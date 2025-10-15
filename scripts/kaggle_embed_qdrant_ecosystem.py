@@ -225,6 +225,7 @@ def load_chunks() -> List[Dict]:
 
 def embed_chunks(chunks: List[dict]) -> List[dict]:
     """Generate embeddings using nomic-embed-code with GPU acceleration"""
+    global BATCH_SIZE
     print(f"\n{'='*60}")
     print("GENERATING EMBEDDINGS")
     print(f"{'='*60}")
@@ -258,28 +259,39 @@ def embed_chunks(chunks: List[dict]) -> List[dict]:
 
         def encode_batch(texts: List[str]) -> np.ndarray:
             """Encode texts using data parallelism across 2 GPUs"""
-            # Split batch into two halves
-            mid = len(texts) // 2
-            texts_gpu0 = texts[:mid]
-            texts_gpu1 = texts[mid:]
+            if not texts:
+                return np.empty((0, MODEL_DIMENSION))
 
-            # Process in parallel (PyTorch handles async execution)
+            # Ensure neither GPU receives an empty slice when batch size < 2
+            split_point = max(1, len(texts) // 2)
+            texts_gpu0 = texts[:split_point]
+            texts_gpu1 = texts[split_point:]
+
+            embeddings_parts = []
             with torch.no_grad():
-                embeddings_gpu0 = model_gpu0.encode(
-                    texts_gpu0,
-                    batch_size=len(texts_gpu0),
-                    show_progress_bar=False,
-                    convert_to_numpy=True
-                )
-                embeddings_gpu1 = model_gpu1.encode(
-                    texts_gpu1,
-                    batch_size=len(texts_gpu1),
-                    show_progress_bar=False,
-                    convert_to_numpy=True
-                )
+                if texts_gpu0:
+                    embeddings_parts.append(
+                        model_gpu0.encode(
+                            texts_gpu0,
+                            batch_size=len(texts_gpu0),
+                            show_progress_bar=False,
+                            convert_to_numpy=True
+                        )
+                    )
+                if texts_gpu1:
+                    embeddings_parts.append(
+                        model_gpu1.encode(
+                            texts_gpu1,
+                            batch_size=len(texts_gpu1),
+                            show_progress_bar=False,
+                            convert_to_numpy=True
+                        )
+                    )
 
-            # Concatenate results
-            return np.vstack([embeddings_gpu0, embeddings_gpu1])
+            if not embeddings_parts:
+                return np.empty((0, MODEL_DIMENSION))
+
+            return np.vstack(embeddings_parts)
 
     else:
         # Single GPU or CPU fallback
@@ -298,35 +310,44 @@ def embed_chunks(chunks: List[dict]) -> List[dict]:
     # Process chunks in batches
     total_chunks = len(chunks)
     print(f"\nProcessing {total_chunks} chunks in batches of {BATCH_SIZE}...")
-    
+
     oom_count = 0
     max_oom_retries = 3
-    
-    for i in range(0, total_chunks, BATCH_SIZE):
-        batch_chunks = chunks[i:i + BATCH_SIZE]
+    current_batch_size = BATCH_SIZE
+    batches_processed = 0
+    index = 0
+
+    while index < total_chunks:
+        batch_start = index
+        batch_chunks = chunks[batch_start:batch_start + current_batch_size]
         texts = [chunk.get('content', '') for chunk in batch_chunks]
-        
+
         # Generate embeddings with OOM handling
         try:
             embeddings = encode_batch(texts)
         except RuntimeError as e:
-            if "out of memory" in str(e).lower() and oom_count < max_oom_retries:
+            if ("out of memory" in str(e).lower() and
+                    oom_count < max_oom_retries and
+                    current_batch_size > 1):
                 oom_count += 1
-                new_batch_size = max(1, BATCH_SIZE // 2)  # Reduce by 50%
-                print(f"⚠ OOM detected! Reducing batch size from {BATCH_SIZE} to {new_batch_size}")
-                global BATCH_SIZE
+                reduction = max(1, current_batch_size // 4)  # Reduce by ~25%
+                new_batch_size = max(1, current_batch_size - reduction)
+                if new_batch_size == current_batch_size:
+                    new_batch_size = max(1, current_batch_size - 1)
+                print(
+                    f"⚠ OOM detected! Reducing batch size from {current_batch_size} to {new_batch_size}"
+                )
+                current_batch_size = new_batch_size
                 BATCH_SIZE = new_batch_size
-                # Retry with smaller batch
-                i -= BATCH_SIZE  # Go back to retry this batch
                 torch.cuda.empty_cache()
                 continue
             else:
                 raise e
-        
+
         # Create embedding data with unique IDs
         for idx, (chunk, embedding) in enumerate(zip(batch_chunks, embeddings)):
             subdir = chunk.get('metadata', {}).get('subdirectory', 'unknown')
-            filename = chunk.get('metadata', {}).get('source_file', f'chunk_{i + idx}')
+            filename = chunk.get('metadata', {}).get('source_file', f'chunk_{batch_start + idx}')
             chunk_index = chunk.get('chunk_index', idx)
             chunk_id = f"qdrant_ecosystem:{subdir}:{filename}:chunk:{chunk_index}"
             
@@ -340,17 +361,20 @@ def embed_chunks(chunks: List[dict]) -> List[dict]:
         
         # Cleanup
         del embeddings
-        
+
+        batches_processed += 1
+        index += len(batch_chunks)
+
         # Aggressive cache clearing every 5 batches
-        if i % (BATCH_SIZE * 5) == 0 and torch.cuda.is_available():
+        if batches_processed % 5 == 0 and torch.cuda.is_available():
             torch.cuda.empty_cache()
-        
+
         # Progress reporting with GPU memory
-        processed = min(i + BATCH_SIZE, total_chunks)
+        processed = index
         elapsed = (datetime.now() - start_time).total_seconds()
         rate = processed / elapsed if elapsed > 0 else 0
         eta = (total_chunks - processed) / rate if rate > 0 else 0
-        
+
         # GPU memory usage
         gpu_memory = ""
         if torch.cuda.is_available():
