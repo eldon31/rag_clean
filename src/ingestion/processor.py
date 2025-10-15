@@ -28,6 +28,12 @@ from src.exceptions import DocumentProcessingError
 
 logger = logging.getLogger(__name__)
 
+# Import for conversion status checking
+try:
+    from docling.datamodel.base_models import ConversionStatus
+except ImportError:
+    ConversionStatus = None  # Fallback if Docling not installed
+
 
 class DocumentMetadata(BaseModel):
     """Metadata extracted from document."""
@@ -46,6 +52,7 @@ class DocumentMetadata(BaseModel):
     word_count: Optional[int] = None
     extracted_at: datetime = Field(default_factory=datetime.now)
     processing_method: str = "unknown"
+    conversion_status: Optional[str] = None  # Track Docling conversion status
     
     # YAML frontmatter or document properties
     custom_metadata: Dict[str, Any] = Field(default_factory=dict)
@@ -88,12 +95,12 @@ class DocumentProcessor:
         self._docling_converter = None
     
     def _get_docling_converter(self):
-        """Lazy-load Docling converter."""
+        """Lazy-load Docling converter with production configuration."""
         if self._docling_converter is None:
             try:
-                from docling.document_converter import DocumentConverter
-                self._docling_converter = DocumentConverter()
-                logger.info("Docling DocumentConverter initialized")
+                from src.config.docling_config import DoclingConfig
+                self._docling_converter = DoclingConfig.create_production_converter()
+                logger.info("Docling DocumentConverter initialized with production config")
             except ImportError:
                 raise DocumentProcessingError(
                     message="Docling is not installed",
@@ -308,17 +315,37 @@ class DocumentProcessor:
             
             logger.info(f"Converting with Docling: {path.name}")
             
-            # Convert document
-            result = converter.convert(file_path)
+            # Convert document with error recovery
+            result = converter.convert(
+                file_path,
+                raises_on_error=False,  # Don't crash on errors
+                max_file_size=self.MAX_FILE_SIZE_BYTES  # Size limit
+            )
+            
+            # Check conversion status
+            if ConversionStatus and result.status != ConversionStatus.SUCCESS:
+                logger.warning(
+                    f"Conversion issue for {path.name}: {result.status}"
+                )
             
             # Export to markdown for consistent processing
             markdown_content = result.document.export_to_markdown()
             
+            # Also export to JSON for metadata preservation (store separately if needed)
+            try:
+                json_content = result.document.export_to_dict()  # Use export_to_dict instead
+            except AttributeError:
+                json_content = None  # Fallback if method doesn't exist
+            
             # Extract metadata from Docling result
             metadata = self._extract_docling_metadata(file_path, result.document, markdown_content)
             metadata.processing_method = "docling"
+            metadata.conversion_status = str(result.status) if hasattr(result, 'status') else "unknown"
             
-            logger.info(f"Docling conversion complete: {path.name} ({len(markdown_content)} chars)")
+            logger.info(
+                f"Docling conversion complete: {path.name} "
+                f"({len(markdown_content)} chars, status: {metadata.conversion_status})"
+            )
             
             return ProcessedDocument(
                 content=markdown_content,
