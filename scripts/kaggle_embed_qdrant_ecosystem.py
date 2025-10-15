@@ -218,11 +218,22 @@ def load_chunks() -> List[Dict]:
 
                 if chunks:
                     # Enrich metadata with subdirectory info
-                    for chunk in chunks:
-                        if 'metadata' not in chunk:
-                            chunk['metadata'] = {}
-                        chunk['metadata']['subdirectory'] = subdir.name
-                        chunk['metadata']['source_file'] = chunk_file.name
+                    for idx, chunk in enumerate(chunks):
+                        if not isinstance(chunk, dict):
+                            # Normalize legacy chunk formats that store raw text values
+                            chunk = {
+                                "content": str(chunk),
+                                "metadata": {}
+                            }
+                            chunks[idx] = chunk
+
+                        metadata = chunk.get('metadata')
+                        if not isinstance(metadata, dict):
+                            metadata = {}
+                            chunk['metadata'] = metadata
+
+                        metadata.setdefault('subdirectory', subdir.name)
+                        metadata.setdefault('source_file', chunk_file.name)
 
                     all_chunks.extend(chunks)
                     print(f"    ✓ {chunk_file.name}: {len(chunks)} chunks")
