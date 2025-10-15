@@ -1,0 +1,324 @@
+[
+  {
+    "chunk_id": "docling:_docling-project_docling_2-core-architecture.md:chunk:0",
+    "content": "# Core Architecture\n\n\nRelevant source files",
+    "metadata": {
+      "source": "_docling-project_docling_2-core-architecture.md",
+      "heading": "Core Architecture",
+      "heading_level": 1,
+      "chunk_index": 0,
+      "collection": "docling",
+      "char_count": 43,
+      "estimated_tokens": 10,
+      "total_chunks": 23
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_2-core-architecture.md:chunk:1",
+    "content": "- [docling/cli/main.py](https://github.com/docling-project/docling/blob/f7244a43/docling/cli/main.py)\n- [docling/datamodel/base\\_models.py](https://github.com/docling-project/docling/blob/f7244a43/docling/datamodel/base_models.py)\n- [docling/datamodel/document.py](https://github.com/docling-project/docling/blob/f7244a43/docling/datamodel/document.py)\n- [docling/datamodel/extraction.py](https://github.com/docling-project/docling/blob/f7244a43/docling/datamodel/extraction.py)\n- [docling/datamodel/pipeline\\_options.py](https://github.com/docling-project/docling/blob/f7244a43/docling/datamodel/pipeline_options.py)\n- [docling/document\\_converter.py](https://github.com/docling-project/docling/blob/f7244a43/docling/document_converter.py)\n- [docling/document\\_extractor.py](https://github.com/docling-project/docling/blob/f7244a43/docling/document_extractor.py)\n- [docling/models/vlm\\_models\\_inline/nuextract\\_transformers\\_model.py](https://github.com/docling-project/docling/blob/f7244a43/docling/models/vlm_models_inline/nuextract_transformers_model.py)\n- [docling/pipeline/asr\\_pipeline.py](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/asr_pipeline.py)\n- [docling/pipeline/base\\_extraction\\_pipeline.py](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/base_extraction_pipeline.py)\n- [docling/pipeline/base\\_pipeline.py](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/base_pipeline.py)\n- [docling/pipeline/extraction\\_vlm\\_pipeline.py](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/extraction_vlm_pipeline.py)\n- [docling/pipeline/simple\\_pipeline.py](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/simple_pipeline.py)\n- [docling/pipeline/threaded\\_standard\\_pdf\\_pipeline.py](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/threaded_standard_pdf_pipeline.py)\n- [docling/pipeline/vlm\\_pipeline.py](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/vlm_pipeline.py)",
+    "metadata": {
+      "source": "_docling-project_docling_2-core-architecture.md",
+      "heading": "Core Architecture",
+      "heading_level": 1,
+      "chunk_index": 1,
+      "collection": "docling",
+      "char_count": 2056,
+      "estimated_tokens": 514,
+      "total_chunks": 23
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_2-core-architecture.md:chunk:2",
+    "content": "ing/blob/f7244a43/docling/pipeline/threaded_standard_pdf_pipeline.py)\n- [docling/pipeline/vlm\\_pipeline.py](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/vlm_pipeline.py)\n\nThis document provides an architectural overview of Docling's core system design, including its three-layer architecture, key abstractions, and how components interact during document processing. For details on specific subsystems, see [Document Conversion Flow](docling-project/docling/2.1-document-conversion-flow.md), [DoclingDocument Data Model](docling-project/docling/2.2-doclingdocument-data-model.md), [Configuration and Pipeline Options](docling-project/docling/2.3-configuration-and-pipeline-options.md), and [Format Detection and Routing](docling-project/docling/2.4-format-detection-and-routing.md).",
+    "metadata": {
+      "source": "_docling-project_docling_2-core-architecture.md",
+      "heading": "Core Architecture",
+      "heading_level": 1,
+      "chunk_index": 2,
+      "collection": "docling",
+      "char_count": 811,
+      "estimated_tokens": 202,
+      "total_chunks": 23
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_2-core-architecture.md:chunk:3",
+    "content": "## System Overview\n\n\nDocling implements a three-layer architecture that separates user interfaces, orchestration logic, and processing pipelines:",
+    "metadata": {
+      "source": "_docling-project_docling_2-core-architecture.md",
+      "heading": "System Overview",
+      "heading_level": 2,
+      "chunk_index": 3,
+      "collection": "docling",
+      "char_count": 145,
+      "estimated_tokens": 36,
+      "total_chunks": 23
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_2-core-architecture.md:chunk:4",
+    "content": "### Three-Layer Architecture\n\n\n```\n```\n\n**Sources:** [docling/document\\_converter.py184-433](https://github.com/docling-project/docling/blob/f7244a43/docling/document_converter.py#L184-L433) [docling/document\\_extractor.py88-326](https://github.com/docling-project/docling/blob/f7244a43/docling/document_extractor.py#L88-L326) [docling/cli/main.py298-816](https://github.com/docling-project/docling/blob/f7244a43/docling/cli/main.py#L298-L816) [docling/pipeline/base\\_pipeline.py43-133](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/base_pipeline.py#L43-L133)",
+    "metadata": {
+      "source": "_docling-project_docling_2-core-architecture.md",
+      "heading": "Three-Layer Architecture",
+      "heading_level": 3,
+      "chunk_index": 4,
+      "collection": "docling",
+      "char_count": 587,
+      "estimated_tokens": 146,
+      "total_chunks": 23
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_2-core-architecture.md:chunk:5",
+    "content": "### Layer Responsibilities\n\n\n| Layer                    | Components                               | Responsibility                                                      |\n| ------------------------ | ---------------------------------------- | ------------------------------------------------------------------- |\n| **User Interfaces**      | CLI, SDK, MCP                            | Accept user input, parse arguments, invoke core APIs                |\n| **Core Orchestration**   | `DocumentConverter`, `DocumentExtractor` | Route documents to appropriate pipelines, manage pipeline lifecycle |\n| **Processing Pipelines** | `BasePipeline` subclasses                | Execute multi-stage document processing (build, assemble, enrich)   |\n| **Document Backends**    | `AbstractDocumentBackend` subclasses     | Provide format-specific document reading and parsing                |\n| **Output**               | `DoclingDocument`                        | Unified document representation with export capabilities            |\n\n**Sources:** [docling/document\\_converter.py184-206](https://github.com/docling-project/docling/blob/f7244a43/docling/document_converter.py#L184-L206) [docling/pipeline/base\\_pipeline.py43-85](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/base_pipeline.py#L43-L85)",
+    "metadata": {
+      "source": "_docling-project_docling_2-core-architecture.md",
+      "heading": "Layer Responsibilities",
+      "heading_level": 3,
+      "chunk_index": 5,
+      "collection": "docling",
+      "char_count": 1316,
+      "estimated_tokens": 329,
+      "total_chunks": 23
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_2-core-architecture.md:chunk:6",
+    "content": "### DocumentConverter and DocumentExtractor\n\n\nThe system provides two primary entry points for different use cases:\n\n```\n```\n\n- **`DocumentConverter`** ([document\\_converter.py184-433](https://github.com/docling-project/docling/blob/f7244a43/document_converter.py#L184-L433)): Converts documents to `DoclingDocument` format for downstream processing, search, or archival\n- **`DocumentExtractor`** ([document\\_extractor.py88-326](https://github.com/docling-project/docling/blob/f7244a43/document_extractor.py#L88-L326)): Extracts structured data from documents according to a template (experimental feature)\n\nBoth classes share a similar architecture with format routing and pipeline caching but serve different end goals.\n\n**Sources:** [docling/document\\_converter.py184-206](https://github.com/docling-project/docling/blob/f7244a43/docling/document_converter.py#L184-L206) [docling/document\\_extractor.py88-120](https://github.com/docling-project/docling/blob/f7244a43/docling/document_extractor.py#L88-L120)",
+    "metadata": {
+      "source": "_docling-project_docling_2-core-architecture.md",
+      "heading": "DocumentConverter and DocumentExtractor",
+      "heading_level": 3,
+      "chunk_index": 6,
+      "collection": "docling",
+      "char_count": 1009,
+      "estimated_tokens": 252,
+      "total_chunks": 23
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_2-core-architecture.md:chunk:7",
+    "content": "### FormatOption: The Routing Mechanism\n\n\nThe `FormatOption` class pairs each `InputFormat` with its appropriate pipeline and backend:\n\n```\n```\n\nThe `DocumentConverter` maintains a `format_to_options: Dict[InputFormat, FormatOption]` mapping that determines how each format is processed. This is configured during initialization and can be customized per format.\n\n**Sources:** [docling/document\\_converter.py62-131](https://github.com/docling-project/docling/blob/f7244a43/docling/document_converter.py#L62-L131) [docling/datamodel/base\\_models.py36-42](https://github.com/docling-project/docling/blob/f7244a43/docling/datamodel/base_models.py#L36-L42)",
+    "metadata": {
+      "source": "_docling-project_docling_2-core-architecture.md",
+      "heading": "FormatOption: The Routing Mechanism",
+      "heading_level": 3,
+      "chunk_index": 7,
+      "collection": "docling",
+      "char_count": 652,
+      "estimated_tokens": 163,
+      "total_chunks": 23
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_2-core-architecture.md:chunk:8",
+    "content": "### Pipeline Hierarchy\n\n\nPipelines implement the `BasePipeline` abstract class, which defines a three-phase processing model:\n\n```\n```\n\n**Key Methods:**\n\n- `execute()` ([base\\_pipeline.py62-84](https://github.com/docling-project/docling/blob/f7244a43/base_pipeline.py#L62-L84)): Entry point that orchestrates the three-phase processing\n- `_build_document()`: Extract raw structure from the document backend\n- `_assemble_document()`: Construct hierarchical document structure\n- `_enrich_document()`: Apply enrichment models (code detection, picture classification, etc.)\n\n**Sources:** [docling/pipeline/base\\_pipeline.py43-133](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/base_pipeline.py#L43-L133) [docling/pipeline/base\\_pipeline.py135-182](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/base_pipeline.py#L135-L182) [docling/pipeline/base\\_pipeline.py184-320](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/base_pipeline.py#L184-L320)",
+    "metadata": {
+      "source": "_docling-project_docling_2-core-architecture.md",
+      "heading": "Pipeline Hierarchy",
+      "heading_level": 3,
+      "chunk_index": 8,
+      "collection": "docling",
+      "char_count": 1019,
+      "estimated_tokens": 254,
+      "total_chunks": 23
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_2-core-architecture.md:chunk:9",
+    "content": "### Backend System\n\n\nBackends provide format-specific document reading capabilities:\n\n```\n```\n\n- **`PaginatedDocumentBackend`** ([backend/abstract\\_backend.py58-88](https://github.com/docling-project/docling/blob/f7244a43/backend/abstract_backend.py#L58-L88)): Supports page-by-page iteration, used by PDF/image formats\n- **`DeclarativeDocumentBackend`** ([backend/abstract\\_backend.py91-101](https://github.com/docling-project/docling/blob/f7244a43/backend/abstract_backend.py#L91-L101)): Directly outputs `DoclingDocument`, used by DOCX/HTML/Markdown formats\n\n**Sources:** [docling/backend/abstract\\_backend.py13-101](https://github.com/docling-project/docling/blob/f7244a43/docling/backend/abstract_backend.py#L13-L101) [docling/backend/pdf\\_backend.py1-100](https://github.com/docling-project/docling/blob/f7244a43/docling/backend/pdf_backend.py#L1-L100)",
+    "metadata": {
+      "source": "_docling-project_docling_2-core-architecture.md",
+      "heading": "Backend System",
+      "heading_level": 3,
+      "chunk_index": 9,
+      "collection": "docling",
+      "char_count": 858,
+      "estimated_tokens": 214,
+      "total_chunks": 23
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_2-core-architecture.md:chunk:10",
+    "content": "## Conversion Flow Architecture\n\n\nThe document conversion process follows a consistent pattern across all pipelines:\n\n```\n```\n\n**Sources:** [docling/document\\_converter.py227-284](https://github.com/docling-project/docling/blob/f7244a43/docling/document_converter.py#L227-L284) [docling/document\\_converter.py351-378](https://github.com/docling-project/docling/blob/f7244a43/docling/document_converter.py#L351-L378) [docling/pipeline/base\\_pipeline.py62-84](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/base_pipeline.py#L62-L84)",
+    "metadata": {
+      "source": "_docling-project_docling_2-core-architecture.md",
+      "heading": "Conversion Flow Architecture",
+      "heading_level": 2,
+      "chunk_index": 10,
+      "collection": "docling",
+      "char_count": 557,
+      "estimated_tokens": 139,
+      "total_chunks": 23
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_2-core-architecture.md:chunk:11",
+    "content": "### Pipeline Caching Mechanism\n\n\nThe `DocumentConverter` caches pipeline instances to avoid redundant model loading:\n\n```\n```\n\n**Caching Logic** ([document\\_converter.py212-217](https://github.com/docling-project/docling/blob/f7244a43/document_converter.py#L212-L217) [document\\_converter.py351-378](https://github.com/docling-project/docling/blob/f7244a43/document_converter.py#L351-L378)):\n\n1. Compute MD5 hash of `pipeline_options.model_dump()`\n2. Create composite key: `(pipeline_cls, options_hash)`\n3. Check cache with thread lock (`_PIPELINE_CACHE_LOCK`)\n4. Initialize and store if not found\n5. Return cached instance if found\n\nThis optimization is critical for performance when processing multiple documents with identical configurations, as it prevents re-initialization of heavy ML models.\n\n**Sources:** [docling/document\\_converter.py203-217](https://github.com/docling-project/docling/blob/f7244a43/docling/document_converter.py#L203-L217) [docling/document\\_converter.py351-378](https://github.com/docling-project/docling/blob/f7244a43/docling/document_converter.py#L351-L378)",
+    "metadata": {
+      "source": "_docling-project_docling_2-core-architecture.md",
+      "heading": "Pipeline Caching Mechanism",
+      "heading_level": 3,
+      "chunk_index": 11,
+      "collection": "docling",
+      "char_count": 1088,
+      "estimated_tokens": 272,
+      "total_chunks": 23
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_2-core-architecture.md:chunk:12",
+    "content": "## Pipeline Processing Phases\n\n\nAll pipelines inherit the three-phase processing model from `BasePipeline`:",
+    "metadata": {
+      "source": "_docling-project_docling_2-core-architecture.md",
+      "heading": "Pipeline Processing Phases",
+      "heading_level": 2,
+      "chunk_index": 12,
+      "collection": "docling",
+      "char_count": 107,
+      "estimated_tokens": 26,
+      "total_chunks": 23
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_2-core-architecture.md:chunk:13",
+    "content": "### Phase 1: Build Document\n\n\n```\n```\n\n- **StandardPdfPipeline**: Sequential model execution for PDF/image processing\n- **SimplePipeline**: Direct backend conversion for structured formats (DOCX, HTML)\n- **VlmPipeline**: Vision-language model inference for end-to-end processing\n\n**Sources:** [docling/pipeline/base\\_pipeline.py86-91](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/base_pipeline.py#L86-L91) [docling/pipeline/simple\\_pipeline.py26-41](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/simple_pipeline.py#L26-L41) [docling/pipeline/vlm\\_pipeline.py136-186](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/vlm_pipeline.py#L136-L186)",
+    "metadata": {
+      "source": "_docling-project_docling_2-core-architecture.md",
+      "heading": "Phase 1: Build Document",
+      "heading_level": 3,
+      "chunk_index": 13,
+      "collection": "docling",
+      "char_count": 724,
+      "estimated_tokens": 181,
+      "total_chunks": 23
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_2-core-architecture.md:chunk:14",
+    "content": "### Phase 2: Assemble Document\n\n\nThis phase constructs the hierarchical `DoclingDocument` structure from extracted elements. The implementation varies by pipeline:\n\n- **StandardPdfPipeline**: Combines page-level elements into document structure\n- **VlmPipeline**: Converts VLM output (DOCTAGS/Markdown/HTML) into `DoclingDocument`\n- **SimplePipeline**: Uses pre-assembled structure from backend\n\n**Sources:** [docling/pipeline/base\\_pipeline.py90-91](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/base_pipeline.py#L90-L91) [docling/pipeline/vlm\\_pipeline.py136-186](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/vlm_pipeline.py#L136-L186)",
+    "metadata": {
+      "source": "_docling-project_docling_2-core-architecture.md",
+      "heading": "Phase 2: Assemble Document",
+      "heading_level": 3,
+      "chunk_index": 14,
+      "collection": "docling",
+      "char_count": 694,
+      "estimated_tokens": 173,
+      "total_chunks": 23
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_2-core-architecture.md:chunk:15",
+    "content": "### Phase 3: Enrich Document\n\n\nEnrichment models operate on the assembled `DoclingDocument` to add additional information:\n\n```\n```\n\nEach enrichment model:\n\n1. Calls `prepare_element()` to filter relevant document items\n2. Processes items in batches\n3. Updates the `DoclingDocument` in-place\n\n**Sources:** [docling/pipeline/base\\_pipeline.py93-115](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/base_pipeline.py#L93-L115) [docling/pipeline/base\\_pipeline.py136-176](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/base_pipeline.py#L136-L176)",
+    "metadata": {
+      "source": "_docling-project_docling_2-core-architecture.md",
+      "heading": "Phase 3: Enrich Document",
+      "heading_level": 3,
+      "chunk_index": 15,
+      "collection": "docling",
+      "char_count": 595,
+      "estimated_tokens": 148,
+      "total_chunks": 23
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_2-core-architecture.md:chunk:16",
+    "content": "## Configuration Architecture\n\n\nThe configuration system is hierarchical, with options cascading from top-level `PipelineOptions` to model-specific configurations:\n\n```\n```\n\nFor detailed configuration information, see [Configuration and Pipeline Options](docling-project/docling/2.3-configuration-and-pipeline-options.md).\n\n**Sources:** [docling/datamodel/pipeline\\_options.py273-384](https://github.com/docling-project/docling/blob/f7244a43/docling/datamodel/pipeline_options.py#L273-L384)",
+    "metadata": {
+      "source": "_docling-project_docling_2-core-architecture.md",
+      "heading": "Configuration Architecture",
+      "heading_level": 2,
+      "chunk_index": 16,
+      "collection": "docling",
+      "char_count": 490,
+      "estimated_tokens": 122,
+      "total_chunks": 23
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_2-core-architecture.md:chunk:17",
+    "content": "## Input Document and Backend Lifecycle\n\n\nThe `InputDocument` class manages document validation and backend initialization:\n\n```\n```\n\n**Key Lifecycle Points:**\n\n1. **Validation** ([datamodel/document.py131-182](https://github.com/docling-project/docling/blob/f7244a43/datamodel/document.py#L131-L182)): Check file size and page count against `DocumentLimits`\n2. **Backend Initialization** ([datamodel/document.py183-191](https://github.com/docling-project/docling/blob/f7244a43/datamodel/document.py#L183-L191)): Create backend instance with document reference\n3. **Page Loading** (in pipelines): Lazy page loading via `backend.load_page(page_no)`\n4. **Resource Cleanup** ([pipeline/base\\_pipeline.py285-293](https://github.com/docling-project/docling/blob/f7244a43/pipeline/base_pipeline.py#L285-L293)): Unload backends after processing\n\n**Sources:** [docling/datamodel/document.py104-191](https://github.com/docling-project/docling/blob/f7244a43/docling/datamodel/document.py#L104-L191) [docling/pipeline/base\\_pipeline.py285-293](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/base_pipeline.py#L285-L293)",
+    "metadata": {
+      "source": "_docling-project_docling_2-core-architecture.md",
+      "heading": "Input Document and Backend Lifecycle",
+      "heading_level": 2,
+      "chunk_index": 17,
+      "collection": "docling",
+      "char_count": 1134,
+      "estimated_tokens": 283,
+      "total_chunks": 23
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_2-core-architecture.md:chunk:18",
+    "content": "## ThreadedStandardPdfPipeline Architecture\n\n\nFor high-performance PDF processing, `ThreadedStandardPdfPipeline` implements a multi-threaded stage graph:\n\n```\n```\n\n**Key Features:**\n\n- **ThreadedQueue** ([threaded\\_standard\\_pdf\\_pipeline.py96-163](https://github.com/docling-project/docling/blob/f7244a43/threaded_standard_pdf_pipeline.py#L96-L163)): Bounded queue with blocking `put()`/`get_batch()` and explicit `close()` semantics\n- **ThreadedPipelineStage** ([threaded\\_standard\\_pdf\\_pipeline.py165-280](https://github.com/docling-project/docling/blob/f7244a43/threaded_standard_pdf_pipeline.py#L165-L280)): Each stage runs in its own thread, processes batches, and handles errors\n- **Backpressure Control**: Queue size limits prevent memory overflow from fast producers\n- **Deterministic Shutdown**: `close()` propagates downstream so stages terminate cleanly\n\n**Sources:** [docling/pipeline/threaded\\_standard\\_pdf\\_pipeline.py1-296](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/threaded_standard_pdf_pipeline.py#L1-L296) [docling/pipeline/threaded\\_standard\\_pdf\\_pipeline.py379-427](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/threaded_standard_pdf_pipeline.py#L379-L427)",
+    "metadata": {
+      "source": "_docling-project_docling_2-core-architecture.md",
+      "heading": "ThreadedStandardPdfPipeline Architecture",
+      "heading_level": 2,
+      "chunk_index": 18,
+      "collection": "docling",
+      "char_count": 1240,
+      "estimated_tokens": 310,
+      "total_chunks": 23
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_2-core-architecture.md:chunk:19",
+    "content": "## Document Format Detection\n\n\nFormat detection uses a multi-strategy approach implemented in `_DocumentConversionInput._guess_format()`:\n\n```\n```\n\nFor detailed format detection logic, see [Format Detection and Routing](docling-project/docling/2.4-format-detection-and-routing.md).\n\n**Sources:** [docling/datamodel/document.py280-374](https://github.com/docling-project/docling/blob/f7244a43/docling/datamodel/document.py#L280-L374)",
+    "metadata": {
+      "source": "_docling-project_docling_2-core-architecture.md",
+      "heading": "Document Format Detection",
+      "heading_level": 2,
+      "chunk_index": 19,
+      "collection": "docling",
+      "char_count": 432,
+      "estimated_tokens": 108,
+      "total_chunks": 23
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_2-core-architecture.md:chunk:20",
+    "content": "## Output and Export\n\n\nAll pipelines converge on `DoclingDocument` as the unified representation:\n\n```\n```\n\nThe `DoclingDocument` class (from `docling-core`) provides:\n\n- Hierarchical document structure with provenance tracking\n- Multiple export formats with configurable image handling\n- Item iteration with `iterate_items()` for traversal\n\nFor details on the data model, see [DoclingDocument Data Model](docling-project/docling/2.2-doclingdocument-data-model.md). For export format details, see [Export Formats](docling-project/docling/8.1-export-formats.md).\n\n**Sources:** [docling/cli/main.py191-290](https://github.com/docling-project/docling/blob/f7244a43/docling/cli/main.py#L191-L290) [docling/datamodel/document.py198-215](https://github.com/docling-project/docling/blob/f7244a43/docling/datamodel/document.py#L198-L215)",
+    "metadata": {
+      "source": "_docling-project_docling_2-core-architecture.md",
+      "heading": "Output and Export",
+      "heading_level": 2,
+      "chunk_index": 20,
+      "collection": "docling",
+      "char_count": 829,
+      "estimated_tokens": 207,
+      "total_chunks": 23
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_2-core-architecture.md:chunk:21",
+    "content": "## Summary\n\n\nDocling's architecture achieves separation of concerns through:\n\n1. **Clear layer boundaries**: User interfaces, orchestration, pipelines, backends, and output\n2. **Pluggable components**: Pipeline and backend selection via `FormatOption` mappings\n3. **Performance optimization**: Pipeline caching prevents redundant model initialization\n4. **Consistent processing model**: Three-phase execution (build, assemble, enrich) across all pipelines\n5. **Unified output**: All pipelines produce `DoclingDocument` for consistent downstream processing\n\nThis design allows Docling to handle diverse document formats with format-specific optimizations while maintaining a consistent external API.\n\n**Sources:** [docling/document\\_converter.py184-433](https://github.com/docling-project/docling/blob/f7244a43/docling/document_converter.py#L184-L433) [docling/pipeline/base\\_pipeline.py43-133](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/base_pipeline.py#L43-L133) [docling/datamodel/document.py104-191](https://github.com/docling-project/docling/blob/f7244a43/docling/datamodel/document.py#L104-L191)\n\nDismiss\n\nRefresh this wiki\n\nThis wiki was recently refreshed. Please wait 4 days to refresh again.",
+    "metadata": {
+      "source": "_docling-project_docling_2-core-architecture.md",
+      "heading": "Summary",
+      "heading_level": 2,
+      "chunk_index": 21,
+      "collection": "docling",
+      "char_count": 1231,
+      "estimated_tokens": 307,
+      "total_chunks": 23
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_2-core-architecture.md:chunk:22",
+    "content": "### On this page\n\n\n- [Core Architecture](#core-architecture.md)\n- [System Overview](#system-overview.md)\n- [Three-Layer Architecture](#three-layer-architecture.md)\n- [Layer Responsibilities](#layer-responsibilities.md)\n- [Key Abstractions](#key-abstractions.md)\n- [DocumentConverter and DocumentExtractor](#documentconverter-and-documentextractor.md)\n- [FormatOption: The Routing Mechanism](#formatoption-the-routing-mechanism.md)\n- [Pipeline Hierarchy](#pipeline-hierarchy.md)\n- [Backend System](#backend-system.md)\n- [Conversion Flow Architecture](#conversion-flow-architecture.md)\n- [Pipeline Caching Mechanism](#pipeline-caching-mechanism.md)\n- [Pipeline Processing Phases](#pipeline-processing-phases.md)\n- [Phase 1: Build Document](#phase-1-build-document.md)\n- [Phase 2: Assemble Document](#phase-2-assemble-document.md)\n- [Phase 3: Enrich Document](#phase-3-enrich-document.md)\n- [Configuration Architecture](#configuration-architecture.md)\n- [Input Document and Backend Lifecycle](#input-document-and-backend-lifecycle.md)\n- [ThreadedStandardPdfPipeline Architecture](#threadedstandardpdfpipeline-architecture.md)\n- [Document Format Detection](#document-format-detection.md)\n- [Output and Export](#output-and-export.md)\n- [Summary](#summary.md)",
+    "metadata": {
+      "source": "_docling-project_docling_2-core-architecture.md",
+      "heading": "On this page",
+      "heading_level": 3,
+      "chunk_index": 22,
+      "collection": "docling",
+      "char_count": 1253,
+      "estimated_tokens": 313,
+      "total_chunks": 23
+    }
+  }
+]

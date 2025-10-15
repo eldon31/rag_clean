@@ -1,0 +1,268 @@
+[
+  {
+    "chunk_id": "docling:_docling-project_docling_7.2-documentextractor-api.md:chunk:0",
+    "content": "# DocumentExtractor API\n\n\nRelevant source files",
+    "metadata": {
+      "source": "_docling-project_docling_7.2-documentextractor-api.md",
+      "heading": "DocumentExtractor API",
+      "heading_level": 1,
+      "chunk_index": 0,
+      "collection": "docling",
+      "char_count": 47,
+      "estimated_tokens": 11,
+      "total_chunks": 19
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_7.2-documentextractor-api.md:chunk:1",
+    "content": "- [docling/datamodel/extraction.py](https://github.com/docling-project/docling/blob/f7244a43/docling/datamodel/extraction.py)\n- [docling/datamodel/pipeline\\_options\\_vlm\\_model.py](https://github.com/docling-project/docling/blob/f7244a43/docling/datamodel/pipeline_options_vlm_model.py)\n- [docling/datamodel/vlm\\_model\\_specs.py](https://github.com/docling-project/docling/blob/f7244a43/docling/datamodel/vlm_model_specs.py)\n- [docling/document\\_extractor.py](https://github.com/docling-project/docling/blob/f7244a43/docling/document_extractor.py)\n- [docling/models/api\\_vlm\\_model.py](https://github.com/docling-project/docling/blob/f7244a43/docling/models/api_vlm_model.py)\n- [docling/models/base\\_model.py](https://github.com/docling-project/docling/blob/f7244a43/docling/models/base_model.py)\n- [docling/models/utils/hf\\_model\\_download.py](https://github.com/docling-project/docling/blob/f7244a43/docling/models/utils/hf_model_download.py)\n- [docling/models/vlm\\_models\\_inline/hf\\_transformers\\_model.py](https://github.com/docling-project/docling/blob/f7244a43/docling/models/vlm_models_inline/hf_transformers_model.py)\n- [docling/models/vlm\\_models\\_inline/mlx\\_model.py](https://github.com/docling-project/docling/blob/f7244a43/docling/models/vlm_models_inline/mlx_model.py)\n- [docling/models/vlm\\_models\\_inline/nuextract\\_transformers\\_model.py](https://github.com/docling-project/docling/blob/f7244a43/docling/models/vlm_models_inline/nuextract_transformers_model.py)\n- [docling/models/vlm\\_models\\_inline/vllm\\_model.py](https://github.com/docling-project/docling/blob/f7244a43/docling/models/vlm_models_inline/vllm_model.py)\n- [docling/pipeline/asr\\_pipeline.py](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/asr_pipeline.py)\n- [docling/pipeline/base\\_extraction\\_pipeline.py](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/base_extraction_pipeline.py)\n- [docling/pipeline/base\\_pipeline.py](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/base_pipeline.py)\n- [docling/pipeline/extraction\\_vlm\\_pipeline.py](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/extraction_vlm_pipeline.py)\n- [docling/pipeline/simple\\_pipeline.py](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/simple_pipeline.py)\n- [docling/pipeline/threaded\\_standard\\_pdf\\_pipeline.py](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/threaded_standard_pdf_pipeline.py)\n- [docling/pipeline/vlm\\_pipeline.py](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/vlm_pipeline.py)",
+    "metadata": {
+      "source": "_docling-project_docling_7.2-documentextractor-api.md",
+      "heading": "DocumentExtractor API",
+      "heading_level": 1,
+      "chunk_index": 1,
+      "collection": "docling",
+      "char_count": 2635,
+      "estimated_tokens": 658,
+      "total_chunks": 19
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_7.2-documentextractor-api.md:chunk:2",
+    "content": "## Purpose and Scope\n\n\nThe `DocumentExtractor` API provides structured data extraction from documents using vision-language models (VLMs) with user-defined templates. Unlike the `DocumentConverter` API (see [DocumentConverter API](docling-project/docling/7.1-documentconverter-api.md)) which converts documents to unified `DoclingDocument` format, `DocumentExtractor` extracts specific structured data based on schemas or prompts, returning `ExtractionResult` objects containing parsed JSON or raw text.\n\nFor details on the underlying extraction pipeline implementation, see [Extraction Pipeline](docling-project/docling/5.4-extraction-pipeline.md). For VLM model configuration, see [Vision Language Models](docling-project/docling/4.3-vision-language-models.md).\n\n**Sources:** [docling/document\\_extractor.py88-97](https://github.com/docling-project/docling/blob/f7244a43/docling/document_extractor.py#L88-L97)",
+    "metadata": {
+      "source": "_docling-project_docling_7.2-documentextractor-api.md",
+      "heading": "Purpose and Scope",
+      "heading_level": 2,
+      "chunk_index": 2,
+      "collection": "docling",
+      "char_count": 911,
+      "estimated_tokens": 227,
+      "total_chunks": 19
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_7.2-documentextractor-api.md:chunk:3",
+    "content": "### Class Hierarchy and Components\n\n\n```\n```\n\n**Diagram: DocumentExtractor Architecture**\n\nThe `DocumentExtractor` class orchestrates extraction by mapping input formats to extraction pipelines through `ExtractionFormatOption` configurations. Each format option specifies both a pipeline class (defaulting to `ExtractionVlmPipeline`) and a backend for document reading (defaulting to `PyPdfiumDocumentBackend`).\n\n**Sources:** [docling/document\\_extractor.py88-120](https://github.com/docling-project/docling/blob/f7244a43/docling/document_extractor.py#L88-L120) [docling/document\\_extractor.py46-64](https://github.com/docling-project/docling/blob/f7244a43/docling/document_extractor.py#L46-L64) [docling/datamodel/extraction.py1-40](https://github.com/docling-project/docling/blob/f7244a43/docling/datamodel/extraction.py#L1-L40)",
+    "metadata": {
+      "source": "_docling-project_docling_7.2-documentextractor-api.md",
+      "heading": "Class Hierarchy and Components",
+      "heading_level": 3,
+      "chunk_index": 3,
+      "collection": "docling",
+      "char_count": 830,
+      "estimated_tokens": 207,
+      "total_chunks": 19
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_7.2-documentextractor-api.md:chunk:4",
+    "content": "### DocumentExtractor Class\n\n\n```\n```\n\n**Diagram: DocumentExtractor Class Structure**\n\nThe `DocumentExtractor` maintains a cache of initialized pipelines keyed by `(pipeline_class, options_hash)` to avoid redundant model loading across documents with identical configurations.\n\n**Sources:** [docling/document\\_extractor.py88-120](https://github.com/docling-project/docling/blob/f7244a43/docling/document_extractor.py#L88-L120) [docling/document\\_extractor.py291-317](https://github.com/docling-project/docling/blob/f7244a43/docling/document_extractor.py#L291-L317)",
+    "metadata": {
+      "source": "_docling-project_docling_7.2-documentextractor-api.md",
+      "heading": "DocumentExtractor Class",
+      "heading_level": 3,
+      "chunk_index": 4,
+      "collection": "docling",
+      "char_count": 564,
+      "estimated_tokens": 141,
+      "total_chunks": 19
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_7.2-documentextractor-api.md:chunk:5",
+    "content": "### extract() - Single Document Extraction\n\n\n```\n```\n\n**Diagram: extract() Method Flow**\n\nThe `extract()` method is a convenience wrapper around `extract_all()` that returns a single result. It internally calls `extract_all()` with a single-item list and returns the first (and only) result via `next()`.\n\n**Sources:** [docling/document\\_extractor.py123-143](https://github.com/docling-project/docling/blob/f7244a43/docling/document_extractor.py#L123-L143) [docling/document\\_extractor.py239-264](https://github.com/docling-project/docling/blob/f7244a43/docling/document_extractor.py#L239-L264)",
+    "metadata": {
+      "source": "_docling-project_docling_7.2-documentextractor-api.md",
+      "heading": "extract() - Single Document Extraction",
+      "heading_level": 3,
+      "chunk_index": 5,
+      "collection": "docling",
+      "char_count": 594,
+      "estimated_tokens": 148,
+      "total_chunks": 19
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_7.2-documentextractor-api.md:chunk:6",
+    "content": "### extract\\_all() - Batch Extraction\n\n\nThe `extract_all()` method processes multiple documents with optional concurrency:\n\n| Parameter         | Type                                         | Default            | Description                                        |\n| ----------------- | -------------------------------------------- | ------------------ | -------------------------------------------------- |\n| `source`          | `Iterable[Union[Path, str, DocumentStream]]` | Required           | Documents to extract from                          |\n| `template`        | `ExtractionTemplateType`                     | Required           | Extraction template (str, dict, or Pydantic model) |\n| `headers`         | `Optional[Dict[str, str]]`                   | `None`             | HTTP headers for remote documents                  |\n| `raises_on_error` | `bool`                                       | `True`             | Whether to raise on extraction failures            |\n| `max_num_pages`   | `int`                                        | `sys.maxsize`      | Maximum pages to process per document              |\n| `max_file_size`   | `int`                                        | `sys.maxsize`      | Maximum file size in bytes                         |\n| `page_range`      | `PageRange`                                  | `(1, sys.maxsize)` | Page range to extract                              |\n\n**Implementation Details:**\n\n- Reuses `_DocumentConversionInput` for format detection and backend initialization\n- Supports batch processing with configurable concurrency via `settings.perf.doc_batch_concurrency`\n- Uses `ThreadPoolExecutor` when `doc_batch_concurrency > 1` and `doc_batch_size > 1`\n- Pipeline caching prevents redundant model initialization",
+    "metadata": {
+      "source": "_docling-project_docling_7.2-documentextractor-api.md",
+      "heading": "extract\\_all() - Batch Extraction",
+      "heading_level": 3,
+      "chunk_index": 6,
+      "collection": "docling",
+      "char_count": 1769,
+      "estimated_tokens": 442,
+      "total_chunks": 19
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_7.2-documentextractor-api.md:chunk:7",
+    "content": "concurrency via `settings.perf.doc_batch_concurrency`\n- Uses `ThreadPoolExecutor` when `doc_batch_concurrency > 1` and `doc_batch_size > 1`\n- Pipeline caching prevents redundant model initialization\n\n**Sources:** [docling/document\\_extractor.py145-193](https://github.com/docling-project/docling/blob/f7244a43/docling/document_extractor.py#L145-L193) [docling/document\\_extractor.py196-237](https://github.com/docling-project/docling/blob/f7244a43/docling/document_extractor.py#L196-L237)",
+    "metadata": {
+      "source": "_docling-project_docling_7.2-documentextractor-api.md",
+      "heading": "extract\\_all() - Batch Extraction",
+      "heading_level": 3,
+      "chunk_index": 7,
+      "collection": "docling",
+      "char_count": 488,
+      "estimated_tokens": 122,
+      "total_chunks": 19
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_7.2-documentextractor-api.md:chunk:8",
+    "content": "### Template Type Hierarchy\n\n\n```\n```\n\n**Diagram: Template Type Serialization**\n\nThe `_serialize_template()` method in `ExtractionVlmPipeline` handles four template types:\n\n1. **String templates**: Passed directly as prompts\n2. **Dict templates**: Serialized via `json.dumps(template, indent=2)`\n3. **Pydantic instances**: Serialized via `template.model_dump_json(indent=2)`\n4. **Pydantic classes**: Instantiated via `polyfactory.ModelFactory.build()` (using field examples and defaults), then serialized\n\n**Sources:** [docling/pipeline/extraction\\_vlm\\_pipeline.py173-193](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/extraction_vlm_pipeline.py#L173-L193)",
+    "metadata": {
+      "source": "_docling-project_docling_7.2-documentextractor-api.md",
+      "heading": "Template Type Hierarchy",
+      "heading_level": 3,
+      "chunk_index": 8,
+      "collection": "docling",
+      "char_count": 685,
+      "estimated_tokens": 171,
+      "total_chunks": 19
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_7.2-documentextractor-api.md:chunk:9",
+    "content": "### Template Serialization Example Flow\n\n\n```\n```\n\n**Diagram: Template Serialization Decision Tree**\n\nFor Pydantic class templates, `polyfactory.ModelFactory` is configured with `__use_examples__=True` and `__use_defaults__=True` to prefer field examples over random values.\n\n**Sources:** [docling/pipeline/extraction\\_vlm\\_pipeline.py173-193](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/extraction_vlm_pipeline.py#L173-L193)",
+    "metadata": {
+      "source": "_docling-project_docling_7.2-documentextractor-api.md",
+      "heading": "Template Serialization Example Flow",
+      "heading_level": 3,
+      "chunk_index": 9,
+      "collection": "docling",
+      "char_count": 455,
+      "estimated_tokens": 113,
+      "total_chunks": 19
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_7.2-documentextractor-api.md:chunk:10",
+    "content": "### Result Structure\n\n\n```\n```\n\n**Diagram: ExtractionResult Class Hierarchy**\n\nThe `ExtractionResult` structure mirrors `ConversionResult` but focuses on extracted data rather than document structure:\n\n- **`input`**: The `InputDocument` that was processed\n- **`status`**: Overall extraction status (SUCCESS, FAILURE, PARTIAL\\_SUCCESS)\n- **`errors`**: Document-level errors (empty list if successful)\n- **`pages`**: Per-page extraction results\n\n**Sources:** [docling/datamodel/extraction.py25-36](https://github.com/docling-project/docling/blob/f7244a43/docling/datamodel/extraction.py#L25-L36)",
+    "metadata": {
+      "source": "_docling-project_docling_7.2-documentextractor-api.md",
+      "heading": "Result Structure",
+      "heading_level": 3,
+      "chunk_index": 10,
+      "collection": "docling",
+      "char_count": 593,
+      "estimated_tokens": 148,
+      "total_chunks": 19
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_7.2-documentextractor-api.md:chunk:11",
+    "content": "### ExtractedPageData Structure\n\n\nEach page in the `pages` list contains:\n\n| Field            | Type                       | Description                                            |\n| ---------------- | -------------------------- | ------------------------------------------------------ |\n| `page_no`        | `int`                      | 1-indexed page number                                  |\n| `extracted_data` | `Optional[Dict[str, Any]]` | Structured data parsed from VLM output (if valid JSON) |\n| `raw_text`       | `Optional[str]`            | Raw VLM output text (always populated)                 |\n| `errors`         | `List[str]`                | Page-specific extraction errors                        |\n\nThe `extracted_data` field is populated only if the VLM output can be parsed as valid JSON. If JSON parsing fails, `extracted_data` is `None` and `raw_text` contains the unparsed output.\n\n**Sources:** [docling/datamodel/extraction.py11-23](https://github.com/docling-project/docling/blob/f7244a43/docling/datamodel/extraction.py#L11-L23) [docling/pipeline/extraction\\_vlm\\_pipeline.py84-98](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/extraction_vlm_pipeline.py#L84-L98)",
+    "metadata": {
+      "source": "_docling-project_docling_7.2-documentextractor-api.md",
+      "heading": "ExtractedPageData Structure",
+      "heading_level": 3,
+      "chunk_index": 11,
+      "collection": "docling",
+      "char_count": 1218,
+      "estimated_tokens": 304,
+      "total_chunks": 19
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_7.2-documentextractor-api.md:chunk:12",
+    "content": "### Extraction Pipeline Hierarchy\n\n\n```\n```\n\n**Diagram: Extraction Pipeline Class Hierarchy**\n\nThe `BaseExtractionPipeline` defines the extraction contract with three abstract methods:\n\n- `_extract_data()`: Populates `ExtractionResult.pages` and `errors`\n- `_determine_status()`: Returns `ConversionStatus` based on extraction results\n- `get_default_options()`: Returns default `PipelineOptions`\n\n**Sources:** [docling/pipeline/base\\_extraction\\_pipeline.py15-73](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/base_extraction_pipeline.py#L15-L73) [docling/pipeline/extraction\\_vlm\\_pipeline.py32-46](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/extraction_vlm_pipeline.py#L32-L46)",
+    "metadata": {
+      "source": "_docling-project_docling_7.2-documentextractor-api.md",
+      "heading": "Extraction Pipeline Hierarchy",
+      "heading_level": 3,
+      "chunk_index": 12,
+      "collection": "docling",
+      "char_count": 737,
+      "estimated_tokens": 184,
+      "total_chunks": 19
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_7.2-documentextractor-api.md:chunk:13",
+    "content": "### VLM Model Integration\n\n\n```\n```\n\n**Diagram: VLM Model Processing Flow**\n\nThe `NuExtractTransformersModel` uses a specialized input format from the NuMind team:\n\n- Documents are passed as `{\"type\": \"image\", \"image\": PIL_Image}`\n- Templates are passed via the `template` parameter to `apply_chat_template()`\n- Vision info is processed via `qwen_vl_utils.process_vision_info()`\n\n**Sources:** [docling/pipeline/extraction\\_vlm\\_pipeline.py48-126](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/extraction_vlm_pipeline.py#L48-L126) [docling/models/vlm\\_models\\_inline/nuextract\\_transformers\\_model.py107-160](https://github.com/docling-project/docling/blob/f7244a43/docling/models/vlm_models_inline/nuextract_transformers_model.py#L107-L160) [docling/models/vlm\\_models\\_inline/nuextract\\_transformers\\_model.py161-290](https://github.com/docling-project/docling/blob/f7244a43/docling/models/vlm_models_inline/nuextract_transformers_model.py#L161-L290)",
+    "metadata": {
+      "source": "_docling-project_docling_7.2-documentextractor-api.md",
+      "heading": "VLM Model Integration",
+      "heading_level": 3,
+      "chunk_index": 13,
+      "collection": "docling",
+      "char_count": 979,
+      "estimated_tokens": 244,
+      "total_chunks": 19
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_7.2-documentextractor-api.md:chunk:14",
+    "content": "### Cache Key Generation\n\n\n```\n```\n\n**Diagram: Pipeline Caching Strategy**\n\nThe `_get_pipeline()` method caches pipelines using a composite key:\n\n1. Pipeline class reference (e.g., `ExtractionVlmPipeline`)\n2. MD5 hash of `pipeline_options.model_dump()` serialization\n\nThis ensures that documents with identical configurations reuse the same pipeline instance (and loaded models), avoiding redundant initialization.\n\n**Thread Safety:** Pipeline retrieval is protected by `_PIPELINE_CACHE_LOCK` to prevent race conditions during concurrent document processing.\n\n**Sources:** [docling/document\\_extractor.py291-317](https://github.com/docling-project/docling/blob/f7244a43/docling/document_extractor.py#L291-L317) [docling/document\\_extractor.py319-325](https://github.com/docling-project/docling/blob/f7244a43/docling/document_extractor.py#L319-L325)",
+    "metadata": {
+      "source": "_docling-project_docling_7.2-documentextractor-api.md",
+      "heading": "Cache Key Generation",
+      "heading_level": 3,
+      "chunk_index": 14,
+      "collection": "docling",
+      "char_count": 848,
+      "estimated_tokens": 212,
+      "total_chunks": 19
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_7.2-documentextractor-api.md:chunk:15",
+    "content": "### Default Format Options\n\n\n```\n```\n\n**Diagram: Default Extraction Configuration**\n\nThe `_get_default_extraction_option()` function defines default extraction configurations:\n\n- **PDF and Image formats**: Use `PyPdfiumDocumentBackend` for document reading\n- **Pipeline**: Always `ExtractionVlmPipeline`\n- **Model**: NuExtract-2.0-2B via `NuExtractTransformersModel`\n\nUsers can override these defaults via the `extraction_format_options` parameter in `DocumentExtractor.__init__()`.\n\n**Experimental Status:** As of the current implementation, only PDF and Image formats are supported for extraction. The API warns users that it is experimental and may change.\n\n**Sources:** [docling/document\\_extractor.py66-85](https://github.com/docling-project/docling/blob/f7244a43/docling/document_extractor.py#L66-L85) [docling/pipeline/extraction\\_vlm\\_pipeline.py32-46](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/extraction_vlm_pipeline.py#L32-L46)",
+    "metadata": {
+      "source": "_docling-project_docling_7.2-documentextractor-api.md",
+      "heading": "Default Format Options",
+      "heading_level": 3,
+      "chunk_index": 15,
+      "collection": "docling",
+      "char_count": 970,
+      "estimated_tokens": 242,
+      "total_chunks": 19
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_7.2-documentextractor-api.md:chunk:16",
+    "content": "### Status Decision Tree\n\n\n```\n```\n\n**Diagram: Extraction Status Determination**\n\nThe `_determine_status()` method in `ExtractionVlmPipeline` uses a simple rule:\n\n- **SUCCESS**: At least one page extracted AND no page errors\n- **FAILURE**: No pages extracted OR any page has errors\n\nUnlike `DocumentConverter`, extraction does not support `PARTIAL_SUCCESS` status—a document either fully succeeds or fails.\n\n**Sources:** [docling/pipeline/extraction\\_vlm\\_pipeline.py128-133](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/extraction_vlm_pipeline.py#L128-L133)",
+    "metadata": {
+      "source": "_docling-project_docling_7.2-documentextractor-api.md",
+      "heading": "Status Decision Tree",
+      "heading_level": 3,
+      "chunk_index": 16,
+      "collection": "docling",
+      "char_count": 587,
+      "estimated_tokens": 146,
+      "total_chunks": 19
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_7.2-documentextractor-api.md:chunk:17",
+    "content": "### Error Propagation\n\n\n```\n```\n\n**Diagram: Error Handling Flow**\n\nThe `raises_on_error` parameter controls error behavior at multiple levels:\n\n1. **Document level**: Invalid formats, missing pipelines\n2. **Page level**: Image loading failures, VLM processing errors\n\nWhen `raises_on_error=False`, errors are captured in the `ExtractionResult` structure rather than raised as exceptions.\n\n**Sources:** [docling/document\\_extractor.py177-192](https://github.com/docling-project/docling/blob/f7244a43/docling/document_extractor.py#L177-L192) [docling/pipeline/base\\_extraction\\_pipeline.py31-53](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/base_extraction_pipeline.py#L31-L53) [docling/pipeline/extraction\\_vlm\\_pipeline.py109-114](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/extraction_vlm_pipeline.py#L109-L114)\n\nDismiss\n\nRefresh this wiki\n\nThis wiki was recently refreshed. Please wait 4 days to refresh again.",
+    "metadata": {
+      "source": "_docling-project_docling_7.2-documentextractor-api.md",
+      "heading": "Error Propagation",
+      "heading_level": 3,
+      "chunk_index": 17,
+      "collection": "docling",
+      "char_count": 971,
+      "estimated_tokens": 242,
+      "total_chunks": 19
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_7.2-documentextractor-api.md:chunk:18",
+    "content": "### On this page\n\n\n- [DocumentExtractor API](#documentextractor-api.md)\n- [Purpose and Scope](#purpose-and-scope.md)\n- [Core Architecture](#core-architecture.md)\n- [Class Hierarchy and Components](#class-hierarchy-and-components.md)\n- [DocumentExtractor Class](#documentextractor-class.md)\n- [API Methods](#api-methods.md)\n- [extract() - Single Document Extraction](#extract---single-document-extraction.md)\n- [extract\\_all() - Batch Extraction](#extract_all---batch-extraction.md)\n- [Template Types and Serialization](#template-types-and-serialization.md)\n- [Template Type Hierarchy](#template-type-hierarchy.md)\n- [Template Serialization Example Flow](#template-serialization-example-flow.md)\n- [ExtractionResult Data Model](#extractionresult-data-model.md)\n- [Result Structure](#result-structure.md)\n- [ExtractedPageData Structure](#extractedpagedata-structure.md)\n- [Pipeline Architecture](#pipeline-architecture.md)\n- [Extraction Pipeline Hierarchy](#extraction-pipeline-hierarchy.md)\n- [VLM Model Integration](#vlm-model-integration.md)\n- [Pipeline Caching Mechanism](#pipeline-caching-mechanism.md)\n- [Cache Key Generation](#cache-key-generation.md)\n- [Format Support and Backend Configuration](#format-support-and-backend-configuration.md)\n- [Default Format Options](#default-format-options.md)\n- [Error Handling and Status Determination](#error-handling-and-status-determination.md)\n- [Status Decision Tree](#status-decision-tree.md)\n- [Error Propagation](#error-propagation.md)",
+    "metadata": {
+      "source": "_docling-project_docling_7.2-documentextractor-api.md",
+      "heading": "On this page",
+      "heading_level": 3,
+      "chunk_index": 18,
+      "collection": "docling",
+      "char_count": 1487,
+      "estimated_tokens": 371,
+      "total_chunks": 19
+    }
+  }
+]

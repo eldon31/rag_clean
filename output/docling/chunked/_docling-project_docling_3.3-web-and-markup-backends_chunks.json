@@ -1,0 +1,268 @@
+[
+  {
+    "chunk_id": "docling:_docling-project_docling_3.3-web-and-markup-backends.md:chunk:0",
+    "content": "# Web and Markup Backends\n\n\nRelevant source files",
+    "metadata": {
+      "source": "_docling-project_docling_3.3-web-and-markup-backends.md",
+      "heading": "Web and Markup Backends",
+      "heading_level": 1,
+      "chunk_index": 0,
+      "collection": "docling",
+      "char_count": 49,
+      "estimated_tokens": 12,
+      "total_chunks": 19
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_3.3-web-and-markup-backends.md:chunk:1",
+    "content": "- [docling/backend/html\\_backend.py](https://github.com/docling-project/docling/blob/f7244a43/docling/backend/html_backend.py)\n- [docling/cli/main.py](https://github.com/docling-project/docling/blob/f7244a43/docling/cli/main.py)\n- [docling/datamodel/base\\_models.py](https://github.com/docling-project/docling/blob/f7244a43/docling/datamodel/base_models.py)\n- [docling/datamodel/document.py](https://github.com/docling-project/docling/blob/f7244a43/docling/datamodel/document.py)\n- [docling/datamodel/pipeline\\_options.py](https://github.com/docling-project/docling/blob/f7244a43/docling/datamodel/pipeline_options.py)\n- [docling/document\\_converter.py](https://github.com/docling-project/docling/blob/f7244a43/docling/document_converter.py)\n- [tests/data/groundtruth/docling\\_v2/example\\_06.html.itxt](https://github.com/docling-project/docling/blob/f7244a43/tests/data/groundtruth/docling_v2/example_06.html.itxt)\n- [tests/data/groundtruth/docling\\_v2/example\\_06.html.json](https://github.com/docling-project/docling/blob/f7244a43/tests/data/groundtruth/docling_v2/example_06.html.json)\n- [tests/data/groundtruth/docling\\_v2/example\\_06.html.md](https://github.com/docling-project/docling/blob/f7244a43/tests/data/groundtruth/docling_v2/example_06.html.md)\n- [tests/data/groundtruth/docling\\_v2/example\\_09.html.itxt](https://github.com/docling-project/docling/blob/f7244a43/tests/data/groundtruth/docling_v2/example_09.html.itxt)\n- [tests/data/groundtruth/docling\\_v2/example\\_09.html.json](https://github.com/docling-project/docling/blob/f7244a43/tests/data/groundtruth/docling_v2/example_09.html.json)\n- [tests/data/groundtruth/docling\\_v2/example\\_09.html.md](https://github.com/docling-project/docling/blob/f7244a43/tests/data/groundtruth/docling_v2/example_09.html.md)\n- [tests/data/groundtruth/docling\\_v2/wiki\\_duck.html.itxt](https://github.com/docling-project/docling/blob/f7244a43/tests/data/groundtruth/docling_v2/wiki_duck.html.itxt)\n- [tests/data/groundtruth/docling\\_v2/wiki\\_duck.html.json](https://github.com/docling-project/docling/blob/f7244a43/tests/data/groundtruth/docling_v2/wiki_duck.html.json)\n- [tests/data/groundtruth/docling\\_v2/wiki\\_duck.html.md](https://github.com/docling-project/docling/blob/f7244a43/tests/data/groundtruth/docling_v2/wiki_duck.html.md)\n- [tests/test\\_backend\\_html.py](https://github.com/docling-project/docling/blob/f7244a43/tests/test_backend_html.py)",
+    "metadata": {
+      "source": "_docling-project_docling_3.3-web-and-markup-backends.md",
+      "heading": "Web and Markup Backends",
+      "heading_level": 1,
+      "chunk_index": 1,
+      "collection": "docling",
+      "char_count": 2407,
+      "estimated_tokens": 601,
+      "total_chunks": 19
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_3.3-web-and-markup-backends.md:chunk:2",
+    "content": "## Purpose and Scope\n\n\nThis document covers the document backends for web and markup formats: HTML, Markdown, and AsciiDoc. These backends parse structured text documents and convert them into the unified `DoclingDocument` representation. All three formats share the `SimplePipeline` processing path and produce documents with hierarchical structure, content layers, and rich formatting.\n\nFor PDF document backends, see [PDF Processing Backends](docling-project/docling/3.1-pdf-processing-backends.md). For Office document formats, see [Office Document Backends](docling-project/docling/3.2-office-document-backends.md).",
+    "metadata": {
+      "source": "_docling-project_docling_3.3-web-and-markup-backends.md",
+      "heading": "Purpose and Scope",
+      "heading_level": 2,
+      "chunk_index": 2,
+      "collection": "docling",
+      "char_count": 620,
+      "estimated_tokens": 155,
+      "total_chunks": 19
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_3.3-web-and-markup-backends.md:chunk:3",
+    "content": "## Architecture Overview\n\n\nWeb and markup backends inherit from `DeclarativeDocumentBackend` and implement format-specific parsing logic. Unlike PDF backends that require complex page-by-page processing, these backends parse the entire document structure in a single pass.\n\n```\n```\n\n**Sources:** [docling/backend/html\\_backend.py183-237](https://github.com/docling-project/docling/blob/f7244a43/docling/backend/html_backend.py#L183-L237) [docling/document\\_converter.py102-114](https://github.com/docling-project/docling/blob/f7244a43/docling/document_converter.py#L102-L114) [docling/datamodel/base\\_models.py54-72](https://github.com/docling-project/docling/blob/f7244a43/docling/datamodel/base_models.py#L54-L72)",
+    "metadata": {
+      "source": "_docling-project_docling_3.3-web-and-markup-backends.md",
+      "heading": "Architecture Overview",
+      "heading_level": 2,
+      "chunk_index": 3,
+      "collection": "docling",
+      "char_count": 715,
+      "estimated_tokens": 178,
+      "total_chunks": 19
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_3.3-web-and-markup-backends.md:chunk:4",
+    "content": "### Format Options\n\n\nEach backend is paired with a `FormatOption` that specifies the pipeline class and backend class. All web and markup formats use `SimplePipeline`:\n\n| Format   | FormatOption Class     | Backend Class             | Pipeline         |\n| -------- | ---------------------- | ------------------------- | ---------------- |\n| HTML     | `HTMLFormatOption`     | `HTMLDocumentBackend`     | `SimplePipeline` |\n| Markdown | `MarkdownFormatOption` | `MarkdownDocumentBackend` | `SimplePipeline` |\n| AsciiDoc | `AsciiDocFormatOption` | `AsciiDocBackend`         | `SimplePipeline` |\n\n```\n```\n\n**Sources:** [docling/document\\_converter.py102-114](https://github.com/docling-project/docling/blob/f7244a43/docling/document_converter.py#L102-L114) [docling/document\\_converter.py132-181](https://github.com/docling-project/docling/blob/f7244a43/docling/document_converter.py#L132-L181)",
+    "metadata": {
+      "source": "_docling-project_docling_3.3-web-and-markup-backends.md",
+      "heading": "Format Options",
+      "heading_level": 3,
+      "chunk_index": 4,
+      "collection": "docling",
+      "char_count": 892,
+      "estimated_tokens": 223,
+      "total_chunks": 19
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_3.3-web-and-markup-backends.md:chunk:5",
+    "content": "### MIME Type and Extension Detection\n\n\nFormat detection uses both MIME types and file extensions to identify document types:\n\n**HTML:**\n\n- MIME types: `text/html`, `application/xhtml+xml`\n- Extensions: `.html`, `.htm`, `.xhtml`\n\n**Markdown:**\n\n- MIME types: `text/markdown`, `text/x-markdown`\n- Extensions: `.md`\n\n**AsciiDoc:**\n\n- MIME types: `text/asciidoc`\n- Extensions: `.adoc`, `.asciidoc`, `.asc`\n\n**Sources:** [docling/datamodel/base\\_models.py83-133](https://github.com/docling-project/docling/blob/f7244a43/docling/datamodel/base_models.py#L83-L133) [docling/datamodel/document.py376-400](https://github.com/docling-project/docling/blob/f7244a43/docling/datamodel/document.py#L376-L400)",
+    "metadata": {
+      "source": "_docling-project_docling_3.3-web-and-markup-backends.md",
+      "heading": "MIME Type and Extension Detection",
+      "heading_level": 3,
+      "chunk_index": 5,
+      "collection": "docling",
+      "char_count": 695,
+      "estimated_tokens": 173,
+      "total_chunks": 19
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_3.3-web-and-markup-backends.md:chunk:6",
+    "content": "## HTML Backend\n\n\nThe `HTMLDocumentBackend` is the most sophisticated web/markup backend, handling complex HTML structures including tables, lists, formatting, hyperlinks, and images.",
+    "metadata": {
+      "source": "_docling-project_docling_3.3-web-and-markup-backends.md",
+      "heading": "HTML Backend",
+      "heading_level": 2,
+      "chunk_index": 6,
+      "collection": "docling",
+      "char_count": 183,
+      "estimated_tokens": 45,
+      "total_chunks": 19
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_3.3-web-and-markup-backends.md:chunk:7",
+    "content": "### Core Implementation\n\n\n```\n```\n\n**Sources:** [docling/backend/html\\_backend.py183-237](https://github.com/docling-project/docling/blob/f7244a43/docling/backend/html_backend.py#L183-L237) [docling/backend/html\\_backend.py239-292](https://github.com/docling-project/docling/blob/f7244a43/docling/backend/html_backend.py#L239-L292)",
+    "metadata": {
+      "source": "_docling-project_docling_3.3-web-and-markup-backends.md",
+      "heading": "Core Implementation",
+      "heading_level": 3,
+      "chunk_index": 7,
+      "collection": "docling",
+      "char_count": 331,
+      "estimated_tokens": 82,
+      "total_chunks": 19
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_3.3-web-and-markup-backends.md:chunk:8",
+    "content": "### Content Layer Management\n\n\nHTML backend implements a content layer system that distinguishes between document body and furniture (metadata/navigation):\n\n```\n```\n\nThe backend determines content layers as follows:\n\n1. **Initial state:** Content is `ContentLayer.FURNITURE` if no headers exist in the document\n2. **First header transition:** When the first `<h1>`-`<h6>` tag is encountered (excluding headers inside tables), content layer switches to `ContentLayer.BODY`\n3. **Footer handling:** `<footer>` tags temporarily switch back to `ContentLayer.FURNITURE`\n\n**Sources:** [docling/backend/html\\_backend.py276-288](https://github.com/docling-project/docling/blob/f7244a43/docling/backend/html_backend.py#L276-L288) [docling/backend/html\\_backend.py751-776](https://github.com/docling-project/docling/blob/f7244a43/docling/backend/html_backend.py#L751-L776)",
+    "metadata": {
+      "source": "_docling-project_docling_3.3-web-and-markup-backends.md",
+      "heading": "Content Layer Management",
+      "heading_level": 3,
+      "chunk_index": 8,
+      "collection": "docling",
+      "char_count": 861,
+      "estimated_tokens": 215,
+      "total_chunks": 19
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_3.3-web-and-markup-backends.md:chunk:9",
+    "content": "### Tag Processing Strategy\n\n\nThe backend uses a block-based buffering strategy to handle mixed inline and block-level HTML elements:\n\n**Block Tags** (create distinct DocItem boundaries):\n\n- `address`, `details`, `figure`, `footer`\n- `h1` through `h6`\n- `ol`, `ul`, `p`, `pre`, `summary`, `table`\n\n**Format Tags** (apply inline formatting):\n\n- `b`, `strong` → bold\n- `i`, `em`, `var` → italic\n- `s`, `del` → strikethrough\n- `u`, `ins` → underline\n- `sub` → subscript\n- `sup` → superscript\n- `code`, `kbd`, `samp` → code formatting\n\n```\n```\n\n**Sources:** [docling/backend/html\\_backend.py467-559](https://github.com/docling-project/docling/blob/f7244a43/docling/backend/html_backend.py#L467-L559) [docling/backend/html\\_backend.py40-77](https://github.com/docling-project/docling/blob/f7244a43/docling/backend/html_backend.py#L40-L77)",
+    "metadata": {
+      "source": "_docling-project_docling_3.3-web-and-markup-backends.md",
+      "heading": "Tag Processing Strategy",
+      "heading_level": 3,
+      "chunk_index": 9,
+      "collection": "docling",
+      "char_count": 833,
+      "estimated_tokens": 208,
+      "total_chunks": 19
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_3.3-web-and-markup-backends.md:chunk:10",
+    "content": "### List Handling\n\n\nThe backend tracks list context to properly number ordered lists and handle nested structures:\n\n```\n```\n\nThe `_Context` class maintains:\n\n- `list_ordered_flag_by_ref`: Tracks whether each list is ordered\n- `list_start_by_ref`: Tracks the starting number for ordered lists\n\n**Sources:** [docling/backend/html\\_backend.py80-83](https://github.com/docling-project/docling/blob/f7244a43/docling/backend/html_backend.py#L80-L83) [docling/backend/html\\_backend.py913-1014](https://github.com/docling-project/docling/blob/f7244a43/docling/backend/html_backend.py#L913-L1014)",
+    "metadata": {
+      "source": "_docling-project_docling_3.3-web-and-markup-backends.md",
+      "heading": "List Handling",
+      "heading_level": 3,
+      "chunk_index": 10,
+      "collection": "docling",
+      "char_count": 587,
+      "estimated_tokens": 146,
+      "total_chunks": 19
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_3.3-web-and-markup-backends.md:chunk:11",
+    "content": "### Table Processing\n\n\nHTML tables are converted to `TableItem` objects with support for both simple and rich cells:\n\n```\n```\n\n**Rich Table Cells** are created when:\n\n- A cell contains multiple document items (e.g., multiple paragraphs)\n- A cell contains non-text items (e.g., images, nested lists)\n\nThe backend creates a `GroupItem` to contain all child elements and references this group from the `RichTableCell`.\n\n**Sources:** [docling/backend/html\\_backend.py1016-1132](https://github.com/docling-project/docling/blob/f7244a43/docling/backend/html_backend.py#L1016-L1132) [docling/backend/html\\_backend.py294-349](https://github.com/docling-project/docling/blob/f7244a43/docling/backend/html_backend.py#L294-L349) [docling/backend/html\\_backend.py351-465](https://github.com/docling-project/docling/blob/f7244a43/docling/backend/html_backend.py#L351-L465)",
+    "metadata": {
+      "source": "_docling-project_docling_3.3-web-and-markup-backends.md",
+      "heading": "Table Processing",
+      "heading_level": 3,
+      "chunk_index": 11,
+      "collection": "docling",
+      "char_count": 859,
+      "estimated_tokens": 214,
+      "total_chunks": 19
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_3.3-web-and-markup-backends.md:chunk:12",
+    "content": "### Formatting and Hyperlinks\n\n\nThe backend tracks formatting and hyperlink context as it recursively walks the DOM tree:\n\n**Formatting Stack:**\n\n- Uses `self.format_tags: list[str]` to maintain active formatting\n- Format tags are pushed/popped using context managers\n- Combined into `Formatting` objects when creating text items\n\n**Hyperlink Context:**\n\n- Uses `self.hyperlink: Union[AnyUrl, Path, None]` to track current link\n- Handles relative URLs by joining with `original_url`\n- Falls back to `Path` for relative links that fail URL validation\n\n**Text Annotation Classes:**\n\n```\n```\n\n**Sources:** [docling/backend/html\\_backend.py85-181](https://github.com/docling-project/docling/blob/f7244a43/docling/backend/html_backend.py#L85-L181) [docling/backend/html\\_backend.py573-580](https://github.com/docling-project/docling/blob/f7244a43/docling/backend/html_backend.py#L573-L580) [docling/backend/html\\_backend.py662-684](https://github.com/docling-project/docling/blob/f7244a43/docling/backend/html_backend.py#L662-L684)",
+    "metadata": {
+      "source": "_docling-project_docling_3.3-web-and-markup-backends.md",
+      "heading": "Formatting and Hyperlinks",
+      "heading_level": 3,
+      "chunk_index": 12,
+      "collection": "docling",
+      "char_count": 1026,
+      "estimated_tokens": 256,
+      "total_chunks": 19
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_3.3-web-and-markup-backends.md:chunk:13",
+    "content": "### Image Handling\n\n\nImages are extracted from `<img>` tags and added as `PictureItem` objects:\n\n```\n```\n\n**Sources:** [docling/backend/html\\_backend.py1134-1218](https://github.com/docling-project/docling/blob/f7244a43/docling/backend/html_backend.py#L1134-L1218)",
+    "metadata": {
+      "source": "_docling-project_docling_3.3-web-and-markup-backends.md",
+      "heading": "Image Handling",
+      "heading_level": 3,
+      "chunk_index": 13,
+      "collection": "docling",
+      "char_count": 264,
+      "estimated_tokens": 66,
+      "total_chunks": 19
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_3.3-web-and-markup-backends.md:chunk:14",
+    "content": "### Heading Hierarchy\n\n\nThe backend manages document hierarchy based on heading levels:\n\n1. `<h1>` tags create level-1 `SectionHeaderItem` and reset parent hierarchy\n2. `<h2>` through `<h6>` tags create nested section headers\n3. The `self.level` counter tracks current hierarchy depth\n4. The `self.parents` dictionary maintains parent references at each level\n\n```\n```\n\n**Sources:** [docling/backend/html\\_backend.py778-839](https://github.com/docling-project/docling/blob/f7244a43/docling/backend/html_backend.py#L778-L839) [docling/backend/html\\_backend.py196-201](https://github.com/docling-project/docling/blob/f7244a43/docling/backend/html_backend.py#L196-L201)",
+    "metadata": {
+      "source": "_docling-project_docling_3.3-web-and-markup-backends.md",
+      "heading": "Heading Hierarchy",
+      "heading_level": 3,
+      "chunk_index": 14,
+      "collection": "docling",
+      "char_count": 666,
+      "estimated_tokens": 166,
+      "total_chunks": 19
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_3.3-web-and-markup-backends.md:chunk:15",
+    "content": "## Markdown and AsciiDoc Backends\n\n\nThe Markdown and AsciiDoc backends follow similar patterns to the HTML backend but with format-specific parsers:\n\n**MarkdownDocumentBackend:**\n\n- Uses `marko` library for Markdown parsing\n- Converts Markdown AST to DoclingDocument structure\n- Handles CommonMark and extensions\n\n**AsciiDocBackend:**\n\n- Parses AsciiDoc markup format\n- Converts AsciiDoc structure to DoclingDocument\n- Preserves document structure and formatting\n\nBoth backends:\n\n- Inherit from `DeclarativeDocumentBackend`\n- Use `SimplePipeline` for processing\n- Produce `DoclingDocument` output with hierarchical structure\n- Support the same content layer system (BODY/FURNITURE)\n\n**Sources:** [docling/document\\_converter.py92-99](https://github.com/docling-project/docling/blob/f7244a43/docling/document_converter.py#L92-L99) [docling/document\\_converter.py146-160](https://github.com/docling-project/docling/blob/f7244a43/docling/document_converter.py#L146-L160)",
+    "metadata": {
+      "source": "_docling-project_docling_3.3-web-and-markup-backends.md",
+      "heading": "Markdown and AsciiDoc Backends",
+      "heading_level": 2,
+      "chunk_index": 15,
+      "collection": "docling",
+      "char_count": 967,
+      "estimated_tokens": 241,
+      "total_chunks": 19
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_3.3-web-and-markup-backends.md:chunk:16",
+    "content": "## Integration with SimplePipeline\n\n\nAll web and markup backends use `SimplePipeline`, which provides:\n\n1. **Direct conversion:** Calls `backend.convert()` to get `DoclingDocument`\n2. **Optional enrichment:** Can apply picture classification and description models\n3. **No page-level processing:** Unlike PDF pipelines, processes entire document at once\n\n```\n```\n\n**Configuration via CLI:**\n\n```\n```\n\n**Sources:** [docling/pipeline/simple\\_pipeline.py](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/simple_pipeline.py) [docling/cli/main.py670-697](https://github.com/docling-project/docling/blob/f7244a43/docling/cli/main.py#L670-L697)",
+    "metadata": {
+      "source": "_docling-project_docling_3.3-web-and-markup-backends.md",
+      "heading": "Integration with SimplePipeline",
+      "heading_level": 2,
+      "chunk_index": 16,
+      "collection": "docling",
+      "char_count": 663,
+      "estimated_tokens": 165,
+      "total_chunks": 19
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_3.3-web-and-markup-backends.md:chunk:17",
+    "content": "## Testing and Ground Truth\n\n\nThe test suite validates HTML backend functionality with multiple test cases:\n\n**Test Coverage:**\n\n- Heading level processing\n- Ordered/unordered lists with start attributes\n- Unicode character handling\n- Hyperlink extraction (including parent context)\n- Furniture vs body content layers\n- End-to-end conversions with ground truth validation\n\n**Ground Truth Structure:**\n\n- JSON files contain full `DoclingDocument` serialization\n- Markdown files contain exported markdown for comparison\n- `.itxt` files contain indented text representation for hierarchy validation\n\n**Sources:** [tests/test\\_backend\\_html.py](https://github.com/docling-project/docling/blob/f7244a43/tests/test_backend_html.py) [tests/data/groundtruth/docling\\_v2/](https://github.com/docling-project/docling/blob/f7244a43/tests/data/groundtruth/docling_v2/)\n\nDismiss\n\nRefresh this wiki\n\nThis wiki was recently refreshed. Please wait 4 days to refresh again.",
+    "metadata": {
+      "source": "_docling-project_docling_3.3-web-and-markup-backends.md",
+      "heading": "Testing and Ground Truth",
+      "heading_level": 2,
+      "chunk_index": 17,
+      "collection": "docling",
+      "char_count": 956,
+      "estimated_tokens": 239,
+      "total_chunks": 19
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_3.3-web-and-markup-backends.md:chunk:18",
+    "content": "### On this page\n\n\n- [Web and Markup Backends](#web-and-markup-backends.md)\n- [Purpose and Scope](#purpose-and-scope.md)\n- [Architecture Overview](#architecture-overview.md)\n- [Backend Configuration](#backend-configuration.md)\n- [Format Options](#format-options.md)\n- [MIME Type and Extension Detection](#mime-type-and-extension-detection.md)\n- [HTML Backend](#html-backend.md)\n- [Core Implementation](#core-implementation.md)\n- [Content Layer Management](#content-layer-management.md)\n- [Tag Processing Strategy](#tag-processing-strategy.md)\n- [List Handling](#list-handling.md)\n- [Table Processing](#table-processing.md)\n- [Formatting and Hyperlinks](#formatting-and-hyperlinks.md)\n- [Image Handling](#image-handling.md)\n- [Heading Hierarchy](#heading-hierarchy.md)\n- [Markdown and AsciiDoc Backends](#markdown-and-asciidoc-backends.md)\n- [Integration with SimplePipeline](#integration-with-simplepipeline.md)\n- [Testing and Ground Truth](#testing-and-ground-truth.md)",
+    "metadata": {
+      "source": "_docling-project_docling_3.3-web-and-markup-backends.md",
+      "heading": "On this page",
+      "heading_level": 3,
+      "chunk_index": 18,
+      "collection": "docling",
+      "char_count": 970,
+      "estimated_tokens": 242,
+      "total_chunks": 19
+    }
+  }
+]

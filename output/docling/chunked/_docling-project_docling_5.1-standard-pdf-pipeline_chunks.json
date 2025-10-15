@@ -1,0 +1,352 @@
+[
+  {
+    "chunk_id": "docling:_docling-project_docling_5.1-standard-pdf-pipeline.md:chunk:0",
+    "content": "# Standard PDF Pipeline\n\n\nRelevant source files",
+    "metadata": {
+      "source": "_docling-project_docling_5.1-standard-pdf-pipeline.md",
+      "heading": "Standard PDF Pipeline",
+      "heading_level": 1,
+      "chunk_index": 0,
+      "collection": "docling",
+      "char_count": 47,
+      "estimated_tokens": 11,
+      "total_chunks": 25
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_5.1-standard-pdf-pipeline.md:chunk:1",
+    "content": "- [docling/datamodel/extraction.py](https://github.com/docling-project/docling/blob/f7244a43/docling/datamodel/extraction.py)\n- [docling/document\\_extractor.py](https://github.com/docling-project/docling/blob/f7244a43/docling/document_extractor.py)\n- [docling/models/base\\_ocr\\_model.py](https://github.com/docling-project/docling/blob/f7244a43/docling/models/base_ocr_model.py)\n- [docling/models/code\\_formula\\_model.py](https://github.com/docling-project/docling/blob/f7244a43/docling/models/code_formula_model.py)\n- [docling/models/document\\_picture\\_classifier.py](https://github.com/docling-project/docling/blob/f7244a43/docling/models/document_picture_classifier.py)\n- [docling/models/easyocr\\_model.py](https://github.com/docling-project/docling/blob/f7244a43/docling/models/easyocr_model.py)\n- [docling/models/layout\\_model.py](https://github.com/docling-project/docling/blob/f7244a43/docling/models/layout_model.py)\n- [docling/models/page\\_assemble\\_model.py](https://github.com/docling-project/docling/blob/f7244a43/docling/models/page_assemble_model.py)\n- [docling/models/page\\_preprocessing\\_model.py](https://github.com/docling-project/docling/blob/f7244a43/docling/models/page_preprocessing_model.py)\n- [docling/models/table\\_structure\\_model.py](https://github.com/docling-project/docling/blob/f7244a43/docling/models/table_structure_model.py)\n- [docling/models/vlm\\_models\\_inline/nuextract\\_transformers\\_model.py](https://github.com/docling-project/docling/blob/f7244a43/docling/models/vlm_models_inline/nuextract_transformers_model.py)\n- [docling/pipeline/asr\\_pipeline.py](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/asr_pipeline.py)\n- [docling/pipeline/base\\_extraction\\_pipeline.py](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/base_extraction_pipeline.py)\n- [docling/pipeline/base\\_pipeline.py](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/base_pipeline.py)\n- [docling/pipeline/extraction\\_vlm\\_pipeline.py](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/extraction_vlm_pipeline.py)\n- [docling/pipeline/simple\\_pipeline.py](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/simple_pipeline.py)\n- [docling/pipeline/standard\\_pdf\\_pipeline.py](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/standard_pdf_pipeline.py)\n- [docling/pipeline/threaded\\_standard\\_pdf\\_pipeline.py](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/threaded_standard_pdf_pipeline.py)\n- [docling/pipeline/vlm\\_pipeline.py](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/vlm_pipeline.py)\n- [tests/test\\_document\\_picture\\_classifier.py](https://github.com/docling-project/docling/blob/f7244a43/tests/test_document_picture_classifier.py)\n- [tests/test\\_options.py](https://github.com/docling-project/docling/blob/f7244a43/tests/test_options.py)",
+    "metadata": {
+      "source": "_docling-project_docling_5.1-standard-pdf-pipeline.md",
+      "heading": "Standard PDF Pipeline",
+      "heading_level": 1,
+      "chunk_index": 1,
+      "collection": "docling",
+      "char_count": 2955,
+      "estimated_tokens": 738,
+      "total_chunks": 25
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_5.1-standard-pdf-pipeline.md:chunk:2",
+    "content": "## Purpose and Scope\n\n\nThe `StandardPdfPipeline` implements a sequential, single-threaded processing pipeline for PDF documents that orchestrates five specialized model stages to extract and structure document content. This pipeline processes pages one batch at a time, applying OCR, layout analysis, table structure detection, and assembly operations in sequence.\n\nFor multi-threaded parallel processing with improved performance, see [Threaded PDF Pipeline](docling-project/docling/5.2-threaded-pdf-pipeline.md). For end-to-end vision-language model processing, see [VLM Pipeline](docling-project/docling/5.3-vlm-pipeline.md). For the base pipeline architecture and three-phase execution model, see [Base Pipeline Architecture](docling-project/docling/5.6-base-pipeline-architecture.md).\n\n**Sources:** [docling/pipeline/standard\\_pdf\\_pipeline.py1-243](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/standard_pdf_pipeline.py#L1-L243)\n\n---",
+    "metadata": {
+      "source": "_docling-project_docling_5.1-standard-pdf-pipeline.md",
+      "heading": "Purpose and Scope",
+      "heading_level": 2,
+      "chunk_index": 2,
+      "collection": "docling",
+      "char_count": 967,
+      "estimated_tokens": 241,
+      "total_chunks": 25
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_5.1-standard-pdf-pipeline.md:chunk:3",
+    "content": "### Class Hierarchy\n\n\nThe `StandardPdfPipeline` inherits from `PaginatedPipeline`, which provides page-by-page iteration and backend management:\n\n```\n```\n\n**Sources:** [docling/pipeline/standard\\_pdf\\_pipeline.py34-35](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/standard_pdf_pipeline.py#L34-L35) [docling/pipeline/base\\_pipeline.py43-133](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/base_pipeline.py#L43-L133) [docling/pipeline/base\\_pipeline.py184-320](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/base_pipeline.py#L184-L320)",
+    "metadata": {
+      "source": "_docling-project_docling_5.1-standard-pdf-pipeline.md",
+      "heading": "Class Hierarchy",
+      "heading_level": 3,
+      "chunk_index": 3,
+      "collection": "docling",
+      "char_count": 616,
+      "estimated_tokens": 154,
+      "total_chunks": 25
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_5.1-standard-pdf-pipeline.md:chunk:4",
+    "content": "### Pipeline Components\n\n\nThe pipeline initializes two model sequences during construction:\n\n```\n```\n\nThe `build_pipe` processes pages sequentially through five stages ([standard\\_pdf\\_pipeline.py51-75](https://github.com/docling-project/docling/blob/f7244a43/standard_pdf_pipeline.py#L51-L75)), while the `enrichment_pipe` operates on individual document items after assembly ([standard\\_pdf\\_pipeline.py77-90](https://github.com/docling-project/docling/blob/f7244a43/standard_pdf_pipeline.py#L77-L90)).\n\n**Sources:** [docling/pipeline/standard\\_pdf\\_pipeline.py51-90](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/standard_pdf_pipeline.py#L51-L90) [docling/pipeline/base\\_pipeline.py135-177](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/base_pipeline.py#L135-L177)\n\n---",
+    "metadata": {
+      "source": "_docling-project_docling_5.1-standard-pdf-pipeline.md",
+      "heading": "Pipeline Components",
+      "heading_level": 3,
+      "chunk_index": 4,
+      "collection": "docling",
+      "char_count": 828,
+      "estimated_tokens": 207,
+      "total_chunks": 25
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_5.1-standard-pdf-pipeline.md:chunk:5",
+    "content": "## Five-Stage Processing\n\n\nThe `build_pipe` sequence implements a fixed order of operations. Each model receives an `Iterable[Page]` and must yield the same pages after processing.",
+    "metadata": {
+      "source": "_docling-project_docling_5.1-standard-pdf-pipeline.md",
+      "heading": "Five-Stage Processing",
+      "heading_level": 2,
+      "chunk_index": 5,
+      "collection": "docling",
+      "char_count": 180,
+      "estimated_tokens": 45,
+      "total_chunks": 25
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_5.1-standard-pdf-pipeline.md:chunk:6",
+    "content": "### Stage 1: Page Preprocessing\n\n\n**Class:** `PagePreprocessingModel`\\\n**Location:** [docling/models/page\\_preprocessing\\_model.py25-146](https://github.com/docling-project/docling/blob/f7244a43/docling/models/page_preprocessing_model.py#L25-L146)\n\nResponsibilities:\n\n- Generate page images at requested scales (`page.get_image(scale)`)\n- Extract text cells from PDF backend (`page._backend.get_segmented_page()`)\n- Calculate parse quality scores using text heuristics\n- Store results in `page.parsed_page` and `page._image_cache`\n\nThe preprocessing model populates page images at multiple scales and extracts programmatic text cells from the backend:\n\n```\n```\n\nConfiguration via `PagePreprocessingOptions`:\n\n- `images_scale`: Output image resolution multiplier\n- `skip_cell_extraction`: Skip cell parsing for VLM-only workflows\n\n**Sources:** [docling/models/page\\_preprocessing\\_model.py37-118](https://github.com/docling-project/docling/blob/f7244a43/docling/models/page_preprocessing_model.py#L37-L118) [docling/pipeline/standard\\_pdf\\_pipeline.py53-57](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/standard_pdf_pipeline.py#L53-L57)",
+    "metadata": {
+      "source": "_docling-project_docling_5.1-standard-pdf-pipeline.md",
+      "heading": "Stage 1: Page Preprocessing",
+      "heading_level": 3,
+      "chunk_index": 6,
+      "collection": "docling",
+      "char_count": 1164,
+      "estimated_tokens": 291,
+      "total_chunks": 25
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_5.1-standard-pdf-pipeline.md:chunk:7",
+    "content": "### Stage 2: OCR (Optical Character Recognition)\n\n\n**Class:** `BaseOcrModel` (abstract)\\\n**Implementations:** `RapidOcrModel`, `EasyOcrModel`, `TesseractOcrModel`, `OcrAutoModel`\\\n**Location:** [docling/models/base\\_ocr\\_model.py24-228](https://github.com/docling-project/docling/blob/f7244a43/docling/models/base_ocr_model.py#L24-L228)\n\nResponsibilities:\n\n- Detect bitmap-heavy regions using `get_ocr_rects()` ([base\\_ocr\\_model.py40-112](https://github.com/docling-project/docling/blob/f7244a43/base_ocr_model.py#L40-L112))\n- Run OCR engine on high-resolution crops of bitmap areas\n- Filter OCR results to avoid duplicating programmatic text\n- Append new `TextCell` objects to `page.parsed_page.textline_cells`\n\nOCR processing workflow:\n\n```\n```\n\nThe OCR model factory selects the appropriate implementation based on `OcrOptions`:\n\n| Option Type           | Model Class         | Engine                         |\n| --------------------- | ------------------- | ------------------------------ |\n| `OcrAutoOptions`      | `OcrAutoModel`      | Auto-selects based on platform |\n| `RapidOcrOptions`     | `RapidOcrModel`     | ONNX or PyTorch backend        |\n| `EasyOcrOptions`      | `EasyOcrModel`      | Deep learning OCR              |\n| `TesseractOcrOptions` | `TesseractOcrModel` | Tesseract binding or CLI       |\n\n**Sources:** [docling/models/base\\_ocr\\_model.py40-217](https://github.com/docling-project/docling/blob/f7244a43/docling/models/base_ocr_model.py#L40-L217) [docling/pipeline/standard\\_pdf\\_pipeline.py49-59](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/standard_pdf_pipeline.py#L49-L59) [docling/models/easyocr\\_model.py28-201](https://github.com/docling-project/docling/blob/f7244a43/docling/models/easyocr_model.py#L28-L201)",
+    "metadata": {
+      "source": "_docling-project_docling_5.1-standard-pdf-pipeline.md",
+      "heading": "Stage 2: OCR (Optical Character Recognition)",
+      "heading_level": 3,
+      "chunk_index": 7,
+      "collection": "docling",
+      "char_count": 1775,
+      "estimated_tokens": 443,
+      "total_chunks": 25
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_5.1-standard-pdf-pipeline.md:chunk:8",
+    "content": "### Stage 3: Layout Analysis\n\n\n**Class:** `LayoutModel`\\\n**Model:** Heron (DocLayoutModel for legacy)\\\n**Location:** [docling/models/layout\\_model.py28-238](https://github.com/docling-project/docling/blob/f7244a43/docling/models/layout_model.py#L28-L238)\n\nResponsibilities:\n\n- Predict bounding boxes and labels for document elements\n- Apply `LayoutPostprocessor` to resolve overlaps and refine clusters\n- Assign confidence scores to predictions\n- Store results in `page.predictions.layout` as `LayoutPrediction`\n\nThe layout model identifies document structure using computer vision:\n\n```\n```\n\nDetected element labels (from `DocItemLabel`):\n\n- **Text elements**: `TEXT`, `SECTION_HEADER`, `LIST_ITEM`, `CODE`, `FORMULA`, `CAPTION`, `FOOTNOTE`\n- **Page decorations**: `PAGE_HEADER`, `PAGE_FOOTER`\n- **Figures**: `PICTURE`\n- **Tables**: `TABLE`, `DOCUMENT_INDEX`\n- **Containers**: `FORM`, `KEY_VALUE_REGION`\n\nEach cluster contains matched cells from earlier stages, enabling text extraction per element.\n\n**Sources:** [docling/models/layout\\_model.py148-237](https://github.com/docling-project/docling/blob/f7244a43/docling/models/layout_model.py#L148-L237) [docling/pipeline/standard\\_pdf\\_pipeline.py60-65](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/standard_pdf_pipeline.py#L60-L65)",
+    "metadata": {
+      "source": "_docling-project_docling_5.1-standard-pdf-pipeline.md",
+      "heading": "Stage 3: Layout Analysis",
+      "heading_level": 3,
+      "chunk_index": 8,
+      "collection": "docling",
+      "char_count": 1313,
+      "estimated_tokens": 328,
+      "total_chunks": 25
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_5.1-standard-pdf-pipeline.md:chunk:9",
+    "content": "### Stage 4: Table Structure Detection\n\n\n**Class:** `TableStructureModel`\\\n**Model:** TableFormer (FAST or ACCURATE mode)\\\n**Location:** [docling/models/table\\_structure\\_model.py29-305](https://github.com/docling-project/docling/blob/f7244a43/docling/models/table_structure_model.py#L29-L305)\n\nResponsibilities:\n\n- Extract table structure for clusters labeled `TABLE` or `DOCUMENT_INDEX`\n- Run TableFormer model on table crops at 144 DPI (2x scale)\n- Parse OTSL sequences and cell coordinates\n- Match cells to table grid using word-level tokens when available\n- Store results in `page.predictions.tablestructure.table_map`\n\nTable processing workflow:\n\n```\n```\n\nThe model supports two modes via `TableFormerMode`:\n\n- **FAST**: Faster inference, lower accuracy\n- **ACCURATE**: Slower inference, higher accuracy\n\nCell matching can be toggled via `do_cell_matching` option:\n\n- `True`: Match predicted cells to source tokens (default)\n- `False`: Extract text directly from predicted bounding boxes\n\n**Sources:** [docling/models/table\\_structure\\_model.py170-304](https://github.com/docling-project/docling/blob/f7244a43/docling/models/table_structure_model.py#L170-L304) [docling/pipeline/standard\\_pdf\\_pipeline.py66-72](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/standard_pdf_pipeline.py#L66-L72)",
+    "metadata": {
+      "source": "_docling-project_docling_5.1-standard-pdf-pipeline.md",
+      "heading": "Stage 4: Table Structure Detection",
+      "heading_level": 3,
+      "chunk_index": 9,
+      "collection": "docling",
+      "char_count": 1325,
+      "estimated_tokens": 331,
+      "total_chunks": 25
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_5.1-standard-pdf-pipeline.md:chunk:10",
+    "content": "### Stage 5: Page Assembly\n\n\n**Class:** `PageAssembleModel`\\\n**Location:** [docling/models/page\\_assemble\\_model.py30-157](https://github.com/docling-project/docling/blob/f7244a43/docling/models/page_assemble_model.py#L30-L157)\n\nResponsibilities:\n\n- Convert layout clusters into typed `PageElement` objects\n- Assemble text from cells within each cluster\n- Handle text sanitization (dehyphenation, Unicode normalization)\n- Populate `page.assembled` with categorized elements (body, headers)\n\nAssembly creates structured elements:\n\n```\n```\n\nElement types created:\n\n- `TextElement`: Text blocks, headers, captions, formulas, code\n- `Table`: Tables with structure (OTSL, cells, grid dimensions)\n- `FigureElement`: Images and diagrams\n- `ContainerElement`: Forms and key-value regions\n\n**Sources:** [docling/models/page\\_assemble\\_model.py67-156](https://github.com/docling-project/docling/blob/f7244a43/docling/models/page_assemble_model.py#L67-L156) [docling/pipeline/standard\\_pdf\\_pipeline.py73-75](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/standard_pdf_pipeline.py#L73-L75)\n\n---",
+    "metadata": {
+      "source": "_docling-project_docling_5.1-standard-pdf-pipeline.md",
+      "heading": "Stage 5: Page Assembly",
+      "heading_level": 3,
+      "chunk_index": 10,
+      "collection": "docling",
+      "char_count": 1110,
+      "estimated_tokens": 277,
+      "total_chunks": 25
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_5.1-standard-pdf-pipeline.md:chunk:11",
+    "content": "### Pipeline Construction\n\n\nThe `StandardPdfPipeline.__init__()` method initializes models with shared configuration:\n\n```\n```\n\nConfiguration flow:\n\n```\n```\n\nAll models receive `AcceleratorOptions` to control device placement (CPU/CUDA/MPS) and thread counts.\n\n**Sources:** [docling/pipeline/standard\\_pdf\\_pipeline.py35-90](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/standard_pdf_pipeline.py#L35-L90) [docling/datamodel/pipeline\\_options.py](https://github.com/docling-project/docling/blob/f7244a43/docling/datamodel/pipeline_options.py)",
+    "metadata": {
+      "source": "_docling-project_docling_5.1-standard-pdf-pipeline.md",
+      "heading": "Pipeline Construction",
+      "heading_level": 3,
+      "chunk_index": 11,
+      "collection": "docling",
+      "char_count": 569,
+      "estimated_tokens": 142,
+      "total_chunks": 25
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_5.1-standard-pdf-pipeline.md:chunk:12",
+    "content": "### OCR Model Selection\n\n\nThe OCR model is created via factory pattern:\n\n```\n```\n\nThe factory uses `OcrOptions.kind` to select the implementation. `OcrAutoModel` provides platform-specific fallbacks.\n\n**Sources:** [docling/pipeline/standard\\_pdf\\_pipeline.py115-124](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/standard_pdf_pipeline.py#L115-L124) [docling/models/factories.py](https://github.com/docling-project/docling/blob/f7244a43/docling/models/factories.py)",
+    "metadata": {
+      "source": "_docling-project_docling_5.1-standard-pdf-pipeline.md",
+      "heading": "OCR Model Selection",
+      "heading_level": 3,
+      "chunk_index": 12,
+      "collection": "docling",
+      "char_count": 492,
+      "estimated_tokens": 123,
+      "total_chunks": 25
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_5.1-standard-pdf-pipeline.md:chunk:13",
+    "content": "### Artifact Management\n\n\nModels download artifacts from HuggingFace if `artifacts_path` is not provided:\n\n```\n```\n\nArtifacts are cached at `settings.cache_dir / \"models\"` by default. The pipeline passes `self.artifacts_path` to all models, which is resolved from `PipelineOptions.artifacts_path` or environment variable.\n\n**Sources:** [docling/pipeline/base\\_pipeline.py50-60](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/base_pipeline.py#L50-L60) [docling/models/table\\_structure\\_model.py92-101](https://github.com/docling-project/docling/blob/f7244a43/docling/models/table_structure_model.py#L92-L101) [docling/models/layout\\_model.py90-102](https://github.com/docling-project/docling/blob/f7244a43/docling/models/layout_model.py#L90-L102)\n\n---",
+    "metadata": {
+      "source": "_docling-project_docling_5.1-standard-pdf-pipeline.md",
+      "heading": "Artifact Management",
+      "heading_level": 3,
+      "chunk_index": 13,
+      "collection": "docling",
+      "char_count": 777,
+      "estimated_tokens": 194,
+      "total_chunks": 25
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_5.1-standard-pdf-pipeline.md:chunk:14",
+    "content": "### Cross-Page Aggregation\n\n\nAfter all pages complete the build pipeline, `_assemble_document()` aggregates results:\n\n```\n```\n\n**Sources:** [docling/pipeline/standard\\_pdf\\_pipeline.py134-234](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/standard_pdf_pipeline.py#L134-L234)",
+    "metadata": {
+      "source": "_docling-project_docling_5.1-standard-pdf-pipeline.md",
+      "heading": "Cross-Page Aggregation",
+      "heading_level": 3,
+      "chunk_index": 14,
+      "collection": "docling",
+      "char_count": 302,
+      "estimated_tokens": 75,
+      "total_chunks": 25
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_5.1-standard-pdf-pipeline.md:chunk:15",
+    "content": "### Reading Order Construction\n\n\nThe `ReadingOrderModel` constructs the final `DoclingDocument` hierarchy from assembled elements. It applies heuristics to determine document structure (sections, lists, hierarchical nesting).\n\n**Sources:** [docling/pipeline/standard\\_pdf\\_pipeline.py153](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/standard_pdf_pipeline.py#L153-L153) [docling/models/readingorder\\_model.py](https://github.com/docling-project/docling/blob/f7244a43/docling/models/readingorder_model.py)",
+    "metadata": {
+      "source": "_docling-project_docling_5.1-standard-pdf-pipeline.md",
+      "heading": "Reading Order Construction",
+      "heading_level": 3,
+      "chunk_index": 15,
+      "collection": "docling",
+      "char_count": 533,
+      "estimated_tokens": 133,
+      "total_chunks": 25
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_5.1-standard-pdf-pipeline.md:chunk:16",
+    "content": "### Image Generation\n\n\nThe pipeline can generate embedded images for visualization:\n\n| Option                    | Target                   | Scale          |\n| ------------------------- | ------------------------ | -------------- |\n| `generate_page_images`    | Full page images         | `images_scale` |\n| `generate_picture_images` | Cropped picture elements | `images_scale` |\n| `generate_table_images`   | Cropped table elements   | `images_scale` |\n\nImages are cropped from `page.image` using element provenance bounding boxes:\n\n```\n```\n\n**Sources:** [docling/pipeline/standard\\_pdf\\_pipeline.py156-203](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/standard_pdf_pipeline.py#L156-L203)",
+    "metadata": {
+      "source": "_docling-project_docling_5.1-standard-pdf-pipeline.md",
+      "heading": "Image Generation",
+      "heading_level": 3,
+      "chunk_index": 16,
+      "collection": "docling",
+      "char_count": 719,
+      "estimated_tokens": 179,
+      "total_chunks": 25
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_5.1-standard-pdf-pipeline.md:chunk:17",
+    "content": "### Confidence Scoring\n\n\nThe pipeline aggregates confidence metrics from page-level predictions:\n\n```\n```\n\n- `layout_score`: Mean confidence from layout model predictions\n- `parse_score`: 10th percentile of text quality scores (emphasizes problems)\n- `table_score`: Mean table structure confidence\n- `ocr_score`: Mean OCR confidence (only for OCR'd cells)\n\n**Sources:** [docling/pipeline/standard\\_pdf\\_pipeline.py204-232](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/standard_pdf_pipeline.py#L204-L232)\n\n---",
+    "metadata": {
+      "source": "_docling-project_docling_5.1-standard-pdf-pipeline.md",
+      "heading": "Confidence Scoring",
+      "heading_level": 3,
+      "chunk_index": 17,
+      "collection": "docling",
+      "char_count": 537,
+      "estimated_tokens": 134,
+      "total_chunks": 25
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_5.1-standard-pdf-pipeline.md:chunk:18",
+    "content": "### PdfPipelineOptions\n\n\nThe `PdfPipelineOptions` class (inherits from `PaginatedPipelineOptions`) controls all aspects of the pipeline:\n\n```\n```\n\n**Sources:** [docling/datamodel/pipeline\\_options.py](https://github.com/docling-project/docling/blob/f7244a43/docling/datamodel/pipeline_options.py) [docling/pipeline/standard\\_pdf\\_pipeline.py35-38](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/standard_pdf_pipeline.py#L35-L38)",
+    "metadata": {
+      "source": "_docling-project_docling_5.1-standard-pdf-pipeline.md",
+      "heading": "PdfPipelineOptions",
+      "heading_level": 3,
+      "chunk_index": 18,
+      "collection": "docling",
+      "char_count": 455,
+      "estimated_tokens": 113,
+      "total_chunks": 25
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_5.1-standard-pdf-pipeline.md:chunk:19",
+    "content": "### Usage Example\n\n\n```\n```\n\n**Sources:** [tests/test\\_options.py98-105](https://github.com/docling-project/docling/blob/f7244a43/tests/test_options.py#L98-L105) [docling/document\\_converter.py](https://github.com/docling-project/docling/blob/f7244a43/docling/document_converter.py)\n\n---",
+    "metadata": {
+      "source": "_docling-project_docling_5.1-standard-pdf-pipeline.md",
+      "heading": "Usage Example",
+      "heading_level": 3,
+      "chunk_index": 19,
+      "collection": "docling",
+      "char_count": 287,
+      "estimated_tokens": 71,
+      "total_chunks": 25
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_5.1-standard-pdf-pipeline.md:chunk:20",
+    "content": "### StandardPdfPipeline vs ThreadedStandardPdfPipeline\n\n\n| Aspect          | StandardPdfPipeline              | ThreadedStandardPdfPipeline                 |\n| --------------- | -------------------------------- | ------------------------------------------- |\n| **Processing**  | Sequential (one batch at a time) | Parallel (pipeline stages run concurrently) |\n| **Threading**   | Single-threaded                  | Multi-threaded with `ThreadedQueue` buffers |\n| **Performance** | Simpler, predictable timing      | Higher throughput for multi-page documents  |\n| **Memory**      | Lower peak memory                | Higher due to queues and concurrent pages   |\n| **Debugging**   | Easier to debug                  | More complex due to concurrency             |\n| **Use case**    | Small documents, debugging       | Production, large documents                 |\n\nThe threaded variant ([threaded\\_standard\\_pdf\\_pipeline.py296-648](https://github.com/docling-project/docling/blob/f7244a43/threaded_standard_pdf_pipeline.py#L296-L648)) maintains the same five-stage model sequence but wraps each in a `ThreadedPipelineStage` with worker threads and bounded queues.\n\n**Sources:** [docling/pipeline/standard\\_pdf\\_pipeline.py34](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/standard_pdf_pipeline.py#L34-L34) [docling/pipeline/threaded\\_standard\\_pdf\\_pipeline.py296-648](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/threaded_standard_pdf_pipeline.py#L296-L648)",
+    "metadata": {
+      "source": "_docling-project_docling_5.1-standard-pdf-pipeline.md",
+      "heading": "StandardPdfPipeline vs ThreadedStandardPdfPipeline",
+      "heading_level": 3,
+      "chunk_index": 20,
+      "collection": "docling",
+      "char_count": 1517,
+      "estimated_tokens": 379,
+      "total_chunks": 25
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_5.1-standard-pdf-pipeline.md:chunk:21",
+    "content": "### StandardPdfPipeline vs VlmPipeline\n\n\n| Aspect       | StandardPdfPipeline                       | VlmPipeline                       |\n| ------------ | ----------------------------------------- | --------------------------------- |\n| **Approach** | Multi-model stages (OCR + layout + table) | End-to-end vision-language model  |\n| **Models**   | Heron, TableFormer, OCR engine            | GraniteDocling, SmolDocling, etc. |\n| **Output**   | Rich `DoclingDocument` with structure     | DOCTAGS, Markdown, or HTML        |\n| **Accuracy** | High for structured documents             | Best for complex visual layouts   |\n| **Speed**    | Moderate (5 stages)                       | Varies by VLM model size          |\n| **Requires** | PDF backend with text                     | Only images                       |\n\nVLM pipeline ([vlm\\_pipeline.py50-389](https://github.com/docling-project/docling/blob/f7244a43/vlm_pipeline.py#L50-L389)) bypasses traditional document understanding models in favor of large vision-language models that directly generate structured output.\n\n**Sources:** [docling/pipeline/standard\\_pdf\\_pipeline.py34](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/standard_pdf_pipeline.py#L34-L34) [docling/pipeline/vlm\\_pipeline.py50-389](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/vlm_pipeline.py#L50-L389)",
+    "metadata": {
+      "source": "_docling-project_docling_5.1-standard-pdf-pipeline.md",
+      "heading": "StandardPdfPipeline vs VlmPipeline",
+      "heading_level": 3,
+      "chunk_index": 21,
+      "collection": "docling",
+      "char_count": 1386,
+      "estimated_tokens": 346,
+      "total_chunks": 25
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_5.1-standard-pdf-pipeline.md:chunk:22",
+    "content": "### Backend Support\n\n\nThe `StandardPdfPipeline` requires a `PdfDocumentBackend`:\n\n```\n```\n\nSupported backends:\n\n- `DoclingParseV4DocumentBackend` (default) - Character/word/line granularity\n- `DoclingParseV2DocumentBackend` - Sanitized format\n- `DoclingParseDocumentBackend` (legacy) - v1 format\n- `PyPdfiumDocumentBackend` - Pure pypdfium2\n\n**Sources:** [docling/pipeline/standard\\_pdf\\_pipeline.py240-243](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/standard_pdf_pipeline.py#L240-L243) [docling/backend/pdf\\_backend.py](https://github.com/docling-project/docling/blob/f7244a43/docling/backend/pdf_backend.py)\n\n---",
+    "metadata": {
+      "source": "_docling-project_docling_5.1-standard-pdf-pipeline.md",
+      "heading": "Backend Support",
+      "heading_level": 3,
+      "chunk_index": 22,
+      "collection": "docling",
+      "char_count": 645,
+      "estimated_tokens": 161,
+      "total_chunks": 25
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_5.1-standard-pdf-pipeline.md:chunk:23",
+    "content": "## Processing Flow Summary\n\n\nThe complete end-to-end flow for a single document:\n\n```\n```\n\n**Sources:** [docling/pipeline/base\\_pipeline.py197-283](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/base_pipeline.py#L197-L283) [docling/pipeline/standard\\_pdf\\_pipeline.py126-234](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/standard_pdf_pipeline.py#L126-L234) [docling/pipeline/base\\_pipeline.py93-115](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/base_pipeline.py#L93-L115)\n\nDismiss\n\nRefresh this wiki\n\nThis wiki was recently refreshed. Please wait 4 days to refresh again.",
+    "metadata": {
+      "source": "_docling-project_docling_5.1-standard-pdf-pipeline.md",
+      "heading": "Processing Flow Summary",
+      "heading_level": 2,
+      "chunk_index": 23,
+      "collection": "docling",
+      "char_count": 656,
+      "estimated_tokens": 164,
+      "total_chunks": 25
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_5.1-standard-pdf-pipeline.md:chunk:24",
+    "content": "### On this page\n\n\n- [Standard PDF Pipeline](#standard-pdf-pipeline.md)\n- [Purpose and Scope](#purpose-and-scope.md)\n- [Pipeline Architecture](#pipeline-architecture.md)\n- [Class Hierarchy](#class-hierarchy.md)\n- [Pipeline Components](#pipeline-components.md)\n- [Five-Stage Processing](#five-stage-processing.md)\n- [Stage 1: Page Preprocessing](#stage-1-page-preprocessing.md)\n- [Stage 2: OCR (Optical Character Recognition)](#stage-2-ocr-optical-character-recognition.md)\n- [Stage 3: Layout Analysis](#stage-3-layout-analysis.md)\n- [Stage 4: Table Structure Detection](#stage-4-table-structure-detection.md)\n- [Stage 5: Page Assembly](#stage-5-page-assembly.md)\n- [Model Integration](#model-integration.md)\n- [Pipeline Construction](#pipeline-construction.md)\n- [OCR Model Selection](#ocr-model-selection.md)\n- [Artifact Management](#artifact-management.md)\n- [Document Assembly](#document-assembly.md)\n- [Cross-Page Aggregation](#cross-page-aggregation.md)\n- [Reading Order Construction](#reading-order-construction.md)\n- [Image Generation](#image-generation.md)\n- [Confidence Scoring](#confidence-scoring.md)\n- [Configuration and Options](#configuration-and-options.md)\n- [PdfPipelineOptions](#pdfpipelineoptions.md)\n- [Usage Example](#usage-example.md)\n- [Comparison with Other Pipelines](#comparison-with-other-pipelines.md)\n- [StandardPdfPipeline vs ThreadedStandardPdfPipeline](#standardpdfpipeline-vs-threadedstandardpdfpipeline.md)\n- [StandardPdfPipeline vs VlmPipeline](#standardpdfpipeline-vs-vlmpipeline.md)\n- [Backend Support](#backend-support.md)\n- [Processing Flow Summary](#processing-flow-summary.md)",
+    "metadata": {
+      "source": "_docling-project_docling_5.1-standard-pdf-pipeline.md",
+      "heading": "On this page",
+      "heading_level": 3,
+      "chunk_index": 24,
+      "collection": "docling",
+      "char_count": 1617,
+      "estimated_tokens": 404,
+      "total_chunks": 25
+    }
+  }
+]

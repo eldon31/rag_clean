@@ -1,0 +1,338 @@
+[
+  {
+    "chunk_id": "docling:_docling-project_docling_5.3-vlm-pipeline.md:chunk:0",
+    "content": "# VLM Pipeline\n\n\nRelevant source files",
+    "metadata": {
+      "source": "_docling-project_docling_5.3-vlm-pipeline.md",
+      "heading": "VLM Pipeline",
+      "heading_level": 1,
+      "chunk_index": 0,
+      "collection": "docling",
+      "char_count": 38,
+      "estimated_tokens": 9,
+      "total_chunks": 24
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_5.3-vlm-pipeline.md:chunk:1",
+    "content": "- [README.md](https://github.com/docling-project/docling/blob/f7244a43/README.md)\n- [docling/datamodel/extraction.py](https://github.com/docling-project/docling/blob/f7244a43/docling/datamodel/extraction.py)\n- [docling/document\\_extractor.py](https://github.com/docling-project/docling/blob/f7244a43/docling/document_extractor.py)\n- [docling/models/vlm\\_models\\_inline/nuextract\\_transformers\\_model.py](https://github.com/docling-project/docling/blob/f7244a43/docling/models/vlm_models_inline/nuextract_transformers_model.py)\n- [docling/pipeline/asr\\_pipeline.py](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/asr_pipeline.py)\n- [docling/pipeline/base\\_extraction\\_pipeline.py](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/base_extraction_pipeline.py)\n- [docling/pipeline/base\\_pipeline.py](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/base_pipeline.py)\n- [docling/pipeline/extraction\\_vlm\\_pipeline.py](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/extraction_vlm_pipeline.py)\n- [docling/pipeline/simple\\_pipeline.py](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/simple_pipeline.py)\n- [docling/pipeline/threaded\\_standard\\_pdf\\_pipeline.py](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/threaded_standard_pdf_pipeline.py)\n- [docling/pipeline/vlm\\_pipeline.py](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/vlm_pipeline.py)\n- [docs/examples/minimal\\_vlm\\_pipeline.py](https://github.com/docling-project/docling/blob/f7244a43/docs/examples/minimal_vlm_pipeline.py)\n- [docs/index.md](https://github.com/docling-project/docling/blob/f7244a43/docs/index.md)\n- [docs/usage/index.md](https://github.com/docling-project/docling/blob/f7244a43/docs/usage/index.md)\n- [docs/usage/mcp.md](https://github.com/docling-project/docling/blob/f7244a43/docs/usage/mcp.md)\n- [docs/usage/vision\\_models.md](https://github.com/docling-project/docling/blob/f7244a43/docs/usage/vision_models.md)\n- [mkdocs.yml](https://github.com/docling-project/docling/blob/f7244a43/mkdocs.yml)",
+    "metadata": {
+      "source": "_docling-project_docling_5.3-vlm-pipeline.md",
+      "heading": "VLM Pipeline",
+      "heading_level": 1,
+      "chunk_index": 1,
+      "collection": "docling",
+      "char_count": 2156,
+      "estimated_tokens": 539,
+      "total_chunks": 24
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_5.3-vlm-pipeline.md:chunk:2",
+    "content": "ocs/usage/vision\\_models.md](https://github.com/docling-project/docling/blob/f7244a43/docs/usage/vision_models.md)\n- [mkdocs.yml](https://github.com/docling-project/docling/blob/f7244a43/mkdocs.yml)\n\nThe VLM Pipeline provides vision-language model based document processing capabilities for converting documents (primarily PDFs) into structured formats using AI models that can understand both text and images. This pipeline leverages various VLM backends including local models via HuggingFace Transformers, MLX for Apple Silicon optimization, VLLM for high-throughput inference, and remote API services.\n\nFor traditional PDF processing without VLM capabilities, see [Standard PDF Pipeline](docling-project/docling/5.1-standard-pdf-pipeline.md). For base pipeline architecture and common functionality, see [Base Pipeline Architecture](docling-project/docling/5.3-vlm-pipeline.md).",
+    "metadata": {
+      "source": "_docling-project_docling_5.3-vlm-pipeline.md",
+      "heading": "VLM Pipeline",
+      "heading_level": 1,
+      "chunk_index": 2,
+      "collection": "docling",
+      "char_count": 882,
+      "estimated_tokens": 220,
+      "total_chunks": 24
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_5.3-vlm-pipeline.md:chunk:3",
+    "content": "## Architecture Overview\n\n\nThe VLM Pipeline architecture centers around the `VlmPipeline` class which orchestrates different VLM model implementations to process document pages as images and generate structured output.",
+    "metadata": {
+      "source": "_docling-project_docling_5.3-vlm-pipeline.md",
+      "heading": "Architecture Overview",
+      "heading_level": 2,
+      "chunk_index": 3,
+      "collection": "docling",
+      "char_count": 218,
+      "estimated_tokens": 54,
+      "total_chunks": 24
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_5.3-vlm-pipeline.md:chunk:4",
+    "content": "### VLM Pipeline System Architecture\n\n\n```\n```\n\nSources: [docling/pipeline/vlm\\_pipeline.py50-125](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/vlm_pipeline.py#L50-L125) [docling/datamodel/pipeline\\_options\\_vlm\\_model.py11-101](https://github.com/docling-project/docling/blob/f7244a43/docling/datamodel/pipeline_options_vlm_model.py#L11-L101)",
+    "metadata": {
+      "source": "_docling-project_docling_5.3-vlm-pipeline.md",
+      "heading": "VLM Pipeline System Architecture",
+      "heading_level": 3,
+      "chunk_index": 4,
+      "collection": "docling",
+      "char_count": 372,
+      "estimated_tokens": 93,
+      "total_chunks": 24
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_5.3-vlm-pipeline.md:chunk:5",
+    "content": "### VLM Model Class Hierarchy\n\n\n```\n```\n\nSources: [docling/models/base\\_model.py40-120](https://github.com/docling-project/docling/blob/f7244a43/docling/models/base_model.py#L40-L120) [docling/models/vlm\\_models\\_inline/hf\\_transformers\\_model.py32](https://github.com/docling-project/docling/blob/f7244a43/docling/models/vlm_models_inline/hf_transformers_model.py#L32-L32) [docling/models/vlm\\_models\\_inline/mlx\\_model.py30](https://github.com/docling-project/docling/blob/f7244a43/docling/models/vlm_models_inline/mlx_model.py#L30-L30) [docling/models/api\\_vlm\\_model.py13](https://github.com/docling-project/docling/blob/f7244a43/docling/models/api_vlm_model.py#L13-L13)",
+    "metadata": {
+      "source": "_docling-project_docling_5.3-vlm-pipeline.md",
+      "heading": "VLM Model Class Hierarchy",
+      "heading_level": 3,
+      "chunk_index": 5,
+      "collection": "docling",
+      "char_count": 674,
+      "estimated_tokens": 168,
+      "total_chunks": 24
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_5.3-vlm-pipeline.md:chunk:6",
+    "content": "## VLM Model Implementations\n\n\nThe VLM Pipeline supports multiple backend implementations for different use cases and hardware configurations.",
+    "metadata": {
+      "source": "_docling-project_docling_5.3-vlm-pipeline.md",
+      "heading": "VLM Model Implementations",
+      "heading_level": 2,
+      "chunk_index": 6,
+      "collection": "docling",
+      "char_count": 142,
+      "estimated_tokens": 35,
+      "total_chunks": 24
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_5.3-vlm-pipeline.md:chunk:7",
+    "content": "### HuggingFace Transformers Model\n\n\nThe `HuggingFaceTransformersVlmModel` provides local inference using the HuggingFace Transformers library with support for various model architectures.\n\n**Key Features:**\n\n- Supports multiple `TransformersModelType`: `AUTOMODEL`, `AUTOMODEL_VISION2SEQ`, `AUTOMODEL_CAUSALLM`, `AUTOMODEL_IMAGETEXTTOTEXT`\n- Batch processing with proper padding and attention handling\n- Flash Attention 2 support for CUDA devices\n- Quantization support via `BitsAndBytesConfig`\n- Multiple prompt styles: `CHAT`, `RAW`, `NONE`\n\n**Configuration Options:**\n\n- `repo_id`: HuggingFace model repository identifier\n- `quantized`: Enable 8-bit quantization\n- `torch_dtype`: Specify torch data type\n- `stop_strings`: Custom stopping criteria\n- `max_new_tokens`: Maximum generation length\n\nSources: [docling/models/vlm\\_models\\_inline/hf\\_transformers\\_model.py32-315](https://github.com/docling-project/docling/blob/f7244a43/docling/models/vlm_models_inline/hf_transformers_model.py#L32-L315) [docling/datamodel/pipeline\\_options\\_vlm\\_model.py52-84](https://github.com/docling-project/docling/blob/f7244a43/docling/datamodel/pipeline_options_vlm_model.py#L52-L84)",
+    "metadata": {
+      "source": "_docling-project_docling_5.3-vlm-pipeline.md",
+      "heading": "HuggingFace Transformers Model",
+      "heading_level": 3,
+      "chunk_index": 7,
+      "collection": "docling",
+      "char_count": 1173,
+      "estimated_tokens": 293,
+      "total_chunks": 24
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_5.3-vlm-pipeline.md:chunk:8",
+    "content": "### MLX Model Implementation\n\n\nThe `HuggingFaceMlxModel` provides optimized inference for Apple Silicon using the MLX framework.\n\n**Key Features:**\n\n- Thread-safe with global locking mechanism (`_MLX_GLOBAL_LOCK`)\n- Stream generation with token-level processing\n- Optimized for Apple Silicon hardware\n- Support for stop string termination\n- Token-level logprob tracking\n\n**Thread Safety:**\n\n```\n```\n\nSources: [docling/models/vlm\\_models\\_inline/mlx\\_model.py25-261](https://github.com/docling-project/docling/blob/f7244a43/docling/models/vlm_models_inline/mlx_model.py#L25-L261)",
+    "metadata": {
+      "source": "_docling-project_docling_5.3-vlm-pipeline.md",
+      "heading": "MLX Model Implementation",
+      "heading_level": 3,
+      "chunk_index": 8,
+      "collection": "docling",
+      "char_count": 578,
+      "estimated_tokens": 144,
+      "total_chunks": 24
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_5.3-vlm-pipeline.md:chunk:9",
+    "content": "### API-Based VLM Model\n\n\nThe `ApiVlmModel` enables integration with remote VLM services through standardized chat completion APIs.\n\n**Key Features:**\n\n- Concurrent processing with `ThreadPoolExecutor`\n- Configurable timeout and concurrency limits\n- Custom headers and parameters support\n- Compatible with OpenAI-style chat completion APIs\n\n**Configuration Example:**\n\n- `url`: API endpoint (default: `http://localhost:11434/v1/chat/completions`)\n- `params`: API-specific parameters (model, temperature, etc.)\n- `headers`: Authentication and custom headers\n- `concurrency`: Maximum concurrent requests\n\nSources: [docling/models/api\\_vlm\\_model.py13-73](https://github.com/docling-project/docling/blob/f7244a43/docling/models/api_vlm_model.py#L13-L73) [docling/datamodel/pipeline\\_options\\_vlm\\_model.py90-101](https://github.com/docling-project/docling/blob/f7244a43/docling/datamodel/pipeline_options_vlm_model.py#L90-L101)",
+    "metadata": {
+      "source": "_docling-project_docling_5.3-vlm-pipeline.md",
+      "heading": "API-Based VLM Model",
+      "heading_level": 3,
+      "chunk_index": 9,
+      "collection": "docling",
+      "char_count": 924,
+      "estimated_tokens": 231,
+      "total_chunks": 24
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_5.3-vlm-pipeline.md:chunk:10",
+    "content": "## Response Formats and Processing\n\n\nThe VLM Pipeline supports multiple response formats, each processed differently to generate the final `DoclingDocument`.",
+    "metadata": {
+      "source": "_docling-project_docling_5.3-vlm-pipeline.md",
+      "heading": "Response Formats and Processing",
+      "heading_level": 2,
+      "chunk_index": 10,
+      "collection": "docling",
+      "char_count": 157,
+      "estimated_tokens": 39,
+      "total_chunks": 24
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_5.3-vlm-pipeline.md:chunk:11",
+    "content": "### Response Format Processing Flow\n\n\n```\n```\n\nSources: [docling/pipeline/vlm\\_pipeline.py148-392](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/vlm_pipeline.py#L148-L392)",
+    "metadata": {
+      "source": "_docling-project_docling_5.3-vlm-pipeline.md",
+      "heading": "Response Format Processing Flow",
+      "heading_level": 3,
+      "chunk_index": 11,
+      "collection": "docling",
+      "char_count": 199,
+      "estimated_tokens": 49,
+      "total_chunks": 24
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_5.3-vlm-pipeline.md:chunk:12",
+    "content": "### DocTags Format Processing\n\n\nDocTags format provides the most structured output with precise bounding box information and element classification.\n\n**Key Features:**\n\n- Direct conversion to `DoclingDocument` via `DocTagsDocument.from_doctags_and_image_pairs()`\n- Preserves spatial relationships and element types\n- Optional backend text extraction with `force_backend_text`\n- Support for picture image generation\n\n**Backend Text Extraction:** When `force_backend_text=True` and `response_format=ResponseFormat.DOCTAGS`, the pipeline extracts actual text from the PDF backend using predicted bounding boxes instead of relying on VLM-generated text.\n\nSources: [docling/pipeline/vlm\\_pipeline.py200-238](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/vlm_pipeline.py#L200-L238)",
+    "metadata": {
+      "source": "_docling-project_docling_5.3-vlm-pipeline.md",
+      "heading": "DocTags Format Processing",
+      "heading_level": 3,
+      "chunk_index": 12,
+      "collection": "docling",
+      "char_count": 803,
+      "estimated_tokens": 200,
+      "total_chunks": 24
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_5.3-vlm-pipeline.md:chunk:13",
+    "content": "### Markdown and HTML Processing\n\n\nBoth Markdown and HTML formats follow similar processing patterns, using respective document backends for conversion.\n\n**Processing Steps:**\n\n1. Extract content from code blocks (triple backticks)\n2. Create temporary `BytesIO` stream with extracted content\n3. Use `MarkdownDocumentBackend` or `HTMLDocumentBackend` for conversion\n4. Generate page structure with image dimensions\n5. Add provenance information with placeholder bounding boxes\n\nSources: [docling/pipeline/vlm\\_pipeline.py240-392](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/vlm_pipeline.py#L240-L392)",
+    "metadata": {
+      "source": "_docling-project_docling_5.3-vlm-pipeline.md",
+      "heading": "Markdown and HTML Processing",
+      "heading_level": 3,
+      "chunk_index": 13,
+      "collection": "docling",
+      "char_count": 629,
+      "estimated_tokens": 157,
+      "total_chunks": 24
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_5.3-vlm-pipeline.md:chunk:14",
+    "content": "## Pipeline Configuration\n\n\nThe VLM Pipeline uses `VlmPipelineOptions` for configuration, which includes VLM-specific options and general pipeline settings.",
+    "metadata": {
+      "source": "_docling-project_docling_5.3-vlm-pipeline.md",
+      "heading": "Pipeline Configuration",
+      "heading_level": 2,
+      "chunk_index": 14,
+      "collection": "docling",
+      "char_count": 156,
+      "estimated_tokens": 39,
+      "total_chunks": 24
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_5.3-vlm-pipeline.md:chunk:15",
+    "content": "### Configuration Class Hierarchy\n\n\n```\n```\n\nSources: [docling/datamodel/pipeline\\_options.py](https://github.com/docling-project/docling/blob/f7244a43/docling/datamodel/pipeline_options.py) [docling/datamodel/pipeline\\_options\\_vlm\\_model.py11-101](https://github.com/docling-project/docling/blob/f7244a43/docling/datamodel/pipeline_options_vlm_model.py#L11-L101)",
+    "metadata": {
+      "source": "_docling-project_docling_5.3-vlm-pipeline.md",
+      "heading": "Configuration Class Hierarchy",
+      "heading_level": 3,
+      "chunk_index": 15,
+      "collection": "docling",
+      "char_count": 364,
+      "estimated_tokens": 91,
+      "total_chunks": 24
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_5.3-vlm-pipeline.md:chunk:16",
+    "content": "### Key Configuration Parameters\n\n\n| Parameter                 | Type             | Description                                  |\n| ------------------------- | ---------------- | -------------------------------------------- |\n| `vlm_options`             | `BaseVlmOptions` | VLM model configuration (inline or API)      |\n| `force_backend_text`      | `bool`           | Extract text from backend vs VLM response    |\n| `generate_page_images`    | `bool`           | Generate page images for processing          |\n| `generate_picture_images` | `bool`           | Generate cropped images for picture elements |\n| `images_scale`            | `float`          | Image scaling factor                         |\n| `enable_remote_services`  | `bool`           | Allow API-based VLM calls                    |\n\nSources: [docling/pipeline/vlm\\_pipeline.py51-77](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/vlm_pipeline.py#L51-L77)",
+    "metadata": {
+      "source": "_docling-project_docling_5.3-vlm-pipeline.md",
+      "heading": "Key Configuration Parameters",
+      "heading_level": 3,
+      "chunk_index": 16,
+      "collection": "docling",
+      "char_count": 952,
+      "estimated_tokens": 238,
+      "total_chunks": 24
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_5.3-vlm-pipeline.md:chunk:17",
+    "content": "## Pipeline Execution Flow\n\n\nThe VLM Pipeline follows the standard pipeline execution pattern with VLM-specific customizations.",
+    "metadata": {
+      "source": "_docling-project_docling_5.3-vlm-pipeline.md",
+      "heading": "Pipeline Execution Flow",
+      "heading_level": 2,
+      "chunk_index": 17,
+      "collection": "docling",
+      "char_count": 127,
+      "estimated_tokens": 31,
+      "total_chunks": 24
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_5.3-vlm-pipeline.md:chunk:18",
+    "content": "### VLM Pipeline Execution Sequence\n\n\n```\n```\n\nSources: [docling/pipeline/base\\_pipeline.py39-61](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/base_pipeline.py#L39-L61) [docling/pipeline/vlm\\_pipeline.py126-198](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/vlm_pipeline.py#L126-L198)",
+    "metadata": {
+      "source": "_docling-project_docling_5.3-vlm-pipeline.md",
+      "heading": "VLM Pipeline Execution Sequence",
+      "heading_level": 3,
+      "chunk_index": 18,
+      "collection": "docling",
+      "char_count": 341,
+      "estimated_tokens": 85,
+      "total_chunks": 24
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_5.3-vlm-pipeline.md:chunk:19",
+    "content": "### Page Initialization Process\n\n\nThe `initialize_page()` method prepares pages for VLM processing:\n\n1. **Backend Loading**: Load page backend via `conv_res.input._backend.load_page(page.page_no)`\n2. **Size Calculation**: Set `page.size` from backend dimensions\n3. **Conditional Text Extraction**: If `force_backend_text=True`, extract `parsed_page` for prompt construction\n\n**Backend Text Extraction Logic:**\n\n```\n```\n\nSources: [docling/pipeline/vlm\\_pipeline.py126-135](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/vlm_pipeline.py#L126-L135)",
+    "metadata": {
+      "source": "_docling-project_docling_5.3-vlm-pipeline.md",
+      "heading": "Page Initialization Process",
+      "heading_level": 3,
+      "chunk_index": 19,
+      "collection": "docling",
+      "char_count": 572,
+      "estimated_tokens": 143,
+      "total_chunks": 24
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_5.3-vlm-pipeline.md:chunk:20",
+    "content": "## Integration with Base Pipeline\n\n\nThe VLM Pipeline extends `PaginatedPipeline` and integrates with the base pipeline architecture through standardized interfaces.",
+    "metadata": {
+      "source": "_docling-project_docling_5.3-vlm-pipeline.md",
+      "heading": "Integration with Base Pipeline",
+      "heading_level": 2,
+      "chunk_index": 20,
+      "collection": "docling",
+      "char_count": 164,
+      "estimated_tokens": 41,
+      "total_chunks": 24
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_5.3-vlm-pipeline.md:chunk:21",
+    "content": "### Pipeline Integration Points\n\n\n```\n```\n\nSources: [docling/pipeline/base\\_pipeline.py32-105](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/base_pipeline.py#L32-L105) [docling/pipeline/vlm\\_pipeline.py50-401](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/vlm_pipeline.py#L50-L401)",
+    "metadata": {
+      "source": "_docling-project_docling_5.3-vlm-pipeline.md",
+      "heading": "Pipeline Integration Points",
+      "heading_level": 3,
+      "chunk_index": 21,
+      "collection": "docling",
+      "char_count": 337,
+      "estimated_tokens": 84,
+      "total_chunks": 24
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_5.3-vlm-pipeline.md:chunk:22",
+    "content": "### Backend Compatibility\n\n\nThe VLM Pipeline supports specific backend types through the `is_backend_supported()` method:\n\n```\n```\n\nCurrently, only `PdfDocumentBackend` instances are supported, limiting VLM processing to PDF documents.\n\nSources: [docling/pipeline/vlm\\_pipeline.py398-400](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/vlm_pipeline.py#L398-L400)\n\nDismiss\n\nRefresh this wiki\n\nThis wiki was recently refreshed. Please wait 4 days to refresh again.",
+    "metadata": {
+      "source": "_docling-project_docling_5.3-vlm-pipeline.md",
+      "heading": "Backend Compatibility",
+      "heading_level": 3,
+      "chunk_index": 22,
+      "collection": "docling",
+      "char_count": 489,
+      "estimated_tokens": 122,
+      "total_chunks": 24
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_5.3-vlm-pipeline.md:chunk:23",
+    "content": "### On this page\n\n\n- [VLM Pipeline](#vlm-pipeline.md)\n- [Architecture Overview](#architecture-overview.md)\n- [VLM Pipeline System Architecture](#vlm-pipeline-system-architecture.md)\n- [VLM Model Class Hierarchy](#vlm-model-class-hierarchy.md)\n- [VLM Model Implementations](#vlm-model-implementations.md)\n- [HuggingFace Transformers Model](#huggingface-transformers-model.md)\n- [MLX Model Implementation](#mlx-model-implementation.md)\n- [API-Based VLM Model](#api-based-vlm-model.md)\n- [Response Formats and Processing](#response-formats-and-processing.md)\n- [Response Format Processing Flow](#response-format-processing-flow.md)\n- [DocTags Format Processing](#doctags-format-processing.md)\n- [Markdown and HTML Processing](#markdown-and-html-processing.md)\n- [Pipeline Configuration](#pipeline-configuration.md)\n- [Configuration Class Hierarchy](#configuration-class-hierarchy.md)\n- [Key Configuration Parameters](#key-configuration-parameters.md)\n- [Pipeline Execution Flow](#pipeline-execution-flow.md)\n- [VLM Pipeline Execution Sequence](#vlm-pipeline-execution-sequence.md)\n- [Page Initialization Process](#page-initialization-process.md)\n- [Integration with Base Pipeline](#integration-with-base-pipeline.md)\n- [Pipeline Integration Points](#pipeline-integration-points.md)\n- [Backend Compatibility](#backend-compatibility.md)",
+    "metadata": {
+      "source": "_docling-project_docling_5.3-vlm-pipeline.md",
+      "heading": "On this page",
+      "heading_level": 3,
+      "chunk_index": 23,
+      "collection": "docling",
+      "char_count": 1331,
+      "estimated_tokens": 332,
+      "total_chunks": 24
+    }
+  }
+]

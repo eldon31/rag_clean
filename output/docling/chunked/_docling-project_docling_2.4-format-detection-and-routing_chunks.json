@@ -1,0 +1,324 @@
+[
+  {
+    "chunk_id": "docling:_docling-project_docling_2.4-format-detection-and-routing.md:chunk:0",
+    "content": "# Format Detection and Routing\n\n\nRelevant source files\n\n- [docling/backend/abstract\\_backend.py](https://github.com/docling-project/docling/blob/f7244a43/docling/backend/abstract_backend.py)\n- [docling/backend/docling\\_parse\\_backend.py](https://github.com/docling-project/docling/blob/f7244a43/docling/backend/docling_parse_backend.py)\n- [docling/backend/docling\\_parse\\_v2\\_backend.py](https://github.com/docling-project/docling/blob/f7244a43/docling/backend/docling_parse_v2_backend.py)\n- [docling/backend/docling\\_parse\\_v4\\_backend.py](https://github.com/docling-project/docling/blob/f7244a43/docling/backend/docling_parse_v4_backend.py)\n- [docling/backend/pypdfium2\\_backend.py](https://github.com/docling-project/docling/blob/f7244a43/docling/backend/pypdfium2_backend.py)\n- [docling/cli/main.py](https://github.com/docling-project/docling/blob/f7244a43/docling/cli/main.py)\n- [docling/datamodel/base\\_models.py](https://github.com/docling-project/docling/blob/f7244a43/docling/datamodel/base_models.py)\n- [docling/datamodel/document.py](https://github.com/docling-project/docling/blob/f7244a43/docling/datamodel/document.py)\n- [docling/datamodel/pipeline\\_options.py](https://github.com/docling-project/docling/blob/f7244a43/docling/datamodel/pipeline_options.py)\n- [docling/document\\_converter.py](https://github.com/docling-project/docling/blob/f7244a43/docling/document_converter.py)\n- [docling/utils/layout\\_postprocessor.py](https://github.com/docling-project/docling/blob/f7244a43/docling/utils/layout_postprocessor.py)\n- [docling/utils/locks.py](https://github.com/docling-project/docling/blob/f7244a43/docling/utils/locks.py)\n- [tests/test\\_backend\\_docling\\_parse\\_v4.py](https://github.com/docling-project/docling/blob/f7244a43/tests/test_backend_docling_parse_v4.py)",
+    "metadata": {
+      "source": "_docling-project_docling_2.4-format-detection-and-routing.md",
+      "heading": "Format Detection and Routing",
+      "heading_level": 1,
+      "chunk_index": 0,
+      "collection": "docling",
+      "char_count": 1785,
+      "estimated_tokens": 446,
+      "total_chunks": 23
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_2.4-format-detection-and-routing.md:chunk:1",
+    "content": "-project/docling/blob/f7244a43/docling/utils/locks.py)\n- [tests/test\\_backend\\_docling\\_parse\\_v4.py](https://github.com/docling-project/docling/blob/f7244a43/tests/test_backend_docling_parse_v4.py)\n\nThis document describes how Docling automatically detects the format of input documents and routes them to the appropriate backend and pipeline for processing. For information about pipeline execution itself, see [Processing Pipelines](docling-project/docling/5-processing-pipelines.md). For backend implementation details, see [Document Backends](docling-project/docling/3-document-backends.md).",
+    "metadata": {
+      "source": "_docling-project_docling_2.4-format-detection-and-routing.md",
+      "heading": "Format Detection and Routing",
+      "heading_level": 1,
+      "chunk_index": 1,
+      "collection": "docling",
+      "char_count": 596,
+      "estimated_tokens": 149,
+      "total_chunks": 23
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_2.4-format-detection-and-routing.md:chunk:2",
+    "content": "## Overview\n\n\nFormat detection and routing is the critical orchestration layer that connects user inputs to the correct processing strategy. The system performs three main operations:\n\n1. **Format Detection**: Analyzes input files using MIME types, file extensions, and content inspection to determine the `InputFormat`\n2. **Backend Selection**: Maps the detected format to a document backend class that can parse that format\n3. **Pipeline Selection**: Routes the format to a processing pipeline with appropriate configuration options\n\nThese operations ensure that each document type receives optimal processing with format-specific parsing and model application strategies.",
+    "metadata": {
+      "source": "_docling-project_docling_2.4-format-detection-and-routing.md",
+      "heading": "Overview",
+      "heading_level": 2,
+      "chunk_index": 2,
+      "collection": "docling",
+      "char_count": 674,
+      "estimated_tokens": 168,
+      "total_chunks": 23
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_2.4-format-detection-and-routing.md:chunk:3",
+    "content": "## Format Detection Architecture\n\n\nThe format detection system uses a multi-strategy approach to reliably identify document types, even when file extensions are missing or misleading.\n\n```\n```\n\n**Sources:** [docling/datamodel/document.py280-490](https://github.com/docling-project/docling/blob/f7244a43/docling/datamodel/document.py#L280-L490) [docling/datamodel/base\\_models.py83-139](https://github.com/docling-project/docling/blob/f7244a43/docling/datamodel/base_models.py#L83-L139)",
+    "metadata": {
+      "source": "_docling-project_docling_2.4-format-detection-and-routing.md",
+      "heading": "Format Detection Architecture",
+      "heading_level": 2,
+      "chunk_index": 3,
+      "collection": "docling",
+      "char_count": 485,
+      "estimated_tokens": 121,
+      "total_chunks": 23
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_2.4-format-detection-and-routing.md:chunk:4",
+    "content": "### Detection Strategy Priority\n\n\nThe `_guess_format()` method implements a waterfall detection strategy:\n\n1. **Primary MIME detection**: Uses `filetype` library to guess MIME type from file magic bytes\n2. **Extension fallback**: If MIME detection fails, derives MIME from file extension using `_mime_from_extension()`\n3. **Content-based refinement**: For ambiguous formats (e.g., `application/zip` could be DOCX/XLSX/PPTX), reads file content to disambiguate\n4. **Specialized detectors**: Applies format-specific detection for complex types like METS archives, USPTO patents, JATS articles\n\n**Key Code Locations:**\n\n- Main detection entry point: [docling/datamodel/document.py280-338](https://github.com/docling-project/docling/blob/f7244a43/docling/datamodel/document.py#L280-L338)\n- MIME-to-format mapping: [docling/datamodel/base\\_models.py135-139](https://github.com/docling-project/docling/blob/f7244a43/docling/datamodel/base_models.py#L135-L139)\n- Extension-to-format mapping: [docling/datamodel/base\\_models.py83-99](https://github.com/docling-project/docling/blob/f7244a43/docling/datamodel/base_models.py#L83-L99)",
+    "metadata": {
+      "source": "_docling-project_docling_2.4-format-detection-and-routing.md",
+      "heading": "Detection Strategy Priority",
+      "heading_level": 3,
+      "chunk_index": 4,
+      "collection": "docling",
+      "char_count": 1124,
+      "estimated_tokens": 281,
+      "total_chunks": 23
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_2.4-format-detection-and-routing.md:chunk:5",
+    "content": "## Format Routing System\n\n\nOnce a format is detected, the `DocumentConverter` uses the `FormatOption` model to route documents to the correct backend and pipeline combination.\n\n```\n```\n\n**Sources:** [docling/document\\_converter.py184-433](https://github.com/docling-project/docling/blob/f7244a43/docling/document_converter.py#L184-L433)",
+    "metadata": {
+      "source": "_docling-project_docling_2.4-format-detection-and-routing.md",
+      "heading": "Format Routing System",
+      "heading_level": 2,
+      "chunk_index": 5,
+      "collection": "docling",
+      "char_count": 336,
+      "estimated_tokens": 84,
+      "total_chunks": 23
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_2.4-format-detection-and-routing.md:chunk:6",
+    "content": "### FormatOption Model\n\n\nThe `FormatOption` class is the central routing data structure that pairs each `InputFormat` with its processing strategy:\n\n| Field              | Type                            | Purpose                              |\n| ------------------ | ------------------------------- | ------------------------------------ |\n| `backend`          | `Type[AbstractDocumentBackend]` | Backend class for parsing the format |\n| `pipeline_cls`     | `Type[BasePipeline]`            | Pipeline class for processing        |\n| `pipeline_options` | `PipelineOptions`               | Configuration for the pipeline       |\n\nSpecialized subclasses exist for convenience:\n\n- `PdfFormatOption`: Routes PDFs to `StandardPdfPipeline` with `DoclingParseV4DocumentBackend`\n- `WordFormatOption`: Routes DOCX to `SimplePipeline` with `MsWordDocumentBackend`\n- `AudioFormatOption`: Routes audio to `AsrPipeline` with `NoOpBackend`\n\n**Sources:** [docling/document\\_converter.py62-130](https://github.com/docling-project/docling/blob/f7244a43/docling/document_converter.py#L62-L130)",
+    "metadata": {
+      "source": "_docling-project_docling_2.4-format-detection-and-routing.md",
+      "heading": "FormatOption Model",
+      "heading_level": 3,
+      "chunk_index": 6,
+      "collection": "docling",
+      "char_count": 1076,
+      "estimated_tokens": 269,
+      "total_chunks": 23
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_2.4-format-detection-and-routing.md:chunk:7",
+    "content": "### Default Routing Table\n\n\nThe `_get_default_option()` function defines the default backend-pipeline pairing for each format:",
+    "metadata": {
+      "source": "_docling-project_docling_2.4-format-detection-and-routing.md",
+      "heading": "Default Routing Table",
+      "heading_level": 3,
+      "chunk_index": 7,
+      "collection": "docling",
+      "char_count": 126,
+      "estimated_tokens": 31,
+      "total_chunks": 23
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_2.4-format-detection-and-routing.md:chunk:8",
+    "content": "| InputFormat    | Backend                         | Pipeline              | Notes                                 |\n| -------------- | ------------------------------- | --------------------- | ------------------------------------- |\n| `PDF`          | `DoclingParseV4DocumentBackend` | `StandardPdfPipeline` | Default PDF processing with v4 parser |\n| `IMAGE`        | `DoclingParseV4DocumentBackend` | `StandardPdfPipeline` | Images treated as single-page PDFs    |\n| `DOCX`         | `MsWordDocumentBackend`         | `SimplePipeline`      | Office Open XML documents             |\n| `XLSX`         | `MsExcelDocumentBackend`        | `SimplePipeline`      | Excel spreadsheets                    |\n| `PPTX`         | `MsPowerpointDocumentBackend`   | `SimplePipeline`      | PowerPoint presentations              |\n| `HTML`         | `HTMLDocumentBackend`           | `SimplePipeline`      | Web content                           |\n| `MD`           | `MarkdownDocumentBackend`       | `SimplePipeline`      | Markdown documents                    |\n| `ASCIIDOC`     | `AsciiDocBackend`               | `SimplePipeline`      | AsciiDoc format                       |\n| `CSV`          | `CsvDocumentBackend`            | `SimplePipeline`      | Comma-separated values                |\n| `METS_GBS`     | `MetsGbsDocumentBackend`        | `StandardPdfPipeline` | Google Books METS archives            |\n| `XML_JATS`     | `JatsDocumentBackend`           | `SimplePipeline`      | Scientific article format             |\n| `XML_USPTO`    | `PatentUsptoDocumentBackend`    | `SimplePipeline`      | USPTO patent format                   |\n| `JSON_DOCLING` | `DoclingJSONBackend`            | `SimplePipeline`      | Native DoclingDocument JSON           |\n| `AUDIO`        | `NoOpBackend`                   | `AsrPipeline`         | Audio transcription                   |\n| `VTT`          | `WebVTTDocumentBackend`         | `SimplePipeline`      | Subtitle format                       |",
+    "metadata": {
+      "source": "_docling-project_docling_2.4-format-detection-and-routing.md",
+      "heading": "Default Routing Table",
+      "heading_level": 3,
+      "chunk_index": 8,
+      "collection": "docling",
+      "char_count": 1988,
+      "estimated_tokens": 497,
+      "total_chunks": 23
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_2.4-format-detection-and-routing.md:chunk:9",
+    "content": "| `AsrPipeline`         | Audio transcription                   |\n| `VTT`          | `WebVTTDocumentBackend`         | `SimplePipeline`      | Subtitle format                       |\n\n**Sources:** [docling/document\\_converter.py132-182](https://github.com/docling-project/docling/blob/f7244a43/docling/document_converter.py#L132-L182)",
+    "metadata": {
+      "source": "_docling-project_docling_2.4-format-detection-and-routing.md",
+      "heading": "Default Routing Table",
+      "heading_level": 3,
+      "chunk_index": 9,
+      "collection": "docling",
+      "char_count": 334,
+      "estimated_tokens": 83,
+      "total_chunks": 23
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_2.4-format-detection-and-routing.md:chunk:10",
+    "content": "### Pipeline Caching Mechanism\n\n\nTo avoid redundant model loading, `DocumentConverter` caches pipeline instances based on a composite key:\n\n```\n```\n\n**Caching Logic:**\n\n1. Hash the serialized `pipeline_options` to create a stable fingerprint\n2. Use `(pipeline_class, options_hash)` as the cache key\n3. Thread-safe access using `_PIPELINE_CACHE_LOCK`\n4. Pipelines with identical configurations share the same instance across all documents\n\nThis approach is critical for performance when processing batches of documents with the same pipeline configuration, as it avoids reloading models (OCR engines, layout models, table models, etc.) for each document.\n\n**Sources:** [docling/document\\_converter.py212-218](https://github.com/docling-project/docling/blob/f7244a43/docling/document_converter.py#L212-L218) [docling/document\\_converter.py351-378](https://github.com/docling-project/docling/blob/f7244a43/docling/document_converter.py#L351-L378)",
+    "metadata": {
+      "source": "_docling-project_docling_2.4-format-detection-and-routing.md",
+      "heading": "Pipeline Caching Mechanism",
+      "heading_level": 3,
+      "chunk_index": 10,
+      "collection": "docling",
+      "char_count": 943,
+      "estimated_tokens": 235,
+      "total_chunks": 23
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_2.4-format-detection-and-routing.md:chunk:11",
+    "content": "### MIME Type and Extension Detection\n\n\nThe system uses two complementary approaches for basic format detection:\n\n**MIME Type Detection** ([docling/datamodel/document.py285-304](https://github.com/docling-project/docling/blob/f7244a43/docling/datamodel/document.py#L285-L304)):\n\n- For `Path` inputs: Uses `filetype.guess_mime()` on file path\n- For `DocumentStream` inputs: Reads first 8KB and uses `filetype.guess_mime()` on content\n- Maps detected MIME to `InputFormat` via `MimeTypeToFormat` dictionary\n\n**Extension-Based Detection** ([docling/datamodel/document.py377-400](https://github.com/docling-project/docling/blob/f7244a43/docling/datamodel/document.py#L377-L400)):\n\n- Fallback when MIME detection fails\n- Extracts file extension and looks up corresponding MIME type\n- Uses `FormatToMimeType` and `FormatToExtensions` mappings",
+    "metadata": {
+      "source": "_docling-project_docling_2.4-format-detection-and-routing.md",
+      "heading": "MIME Type and Extension Detection",
+      "heading_level": 3,
+      "chunk_index": 11,
+      "collection": "docling",
+      "char_count": 836,
+      "estimated_tokens": 209,
+      "total_chunks": 23
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_2.4-format-detection-and-routing.md:chunk:12",
+    "content": "### Office Document Disambiguation\n\n\nOffice Open XML formats (DOCX, XLSX, PPTX) all use `application/zip` as their MIME type, requiring special handling:\n\n```\n```\n\n**Implementation:** [docling/datamodel/document.py292-318](https://github.com/docling-project/docling/blob/f7244a43/docling/datamodel/document.py#L292-L318)",
+    "metadata": {
+      "source": "_docling-project_docling_2.4-format-detection-and-routing.md",
+      "heading": "Office Document Disambiguation",
+      "heading_level": 3,
+      "chunk_index": 12,
+      "collection": "docling",
+      "char_count": 320,
+      "estimated_tokens": 80,
+      "total_chunks": 23
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_2.4-format-detection-and-routing.md:chunk:13",
+    "content": "### Specialized Content-Based Detection\n\n\nFor formats that cannot be reliably detected by MIME or extension alone, the system reads file content and applies pattern matching.",
+    "metadata": {
+      "source": "_docling-project_docling_2.4-format-detection-and-routing.md",
+      "heading": "Specialized Content-Based Detection",
+      "heading_level": 3,
+      "chunk_index": 13,
+      "collection": "docling",
+      "char_count": 174,
+      "estimated_tokens": 43,
+      "total_chunks": 23
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_2.4-format-detection-and-routing.md:chunk:14",
+    "content": "#### METS Archive Detection\n\n\nMETS (Metadata Encoding and Transmission Standard) archives from Google Books use `.tar.gz` extension but need special handling:\n\n**Detection Process:**\n\n1. Detect `application/gzip` MIME type\n2. Open tarball and scan member files\n3. Look for XML files containing `http://www.loc.gov/METS/` namespace\n4. If found, classify as `InputFormat.METS_GBS`\n\n**Sources:** [docling/datamodel/document.py320-322](https://github.com/docling-project/docling/blob/f7244a43/docling/datamodel/document.py#L320-L322) [docling/datamodel/document.py471-489](https://github.com/docling-project/docling/blob/f7244a43/docling/datamodel/document.py#L471-L489)",
+    "metadata": {
+      "source": "_docling-project_docling_2.4-format-detection-and-routing.md",
+      "heading": "METS Archive Detection",
+      "heading_level": 4,
+      "chunk_index": 14,
+      "collection": "docling",
+      "char_count": 666,
+      "estimated_tokens": 166,
+      "total_chunks": 23
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_2.4-format-detection-and-routing.md:chunk:15",
+    "content": "#### HTML/XHTML/XML Detection\n\n\nThe `_detect_html_xhtml()` method analyzes document preambles to distinguish between similar markup formats:\n\n**Detection Rules:**\n\n1. Remove XML comments from content\n\n2. Check for XML declaration (`<?xml`)\n\n   - If contains \"xhtml\": `application/xhtml+xml`\n   - Otherwise: `application/xml`\n\n3. Check for HTML5/4 markers: `<!doctype html>`, `<html>`, `<head>`, `<body>`\n\n4. Check for XML doctype with matching root element\n\n**Sources:** [docling/datamodel/document.py402-439](https://github.com/docling-project/docling/blob/f7244a43/docling/datamodel/document.py#L402-L439)",
+    "metadata": {
+      "source": "_docling-project_docling_2.4-format-detection-and-routing.md",
+      "heading": "HTML/XHTML/XML Detection",
+      "heading_level": 4,
+      "chunk_index": 15,
+      "collection": "docling",
+      "char_count": 607,
+      "estimated_tokens": 151,
+      "total_chunks": 23
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_2.4-format-detection-and-routing.md:chunk:16",
+    "content": "#### CSV Detection\n\n\nUses Python's `csv.Sniffer` to detect CSV characteristics:\n\n**Detection Rules:**\n\n1. Check for newline presence (multi-line requirement)\n2. Apply `csv.Sniffer().sniff()` to detect dialect\n3. Verify delimiter is common (`,`, `;`, `\\t`, `|`)\n\n**Sources:** [docling/datamodel/document.py441-468](https://github.com/docling-project/docling/blob/f7244a43/docling/datamodel/document.py#L441-L468)",
+    "metadata": {
+      "source": "_docling-project_docling_2.4-format-detection-and-routing.md",
+      "heading": "CSV Detection",
+      "heading_level": 4,
+      "chunk_index": 16,
+      "collection": "docling",
+      "char_count": 411,
+      "estimated_tokens": 102,
+      "total_chunks": 23
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_2.4-format-detection-and-routing.md:chunk:17",
+    "content": "#### Scientific Format Detection\n\n\nFor XML-based scientific formats, the system inspects DOCTYPE declarations:\n\n**USPTO Patent Detection:**\n\n- Checks for DOCTYPE containing: `us-patent-application-v4`, `us-patent-grant-v4`, `us-grant-025`, `patent-application-publication`\n- Also detects plain text format starting with `PATN\\r\\n`\n\n**JATS Article Detection:**\n\n- Checks for DOCTYPE containing: `JATS-journalpublishing`, `JATS-archive`\n\n**Sources:** [docling/datamodel/document.py340-374](https://github.com/docling-project/docling/blob/f7244a43/docling/datamodel/document.py#L340-L374)",
+    "metadata": {
+      "source": "_docling-project_docling_2.4-format-detection-and-routing.md",
+      "heading": "Scientific Format Detection",
+      "heading_level": 4,
+      "chunk_index": 17,
+      "collection": "docling",
+      "char_count": 585,
+      "estimated_tokens": 146,
+      "total_chunks": 23
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_2.4-format-detection-and-routing.md:chunk:18",
+    "content": "## CLI Format Configuration\n\n\nThe CLI provides extensive control over format routing through command-line arguments:\n\n```\n```\n\n**Key CLI Options:**\n\n| Option          | Purpose                      | Example                      |\n| --------------- | ---------------------------- | ---------------------------- |\n| `--from`        | Filter allowed input formats | `--from pdf --from docx`     |\n| `--pipeline`    | Select processing pipeline   | `--pipeline vlm`             |\n| `--pdf-backend` | Choose PDF backend           | `--pdf-backend dlparse_v4`   |\n| `--ocr-engine`  | Select OCR engine            | `--ocr-engine tesseract`     |\n| `--vlm-model`   | Choose VLM model             | `--vlm-model granitedocling` |\n\n**Sources:** [docling/cli/main.py308-697](https://github.com/docling-project/docling/blob/f7244a43/docling/cli/main.py#L308-L697)",
+    "metadata": {
+      "source": "_docling-project_docling_2.4-format-detection-and-routing.md",
+      "heading": "CLI Format Configuration",
+      "heading_level": 2,
+      "chunk_index": 18,
+      "collection": "docling",
+      "char_count": 853,
+      "estimated_tokens": 213,
+      "total_chunks": 23
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_2.4-format-detection-and-routing.md:chunk:19",
+    "content": "### Pipeline-Specific Routing\n\n\nThe CLI constructs different `FormatOption` configurations based on the `--pipeline` argument:\n\n**Standard Pipeline** ([docling/cli/main.py619-697](https://github.com/docling-project/docling/blob/f7244a43/docling/cli/main.py#L619-L697)):\n\n- Creates `PdfPipelineOptions` with OCR, table, and enrichment settings\n- Instantiates `PdfFormatOption` with selected backend\n- Creates `ConvertPipelineOptions` for simple formats (DOCX, HTML, etc.)\n\n**VLM Pipeline** ([docling/cli/main.py699-748](https://github.com/docling-project/docling/blob/f7244a43/docling/cli/main.py#L699-L748)):\n\n- Creates `VlmPipelineOptions` with selected VLM model\n- Routes only PDF and IMAGE formats\n- Automatically selects MLX backend on Darwin platform if available\n\n**ASR Pipeline** ([docling/cli/main.py750-781](https://github.com/docling-project/docling/blob/f7244a43/docling/cli/main.py#L750-L781)):\n\n- Creates `AsrPipelineOptions` with selected Whisper model\n- Routes only AUDIO format\n- Uses `NoOpBackend` since audio parsing happens in pipeline",
+    "metadata": {
+      "source": "_docling-project_docling_2.4-format-detection-and-routing.md",
+      "heading": "Pipeline-Specific Routing",
+      "heading_level": 3,
+      "chunk_index": 19,
+      "collection": "docling",
+      "char_count": 1054,
+      "estimated_tokens": 263,
+      "total_chunks": 23
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_2.4-format-detection-and-routing.md:chunk:20",
+    "content": "## Complete Detection and Routing Flow\n\n\n```\n```\n\n**Sources:** [docling/document\\_converter.py313-350](https://github.com/docling-project/docling/blob/f7244a43/docling/document_converter.py#L313-L350) [docling/datamodel/document.py241-279](https://github.com/docling-project/docling/blob/f7244a43/docling/datamodel/document.py#L241-L279)",
+    "metadata": {
+      "source": "_docling-project_docling_2.4-format-detection-and-routing.md",
+      "heading": "Complete Detection and Routing Flow",
+      "heading_level": 2,
+      "chunk_index": 20,
+      "collection": "docling",
+      "char_count": 337,
+      "estimated_tokens": 84,
+      "total_chunks": 23
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_2.4-format-detection-and-routing.md:chunk:21",
+    "content": "## Error Handling and Validation\n\n\nThe format detection system includes robust error handling:\n\n**Invalid Format Handling:**\n\n- If detected format is not in `allowed_formats`, creates `ConversionResult` with status `SKIPPED`\n- If no backend can be selected, uses `_DummyBackend` to mark document as invalid\n- Logs error messages with detected format and allowed formats for debugging\n\n**Backend Validation:**\n\n- Each backend implements `is_valid()` to verify successful initialization\n- If backend initialization fails, `InputDocument.valid` is set to `False`\n- Invalid documents are caught before pipeline execution\n\n**Sources:** [docling/datamodel/document.py251-278](https://github.com/docling-project/docling/blob/f7244a43/docling/datamodel/document.py#L251-L278) [docling/document\\_converter.py380-432](https://github.com/docling-project/docling/blob/f7244a43/docling/document_converter.py#L380-L432)\n\nDismiss\n\nRefresh this wiki\n\nThis wiki was recently refreshed. Please wait 4 days to refresh again.",
+    "metadata": {
+      "source": "_docling-project_docling_2.4-format-detection-and-routing.md",
+      "heading": "Error Handling and Validation",
+      "heading_level": 2,
+      "chunk_index": 21,
+      "collection": "docling",
+      "char_count": 1005,
+      "estimated_tokens": 251,
+      "total_chunks": 23
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_2.4-format-detection-and-routing.md:chunk:22",
+    "content": "### On this page\n\n\n- [Format Detection and Routing](#format-detection-and-routing.md)\n- [Overview](#overview.md)\n- [Format Detection Architecture](#format-detection-architecture.md)\n- [Detection Strategy Priority](#detection-strategy-priority.md)\n- [Format Routing System](#format-routing-system.md)\n- [FormatOption Model](#formatoption-model.md)\n- [Default Routing Table](#default-routing-table.md)\n- [Pipeline Caching Mechanism](#pipeline-caching-mechanism.md)\n- [Detailed Format Detection Mechanisms](#detailed-format-detection-mechanisms.md)\n- [MIME Type and Extension Detection](#mime-type-and-extension-detection.md)\n- [Office Document Disambiguation](#office-document-disambiguation.md)\n- [Specialized Content-Based Detection](#specialized-content-based-detection.md)\n- [METS Archive Detection](#mets-archive-detection.md)\n- [HTML/XHTML/XML Detection](#htmlxhtmlxml-detection.md)\n- [CSV Detection](#csv-detection.md)\n- [Scientific Format Detection](#scientific-format-detection.md)\n- [CLI Format Configuration](#cli-format-configuration.md)\n- [Pipeline-Specific Routing](#pipeline-specific-routing.md)\n- [Complete Detection and Routing Flow](#complete-detection-and-routing-flow.md)\n- [Error Handling and Validation](#error-handling-and-validation.md)",
+    "metadata": {
+      "source": "_docling-project_docling_2.4-format-detection-and-routing.md",
+      "heading": "On this page",
+      "heading_level": 3,
+      "chunk_index": 22,
+      "collection": "docling",
+      "char_count": 1258,
+      "estimated_tokens": 314,
+      "total_chunks": 23
+    }
+  }
+]

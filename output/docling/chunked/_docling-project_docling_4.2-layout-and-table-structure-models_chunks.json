@@ -1,0 +1,352 @@
+[
+  {
+    "chunk_id": "docling:_docling-project_docling_4.2-layout-and-table-structure-models.md:chunk:0",
+    "content": "# Layout and Table Structure Models\n\n\nRelevant source files",
+    "metadata": {
+      "source": "_docling-project_docling_4.2-layout-and-table-structure-models.md",
+      "heading": "Layout and Table Structure Models",
+      "heading_level": 1,
+      "chunk_index": 0,
+      "collection": "docling",
+      "char_count": 59,
+      "estimated_tokens": 14,
+      "total_chunks": 25
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_4.2-layout-and-table-structure-models.md:chunk:1",
+    "content": "- [docling/models/base\\_ocr\\_model.py](https://github.com/docling-project/docling/blob/f7244a43/docling/models/base_ocr_model.py)\n- [docling/models/code\\_formula\\_model.py](https://github.com/docling-project/docling/blob/f7244a43/docling/models/code_formula_model.py)\n- [docling/models/document\\_picture\\_classifier.py](https://github.com/docling-project/docling/blob/f7244a43/docling/models/document_picture_classifier.py)\n- [docling/models/easyocr\\_model.py](https://github.com/docling-project/docling/blob/f7244a43/docling/models/easyocr_model.py)\n- [docling/models/layout\\_model.py](https://github.com/docling-project/docling/blob/f7244a43/docling/models/layout_model.py)\n- [docling/models/page\\_assemble\\_model.py](https://github.com/docling-project/docling/blob/f7244a43/docling/models/page_assemble_model.py)\n- [docling/models/page\\_preprocessing\\_model.py](https://github.com/docling-project/docling/blob/f7244a43/docling/models/page_preprocessing_model.py)\n- [docling/models/table\\_structure\\_model.py](https://github.com/docling-project/docling/blob/f7244a43/docling/models/table_structure_model.py)\n- [docling/pipeline/standard\\_pdf\\_pipeline.py](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/standard_pdf_pipeline.py)\n- [tests/data/groundtruth/docling\\_v2/2203.01017v2.doctags.txt](https://github.com/docling-project/docling/blob/f7244a43/tests/data/groundtruth/docling_v2/2203.01017v2.doctags.txt)\n- [tests/data/groundtruth/docling\\_v2/2203.01017v2.json](https://github.com/docling-project/docling/blob/f7244a43/tests/data/groundtruth/docling_v2/2203.01017v2.json)\n- [tests/data/groundtruth/docling\\_v2/2203.01017v2.md](https://github.com/docling-project/docling/blob/f7244a43/tests/data/groundtruth/docling_v2/2203.01017v2.md)\n- [tests/data/groundtruth/docling\\_v2/2206.01062.doctags.txt](https://github.com/docling-project/docling/blob/f7244a43/tests/data/groundtruth/docling_v2/2206.01062.doctags.txt)\n- [tests/data/groundtruth/docling\\_v2/2206.01062.json](https://github.com/docling-project/docling/blob/f7244a43/tests/data/groundtruth/docling_v2/2206.01062.json)\n- [tests/data/groundtruth/docling\\_v2/2305.03393v1.doctags.txt](https://github.com/docling-project/docling/blob/f7244a43/tests/data/groundtruth/docling_v2/2305.03393v1.doctags.txt)\n- [tests/data/groundtruth/docling\\_v2/2305.03393v1.json](https://github.com/docling-project/docling/blob/f7244a43/tests/data/groundtruth/docling_v2/2305.03393v1.json)\n- [tests/data/groundtruth/docling\\_v2/multi\\_page.json](https://github.com/docling-project/docling/blob/f7244a43/tests/data/groundtruth/docling_v2/multi_page.json)\n- [tests/data/groundtruth/docling\\_v2/redp5110\\_sampled.doctags.txt](https://github.com/docling-project/docling/blob/f7244a43/tests/data/groundtruth/docling_v2/redp5110_sampled.doctags.txt)\n- [tests/data/groundtruth/docling\\_v2/redp5110\\_sampled.json](https://github.com/docling-project/docling/blob/f7244a43/tests/data/groundtruth/docling_v2/redp5110_sampled.json)\n- [tests/data/groundtruth/docling\\_v2/redp5110\\_sampled.md](https://github.com/docling-project/docling/blob/f7244a43/tests/data/groundtruth/docling_v2/redp5110_sampled.md)\n- [tests/test\\_document\\_picture\\_classifier.py](https://github.com/docling-project/docling/blob/f7244a43/tests/test_document_picture_classifier.py)\n- [tests/test\\_options.py](https://github.com/docling-project/docling/blob/f7244a43/tests/test_options.py)",
+    "metadata": {
+      "source": "_docling-project_docling_4.2-layout-and-table-structure-models.md",
+      "heading": "Layout and Table Structure Models",
+      "heading_level": 1,
+      "chunk_index": 1,
+      "collection": "docling",
+      "char_count": 3414,
+      "estimated_tokens": 853,
+      "total_chunks": 25
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_4.2-layout-and-table-structure-models.md:chunk:2",
+    "content": "github.com/docling-project/docling/blob/f7244a43/tests/test_document_picture_classifier.py)\n- [tests/test\\_options.py](https://github.com/docling-project/docling/blob/f7244a43/tests/test_options.py)\n\nThis page covers the AI/ML models used for document layout analysis and table structure recognition in Docling. These models work together to understand the spatial and structural organization of document content, identifying elements like text blocks, tables, figures, and headers, then extracting detailed table structure including cell boundaries and relationships.\n\nFor information about OCR text extraction capabilities, see [OCR Models](docling-project/docling/4.1-ocr-models.md). For vision-language model integration for content understanding, see [Vision Language Models](docling-project/docling/4.3-vision-language-models.md).",
+    "metadata": {
+      "source": "_docling-project_docling_4.2-layout-and-table-structure-models.md",
+      "heading": "Layout and Table Structure Models",
+      "heading_level": 1,
+      "chunk_index": 2,
+      "collection": "docling",
+      "char_count": 836,
+      "estimated_tokens": 209,
+      "total_chunks": 25
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_4.2-layout-and-table-structure-models.md:chunk:3",
+    "content": "## Overview\n\n\nDocling's layout and table structure analysis pipeline consists of several interconnected models that process documents in stages:\n\n```\n```\n\nThe pipeline processes pages through preprocessing, layout analysis with cleanup, and specialized table structure recognition for table elements identified by the layout model.\n\n**Sources**: [docling/models/layout\\_model.py](https://github.com/docling-project/docling/blob/f7244a43/docling/models/layout_model.py) [docling/models/table\\_structure\\_model.py](https://github.com/docling-project/docling/blob/f7244a43/docling/models/table_structure_model.py) [docling/models/page\\_preprocessing\\_model.py](https://github.com/docling-project/docling/blob/f7244a43/docling/models/page_preprocessing_model.py) [docling/utils/layout\\_postprocessor.py](https://github.com/docling-project/docling/blob/f7244a43/docling/utils/layout_postprocessor.py)",
+    "metadata": {
+      "source": "_docling-project_docling_4.2-layout-and-table-structure-models.md",
+      "heading": "Overview",
+      "heading_level": 2,
+      "chunk_index": 3,
+      "collection": "docling",
+      "char_count": 895,
+      "estimated_tokens": 223,
+      "total_chunks": 25
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_4.2-layout-and-table-structure-models.md:chunk:4",
+    "content": "## Page Preprocessing Model\n\n\nThe `PagePreprocessingModel` handles initial page processing, extracting images and text cells while assessing text quality.",
+    "metadata": {
+      "source": "_docling-project_docling_4.2-layout-and-table-structure-models.md",
+      "heading": "Page Preprocessing Model",
+      "heading_level": 2,
+      "chunk_index": 4,
+      "collection": "docling",
+      "char_count": 154,
+      "estimated_tokens": 38,
+      "total_chunks": 25
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_4.2-layout-and-table-structure-models.md:chunk:5",
+    "content": "### Core Functionality\n\n\n| Feature             | Description                                        | Implementation                                                                                                                                                       |\n| ------------------- | -------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |\n| Image Extraction    | Generates page images at specified scales          | [docling/models/page\\_preprocessing\\_model.py52-66](https://github.com/docling-project/docling/blob/f7244a43/docling/models/page_preprocessing_model.py#L52-L66)     |\n| Cell Extraction     | Extracts text cells from document backends         | [docling/models/page\\_preprocessing\\_model.py69-90](https://github.com/docling-project/docling/blob/f7244a43/docling/models/page_preprocessing_model.py#L69-L90)     |\n| Text Quality Rating | Evaluates text extraction quality using heuristics | [docling/models/page\\_preprocessing\\_model.py120-145](https://github.com/docling-project/docling/blob/f7244a43/docling/models/page_preprocessing_model.py#L120-L145) |\n| VLM Support         | Can skip cell extraction for VLM-only processing   | [docling/models/page\\_preprocessing\\_model.py20-22](https://github.com/docling-project/docling/blob/f7244a43/docling/models/page_preprocessing_model.py#L20-L22)     |",
+    "metadata": {
+      "source": "_docling-project_docling_4.2-layout-and-table-structure-models.md",
+      "heading": "Core Functionality",
+      "heading_level": 3,
+      "chunk_index": 5,
+      "collection": "docling",
+      "char_count": 1488,
+      "estimated_tokens": 372,
+      "total_chunks": 25
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_4.2-layout-and-table-structure-models.md:chunk:6",
+    "content": "### Text Quality Assessment\n\n\nThe model uses several patterns to detect problematic text extraction:\n\n```\n```\n\nHard failures (score 0.0) include replacement characters, glyph patterns, and excessive slash-number sequences. Fragment patterns apply graduated penalties.\n\n**Sources**: [docling/models/page\\_preprocessing\\_model.py120-145](https://github.com/docling-project/docling/blob/f7244a43/docling/models/page_preprocessing_model.py#L120-L145)",
+    "metadata": {
+      "source": "_docling-project_docling_4.2-layout-and-table-structure-models.md",
+      "heading": "Text Quality Assessment",
+      "heading_level": 3,
+      "chunk_index": 6,
+      "collection": "docling",
+      "char_count": 446,
+      "estimated_tokens": 111,
+      "total_chunks": 25
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_4.2-layout-and-table-structure-models.md:chunk:7",
+    "content": "## Layout Model\n\n\nThe `LayoutModel` performs document layout analysis using IBM's layout prediction models to identify and classify document elements.",
+    "metadata": {
+      "source": "_docling-project_docling_4.2-layout-and-table-structure-models.md",
+      "heading": "Layout Model",
+      "heading_level": 2,
+      "chunk_index": 7,
+      "collection": "docling",
+      "char_count": 150,
+      "estimated_tokens": 37,
+      "total_chunks": 25
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_4.2-layout-and-table-structure-models.md:chunk:8",
+    "content": "### Element Detection\n\n\nThe model classifies document elements into these categories:\n\n| Label Type    | Elements                                                                                           | Purpose                  |\n| ------------- | -------------------------------------------------------------------------------------------------- | ------------------------ |\n| Text Elements | `TEXT`, `FOOTNOTE`, `CAPTION`, `SECTION_HEADER`, `PAGE_HEADER`, `PAGE_FOOTER`, `CODE`, `LIST_ITEM` | Content text blocks      |\n| Tables        | `TABLE`, `DOCUMENT_INDEX`                                                                          | Tabular data structures  |\n| Figures       | `PICTURE`                                                                                          | Images and graphics      |\n| Interactive   | `CHECKBOX_SELECTED`, `CHECKBOX_UNSELECTED`                                                         | Form elements            |\n| Containers    | `FORM`, `KEY_VALUE_REGION`                                                                         | Wrapper structures       |\n| Mathematical  | `FORMULA`                                                                                          | Mathematical expressions |",
+    "metadata": {
+      "source": "_docling-project_docling_4.2-layout-and-table-structure-models.md",
+      "heading": "Element Detection",
+      "heading_level": 3,
+      "chunk_index": 8,
+      "collection": "docling",
+      "char_count": 1254,
+      "estimated_tokens": 313,
+      "total_chunks": 25
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_4.2-layout-and-table-structure-models.md:chunk:9",
+    "content": "### Batch Processing Architecture\n\n\n```\n```\n\nThe model processes pages in batches for efficiency, using the `LayoutPredictor.predict_batch()` method from `docling_ibm_models`.\n\n**Sources**: [docling/models/layout\\_model.py148-237](https://github.com/docling-project/docling/blob/f7244a43/docling/models/layout_model.py#L148-L237) [docling/models/layout\\_model.py28-47](https://github.com/docling-project/docling/blob/f7244a43/docling/models/layout_model.py#L28-L47)",
+    "metadata": {
+      "source": "_docling-project_docling_4.2-layout-and-table-structure-models.md",
+      "heading": "Batch Processing Architecture",
+      "heading_level": 3,
+      "chunk_index": 9,
+      "collection": "docling",
+      "char_count": 465,
+      "estimated_tokens": 116,
+      "total_chunks": 25
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_4.2-layout-and-table-structure-models.md:chunk:10",
+    "content": "### Model Configuration\n\n\nThe layout model supports different model specifications through `LayoutModelConfig`:\n\n```\n```\n\nModels are downloaded from HuggingFace repositories and cached locally for reuse.\n\n**Sources**: [docling/models/layout\\_model.py89-102](https://github.com/docling-project/docling/blob/f7244a43/docling/models/layout_model.py#L89-L102) [docling/datamodel/layout\\_model\\_specs.py](https://github.com/docling-project/docling/blob/f7244a43/docling/datamodel/layout_model_specs.py)",
+    "metadata": {
+      "source": "_docling-project_docling_4.2-layout-and-table-structure-models.md",
+      "heading": "Model Configuration",
+      "heading_level": 3,
+      "chunk_index": 10,
+      "collection": "docling",
+      "char_count": 497,
+      "estimated_tokens": 124,
+      "total_chunks": 25
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_4.2-layout-and-table-structure-models.md:chunk:11",
+    "content": "## Layout Postprocessor\n\n\nThe `LayoutPostprocessor` refines raw layout predictions through spatial indexing, overlap resolution, and cell assignment.",
+    "metadata": {
+      "source": "_docling-project_docling_4.2-layout-and-table-structure-models.md",
+      "heading": "Layout Postprocessor",
+      "heading_level": 2,
+      "chunk_index": 11,
+      "collection": "docling",
+      "char_count": 149,
+      "estimated_tokens": 37,
+      "total_chunks": 25
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_4.2-layout-and-table-structure-models.md:chunk:12",
+    "content": "### Spatial Indexing System\n\n\n```\n```\n\nThe postprocessor uses multiple spatial data structures for efficient overlap detection and resolution.\n\n**Sources**: [docling/utils/layout\\_postprocessor.py50-106](https://github.com/docling-project/docling/blob/f7244a43/docling/utils/layout_postprocessor.py#L50-L106) [docling/utils/layout\\_postprocessor.py17-48](https://github.com/docling-project/docling/blob/f7244a43/docling/utils/layout_postprocessor.py#L17-L48)",
+    "metadata": {
+      "source": "_docling-project_docling_4.2-layout-and-table-structure-models.md",
+      "heading": "Spatial Indexing System",
+      "heading_level": 3,
+      "chunk_index": 12,
+      "collection": "docling",
+      "char_count": 458,
+      "estimated_tokens": 114,
+      "total_chunks": 25
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_4.2-layout-and-table-structure-models.md:chunk:13",
+    "content": "### Cluster Processing Pipeline\n\n\nDifferent cluster types receive specialized processing:\n\n| Cluster Type | Processing Rules                                  | Overlap Thresholds                          |\n| ------------ | ------------------------------------------------- | ------------------------------------------- |\n| Regular      | Standard confidence filtering, cell assignment    | area\\_threshold: 1.3, conf\\_threshold: 0.05 |\n| Picture      | Higher confidence thresholds, full-page filtering | area\\_threshold: 2.0, conf\\_threshold: 0.3  |\n| Wrapper      | Container handling, child cluster management      | area\\_threshold: 2.0, conf\\_threshold: 0.2  |\n\n**Sources**: [docling/utils/layout\\_postprocessor.py158-163](https://github.com/docling-project/docling/blob/f7244a43/docling/utils/layout_postprocessor.py#L158-L163) [docling/utils/layout\\_postprocessor.py164-171](https://github.com/docling-project/docling/blob/f7244a43/docling/utils/layout_postprocessor.py#L164-L171)",
+    "metadata": {
+      "source": "_docling-project_docling_4.2-layout-and-table-structure-models.md",
+      "heading": "Cluster Processing Pipeline",
+      "heading_level": 3,
+      "chunk_index": 13,
+      "collection": "docling",
+      "char_count": 987,
+      "estimated_tokens": 246,
+      "total_chunks": 25
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_4.2-layout-and-table-structure-models.md:chunk:14",
+    "content": "### Cell Assignment Strategy\n\n\n```\n```\n\nCells are assigned to clusters based on spatial overlap, with unassigned cells optionally converted to orphan text clusters.\n\n**Sources**: [docling/utils/layout\\_postprocessor.py585-617](https://github.com/docling-project/docling/blob/f7244a43/docling/utils/layout_postprocessor.py#L585-L617) [docling/utils/layout\\_postprocessor.py284-301](https://github.com/docling-project/docling/blob/f7244a43/docling/utils/layout_postprocessor.py#L284-L301)",
+    "metadata": {
+      "source": "_docling-project_docling_4.2-layout-and-table-structure-models.md",
+      "heading": "Cell Assignment Strategy",
+      "heading_level": 3,
+      "chunk_index": 14,
+      "collection": "docling",
+      "char_count": 486,
+      "estimated_tokens": 121,
+      "total_chunks": 25
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_4.2-layout-and-table-structure-models.md:chunk:15",
+    "content": "## Table Structure Model\n\n\nThe `TableStructureModel` uses TableFormer to extract detailed table structure from table regions identified by the layout model. It predicts both the structural representation (in OTSL format) and the precise bounding boxes for each table cell.",
+    "metadata": {
+      "source": "_docling-project_docling_4.2-layout-and-table-structure-models.md",
+      "heading": "Table Structure Model",
+      "heading_level": 2,
+      "chunk_index": 15,
+      "collection": "docling",
+      "char_count": 272,
+      "estimated_tokens": 68,
+      "total_chunks": 25
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_4.2-layout-and-table-structure-models.md:chunk:16",
+    "content": "### TableFormer Architecture\n\n\nThe model consists of three main components:\n\n```\n```\n\nThe model operates at 2x scale (144 DPI) for improved accuracy. The scale factor is applied to both input images and coordinates, then predictions are scaled back.\n\n**Sources**: [docling/models/table\\_structure\\_model.py29-90](https://github.com/docling-project/docling/blob/f7244a43/docling/models/table_structure_model.py#L29-L90) [docling/models/table\\_structure\\_model.py65-90](https://github.com/docling-project/docling/blob/f7244a43/docling/models/table_structure_model.py#L65-L90) [docling/models/table\\_structure\\_model.py92-101](https://github.com/docling-project/docling/blob/f7244a43/docling/models/table_structure_model.py#L92-L101)",
+    "metadata": {
+      "source": "_docling-project_docling_4.2-layout-and-table-structure-models.md",
+      "heading": "TableFormer Architecture",
+      "heading_level": 3,
+      "chunk_index": 16,
+      "collection": "docling",
+      "char_count": 730,
+      "estimated_tokens": 182,
+      "total_chunks": 25
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_4.2-layout-and-table-structure-models.md:chunk:17",
+    "content": "### OTSL Token Language\n\n\nTableFormer predicts table structure using OTSL (Optimized Table Structure Language), a minimal vocabulary for representing table structure:\n\n| OTSL Token   | Meaning                     | Example Context                     |\n| ------------ | --------------------------- | ----------------------------------- |\n| `<ched>`     | Column header cell          | `<otsl>...<ched>Header Text<nl>...` |\n| `<fcel>`     | First cell in row           | `<fcel>Cell 1<fcel>Cell 2<nl>`      |\n| `<lcel>`     | Last cell in row (implicit) | Continues until `<nl>`              |\n| `<nl>`       | New line (end row)          | `<fcel>A<fcel>B<nl>`                |\n| `<srowspan>` | Row span start              | For merged cells                    |\n| `<erowspan>` | Row span end                | End of merged region                |\n\nThe OTSL sequence provides a structured representation that can be parsed to reconstruct the complete table grid, including spanning cells.\n\n**Sources**: [tests/data/groundtruth/docling\\_v2/2203.01017v2.doctags.txt10-12](https://github.com/docling-project/docling/blob/f7244a43/tests/data/groundtruth/docling_v2/2203.01017v2.doctags.txt#L10-L12) [docling/models/table\\_structure\\_model.py275-279](https://github.com/docling-project/docling/blob/f7244a43/docling/models/table_structure_model.py#L275-L279)",
+    "metadata": {
+      "source": "_docling-project_docling_4.2-layout-and-table-structure-models.md",
+      "heading": "OTSL Token Language",
+      "heading_level": 3,
+      "chunk_index": 17,
+      "collection": "docling",
+      "char_count": 1353,
+      "estimated_tokens": 338,
+      "total_chunks": 25
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_4.2-layout-and-table-structure-models.md:chunk:18",
+    "content": "### Table Processing Workflow\n\n\nThe table structure extraction follows this detailed workflow:\n\n```\n```\n\nKey implementation details:",
+    "metadata": {
+      "source": "_docling-project_docling_4.2-layout-and-table-structure-models.md",
+      "heading": "Table Processing Workflow",
+      "heading_level": 3,
+      "chunk_index": 18,
+      "collection": "docling",
+      "char_count": 132,
+      "estimated_tokens": 33,
+      "total_chunks": 25
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_4.2-layout-and-table-structure-models.md:chunk:19",
+    "content": "| Stage                  | Operation                                                         | Code Reference                                                                                                                                                 |\n| ---------------------- | ----------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |\n| Input Preparation      | Scale page image to 2x, extract table bounding boxes              | [docling/models/table\\_structure\\_model.py190-216](https://github.com/docling-project/docling/blob/f7244a43/docling/models/table_structure_model.py#L190-L216) |\n| Token Extraction       | Prefer word-level cells, fall back to line-level cells            | [docling/models/table\\_structure\\_model.py218-248](https://github.com/docling-project/docling/blob/f7244a43/docling/models/table_structure_model.py#L218-L248) |\n| TableFormer Prediction | Call `tf_predictor.multi_table_predict()` with scaled inputs      | [docling/models/table\\_structure\\_model.py250-253](https://github.com/docling-project/docling/blob/f7244a43/docling/models/table_structure_model.py#L250-L253) |\n| Cell Matching          | Match predicted cells to extracted tokens or extract from backend | [docling/models/table\\_structure\\_model.py256-268](https://github.com/docling-project/docling/blob/f7244a43/docling/models/table_structure_model.py#L256-L268) |\n| Coordinate Unscaling   | Scale all bounding boxes back by 1/2.0 before storage             | [docling/models/table\\_structure\\_model.py267-268](https://github.com/docling-project/docling/blob/f7244a43/docling/models/table_structure_model.py#L267-L268) |\n| Output Assembly        | Create `Table` object with OTSL sequence and `TableCell` array    | [docling/models/table\\_structure\\_model.py281-294](https://github.com/docling-project/docling/blob/f7244a43/docling/models/table_structure_model.py#L281-L294) |",
+    "metadata": {
+      "source": "_docling-project_docling_4.2-layout-and-table-structure-models.md",
+      "heading": "Table Processing Workflow",
+      "heading_level": 3,
+      "chunk_index": 19,
+      "collection": "docling",
+      "char_count": 2047,
+      "estimated_tokens": 511,
+      "total_chunks": 25
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_4.2-layout-and-table-structure-models.md:chunk:20",
+    "content": "### Cell Matching Strategy\n\n\nThe `do_cell_matching` option controls how cell content is extracted:\n\n```\n```\n\nWith cell matching enabled (default), the model matches input text tokens to predicted cells, preserving original text. With matching disabled, text is extracted from the PDF using predicted cell coordinates, which works better when no word-level segmentation is available.\n\n**Sources**: [docling/models/table\\_structure\\_model.py218-268](https://github.com/docling-project/docling/blob/f7244a43/docling/models/table_structure_model.py#L218-L268) [docling/models/table\\_structure\\_model.py41-42](https://github.com/docling-project/docling/blob/f7244a43/docling/models/table_structure_model.py#L41-L42)",
+    "metadata": {
+      "source": "_docling-project_docling_4.2-layout-and-table-structure-models.md",
+      "heading": "Cell Matching Strategy",
+      "heading_level": 3,
+      "chunk_index": 20,
+      "collection": "docling",
+      "char_count": 710,
+      "estimated_tokens": 177,
+      "total_chunks": 25
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_4.2-layout-and-table-structure-models.md:chunk:21",
+    "content": "### Table Cell Output Structure\n\n\nEach `TableCell` contains structural and spatial information:\n\n```\n```\n\nThe model also provides aggregate information in the `Table` object:\n\n- `otsl_seq`: List of OTSL tokens representing structure\n- `table_cells`: List of all `TableCell` objects\n- `num_rows`: Total number of rows\n- `num_cols`: Total number of columns\n\n**Sources**: [docling/models/table\\_structure\\_model.py265-294](https://github.com/docling-project/docling/blob/f7244a43/docling/models/table_structure_model.py#L265-L294) [tests/data/groundtruth/docling\\_v2/2203.01017v2.json](https://github.com/docling-project/docling/blob/f7244a43/tests/data/groundtruth/docling_v2/2203.01017v2.json)",
+    "metadata": {
+      "source": "_docling-project_docling_4.2-layout-and-table-structure-models.md",
+      "heading": "Table Cell Output Structure",
+      "heading_level": 3,
+      "chunk_index": 21,
+      "collection": "docling",
+      "char_count": 692,
+      "estimated_tokens": 173,
+      "total_chunks": 25
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_4.2-layout-and-table-structure-models.md:chunk:22",
+    "content": "### Pipeline Integration\n\n\nThe layout and table models integrate with the broader Docling pipeline through these interfaces:\n\n```\n```\n\nEach model implements the `BasePageModel.__call__()` interface, processing page batches and updating page predictions.\n\n**Sources**: [docling/models/base\\_model.py](https://github.com/docling-project/docling/blob/f7244a43/docling/models/base_model.py) [docling/models/layout\\_model.py148-237](https://github.com/docling-project/docling/blob/f7244a43/docling/models/layout_model.py#L148-L237) [docling/models/table\\_structure\\_model.py170-304](https://github.com/docling-project/docling/blob/f7244a43/docling/models/table_structure_model.py#L170-L304)",
+    "metadata": {
+      "source": "_docling-project_docling_4.2-layout-and-table-structure-models.md",
+      "heading": "Pipeline Integration",
+      "heading_level": 3,
+      "chunk_index": 22,
+      "collection": "docling",
+      "char_count": 685,
+      "estimated_tokens": 171,
+      "total_chunks": 25
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_4.2-layout-and-table-structure-models.md:chunk:23",
+    "content": "### Configuration System\n\n\nModel behavior is controlled through the pipeline options system:\n\n| Option Category         | Key Parameters                                              | Impact                                                |\n| ----------------------- | ----------------------------------------------------------- | ----------------------------------------------------- |\n| `LayoutOptions`         | `model_spec`, `skip_cell_assignment`, `keep_empty_clusters` | Layout model selection and post-processing            |\n| `TableStructureOptions` | `mode`, `do_cell_matching`                                  | TableFormer accuracy vs speed, cell extraction method |\n| `AcceleratorOptions`    | `device`, `num_threads`                                     | Hardware acceleration and threading                   |\n\n**Sources**: [docling/datamodel/pipeline\\_options.py](https://github.com/docling-project/docling/blob/f7244a43/docling/datamodel/pipeline_options.py) [tests/test\\_options.py25-40](https://github.com/docling-project/docling/blob/f7244a43/tests/test_options.py#L25-L40)\n\nDismiss\n\nRefresh this wiki\n\nThis wiki was recently refreshed. Please wait 4 days to refresh again.",
+    "metadata": {
+      "source": "_docling-project_docling_4.2-layout-and-table-structure-models.md",
+      "heading": "Configuration System",
+      "heading_level": 3,
+      "chunk_index": 23,
+      "collection": "docling",
+      "char_count": 1192,
+      "estimated_tokens": 298,
+      "total_chunks": 25
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_4.2-layout-and-table-structure-models.md:chunk:24",
+    "content": "### On this page\n\n\n- [Layout and Table Structure Models](#layout-and-table-structure-models.md)\n- [Overview](#overview.md)\n- [Page Preprocessing Model](#page-preprocessing-model.md)\n- [Core Functionality](#core-functionality.md)\n- [Text Quality Assessment](#text-quality-assessment.md)\n- [Layout Model](#layout-model.md)\n- [Element Detection](#element-detection.md)\n- [Batch Processing Architecture](#batch-processing-architecture.md)\n- [Model Configuration](#model-configuration.md)\n- [Layout Postprocessor](#layout-postprocessor.md)\n- [Spatial Indexing System](#spatial-indexing-system.md)\n- [Cluster Processing Pipeline](#cluster-processing-pipeline.md)\n- [Cell Assignment Strategy](#cell-assignment-strategy.md)\n- [Table Structure Model](#table-structure-model.md)\n- [TableFormer Architecture](#tableformer-architecture.md)\n- [OTSL Token Language](#otsl-token-language.md)\n- [Table Processing Workflow](#table-processing-workflow.md)\n- [Cell Matching Strategy](#cell-matching-strategy.md)\n- [Table Cell Output Structure](#table-cell-output-structure.md)\n- [Model Integration Points](#model-integration-points.md)\n- [Pipeline Integration](#pipeline-integration.md)\n- [Configuration System](#configuration-system.md)",
+    "metadata": {
+      "source": "_docling-project_docling_4.2-layout-and-table-structure-models.md",
+      "heading": "On this page",
+      "heading_level": 3,
+      "chunk_index": 24,
+      "collection": "docling",
+      "char_count": 1218,
+      "estimated_tokens": 304,
+      "total_chunks": 25
+    }
+  }
+]

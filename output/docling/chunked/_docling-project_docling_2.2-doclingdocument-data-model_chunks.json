@@ -1,0 +1,366 @@
+[
+  {
+    "chunk_id": "docling:_docling-project_docling_2.2-doclingdocument-data-model.md:chunk:0",
+    "content": "# DoclingDocument Data Model\n\n\nRelevant source files",
+    "metadata": {
+      "source": "_docling-project_docling_2.2-doclingdocument-data-model.md",
+      "heading": "DoclingDocument Data Model",
+      "heading_level": 1,
+      "chunk_index": 0,
+      "collection": "docling",
+      "char_count": 52,
+      "estimated_tokens": 13,
+      "total_chunks": 26
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_2.2-doclingdocument-data-model.md:chunk:1",
+    "content": "- [docling/cli/main.py](https://github.com/docling-project/docling/blob/f7244a43/docling/cli/main.py)\n- [docling/datamodel/base\\_models.py](https://github.com/docling-project/docling/blob/f7244a43/docling/datamodel/base_models.py)\n- [docling/datamodel/document.py](https://github.com/docling-project/docling/blob/f7244a43/docling/datamodel/document.py)\n- [docling/datamodel/pipeline\\_options.py](https://github.com/docling-project/docling/blob/f7244a43/docling/datamodel/pipeline_options.py)\n- [docling/document\\_converter.py](https://github.com/docling-project/docling/blob/f7244a43/docling/document_converter.py)\n- [tests/data/groundtruth/docling\\_v2/2203.01017v2.doctags.txt](https://github.com/docling-project/docling/blob/f7244a43/tests/data/groundtruth/docling_v2/2203.01017v2.doctags.txt)\n- [tests/data/groundtruth/docling\\_v2/2203.01017v2.json](https://github.com/docling-project/docling/blob/f7244a43/tests/data/groundtruth/docling_v2/2203.01017v2.json)\n- [tests/data/groundtruth/docling\\_v2/2203.01017v2.md](https://github.com/docling-project/docling/blob/f7244a43/tests/data/groundtruth/docling_v2/2203.01017v2.md)\n- [tests/data/groundtruth/docling\\_v2/2206.01062.doctags.txt](https://github.com/docling-project/docling/blob/f7244a43/tests/data/groundtruth/docling_v2/2206.01062.doctags.txt)\n- [tests/data/groundtruth/docling\\_v2/2206.01062.json](https://github.com/docling-project/docling/blob/f7244a43/tests/data/groundtruth/docling_v2/2206.01062.json)\n- [tests/data/groundtruth/docling\\_v2/2305.03393v1.doctags.txt](https://github.com/docling-project/docling/blob/f7244a43/tests/data/groundtruth/docling_v2/2305.03393v1.doctags.txt)\n- [tests/data/groundtruth/docling\\_v2/2305.03393v1.json](https://github.com/docling-project/docling/blob/f7244a43/tests/data/groundtruth/docling_v2/2305.03393v1.json)\n- [tests/data/groundtruth/docling\\_v2/multi\\_page.json](https://github.com/docling-project/docling/blob/f7244a43/tests/data/groundtruth/docling_v2/multi_page.json)\n- [tests/data/groundtruth/docling\\_v2/redp5110\\_sampled.doctags.txt](https://github.com/docling-project/docling/blob/f7244a43/tests/data/groundtruth/docling_v2/redp5110_sampled.doctags.txt)\n- [tests/data/groundtruth/docling\\_v2/redp5110\\_sampled.json](https://github.com/docling-project/docling/blob/f7244a43/tests/data/groundtruth/docling_v2/redp5110_sampled.json)\n- [tests/data/groundtruth/docling\\_v2/redp5110\\_sampled.md](https://github.com/docling-project/docling/blob/f7244a43/tests/data/groundtruth/docling_v2/redp5110_sampled.md)",
+    "metadata": {
+      "source": "_docling-project_docling_2.2-doclingdocument-data-model.md",
+      "heading": "DoclingDocument Data Model",
+      "heading_level": 1,
+      "chunk_index": 1,
+      "collection": "docling",
+      "char_count": 2515,
+      "estimated_tokens": 628,
+      "total_chunks": 26
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_2.2-doclingdocument-data-model.md:chunk:2",
+    "content": "_v2/redp5110_sampled.json)\n- [tests/data/groundtruth/docling\\_v2/redp5110\\_sampled.md](https://github.com/docling-project/docling/blob/f7244a43/tests/data/groundtruth/docling_v2/redp5110_sampled.md)\n\nThis document describes the `DoclingDocument` data model, which is the unified representation format produced by all Docling conversion pipelines. It defines the schema for representing document structure, content, and metadata in a format-agnostic way that enables downstream processing, export to multiple formats, and semantic analysis.\n\nFor information about the conversion process that produces `DoclingDocument` instances, see [Document Conversion Flow](docling-project/docling/2.1-document-conversion-flow.md). For details on export formats, see [Export Formats](docling-project/docling/8.1-export-formats.md).\n\n---",
+    "metadata": {
+      "source": "_docling-project_docling_2.2-doclingdocument-data-model.md",
+      "heading": "DoclingDocument Data Model",
+      "heading_level": 1,
+      "chunk_index": 2,
+      "collection": "docling",
+      "char_count": 822,
+      "estimated_tokens": 205,
+      "total_chunks": 26
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_2.2-doclingdocument-data-model.md:chunk:3",
+    "content": "## Purpose and Scope\n\n\nThe `DoclingDocument` data model serves as the central unified representation in Docling's architecture. All processing pipelines—whether `StandardPdfPipeline`, `VlmPipeline`, or `SimplePipeline`—produce a `DoclingDocument` instance that captures:\n\n- **Document structure**: Hierarchical organization of content using parent-child relationships\n- **Content elements**: Text blocks, tables, pictures, lists, and other semantic units\n- **Provenance information**: Spatial coordinates, page numbers, and character spans linking elements to source locations\n- **Metadata**: Document origin, format information, and processing metadata\n- **Content layers**: Separation between body content and document furniture (headers, footers)\n\nThe model is defined in the `docling-core` package and imported into Docling for use across the conversion pipeline.\n\nSources: [docling/datamodel/document.py24-32](https://github.com/docling-project/docling/blob/f7244a43/docling/datamodel/document.py#L24-L32) [docling/datamodel/document.py198-215](https://github.com/docling-project/docling/blob/f7244a43/docling/datamodel/document.py#L198-L215) [tests/data/groundtruth/docling\\_v2/2203.01017v2.json1-15](https://github.com/docling-project/docling/blob/f7244a43/tests/data/groundtruth/docling_v2/2203.01017v2.json#L1-L15)\n\n---",
+    "metadata": {
+      "source": "_docling-project_docling_2.2-doclingdocument-data-model.md",
+      "heading": "Purpose and Scope",
+      "heading_level": 2,
+      "chunk_index": 3,
+      "collection": "docling",
+      "char_count": 1328,
+      "estimated_tokens": 332,
+      "total_chunks": 26
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_2.2-doclingdocument-data-model.md:chunk:4",
+    "content": "### Top-Level Schema\n\n\n```\n```\n\n**Diagram: DoclingDocument top-level structure showing schema information, origin metadata, root nodes, and element collections**\n\nThe document consists of:\n\n1. **Schema metadata**: `schema_name` (always \"DoclingDocument\"), `version`, and document `name`\n2. **Origin information**: Source file metadata including MIME type, binary hash, and filename\n3. **Root nodes**: `body` and `furniture` as entry points into the document hierarchy\n4. **Typed collections**: Arrays holding all instances of each element type (texts, tables, pictures, groups)\n\nSources: [tests/data/groundtruth/docling\\_v2/2203.01017v2.json1-16](https://github.com/docling-project/docling/blob/f7244a43/tests/data/groundtruth/docling_v2/2203.01017v2.json#L1-L16) [tests/data/groundtruth/docling\\_v2/redp5110\\_sampled.json1-17](https://github.com/docling-project/docling/blob/f7244a43/tests/data/groundtruth/docling_v2/redp5110_sampled.json#L1-L17)\n\n---",
+    "metadata": {
+      "source": "_docling-project_docling_2.2-doclingdocument-data-model.md",
+      "heading": "Top-Level Schema",
+      "heading_level": 3,
+      "chunk_index": 4,
+      "collection": "docling",
+      "char_count": 953,
+      "estimated_tokens": 238,
+      "total_chunks": 26
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_2.2-doclingdocument-data-model.md:chunk:5",
+    "content": "### Reference-Based Hierarchy\n\n\nDoclingDocument uses a JSON reference system (`$ref`) to establish parent-child relationships without duplicating data. Each element has:\n\n- `self_ref`: A JSON pointer to the element's location (e.g., `\"#/texts/42\"`)\n- `parent`: A `$ref` to the parent element (e.g., `{\"$ref\": \"#/body\"}`)\n- `children`: A list of `$ref` objects pointing to child elements\n\n```\n```\n\n**Diagram: Document hierarchy using JSON $ref pointers. Solid arrows show parent-to-child references via children array, dotted arrows show child-to-parent references via parent field**\n\nThis design provides several advantages:\n\n1. **No duplication**: Each element appears exactly once in its typed array\n2. **Efficient traversal**: Both top-down (via `children`) and bottom-up (via `parent`) navigation\n3. **Clear ownership**: Every element except roots has exactly one parent\n4. **Type safety**: Elements remain in their typed collections for easy access\n\nSources: [tests/data/groundtruth/docling\\_v2/2203.01017v2.json17-60](https://github.com/docling-project/docling/blob/f7244a43/tests/data/groundtruth/docling_v2/2203.01017v2.json#L17-L60) [tests/data/groundtruth/docling\\_v2/redp5110\\_sampled.json466-527](https://github.com/docling-project/docling/blob/f7244a43/tests/data/groundtruth/docling_v2/redp5110_sampled.json#L466-L527)\n\n---",
+    "metadata": {
+      "source": "_docling-project_docling_2.2-doclingdocument-data-model.md",
+      "heading": "Reference-Based Hierarchy",
+      "heading_level": 3,
+      "chunk_index": 5,
+      "collection": "docling",
+      "char_count": 1337,
+      "estimated_tokens": 334,
+      "total_chunks": 26
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_2.2-doclingdocument-data-model.md:chunk:6",
+    "content": "### Body Layer\n\n\nThe `body` node contains the main semantic content of the document:\n\n- Section headers\n- Paragraphs and text blocks\n- Tables\n- Figures and pictures\n- Lists and enumerations\n- Formulas and equations\n- Code blocks\n\n```\n```",
+    "metadata": {
+      "source": "_docling-project_docling_2.2-doclingdocument-data-model.md",
+      "heading": "Body Layer",
+      "heading_level": 3,
+      "chunk_index": 6,
+      "collection": "docling",
+      "char_count": 237,
+      "estimated_tokens": 59,
+      "total_chunks": 26
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_2.2-doclingdocument-data-model.md:chunk:7",
+    "content": "### Furniture Layer\n\n\nThe `furniture` node contains document furniture—elements that provide context but are not primary content:\n\n- Page headers\n- Page footers\n- Footnotes\n- Marginal notes\n- Page numbers\n\n```\n```\n\nElements have a `content_layer` field indicating their layer membership. This separation enables:\n\n- **Clean export**: Body-only exports for main content extraction\n- **Layout analysis**: Identification of page layout patterns\n- **Semantic processing**: Focus on primary content without distractions\n\nSources: [tests/data/groundtruth/docling\\_v2/2203.01017v2.json10-16](https://github.com/docling-project/docling/blob/f7244a43/tests/data/groundtruth/docling_v2/2203.01017v2.json#L10-L16) [tests/data/groundtruth/docling\\_v2/2203.01017v2.json17-489](https://github.com/docling-project/docling/blob/f7244a43/tests/data/groundtruth/docling_v2/2203.01017v2.json#L17-L489) [docling/datamodel/document.py80-99](https://github.com/docling-project/docling/blob/f7244a43/docling/datamodel/document.py#L80-L99)\n\n---",
+    "metadata": {
+      "source": "_docling-project_docling_2.2-doclingdocument-data-model.md",
+      "heading": "Furniture Layer",
+      "heading_level": 3,
+      "chunk_index": 7,
+      "collection": "docling",
+      "char_count": 1020,
+      "estimated_tokens": 255,
+      "total_chunks": 26
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_2.2-doclingdocument-data-model.md:chunk:8",
+    "content": "### DocItemLabel Enumeration\n\n\nElements are classified using `DocItemLabel` values, which map to specific semantic types:\n\n| Label                | Description          | Common Use                         |\n| -------------------- | -------------------- | ---------------------------------- |\n| `section_header`     | Section heading      | Document structure, TOC generation |\n| `title`              | Document title       | Metadata extraction                |\n| `text` / `paragraph` | Body text            | Content extraction                 |\n| `list_item`          | List entry           | List detection and formatting      |\n| `table`              | Table structure      | Table extraction                   |\n| `picture`            | Image or figure      | Image extraction, captioning       |\n| `caption`            | Image/table caption  | Association with parent element    |\n| `formula`            | Mathematical formula | LaTeX extraction                   |\n| `code`               | Code block           | Syntax highlighting                |\n| `page_header`        | Running header       | Furniture identification           |\n| `page_footer`        | Running footer       | Furniture identification           |\n| `footnote`           | Footnote reference   | Citation tracking                  |\n\nSources: [docling/datamodel/document.py80-99](https://github.com/docling-project/docling/blob/f7244a43/docling/datamodel/document.py#L80-L99) [docling/datamodel/base\\_models.py6-13](https://github.com/docling-project/docling/blob/f7244a43/docling/datamodel/base_models.py#L6-L13)",
+    "metadata": {
+      "source": "_docling-project_docling_2.2-doclingdocument-data-model.md",
+      "heading": "DocItemLabel Enumeration",
+      "heading_level": 3,
+      "chunk_index": 8,
+      "collection": "docling",
+      "char_count": 1593,
+      "estimated_tokens": 398,
+      "total_chunks": 26
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_2.2-doclingdocument-data-model.md:chunk:9",
+    "content": "### Element Type Overview\n\n\n```\n```\n\n**Diagram: Element type hierarchy showing common base properties and specialized types**\n\nSources: [docling/datamodel/document.py24-32](https://github.com/docling-project/docling/blob/f7244a43/docling/datamodel/document.py#L24-L32) \\[docling\\_core.types.doc imports]\n\n---",
+    "metadata": {
+      "source": "_docling-project_docling_2.2-doclingdocument-data-model.md",
+      "heading": "Element Type Overview",
+      "heading_level": 3,
+      "chunk_index": 9,
+      "collection": "docling",
+      "char_count": 308,
+      "estimated_tokens": 77,
+      "total_chunks": 26
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_2.2-doclingdocument-data-model.md:chunk:10",
+    "content": "### TextItem Structure\n\n\nText elements represent textual content with rich provenance information:\n\n```\n```\n\n**Key fields:**\n\n- `orig`: Original text as extracted from the source\n- `text`: Processed/cleaned text for output\n- `prov`: Provenance array linking text to source page(s)\n- `label`: Semantic classification (text, paragraph, section\\_header, etc.)",
+    "metadata": {
+      "source": "_docling-project_docling_2.2-doclingdocument-data-model.md",
+      "heading": "TextItem Structure",
+      "heading_level": 3,
+      "chunk_index": 10,
+      "collection": "docling",
+      "char_count": 356,
+      "estimated_tokens": 89,
+      "total_chunks": 26
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_2.2-doclingdocument-data-model.md:chunk:11",
+    "content": "### SectionHeaderItem\n\n\nSection headers extend TextItem with hierarchical level information:\n\n```\n```\n\nThe `level` field indicates nesting depth, enabling table of contents generation and document outline extraction.\n\nSources: [tests/data/groundtruth/docling\\_v2/2203.01017v2.json834-916](https://github.com/docling-project/docling/blob/f7244a43/tests/data/groundtruth/docling_v2/2203.01017v2.json#L834-L916) [tests/data/groundtruth/docling\\_v2/2203.01017v2.json945-971](https://github.com/docling-project/docling/blob/f7244a43/tests/data/groundtruth/docling_v2/2203.01017v2.json#L945-L971)\n\n---",
+    "metadata": {
+      "source": "_docling-project_docling_2.2-doclingdocument-data-model.md",
+      "heading": "SectionHeaderItem",
+      "heading_level": 3,
+      "chunk_index": 11,
+      "collection": "docling",
+      "char_count": 595,
+      "estimated_tokens": 148,
+      "total_chunks": 26
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_2.2-doclingdocument-data-model.md:chunk:12",
+    "content": "### TableItem Structure\n\n\nTables are represented with complete structural information:\n\n```\n```\n\n**Key components:**\n\n- `otsl_seq`: Optimized Table Structure Language sequence (see OTSL documentation)\n- `num_rows`, `num_cols`: Table dimensions\n- `table_cells`: Array of cell objects with positions and spans\n- Each cell contains bbox, span information, and text content\n\nOTSL tokens used in sequence:\n\n- `<ched>`: Column header\n- `<rhed>`: Row header\n- `<fcel>`: First cell in row\n- `<lcel>`: Last cell in row\n- `<nl>`: New line (row separator)\n\nSources: [tests/data/groundtruth/docling\\_v2/2203.01017v2.doctags.txt11-12](https://github.com/docling-project/docling/blob/f7244a43/tests/data/groundtruth/docling_v2/2203.01017v2.doctags.txt#L11-L12) [docling/datamodel/document.py42-44](https://github.com/docling-project/docling/blob/f7244a43/docling/datamodel/document.py#L42-L44)\n\n---",
+    "metadata": {
+      "source": "_docling-project_docling_2.2-doclingdocument-data-model.md",
+      "heading": "TableItem Structure",
+      "heading_level": 3,
+      "chunk_index": 12,
+      "collection": "docling",
+      "char_count": 884,
+      "estimated_tokens": 221,
+      "total_chunks": 26
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_2.2-doclingdocument-data-model.md:chunk:13",
+    "content": "### PictureItem Structure\n\n\nPictures (images, figures) are represented with optional annotations and captions:\n\n```\n```\n\n**Key fields:**\n\n- `annotations`: List of `PictureDataType` objects for image data (base64, PNG, etc.)\n- `provenance`: String indicating annotation source (e.g., \"model\\_generated\", \"api\\_described\")\n- `predicted_class`: Classification result (Figure, Chart, Diagram, etc.)\n- `confidence`: Model confidence score\n- `children`: Often contains a caption TextItem\n\nThe `prov` bbox defines the image's location on the page, enabling image extraction and spatial relationship analysis.\n\nSources: [docling/datamodel/base\\_models.py218-233](https://github.com/docling-project/docling/blob/f7244a43/docling/datamodel/base_models.py#L218-L233) \\[tests/data/groundtruth/docling\\_v2/2203.01017v2.json]\n\n---",
+    "metadata": {
+      "source": "_docling-project_docling_2.2-doclingdocument-data-model.md",
+      "heading": "PictureItem Structure",
+      "heading_level": 3,
+      "chunk_index": 13,
+      "collection": "docling",
+      "char_count": 816,
+      "estimated_tokens": 204,
+      "total_chunks": 26
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_2.2-doclingdocument-data-model.md:chunk:14",
+    "content": "### GroupItem for Structural Aggregation\n\n\nGroups aggregate related elements, most commonly for lists:\n\n```\n```\n\nGroups serve multiple purposes:\n\n- **List representation**: Unordered and ordered lists\n- **Nested structures**: Lists can contain other groups for multi-level lists\n- **Logical grouping**: Related content that should be processed together\n\nThe `name` field identifies the group type (\"list\", \"group\"), while `label` provides semantic classification. Children maintain document order.\n\nSources: [tests/data/groundtruth/docling\\_v2/2203.01017v2.json490-541](https://github.com/docling-project/docling/blob/f7244a43/tests/data/groundtruth/docling_v2/2203.01017v2.json#L490-L541) [tests/data/groundtruth/docling\\_v2/redp5110\\_sampled.json466-527](https://github.com/docling-project/docling/blob/f7244a43/tests/data/groundtruth/docling_v2/redp5110_sampled.json#L466-L527)\n\n---",
+    "metadata": {
+      "source": "_docling-project_docling_2.2-doclingdocument-data-model.md",
+      "heading": "GroupItem for Structural Aggregation",
+      "heading_level": 3,
+      "chunk_index": 14,
+      "collection": "docling",
+      "char_count": 885,
+      "estimated_tokens": 221,
+      "total_chunks": 26
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_2.2-doclingdocument-data-model.md:chunk:15",
+    "content": "### Provenance Structure\n\n\nEvery content element includes `prov` (provenance) information linking it to source locations:\n\n```\n```\n\n**Diagram: Provenance structure linking elements to source locations**",
+    "metadata": {
+      "source": "_docling-project_docling_2.2-doclingdocument-data-model.md",
+      "heading": "Provenance Structure",
+      "heading_level": 3,
+      "chunk_index": 15,
+      "collection": "docling",
+      "char_count": 202,
+      "estimated_tokens": 50,
+      "total_chunks": 26
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_2.2-doclingdocument-data-model.md:chunk:16",
+    "content": "### Bounding Box Coordinates\n\n\nCoordinates follow PDF conventions with configurable origin:\n\n```\n```\n\n- `l` (left), `t` (top), `r` (right), `b` (bottom): Coordinates in points (1/72 inch)\n- `coord_origin`: Typically `\"BOTTOMLEFT\"` for PDF (origin at bottom-left of page)\n- Coordinates enable precise spatial analysis and image cropping",
+    "metadata": {
+      "source": "_docling-project_docling_2.2-doclingdocument-data-model.md",
+      "heading": "Bounding Box Coordinates",
+      "heading_level": 3,
+      "chunk_index": 16,
+      "collection": "docling",
+      "char_count": 335,
+      "estimated_tokens": 83,
+      "total_chunks": 26
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_2.2-doclingdocument-data-model.md:chunk:17",
+    "content": "### Character Spans\n\n\nThe `charspan` field provides character-level granularity:\n\n```\n```\n\nThis `[start, end)` range links the element to the character stream extracted from the page, enabling:\n\n- Text selection and highlighting\n- Precise text extraction from source\n- Mapping between visual and textual representations",
+    "metadata": {
+      "source": "_docling-project_docling_2.2-doclingdocument-data-model.md",
+      "heading": "Character Spans",
+      "heading_level": 3,
+      "chunk_index": 17,
+      "collection": "docling",
+      "char_count": 319,
+      "estimated_tokens": 79,
+      "total_chunks": 26
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_2.2-doclingdocument-data-model.md:chunk:18",
+    "content": "### Multi-Page Elements\n\n\nElements can span multiple pages using multiple provenance entries:\n\n```\n```\n\nThis structure supports:\n\n- Tables spanning pages\n- Text flowing across page boundaries\n- Complete reconstruction of element layout\n\nSources: [tests/data/groundtruth/docling\\_v2/2203.01017v2.json843-857](https://github.com/docling-project/docling/blob/f7244a43/tests/data/groundtruth/docling_v2/2203.01017v2.json#L843-L857) [docling/datamodel/document.py35-40](https://github.com/docling-project/docling/blob/f7244a43/docling/datamodel/document.py#L35-L40) \\[docling\\_core.types.doc BoundingBox]\n\n---",
+    "metadata": {
+      "source": "_docling-project_docling_2.2-doclingdocument-data-model.md",
+      "heading": "Multi-Page Elements",
+      "heading_level": 3,
+      "chunk_index": 18,
+      "collection": "docling",
+      "char_count": 604,
+      "estimated_tokens": 151,
+      "total_chunks": 26
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_2.2-doclingdocument-data-model.md:chunk:19",
+    "content": "### Creation in Pipeline\n\n\n```\n```\n\n**Diagram: DoclingDocument creation flow through pipeline phases**",
+    "metadata": {
+      "source": "_docling-project_docling_2.2-doclingdocument-data-model.md",
+      "heading": "Creation in Pipeline",
+      "heading_level": 3,
+      "chunk_index": 19,
+      "collection": "docling",
+      "char_count": 102,
+      "estimated_tokens": 25,
+      "total_chunks": 26
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_2.2-doclingdocument-data-model.md:chunk:20",
+    "content": "### ConversionResult Container\n\n\nThe `ConversionResult` class wraps the document with metadata:\n\n```\n```\n\nKey relationships:\n\n- `input`: Source document information\n- `pages`: Intermediate page-level representations (retained for debugging)\n- `document`: Final unified DoclingDocument\n- `status`: Conversion outcome\n- `confidence`: Quality scores per page and overall\n\nSources: [docling/datamodel/document.py198-215](https://github.com/docling-project/docling/blob/f7244a43/docling/datamodel/document.py#L198-L215) \\[docling/pipeline/base\\_pipeline.py]",
+    "metadata": {
+      "source": "_docling-project_docling_2.2-doclingdocument-data-model.md",
+      "heading": "ConversionResult Container",
+      "heading_level": 3,
+      "chunk_index": 20,
+      "collection": "docling",
+      "char_count": 552,
+      "estimated_tokens": 138,
+      "total_chunks": 26
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_2.2-doclingdocument-data-model.md:chunk:21",
+    "content": "### Export Capabilities\n\n\nOnce created, DoclingDocument can be exported to multiple formats:\n\n```\n```\n\nExport methods leverage the unified structure to generate:\n\n- **JSON**: Complete serialization with provenance and structure\n- **Markdown**: Semantic text with tables and images\n- **HTML**: Rich rendering with CSS styling\n- **DOCTAGS**: Tagged format for training VLM models\n\nSources: [docling/cli/main.py211-275](https://github.com/docling-project/docling/blob/f7244a43/docling/cli/main.py#L211-L275)\n\n---",
+    "metadata": {
+      "source": "_docling-project_docling_2.2-doclingdocument-data-model.md",
+      "heading": "Export Capabilities",
+      "heading_level": 3,
+      "chunk_index": 21,
+      "collection": "docling",
+      "char_count": 509,
+      "estimated_tokens": 127,
+      "total_chunks": 26
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_2.2-doclingdocument-data-model.md:chunk:22",
+    "content": "### Complete Document Structure\n\n\nHere's a minimal complete DoclingDocument in JSON format:\n\n```\n```\n\nThis structure demonstrates:\n\n1. Schema versioning for compatibility tracking\n2. Origin metadata for provenance\n3. Separation of furniture and body content\n4. Reference-based hierarchy avoiding duplication\n5. Type-specific collections for efficient access\n6. Complete provenance linking to source pages\n\nSources: [tests/data/groundtruth/docling\\_v2/2203.01017v2.json1-100](https://github.com/docling-project/docling/blob/f7244a43/tests/data/groundtruth/docling_v2/2203.01017v2.json#L1-L100) [tests/data/groundtruth/docling\\_v2/redp5110\\_sampled.json1-100](https://github.com/docling-project/docling/blob/f7244a43/tests/data/groundtruth/docling_v2/redp5110_sampled.json#L1-L100)\n\n---",
+    "metadata": {
+      "source": "_docling-project_docling_2.2-doclingdocument-data-model.md",
+      "heading": "Complete Document Structure",
+      "heading_level": 3,
+      "chunk_index": 22,
+      "collection": "docling",
+      "char_count": 784,
+      "estimated_tokens": 196,
+      "total_chunks": 26
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_2.2-doclingdocument-data-model.md:chunk:23",
+    "content": "## Summary Table\n\n\n| Aspect             | Description                                             | Key Files                                                                                                                                 |\n| ------------------ | ------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |\n| **Schema**         | DoclingDocument from docling-core with versioned schema | [docling/datamodel/document.py24-32](https://github.com/docling-project/docling/blob/f7244a43/docling/datamodel/document.py#L24-L32)      |\n| **Structure**      | JSON with $ref pointers for hierarchy                   | [tests/data/groundtruth examples](<https://github.com/docling-project/docling/blob/f7244a43/tests/data/groundtruth examples>)             |\n| **Content Layers** | body (main content) and furniture (page elements)       | [docling/datamodel/document.py80-99](https://github.com/docling-project/docling/blob/f7244a43/docling/datamodel/document.py#L80-L99)      |\n| **Element Types**  | texts, tables, pictures, groups with DocItemLabel       | [docling/datamodel/base\\_models.py6-13](https://github.com/docling-project/docling/blob/f7244a43/docling/datamodel/base_models.py#L6-L13) |\n| **Provenance**     | page\\_no, bbox, charspan for each element               | [docling\\_core.types.doc.base](https://github.com/docling-project/docling/blob/f7244a43/docling_core.types.doc.base)                      |\n| **Integration**    | Created by pipelines, wrapped in ConversionResult       | [docling/datamodel/document.py198-215](https://github.com/docling-project/docling/blob/f7244a43/docling/datamodel/document.py#L198-L215)  |\n| **Export**         | JSON, Markdown, HTML, DOCTAGS formats                   | [docling/cli/main.py211-275](https://github.com/docling-project/docling/blob/f7244a43/docling/cli/main.py#L211-L275)                      |",
+    "metadata": {
+      "source": "_docling-project_docling_2.2-doclingdocument-data-model.md",
+      "heading": "Summary Table",
+      "heading_level": 2,
+      "chunk_index": 23,
+      "collection": "docling",
+      "char_count": 2007,
+      "estimated_tokens": 501,
+      "total_chunks": 26
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_2.2-doclingdocument-data-model.md:chunk:24",
+    "content": "JSON, Markdown, HTML, DOCTAGS formats                   | [docling/cli/main.py211-275](https://github.com/docling-project/docling/blob/f7244a43/docling/cli/main.py#L211-L275)                      |\n\nThe DoclingDocument data model provides a robust, extensible representation that bridges the gap between raw document formats and structured semantic content, enabling high-quality document understanding and downstream processing.\n\nDismiss\n\nRefresh this wiki\n\nThis wiki was recently refreshed. Please wait 4 days to refresh again.",
+    "metadata": {
+      "source": "_docling-project_docling_2.2-doclingdocument-data-model.md",
+      "heading": "Summary Table",
+      "heading_level": 2,
+      "chunk_index": 24,
+      "collection": "docling",
+      "char_count": 529,
+      "estimated_tokens": 132,
+      "total_chunks": 26
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_2.2-doclingdocument-data-model.md:chunk:25",
+    "content": "### On this page\n\n\n- [DoclingDocument Data Model](#doclingdocument-data-model.md)\n- [Purpose and Scope](#purpose-and-scope.md)\n- [Schema Structure Overview](#schema-structure-overview.md)\n- [Top-Level Schema](#top-level-schema.md)\n- [Hierarchical Structure with JSON References](#hierarchical-structure-with-json-references.md)\n- [Reference-Based Hierarchy](#reference-based-hierarchy.md)\n- [Content Layers: Body vs Furniture](#content-layers-body-vs-furniture.md)\n- [Body Layer](#body-layer.md)\n- [Furniture Layer](#furniture-layer.md)\n- [Element Types and Labels](#element-types-and-labels.md)\n- [DocItemLabel Enumeration](#docitemlabel-enumeration.md)\n- [Element Type Overview](#element-type-overview.md)\n- [Text Elements](#text-elements.md)\n- [TextItem Structure](#textitem-structure.md)\n- [SectionHeaderItem](#sectionheaderitem.md)\n- [Table Elements](#table-elements.md)\n- [TableItem Structure](#tableitem-structure.md)\n- [Picture Elements](#picture-elements.md)\n- [PictureItem Structure](#pictureitem-structure.md)\n- [Group Elements](#group-elements.md)\n- [GroupItem for Structural Aggregation](#groupitem-for-structural-aggregation.md)\n- [Provenance Tracking](#provenance-tracking.md)\n- [Provenance Structure](#provenance-structure.md)\n- [Bounding Box Coordinates](#bounding-box-coordinates.md)\n- [Character Spans](#character-spans.md)\n- [Multi-Page Elements](#multi-page-elements.md)\n- [Integration with Conversion Pipeline](#integration-with-conversion-pipeline.md)\n- [Creation in Pipeline](#creation-in-pipeline.md)\n- [ConversionResult Container](#conversionresult-container.md)\n- [Export Capabilities](#export-capabilities.md)\n- [JSON Schema Example](#json-schema-example.md)\n- [Complete Document Structure](#complete-document-structure.md)\n- [Summary Table](#summary-table.md)",
+    "metadata": {
+      "source": "_docling-project_docling_2.2-doclingdocument-data-model.md",
+      "heading": "On this page",
+      "heading_level": 3,
+      "chunk_index": 25,
+      "collection": "docling",
+      "char_count": 1788,
+      "estimated_tokens": 447,
+      "total_chunks": 26
+    }
+  }
+]

@@ -1,0 +1,226 @@
+[
+  {
+    "chunk_id": "docling:_docling-project_docling_1.2-quick-start.md:chunk:0",
+    "content": "# Quick Start\n\n\nRelevant source files\n\n- [README.md](https://github.com/docling-project/docling/blob/f7244a43/README.md)\n- [docling/cli/main.py](https://github.com/docling-project/docling/blob/f7244a43/docling/cli/main.py)\n- [docling/datamodel/base\\_models.py](https://github.com/docling-project/docling/blob/f7244a43/docling/datamodel/base_models.py)\n- [docling/datamodel/document.py](https://github.com/docling-project/docling/blob/f7244a43/docling/datamodel/document.py)\n- [docling/datamodel/pipeline\\_options.py](https://github.com/docling-project/docling/blob/f7244a43/docling/datamodel/pipeline_options.py)\n- [docling/document\\_converter.py](https://github.com/docling-project/docling/blob/f7244a43/docling/document_converter.py)\n- [docs/examples/minimal\\_vlm\\_pipeline.py](https://github.com/docling-project/docling/blob/f7244a43/docs/examples/minimal_vlm_pipeline.py)\n- [docs/index.md](https://github.com/docling-project/docling/blob/f7244a43/docs/index.md)\n- [docs/usage/index.md](https://github.com/docling-project/docling/blob/f7244a43/docs/usage/index.md)\n- [docs/usage/mcp.md](https://github.com/docling-project/docling/blob/f7244a43/docs/usage/mcp.md)\n- [docs/usage/vision\\_models.md](https://github.com/docling-project/docling/blob/f7244a43/docs/usage/vision_models.md)\n- [mkdocs.yml](https://github.com/docling-project/docling/blob/f7244a43/mkdocs.yml)\n\nThis page provides simple, working code examples to get you started with Docling immediately. It covers the most common use cases: basic document conversion, using vision language models, and CLI usage. For detailed installation instructions, see [Installation](docling-project/docling/1.1-installation.md). For advanced configuration options, see [Configuration and Pipeline Options](docling-project/docling/2.3-configuration-and-pipeline-options.md) and [Advanced Options](https://docling-project.github.io/docling/usage/advanced_options/).",
+    "metadata": {
+      "source": "_docling-project_docling_1.2-quick-start.md",
+      "heading": "Quick Start",
+      "heading_level": 1,
+      "chunk_index": 0,
+      "collection": "docling",
+      "char_count": 1912,
+      "estimated_tokens": 478,
+      "total_chunks": 16
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_1.2-quick-start.md:chunk:1",
+    "content": "## Prerequisites\n\n\nEnsure Docling is installed before proceeding:\n\n```\n```\n\nFor VLM features or specific OCR engines, additional extras may be required. See [Installation](docling-project/docling/1.1-installation.md) for details.",
+    "metadata": {
+      "source": "_docling-project_docling_1.2-quick-start.md",
+      "heading": "Prerequisites",
+      "heading_level": 2,
+      "chunk_index": 1,
+      "collection": "docling",
+      "char_count": 229,
+      "estimated_tokens": 57,
+      "total_chunks": 16
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_1.2-quick-start.md:chunk:2",
+    "content": "## Basic Document Conversion\n\n\nThe simplest way to convert a document is to create a `DocumentConverter` and call `convert()`:\n\n```\n```\n\n**What this does:**\n\n1. `DocumentConverter` initializes with default format options for all supported formats\n2. `convert()` detects the input format, selects the appropriate backend and pipeline\n3. Returns a `ConversionResult` containing a `DoclingDocument`\n4. `export_to_markdown()` serializes the document to Markdown format",
+    "metadata": {
+      "source": "_docling-project_docling_1.2-quick-start.md",
+      "heading": "Basic Document Conversion",
+      "heading_level": 2,
+      "chunk_index": 2,
+      "collection": "docling",
+      "char_count": 464,
+      "estimated_tokens": 116,
+      "total_chunks": 16
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_1.2-quick-start.md:chunk:3",
+    "content": "### Conversion Flow Diagram\n\n\n```\n```\n\n**Sources:** [docling/document\\_converter.py228-245](https://github.com/docling-project/docling/blob/f7244a43/docling/document_converter.py#L228-L245) [docling/datamodel/document.py280-338](https://github.com/docling-project/docling/blob/f7244a43/docling/datamodel/document.py#L280-L338) [README.md69-77](https://github.com/docling-project/docling/blob/f7244a43/README.md#L69-L77)",
+    "metadata": {
+      "source": "_docling-project_docling_1.2-quick-start.md",
+      "heading": "Conversion Flow Diagram",
+      "heading_level": 3,
+      "chunk_index": 3,
+      "collection": "docling",
+      "char_count": 419,
+      "estimated_tokens": 104,
+      "total_chunks": 16
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_1.2-quick-start.md:chunk:4",
+    "content": "## Output Formats\n\n\nThe `DoclingDocument` supports multiple export formats:\n\n| Method                        | Output Format | Description                        |\n| ----------------------------- | ------------- | ---------------------------------- |\n| `export_to_markdown()`        | Markdown      | Human-readable text with structure |\n| `export_to_json()`            | JSON          | Complete structured document data  |\n| `export_to_html()`            | HTML          | Web-ready HTML output              |\n| `export_to_document_tokens()` | DocTags       | Structured token sequence          |\n\nExample with JSON export:\n\n```\n```\n\n**Sources:** [docling/cli/main.py191-275](https://github.com/docling-project/docling/blob/f7244a43/docling/cli/main.py#L191-L275) [docling/datamodel/document.py198-215](https://github.com/docling-project/docling/blob/f7244a43/docling/datamodel/document.py#L198-L215)",
+    "metadata": {
+      "source": "_docling-project_docling_1.2-quick-start.md",
+      "heading": "Output Formats",
+      "heading_level": 2,
+      "chunk_index": 4,
+      "collection": "docling",
+      "char_count": 902,
+      "estimated_tokens": 225,
+      "total_chunks": 16
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_1.2-quick-start.md:chunk:5",
+    "content": "## VLM Pipeline Usage\n\n\nDocling supports vision-language models for end-to-end document processing. The `VlmPipeline` processes pages using models like GraniteDocling or SmolDocling:\n\n```\n```",
+    "metadata": {
+      "source": "_docling-project_docling_1.2-quick-start.md",
+      "heading": "VLM Pipeline Usage",
+      "heading_level": 2,
+      "chunk_index": 5,
+      "collection": "docling",
+      "char_count": 191,
+      "estimated_tokens": 47,
+      "total_chunks": 16
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_1.2-quick-start.md:chunk:6",
+    "content": "### VLM with MLX Acceleration (macOS)\n\n\nOn Apple Silicon, use MLX for faster inference:\n\n```\n```\n\n**Sources:** [docs/examples/minimal\\_vlm\\_pipeline.py1-71](https://github.com/docling-project/docling/blob/f7244a43/docs/examples/minimal_vlm_pipeline.py#L1-L71) [docs/usage/vision\\_models.md11-38](https://github.com/docling-project/docling/blob/f7244a43/docs/usage/vision_models.md#L11-L38)",
+    "metadata": {
+      "source": "_docling-project_docling_1.2-quick-start.md",
+      "heading": "VLM with MLX Acceleration (macOS)",
+      "heading_level": 3,
+      "chunk_index": 6,
+      "collection": "docling",
+      "char_count": 389,
+      "estimated_tokens": 97,
+      "total_chunks": 16
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_1.2-quick-start.md:chunk:7",
+    "content": "## Pipeline Selection Diagram\n\n\n```\n```\n\n**Sources:** [docling/document\\_converter.py132-182](https://github.com/docling-project/docling/blob/f7244a43/docling/document_converter.py#L132-L182) [docling/document\\_converter.py351-378](https://github.com/docling-project/docling/blob/f7244a43/docling/document_converter.py#L351-L378) [docling/datamodel/pipeline\\_options.py273-368](https://github.com/docling-project/docling/blob/f7244a43/docling/datamodel/pipeline_options.py#L273-L368)",
+    "metadata": {
+      "source": "_docling-project_docling_1.2-quick-start.md",
+      "heading": "Pipeline Selection Diagram",
+      "heading_level": 2,
+      "chunk_index": 7,
+      "collection": "docling",
+      "char_count": 483,
+      "estimated_tokens": 120,
+      "total_chunks": 16
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_1.2-quick-start.md:chunk:8",
+    "content": "## CLI Usage\n\n\nDocling provides a command-line interface for quick conversions without writing code:",
+    "metadata": {
+      "source": "_docling-project_docling_1.2-quick-start.md",
+      "heading": "CLI Usage",
+      "heading_level": 2,
+      "chunk_index": 8,
+      "collection": "docling",
+      "char_count": 100,
+      "estimated_tokens": 25,
+      "total_chunks": 16
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_1.2-quick-start.md:chunk:9",
+    "content": "### CLI Command Structure\n\n\n```\n```\n\n**Sources:** [docling/cli/main.py298-816](https://github.com/docling-project/docling/blob/f7244a43/docling/cli/main.py#L298-L816) [docs/usage/index.md26-39](https://github.com/docling-project/docling/blob/f7244a43/docs/usage/index.md#L26-L39) [README.md84-98](https://github.com/docling-project/docling/blob/f7244a43/README.md#L84-L98)",
+    "metadata": {
+      "source": "_docling-project_docling_1.2-quick-start.md",
+      "heading": "CLI Command Structure",
+      "heading_level": 3,
+      "chunk_index": 9,
+      "collection": "docling",
+      "char_count": 372,
+      "estimated_tokens": 93,
+      "total_chunks": 16
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_1.2-quick-start.md:chunk:10",
+    "content": "## Processing Multiple Documents\n\n\nConvert multiple documents in batch:\n\n```\n```\n\n**Sources:** [docling/document\\_converter.py247-283](https://github.com/docling-project/docling/blob/f7244a43/docling/document_converter.py#L247-L283)",
+    "metadata": {
+      "source": "_docling-project_docling_1.2-quick-start.md",
+      "heading": "Processing Multiple Documents",
+      "heading_level": 2,
+      "chunk_index": 10,
+      "collection": "docling",
+      "char_count": 232,
+      "estimated_tokens": 58,
+      "total_chunks": 16
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_1.2-quick-start.md:chunk:11",
+    "content": "## Table Extraction\n\n\nDocling automatically extracts tables. Access them from the `DoclingDocument`:\n\n```\n```\n\n**Sources:** [docling\\_core.types.doc](https://github.com/docling-project/docling/blob/f7244a43/docling_core.types.doc#LNaN-LNaN) [docling/datamodel/document.py24-32](https://github.com/docling-project/docling/blob/f7244a43/docling/datamodel/document.py#L24-L32)",
+    "metadata": {
+      "source": "_docling-project_docling_1.2-quick-start.md",
+      "heading": "Table Extraction",
+      "heading_level": 2,
+      "chunk_index": 11,
+      "collection": "docling",
+      "char_count": 373,
+      "estimated_tokens": 93,
+      "total_chunks": 16
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_1.2-quick-start.md:chunk:12",
+    "content": "## Configuration Options Summary\n\n\nKey configuration classes for customizing conversion:\n\n| Class                   | Purpose                       | Used For                            |\n| ----------------------- | ----------------------------- | ----------------------------------- |\n| `PdfPipelineOptions`    | Configure PDF processing      | OCR, table extraction, enrichment   |\n| `VlmPipelineOptions`    | Configure VLM models          | Model selection, prompts, inference |\n| `AsrPipelineOptions`    | Configure audio transcription | Whisper model selection             |\n| `OcrOptions`            | Configure OCR engines         | Engine type, languages, parameters  |\n| `TableStructureOptions` | Configure table extraction    | Accuracy vs speed tradeoffs         |\n| `AcceleratorOptions`    | Configure hardware            | Device (CPU/CUDA/MPS), threads      |\n\nExample with custom options:\n\n```\n```\n\n**Sources:** [docling/datamodel/pipeline\\_options.py273-384](https://github.com/docling-project/docling/blob/f7244a43/docling/datamodel/pipeline_options.py#L273-L384) [docling/cli/main.py619-697](https://github.com/docling-project/docling/blob/f7244a43/docling/cli/main.py#L619-L697)",
+    "metadata": {
+      "source": "_docling-project_docling_1.2-quick-start.md",
+      "heading": "Configuration Options Summary",
+      "heading_level": 2,
+      "chunk_index": 12,
+      "collection": "docling",
+      "char_count": 1197,
+      "estimated_tokens": 299,
+      "total_chunks": 16
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_1.2-quick-start.md:chunk:13",
+    "content": "## Error Handling\n\n\nControl error behavior during conversion:\n\n```\n```\n\n**Sources:** [docling/document\\_converter.py227-245](https://github.com/docling-project/docling/blob/f7244a43/docling/document_converter.py#L227-L245) [docling/datamodel/base\\_models.py45-51](https://github.com/docling-project/docling/blob/f7244a43/docling/datamodel/base_models.py#L45-L51)",
+    "metadata": {
+      "source": "_docling-project_docling_1.2-quick-start.md",
+      "heading": "Error Handling",
+      "heading_level": 2,
+      "chunk_index": 13,
+      "collection": "docling",
+      "char_count": 362,
+      "estimated_tokens": 90,
+      "total_chunks": 16
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_1.2-quick-start.md:chunk:14",
+    "content": "## Next Steps\n\n\n- For installation details and optional dependencies, see [Installation](docling-project/docling/1.1-installation.md)\n- For format-specific guidance, see [Supported Formats](https://docling-project.github.io/docling/usage/supported_formats/)\n- For detailed configuration, see [Configuration and Pipeline Options](docling-project/docling/2.3-configuration-and-pipeline-options.md)\n- For advanced pipeline usage, see [Processing Pipelines](docling-project/docling/5-processing-pipelines.md)\n- For integration examples, see [Framework Integrations](docling-project/docling/8.3-framework-integrations.md)\n\nDismiss\n\nRefresh this wiki\n\nThis wiki was recently refreshed. Please wait 4 days to refresh again.",
+    "metadata": {
+      "source": "_docling-project_docling_1.2-quick-start.md",
+      "heading": "Next Steps",
+      "heading_level": 2,
+      "chunk_index": 14,
+      "collection": "docling",
+      "char_count": 716,
+      "estimated_tokens": 179,
+      "total_chunks": 16
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_1.2-quick-start.md:chunk:15",
+    "content": "### On this page\n\n\n- [Quick Start](#quick-start.md)\n- [Prerequisites](#prerequisites.md)\n- [Basic Document Conversion](#basic-document-conversion.md)\n- [Conversion Flow Diagram](#conversion-flow-diagram.md)\n- [Output Formats](#output-formats.md)\n- [VLM Pipeline Usage](#vlm-pipeline-usage.md)\n- [VLM with MLX Acceleration (macOS)](#vlm-with-mlx-acceleration-macos.md)\n- [Pipeline Selection Diagram](#pipeline-selection-diagram.md)\n- [CLI Usage](#cli-usage.md)\n- [Basic Conversion](#basic-conversion.md)\n- [VLM Pipeline via CLI](#vlm-pipeline-via-cli.md)\n- [Common CLI Options](#common-cli-options.md)\n- [CLI Command Structure](#cli-command-structure.md)\n- [Processing Multiple Documents](#processing-multiple-documents.md)\n- [Table Extraction](#table-extraction.md)\n- [Configuration Options Summary](#configuration-options-summary.md)\n- [Error Handling](#error-handling.md)\n- [Next Steps](#next-steps.md)",
+    "metadata": {
+      "source": "_docling-project_docling_1.2-quick-start.md",
+      "heading": "On this page",
+      "heading_level": 3,
+      "chunk_index": 15,
+      "collection": "docling",
+      "char_count": 904,
+      "estimated_tokens": 226,
+      "total_chunks": 16
+    }
+  }
+]

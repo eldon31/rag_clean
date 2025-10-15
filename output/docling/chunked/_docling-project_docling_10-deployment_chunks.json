@@ -1,0 +1,212 @@
+[
+  {
+    "chunk_id": "docling:_docling-project_docling_10-deployment.md:chunk:0",
+    "content": "# Deployment\n\n\nRelevant source files\n\n- [.github/SECURITY.md](https://github.com/docling-project/docling/blob/f7244a43/.github/SECURITY.md)\n- [CHANGELOG.md](https://github.com/docling-project/docling/blob/f7244a43/CHANGELOG.md)\n- [CITATION.cff](https://github.com/docling-project/docling/blob/f7244a43/CITATION.cff)\n- [docling/cli/models.py](https://github.com/docling-project/docling/blob/f7244a43/docling/cli/models.py)\n- [docling/models/auto\\_ocr\\_model.py](https://github.com/docling-project/docling/blob/f7244a43/docling/models/auto_ocr_model.py)\n- [docling/models/picture\\_description\\_vlm\\_model.py](https://github.com/docling-project/docling/blob/f7244a43/docling/models/picture_description_vlm_model.py)\n- [docling/models/plugins/defaults.py](https://github.com/docling-project/docling/blob/f7244a43/docling/models/plugins/defaults.py)\n- [docling/models/rapid\\_ocr\\_model.py](https://github.com/docling-project/docling/blob/f7244a43/docling/models/rapid_ocr_model.py)\n- [docling/utils/model\\_downloader.py](https://github.com/docling-project/docling/blob/f7244a43/docling/utils/model_downloader.py)\n- [pyproject.toml](https://github.com/docling-project/docling/blob/f7244a43/pyproject.toml)\n- [uv.lock](https://github.com/docling-project/docling/blob/f7244a43/uv.lock)\n\nThis document covers deploying Docling in production environments, focusing on Docker containerization, model artifact management, and performance optimization. Key topics include the `docling-tools` CLI for model management, offline deployment strategies, and environment configuration for scalable document processing systems.\n\nFor configuration details, see [Configuration and Pipeline Options](docling-project/docling/2.3-configuration-and-pipeline-options.md). For model specifications, see [AI/ML Models](docling-project/docling/4-aiml-models.md).",
+    "metadata": {
+      "source": "_docling-project_docling_10-deployment.md",
+      "heading": "Deployment",
+      "heading_level": 1,
+      "chunk_index": 0,
+      "collection": "docling",
+      "char_count": 1832,
+      "estimated_tokens": 458,
+      "total_chunks": 15
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_10-deployment.md:chunk:1",
+    "content": "## Docker Deployment\n\n\nDocling supports containerized deployment through Docker, with pre-built images available on Quay.io and GHCR.io. The deployment strategy involves managing AI model artifacts, configuring environment variables, and optimizing resource usage for production workloads.",
+    "metadata": {
+      "source": "_docling-project_docling_10-deployment.md",
+      "heading": "Docker Deployment",
+      "heading_level": 2,
+      "chunk_index": 1,
+      "collection": "docling",
+      "char_count": 289,
+      "estimated_tokens": 72,
+      "total_chunks": 15
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_10-deployment.md:chunk:2",
+    "content": "### Container Architecture\n\n\n```\n```\n\n**Container Build Strategy**: The container starts with a minimal Python base image, installs Docling with required dependencies, configures cache directories via environment variables, and pre-downloads models using `docling-tools`. At runtime, models are loaded on-demand based on the configured pipelines.\n\nSources: [pyproject.toml1-90](https://github.com/docling-project/docling/blob/f7244a43/pyproject.toml#L1-L90) [docling/cli/models.py54-127](https://github.com/docling-project/docling/blob/f7244a43/docling/cli/models.py#L54-L127) [docling/utils/model\\_downloader.py30-158](https://github.com/docling-project/docling/blob/f7244a43/docling/utils/model_downloader.py#L30-L158)",
+    "metadata": {
+      "source": "_docling-project_docling_10-deployment.md",
+      "heading": "Container Architecture",
+      "heading_level": 3,
+      "chunk_index": 2,
+      "collection": "docling",
+      "char_count": 720,
+      "estimated_tokens": 180,
+      "total_chunks": 15
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_10-deployment.md:chunk:3",
+    "content": "### Environment Configuration\n\n\nDocling uses several environment variables for deployment configuration:\n\n| Variable              | Purpose                 | Code Reference                   | Production Value     |\n| --------------------- | ----------------------- | -------------------------------- | -------------------- |\n| `DOCLING_CACHE_DIR`   | Base cache directory    | `settings.cache_dir`             | Persistent volume    |\n| `HF_HOME`             | HuggingFace model cache | Used by `transformers`           | Persistent volume    |\n| `TORCH_HOME`          | PyTorch model cache     | Used by `torch`                  | Persistent volume    |\n| `OMP_NUM_THREADS`     | OpenMP thread limit     | `AcceleratorOptions`             | CPU cores / 2        |\n| `DOCLING_NUM_THREADS` | Docling thread budget   | `AcceleratorOptions.num_threads` | CPU cores            |\n| `DOCLING_DEVICE`      | Compute device          | `AcceleratorOptions.device`      | `cpu`, `cuda`, `mps` |\n\nThe `settings` object in `docling.datamodel.settings` provides centralized configuration management with environment variable overrides.\n\nSources: [pyproject.toml44-76](https://github.com/docling-project/docling/blob/f7244a43/pyproject.toml#L44-L76) [docling/datamodel/settings.py](https://github.com/docling-project/docling/blob/f7244a43/docling/datamodel/settings.py)",
+    "metadata": {
+      "source": "_docling-project_docling_10-deployment.md",
+      "heading": "Environment Configuration",
+      "heading_level": 3,
+      "chunk_index": 3,
+      "collection": "docling",
+      "char_count": 1356,
+      "estimated_tokens": 339,
+      "total_chunks": 15
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_10-deployment.md:chunk:4",
+    "content": "## Model Artifacts Management\n\n\nDocling requires several AI models for document processing. The `docling-tools` CLI provides model download and management capabilities for production deployments.",
+    "metadata": {
+      "source": "_docling-project_docling_10-deployment.md",
+      "heading": "Model Artifacts Management",
+      "heading_level": 2,
+      "chunk_index": 4,
+      "collection": "docling",
+      "char_count": 195,
+      "estimated_tokens": 48,
+      "total_chunks": 15
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_10-deployment.md:chunk:5",
+    "content": "### Model Download CLI\n\n\nThe `docling-tools download` command pre-downloads models for offline use:\n\n```\n```\n\n**CLI Usage**: The `docling-tools download` command supports selective model downloading via the `models` argument or `--all` flag. The `--force` flag enables re-downloading, and `--quiet` suppresses progress output for CI/CD environments.\n\nSources: [docling/cli/models.py54-136](https://github.com/docling-project/docling/blob/f7244a43/docling/cli/models.py#L54-L136) [docling/utils/model\\_downloader.py30-158](https://github.com/docling-project/docling/blob/f7244a43/docling/utils/model_downloader.py#L30-L158)",
+    "metadata": {
+      "source": "_docling-project_docling_10-deployment.md",
+      "heading": "Model Download CLI",
+      "heading_level": 3,
+      "chunk_index": 5,
+      "collection": "docling",
+      "char_count": 622,
+      "estimated_tokens": 155,
+      "total_chunks": 15
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_10-deployment.md:chunk:6",
+    "content": "### Model Storage Architecture\n\n\n```\n```\n\n**Model Storage Conventions**: Each model type defines a `_model_repo_folder` class attribute (e.g., `RapidOcrModel._model_repo_folder = \"RapidOcr\"`) used for organizing downloaded files. HuggingFace models use a `repo_cache_folder` property that sanitizes repo IDs by replacing `/` with `--`.\n\nSources: [docling/utils/model\\_downloader.py1-158](https://github.com/docling-project/docling/blob/f7244a43/docling/utils/model_downloader.py#L1-L158) [docling/models/rapid\\_ocr\\_model.py37-224](https://github.com/docling-project/docling/blob/f7244a43/docling/models/rapid_ocr_model.py#L37-L224) [docling/models/picture\\_description\\_vlm\\_model.py49-53](https://github.com/docling-project/docling/blob/f7244a43/docling/models/picture_description_vlm_model.py#L49-L53)",
+    "metadata": {
+      "source": "_docling-project_docling_10-deployment.md",
+      "heading": "Model Storage Architecture",
+      "heading_level": 3,
+      "chunk_index": 6,
+      "collection": "docling",
+      "char_count": 804,
+      "estimated_tokens": 201,
+      "total_chunks": 15
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_10-deployment.md:chunk:7",
+    "content": "### Offline Mode\n\n\nFor air-gapped or offline deployments, models must be pre-downloaded:\n\n```\n```\n\nAt runtime, configure Docling to use the offline model cache:\n\n```\n```\n\nThe `artifacts_path` parameter is passed to model constructors and overrides automatic model downloading. Each model's `__init__` method checks if `artifacts_path` is provided before attempting downloads.\n\nSources: [docling/cli/models.py54-127](https://github.com/docling-project/docling/blob/f7244a43/docling/cli/models.py#L54-L127) [docling/utils/model\\_downloader.py30-158](https://github.com/docling-project/docling/blob/f7244a43/docling/utils/model_downloader.py#L30-L158) [docling/models/rapid\\_ocr\\_model.py82-150](https://github.com/docling-project/docling/blob/f7244a43/docling/models/rapid_ocr_model.py#L82-L150)",
+    "metadata": {
+      "source": "_docling-project_docling_10-deployment.md",
+      "heading": "Offline Mode",
+      "heading_level": 3,
+      "chunk_index": 7,
+      "collection": "docling",
+      "char_count": 793,
+      "estimated_tokens": 198,
+      "total_chunks": 15
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_10-deployment.md:chunk:8",
+    "content": "### RapidOCR Model Management\n\n\nRapidOCR requires additional consideration for offline deployment as it downloads models from ModelScope:\n\n```\n```\n\n**RapidOCR Architecture**: RapidOCR supports two backends (`onnxruntime` and `torch`), each requiring separate model files. The `RapidOcrModel._default_models` dictionary maps backend types to model URLs and paths. The `download_models()` static method handles offline preparation.\n\nSources: [docling/models/rapid\\_ocr\\_model.py36-224](https://github.com/docling-project/docling/blob/f7244a43/docling/models/rapid_ocr_model.py#L36-L224)",
+    "metadata": {
+      "source": "_docling-project_docling_10-deployment.md",
+      "heading": "RapidOCR Model Management",
+      "heading_level": 3,
+      "chunk_index": 8,
+      "collection": "docling",
+      "char_count": 584,
+      "estimated_tokens": 146,
+      "total_chunks": 15
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_10-deployment.md:chunk:9",
+    "content": "### Threading Configuration\n\n\nDocling uses multiple threading mechanisms that must be coordinated in production:\n\n| Threading Layer    | Configuration         | Purpose                          |\n| ------------------ | --------------------- | -------------------------------- |\n| OpenMP             | `OMP_NUM_THREADS`     | Controls NumPy/SciPy parallelism |\n| Docling            | `DOCLING_NUM_THREADS` | Controls internal threading      |\n| AcceleratorOptions | `num_threads`         | Passed to ONNX models            |\n\nThe `AcceleratorOptions` class in pipeline options provides thread budget configuration:\n\n```\n```\n\nFor CPU-bound workloads, set `OMP_NUM_THREADS` and `num_threads` to half the available cores to prevent oversubscription.\n\nSources: [docling/models/rapid\\_ocr\\_model.py82-200](https://github.com/docling-project/docling/blob/f7244a43/docling/models/rapid_ocr_model.py#L82-L200)",
+    "metadata": {
+      "source": "_docling-project_docling_10-deployment.md",
+      "heading": "Threading Configuration",
+      "heading_level": 3,
+      "chunk_index": 9,
+      "collection": "docling",
+      "char_count": 900,
+      "estimated_tokens": 225,
+      "total_chunks": 15
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_10-deployment.md:chunk:10",
+    "content": "### Memory Management\n\n\nModel loading can consume significant memory. Docling provides several strategies for memory optimization:\n\n1. **Pipeline Caching**: `DocumentConverter` caches pipeline instances by configuration hash to avoid redundant model loading\n2. **Lazy Loading**: Models are only loaded when needed for specific document formats\n3. **Shared Models**: Multiple `DocumentConverter` instances can share underlying model instances\n\n```\n```\n\nThe threading lock in model initialization (`_model_init_lock` in [docling/models/picture\\_description\\_vlm\\_model.py21](https://github.com/docling-project/docling/blob/f7244a43/docling/models/picture_description_vlm_model.py#L21-L21)) prevents race conditions during parallel initialization.\n\nSources: [docling/models/picture\\_description\\_vlm\\_model.py20-78](https://github.com/docling-project/docling/blob/f7244a43/docling/models/picture_description_vlm_model.py#L20-L78)",
+    "metadata": {
+      "source": "_docling-project_docling_10-deployment.md",
+      "heading": "Memory Management",
+      "heading_level": 3,
+      "chunk_index": 10,
+      "collection": "docling",
+      "char_count": 926,
+      "estimated_tokens": 231,
+      "total_chunks": 15
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_10-deployment.md:chunk:11",
+    "content": "### Device Selection\n\n\nThe `AcceleratorDevice` enum supports multiple compute backends:\n\n```\n```\n\nThe `decide_device()` function in `accelerator_utils` resolves device strings to actual hardware availability.\n\nSources: [docling/models/rapid\\_ocr\\_model.py109](https://github.com/docling-project/docling/blob/f7244a43/docling/models/rapid_ocr_model.py#L109-L109) [docling/models/picture\\_description\\_vlm\\_model.py54](https://github.com/docling-project/docling/blob/f7244a43/docling/models/picture_description_vlm_model.py#L54-L54)",
+    "metadata": {
+      "source": "_docling-project_docling_10-deployment.md",
+      "heading": "Device Selection",
+      "heading_level": 3,
+      "chunk_index": 11,
+      "collection": "docling",
+      "char_count": 530,
+      "estimated_tokens": 132,
+      "total_chunks": 15
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_10-deployment.md:chunk:12",
+    "content": "### CPU Optimization\n\n\nThe Dockerfile configures PyTorch for CPU-only operation to reduce image size and memory requirements:\n\n```\n```\n\nThis configuration is suitable for CPU-based inference but may require modification for GPU-accelerated deployments.\n\nSources: [Dockerfile10-12](https://github.com/docling-project/docling/blob/f7244a43/Dockerfile#L10-L12)",
+    "metadata": {
+      "source": "_docling-project_docling_10-deployment.md",
+      "heading": "CPU Optimization",
+      "heading_level": 3,
+      "chunk_index": 12,
+      "collection": "docling",
+      "char_count": 357,
+      "estimated_tokens": 89,
+      "total_chunks": 15
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_10-deployment.md:chunk:13",
+    "content": "### Memory Management\n\n\nEnvironment variables are configured to use temporary storage for framework caches, reducing persistent storage requirements:\n\n```\n```\n\nIn production, these should be mapped to persistent volumes to avoid model re-downloads on container restarts.\n\nSources: [Dockerfile14-15](https://github.com/docling-project/docling/blob/f7244a43/Dockerfile#L14-L15)\n\nDismiss\n\nRefresh this wiki\n\nThis wiki was recently refreshed. Please wait 4 days to refresh again.",
+    "metadata": {
+      "source": "_docling-project_docling_10-deployment.md",
+      "heading": "Memory Management",
+      "heading_level": 3,
+      "chunk_index": 13,
+      "collection": "docling",
+      "char_count": 475,
+      "estimated_tokens": 118,
+      "total_chunks": 15
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_10-deployment.md:chunk:14",
+    "content": "### On this page\n\n\n- [Deployment](#deployment.md)\n- [Docker Deployment](#docker-deployment.md)\n- [Container Architecture](#container-architecture.md)\n- [Environment Configuration](#environment-configuration.md)\n- [Model Artifacts Management](#model-artifacts-management.md)\n- [Model Download CLI](#model-download-cli.md)\n- [Model Storage Architecture](#model-storage-architecture.md)\n- [Offline Mode](#offline-mode.md)\n- [RapidOCR Model Management](#rapidocr-model-management.md)\n- [Performance Considerations](#performance-considerations.md)\n- [Threading Configuration](#threading-configuration.md)\n- [Memory Management](#memory-management.md)\n- [Device Selection](#device-selection.md)\n- [Performance Considerations](#performance-considerations-1.md)\n- [CPU Optimization](#cpu-optimization.md)\n- [Memory Management](#memory-management-1.md)",
+    "metadata": {
+      "source": "_docling-project_docling_10-deployment.md",
+      "heading": "On this page",
+      "heading_level": 3,
+      "chunk_index": 14,
+      "collection": "docling",
+      "char_count": 842,
+      "estimated_tokens": 210,
+      "total_chunks": 15
+    }
+  }
+]

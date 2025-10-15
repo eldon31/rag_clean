@@ -1,0 +1,212 @@
+[
+  {
+    "chunk_id": "docling:_docling-project_docling_9.3-cicd-and-development-workflow.md:chunk:0",
+    "content": "# CI/CD and Development Workflow\n\n\nRelevant source files\n\n- [.github/SECURITY.md](https://github.com/docling-project/docling/blob/f7244a43/.github/SECURITY.md)\n- [CHANGELOG.md](https://github.com/docling-project/docling/blob/f7244a43/CHANGELOG.md)\n- [CITATION.cff](https://github.com/docling-project/docling/blob/f7244a43/CITATION.cff)\n- [docling/cli/models.py](https://github.com/docling-project/docling/blob/f7244a43/docling/cli/models.py)\n- [docling/models/auto\\_ocr\\_model.py](https://github.com/docling-project/docling/blob/f7244a43/docling/models/auto_ocr_model.py)\n- [docling/models/picture\\_description\\_vlm\\_model.py](https://github.com/docling-project/docling/blob/f7244a43/docling/models/picture_description_vlm_model.py)\n- [docling/models/plugins/defaults.py](https://github.com/docling-project/docling/blob/f7244a43/docling/models/plugins/defaults.py)\n- [docling/models/rapid\\_ocr\\_model.py](https://github.com/docling-project/docling/blob/f7244a43/docling/models/rapid_ocr_model.py)\n- [docling/utils/model\\_downloader.py](https://github.com/docling-project/docling/blob/f7244a43/docling/utils/model_downloader.py)\n- [pyproject.toml](https://github.com/docling-project/docling/blob/f7244a43/pyproject.toml)\n- [uv.lock](https://github.com/docling-project/docling/blob/f7244a43/uv.lock)\n\nThis document covers the continuous integration and continuous deployment (CI/CD) pipeline and development workflow for the Docling project. It details the automated testing, quality assurance, security scanning, version management, documentation generation, and package distribution processes that ensure code quality and reliable releases.\n\nFor information about the testing framework and test data organization, see [Testing Framework](docling-project/docling/9.1-testing-framework.md) and [Ground Truth Data](docling-project/docling/9.2-ground-truth-data.md).",
+    "metadata": {
+      "source": "_docling-project_docling_9.3-cicd-and-development-workflow.md",
+      "heading": "CI/CD and Development Workflow",
+      "heading_level": 1,
+      "chunk_index": 0,
+      "collection": "docling",
+      "char_count": 1862,
+      "estimated_tokens": 465,
+      "total_chunks": 15
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_9.3-cicd-and-development-workflow.md:chunk:1",
+    "content": "## CI/CD Pipeline Overview\n\n\nThe Docling project employs a comprehensive CI/CD pipeline built on GitHub Actions that ensures code quality, runs extensive tests across multiple Python versions, and automates documentation and package distribution.\n\n```\n```\n\n**Sources:** [.github/workflows/checks.yml1-118](https://github.com/docling-project/docling/blob/f7244a43/.github/workflows/checks.yml#L1-L118) [README.md13-26](https://github.com/docling-project/docling/blob/f7244a43/README.md#L13-L26)",
+    "metadata": {
+      "source": "_docling-project_docling_9.3-cicd-and-development-workflow.md",
+      "heading": "CI/CD Pipeline Overview",
+      "heading_level": 2,
+      "chunk_index": 1,
+      "collection": "docling",
+      "char_count": 493,
+      "estimated_tokens": 123,
+      "total_chunks": 15
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_9.3-cicd-and-development-workflow.md:chunk:2",
+    "content": "## GitHub Actions Workflow Configuration\n\n\nThe main CI/CD workflow is defined in `checks.yml` and includes three primary jobs: `run-checks`, `build-package`, and `test-package`.",
+    "metadata": {
+      "source": "_docling-project_docling_9.3-cicd-and-development-workflow.md",
+      "heading": "GitHub Actions Workflow Configuration",
+      "heading_level": 2,
+      "chunk_index": 2,
+      "collection": "docling",
+      "char_count": 177,
+      "estimated_tokens": 44,
+      "total_chunks": 15
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_9.3-cicd-and-development-workflow.md:chunk:3",
+    "content": "### Environment Configuration\n\n\nThe workflow configures several environment variables and caching strategies:\n\n| Configuration             | Purpose                             | Implementation         |\n| ------------------------- | ----------------------------------- | ---------------------- |\n| `HF_HUB_DOWNLOAD_TIMEOUT` | Hugging Face model download timeout | Set to 60 seconds      |\n| `HF_HUB_ETAG_TIMEOUT`     | Hugging Face ETag timeout           | Set to 60 seconds      |\n| `UV_FROZEN`               | Lock dependency versions            | Set to \"1\"             |\n| `TESSDATA_PREFIX`         | Tesseract data path                 | Dynamically determined |\n\n**Sources:** [.github/workflows/checks.yml12-29](https://github.com/docling-project/docling/blob/f7244a43/.github/workflows/checks.yml#L12-L29)",
+    "metadata": {
+      "source": "_docling-project_docling_9.3-cicd-and-development-workflow.md",
+      "heading": "Environment Configuration",
+      "heading_level": 3,
+      "chunk_index": 3,
+      "collection": "docling",
+      "char_count": 813,
+      "estimated_tokens": 203,
+      "total_chunks": 15
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_9.3-cicd-and-development-workflow.md:chunk:4",
+    "content": "### Multi-Version Testing Matrix\n\n\nThe pipeline tests against five Python versions to ensure broad compatibility:\n\n```\n```\n\n**Sources:** [.github/workflows/checks.yml20-22](https://github.com/docling-project/docling/blob/f7244a43/.github/workflows/checks.yml#L20-L22) [.github/workflows/checks.yml50-71](https://github.com/docling-project/docling/blob/f7244a43/.github/workflows/checks.yml#L50-L71)",
+    "metadata": {
+      "source": "_docling-project_docling_9.3-cicd-and-development-workflow.md",
+      "heading": "Multi-Version Testing Matrix",
+      "heading_level": 3,
+      "chunk_index": 4,
+      "collection": "docling",
+      "char_count": 398,
+      "estimated_tokens": 99,
+      "total_chunks": 15
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_9.3-cicd-and-development-workflow.md:chunk:5",
+    "content": "### Pre-commit Hook Integration\n\n\nThe project uses `pre-commit` for automated code quality enforcement. The workflow includes pre-commit cache optimization and runs all configured hooks:\n\n```\n```\n\n**Sources:** [.github/workflows/checks.yml40-49](https://github.com/docling-project/docling/blob/f7244a43/.github/workflows/checks.yml#L40-L49) [README.md18-20](https://github.com/docling-project/docling/blob/f7244a43/README.md#L18-L20)",
+    "metadata": {
+      "source": "_docling-project_docling_9.3-cicd-and-development-workflow.md",
+      "heading": "Pre-commit Hook Integration",
+      "heading_level": 3,
+      "chunk_index": 5,
+      "collection": "docling",
+      "char_count": 433,
+      "estimated_tokens": 108,
+      "total_chunks": 15
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_9.3-cicd-and-development-workflow.md:chunk:6",
+    "content": "### Testing and Coverage\n\n\nThe testing pipeline uses `pytest` with coverage reporting and uploads results to Codecov:\n\n| Component          | Purpose                      | Configuration                       |\n| ------------------ | ---------------------------- | ----------------------------------- |\n| `pytest`           | Unit and integration testing | `-v --cov=docling --cov-report=xml` |\n| `codecov`          | Coverage reporting           | Uploads to codecov.io               |\n| Example validation | Real-world usage testing     | Runs all example scripts            |\n\n**Sources:** [.github/workflows/checks.yml50-58](https://github.com/docling-project/docling/blob/f7244a43/.github/workflows/checks.yml#L50-L58)",
+    "metadata": {
+      "source": "_docling-project_docling_9.3-cicd-and-development-workflow.md",
+      "heading": "Testing and Coverage",
+      "heading_level": 3,
+      "chunk_index": 6,
+      "collection": "docling",
+      "char_count": 723,
+      "estimated_tokens": 180,
+      "total_chunks": 15
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_9.3-cicd-and-development-workflow.md:chunk:7",
+    "content": "### Example Script Validation\n\n\nThe CI pipeline validates example scripts to ensure documentation accuracy, with selective execution based on script characteristics. Some examples are skipped in CI due to external dependencies or resource requirements.\n\n**Sources:** [.github/workflows/checks.yml59-71](https://github.com/docling-project/docling/blob/f7244a43/.github/workflows/checks.yml#L59-L71)",
+    "metadata": {
+      "source": "_docling-project_docling_9.3-cicd-and-development-workflow.md",
+      "heading": "Example Script Validation",
+      "heading_level": 3,
+      "chunk_index": 7,
+      "collection": "docling",
+      "char_count": 397,
+      "estimated_tokens": 99,
+      "total_chunks": 15
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_9.3-cicd-and-development-workflow.md:chunk:8",
+    "content": "### MkDocs Configuration\n\n\nThe documentation system uses MkDocs with Material theme and extensive plugin integration:\n\n```\n```",
+    "metadata": {
+      "source": "_docling-project_docling_9.3-cicd-and-development-workflow.md",
+      "heading": "MkDocs Configuration",
+      "heading_level": 3,
+      "chunk_index": 8,
+      "collection": "docling",
+      "char_count": 126,
+      "estimated_tokens": 31,
+      "total_chunks": 15
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_9.3-cicd-and-development-workflow.md:chunk:9",
+    "content": "### Theme and Extension Configuration\n\n\nThe documentation uses Material theme with comprehensive feature enablement:\n\n| Feature Category | Enabled Features                                                  |\n| ---------------- | ----------------------------------------------------------------- |\n| Content          | `content.tabs.link`, `content.code.annotate`, `content.code.copy` |\n| Navigation       | `navigation.footer`, `navigation.tabs`, `navigation.indexes`      |\n| Search           | `search.suggest`                                                  |\n| TOC              | `toc.follow`                                                      |\n\n**Sources:** [mkdocs.yml36-54](https://github.com/docling-project/docling/blob/f7244a43/mkdocs.yml#L36-L54)",
+    "metadata": {
+      "source": "_docling-project_docling_9.3-cicd-and-development-workflow.md",
+      "heading": "Theme and Extension Configuration",
+      "heading_level": 3,
+      "chunk_index": 9,
+      "collection": "docling",
+      "char_count": 760,
+      "estimated_tokens": 190,
+      "total_chunks": 15
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_9.3-cicd-and-development-workflow.md:chunk:10",
+    "content": "### Plugin Configuration\n\n\nKey plugins and their purposes:\n\n| Plugin           | Configuration                        | Purpose                      |\n| ---------------- | ------------------------------------ | ---------------------------- |\n| `mkdocs-jupyter` | Default settings                     | Jupyter notebook integration |\n| `mkdocstrings`   | Python handler with Pydantic support | API documentation generation |\n| `mkdocs-click`   | Default settings                     | CLI documentation            |\n\n**Sources:** [mkdocs.yml176-187](https://github.com/docling-project/docling/blob/f7244a43/mkdocs.yml#L176-L187)",
+    "metadata": {
+      "source": "_docling-project_docling_9.3-cicd-and-development-workflow.md",
+      "heading": "Plugin Configuration",
+      "heading_level": 3,
+      "chunk_index": 10,
+      "collection": "docling",
+      "char_count": 627,
+      "estimated_tokens": 156,
+      "total_chunks": 15
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_9.3-cicd-and-development-workflow.md:chunk:11",
+    "content": "### Package Validation\n\n\nThe built package undergoes validation to ensure proper installation and functionality:\n\n| Validation Step     | Purpose                   | Command                     |\n| ------------------- | ------------------------- | --------------------------- |\n| Wheel content check | Verify package contents   | `unzip -l dist/*.whl`       |\n| Installation test   | Validate pip installation | `uv pip install dist/*.whl` |\n| CLI functionality   | Ensure CLI works          | `docling --help`            |\n\n**Sources:** [.github/workflows/checks.yml72-118](https://github.com/docling-project/docling/blob/f7244a43/.github/workflows/checks.yml#L72-L118)",
+    "metadata": {
+      "source": "_docling-project_docling_9.3-cicd-and-development-workflow.md",
+      "heading": "Package Validation",
+      "heading_level": 3,
+      "chunk_index": 11,
+      "collection": "docling",
+      "char_count": 670,
+      "estimated_tokens": 167,
+      "total_chunks": 15
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_9.3-cicd-and-development-workflow.md:chunk:12",
+    "content": "### Developer Environment Setup\n\n\nThe development workflow relies on `uv` for dependency management and environment setup:\n\n```\n```",
+    "metadata": {
+      "source": "_docling-project_docling_9.3-cicd-and-development-workflow.md",
+      "heading": "Developer Environment Setup",
+      "heading_level": 3,
+      "chunk_index": 12,
+      "collection": "docling",
+      "char_count": 131,
+      "estimated_tokens": 32,
+      "total_chunks": 15
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_9.3-cicd-and-development-workflow.md:chunk:13",
+    "content": "### Quality Assurance Integration\n\n\nThe project integrates multiple quality assurance tools as evidenced by the badges and configuration:\n\n| Tool        | Purpose                     | Integration         |\n| ----------- | --------------------------- | ------------------- |\n| Ruff        | Code linting and formatting | Pre-commit and CI   |\n| Pydantic v2 | Data validation             | Runtime and testing |\n| Pre-commit  | Git hook automation         | Local and CI        |\n| UV          | Fast dependency management  | All environments    |\n| Codecov     | Coverage reporting          | CI pipeline         |\n\n**Sources:** [README.md17-21](https://github.com/docling-project/docling/blob/f7244a43/README.md#L17-L21) [.github/workflows/checks.yml35-49](https://github.com/docling-project/docling/blob/f7244a43/.github/workflows/checks.yml#L35-L49)\n\nDismiss\n\nRefresh this wiki\n\nThis wiki was recently refreshed. Please wait 4 days to refresh again.",
+    "metadata": {
+      "source": "_docling-project_docling_9.3-cicd-and-development-workflow.md",
+      "heading": "Quality Assurance Integration",
+      "heading_level": 3,
+      "chunk_index": 13,
+      "collection": "docling",
+      "char_count": 952,
+      "estimated_tokens": 238,
+      "total_chunks": 15
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_9.3-cicd-and-development-workflow.md:chunk:14",
+    "content": "### On this page\n\n\n- [CI/CD and Development Workflow](#cicd-and-development-workflow.md)\n- [CI/CD Pipeline Overview](#cicd-pipeline-overview.md)\n- [GitHub Actions Workflow Configuration](#github-actions-workflow-configuration.md)\n- [Workflow Jobs Architecture](#workflow-jobs-architecture.md)\n- [Environment Configuration](#environment-configuration.md)\n- [Multi-Version Testing Matrix](#multi-version-testing-matrix.md)\n- [Development Tools and Quality Assurance](#development-tools-and-quality-assurance.md)\n- [Pre-commit Hook Integration](#pre-commit-hook-integration.md)\n- [Testing and Coverage](#testing-and-coverage.md)\n- [Example Script Validation](#example-script-validation.md)\n- [Documentation Generation Pipeline](#documentation-generation-pipeline.md)\n- [MkDocs Configuration](#mkdocs-configuration.md)\n- [Theme and Extension Configuration](#theme-and-extension-configuration.md)\n- [Plugin Configuration](#plugin-configuration.md)\n- [Package Building and Distribution](#package-building-and-distribution.md)\n- [Build Process](#build-process.md)\n- [Package Validation](#package-validation.md)\n- [Development Workflow](#development-workflow.md)\n- [Developer Environment Setup](#developer-environment-setup.md)\n- [Quality Assurance Integration](#quality-assurance-integration.md)",
+    "metadata": {
+      "source": "_docling-project_docling_9.3-cicd-and-development-workflow.md",
+      "heading": "On this page",
+      "heading_level": 3,
+      "chunk_index": 14,
+      "collection": "docling",
+      "char_count": 1288,
+      "estimated_tokens": 322,
+      "total_chunks": 15
+    }
+  }
+]

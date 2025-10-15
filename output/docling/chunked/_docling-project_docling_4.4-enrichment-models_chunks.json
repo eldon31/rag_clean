@@ -1,0 +1,352 @@
+[
+  {
+    "chunk_id": "docling:_docling-project_docling_4.4-enrichment-models.md:chunk:0",
+    "content": "# Enrichment Models\n\n\nRelevant source files",
+    "metadata": {
+      "source": "_docling-project_docling_4.4-enrichment-models.md",
+      "heading": "Enrichment Models",
+      "heading_level": 1,
+      "chunk_index": 0,
+      "collection": "docling",
+      "char_count": 43,
+      "estimated_tokens": 10,
+      "total_chunks": 25
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_4.4-enrichment-models.md:chunk:1",
+    "content": "- [docling/cli/models.py](https://github.com/docling-project/docling/blob/f7244a43/docling/cli/models.py)\n- [docling/models/auto\\_ocr\\_model.py](https://github.com/docling-project/docling/blob/f7244a43/docling/models/auto_ocr_model.py)\n- [docling/models/base\\_ocr\\_model.py](https://github.com/docling-project/docling/blob/f7244a43/docling/models/base_ocr_model.py)\n- [docling/models/code\\_formula\\_model.py](https://github.com/docling-project/docling/blob/f7244a43/docling/models/code_formula_model.py)\n- [docling/models/document\\_picture\\_classifier.py](https://github.com/docling-project/docling/blob/f7244a43/docling/models/document_picture_classifier.py)\n- [docling/models/easyocr\\_model.py](https://github.com/docling-project/docling/blob/f7244a43/docling/models/easyocr_model.py)\n- [docling/models/layout\\_model.py](https://github.com/docling-project/docling/blob/f7244a43/docling/models/layout_model.py)\n- [docling/models/page\\_assemble\\_model.py](https://github.com/docling-project/docling/blob/f7244a43/docling/models/page_assemble_model.py)\n- [docling/models/page\\_preprocessing\\_model.py](https://github.com/docling-project/docling/blob/f7244a43/docling/models/page_preprocessing_model.py)\n- [docling/models/picture\\_description\\_vlm\\_model.py](https://github.com/docling-project/docling/blob/f7244a43/docling/models/picture_description_vlm_model.py)\n- [docling/models/plugins/defaults.py](https://github.com/docling-project/docling/blob/f7244a43/docling/models/plugins/defaults.py)\n- [docling/models/rapid\\_ocr\\_model.py](https://github.com/docling-project/docling/blob/f7244a43/docling/models/rapid_ocr_model.py)\n- [docling/models/table\\_structure\\_model.py](https://github.com/docling-project/docling/blob/f7244a43/docling/models/table_structure_model.py)\n- [docling/pipeline/standard\\_pdf\\_pipeline.py](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/standard_pdf_pipeline.py)\n- [docling/utils/model\\_downloader.py](https://github.com/docling-project/docling/blob/f7244a43/docling/utils/model_downloader.py)\n- [tests/test\\_document\\_picture\\_classifier.py](https://github.com/docling-project/docling/blob/f7244a43/tests/test_document_picture_classifier.py)\n- [tests/test\\_options.py](https://github.com/docling-project/docling/blob/f7244a43/tests/test_options.py)",
+    "metadata": {
+      "source": "_docling-project_docling_4.4-enrichment-models.md",
+      "heading": "Enrichment Models",
+      "heading_level": 1,
+      "chunk_index": 1,
+      "collection": "docling",
+      "char_count": 2305,
+      "estimated_tokens": 576,
+      "total_chunks": 25
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_4.4-enrichment-models.md:chunk:2",
+    "content": "## Purpose and Scope\n\n\nEnrichment Models operate on assembled document items after the initial extraction and layout analysis phases. They enhance document elements with additional information such as LaTeX formulas, code snippets with language detection, picture classifications, and image captions. Unlike page-level models (see [Layout and Table Structure Models](docling-project/docling/4.2-layout-and-table-structure-models.md)), enrichment models process individual document items (text blocks, code blocks, pictures) along with their cropped images.\n\nThis page documents the three main types of enrichment models:\n\n- **CodeFormulaModel**: Extracts LaTeX formulas and code with language detection\n- **DocumentPictureClassifier**: Classifies pictures into 16 semantic categories\n- **PictureDescriptionVlmModel**: Generates natural language descriptions of images\n\nFor VLM-based document processing that operates at the page level, see [Vision Language Models](docling-project/docling/4.3-vision-language-models.md). For the pipeline execution flow that includes enrichment, see [Base Pipeline Architecture](docling-project/docling/5.6-base-pipeline-architecture.md).\n\n---",
+    "metadata": {
+      "source": "_docling-project_docling_4.4-enrichment-models.md",
+      "heading": "Purpose and Scope",
+      "heading_level": 2,
+      "chunk_index": 2,
+      "collection": "docling",
+      "char_count": 1176,
+      "estimated_tokens": 294,
+      "total_chunks": 25
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_4.4-enrichment-models.md:chunk:3",
+    "content": "### Processing Flow\n\n\nEnrichment models are invoked during the `_enrich_document` phase of the pipeline, after document assembly is complete. They process items in batches, receiving both the document item and its cropped image.\n\n**Diagram: Enrichment Processing Flow**\n\n```\n```\n\nSources: [docling/pipeline/base\\_pipeline.py177-206](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/base_pipeline.py#L177-L206) [docling/pipeline/standard\\_pdf\\_pipeline.py77-90](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/standard_pdf_pipeline.py#L77-L90)\n\n---",
+    "metadata": {
+      "source": "_docling-project_docling_4.4-enrichment-models.md",
+      "heading": "Processing Flow",
+      "heading_level": 3,
+      "chunk_index": 3,
+      "collection": "docling",
+      "char_count": 598,
+      "estimated_tokens": 149,
+      "total_chunks": 25
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_4.4-enrichment-models.md:chunk:4",
+    "content": "### Base Class Interface\n\n\nAll enrichment models inherit from `BaseItemAndImageEnrichmentModel`, which defines the standard interface for item-level processing.\n\n**Diagram: Enrichment Model Class Hierarchy**\n\n```\n```\n\nSources: [docling/models/base\\_model.py67-113](https://github.com/docling-project/docling/blob/f7244a43/docling/models/base_model.py#L67-L113) [docling/models/code\\_formula\\_model.py45-66](https://github.com/docling-project/docling/blob/f7244a43/docling/models/code_formula_model.py#L45-L66) [docling/models/document\\_picture\\_classifier.py36-60](https://github.com/docling-project/docling/blob/f7244a43/docling/models/document_picture_classifier.py#L36-L60) [docling/models/picture\\_description\\_vlm\\_model.py24-46](https://github.com/docling-project/docling/blob/f7244a43/docling/models/picture_description_vlm_model.py#L24-L46)\n\n---",
+    "metadata": {
+      "source": "_docling-project_docling_4.4-enrichment-models.md",
+      "heading": "Base Class Interface",
+      "heading_level": 3,
+      "chunk_index": 4,
+      "collection": "docling",
+      "char_count": 853,
+      "estimated_tokens": 213,
+      "total_chunks": 25
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_4.4-enrichment-models.md:chunk:5",
+    "content": "### Item and Image Element Structure\n\n\nEnrichment models receive `ItemAndImageEnrichmentElement` objects that bundle the document item with its cropped image and bounding box information.\n\n| Field        | Type                        | Description                                         |\n| ------------ | --------------------------- | --------------------------------------------------- |\n| `item`       | `NodeItem`                  | The document item (CodeItem, TextItem, PictureItem) |\n| `image`      | `Image.Image \\| np.ndarray` | Cropped image of the item                           |\n| `page_image` | `Image.Image`               | Full page image (for context)                       |\n| `bbox`       | `BoundingBox`               | Item's bounding box on the page                     |\n| `page_no`    | `int`                       | Page number containing the item                     |\n\nSources: [docling/datamodel/base\\_models.py285-294](https://github.com/docling-project/docling/blob/f7244a43/docling/datamodel/base_models.py#L285-L294)\n\n---",
+    "metadata": {
+      "source": "_docling-project_docling_4.4-enrichment-models.md",
+      "heading": "Item and Image Element Structure",
+      "heading_level": 3,
+      "chunk_index": 5,
+      "collection": "docling",
+      "char_count": 1054,
+      "estimated_tokens": 263,
+      "total_chunks": 25
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_4.4-enrichment-models.md:chunk:6",
+    "content": "### CodeFormulaModel\n\n\nThe `CodeFormulaModel` processes code blocks and formula elements to extract structured representations. It uses a vision-language model fine-tuned for converting images of code and formulas into their text representations.\n\n**Model Details:**\n\n| Attribute        | Value                         | Purpose                      |\n| ---------------- | ----------------------------- | ---------------------------- |\n| Repository       | `ds4sd/CodeFormulaV2`         | Hugging Face model ID        |\n| Model Type       | `AutoModelForImageTextToText` | Florence-based architecture  |\n| Batch Size       | `5`                           | Elements processed per batch |\n| Image Scale      | `1.67` (120 DPI)              | Resolution for image input   |\n| Expansion Factor | `0.18`                        | Bounding box expansion (18%) |\n\nSources: [docling/models/code\\_formula\\_model.py68-72](https://github.com/docling-project/docling/blob/f7244a43/docling/models/code_formula_model.py#L68-L72)\n\n---",
+    "metadata": {
+      "source": "_docling-project_docling_4.4-enrichment-models.md",
+      "heading": "CodeFormulaModel",
+      "heading_level": 3,
+      "chunk_index": 6,
+      "collection": "docling",
+      "char_count": 1019,
+      "estimated_tokens": 254,
+      "total_chunks": 25
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_4.4-enrichment-models.md:chunk:7",
+    "content": "### Processing Logic\n\n\n**Diagram: CodeFormulaModel Processing Pipeline**\n\n```\n```\n\nSources: [docling/models/code\\_formula\\_model.py277-337](https://github.com/docling-project/docling/blob/f7244a43/docling/models/code_formula_model.py#L277-L337)\n\n---",
+    "metadata": {
+      "source": "_docling-project_docling_4.4-enrichment-models.md",
+      "heading": "Processing Logic",
+      "heading_level": 3,
+      "chunk_index": 7,
+      "collection": "docling",
+      "char_count": 249,
+      "estimated_tokens": 62,
+      "total_chunks": 25
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_4.4-enrichment-models.md:chunk:8",
+    "content": "### Code Language Detection\n\n\nThe model outputs code with a language prefix in the format `<_language_>`. The `_extract_code_language` method extracts this information:\n\n**Pattern:** `^<_([^_>]+)_>\\s*(.*)`\n\n**Example Output:**\n\n- Input: `<_python_>def main():\\n print(\"Hello\")`\n- Extracted Language: `python`\n- Remainder: `def main():\\n print(\"Hello\")`\n\nThe language string is then converted to a `CodeLanguageLabel` enum member. If the language is unrecognized or missing, it defaults to `CodeLanguageLabel.UNKNOWN`.\n\nSources: [docling/models/code\\_formula\\_model.py156-206](https://github.com/docling-project/docling/blob/f7244a43/docling/models/code_formula_model.py#L156-L206)\n\n---",
+    "metadata": {
+      "source": "_docling-project_docling_4.4-enrichment-models.md",
+      "heading": "Code Language Detection",
+      "heading_level": 3,
+      "chunk_index": 8,
+      "collection": "docling",
+      "char_count": 685,
+      "estimated_tokens": 171,
+      "total_chunks": 25
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_4.4-enrichment-models.md:chunk:9",
+    "content": "### Formula Extraction\n\n\nFor formula elements (identified by `DocItemLabel.FORMULA`), the model extracts LaTeX representations:\n\n**Example:**\n\n- Input: Image of mathematical formula\n- Output: `E = mc^2`\n\nThe extracted LaTeX is stored in the `TextItem.text` field, replacing any placeholder text from layout analysis.\n\nSources: [docling/models/code\\_formula\\_model.py208-245](https://github.com/docling-project/docling/blob/f7244a43/docling/models/code_formula_model.py#L208-L245)\n\n---",
+    "metadata": {
+      "source": "_docling-project_docling_4.4-enrichment-models.md",
+      "heading": "Formula Extraction",
+      "heading_level": 3,
+      "chunk_index": 9,
+      "collection": "docling",
+      "char_count": 484,
+      "estimated_tokens": 121,
+      "total_chunks": 25
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_4.4-enrichment-models.md:chunk:10",
+    "content": "### DocumentPictureClassifier\n\n\nThe `DocumentPictureClassifier` categorizes picture elements into semantic classes such as charts, diagrams, photographs, and maps.\n\n**Model Details:**\n\n| Attribute         | Value                            |\n| ----------------- | -------------------------------- |\n| Repository        | `ds4sd/DocumentFigureClassifier` |\n| Revision          | `v1.0.1`                         |\n| Image Scale       | `2` (144 DPI)                    |\n| Number of Classes | `16`                             |\n| Output Type       | `PictureClassificationData`      |\n\nSources: [docling/models/document\\_picture\\_classifier.py62-105](https://github.com/docling-project/docling/blob/f7244a43/docling/models/document_picture_classifier.py#L62-L105)\n\n---",
+    "metadata": {
+      "source": "_docling-project_docling_4.4-enrichment-models.md",
+      "heading": "DocumentPictureClassifier",
+      "heading_level": 3,
+      "chunk_index": 10,
+      "collection": "docling",
+      "char_count": 767,
+      "estimated_tokens": 191,
+      "total_chunks": 25
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_4.4-enrichment-models.md:chunk:11",
+    "content": "### Classification Classes\n\n\nThe classifier predicts probabilities for 16 figure types. Results are sorted by confidence in descending order.\n\n**Common Classification Classes:**\n\n- `bar_chart`\n- `line_chart`\n- `pie_chart`\n- `scatter_plot`\n- `map`\n- `photograph`\n- `diagram`\n- `flowchart`\n- `table` (visual table representation)\n- `equation`\n- `schematic`\n- `illustration`\n\nSources: [tests/test\\_document\\_picture\\_classifier.py54-79](https://github.com/docling-project/docling/blob/f7244a43/tests/test_document_picture_classifier.py#L54-L79)\n\n---",
+    "metadata": {
+      "source": "_docling-project_docling_4.4-enrichment-models.md",
+      "heading": "Classification Classes",
+      "heading_level": 3,
+      "chunk_index": 11,
+      "collection": "docling",
+      "char_count": 546,
+      "estimated_tokens": 136,
+      "total_chunks": 25
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_4.4-enrichment-models.md:chunk:12",
+    "content": "### Output Structure\n\n\n**Diagram: PictureClassificationData Structure**\n\n```\n```\n\n**Example:**\n\n```\n```\n\nSources: [docling/models/document\\_picture\\_classifier.py136-185](https://github.com/docling-project/docling/blob/f7244a43/docling/models/document_picture_classifier.py#L136-L185) [tests/test\\_document\\_picture\\_classifier.py47-64](https://github.com/docling-project/docling/blob/f7244a43/tests/test_document_picture_classifier.py#L47-L64)\n\n---",
+    "metadata": {
+      "source": "_docling-project_docling_4.4-enrichment-models.md",
+      "heading": "Output Structure",
+      "heading_level": 3,
+      "chunk_index": 12,
+      "collection": "docling",
+      "char_count": 449,
+      "estimated_tokens": 112,
+      "total_chunks": 25
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_4.4-enrichment-models.md:chunk:13",
+    "content": "### PictureDescriptionVlmModel\n\n\nThe `PictureDescriptionVlmModel` generates natural language descriptions of images using vision-language models. It supports multiple VLM backends and custom prompts.\n\n**Supported Models:**\n\n| Model Name     | Repository                             | Use Case                |\n| -------------- | -------------------------------------- | ----------------------- |\n| SmolVLM        | `HuggingFaceTB/SmolVLM2-1.7B-Instruct` | Lightweight description |\n| Granite Vision | `ibm-granite/granite-vision-3.1-2b`    | IBM Granite family      |\n| Custom VLM     | User-specified                         | Any compatible VLM      |\n\nSources: [docling/datamodel/pipeline\\_options.py416-438](https://github.com/docling-project/docling/blob/f7244a43/docling/datamodel/pipeline_options.py#L416-L438) [docling/models/picture\\_description\\_vlm\\_model.py24-81](https://github.com/docling-project/docling/blob/f7244a43/docling/models/picture_description_vlm_model.py#L24-L81)\n\n---",
+    "metadata": {
+      "source": "_docling-project_docling_4.4-enrichment-models.md",
+      "heading": "PictureDescriptionVlmModel",
+      "heading_level": 3,
+      "chunk_index": 13,
+      "collection": "docling",
+      "char_count": 994,
+      "estimated_tokens": 248,
+      "total_chunks": 25
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_4.4-enrichment-models.md:chunk:14",
+    "content": "### Description Generation\n\n\n**Diagram: Picture Description Pipeline**\n\n```\n```\n\nSources: [docling/models/picture\\_description\\_vlm\\_model.py82-116](https://github.com/docling-project/docling/blob/f7244a43/docling/models/picture_description_vlm_model.py#L82-L116)\n\n---",
+    "metadata": {
+      "source": "_docling-project_docling_4.4-enrichment-models.md",
+      "heading": "Description Generation",
+      "heading_level": 3,
+      "chunk_index": 14,
+      "collection": "docling",
+      "char_count": 268,
+      "estimated_tokens": 67,
+      "total_chunks": 25
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_4.4-enrichment-models.md:chunk:15",
+    "content": "### Custom Prompts\n\n\nThe `PictureDescriptionVlmOptions` allows customization of the description prompt:\n\n**Default Configuration:**\n\n```\n```\n\n**Message Format:**\n\n```\n```\n\nSources: [docling/models/picture\\_description\\_vlm\\_model.py86-103](https://github.com/docling-project/docling/blob/f7244a43/docling/models/picture_description_vlm_model.py#L86-L103) [docling/datamodel/pipeline\\_options.py416-438](https://github.com/docling-project/docling/blob/f7244a43/docling/datamodel/pipeline_options.py#L416-L438)\n\n---",
+    "metadata": {
+      "source": "_docling-project_docling_4.4-enrichment-models.md",
+      "heading": "Custom Prompts",
+      "heading_level": 3,
+      "chunk_index": 15,
+      "collection": "docling",
+      "char_count": 513,
+      "estimated_tokens": 128,
+      "total_chunks": 25
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_4.4-enrichment-models.md:chunk:16",
+    "content": "### API-Based Picture Description\n\n\nThe `PictureDescriptionApiModel` provides an alternative that uses OpenAI-compatible APIs instead of local model inference.\n\n**Configuration:**\n\n```\n```\n\nSources: [docling/models/picture\\_description\\_api\\_model.py1-100](https://github.com/docling-project/docling/blob/f7244a43/docling/models/picture_description_api_model.py#L1-L100) [docling/datamodel/pipeline\\_options.py441-466](https://github.com/docling-project/docling/blob/f7244a43/docling/datamodel/pipeline_options.py#L441-L466)\n\n---",
+    "metadata": {
+      "source": "_docling-project_docling_4.4-enrichment-models.md",
+      "heading": "API-Based Picture Description",
+      "heading_level": 3,
+      "chunk_index": 16,
+      "collection": "docling",
+      "char_count": 529,
+      "estimated_tokens": 132,
+      "total_chunks": 25
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_4.4-enrichment-models.md:chunk:17",
+    "content": "### Pipeline Options\n\n\nEnrichment models are configured through `PdfPipelineOptions`:\n\n**Configuration Table:**\n\n| Option                        | Type    | Default | Description                   |\n| ----------------------------- | ------- | ------- | ----------------------------- |\n| `do_code_enrichment`          | `bool`  | `False` | Enable code extraction        |\n| `do_formula_enrichment`       | `bool`  | `False` | Enable formula extraction     |\n| `do_picture_classification`   | `bool`  | `False` | Enable picture classification |\n| `do_picture_description`      | `bool`  | `False` | Enable picture description    |\n| `picture_description_options` | Options | `None`  | VLM or API configuration      |\n\n**Example Configuration:**\n\n```\n```\n\nSources: [docling/pipeline/standard\\_pdf\\_pipeline.py77-98](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/standard_pdf_pipeline.py#L77-L98) [docling/datamodel/pipeline\\_options.py184-204](https://github.com/docling-project/docling/blob/f7244a43/docling/datamodel/pipeline_options.py#L184-L204)\n\n---",
+    "metadata": {
+      "source": "_docling-project_docling_4.4-enrichment-models.md",
+      "heading": "Pipeline Options",
+      "heading_level": 3,
+      "chunk_index": 17,
+      "collection": "docling",
+      "char_count": 1079,
+      "estimated_tokens": 269,
+      "total_chunks": 25
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_4.4-enrichment-models.md:chunk:18",
+    "content": "### Model Downloading\n\n\nEnrichment models are downloaded from Hugging Face using the `download_models` utility:\n\n**CLI Command:**\n\n```\n```\n\n**Programmatic Download:**\n\n```\n```\n\n**Downloaded Artifacts:**\n\n| Model                     | Folder                                  | Size     |\n| ------------------------- | --------------------------------------- | -------- |\n| CodeFormulaModel          | `ds4sd--CodeFormulaV2`                  | \\~6 GB   |\n| DocumentPictureClassifier | `ds4sd--DocumentFigureClassifier`       | \\~500 MB |\n| SmolVLM                   | `HuggingFaceTB--SmolVLM2-1.7B-Instruct` | \\~3.5 GB |\n\nSources: [docling/utils/model\\_downloader.py30-158](https://github.com/docling-project/docling/blob/f7244a43/docling/utils/model_downloader.py#L30-L158) [docling/cli/models.py30-50](https://github.com/docling-project/docling/blob/f7244a43/docling/cli/models.py#L30-L50)\n\n---",
+    "metadata": {
+      "source": "_docling-project_docling_4.4-enrichment-models.md",
+      "heading": "Model Downloading",
+      "heading_level": 3,
+      "chunk_index": 18,
+      "collection": "docling",
+      "char_count": 894,
+      "estimated_tokens": 223,
+      "total_chunks": 25
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_4.4-enrichment-models.md:chunk:19",
+    "content": "### Enrichment Pipe Construction\n\n\nThe `StandardPdfPipeline` constructs the enrichment pipeline by prepending the `CodeFormulaModel` to inherited enrichment models:\n\n**File:** [docling/pipeline/standard\\_pdf\\_pipeline.py77-90](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/standard_pdf_pipeline.py#L77-L90)\n\n```\n```\n\nSources: [docling/pipeline/standard\\_pdf\\_pipeline.py77-90](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/standard_pdf_pipeline.py#L77-L90)\n\n---",
+    "metadata": {
+      "source": "_docling-project_docling_4.4-enrichment-models.md",
+      "heading": "Enrichment Pipe Construction",
+      "heading_level": 3,
+      "chunk_index": 19,
+      "collection": "docling",
+      "char_count": 517,
+      "estimated_tokens": 129,
+      "total_chunks": 25
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_4.4-enrichment-models.md:chunk:20",
+    "content": "### Execution Flow in ConvertPipeline\n\n\nThe `ConvertPipeline` base class implements the `_enrich_document` method that orchestrates enrichment processing:\n\n**Diagram: Enrichment Execution in ConvertPipeline**\n\n```\n```\n\nSources: [docling/pipeline/base\\_pipeline.py177-206](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/base_pipeline.py#L177-L206)\n\n---",
+    "metadata": {
+      "source": "_docling-project_docling_4.4-enrichment-models.md",
+      "heading": "Execution Flow in ConvertPipeline",
+      "heading_level": 3,
+      "chunk_index": 20,
+      "collection": "docling",
+      "char_count": 378,
+      "estimated_tokens": 94,
+      "total_chunks": 25
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_4.4-enrichment-models.md:chunk:21",
+    "content": "### Image Scaling and Cropping\n\n\nEnrichment models specify their required image resolution through `images_scale` and bounding box expansion through `expansion_factor`:\n\n**Scaling Calculation:**\n\n```\n```\n\n**Scaling Values by Model:**\n\n| Model                      | `images_scale` | `expansion_factor` | Effective DPI |\n| -------------------------- | -------------- | ------------------ | ------------- |\n| CodeFormulaModel           | 1.67           | 0.18               | 120 DPI       |\n| DocumentPictureClassifier  | 2.0            | 0.0                | 144 DPI       |\n| PictureDescriptionVlmModel | 1.0            | 0.0                | 72 DPI        |\n\nSources: [docling/models/code\\_formula\\_model.py70-71](https://github.com/docling-project/docling/blob/f7244a43/docling/models/code_formula_model.py#L70-L71) [docling/models/document\\_picture\\_classifier.py63](https://github.com/docling-project/docling/blob/f7244a43/docling/models/document_picture_classifier.py#L63-L63) [docling/pipeline/base\\_pipeline.py177-206](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/base_pipeline.py#L177-L206)\n\n---",
+    "metadata": {
+      "source": "_docling-project_docling_4.4-enrichment-models.md",
+      "heading": "Image Scaling and Cropping",
+      "heading_level": 3,
+      "chunk_index": 21,
+      "collection": "docling",
+      "char_count": 1133,
+      "estimated_tokens": 283,
+      "total_chunks": 25
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_4.4-enrichment-models.md:chunk:22",
+    "content": "### Backend Retention for Enrichment\n\n\nWhen enrichment models are enabled, the pipeline retains the document backend after assembly to support image cropping:\n\n**File:** [docling/pipeline/standard\\_pdf\\_pipeline.py92-98](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/standard_pdf_pipeline.py#L92-L98)\n\n```\n```\n\nThis ensures that page images remain accessible during the enrichment phase, allowing models to crop item-specific regions from the full page images.\n\nSources: [docling/pipeline/standard\\_pdf\\_pipeline.py92-98](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/standard_pdf_pipeline.py#L92-L98)\n\n---",
+    "metadata": {
+      "source": "_docling-project_docling_4.4-enrichment-models.md",
+      "heading": "Backend Retention for Enrichment",
+      "heading_level": 3,
+      "chunk_index": 22,
+      "collection": "docling",
+      "char_count": 662,
+      "estimated_tokens": 165,
+      "total_chunks": 25
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_4.4-enrichment-models.md:chunk:23",
+    "content": "## Plugin System for Enrichment\n\n\nEnrichment models are discoverable through the plugin system using Python entry points. The `docling_defaults` entry point provides default enrichment implementations:\n\n**File:** [docling/models/plugins/defaults.py21-30](https://github.com/docling-project/docling/blob/f7244a43/docling/models/plugins/defaults.py#L21-L30)\n\n```\n```\n\nThis allows third-party packages to register additional enrichment models by defining their own entry points.\n\nSources: [docling/models/plugins/defaults.py21-30](https://github.com/docling-project/docling/blob/f7244a43/docling/models/plugins/defaults.py#L21-L30) [docling/models/factories.py1-50](https://github.com/docling-project/docling/blob/f7244a43/docling/models/factories.py#L1-L50)\n\nDismiss\n\nRefresh this wiki\n\nThis wiki was recently refreshed. Please wait 4 days to refresh again.",
+    "metadata": {
+      "source": "_docling-project_docling_4.4-enrichment-models.md",
+      "heading": "Plugin System for Enrichment",
+      "heading_level": 2,
+      "chunk_index": 23,
+      "collection": "docling",
+      "char_count": 855,
+      "estimated_tokens": 213,
+      "total_chunks": 25
+    }
+  },
+  {
+    "chunk_id": "docling:_docling-project_docling_4.4-enrichment-models.md:chunk:24",
+    "content": "### On this page\n\n\n- [Enrichment Models](#enrichment-models.md)\n- [Purpose and Scope](#purpose-and-scope.md)\n- [Enrichment Architecture](#enrichment-architecture.md)\n- [Processing Flow](#processing-flow.md)\n- [Base Class Interface](#base-class-interface.md)\n- [Item and Image Element Structure](#item-and-image-element-structure.md)\n- [Code and Formula Enrichment](#code-and-formula-enrichment.md)\n- [CodeFormulaModel](#codeformulamodel.md)\n- [Processing Logic](#processing-logic.md)\n- [Code Language Detection](#code-language-detection.md)\n- [Formula Extraction](#formula-extraction.md)\n- [Picture Classification](#picture-classification.md)\n- [DocumentPictureClassifier](#documentpictureclassifier.md)\n- [Classification Classes](#classification-classes.md)\n- [Output Structure](#output-structure.md)\n- [Picture Description](#picture-description.md)\n- [PictureDescriptionVlmModel](#picturedescriptionvlmmodel.md)\n- [Description Generation](#description-generation.md)\n- [Custom Prompts](#custom-prompts.md)\n- [API-Based Picture Description](#api-based-picture-description.md)\n- [Configuration](#configuration.md)\n- [Pipeline Options](#pipeline-options.md)\n- [Model Downloading](#model-downloading.md)\n- [Integration with Pipeline](#integration-with-pipeline.md)\n- [Enrichment Pipe Construction](#enrichment-pipe-construction.md)\n- [Execution Flow in ConvertPipeline](#execution-flow-in-convertpipeline.md)\n- [Image Scaling and Cropping](#image-scaling-and-cropping.md)\n- [Backend Retention for Enrichment](#backend-retention-for-enrichment.md)\n- [Plugin System for Enrichment](#plugin-system-for-enrichment.md)",
+    "metadata": {
+      "source": "_docling-project_docling_4.4-enrichment-models.md",
+      "heading": "On this page",
+      "heading_level": 3,
+      "chunk_index": 24,
+      "collection": "docling",
+      "char_count": 1611,
+      "estimated_tokens": 402,
+      "total_chunks": 25
+    }
+  }
+]
