@@ -68,8 +68,8 @@ print(f"{'='*60}\n")
 
 # Configuration
 COLLECTION_NAME = "qdrant_ecosystem"
-INPUT_DIR = Path("output/qdrant_ecosystem")
-OUTPUT_DIR = Path("output/embeddings")
+INPUT_DIR = Path("/kaggle/working/rad_clean/output/qdrant_ecosystem")
+OUTPUT_DIR = Path("/kaggle/working/embeddings")
 OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
 # Model configuration
