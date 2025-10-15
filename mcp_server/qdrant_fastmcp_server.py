@@ -34,7 +34,7 @@ stores: dict[str, QdrantStore] = {}
 
 EMBEDDING_MODEL = "nomic-ai/nomic-embed-code"
 VECTOR_SIZE = 3584
-COLLECTIONS = ["viator_api", "fast_docs", "pydantic_docs", "inngest_ecosystem"]
+COLLECTIONS = ["docling", "viator_api", "fast_docs", "pydantic_docs", "inngest_ecosystem"]
 QDRANT_HOST = os.getenv("QDRANT_HOST", "localhost")
 QDRANT_PORT = int(os.getenv("QDRANT_PORT", "6333"))
 
