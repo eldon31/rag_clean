@@ -1,0 +1,338 @@
+[
+  {
+    "chunk_id": "sentence_transformers_docs:UKPLab\\sentence-transformers\\Subset_of_datasets_with_prompts.md:chunk:0",
+    "content": "evaluator = NanoBEIREvaluator(\n    dataset_names=[\"msmarco\", \"nfcorpus\"],\n    query_prompts={\n        \"msmarco\": \"Retrieve relevant passages: \",\n        \"nfcorpus\": \"Find related documents: \"\n    }\n)\n```\n\n### Sparse Model Evaluation  \n\n```python\nfrom sentence_transformers import SparseEncoder\nfrom sentence_transformers.sparse_encoder.evaluation import SparseNanoBEIREvaluator\n\n# Evaluation with sparsity constraints\nevaluator = SparseNanoBEIREvaluator(\n    dataset_names=[\"msmarco\", \"scifact\"],\n    max_active_dims=100,\n    show_progress_bar=True\n)\nresults = evaluator(sparse_model)\n```\n\nSources: [sentence_transformers/evaluation/NanoBEIREvaluator.py:101-120](), [sentence_transformers/sparse_encoder/evaluation/SparseNanoBEIREvaluator.py:58-77]()\n\n## Configuration Options\n\n### Core Parameters\n\n| Parameter | Type | Description | Default |\n|-----------|------|-------------|---------|\n| `dataset_names` | `List[DatasetNameType]` | Datasets to evaluate on | All 13 datasets |",
+    "metadata": {
+      "source_file": "UKPLab\\sentence-transformers\\Subset_of_datasets_with_prompts.md",
+      "source_collection": "sentence_transformers_docs",
+      "subdirectory": "UKPLab",
+      "filename": "Subset_of_datasets_with_prompts.md",
+      "file_extension": ".md",
+      "chunk_index": 0,
+      "token_count": 240,
+      "char_count": 978,
+      "start_char": 0,
+      "end_char": 979
+    }
+  },
+  {
+    "chunk_id": "sentence_transformers_docs:UKPLab\\sentence-transformers\\Subset_of_datasets_with_prompts.md:chunk:1",
+    "content": "--------|\n| `dataset_names` | `List[DatasetNameType]` | Datasets to evaluate on | All 13 datasets |\n| `aggregate_fn` | `Callable` | Function to aggregate scores | `np.mean` |\n| `aggregate_key` | `str` | Key for aggregated results | `\"mean\"` |\n| `batch_size` | `int` | Batch size for encoding | `32` |\n| `show_progress_bar` | `bool` | Show evaluation progress | `False` |\n\n### Metric Configuration\n\n| Parameter | Type | Description | Default |\n|-----------|------|-------------|---------|\n| `mrr_at_k` | `List[int]` | MRR calculation values | `[10]` |\n| `ndcg_at_k` | `List[int]` | NDCG calculation values | `[10]` |\n| `accuracy_at_k` | `List[int]` | Accuracy calculation values | `[1, 3, 5, 10]` |\n| `precision_recall_at_k` | `List[int]` | P/R calculation values | `[1, 3, 5, 10]` |\n| `map_at_k` | `List[int]` | MAP calculation values | `[100]` |\n\n### Prompt Configuration\n\nBoth `query_prompts` and `corpus_prompts` can be:\n- `str`: Same prompt for all datasets\n- `Dict[str, str]`: Dataset-specific prompts",
+    "metadata": {
+      "source_file": "UKPLab\\sentence-transformers\\Subset_of_datasets_with_prompts.md",
+      "source_collection": "sentence_transformers_docs",
+      "subdirectory": "UKPLab",
+      "filename": "Subset_of_datasets_with_prompts.md",
+      "file_extension": ".md",
+      "chunk_index": 1,
+      "token_count": 312,
+      "char_count": 1006,
+      "start_char": 879,
+      "end_char": 1886
+    }
+  },
+  {
+    "chunk_id": "sentence_transformers_docs:UKPLab\\sentence-transformers\\Subset_of_datasets_with_prompts.md:chunk:2",
+    "content": "prompts` can be:\n- `str`: Same prompt for all datasets\n- `Dict[str, str]`: Dataset-specific prompts\n- `None`: No prompts used\n\nSources: [sentence_transformers/evaluation/NanoBEIREvaluator.py:193-211](), [sentence_transformers/evaluation/NanoBEIREvaluator.py:447-466]()\n\n## Key Methods and Data Flow\n\n### Evaluation Process\n\n```mermaid\ngraph TD\n    __call__[\"__call__(model, output_path, epoch, steps)<br/>Main evaluation entry\"]\n    _validate_dataset_names[\"_validate_dataset_names()<br/>Check dataset validity against<br/>dataset_name_to_id.keys()\"]\n    _validate_prompts[\"_validate_prompts()<br/>Validate prompt configuration<br/>for each dataset_name\"]\n    \n    create_evaluators[\"Create self.evaluators list<br/>via _load_dataset() in __init__\"]\n    \n    per_dataset_loop[\"for evaluator in tqdm(self.evaluators)<br/>desc='Evaluating datasets'\"]\n    evaluator_call[\"evaluation = evaluator(model)<br/>Returns dict[metric_name, score]\"]\n    \n    split_metrics[\"splits = full_key.",
+    "metadata": {
+      "source_file": "UKPLab\\sentence-transformers\\Subset_of_datasets_with_prompts.md",
+      "source_collection": "sentence_transformers_docs",
+      "subdirectory": "UKPLab",
+      "filename": "Subset_of_datasets_with_prompts.md",
+      "file_extension": ".md",
+      "chunk_index": 2,
+      "token_count": 250,
+      "char_count": 980,
+      "start_char": 1786,
+      "end_char": 2766
+    }
+  },
+  {
+    "chunk_id": "sentence_transformers_docs:UKPLab\\sentence-transformers\\Subset_of_datasets_with_prompts.md:chunk:3",
+    "content": "= evaluator(model)<br/>Returns dict[metric_name, score]\"]\n    \n    split_metrics[\"splits = full_key.split('_', maxsplit=<br/>num_underscores_in_name)\"]\n    collect_per_metric[\"per_metric_results[metric].append(<br/>metric_value)\"]\n    \n    aggregate_metrics[\"agg_results[metric] = <br/>self.aggregate_fn(per_metric_results[metric])\"]\n    \n    determine_primary[\"if not self.primary_metric:<br/>score_function with max ndcg@k\"]\n    store_metrics[\"store_metrics_in_model_card_data()<br/>Save to model.model_card_data\"]\n    write_csv[\"Write to self.csv_file<br/>(if self.write_csv)\"]\n    \n    __call__ --> _validate_dataset_names\n    __call__ --> _validate_prompts\n    __call__ --> create_evaluators\n    create_evaluators --> per_dataset_loop\n    per_dataset_loop --> evaluator_call\n    evaluator_call --> split_metrics\n    split_metrics --> collect_per_metric\n    collect_per_metric --> aggregate_metrics\n    aggregate_metrics --> determine_primary\n    determine_primary --> store_metrics\n    determine_primary --> write_csv",
+    "metadata": {
+      "source_file": "UKPLab\\sentence-transformers\\Subset_of_datasets_with_prompts.md",
+      "source_collection": "sentence_transformers_docs",
+      "subdirectory": "UKPLab",
+      "filename": "Subset_of_datasets_with_prompts.md",
+      "file_extension": ".md",
+      "chunk_index": 3,
+      "token_count": 236,
+      "char_count": 1022,
+      "start_char": 2666,
+      "end_char": 3689
+    }
+  },
+  {
+    "chunk_id": "sentence_transformers_docs:UKPLab\\sentence-transformers\\Subset_of_datasets_with_prompts.md:chunk:4",
+    "content": "s --> determine_primary\n    determine_primary --> store_metrics\n    determine_primary --> write_csv\n```\n\nSources: [sentence_transformers/evaluation/NanoBEIREvaluator.py:283-396](), [sentence_transformers/evaluation/NanoBEIREvaluator.py:314-325](), [sentence_transformers/evaluation/NanoBEIREvaluator.py:358-366]()\n\n### Dataset Loading Process\n\nThe `_load_dataset` method handles the conversion from Hugging Face dataset format to the format expected by `InformationRetrievalEvaluator`:\n\n```mermaid\ngraph LR\n    load_dataset[\"load_dataset()<br/>corpus, queries, qrels\"]\n    corpus_dict[\"corpus_dict<br/>{sample['_id']: sample['text']}\"]\n    queries_dict[\"queries_dict<br/>{sample['_id']: sample['text']}\"]\n    qrels_dict[\"qrels_dict<br/>{query-id: set(corpus-ids)}\"]\n    \n    apply_prompts[\"Apply query_prompts/<br/>corpus_prompts\"]\n    create_evaluator[\"self.information_retrieval_class()<br/>InformationRetrievalEvaluator or<br/>SparseInformationRetrievalEvaluator\"]\n    \n    load_dataset --> corpus_dict",
+    "metadata": {
+      "source_file": "UKPLab\\sentence-transformers\\Subset_of_datasets_with_prompts.md",
+      "source_collection": "sentence_transformers_docs",
+      "subdirectory": "UKPLab",
+      "filename": "Subset_of_datasets_with_prompts.md",
+      "file_extension": ".md",
+      "chunk_index": 4,
+      "token_count": 260,
+      "char_count": 1005,
+      "start_char": 3589,
+      "end_char": 4595
+    }
+  },
+  {
+    "chunk_id": "sentence_transformers_docs:UKPLab\\sentence-transformers\\Subset_of_datasets_with_prompts.md:chunk:5",
+    "content": "trievalEvaluator or<br/>SparseInformationRetrievalEvaluator\"]\n    \n    load_dataset --> corpus_dict\n    load_dataset --> queries_dict\n    load_dataset --> qrels_dict\n    \n    corpus_dict --> apply_prompts\n    queries_dict --> apply_prompts\n    qrels_dict --> apply_prompts\n    \n    apply_prompts --> create_evaluator\n```\n\n1. **Load dataset splits**: `corpus`, `queries`, `qrels` from Hub using `datasets.load_dataset`\n2. **Convert to dictionaries**: Transform to `{sample[\"_id\"]: sample[\"text\"]}` format\n3. **Build relevance mapping**: Create `{sample[\"query-id\"]: set(sample[\"corpus-id\"])}` from qrels\n4. **Apply prompts**: Add dataset-specific `query_prompt`/`corpus_prompt` if configured\n5. **Create evaluator**: Instantiate via `self.information_retrieval_class` attribute\n\nSources: [sentence_transformers/evaluation/NanoBEIREvaluator.py:404-434](), [sentence_transformers/evaluation/NanoBEIREvaluator.py:415-421]()\n\n## Output Format and Metrics\n\n### Individual Dataset Results",
+    "metadata": {
+      "source_file": "UKPLab\\sentence-transformers\\Subset_of_datasets_with_prompts.md",
+      "source_collection": "sentence_transformers_docs",
+      "subdirectory": "UKPLab",
+      "filename": "Subset_of_datasets_with_prompts.md",
+      "file_extension": ".md",
+      "chunk_index": 5,
+      "token_count": 243,
+      "char_count": 981,
+      "start_char": 4495,
+      "end_char": 5478
+    }
+  },
+  {
+    "chunk_id": "sentence_transformers_docs:UKPLab\\sentence-transformers\\Subset_of_datasets_with_prompts.md:chunk:6",
+    "content": "tion/NanoBEIREvaluator.py:415-421]()\n\n## Output Format and Metrics\n\n### Individual Dataset Results\n\nEach dataset evaluation produces metrics with the pattern: `{dataset_name}_{score_function}_{metric}@{k}`:\n- `NanoMSMARCO_cosine_ndcg@10`\n- `NanoSciFact_dot_mrr@10`\n- `NanoQuoraRetrieval_cosine_map@100`\n\n### Aggregated Results\n\nAggregated metrics follow the pattern: `NanoBEIR_{aggregate_key}_{score_function}_{metric}@{k}`:\n- `NanoBEIR_mean_cosine_ndcg@10`\n- `NanoBEIR_mean_dot_mrr@10`\n\n### Sparse Model Additional Metrics\n\n`SparseNanoBEIREvaluator` extends the base functionality with sparsity tracking via `defaultdict(list)` collections:\n\n| Metric | Calculation | Description |\n|--------|-------------|-------------|\n| `{name}_query_active_dims` | Weighted average by query count | Average active dimensions across all queries |\n| `{name}_query_sparsity_ratio` | Weighted average by query count | Sparsity ratio (1 - active/total) for queries |",
+    "metadata": {
+      "source_file": "UKPLab\\sentence-transformers\\Subset_of_datasets_with_prompts.md",
+      "source_collection": "sentence_transformers_docs",
+      "subdirectory": "UKPLab",
+      "filename": "Subset_of_datasets_with_prompts.md",
+      "file_extension": ".md",
+      "chunk_index": 6,
+      "token_count": 244,
+      "char_count": 948,
+      "start_char": 5378,
+      "end_char": 6327
+    }
+  },
+  {
+    "chunk_id": "sentence_transformers_docs:UKPLab\\sentence-transformers\\Subset_of_datasets_with_prompts.md:chunk:7",
+    "content": "sparsity_ratio` | Weighted average by query count | Sparsity ratio (1 - active/total) for queries |\n| `{name}_corpus_active_dims` | Weighted average by corpus size | Average active dimensions across all documents |\n| `{name}_corpus_sparsity_ratio` | Weighted average by corpus size | Sparsity ratio for corpus documents |\n\nThe sparsity calculation process:\n\n```mermaid\ngraph LR\n    per_evaluator[\"Each evaluator.sparsity_stats<br/>{key: value}\"]\n    collect[\"self.sparsity_stats[key]<br/>.append(value)\"]\n    weight_calc[\"sum(val * length for val, length in <br/>zip(value, self.lengths[key.split('_')[0]])\"]\n    normalize[\"/ sum(self.lengths[key.split('_')[0]])\"]\n    \n    prefix_metrics[\"self.prefix_name_to_metrics(<br/>self.sparsity_stats, self.name)\"]\n    \n    per_evaluator --> collect\n    collect --> weight_calc\n    weight_calc --> normalize\n    normalize --> prefix_metrics\n```\n\nSources: [sentence_transformers/sparse_encoder/evaluation/SparseNanoBEIREvaluator.",
+    "metadata": {
+      "source_file": "UKPLab\\sentence-transformers\\Subset_of_datasets_with_prompts.md",
+      "source_collection": "sentence_transformers_docs",
+      "subdirectory": "UKPLab",
+      "filename": "Subset_of_datasets_with_prompts.md",
+      "file_extension": ".md",
+      "chunk_index": 7,
+      "token_count": 232,
+      "char_count": 970,
+      "start_char": 6227,
+      "end_char": 7197
+    }
+  },
+  {
+    "chunk_id": "sentence_transformers_docs:UKPLab\\sentence-transformers\\Subset_of_datasets_with_prompts.md:chunk:8",
+    "content": "efix_metrics\n```\n\nSources: [sentence_transformers/sparse_encoder/evaluation/SparseNanoBEIREvaluator.py:222-231](), [sentence_transformers/sparse_encoder/evaluation/SparseInformationRetrievalEvaluator.py:202-212]()\n\n## Primary Metric Selection\n\nThe primary metric is determined by:\n1. **Explicit main_score_function**: Use `{main_score_function}_ndcg@{max(ndcg_at_k)}`\n2. **Automatic selection**: Choose score function with highest NDCG@k score\n3. **Format**: `NanoBEIR_{aggregate_key}_{score_function}_ndcg@{k}`\n\nThe primary metric is used for model selection and optimization during training.\n\nSources: [sentence_transformers/evaluation/NanoBEIREvaluator.py:358-366]()\n\n# Pretrained Models\n\n\n\n\nThis page provides an overview of the extensive collection of pretrained models available in the sentence-transformers library and guidance on selecting the right model for your task.",
+    "metadata": {
+      "source_file": "UKPLab\\sentence-transformers\\Subset_of_datasets_with_prompts.md",
+      "source_collection": "sentence_transformers_docs",
+      "subdirectory": "UKPLab",
+      "filename": "Subset_of_datasets_with_prompts.md",
+      "file_extension": ".md",
+      "chunk_index": 8,
+      "token_count": 211,
+      "char_count": 878,
+      "start_char": 7097,
+      "end_char": 7975
+    }
+  },
+  {
+    "chunk_id": "sentence_transformers_docs:UKPLab\\sentence-transformers\\Subset_of_datasets_with_prompts.md:chunk:9",
+    "content": "ilable in the sentence-transformers library and guidance on selecting the right model for your task. With over 15,000 models available on the Hugging Face Hub, this overview helps you navigate the three main model architectures and understand when to use each type.\n\nThe library offers three distinct model architectures, each optimized for different use cases:\n- **SentenceTransformer**: Dense vector embeddings for semantic similarity and clustering\n- **SparseEncoder**: Sparse vector embeddings for efficient retrieval and search engine integration  \n- **CrossEncoder**: Pairwise scoring models for reranking and classification\n\nFor detailed model catalogs and specific recommendations, see [SentenceTransformer Models](#5.1), [SparseEncoder Models](#5.2), [CrossEncoder Models](#5.3), and [MSMARCO Models](#5.4).\n\n## Model Architecture Overview\n\nModel Architecture Comparison\n```mermaid\ngraph TB\n    subgraph \"sentence_transformers.SentenceTransformer\"\n        ST_CLASS[\"SentenceTransformer\"]\n        ST_ENCODE[\"model.",
+    "metadata": {
+      "source_file": "UKPLab\\sentence-transformers\\Subset_of_datasets_with_prompts.md",
+      "source_collection": "sentence_transformers_docs",
+      "subdirectory": "UKPLab",
+      "filename": "Subset_of_datasets_with_prompts.md",
+      "file_extension": ".md",
+      "chunk_index": 9,
+      "token_count": 206,
+      "char_count": 1022,
+      "start_char": 7875,
+      "end_char": 8897
+    }
+  },
+  {
+    "chunk_id": "sentence_transformers_docs:UKPLab\\sentence-transformers\\Subset_of_datasets_with_prompts.md:chunk:10",
+    "content": "_transformers.SentenceTransformer\"\n        ST_CLASS[\"SentenceTransformer\"]\n        ST_ENCODE[\"model.encode()\"]\n        ST_SIM[\"model.similarity()\"]\n        ST_MODELS[\"all-mpnet-base-v2<br/>all-MiniLM-L6-v2<br/>paraphrase-mpnet-base-v2\"]\n    end\n    \n    subgraph \"sentence_transformers.SparseEncoder\"  \n        SE_CLASS[\"SparseEncoder\"]\n        SE_ENCODE[\"model.encode()\"]\n        SE_SPARSE[\"model.sparsity()\"]\n        SE_MODELS[\"naver/splade-cocondenser-ensembledistil<br/>prithivida/Splade_PP_en_v1\"]\n    end\n    \n    subgraph \"sentence_transformers.CrossEncoder\"\n        CE_CLASS[\"CrossEncoder\"] \n        CE_PREDICT[\"model.predict()\"]\n        CE_RANK[\"model.rank()\"]\n        CE_MODELS[\"cross-encoder/ms-marco-MiniLM-L6-v2<br/>cross-encoder/ms-marco-TinyBERT-L2-v2\"]\n    end\n    \n    subgraph \"Output_Types\"\n        DENSE[\"Dense Vectors<br/>torch.Tensor[batch, 384-1024]<br/>util.cos_sim()\"]\n        SPARSE[\"Sparse Vectors<br/>torch.Tensor[batch, vocab_size]<br/>util.dot_score()\"]\n        SCORES[\"Scalar Scores<br/>torch.",
+    "metadata": {
+      "source_file": "UKPLab\\sentence-transformers\\Subset_of_datasets_with_prompts.md",
+      "source_collection": "sentence_transformers_docs",
+      "subdirectory": "UKPLab",
+      "filename": "Subset_of_datasets_with_prompts.md",
+      "file_extension": ".md",
+      "chunk_index": 10,
+      "token_count": 286,
+      "char_count": 1024,
+      "start_char": 8797,
+      "end_char": 9821
+    }
+  },
+  {
+    "chunk_id": "sentence_transformers_docs:UKPLab\\sentence-transformers\\Subset_of_datasets_with_prompts.md:chunk:11",
+    "content": "<br/>torch.Tensor[batch, vocab_size]<br/>util.dot_score()\"]\n        SCORES[\"Scalar Scores<br/>torch.Tensor[batch]<br/>torch.sigmoid()\"]\n    end\n    \n    ST_CLASS --> DENSE\n    SE_CLASS --> SPARSE  \n    CE_CLASS --> SCORES\n```\n\nModel Selection Decision Tree\n```mermaid\ngraph TD\n    START[\"What is your use case?\"]\n    \n    START --> SEMANTIC[\"Semantic Search<br/>Similarity Comparison<br/>Clustering\"]\n    START --> RETRIEVAL[\"Document Retrieval<br/>Search Engine Integration<br/>Keyword + Semantic\"]\n    START --> RANKING[\"Reranking<br/>Pairwise Classification<br/>Relevance Scoring\"]\n    \n    SEMANTIC --> ST_CHOICE[\"Use SentenceTransformer<br/>See page 5.1\"]\n    RETRIEVAL --> SE_CHOICE[\"Use SparseEncoder<br/>See page 5.2\"] \n    RANKING --> CE_CHOICE[\"Use CrossEncoder<br/>See page 5.3\"]\n    \n    ST_CHOICE --> ST_SPEED[\"Speed Priority?\"]\n    ST_SPEED --> ST_FAST[\"all-MiniLM-L6-v2<br/>14,200 sent/sec\"]\n    ST_SPEED --> ST_QUALITY[\"all-mpnet-base-v2<br/>Best quality\"]\n    \n    SE_CHOICE --> SE_LANG[\"Language?\"]",
+    "metadata": {
+      "source_file": "UKPLab\\sentence-transformers\\Subset_of_datasets_with_prompts.md",
+      "source_collection": "sentence_transformers_docs",
+      "subdirectory": "UKPLab",
+      "filename": "Subset_of_datasets_with_prompts.md",
+      "file_extension": ".md",
+      "chunk_index": 11,
+      "token_count": 285,
+      "char_count": 1016,
+      "start_char": 9721,
+      "end_char": 10738
+    }
+  },
+  {
+    "chunk_id": "sentence_transformers_docs:UKPLab\\sentence-transformers\\Subset_of_datasets_with_prompts.md:chunk:12",
+    "content": "ED --> ST_QUALITY[\"all-mpnet-base-v2<br/>Best quality\"]\n    \n    SE_CHOICE --> SE_LANG[\"Language?\"]\n    SE_LANG --> SE_EN[\"English:<br/>splade-cocondenser-ensembledistil\"]\n    SE_LANG --> SE_MULTI[\"Multilingual:<br/>Available models limited\"]\n    \n    CE_CHOICE --> CE_DOMAIN[\"Domain?\"]\n    CE_DOMAIN --> CE_GENERAL[\"General:<br/>cross-encoder/ms-marco-MiniLM-L6-v2\"]\n    CE_DOMAIN --> CE_SPECIFIC[\"Domain-specific:<br/>See MSMARCO page 5.4\"]\n```\n\n**Sources:** [README.md:19](), [docs/sentence_transformer/pretrained_models.md:16-27](), [index.rst:37-132]()\n\n## Model Discovery and Selection\n\nModel Discovery Pathways\n```mermaid\ngraph TB\n    subgraph \"Official_Sources\"\n        HF_ORG[\"huggingface.co/sentence-transformers<br/>Official model organization<br/>~100 curated models\"]\n        DOCS_HTML[\"docs/_static/html/models_en_sentence_embeddings.html<br/>Interactive Vue.js browser<br/>Sortable performance tables\"]\n    end\n    \n    subgraph \"Community_Sources\"\n        HF_COMMUNITY[\"huggingface.co/models?",
+    "metadata": {
+      "source_file": "UKPLab\\sentence-transformers\\Subset_of_datasets_with_prompts.md",
+      "source_collection": "sentence_transformers_docs",
+      "subdirectory": "UKPLab",
+      "filename": "Subset_of_datasets_with_prompts.md",
+      "file_extension": ".md",
+      "chunk_index": 12,
+      "token_count": 274,
+      "char_count": 1008,
+      "start_char": 10638,
+      "end_char": 11646
+    }
+  },
+  {
+    "chunk_id": "sentence_transformers_docs:UKPLab\\sentence-transformers\\Subset_of_datasets_with_prompts.md:chunk:13",
+    "content": "tables\"]\n    end\n    \n    subgraph \"Community_Sources\"\n        HF_COMMUNITY[\"huggingface.co/models?library=sentence-transformers<br/>15,000+ community models<br/>Diverse domains and languages\"]\n        MTEB_BOARD[\"huggingface.co/spaces/mteb/leaderboard<br/>MTEB benchmark rankings<br/>State-of-the-art performance\"]\n    end\n    \n    subgraph \"Selection_Criteria\"\n        TASK_FIT[\"Task Compatibility<br/>sentence_performance: 49-70<br/>semantic_search: 22-57\"]\n        SPEED_REQ[\"Speed Requirements<br/>GPU: 800-34000 sent/sec<br/>CPU: 30-750 sent/sec\"]\n        RESOURCE_LIMIT[\"Resource Constraints<br/>Model size: 43-1360 MB<br/>Memory requirements\"]\n    end\n    \n    HF_ORG --> TASK_FIT\n    DOCS_HTML --> SPEED_REQ\n    MTEB_BOARD --> RESOURCE_LIMIT\n```\n\nSelection Criteria and Properties\n| Property | Code Reference | Typical Values | Impact |\n|---|---|---|---|\n| Dimensions | `model.get_sentence_embedding_dimension()` | 384, 768, 1024 | Memory usage, similarity computation speed |",
+    "metadata": {
+      "source_file": "UKPLab\\sentence-transformers\\Subset_of_datasets_with_prompts.md",
+      "source_collection": "sentence_transformers_docs",
+      "subdirectory": "UKPLab",
+      "filename": "Subset_of_datasets_with_prompts.md",
+      "file_extension": ".md",
+      "chunk_index": 13,
+      "token_count": 273,
+      "char_count": 985,
+      "start_char": 11546,
+      "end_char": 12533
+    }
+  },
+  {
+    "chunk_id": "sentence_transformers_docs:UKPLab\\sentence-transformers\\Subset_of_datasets_with_prompts.md:chunk:14",
+    "content": "get_sentence_embedding_dimension()` | 384, 768, 1024 | Memory usage, similarity computation speed |\n| Normalized Embeddings | `normalized_embeddings: true/false` | Boolean | Score function compatibility |\n| Score Functions | `score_functions: [\"cos\", \"dot\", \"eucl\"]` | Array of strings | Similarity computation method |\n| Max Sequence Length | `max_seq_length` | 128, 256, 512 | Input text limitations |\n| Model Size | File size in MB | 43-1360 MB | Storage and loading time |\n\n**Sources:** [README.md:2](), [docs/_static/html/models_en_sentence_embeddings.html:236-550](), [docs/sentence_transformer/pretrained_models.md:4-7]()\n\n## Benchmark Evaluation Framework\n\nEvaluation Metrics and Datasets\n```mermaid\ngraph TB\n    subgraph \"SentenceTransformer_Evaluation\"\n        ST_SENTENCE[\"Sentence Performance<br/>14 diverse tasks<br/>STS, classification, clustering\"]\n        ST_SEARCH[\"Semantic Search<br/>6 retrieval datasets<br/>Query-passage matching\"]",
+    "metadata": {
+      "source_file": "UKPLab\\sentence-transformers\\Subset_of_datasets_with_prompts.md",
+      "source_collection": "sentence_transformers_docs",
+      "subdirectory": "UKPLab",
+      "filename": "Subset_of_datasets_with_prompts.md",
+      "file_extension": ".md",
+      "chunk_index": 14,
+      "token_count": 244,
+      "char_count": 952,
+      "start_char": 12433,
+      "end_char": 13386
+    }
+  },
+  {
+    "chunk_id": "sentence_transformers_docs:UKPLab\\sentence-transformers\\Subset_of_datasets_with_prompts.md:chunk:15",
+    "content": "ustering\"]\n        ST_SEARCH[\"Semantic Search<br/>6 retrieval datasets<br/>Query-passage matching\"]\n        ST_SPEED[\"Inference Speed<br/>V100 GPU / 8-core CPU<br/>sentences per second\"]\n    end\n    \n    subgraph \"SparseEncoder_Evaluation\" \n        SE_SPARSITY[\"Sparsity Metrics<br/>SparseEncoder.sparsity()<br/>sparsity_ratio calculation\"]\n        SE_RETRIEVAL[\"Sparse Retrieval<br/>BEIR benchmark<br/>Neural-lexical search\"]\n        SE_EFFICIENCY[\"Memory Efficiency<br/>Storage compression<br/>Index size optimization\"]\n    end\n    \n    subgraph \"CrossEncoder_Evaluation\"\n        CE_RERANK[\"Reranking Performance<br/>TREC-DL datasets<br/>NDCG@10 scores\"]\n        CE_CLASSIFICATION[\"Classification Tasks<br/>Binary/multi-class<br/>Accuracy and F1\"]\n        CE_SPEED[\"Prediction Speed<br/>Pairs per second<br/>GPU/CPU throughput\"]\n    end\n```\n\nPerformance Ranges by Model Type\n| Model Type | Performance Metric | Range | Best Models |\n|---|---|---|---|",
+    "metadata": {
+      "source_file": "UKPLab\\sentence-transformers\\Subset_of_datasets_with_prompts.md",
+      "source_collection": "sentence_transformers_docs",
+      "subdirectory": "UKPLab",
+      "filename": "Subset_of_datasets_with_prompts.md",
+      "file_extension": ".md",
+      "chunk_index": 15,
+      "token_count": 235,
+      "char_count": 952,
+      "start_char": 13286,
+      "end_char": 14239
+    }
+  },
+  {
+    "chunk_id": "sentence_transformers_docs:UKPLab\\sentence-transformers\\Subset_of_datasets_with_prompts.md:chunk:16",
+    "content": "ce Ranges by Model Type\n| Model Type | Performance Metric | Range | Best Models |\n|---|---|---|---|\n| SentenceTransformer | Sentence Performance | 49-70 | `all-mpnet-base-v2` (69.57) |\n| SentenceTransformer | Semantic Search | 22-57 | `all-mpnet-base-v2` (57.02) |\n| SparseEncoder | Sparsity Ratio | 99.5-99.9% | `splade-cocondenser-ensembledistil` |\n| CrossEncoder | NDCG@10 | 60-75 | `ms-marco-MiniLM-L6-v2` (74.30) |\n| All Types | Inference Speed | 800-34000 sent/sec | GPU performance varies by size |\n\n**Sources:** [docs/_static/html/models_en_sentence_embeddings.html:113-151](), [README.md:164-166](), [docs/pretrained-models/msmarco-v5.md:29-44]()\n\n## Quick Start Recommendations\n\nThe following table provides starting points for common use cases, with links to detailed model catalogs:\n\n| Use Case | Recommended Model | Performance | Speed | Documentation |\n|---|---|---|---|---|\n| **General Embeddings** | `all-mpnet-base-v2` | Best quality (69.57) | 2800 sent/sec | [Page 5.1](#5.1) |",
+    "metadata": {
+      "source_file": "UKPLab\\sentence-transformers\\Subset_of_datasets_with_prompts.md",
+      "source_collection": "sentence_transformers_docs",
+      "subdirectory": "UKPLab",
+      "filename": "Subset_of_datasets_with_prompts.md",
+      "file_extension": ".md",
+      "chunk_index": 16,
+      "token_count": 340,
+      "char_count": 995,
+      "start_char": 14139,
+      "end_char": 15135
+    }
+  },
+  {
+    "chunk_id": "sentence_transformers_docs:UKPLab\\sentence-transformers\\Subset_of_datasets_with_prompts.md:chunk:17",
+    "content": "eral Embeddings** | `all-mpnet-base-v2` | Best quality (69.57) | 2800 sent/sec | [Page 5.1](#5.1) |\n| **Fast Embeddings** | `all-MiniLM-L6-v2` | Good quality (68.06) | 14200 sent/sec | [Page 5.1](#5.1) |\n| **Semantic Search** | `multi-qa-mpnet-base-cos-v1` | High search (57.46) | 4000 sent/sec | [Page 5.1](#5.1) |\n| **Sparse Retrieval** | `naver/splade-cocondenser-ensembledistil` | SPLADE architecture | Memory efficient | [Page 5.2](#5.2) |\n| **Reranking** | `cross-encoder/ms-marco-MiniLM-L6-v2` | NDCG@10: 74.30 | 39.01 MRR@10 | [Page 5.3](#5.3) |\n| **MSMARCO Tasks** | `msmarco-distilbert-dot-v5` | MRR@10: 37.25 | 7000 sent/sec | [Page 5.4](#5.4) |\n\n### Model Series Overview\n\n**General Purpose (`all-*` series)**\n- Trained on 1B+ training pairs from diverse sources\n- Best for general semantic understanding tasks\n- Available in multiple sizes: MiniLM (fast), DistilRoBERTa (balanced), MPNet (quality)\n\n**Search-Optimized (`multi-qa-*` and `msmarco-*` series)**",
+    "metadata": {
+      "source_file": "UKPLab\\sentence-transformers\\Subset_of_datasets_with_prompts.md",
+      "source_collection": "sentence_transformers_docs",
+      "subdirectory": "UKPLab",
+      "filename": "Subset_of_datasets_with_prompts.md",
+      "file_extension": ".md",
+      "chunk_index": 17,
+      "token_count": 389,
+      "char_count": 970,
+      "start_char": 15035,
+      "end_char": 16008
+    }
+  },
+  {
+    "chunk_id": "sentence_transformers_docs:UKPLab\\sentence-transformers\\Subset_of_datasets_with_prompts.md:chunk:18",
+    "content": "ilRoBERTa (balanced), MPNet (quality)\n\n**Search-Optimized (`multi-qa-*` and `msmarco-*` series)**  \n- Fine-tuned for question-answering and information retrieval\n- Optimized for query-passage similarity measurement\n- Available in dot-product and cosine similarity variants\n\n**Sparse Models (SPLADE variants)**\n- Neural sparse representations for efficient retrieval\n- Compatible with inverted index search engines\n- High sparsity (99%+) while maintaining semantic understanding\n\n**Cross-Encoder Rerankers**\n- Highest accuracy for pairwise relevance scoring\n- Computationally intensive but precise\n- Ideal for reranking small candidate sets\n\n### Navigation to Detailed Catalogs\n\n- **[SentenceTransformer Models](#5.1)**: Complete catalog of dense embedding models with performance comparisons and specialized variants\n- **[SparseEncoder Models](#5.2)**: Sparse model architectures, SPLADE variants, and search engine integration guides  \n- **[CrossEncoder Models](#5.",
+    "metadata": {
+      "source_file": "UKPLab\\sentence-transformers\\Subset_of_datasets_with_prompts.md",
+      "source_collection": "sentence_transformers_docs",
+      "subdirectory": "UKPLab",
+      "filename": "Subset_of_datasets_with_prompts.md",
+      "file_extension": ".md",
+      "chunk_index": 18,
+      "token_count": 211,
+      "char_count": 966,
+      "start_char": 15908,
+      "end_char": 16874
+    }
+  },
+  {
+    "chunk_id": "sentence_transformers_docs:UKPLab\\sentence-transformers\\Subset_of_datasets_with_prompts.md:chunk:19",
+    "content": "architectures, SPLADE variants, and search engine integration guides  \n- **[CrossEncoder Models](#5.3)**: Reranking and classification models across different domains and tasks\n- **[MSMARCO Models](#5.4)**: Specialized documentation for MSMARCO-trained models with version histories and performance evolution\n\n**Sources:** [docs/sentence_transformer/pretrained_models.md:45-124](), [README.md:169-176](), [docs/_static/html/models_en_sentence_embeddings.html:470-550]()\n\n## Loading and Usage Patterns\n\n### Basic Loading Patterns\n\nAll pretrained models follow consistent loading and usage patterns through their respective classes from the `sentence_transformers` package:\n\n```python\n# SentenceTransformer - Dense vector embeddings\nfrom sentence_transformers import SentenceTransformer\n\n# Official models (no prefix needed)\nmodel = SentenceTransformer(\"all-mpnet-base-v2\")\n# Community models (full path required)  \nmodel = SentenceTransformer(\"BAAI/bge-large-en\")\n\nsentences = [\"The weather is lovely today.",
+    "metadata": {
+      "source_file": "UKPLab\\sentence-transformers\\Subset_of_datasets_with_prompts.md",
+      "source_collection": "sentence_transformers_docs",
+      "subdirectory": "UKPLab",
+      "filename": "Subset_of_datasets_with_prompts.md",
+      "file_extension": ".md",
+      "chunk_index": 19,
+      "token_count": 229,
+      "char_count": 1006,
+      "start_char": 16774,
+      "end_char": 17780
+    }
+  },
+  {
+    "chunk_id": "sentence_transformers_docs:UKPLab\\sentence-transformers\\Subset_of_datasets_with_prompts.md:chunk:20",
+    "content": "ired)  \nmodel = SentenceTransformer(\"BAAI/bge-large-en\")\n\nsentences = [\"The weather is lovely today.\", \"It's sunny outside!\"]\nembeddings = model.encode(sentences)\nsimilarities = model.similarity(embeddings, embeddings)\n```\n\n```python",
+    "metadata": {
+      "source_file": "UKPLab\\sentence-transformers\\Subset_of_datasets_with_prompts.md",
+      "source_collection": "sentence_transformers_docs",
+      "subdirectory": "UKPLab",
+      "filename": "Subset_of_datasets_with_prompts.md",
+      "file_extension": ".md",
+      "chunk_index": 20,
+      "token_count": 56,
+      "char_count": 233,
+      "start_char": 17680,
+      "end_char": 18704
+    }
+  }
+]

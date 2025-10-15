@@ -1,0 +1,1 @@
+scores = cross_encoder.predict([(query, doc) for doc in candidates])

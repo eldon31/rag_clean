@@ -1,0 +1,66 @@
+[
+  {
+    "chunk_id": "sentence_transformers_docs:UKPLab\\sentence-transformers\\Core_Model_Types.md:chunk:0",
+    "content": "This document covers the three core model architectures in the sentence-transformers library: `SentenceTransformer`, `SparseEncoder`, and `CrossEncoder`. Each serves distinct use cases in text encoding and similarity tasks.\n\nFor information about training these model types, see pages [3.1](#3.1), [3.2](#3.2), and [3.3](#3.3). For details on available pretrained models, see pages [5.1](#5.1), [5.2](#5.2), and [5.3](#5.3).\n\n## Architecture Overview\n\nThe sentence-transformers library provides three main model architectures that differ in their encoding approach and use cases:\n\n```mermaid\ngraph TB\n    subgraph \"Input Processing\"\n        Text[\"Text Input(s)\"]\n    end\n    \n    subgraph \"Core Model Types\"\n        ST[\"SentenceTransformer<br/>Dense Embeddings\"]\n        SE[\"SparseEncoder<br/>Sparse Embeddings\"]\n        CE[\"CrossEncoder<br/>Pairwise Scoring\"]\n    end\n    \n    subgraph \"Output Types\"\n        Dense[\"Dense Vectors<br/>[batch_size, embedding_dim]\"]",
+    "metadata": {
+      "source_file": "UKPLab\\sentence-transformers\\Core_Model_Types.md",
+      "source_collection": "sentence_transformers_docs",
+      "subdirectory": "UKPLab",
+      "filename": "Core_Model_Types.md",
+      "file_extension": ".md",
+      "chunk_index": 0,
+      "token_count": 240,
+      "char_count": 964,
+      "start_char": 0,
+      "end_char": 965
+    }
+  },
+  {
+    "chunk_id": "sentence_transformers_docs:UKPLab\\sentence-transformers\\Core_Model_Types.md:chunk:1",
+    "content": "end\n    \n    subgraph \"Output Types\"\n        Dense[\"Dense Vectors<br/>[batch_size, embedding_dim]\"]\n        Sparse[\"Sparse Vectors<br/>[batch_size, vocab_size]\"]\n        Scores[\"Similarity Scores<br/>[batch_size] or [batch_size, num_labels]\"]\n    end\n    \n    subgraph \"Use Cases\"\n        SemanticSearch[\"Semantic Search\"]\n        Clustering[\"Clustering\"]\n        LexicalSearch[\"Neural Lexical Search\"]\n        HybridRetrieval[\"Hybrid Retrieval\"]\n        Reranking[\"Reranking\"]\n        Classification[\"Text Classification\"]\n    end\n    \n    Text --> ST\n    Text --> SE\n    Text --> CE\n    \n    ST --> Dense\n    SE --> Sparse\n    CE --> Scores\n    \n    Dense --> SemanticSearch\n    Dense --> Clustering\n    Sparse --> LexicalSearch\n    Sparse --> HybridRetrieval\n    Scores --> Reranking\n    Scores --> Classification\n```\n\n**Sources:** [sentence_transformers/SentenceTransformer.py:61-163](), [sentence_transformers/sparse_encoder/SparseEncoder.py:27-129](), [sentence_transformers/cross_encoder/CrossEncoder.",
+    "metadata": {
+      "source_file": "UKPLab\\sentence-transformers\\Core_Model_Types.md",
+      "source_collection": "sentence_transformers_docs",
+      "subdirectory": "UKPLab",
+      "filename": "Core_Model_Types.md",
+      "file_extension": ".md",
+      "chunk_index": 1,
+      "token_count": 249,
+      "char_count": 1008,
+      "start_char": 865,
+      "end_char": 1873
+    }
+  },
+  {
+    "chunk_id": "sentence_transformers_docs:UKPLab\\sentence-transformers\\Core_Model_Types.md:chunk:2",
+    "content": "ormers/sparse_encoder/SparseEncoder.py:27-129](), [sentence_transformers/cross_encoder/CrossEncoder.py:48-116](), [README.md:15-17]()\n\n## SentenceTransformer\n\nThe `SentenceTransformer` class is the primary model for generating dense vector embeddings from text. It encodes individual sentences or documents into fixed-size dense vectors suitable for semantic similarity tasks.\n\n### Core Architecture\n\n```mermaid\ngraph LR\n    subgraph \"SentenceTransformer Pipeline\"\n        Input[\"Text Input\"]\n        Tokenizer[\"tokenize()\"]\n        Transformer[\"Transformer Module\"]\n        Pooling[\"Pooling Module\"]\n        Optional[\"Optional Modules<br/>(Normalize, Dense, etc.)\"]\n        Output[\"Dense Embedding\"]\n    end\n    \n    Input --> Tokenizer\n    Tokenizer --> Transformer\n    Transformer --> Pooling\n    Pooling --> Optional\n    Optional --> Output\n    \n    subgraph \"Key Methods\"\n        Encode[\"encode()\"]\n        EncodeQuery[\"encode_query()\"]\n        EncodeDoc[\"encode_document()\"]\n        Similarity[\"similarity()\"]\n    end",
+    "metadata": {
+      "source_file": "UKPLab\\sentence-transformers\\Core_Model_Types.md",
+      "source_collection": "sentence_transformers_docs",
+      "subdirectory": "UKPLab",
+      "filename": "Core_Model_Types.md",
+      "file_extension": ".md",
+      "chunk_index": 2,
+      "token_count": 230,
+      "char_count": 1023,
+      "start_char": 1773,
+      "end_char": 2797
+    }
+  },
+  {
+    "chunk_id": "sentence_transformers_docs:UKPLab\\sentence-transformers\\Core_Model_Types.md:chunk:3",
+    "content": "\"encode_query()\"]\n        EncodeDoc[\"encode_document()\"]\n        Similarity[\"similarity()\"]\n    end\n```\n\nThe `SentenceTransformer` class inherits from `nn.Sequential`, `FitMixin`, and `PeftAdapterMixin`, allowing it to function as a sequential pipeline of modules while supporting training and PEFT adapters.\n\n### Key Features\n\n- **Modular Design**: Composed of sequential modules like `Transformer`, `Pooling`, `Normalize`\n- **Prompt Support**: Configurable prompts for different tasks via `prompts` dictionary\n- **Task-Specific Encoding**: `encode_query()` and `encode_document()` methods for asymmetric retrieval\n- **Multiple Backends**: Supports PyTorch, ONNX, and OpenVINO backends\n- **Similarity Functions**: Built-in similarity computation with configurable functions\n\n### Usage Patterns\n\n```python",
+    "metadata": {
+      "source_file": "UKPLab\\sentence-transformers\\Core_Model_Types.md",
+      "source_collection": "sentence_transformers_docs",
+      "subdirectory": "UKPLab",
+      "filename": "Core_Model_Types.md",
+      "file_extension": ".md",
+      "chunk_index": 3,
+      "token_count": 172,
+      "char_count": 805,
+      "start_char": 2697,
+      "end_char": 3721
+    }
+  }
+]

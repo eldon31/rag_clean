@@ -1,0 +1,34 @@
+[
+  {
+    "chunk_id": "sentence_transformers_docs:UKPLab\\sentence-transformers\\Example_test_structure_from_test_pretrained_stsb.py.md:chunk:0",
+    "content": "def pretrained_model_score(model_name, expected_score: float, max_test_samples: int = 100):\n    model = SentenceTransformer(model_name, cache_folder=cache_dir)\n    # Download and load STS benchmark data\n    # Evaluate model performance\n    # Assert performance meets threshold\n```\n\n**Key Test Parameters:**\n- `max_test_samples`: Limits test data size (100 for fast tests, -1 for complete evaluation)\n- `expected_score`: Minimum performance threshold for each model\n- Similarity functions tested: cosine, euclidean, manhattan, dot product\n\nSources: [tests/test_pretrained_stsb.py:18-49]()\n\n### Training Validation Tests\n\nThe `test_train_stsb.py` module validates training functionality across different scenarios:\n\n```mermaid\ngraph TD\n    subgraph \"Training Test Types\"\n        STSBTrain[\"STSB Training Tests\"]\n        NLITrain[\"NLI Training Tests\"]\n        SlowTrain[\"Slow Training Tests\"]\n        FastTrain[\"Fast Training Tests\"]\n    end\n    \n    subgraph \"Test Conditions\"\n        FullDataset[\"Full Dataset (slow)\"]",
+    "metadata": {
+      "source_file": "UKPLab\\sentence-transformers\\Example_test_structure_from_test_pretrained_stsb.py.md",
+      "source_collection": "sentence_transformers_docs",
+      "subdirectory": "UKPLab",
+      "filename": "Example_test_structure_from_test_pretrained_stsb.py.md",
+      "file_extension": ".md",
+      "chunk_index": 0,
+      "token_count": 231,
+      "char_count": 1017,
+      "start_char": 0,
+      "end_char": 1018
+    }
+  },
+  {
+    "chunk_id": "sentence_transformers_docs:UKPLab\\sentence-transformers\\Example_test_structure_from_test_pretrained_stsb.py.md:chunk:1",
+    "content": "ning Tests\"]\n    end\n    \n    subgraph \"Test Conditions\"\n        FullDataset[\"Full Dataset (slow)\"]\n        SubsetDataset[\"Subset Dataset (fast)\"]\n        CI_Skip[\"CI Environment Skip\"]\n    end\n    \n    STSBTrain --> FullDataset\n    STSBTrain --> SubsetDataset\n    NLITrain --> FullDataset\n    NLITrain --> SubsetDataset\n    \n    SlowTrain --> CI_Skip\n    FastTrain --> SubsetDataset\n```\n\nSources: [tests/test_train_stsb.py:82-187]()\n\n### Test Execution Control\n\nTests use pytest markers to control execution:\n- `@pytest.mark.slow`: Comprehensive tests with full datasets\n- `@pytest.mark.skipif(\"CI\" in os.environ)`: Skip resource-intensive tests in CI\n- `@pytest.mark.parametrize`: Run same test with multiple parameter sets\n\n## Running Tests\n\n### Local Development\n\n```bash",
+    "metadata": {
+      "source_file": "UKPLab\\sentence-transformers\\Example_test_structure_from_test_pretrained_stsb.py.md",
+      "source_collection": "sentence_transformers_docs",
+      "subdirectory": "UKPLab",
+      "filename": "Example_test_structure_from_test_pretrained_stsb.py.md",
+      "file_extension": ".md",
+      "chunk_index": 1,
+      "token_count": 186,
+      "char_count": 775,
+      "start_char": 918,
+      "end_char": 1942
+    }
+  }
+]

@@ -1,0 +1,162 @@
+[
+  {
+    "chunk_id": "sentence_transformers_docs:UKPLab\\sentence-transformers\\SparseEncoder_Evaluators.md:chunk:0",
+    "content": "This document covers the evaluation framework specifically designed for sparse encoder models in the sentence-transformers library. These evaluators extend the standard dense evaluators to handle sparse embeddings and provide additional sparsity-related metrics.\n\nFor general evaluation concepts and dense model evaluators, see [SentenceTransformer Evaluators](#4.1). For information about sparse encoder models themselves, see [SparseEncoder Training](#3.2).\n\n## Architecture Overview\n\nSparseEncoder evaluators follow an inheritance-based architecture where each sparse evaluator extends its corresponding dense evaluator while adding sparse-specific functionality.\n\n### Class Hierarchy\n\n```mermaid\ngraph TD\n    subgraph \"Dense Evaluators\"\n        IRE[\"InformationRetrievalEvaluator\"]\n        NBE[\"NanoBEIREvaluator\"]\n        ESE[\"EmbeddingSimilarityEvaluator\"]\n        RE[\"RerankingEvaluator\"]\n        BCE[\"BinaryClassificationEvaluator\"]\n        MSE[\"MSEEvaluator\"]\n        TE[\"TripletEvaluator\"]",
+    "metadata": {
+      "source_file": "UKPLab\\sentence-transformers\\SparseEncoder_Evaluators.md",
+      "source_collection": "sentence_transformers_docs",
+      "subdirectory": "UKPLab",
+      "filename": "SparseEncoder_Evaluators.md",
+      "file_extension": ".md",
+      "chunk_index": 0,
+      "token_count": 188,
+      "char_count": 999,
+      "start_char": 0,
+      "end_char": 1000
+    }
+  },
+  {
+    "chunk_id": "sentence_transformers_docs:UKPLab\\sentence-transformers\\SparseEncoder_Evaluators.md:chunk:1",
+    "content": "BCE[\"BinaryClassificationEvaluator\"]\n        MSE[\"MSEEvaluator\"]\n        TE[\"TripletEvaluator\"]\n        TransE[\"TranslationEvaluator\"]\n    end\n    \n    subgraph \"Sparse Evaluators\"\n        SIRE[\"SparseInformationRetrievalEvaluator\"]\n        SNBE[\"SparseNanoBEIREvaluator\"]\n        SESE[\"SparseEmbeddingSimilarityEvaluator\"]\n        SRE[\"SparseRerankingEvaluator\"]\n        SBCE[\"SparseBinaryClassificationEvaluator\"]\n        SMSE[\"SparseMSEEvaluator\"]\n        STE[\"SparseTripletEvaluator\"]\n        STrE[\"SparseTranslationEvaluator\"]\n    end\n    \n    IRE --> SIRE\n    NBE --> SNBE\n    ESE --> SESE\n    RE --> SRE\n    BCE --> SBCE\n    MSE --> SMSE\n    TE --> STE\n    TransE --> STrE\n    \n    subgraph \"Sparse Model\"\n        SE[\"SparseEncoder\"]\n    end\n    \n    SIRE --> SE\n    SNBE --> SE\n    SESE --> SE\n    SRE --> SE\n    SBCE --> SE\n    SMSE --> SE\n    STE --> SE\n    STrE --> SE\n```\n\nSources: [sentence_transformers/sparse_encoder/evaluation/SparseInformationRetrievalEvaluator.",
+    "metadata": {
+      "source_file": "UKPLab\\sentence-transformers\\SparseEncoder_Evaluators.md",
+      "source_collection": "sentence_transformers_docs",
+      "subdirectory": "UKPLab",
+      "filename": "SparseEncoder_Evaluators.md",
+      "file_extension": ".md",
+      "chunk_index": 1,
+      "token_count": 256,
+      "char_count": 979,
+      "start_char": 900,
+      "end_char": 1883
+    }
+  },
+  {
+    "chunk_id": "sentence_transformers_docs:UKPLab\\sentence-transformers\\SparseEncoder_Evaluators.md:chunk:2",
+    "content": "```\n\nSources: [sentence_transformers/sparse_encoder/evaluation/SparseInformationRetrievalEvaluator.py:23-281](), [sentence_transformers/sparse_encoder/evaluation/SparseNanoBEIREvaluator.py:26-263](), [sentence_transformers/sparse_encoder/evaluation/SparseEmbeddingSimilarityEvaluator.py:22-169]()\n\n## Core Functionality Differences\n\n### Sparse Embedding Generation\n\nAll sparse evaluators override the `embed_inputs` method to generate sparse embeddings instead of dense ones:\n\n| Component | Dense Evaluators | Sparse Evaluators |\n|-----------|------------------|-------------------|\n| Embedding Format | Dense tensors | Sparse tensors via `convert_to_sparse_tensor=True` |\n| Memory Management | Standard tensor operations | `save_to_cpu=True` for memory efficiency |\n| Dimension Control | `truncate_dim` for reducing dimensions | `max_active_dims` for sparsity control |\n| Similarity Functions | Cosine, dot product, euclidean, manhattan | Same functions but optimized for sparse tensors |\n\n### Sparsity Statistics Tracking",
+    "metadata": {
+      "source_file": "UKPLab\\sentence-transformers\\SparseEncoder_Evaluators.md",
+      "source_collection": "sentence_transformers_docs",
+      "subdirectory": "UKPLab",
+      "filename": "SparseEncoder_Evaluators.md",
+      "file_extension": ".md",
+      "chunk_index": 2,
+      "token_count": 224,
+      "char_count": 1023,
+      "start_char": 1783,
+      "end_char": 2808
+    }
+  },
+  {
+    "chunk_id": "sentence_transformers_docs:UKPLab\\sentence-transformers\\SparseEncoder_Evaluators.md:chunk:3",
+    "content": "an, manhattan | Same functions but optimized for sparse tensors |\n\n### Sparsity Statistics Tracking\n\nEach sparse evaluator tracks and reports sparsity statistics:\n\n```mermaid\ngraph LR\n    subgraph \"Embedding Process\"\n        Input[\"Text Input\"]\n        SE[\"SparseEncoder.encode()\"]\n        SparseTensor[\"Sparse Tensor\"]\n        Stats[\"model.sparsity()\"]\n    end\n    \n    subgraph \"Tracked Metrics\"\n        ActiveDims[\"active_dims\"]\n        SparsityRatio[\"sparsity_ratio\"]\n    end\n    \n    Input --> SE\n    SE --> SparseTensor\n    SparseTensor --> Stats\n    Stats --> ActiveDims\n    Stats --> SparsityRatio\n    \n    subgraph \"Output\"\n        CSVHeaders[\"CSV Headers\"]\n        LogOutput[\"Logger Output\"]\n        Metrics[\"Return Metrics\"]\n    end\n    \n    ActiveDims --> CSVHeaders\n    SparsityRatio --> CSVHeaders\n    ActiveDims --> LogOutput\n    SparsityRatio --> LogOutput\n    ActiveDims --> Metrics\n    SparsityRatio --> Metrics\n```",
+    "metadata": {
+      "source_file": "UKPLab\\sentence-transformers\\SparseEncoder_Evaluators.md",
+      "source_collection": "sentence_transformers_docs",
+      "subdirectory": "UKPLab",
+      "filename": "SparseEncoder_Evaluators.md",
+      "file_extension": ".md",
+      "chunk_index": 3,
+      "token_count": 207,
+      "char_count": 933,
+      "start_char": 2708,
+      "end_char": 3643
+    }
+  },
+  {
+    "chunk_id": "sentence_transformers_docs:UKPLab\\sentence-transformers\\SparseEncoder_Evaluators.md:chunk:4",
+    "content": "utput\n    SparsityRatio --> LogOutput\n    ActiveDims --> Metrics\n    SparsityRatio --> Metrics\n```\n\nSources: [sentence_transformers/sparse_encoder/evaluation/SparseInformationRetrievalEvaluator.py:263-269](), [sentence_transformers/sparse_encoder/evaluation/SparseEmbeddingSimilarityEvaluator.py:154-157]()\n\n## Sparsity Statistics\n\n### Active Dimensions and Sparsity Ratio\n\nAll sparse evaluators compute two key sparsity metrics:\n\n- **Active Dimensions**: Average number of non-zero dimensions per embedding\n- **Sparsity Ratio**: Proportion of zero values in the embedding (closer to 1.0 means more sparse)\n\nThese statistics are computed using [sentence_transformers/sparse_encoder/SparseEncoder.py]() model's `sparsity()` method and are:\n- Added to CSV output headers via `_append_csv_headers()`\n- Logged to console during evaluation\n- Included in returned metrics dictionary\n- Stored in model card data\n\n### Context-Specific Statistics\n\nSome evaluators track sparsity statistics for different contexts:",
+    "metadata": {
+      "source_file": "UKPLab\\sentence-transformers\\SparseEncoder_Evaluators.md",
+      "source_collection": "sentence_transformers_docs",
+      "subdirectory": "UKPLab",
+      "filename": "SparseEncoder_Evaluators.md",
+      "file_extension": ".md",
+      "chunk_index": 4,
+      "token_count": 224,
+      "char_count": 1004,
+      "start_char": 3543,
+      "end_char": 4549
+    }
+  },
+  {
+    "chunk_id": "sentence_transformers_docs:UKPLab\\sentence-transformers\\SparseEncoder_Evaluators.md:chunk:5",
+    "content": "### Context-Specific Statistics\n\nSome evaluators track sparsity statistics for different contexts:\n\n| Evaluator | Sparsity Context | Statistics Tracked |\n|-----------|------------------|-------------------|\n| `SparseInformationRetrievalEvaluator` | Query vs Corpus embeddings | `query_active_dims`, `query_sparsity_ratio`, `corpus_active_dims`, `corpus_sparsity_ratio` |\n| `SparseRerankingEvaluator` | Query vs Document embeddings | Same as above |\n| `SparseTripletEvaluator` | Anchor, Positive, Negative | `anchor_*`, `positive_*`, `negative_*` for each statistic |\n| Other evaluators | Single context | `active_dims`, `sparsity_ratio` |\n\nSources: [sentence_transformers/sparse_encoder/evaluation/SparseInformationRetrievalEvaluator.py:190-194](), [sentence_transformers/sparse_encoder/evaluation/SparseTripletEvaluator.py:129-133]()\n\n## Individual Evaluators\n\n### SparseInformationRetrievalEvaluator\n\nExtends `InformationRetrievalEvaluator` for information retrieval tasks with sparse embeddings.\n\n**Key Features:**",
+    "metadata": {
+      "source_file": "UKPLab\\sentence-transformers\\SparseEncoder_Evaluators.md",
+      "source_collection": "sentence_transformers_docs",
+      "subdirectory": "UKPLab",
+      "filename": "SparseEncoder_Evaluators.md",
+      "file_extension": ".md",
+      "chunk_index": 5,
+      "token_count": 233,
+      "char_count": 1017,
+      "start_char": 4449,
+      "end_char": 5467
+    }
+  },
+  {
+    "chunk_id": "sentence_transformers_docs:UKPLab\\sentence-transformers\\SparseEncoder_Evaluators.md:chunk:6",
+    "content": "ationRetrievalEvaluator` for information retrieval tasks with sparse embeddings.\n\n**Key Features:**\n- Computes standard IR metrics (MRR, NDCG, MAP, Precision, Recall)\n- Tracks separate sparsity statistics for queries and corpus\n- Supports `max_active_dims` parameter for controlling sparsity during evaluation\n- Handles corpus chunking for memory efficiency\n\n**Usage Pattern:**\n```python\nfrom sentence_transformers.sparse_encoder.evaluation import SparseInformationRetrievalEvaluator\n\nevaluator = SparseInformationRetrievalEvaluator(\n    queries=query_dict,\n    corpus=corpus_dict, \n    relevant_docs=qrels_dict,\n    max_active_dims=1000,\n    batch_size=16\n)\n```\n\nSources: [sentence_transformers/sparse_encoder/evaluation/SparseInformationRetrievalEvaluator.py:23-281]()\n\n### SparseNanoBEIREvaluator  \n\nExtends `NanoBEIREvaluator` to evaluate sparse models on multiple NanoBEIR datasets simultaneously.\n\n**Key Features:**\n- Evaluates across 13 NanoBEIR datasets",
+    "metadata": {
+      "source_file": "UKPLab\\sentence-transformers\\SparseEncoder_Evaluators.md",
+      "source_collection": "sentence_transformers_docs",
+      "subdirectory": "UKPLab",
+      "filename": "SparseEncoder_Evaluators.md",
+      "file_extension": ".md",
+      "chunk_index": 6,
+      "token_count": 219,
+      "char_count": 961,
+      "start_char": 5367,
+      "end_char": 6329
+    }
+  },
+  {
+    "chunk_id": "sentence_transformers_docs:UKPLab\\sentence-transformers\\SparseEncoder_Evaluators.md:chunk:7",
+    "content": "ltiple NanoBEIR datasets simultaneously.\n\n**Key Features:**\n- Evaluates across 13 NanoBEIR datasets\n- Aggregates sparsity statistics across all datasets using weighted averages\n- Supports dataset-specific prompts via `query_prompts` and `corpus_prompts`\n- Uses `SparseInformationRetrievalEvaluator` as the underlying evaluator class\n\n**Aggregation Logic:**\n- Query statistics: Simple average across datasets\n- Corpus statistics: Weighted average by corpus size\n- Final metrics: Aggregated using `aggregate_fn` (default: `np.mean`)\n\nSources: [sentence_transformers/sparse_encoder/evaluation/SparseNanoBEIREvaluator.py:26-263]()\n\n### SparseEmbeddingSimilarityEvaluator\n\nExtends `EmbeddingSimilarityEvaluator` for semantic similarity tasks using sparse embeddings.\n\n**Key Features:**\n- Computes Pearson and Spearman correlations\n- Single sparsity context (combined statistics for both sentence sets)\n- Supports multiple similarity functions (cosine, dot, euclidean, manhattan)\n- Memory-efficient sparse tensor operations",
+    "metadata": {
+      "source_file": "UKPLab\\sentence-transformers\\SparseEncoder_Evaluators.md",
+      "source_collection": "sentence_transformers_docs",
+      "subdirectory": "UKPLab",
+      "filename": "SparseEncoder_Evaluators.md",
+      "file_extension": ".md",
+      "chunk_index": 7,
+      "token_count": 220,
+      "char_count": 1017,
+      "start_char": 6229,
+      "end_char": 7248
+    }
+  },
+  {
+    "chunk_id": "sentence_transformers_docs:UKPLab\\sentence-transformers\\SparseEncoder_Evaluators.md:chunk:8",
+    "content": "milarity functions (cosine, dot, euclidean, manhattan)\n- Memory-efficient sparse tensor operations\n\nSources: [sentence_transformers/sparse_encoder/evaluation/SparseEmbeddingSimilarityEvaluator.py:22-169]()\n\n### Other Sparse Evaluators\n\n| Evaluator | Purpose | Key Difference |\n|-----------|---------|----------------|\n| `SparseRerankingEvaluator` | Re-ranking evaluation | Tracks query/corpus sparsity separately |\n| `SparseBinaryClassificationEvaluator` | Binary classification | Single sparsity context |\n| `SparseMSEEvaluator` | Knowledge distillation | Handles sparse-to-sparse MSE computation |\n| `SparseTripletEvaluator` | Triplet accuracy | Tracks sparsity for anchor/positive/negative separately |\n| `SparseTranslationEvaluator` | Translation matching | Single sparsity context for both languages |\n\n## Common Usage Patterns\n\n### Memory Management\n\nSparse evaluators include several memory optimization strategies:\n\n```python\n# Common parameters across sparse evaluators\nembeddings = model.encode(\n    sentences,",
+    "metadata": {
+      "source_file": "UKPLab\\sentence-transformers\\SparseEncoder_Evaluators.md",
+      "source_collection": "sentence_transformers_docs",
+      "subdirectory": "UKPLab",
+      "filename": "SparseEncoder_Evaluators.md",
+      "file_extension": ".md",
+      "chunk_index": 8,
+      "token_count": 209,
+      "char_count": 1020,
+      "start_char": 7148,
+      "end_char": 8169
+    }
+  },
+  {
+    "chunk_id": "sentence_transformers_docs:UKPLab\\sentence-transformers\\SparseEncoder_Evaluators.md:chunk:9",
+    "content": ":\n\n```python\n# Common parameters across sparse evaluators\nembeddings = model.encode(\n    sentences,\n    convert_to_sparse_tensor=True,  # Generate sparse tensors\n    save_to_cpu=True,              # Move to CPU to free GPU memory\n    max_active_dims=max_active_dims # Control sparsity level\n)\n```\n\n### CSV Output Enhancement\n\nAll sparse evaluators extend CSV headers to include sparsity statistics:\n\n```python",
+    "metadata": {
+      "source_file": "UKPLab\\sentence-transformers\\SparseEncoder_Evaluators.md",
+      "source_collection": "sentence_transformers_docs",
+      "subdirectory": "UKPLab",
+      "filename": "SparseEncoder_Evaluators.md",
+      "file_extension": ".md",
+      "chunk_index": 9,
+      "token_count": 86,
+      "char_count": 409,
+      "start_char": 8069,
+      "end_char": 9093
+    }
+  }
+]

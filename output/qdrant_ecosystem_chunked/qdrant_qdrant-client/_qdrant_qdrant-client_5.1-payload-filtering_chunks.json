@@ -1,0 +1,242 @@
+[
+  {
+    "chunk_id": "qdrant_ecosystem:qdrant_qdrant-client\\_qdrant_qdrant-client_5.1-payload-filtering.md:chunk:0",
+    "content": "Payload Filtering | qdrant/qdrant-client | DeepWiki\n\n[Index your code with Devin](private-repo.md)\n\n[DeepWiki](https://deepwiki.com)\n\n[DeepWiki](.md)\n\n[qdrant/qdrant-client](https://github.com/qdrant/qdrant-client \"Open repository\")\n\n[Index your code with](private-repo.md)\n\n[Devin](private-repo.md)\n\nShare\n\nLast indexed: 9 July 2025 ([ac6f6c](https://github.com/qdrant/qdrant-client/commits/ac6f6cd2))\n\n- [Overview](qdrant/qdrant-client/1-overview.md)\n- [Client Architecture](qdrant/qdrant-client/2-client-architecture.md)\n- [Client Interface](qdrant/qdrant-client/2.1-client-interface.md)\n- [Local Mode](qdrant/qdrant-client/2.2-local-mode.md)\n- [Remote Mode](qdrant/qdrant-client/2.3-remote-mode.md)\n- [Protocol Handling](qdrant/qdrant-client/2.4-protocol-handling.md)\n- [Core Operations](qdrant/qdrant-client/3-core-operations.md)\n- [Search Operations](qdrant/qdrant-client/3.1-search-operations.md)\n- [Collection Management](qdrant/qdrant-client/3.2-collection-management.md)\n- [Point Operations](qdrant/qdrant-client/3.",
+    "metadata": {
+      "source_file": "qdrant_qdrant-client\\_qdrant_qdrant-client_5.1-payload-filtering.md",
+      "source_collection": "qdrant_ecosystem",
+      "subdirectory": "qdrant_qdrant-client",
+      "filename": "_qdrant_qdrant-client_5.1-payload-filtering.md",
+      "file_extension": ".md",
+      "chunk_index": 0,
+      "token_count": 319,
+      "char_count": 1025,
+      "start_char": 0,
+      "end_char": 1025
+    }
+  },
+  {
+    "chunk_id": "qdrant_ecosystem:qdrant_qdrant-client\\_qdrant_qdrant-client_5.1-payload-filtering.md:chunk:1",
+    "content": "ent](qdrant/qdrant-client/3.2-collection-management.md)\n- [Point Operations](qdrant/qdrant-client/3.3-point-operations.md)\n- [Advanced Features](qdrant/qdrant-client/4-advanced-features.md)\n- [FastEmbed Integration](qdrant/qdrant-client/4.1-fastembed-integration.md)\n- [Batch Operations](qdrant/qdrant-client/4.2-batch-operations.md)\n- [Hybrid Search](qdrant/qdrant-client/4.3-hybrid-search.md)\n- [Local Inference](qdrant/qdrant-client/4.4-local-inference.md)\n- [Implementation Details](qdrant/qdrant-client/5-implementation-details.md)\n- [Payload Filtering](qdrant/qdrant-client/5.1-payload-filtering.md)\n- [Type Inspector System](qdrant/qdrant-client/5.2-type-inspector-system.md)\n- [Expression Evaluation](qdrant/qdrant-client/5.3-expression-evaluation.md)\n- [Development & Testing](qdrant/qdrant-client/6-development-and-testing.md)\n- [Project Setup](qdrant/qdrant-client/6.1-project-setup.md)\n- [Testing Framework](qdrant/qdrant-client/6.2-testing-framework.md)\n- [Documentation System](qdrant/qdrant-client/6.",
+    "metadata": {
+      "source_file": "qdrant_qdrant-client\\_qdrant_qdrant-client_5.1-payload-filtering.md",
+      "source_collection": "qdrant_ecosystem",
+      "subdirectory": "qdrant_qdrant-client",
+      "filename": "_qdrant_qdrant-client_5.1-payload-filtering.md",
+      "file_extension": ".md",
+      "chunk_index": 1,
+      "token_count": 307,
+      "char_count": 1015,
+      "start_char": 925,
+      "end_char": 1940
+    }
+  },
+  {
+    "chunk_id": "qdrant_ecosystem:qdrant_qdrant-client\\_qdrant_qdrant-client_5.1-payload-filtering.md:chunk:2",
+    "content": "ork](qdrant/qdrant-client/6.2-testing-framework.md)\n- [Documentation System](qdrant/qdrant-client/6.3-documentation-system.md)\n\nMenu\n\n# Payload Filtering\n\nRelevant source files\n\n- [qdrant\\_client/local/geo.py](https://github.com/qdrant/qdrant-client/blob/ac6f6cd2/qdrant_client/local/geo.py)\n- [qdrant\\_client/local/payload\\_filters.py](https://github.com/qdrant/qdrant-client/blob/ac6f6cd2/qdrant_client/local/payload_filters.py)\n- [qdrant\\_client/local/payload\\_value\\_extractor.py](https://github.com/qdrant/qdrant-client/blob/ac6f6cd2/qdrant_client/local/payload_value_extractor.py)\n- [tests/fixtures/filters.py](https://github.com/qdrant/qdrant-client/blob/ac6f6cd2/tests/fixtures/filters.py)\n- [tests/fixtures/payload.py](https://github.com/qdrant/qdrant-client/blob/ac6f6cd2/tests/fixtures/payload.py)\n\nPayload filtering is a core functionality in the Qdrant client that enables filtering vector search results based on metadata attached to vectors.",
+    "metadata": {
+      "source_file": "qdrant_qdrant-client\\_qdrant_qdrant-client_5.1-payload-filtering.md",
+      "source_collection": "qdrant_ecosystem",
+      "subdirectory": "qdrant_qdrant-client",
+      "filename": "_qdrant_qdrant-client_5.1-payload-filtering.md",
+      "file_extension": ".md",
+      "chunk_index": 2,
+      "token_count": 265,
+      "char_count": 956,
+      "start_char": 1840,
+      "end_char": 2796
+    }
+  },
+  {
+    "chunk_id": "qdrant_ecosystem:qdrant_qdrant-client\\_qdrant_qdrant-client_5.1-payload-filtering.md:chunk:3",
+    "content": "he Qdrant client that enables filtering vector search results based on metadata attached to vectors. This document explains how payload filtering works in the client implementation, the available filter types, and how they are processed.\n\nFor information about search operations that use these filters, see [Search Operations](qdrant/qdrant-client/3.1-search-operations.md). For details about expression evaluation involving filters, see [Expression Evaluation](qdrant/qdrant-client/4.3-hybrid-search.md).\n\n## 1. Filter Structure Overview\n\nPayload filters in Qdrant follow a boolean query structure similar to Elasticsearch's Query DSL. They combine conditions with boolean operators to create complex filtering expressions.\n\n```\n```\n\nSources: [qdrant\\_client/local/payload\\_filters.py275-312](https://github.com/qdrant/qdrant-client/blob/ac6f6cd2/qdrant_client/local/payload_filters.py#L275-L312)\n\n### Filter Boolean Logic\n\nA filter combines conditions using boolean logic:",
+    "metadata": {
+      "source_file": "qdrant_qdrant-client\\_qdrant_qdrant-client_5.1-payload-filtering.md",
+      "source_collection": "qdrant_ecosystem",
+      "subdirectory": "qdrant_qdrant-client",
+      "filename": "_qdrant_qdrant-client_5.1-payload-filtering.md",
+      "file_extension": ".md",
+      "chunk_index": 3,
+      "token_count": 215,
+      "char_count": 974,
+      "start_char": 2696,
+      "end_char": 3672
+    }
+  },
+  {
+    "chunk_id": "qdrant_ecosystem:qdrant_qdrant-client\\_qdrant_qdrant-client_5.1-payload-filtering.md:chunk:4",
+    "content": "filters.py#L275-L312)\n\n### Filter Boolean Logic\n\nA filter combines conditions using boolean logic:\n\n| Operator     | Description                              | Implementation              |\n| ------------ | ---------------------------------------- | --------------------------- |\n| `must`       | All conditions must match (AND)          | `check_must` function       |\n| `must_not`   | All conditions must NOT match (NOT)      | `check_must_not` function   |\n| `should`     | At least one condition should match (OR) | `check_should` function     |\n| `min_should` | At least N conditions should match       | `check_min_should` function |\n\nSources: [qdrant\\_client/local/payload\\_filters.py229-272](https://github.com/qdrant/qdrant-client/blob/ac6f6cd2/qdrant_client/local/payload_filters.py#L229-L272)\n\n## 2. Condition Types\n\nConditions are the building blocks of filters. Qdrant supports various condition types to filter points based on their payload, ID, or vector existence.\n\n### Field Conditions",
+    "metadata": {
+      "source_file": "qdrant_qdrant-client\\_qdrant_qdrant-client_5.1-payload-filtering.md",
+      "source_collection": "qdrant_ecosystem",
+      "subdirectory": "qdrant_qdrant-client",
+      "filename": "_qdrant_qdrant-client_5.1-payload-filtering.md",
+      "file_extension": ".md",
+      "chunk_index": 4,
+      "token_count": 236,
+      "char_count": 1002,
+      "start_char": 3572,
+      "end_char": 4576
+    }
+  },
+  {
+    "chunk_id": "qdrant_ecosystem:qdrant_qdrant-client\\_qdrant_qdrant-client_5.1-payload-filtering.md:chunk:5",
+    "content": "tion types to filter points based on their payload, ID, or vector existence.\n\n### Field Conditions\n\nField conditions operate on specific payload fields identified by a key path. They can use various matchers:\n\n```\n```\n\nSources: [qdrant\\_client/local/payload\\_filters.py150-159](https://github.com/qdrant/qdrant-client/blob/ac6f6cd2/qdrant_client/local/payload_filters.py#L150-L159)\n\n### Special Condition Types\n\nIn addition to field conditions, Qdrant supports special condition types:\n\n| Condition Type       | Description                                  | Implementation                 |\n| -------------------- | -------------------------------------------- | ------------------------------ |\n| `IsEmptyCondition`   | Checks if a field is empty or doesn't exist  | `check_condition` function     |\n| `IsNullCondition`    | Checks if a field is explicitly null         | `check_condition` function     |\n| `HasIdCondition`     | Checks if a point ID is in the provided list | `check_condition` function     |",
+    "metadata": {
+      "source_file": "qdrant_qdrant-client\\_qdrant_qdrant-client_5.1-payload-filtering.md",
+      "source_collection": "qdrant_ecosystem",
+      "subdirectory": "qdrant_qdrant-client",
+      "filename": "_qdrant_qdrant-client_5.1-payload-filtering.md",
+      "file_extension": ".md",
+      "chunk_index": 5,
+      "token_count": 217,
+      "char_count": 1011,
+      "start_char": 4476,
+      "end_char": 5488
+    }
+  },
+  {
+    "chunk_id": "qdrant_ecosystem:qdrant_qdrant-client\\_qdrant_qdrant-client_5.1-payload-filtering.md:chunk:6",
+    "content": "sIdCondition`     | Checks if a point ID is in the provided list | `check_condition` function     |\n| `HasVectorCondition` | Checks if a point has a named vector         | `check_condition` function     |\n| `NestedCondition`    | Applies a filter to nested objects           | `check_nested_filter` function |\n\nSources: [qdrant\\_client/local/payload\\_filters.py166-226](https://github.com/qdrant/qdrant-client/blob/ac6f6cd2/qdrant_client/local/payload_filters.py#L166-L226)\n\n## 3. Field Matchers Implementation\n\n### Match Condition Types\n\nMatch conditions check for equality or inclusion:\n\n```\n```\n\nThe implementation checks these conditions in the `check_match` function, which handles different types of matching operations:\n\n| Match Type    | Implementation                       | Line Reference |\n| ------------- | ------------------------------------ | -------------- |\n| `MatchValue`  | Exact equality comparison            | Line 152       |\n| `MatchText`   | Substring search using `in` operator | Line 154       |",
+    "metadata": {
+      "source_file": "qdrant_qdrant-client\\_qdrant_qdrant-client_5.1-payload-filtering.md",
+      "source_collection": "qdrant_ecosystem",
+      "subdirectory": "qdrant_qdrant-client",
+      "filename": "_qdrant_qdrant-client_5.1-payload-filtering.md",
+      "file_extension": ".md",
+      "chunk_index": 6,
+      "token_count": 237,
+      "char_count": 1023,
+      "start_char": 5388,
+      "end_char": 6412
+    }
+  },
+  {
+    "chunk_id": "qdrant_ecosystem:qdrant_qdrant-client\\_qdrant_qdrant-client_5.1-payload-filtering.md:chunk:7",
+    "content": "| Line 152       |\n| `MatchText`   | Substring search using `in` operator | Line 154       |\n| `MatchAny`    | Value membership in array            | Line 156       |\n| `MatchExcept` | Value exclusion from array           | Line 158       |\n\nSources: [qdrant\\_client/local/payload\\_filters.py150-159](https://github.com/qdrant/qdrant-client/blob/ac6f6cd2/qdrant_client/local/payload_filters.py#L150-L159)\n\n### Range Conditions\n\nRange conditions filter numeric or datetime values:\n\n```\n```\n\nThe `check_range` and `check_datetime_range` functions validate whether values fall within specified ranges:\n\n| Function                | Purpose                   | Implementation Details                     |\n| ----------------------- | ------------------------- | ------------------------------------------ |\n| `check_range`           | Numeric range validation  | Checks `lt`, `lte`, `gt`, `gte` conditions |\n| `check_datetime_range`  | Datetime range validation | Parses datetime strings, handles timezones |",
+    "metadata": {
+      "source_file": "qdrant_qdrant-client\\_qdrant_qdrant-client_5.1-payload-filtering.md",
+      "source_collection": "qdrant_ecosystem",
+      "subdirectory": "qdrant_qdrant-client",
+      "filename": "_qdrant_qdrant-client_5.1-payload-filtering.md",
+      "file_extension": ".md",
+      "chunk_index": 7,
+      "token_count": 235,
+      "char_count": 1003,
+      "start_char": 6312,
+      "end_char": 7323
+    }
+  },
+  {
+    "chunk_id": "qdrant_ecosystem:qdrant_qdrant-client\\_qdrant_qdrant-client_5.1-payload-filtering.md:chunk:8",
+    "content": "`check_datetime_range`  | Datetime range validation | Parses datetime strings, handles timezones |\n| `check_range_interface` | Dispatcher function       | Routes to appropriate range checker        |\n\nSources: [qdrant\\_client/local/payload\\_filters.py99-147](https://github.com/qdrant/qdrant-client/blob/ac6f6cd2/qdrant_client/local/payload_filters.py#L99-L147)\n\n### Geo Conditions\n\nQdrant provides several geo-spatial filtering capabilities implemented in the `check_geo_radius`, `check_geo_bounding_box`, and `check_geo_polygon` functions:\n\n```\n```\n\nThe implementation uses mathematical algorithms implemented in separate functions:\n\n| Geo Function             | Algorithm                  | Implementation                                           |\n| ------------------------ | -------------------------- | -------------------------------------------------------- |\n| `check_geo_radius`       | Haversine formula          | Calls `geo_distance` from geo module                     |",
+    "metadata": {
+      "source_file": "qdrant_qdrant-client\\_qdrant_qdrant-client_5.1-payload-filtering.md",
+      "source_collection": "qdrant_ecosystem",
+      "subdirectory": "qdrant_qdrant-client",
+      "filename": "_qdrant_qdrant-client_5.1-payload-filtering.md",
+      "file_extension": ".md",
+      "chunk_index": 8,
+      "token_count": 191,
+      "char_count": 986,
+      "start_char": 7223,
+      "end_char": 8211
+    }
+  },
+  {
+    "chunk_id": "qdrant_ecosystem:qdrant_qdrant-client\\_qdrant_qdrant-client_5.1-payload-filtering.md:chunk:9",
+    "content": "us`       | Haversine formula          | Calls `geo_distance` from geo module                     |\n| `check_geo_bounding_box` | Coordinate bounds checking | Direct coordinate comparison with anti-meridian handling |\n| `check_geo_polygon`      | Ray-casting algorithm      | Calls `boolean_point_in_polygon` from geo module         |\n\nSources: [qdrant\\_client/local/payload\\_filters.py46-96](https://github.com/qdrant/qdrant-client/blob/ac6f6cd2/qdrant_client/local/payload_filters.py#L46-L96) [qdrant\\_client/local/geo.py7-91](https://github.com/qdrant/qdrant-client/blob/ac6f6cd2/qdrant_client/local/geo.py#L7-L91)\n\n### Values Count Condition\n\nThe values count condition filters based on the number of values in a field:\n\n```\n```\n\nThe `check_values_count` function determines whether a field has the required number of values, using the helper function `get_value_counts` to calculate actual counts:\n\n```\n```\n\nSources: [qdrant\\_client/local/payload\\_filters.py13-43](https://github.",
+    "metadata": {
+      "source_file": "qdrant_qdrant-client\\_qdrant_qdrant-client_5.1-payload-filtering.md",
+      "source_collection": "qdrant_ecosystem",
+      "subdirectory": "qdrant_qdrant-client",
+      "filename": "_qdrant_qdrant-client_5.1-payload-filtering.md",
+      "file_extension": ".md",
+      "chunk_index": 9,
+      "token_count": 256,
+      "char_count": 984,
+      "start_char": 8111,
+      "end_char": 9095
+    }
+  },
+  {
+    "chunk_id": "qdrant_ecosystem:qdrant_qdrant-client\\_qdrant_qdrant-client_5.1-payload-filtering.md:chunk:10",
+    "content": "te actual counts:\n\n```\n```\n\nSources: [qdrant\\_client/local/payload\\_filters.py13-43](https://github.com/qdrant/qdrant-client/blob/ac6f6cd2/qdrant_client/local/payload_filters.py#L13-L43)\n\n## 4. Nested Filtering\n\nQdrant supports filtering on nested objects and arrays using dot notation and array indexing:\n\n```\n```\n\nThe `NestedCondition` is particularly powerful as it allows applying a complete filter to each element of an array:\n\n```\n```\n\nThe `check_nested_filter` function handles nested filtering by applying the filter to each element in the specified array. It uses the `value_by_key` function from the payload value extractor module to navigate nested structures:\n\n```\n```\n\nThe `value_by_key` function supports JSON path notation with array indexing and wildcard access patterns.\n\nSources: [qdrant\\_client/local/payload\\_filters.py162-163](https://github.com/qdrant/qdrant-client/blob/ac6f6cd2/qdrant_client/local/payload_filters.py#L162-L163) [qdrant\\_client/local/payload\\_value\\_extractor.py11-81](https://github.",
+    "metadata": {
+      "source_file": "qdrant_qdrant-client\\_qdrant_qdrant-client_5.1-payload-filtering.md",
+      "source_collection": "qdrant_ecosystem",
+      "subdirectory": "qdrant_qdrant-client",
+      "filename": "_qdrant_qdrant-client_5.1-payload-filtering.md",
+      "file_extension": ".md",
+      "chunk_index": 10,
+      "token_count": 266,
+      "char_count": 1024,
+      "start_char": 8995,
+      "end_char": 10019
+    }
+  },
+  {
+    "chunk_id": "qdrant_ecosystem:qdrant_qdrant-client\\_qdrant_qdrant-client_5.1-payload-filtering.md:chunk:11",
+    "content": "yload_filters.py#L162-L163) [qdrant\\_client/local/payload\\_value\\_extractor.py11-81](https://github.com/qdrant/qdrant-client/blob/ac6f6cd2/qdrant_client/local/payload_value_extractor.py#L11-L81)\n\n## 5. Filter Processing Flow\n\nWhen a search request includes a filter, the filtering process follows these steps:\n\nFilter Processing Flow Diagram\n\n```\n```\n\nThe key function in this process is `calculate_payload_mask`, which applies the filter to all payloads and returns a boolean mask that indicates which points match the filter.\n\nSources: [qdrant\\_client/local/payload\\_filters.py315-333](https://github.com/qdrant/qdrant-client/blob/ac6f6cd2/qdrant_client/local/payload_filters.py#L315-L333)\n\n## 6. Performance Considerations\n\nPayload filtering takes place after vector similarity search in the Qdrant client implementation. This means that:\n\n1. The filter is applied to the top-k results from the vector search\n2. If you need to filter first, consider using `prefiltration=True` in your search request\n3.",
+    "metadata": {
+      "source_file": "qdrant_qdrant-client\\_qdrant_qdrant-client_5.1-payload-filtering.md",
+      "source_collection": "qdrant_ecosystem",
+      "subdirectory": "qdrant_qdrant-client",
+      "filename": "_qdrant_qdrant-client_5.1-payload-filtering.md",
+      "file_extension": ".md",
+      "chunk_index": 11,
+      "token_count": 262,
+      "char_count": 1005,
+      "start_char": 9919,
+      "end_char": 10924
+    }
+  },
+  {
+    "chunk_id": "qdrant_ecosystem:qdrant_qdrant-client\\_qdrant_qdrant-client_5.1-payload-filtering.md:chunk:12",
+    "content": "search\n2. If you need to filter first, consider using `prefiltration=True` in your search request\n3. Complex filters on large result sets can impact performance\n\nFor optimal performance:\n\n- Use simple conditions when possible\n- Avoid deeply nested filters\n- Consider indexing frequently filtered fields (server-side)\n- For local mode, filters operate in-memory without indexing\n\nSources: [qdrant\\_client/local/payload\\_filters.py315-333](https://github.com/qdrant/qdrant-client/blob/ac6f6cd2/qdrant_client/local/payload_filters.py#L315-L333)\n\n## 7. Integration with Formula Expressions\n\nPayload filters can also be used within formula expressions to adjust scores based on payload values:\n\n```\n```\n\nThe `check_condition` function is reused in the formula expression evaluation to determine if conditions are met.\n\nSources: [qdrant\\_client/hybrid/formula.py33-36](https://github.com/qdrant/qdrant-client/blob/ac6f6cd2/qdrant_client/hybrid/formula.py#L33-L36)",
+    "metadata": {
+      "source_file": "qdrant_qdrant-client\\_qdrant_qdrant-client_5.1-payload-filtering.md",
+      "source_collection": "qdrant_ecosystem",
+      "subdirectory": "qdrant_qdrant-client",
+      "filename": "_qdrant_qdrant-client_5.1-payload-filtering.md",
+      "file_extension": ".md",
+      "chunk_index": 12,
+      "token_count": 239,
+      "char_count": 957,
+      "start_char": 10824,
+      "end_char": 11783
+    }
+  },
+  {
+    "chunk_id": "qdrant_ecosystem:qdrant_qdrant-client\\_qdrant_qdrant-client_5.1-payload-filtering.md:chunk:13",
+    "content": "36](https://github.com/qdrant/qdrant-client/blob/ac6f6cd2/qdrant_client/hybrid/formula.py#L33-L36)\n\nThis integration allows for powerful hybrid search capabilities where both vector similarity and metadata influence the final ranking.\n\nDismiss\n\nRefresh this wiki\n\nEnter email to refresh\n\n### On this page\n\n- [Payload Filtering](#payload-filtering.md)\n- [1. Filter Structure Overview](#1-filter-structure-overview.md)\n- [Filter Boolean Logic](#filter-boolean-logic.md)\n- [2. Condition Types](#2-condition-types.md)\n- [Field Conditions](#field-conditions.md)\n- [Special Condition Types](#special-condition-types.md)\n- [3. Field Matchers Implementation](#3-field-matchers-implementation.md)\n- [Match Condition Types](#match-condition-types.md)\n- [Range Conditions](#range-conditions.md)\n- [Geo Conditions](#geo-conditions.md)\n- [Values Count Condition](#values-count-condition.md)\n- [4. Nested Filtering](#4-nested-filtering.md)\n- [5. Filter Processing Flow](#5-filter-processing-flow.md)\n- [6.",
+    "metadata": {
+      "source_file": "qdrant_qdrant-client\\_qdrant_qdrant-client_5.1-payload-filtering.md",
+      "source_collection": "qdrant_ecosystem",
+      "subdirectory": "qdrant_qdrant-client",
+      "filename": "_qdrant_qdrant-client_5.1-payload-filtering.md",
+      "file_extension": ".md",
+      "chunk_index": 13,
+      "token_count": 248,
+      "char_count": 991,
+      "start_char": 11683,
+      "end_char": 12674
+    }
+  },
+  {
+    "chunk_id": "qdrant_ecosystem:qdrant_qdrant-client\\_qdrant_qdrant-client_5.1-payload-filtering.md:chunk:14",
+    "content": "Filtering](#4-nested-filtering.md)\n- [5. Filter Processing Flow](#5-filter-processing-flow.md)\n- [6. Performance Considerations](#6-performance-considerations.md)\n- [7. Integration with Formula Expressions](#7-integration-with-formula-expressions.md)",
+    "metadata": {
+      "source_file": "qdrant_qdrant-client\\_qdrant_qdrant-client_5.1-payload-filtering.md",
+      "source_collection": "qdrant_ecosystem",
+      "subdirectory": "qdrant_qdrant-client",
+      "filename": "_qdrant_qdrant-client_5.1-payload-filtering.md",
+      "file_extension": ".md",
+      "chunk_index": 14,
+      "token_count": 63,
+      "char_count": 250,
+      "start_char": 12574,
+      "end_char": 13598
+    }
+  }
+]

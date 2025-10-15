@@ -1,0 +1,130 @@
+[
+  {
+    "chunk_id": "qdrant_ecosystem:qdrant_examples\\_qdrant_examples_6.3-pdf-retrieval-at-scale.md:chunk:0",
+    "content": "PDF Retrieval at Scale | qdrant/examples | DeepWiki\n\n[Index your code with Devin](private-repo.md)\n\n[DeepWiki](https://deepwiki.com)\n\n[DeepWiki](.md)\n\n[qdrant/examples](https://github.com/qdrant/examples \"Open repository\")\n\n[Index your code with](private-repo.md)\n\n[Devin](private-repo.md)\n\nShare\n\nLast indexed: 26 June 2025 ([b3c4b2](https://github.com/qdrant/examples/commits/b3c4b28f))\n\n- [Overview](qdrant/examples/1-overview.md)\n- [Getting Started with Qdrant](qdrant/examples/2-getting-started-with-qdrant.md)\n- [Text Data Applications](qdrant/examples/3-text-data-applications.md)\n- [Code Search with Dual Embeddings](qdrant/examples/3.1-code-search-with-dual-embeddings.md)\n- [Extractive Question Answering](qdrant/examples/3.2-extractive-question-answering.md)\n- [Movie Recommendations with Sparse Vectors](qdrant/examples/3.3-movie-recommendations-with-sparse-vectors.md)\n- [Image Data Applications](qdrant/examples/4-image-data-applications.md)\n- [E-commerce Reverse Image Search](qdrant/examples/4.",
+    "metadata": {
+      "source_file": "qdrant_examples\\_qdrant_examples_6.3-pdf-retrieval-at-scale.md",
+      "source_collection": "qdrant_ecosystem",
+      "subdirectory": "qdrant_examples",
+      "filename": "_qdrant_examples_6.3-pdf-retrieval-at-scale.md",
+      "file_extension": ".md",
+      "chunk_index": 0,
+      "token_count": 291,
+      "char_count": 1010,
+      "start_char": 0,
+      "end_char": 1010
+    }
+  },
+  {
+    "chunk_id": "qdrant_ecosystem:qdrant_examples\\_qdrant_examples_6.3-pdf-retrieval-at-scale.md:chunk:1",
+    "content": "qdrant/examples/4-image-data-applications.md)\n- [E-commerce Reverse Image Search](qdrant/examples/4.1-e-commerce-reverse-image-search.md)\n- [Medical Image Search with Vision Transformers](qdrant/examples/4.2-medical-image-search-with-vision-transformers.md)\n- [Audio Data Applications](qdrant/examples/5-audio-data-applications.md)\n- [Music Recommendation Engine](qdrant/examples/5.1-music-recommendation-engine.md)\n- [Advanced RAG Systems](qdrant/examples/6-advanced-rag-systems.md)\n- [Multivector RAG with DSPy](qdrant/examples/6.1-multivector-rag-with-dspy.md)\n- [Graph-Enhanced RAG with Neo4j](qdrant/examples/6.2-graph-enhanced-rag-with-neo4j.md)\n- [PDF Retrieval at Scale](qdrant/examples/6.3-pdf-retrieval-at-scale.md)\n- [Agentic Systems with CrewAI](qdrant/examples/7-agentic-systems-with-crewai.md)\n- [Meeting Analysis with Agentic RAG](qdrant/examples/7.1-meeting-analysis-with-agentic-rag.md)\n- [Additional Use Cases](qdrant/examples/8-additional-use-cases.md)",
+    "metadata": {
+      "source_file": "qdrant_examples\\_qdrant_examples_6.3-pdf-retrieval-at-scale.md",
+      "source_collection": "qdrant_ecosystem",
+      "subdirectory": "qdrant_examples",
+      "filename": "_qdrant_examples_6.3-pdf-retrieval-at-scale.md",
+      "file_extension": ".md",
+      "chunk_index": 1,
+      "token_count": 284,
+      "char_count": 971,
+      "start_char": 910,
+      "end_char": 1882
+    }
+  },
+  {
+    "chunk_id": "qdrant_ecosystem:qdrant_examples\\_qdrant_examples_6.3-pdf-retrieval-at-scale.md:chunk:2",
+    "content": "g-analysis-with-agentic-rag.md)\n- [Additional Use Cases](qdrant/examples/8-additional-use-cases.md)\n- [Self-Query Systems with LangChain](qdrant/examples/8.1-self-query-systems-with-langchain.md)\n- [Development Environment Setup](qdrant/examples/8.2-development-environment-setup.md)\n\nMenu\n\n# PDF Retrieval at Scale\n\nRelevant source files\n\n- [pdf-retrieval-at-scale/ColPali\\_ColQwen2\\_Tutorial.ipynb](https://github.com/qdrant/examples/blob/b3c4b28f/pdf-retrieval-at-scale/ColPali_ColQwen2_Tutorial.ipynb)\n\n## Purpose and Scope\n\nThis document covers the implementation of large-scale PDF document retrieval using visual document understanding models, specifically ColPali and ColQwen2, integrated with Qdrant vector database. The system demonstrates how to process, embed, and retrieve PDF documents by understanding their visual layout and content structure rather than relying solely on extracted text.\n\nFor general RAG system patterns, see [Advanced RAG Systems](qdrant/examples/6-advanced-rag-systems.md).",
+    "metadata": {
+      "source_file": "qdrant_examples\\_qdrant_examples_6.3-pdf-retrieval-at-scale.md",
+      "source_collection": "qdrant_ecosystem",
+      "subdirectory": "qdrant_examples",
+      "filename": "_qdrant_examples_6.3-pdf-retrieval-at-scale.md",
+      "file_extension": ".md",
+      "chunk_index": 2,
+      "token_count": 247,
+      "char_count": 1009,
+      "start_char": 1782,
+      "end_char": 2791
+    }
+  },
+  {
+    "chunk_id": "qdrant_ecosystem:qdrant_examples\\_qdrant_examples_6.3-pdf-retrieval-at-scale.md:chunk:3",
+    "content": "general RAG system patterns, see [Advanced RAG Systems](qdrant/examples/6-advanced-rag-systems.md). For multi-agent document analysis, see [Meeting Analysis with Agentic RAG](qdrant/examples/7.1-meeting-analysis-with-agentic-rag.md).\n\n## System Overview\n\nThe PDF Retrieval at Scale system processes PDF documents by treating them as visual entities, capturing both textual content and layout information through vision-language models. This approach preserves document structure, formatting, and visual elements that traditional text extraction methods lose.\n\n### Core Architecture\n\n```\n```\n\n**Sources**: Based on Advanced RAG Systems architecture patterns from repository overview\n\n## Processing Pipeline Components\n\n### PDF Rendering and Page Extraction\n\nThe system converts PDF documents into high-resolution images to preserve visual layout and formatting information that text extraction would lose.\n\n```\n```\n\n**Sources**: Inferred from PDF processing requirements for visual document understanding",
+    "metadata": {
+      "source_file": "qdrant_examples\\_qdrant_examples_6.3-pdf-retrieval-at-scale.md",
+      "source_collection": "qdrant_ecosystem",
+      "subdirectory": "qdrant_examples",
+      "filename": "_qdrant_examples_6.3-pdf-retrieval-at-scale.md",
+      "file_extension": ".md",
+      "chunk_index": 3,
+      "token_count": 187,
+      "char_count": 1003,
+      "start_char": 2691,
+      "end_char": 3697
+    }
+  },
+  {
+    "chunk_id": "qdrant_ecosystem:qdrant_examples\\_qdrant_examples_6.3-pdf-retrieval-at-scale.md:chunk:4",
+    "content": "```\n```\n\n**Sources**: Inferred from PDF processing requirements for visual document understanding\n\n### Visual Document Understanding Models\n\nThe system leverages two complementary vision-language models for different aspects of document understanding:\n\n| Model    | Purpose                   | Strengths                                            |\n| -------- | ------------------------- | ---------------------------------------------------- |\n| ColPali  | Layout-aware retrieval    | Document structure understanding, multi-column text  |\n| ColQwen2 | Visual question answering | Complex visual reasoning, chart/table interpretation |\n\n### Embedding Generation and Storage\n\n```\n```\n\n**Sources**: Based on multivector RAG patterns and Qdrant integration approaches\n\n## Scaling Considerations\n\n### Batch Processing Architecture\n\nThe system handles large-scale PDF processing through distributed batch operations:\n\n```\n```\n\n**Sources**: Inferred from large-scale processing requirements and Qdrant clustering capabilities",
+    "metadata": {
+      "source_file": "qdrant_examples\\_qdrant_examples_6.3-pdf-retrieval-at-scale.md",
+      "source_collection": "qdrant_ecosystem",
+      "subdirectory": "qdrant_examples",
+      "filename": "_qdrant_examples_6.3-pdf-retrieval-at-scale.md",
+      "file_extension": ".md",
+      "chunk_index": 4,
+      "token_count": 171,
+      "char_count": 1020,
+      "start_char": 3597,
+      "end_char": 4620
+    }
+  },
+  {
+    "chunk_id": "qdrant_ecosystem:qdrant_examples\\_qdrant_examples_6.3-pdf-retrieval-at-scale.md:chunk:5",
+    "content": "**Sources**: Inferred from large-scale processing requirements and Qdrant clustering capabilities\n\n### Memory and Performance Optimization\n\n| Component             | Optimization Strategy     | Impact                   |\n| --------------------- | ------------------------- | ------------------------ |\n| `pdf2image_converter` | Streaming page processing | Reduced memory footprint |\n| `colpali_embedder`    | Batch inference with GPU  | Improved throughput      |\n| `qdrant_client`       | Connection pooling        | Reduced latency          |\n| `embedding_combiner`  | Lazy evaluation           | Memory efficiency        |\n\n## Query Processing and Retrieval\n\n### Multi-Modal Query Interface\n\nThe system supports both text and visual queries for comprehensive document retrieval:\n\n```\n```\n\n**Sources**: Based on hybrid search patterns and multi-modal query processing approaches\n\n### Result Ranking and Post-Processing",
+    "metadata": {
+      "source_file": "qdrant_examples\\_qdrant_examples_6.3-pdf-retrieval-at-scale.md",
+      "source_collection": "qdrant_ecosystem",
+      "subdirectory": "qdrant_examples",
+      "filename": "_qdrant_examples_6.3-pdf-retrieval-at-scale.md",
+      "file_extension": ".md",
+      "chunk_index": 5,
+      "token_count": 168,
+      "char_count": 920,
+      "start_char": 4520,
+      "end_char": 5443
+    }
+  },
+  {
+    "chunk_id": "qdrant_ecosystem:qdrant_examples\\_qdrant_examples_6.3-pdf-retrieval-at-scale.md:chunk:6",
+    "content": "earch patterns and multi-modal query processing approaches\n\n### Result Ranking and Post-Processing\n\nThe system implements sophisticated ranking mechanisms that consider both semantic similarity and document structure:\n\n- `colpali_scorer`: Layout-aware similarity scoring\n- `colqwen2_scorer`: Visual content relevance scoring\n- `hybrid_ranker`: Combined scoring with weighted fusion\n- `result_formatter`: Structured output with page-level metadata\n\n**Sources**: Inferred from advanced RAG system patterns and visual document understanding requirements\n\n*Note: Specific file citations are not available as no source files were provided for this section. The architecture described is based on the stated system purpose and established patterns from the repository's Advanced RAG Systems section.*\n\nDismiss\n\nRefresh this wiki\n\nEnter email to refresh\n\n### On this page\n\n- [PDF Retrieval at Scale](#pdf-retrieval-at-scale.md)\n- [Purpose and Scope](#purpose-and-scope.md)\n- [System Overview](#system-overview.md)",
+    "metadata": {
+      "source_file": "qdrant_examples\\_qdrant_examples_6.3-pdf-retrieval-at-scale.md",
+      "source_collection": "qdrant_ecosystem",
+      "subdirectory": "qdrant_examples",
+      "filename": "_qdrant_examples_6.3-pdf-retrieval-at-scale.md",
+      "file_extension": ".md",
+      "chunk_index": 6,
+      "token_count": 203,
+      "char_count": 1006,
+      "start_char": 5343,
+      "end_char": 6350
+    }
+  },
+  {
+    "chunk_id": "qdrant_ecosystem:qdrant_examples\\_qdrant_examples_6.3-pdf-retrieval-at-scale.md:chunk:7",
+    "content": "-at-scale.md)\n- [Purpose and Scope](#purpose-and-scope.md)\n- [System Overview](#system-overview.md)\n- [Core Architecture](#core-architecture.md)\n- [Processing Pipeline Components](#processing-pipeline-components.md)\n- [PDF Rendering and Page Extraction](#pdf-rendering-and-page-extraction.md)\n- [Visual Document Understanding Models](#visual-document-understanding-models.md)\n- [Embedding Generation and Storage](#embedding-generation-and-storage.md)\n- [Scaling Considerations](#scaling-considerations.md)\n- [Batch Processing Architecture](#batch-processing-architecture.md)\n- [Memory and Performance Optimization](#memory-and-performance-optimization.md)\n- [Query Processing and Retrieval](#query-processing-and-retrieval.md)\n- [Multi-Modal Query Interface](#multi-modal-query-interface.md)\n- [Result Ranking and Post-Processing](#result-ranking-and-post-processing.md)",
+    "metadata": {
+      "source_file": "qdrant_examples\\_qdrant_examples_6.3-pdf-retrieval-at-scale.md",
+      "source_collection": "qdrant_ecosystem",
+      "subdirectory": "qdrant_examples",
+      "filename": "_qdrant_examples_6.3-pdf-retrieval-at-scale.md",
+      "file_extension": ".md",
+      "chunk_index": 7,
+      "token_count": 192,
+      "char_count": 870,
+      "start_char": 6250,
+      "end_char": 7274
+    }
+  }
+]

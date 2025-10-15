@@ -1,0 +1,242 @@
+[
+  {
+    "chunk_id": "sentence_transformers_docs:UKPLab\\sentence-transformers\\Example_of_automatic_statistics_generation.md:chunk:0",
+    "content": "def compute_dataset_metrics(self, dataset, dataset_info, loss):\n    # String columns: token/character length analysis\n    if isinstance(first, str):\n        tokenized = self.tokenize(subsection, task=\"document\")\n        if isinstance(tokenized, dict) and \"attention_mask\" in tokenized:\n            lengths = tokenized[\"attention_mask\"].sum(dim=1).tolist()\n            suffix = \"tokens\"\n        else:\n            lengths = [len(sentence) for sentence in subsection]\n            suffix = \"characters\"\n```\n\nSources: [sentence_transformers/model_card.py:609-756]()\n\n### Template-Based Generation\n\nModel cards are generated using Jinja2 templates that create standardized documentation:\n\n| Template Section | Content Generated | Data Source |\n|------------------|-------------------|-------------|\n| **Model Description** | Base model, architecture, dimensions | `base_model`, `output_dimensionality` |\n| **Usage Examples** | Code snippets with actual model ID | `predict_example`, `model_id` |",
+    "metadata": {
+      "source_file": "UKPLab\\sentence-transformers\\Example_of_automatic_statistics_generation.md",
+      "source_collection": "sentence_transformers_docs",
+      "subdirectory": "UKPLab",
+      "filename": "Example_of_automatic_statistics_generation.md",
+      "file_extension": ".md",
+      "chunk_index": 0,
+      "token_count": 208,
+      "char_count": 989,
+      "start_char": 0,
+      "end_char": 990
+    }
+  },
+  {
+    "chunk_id": "sentence_transformers_docs:UKPLab\\sentence-transformers\\Example_of_automatic_statistics_generation.md:chunk:1",
+    "content": "lity` |\n| **Usage Examples** | Code snippets with actual model ID | `predict_example`, `model_id` |\n| **Training Details** | Dataset information, hyperparameters | `train_datasets`, `all_hyperparameters` |\n| **Evaluation Metrics** | Performance tables and charts | `eval_results_dict`, `training_logs` |\n| **Citations** | Automatic BibTeX generation | `citations` from loss functions |\n\nTemplates automatically adapt based on model type:\n- Information Retrieval models get separate `encode_query`/`encode_document` examples\n- Sparse encoders include sparsity and dimensionality information  \n- Cross encoders focus on reranking and classification use cases\n\nSources: [sentence_transformers/model_card_template.md:76-126](), [sentence_transformers/sparse_encoder/model_card_template.md:99-126]()\n\n## Backend Architecture and Optimization\n\nThe library supports multiple backend implementations for optimized inference across different deployment scenarios.\n\n### Multi-Backend Support\n\n```mermaid\ngraph TB",
+    "metadata": {
+      "source_file": "UKPLab\\sentence-transformers\\Example_of_automatic_statistics_generation.md",
+      "source_collection": "sentence_transformers_docs",
+      "subdirectory": "UKPLab",
+      "filename": "Example_of_automatic_statistics_generation.md",
+      "file_extension": ".md",
+      "chunk_index": 1,
+      "token_count": 211,
+      "char_count": 1002,
+      "start_char": 890,
+      "end_char": 1893
+    }
+  },
+  {
+    "chunk_id": "sentence_transformers_docs:UKPLab\\sentence-transformers\\Example_of_automatic_statistics_generation.md:chunk:2",
+    "content": "ed inference across different deployment scenarios.\n\n### Multi-Backend Support\n\n```mermaid\ngraph TB\n    subgraph \"Input Processing\"\n        TextInput[\"Text Input\"]\n        ImageInput[\"Image Input\"]\n        TokenProcessor[\"Tokenization\"]\n    end\n    \n    subgraph \"Backend Selection\"\n        PyTorchBackend[\"PyTorch Backend\"]\n        ONNXBackend[\"ONNX Runtime\"]\n        OpenVINOBackend[\"OpenVINO Backend\"]\n    end\n    \n    subgraph \"Model Components\"\n        TransformerModule[\"Transformer Module\"]\n        PoolingModule[\"Pooling Module\"]\n        RouterModule[\"Router Module\"]\n        SpladePooling[\"SpladePooling\"]\n    end\n    \n    subgraph \"Output Processing\"\n        Quantization[\"Quantization\"]\n        Normalization[\"Normalization\"]\n        SparsityControl[\"Sparsity Control\"]\n    end\n    \n    TextInput --> TokenProcessor\n    ImageInput --> TokenProcessor\n    TokenProcessor --> PyTorchBackend\n    TokenProcessor --> ONNXBackend  \n    TokenProcessor --> OpenVINOBackend\n    \n    PyTorchBackend --> TransformerModule",
+    "metadata": {
+      "source_file": "UKPLab\\sentence-transformers\\Example_of_automatic_statistics_generation.md",
+      "source_collection": "sentence_transformers_docs",
+      "subdirectory": "UKPLab",
+      "filename": "Example_of_automatic_statistics_generation.md",
+      "file_extension": ".md",
+      "chunk_index": 2,
+      "token_count": 211,
+      "char_count": 1020,
+      "start_char": 1793,
+      "end_char": 2814
+    }
+  },
+  {
+    "chunk_id": "sentence_transformers_docs:UKPLab\\sentence-transformers\\Example_of_automatic_statistics_generation.md:chunk:3",
+    "content": "ONNXBackend  \n    TokenProcessor --> OpenVINOBackend\n    \n    PyTorchBackend --> TransformerModule\n    PyTorchBackend --> RouterModule\n    ONNXBackend --> TransformerModule\n    OpenVINOBackend --> TransformerModule\n    \n    TransformerModule --> PoolingModule\n    RouterModule --> SpladePooling\n    \n    PoolingModule --> Quantization\n    SpladePooling --> SparsityControl\n    Quantization --> Normalization\n```\n\nSources: Based on architecture patterns seen in [sentence_transformers/model_card.py:602-607]() and backend references\n\n### Performance Optimization Techniques\n\nThe library implements several optimization strategies for production deployment:\n\n| Optimization | Implementation | Use Case |\n|-------------|----------------|----------|\n| **Multi-Processing** | Process pools for batch encoding | Large-scale text processing |\n| **ONNX Conversion** | Model quantization and optimization | CPU inference optimization |\n| **Backend Selection** | Runtime backend switching | Hardware-specific optimization |",
+    "metadata": {
+      "source_file": "UKPLab\\sentence-transformers\\Example_of_automatic_statistics_generation.md",
+      "source_collection": "sentence_transformers_docs",
+      "subdirectory": "UKPLab",
+      "filename": "Example_of_automatic_statistics_generation.md",
+      "file_extension": ".md",
+      "chunk_index": 3,
+      "token_count": 195,
+      "char_count": 1013,
+      "start_char": 2714,
+      "end_char": 3729
+    }
+  },
+  {
+    "chunk_id": "sentence_transformers_docs:UKPLab\\sentence-transformers\\Example_of_automatic_statistics_generation.md:chunk:4",
+    "content": "timization |\n| **Backend Selection** | Runtime backend switching | Hardware-specific optimization |\n| **Memory Management** | Gradient caching, efficient batching | Memory-constrained training |\n| **Sparse Operations** | Optimized sparse tensor operations | Sparse encoder efficiency |\n\n## Development and Extension Points\n\n### Custom Model Card Integration\n\nDevelopers can extend the model card system for custom model types:\n\n```python\n@dataclass\nclass CustomModelCardData(SentenceTransformerModelCardData):\n    custom_field: str = \"default_value\"\n    custom_metrics: dict = field(default_factory=dict)\n    \n    def get_model_specific_metadata(self) -> dict[str, Any]:\n        return {\n            \"custom_dimension\": self.model.get_custom_dimension(),\n            \"special_config\": self.model.get_special_config(),\n        }\n```\n\n### Callback Extension\n\nThe callback system can be extended to capture custom training information:\n\n```python\nclass CustomModelCardCallback(SentenceTransformerModelCardCallback):",
+    "metadata": {
+      "source_file": "UKPLab\\sentence-transformers\\Example_of_automatic_statistics_generation.md",
+      "source_collection": "sentence_transformers_docs",
+      "subdirectory": "UKPLab",
+      "filename": "Example_of_automatic_statistics_generation.md",
+      "file_extension": ".md",
+      "chunk_index": 4,
+      "token_count": 190,
+      "char_count": 1012,
+      "start_char": 3629,
+      "end_char": 4642
+    }
+  },
+  {
+    "chunk_id": "sentence_transformers_docs:UKPLab\\sentence-transformers\\Example_of_automatic_statistics_generation.md:chunk:5",
+    "content": "aining information:\n\n```python\nclass CustomModelCardCallback(SentenceTransformerModelCardCallback):\n    def on_custom_event(self, args, state, control, model, **kwargs):\n        # Custom data collection logic\n        model.model_card_data.custom_metrics.update(kwargs.get('metrics', {}))\n```\n\nSources: [sentence_transformers/model_card.py:47-199](), [sentence_transformers/sparse_encoder/model_card.py:18-20]()\n\n### Version and Dependency Management\n\nThe system automatically tracks framework versions and dependencies for reproducibility:\n\n```python\ndef get_versions() -> dict[str, Any]:\n    versions = {\n        \"python\": python_version(),\n        \"sentence_transformers\": sentence_transformers_version,\n        \"transformers\": transformers.__version__,\n        \"torch\": torch.__version__,\n    }\n    # Conditional imports for optional dependencies\n    if is_accelerate_available():\n        versions[\"accelerate\"] = accelerate_version\n```",
+    "metadata": {
+      "source_file": "UKPLab\\sentence-transformers\\Example_of_automatic_statistics_generation.md",
+      "source_collection": "sentence_transformers_docs",
+      "subdirectory": "UKPLab",
+      "filename": "Example_of_automatic_statistics_generation.md",
+      "file_extension": ".md",
+      "chunk_index": 5,
+      "token_count": 196,
+      "char_count": 939,
+      "start_char": 4542,
+      "end_char": 5483
+    }
+  },
+  {
+    "chunk_id": "sentence_transformers_docs:UKPLab\\sentence-transformers\\Example_of_automatic_statistics_generation.md:chunk:6",
+    "content": "ndencies\n    if is_accelerate_available():\n        versions[\"accelerate\"] = accelerate_version\n```\n\nThis ensures model cards include complete environment information for reproducible results.\n\nSources: [sentence_transformers/model_card.py:217-236]()\n\n# Model Card Generation\n\n\n\n\nThis document covers the automatic model card generation system in sentence-transformers, which creates comprehensive documentation and metadata for trained models. The system automatically tracks training data, hyperparameters, evaluation metrics, and generates standardized model cards during the training process.\n\nFor information about manual model configuration, see other training documentation pages. For details about evaluation metrics collection, see [4](#4).\n\n## Model Card Architecture Overview\n\nThe model card generation system consists of three main components working together to automatically document models during training:\n\n```mermaid\ngraph TB\n    subgraph \"Model Card Data Classes\"",
+    "metadata": {
+      "source_file": "UKPLab\\sentence-transformers\\Example_of_automatic_statistics_generation.md",
+      "source_collection": "sentence_transformers_docs",
+      "subdirectory": "UKPLab",
+      "filename": "Example_of_automatic_statistics_generation.md",
+      "file_extension": ".md",
+      "chunk_index": 6,
+      "token_count": 174,
+      "char_count": 980,
+      "start_char": 5383,
+      "end_char": 6364
+    }
+  },
+  {
+    "chunk_id": "sentence_transformers_docs:UKPLab\\sentence-transformers\\Example_of_automatic_statistics_generation.md:chunk:7",
+    "content": "ically document models during training:\n\n```mermaid\ngraph TB\n    subgraph \"Model Card Data Classes\"\n        STMCD[\"SentenceTransformerModelCardData\"]\n        SEMCD[\"SparseEncoderModelCardData\"] \n        CEMCD[\"CrossEncoderModelCardData\"]\n    end\n    \n    subgraph \"Model Card Callbacks\"\n        STMCC[\"SentenceTransformerModelCardCallback\"]\n        SEMCC[\"SparseEncoderModelCardCallback\"]\n        CEMCC[\"CrossEncoderModelCardCallback\"]\n    end\n    \n    subgraph \"Trainers\"\n        STT[\"SentenceTransformerTrainer\"]\n        SET[\"SparseEncoderTrainer\"]\n        CET[\"CrossEncoderTrainer\"]\n    end\n    \n    subgraph \"Templates\"\n        STTemplate[\"model_card_template.md\"]\n        SETemplate[\"sparse_encoder/model_card_template.md\"]\n        CETemplate[\"cross_encoder/model_card_template.md\"]\n    end\n    \n    subgraph \"Generated Output\"\n        README[\"README.md\"]\n    end\n    \n    STT --> STMCC\n    SET --> SEMCC\n    CET --> CEMCC\n    \n    STMCC --> STMCD\n    SEMCC --> SEMCD\n    CEMCC --> CEMCD\n    \n    STMCD --> STTemplate",
+    "metadata": {
+      "source_file": "UKPLab\\sentence-transformers\\Example_of_automatic_statistics_generation.md",
+      "source_collection": "sentence_transformers_docs",
+      "subdirectory": "UKPLab",
+      "filename": "Example_of_automatic_statistics_generation.md",
+      "file_extension": ".md",
+      "chunk_index": 7,
+      "token_count": 241,
+      "char_count": 1022,
+      "start_char": 6264,
+      "end_char": 7287
+    }
+  },
+  {
+    "chunk_id": "sentence_transformers_docs:UKPLab\\sentence-transformers\\Example_of_automatic_statistics_generation.md:chunk:8",
+    "content": "EMCC\n    \n    STMCC --> STMCD\n    SEMCC --> SEMCD\n    CEMCC --> CEMCD\n    \n    STMCD --> STTemplate\n    SEMCD --> SETemplate\n    CEMCD --> CETemplate\n    \n    STTemplate --> README\n    SETemplate --> README\n    CETemplate --> README\n    \n    STMCD -.-> SEMCD\n    STMCD -.-> CEMCD\n```\n\n**Model Card Data Collection Flow**\n\nSources: [sentence_transformers/model_card.py:265-355](), [sentence_transformers/sparse_encoder/model_card.py:22-132](), [sentence_transformers/cross_encoder/model_card.py:27-161]()\n\n## Data Collection Process\n\nThe model card system automatically collects training metadata through callback integration with the trainer lifecycle:\n\n```mermaid\nsequenceDiagram\n    participant Trainer as \"SentenceTransformerTrainer\"\n    participant Callback as \"SentenceTransformerModelCardCallback\"\n    participant ModelCard as \"SentenceTransformerModelCardData\"\n    participant Model as \"SentenceTransformer\"\n    \n    Trainer->>Callback: on_init_end()\n    Callback->>ModelCard: extract_dataset_metadata()",
+    "metadata": {
+      "source_file": "UKPLab\\sentence-transformers\\Example_of_automatic_statistics_generation.md",
+      "source_collection": "sentence_transformers_docs",
+      "subdirectory": "UKPLab",
+      "filename": "Example_of_automatic_statistics_generation.md",
+      "file_extension": ".md",
+      "chunk_index": 8,
+      "token_count": 240,
+      "char_count": 1010,
+      "start_char": 7187,
+      "end_char": 8198
+    }
+  },
+  {
+    "chunk_id": "sentence_transformers_docs:UKPLab\\sentence-transformers\\Example_of_automatic_statistics_generation.md:chunk:9",
+    "content": "er\"\n    \n    Trainer->>Callback: on_init_end()\n    Callback->>ModelCard: extract_dataset_metadata()\n    Callback->>ModelCard: set_losses()\n    Callback->>ModelCard: set_widget_examples()\n    \n    Trainer->>Callback: on_train_begin()\n    Callback->>ModelCard: store hyperparameters\n    \n    loop During Training\n        Trainer->>Callback: on_log()\n        Callback->>ModelCard: track training_logs\n        \n        Trainer->>Callback: on_evaluate()\n        Callback->>ModelCard: track evaluation metrics\n    end\n    \n    Model->>ModelCard: save()\n    ModelCard->>ModelCard: generate_model_card()\n```\n\n**Automatic Data Collection Timeline**\n\nNote: The legacy `ModelCardCallback` class has been deprecated in favor of `SentenceTransformerModelCardCallback` ([sentence_transformers/model_card.py:193-199]()).\n\nSources: [sentence_transformers/model_card.py:47-192](), [sentence_transformers/trainer.py:315-333]()\n\n## Model Card Types and Features",
+    "metadata": {
+      "source_file": "UKPLab\\sentence-transformers\\Example_of_automatic_statistics_generation.md",
+      "source_collection": "sentence_transformers_docs",
+      "subdirectory": "UKPLab",
+      "filename": "Example_of_automatic_statistics_generation.md",
+      "file_extension": ".md",
+      "chunk_index": 9,
+      "token_count": 228,
+      "char_count": 942,
+      "start_char": 8098,
+      "end_char": 9042
+    }
+  },
+  {
+    "chunk_id": "sentence_transformers_docs:UKPLab\\sentence-transformers\\Example_of_automatic_statistics_generation.md:chunk:10",
+    "content": "_card.py:47-192](), [sentence_transformers/trainer.py:315-333]()\n\n## Model Card Types and Features\n\nThe system supports three model card types with specialized features for each model architecture:\n\n| Model Type | Data Class | Callback Class | Key Features |\n|------------|------------|----------------|--------------|\n| `SentenceTransformer` | `SentenceTransformerModelCardData` | `SentenceTransformerModelCardCallback` | Dense embeddings, similarity functions, widget examples |\n| `SparseEncoder` | `SparseEncoderModelCardData` | `SparseEncoderModelCardCallback` | Sparse embeddings, sparsity metrics, active dimensions |\n| `CrossEncoder` | `CrossEncoderModelCardData` | `CrossEncoderModelCardCallback` | Pairwise scoring, ranking metrics, text classification |\n\nSources: [sentence_transformers/model_card.py:266-355](), [sentence_transformers/sparse_encoder/model_card.py:23-132](), [sentence_transformers/cross_encoder/model_card.py:28-161]()\n\n## Automatic Data Tracking\n\n### Training Metadata Collection",
+    "metadata": {
+      "source_file": "UKPLab\\sentence-transformers\\Example_of_automatic_statistics_generation.md",
+      "source_collection": "sentence_transformers_docs",
+      "subdirectory": "UKPLab",
+      "filename": "Example_of_automatic_statistics_generation.md",
+      "file_extension": ".md",
+      "chunk_index": 10,
+      "token_count": 234,
+      "char_count": 1008,
+      "start_char": 8942,
+      "end_char": 9952
+    }
+  },
+  {
+    "chunk_id": "sentence_transformers_docs:UKPLab\\sentence-transformers\\Example_of_automatic_statistics_generation.md:chunk:11",
+    "content": "ross_encoder/model_card.py:28-161]()\n\n## Automatic Data Tracking\n\n### Training Metadata Collection\n\nThe `SentenceTransformerModelCardCallback` automatically captures training information through trainer hooks:\n\n**Initialization Phase** ([sentence_transformers/model_card.py:52-88]()):\n- Dataset metadata extraction via `extract_dataset_metadata()`\n- Loss function registration via `set_losses()`\n- Widget example generation via `set_widget_examples()`\n- CodeCarbon integration for emissions tracking\n\n**Training Phase** ([sentence_transformers/model_card.py:89-130]()):\n- Hyperparameter tracking (default vs. non-default values)\n- Training and validation loss logging\n- Information retrieval model detection\n\n**Evaluation Phase** ([sentence_transformers/model_card.py:131-191]()):\n- Evaluation metrics collection\n- Primary metric identification for model selection\n- Training log consolidation\n\n### Dataset Information Extraction\n\nThe system automatically infers dataset metadata from Hugging Face Hub information:",
+    "metadata": {
+      "source_file": "UKPLab\\sentence-transformers\\Example_of_automatic_statistics_generation.md",
+      "source_collection": "sentence_transformers_docs",
+      "subdirectory": "UKPLab",
+      "filename": "Example_of_automatic_statistics_generation.md",
+      "file_extension": ".md",
+      "chunk_index": 11,
+      "token_count": 202,
+      "char_count": 1014,
+      "start_char": 9852,
+      "end_char": 10868
+    }
+  },
+  {
+    "chunk_id": "sentence_transformers_docs:UKPLab\\sentence-transformers\\Example_of_automatic_statistics_generation.md:chunk:12",
+    "content": "on Extraction\n\nThe system automatically infers dataset metadata from Hugging Face Hub information:\n\n```python\n# From extract_dataset_metadata method\ndef extract_dataset_metadata(self, dataset, existing_datasets, loss, dataset_type):\n    # Automatically detects:\n    # - Dataset ID and revision from download checksums\n    # - Dataset size and column statistics  \n    # - Language information from dataset cards\n    # - Loss function configuration\n```\n\nSources: [sentence_transformers/model_card.py:758-809]()\n\n### Widget Example Generation\n\nThe `set_widget_examples()` method automatically creates interactive examples from training or evaluation datasets:\n\n**Example Selection Process** ([sentence_transformers/model_card.py:445-522]()):\n1. Sample 1000 examples from random datasets\n2. Sort by text length to find representative examples  \n3. Generate 4-text combinations for similarity demonstrations\n4. Handle Router module compatibility for asymmetric models",
+    "metadata": {
+      "source_file": "UKPLab\\sentence-transformers\\Example_of_automatic_statistics_generation.md",
+      "source_collection": "sentence_transformers_docs",
+      "subdirectory": "UKPLab",
+      "filename": "Example_of_automatic_statistics_generation.md",
+      "file_extension": ".md",
+      "chunk_index": 12,
+      "token_count": 195,
+      "char_count": 962,
+      "start_char": 10768,
+      "end_char": 11732
+    }
+  },
+  {
+    "chunk_id": "sentence_transformers_docs:UKPLab\\sentence-transformers\\Example_of_automatic_statistics_generation.md:chunk:13",
+    "content": "inations for similarity demonstrations\n4. Handle Router module compatibility for asymmetric models\n\n**CrossEncoder Widget Handling** ([sentence_transformers/cross_encoder/model_card.py:90-136]()):\nCrossEncoder models have specialized widget handling that only generates prediction examples rather than interactive widgets, since HuggingFace Hub doesn't support pairwise text ranking widgets.\n\n## Template System\n\n### Template Structure\n\nModel cards are generated using Jinja2 templates with conditional sections:\n\n**Base Template Features** ([sentence_transformers/model_card_template.md:1-277]()):\n- YAML metadata header with HuggingFace Hub integration\n- Model description with training dataset links\n- Usage examples with code snippets\n- Architecture documentation\n- Evaluation metrics tables\n- Training details and hyperparameters\n- Framework version tracking\n- Citation generation\n\n**Sparse Encoder Specializations** ([sentence_transformers/sparse_encoder/model_card_template.md:1-276]()):",
+    "metadata": {
+      "source_file": "UKPLab\\sentence-transformers\\Example_of_automatic_statistics_generation.md",
+      "source_collection": "sentence_transformers_docs",
+      "subdirectory": "UKPLab",
+      "filename": "Example_of_automatic_statistics_generation.md",
+      "file_extension": ".md",
+      "chunk_index": 13,
+      "token_count": 188,
+      "char_count": 994,
+      "start_char": 11632,
+      "end_char": 12627
+    }
+  },
+  {
+    "chunk_id": "sentence_transformers_docs:UKPLab\\sentence-transformers\\Example_of_automatic_statistics_generation.md:chunk:14",
+    "content": "Encoder Specializations** ([sentence_transformers/sparse_encoder/model_card_template.md:1-276]()):\n- Sparsity statistics and active dimension reporting\n- Asymmetric model detection (Router/Asym modules)\n- SPLADE and CSR model type identification\n- Sparse retrieval usage examples\n\n### Model Type Detection\n\nThe system automatically detects model characteristics for specialized documentation:\n\n```python",
+    "metadata": {
+      "source_file": "UKPLab\\sentence-transformers\\Example_of_automatic_statistics_generation.md",
+      "source_collection": "sentence_transformers_docs",
+      "subdirectory": "UKPLab",
+      "filename": "Example_of_automatic_statistics_generation.md",
+      "file_extension": ".md",
+      "chunk_index": 14,
+      "token_count": 76,
+      "char_count": 403,
+      "start_char": 12527,
+      "end_char": 13551
+    }
+  }
+]
