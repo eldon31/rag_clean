@@ -218,22 +218,26 @@ def load_chunks() -> List[Dict]:
 
                 if chunks:
                     # Enrich metadata with subdirectory info
-                    for idx, chunk in enumerate(chunks):
-                        if not isinstance(chunk, dict):
-                            # Normalize legacy chunk formats that store raw text values
+                    normalized_chunks = []
+                    for raw_chunk in chunks:
+                        if not isinstance(raw_chunk, dict):
                             chunk = {
-                                "content": str(chunk),
+                                "content": str(raw_chunk),
                                 "metadata": {}
                             }
-                            chunks[idx] = chunk
+                        else:
+                            chunk = dict(raw_chunk)
 
                         metadata = chunk.get('metadata')
                         if not isinstance(metadata, dict):
-                            metadata = {}
+                            metadata = dict(metadata) if metadata else {}
                             chunk['metadata'] = metadata
 
                         metadata.setdefault('subdirectory', subdir.name)
                         metadata.setdefault('source_file', chunk_file.name)
+                        normalized_chunks.append(chunk)
+
+                    chunks = normalized_chunks
 
                     all_chunks.extend(chunks)
                     print(f"    ✓ {chunk_file.name}: {len(chunks)} chunks")
