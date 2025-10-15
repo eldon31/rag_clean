@@ -90,6 +90,22 @@ async def qdrant_search_viator_api(query: str, limit: int = 5, score_threshold: 
 
 
 @mcp.tool()
+async def qdrant_search_docling(query: str, limit: int = 5, score_threshold: float = 0.7) -> str:
+    """
+    Search the docling collection (Docling document conversion library documentation) using semantic similarity.
+    
+    Args:
+        query: Search query text
+        limit: Maximum number of results (default: 5)
+        score_threshold: Minimum similarity score 0-1 (default: 0.7)
+    
+    Returns:
+        Formatted search results with scores and metadata
+    """
+    return await _search_collection("docling", query, limit, score_threshold)
+
+
+@mcp.tool()
 async def qdrant_search_fast_docs(query: str, limit: int = 5, score_threshold: float = 0.7, subdir: Optional[str] = None) -> str:
     """
     Search the fast_docs collection (FastAPI, FastMCP, and Python SDK documentation) using semantic similarity.
