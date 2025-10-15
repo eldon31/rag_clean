@@ -77,6 +77,7 @@ import torch
 from pydantic import BaseModel, Field
 from sentence_transformers import SentenceTransformer
 from tqdm import tqdm
+from concurrent.futures import ThreadPoolExecutor
 
 # Setup logging
 logging.basicConfig(
@@ -247,21 +248,33 @@ class UniversalEmbedder:
             texts_gpu0 = texts[:mid]
             texts_gpu1 = texts[mid:]
             
-            with torch.no_grad():
-                emb0 = self.model_gpu0.encode(
-                    texts_gpu0,
-                    batch_size=len(texts_gpu0),
-                    show_progress_bar=False,
-                    convert_to_numpy=True,
-                    normalize_embeddings=True
-                )
-                emb1 = self.model_gpu1.encode(
-                    texts_gpu1,
-                    batch_size=len(texts_gpu1),
-                    show_progress_bar=False,
-                    convert_to_numpy=True,
-                    normalize_embeddings=True
-                )
+            # TRUE PARALLELISM: Run both GPUs simultaneously using threads
+            def encode_gpu0():
+                with torch.no_grad():
+                    return self.model_gpu0.encode(
+                        texts_gpu0,
+                        batch_size=len(texts_gpu0),
+                        show_progress_bar=False,
+                        convert_to_numpy=True,
+                        normalize_embeddings=True
+                    )
+            
+            def encode_gpu1():
+                with torch.no_grad():
+                    return self.model_gpu1.encode(
+                        texts_gpu1,
+                        batch_size=len(texts_gpu1),
+                        show_progress_bar=False,
+                        convert_to_numpy=True,
+                        normalize_embeddings=True
+                    )
+            
+            # Execute both GPUs in parallel
+            with ThreadPoolExecutor(max_workers=2) as executor:
+                future0 = executor.submit(encode_gpu0)
+                future1 = executor.submit(encode_gpu1)
+                emb0 = future0.result()
+                emb1 = future1.result()
             
             return np.vstack([emb0, emb1])
         else:
