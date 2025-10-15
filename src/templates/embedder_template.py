@@ -285,15 +285,40 @@ class UniversalEmbedder:
         """
         logger.info(f"📂 Loading pre-chunked JSON from: {self.config.input_path}")
         
-        all_chunks = []
-        chunk_files = sorted(self.config.input_path.glob("**/*_chunks.json"))
-        
+        all_chunks: List[Dict[str, Any]] = []
+        search_roots: List[Path] = [self.config.input_path]
+
+        # Allow automatic fallback to /kaggle/output and /kaggle/working when users
+        # generate chunks in a separate Kaggle workflow and forget to upload them
+        # as an input dataset. This keeps Template 2 standalone while still being
+        # forgiving about where the files live.
+        input_str = str(self.config.input_path)
+        if input_str.startswith("/kaggle/input/"):
+            suffix = input_str[len("/kaggle/input/"):]
+            output_candidate = Path("/kaggle/output") / suffix
+            working_candidate = Path("/kaggle/working") / suffix
+            # Avoid duplicates if the candidates already exist in search_roots
+            for candidate in (output_candidate, working_candidate):
+                if candidate not in search_roots:
+                    search_roots.append(candidate)
+
+        chunk_files: List[Path] = []
+        for root in search_roots:
+            if not root.exists():
+                continue
+            matches = sorted(root.glob("**/*_chunks.json"))
+            if matches:
+                logger.info(f"  ✓ Found {len(matches)} chunk files under {root}")
+                chunk_files = matches
+                break
+
         if not chunk_files:
+            searched_locations = " | ".join(str(path) for path in search_roots)
             raise FileNotFoundError(
-                f"No *_chunks.json files found in {self.config.input_path}. "
-                f"Did you run Template 1 (chunker_template.py)?"
+                "No *_chunks.json files found.\n"
+                f"Searched locations: {searched_locations}\n"
+                "Ensure Template 1 output is available (upload dataset or copy files)."
             )
-        
         logger.info(f"  Found {len(chunk_files)} chunk files")
         
         for chunk_file in chunk_files:
