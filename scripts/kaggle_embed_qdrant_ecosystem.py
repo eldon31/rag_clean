@@ -31,8 +31,10 @@ SUBFOLDERS INCLUDED:
 import sys
 from pathlib import Path
 
-# Add templates to path
+# Add templates to path - handle both direct upload and repo structure
 sys.path.insert(0, '/kaggle/working')
+sys.path.insert(0, '/kaggle/working/rad_clean/src/templates')
+sys.path.insert(0, str(Path(__file__).parent.parent / 'src' / 'templates'))
 
 # Import embedder template
 from embedder_template import UniversalEmbedder, EmbedderConfig
