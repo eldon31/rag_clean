@@ -288,10 +288,9 @@ class UniversalEmbedder:
         all_chunks: List[Dict[str, Any]] = []
         search_roots: List[Path] = [self.config.input_path]
 
-        # Allow automatic fallback to /kaggle/output and /kaggle/working when users
-        # generate chunks in a separate Kaggle workflow and forget to upload them
-        # as an input dataset. This keeps Template 2 standalone while still being
-        # forgiving about where the files live.
+        # Allow automatic fallback to additional Kaggle runtime locations so
+        # Template 2 remains standalone regardless of where the chunk artifacts
+        # were produced (dataset, /kaggle/output, or repo workspace).
         input_str = str(self.config.input_path)
         if input_str.startswith("/kaggle/input/"):
             suffix = input_str[len("/kaggle/input/"):]
@@ -299,6 +298,25 @@ class UniversalEmbedder:
             working_candidate = Path("/kaggle/working") / suffix
             # Avoid duplicates if the candidates already exist in search_roots
             for candidate in (output_candidate, working_candidate):
+                if candidate not in search_roots:
+                    search_roots.append(candidate)
+
+        # When running in a Kaggle notebook that cloned the repository, the
+        # chunk outputs often reside under /kaggle/working/rad_clean/output/*.
+        repo_root = Path(__file__).resolve().parents[2]
+        repo_output_root = repo_root / "output"
+        if repo_output_root not in search_roots:
+            search_roots.append(repo_output_root)
+
+        # Add collection-specific folder heuristics (hyphen vs underscore)
+        collection_slug_variants = {
+            self.config.collection_name,
+            self.config.collection_name.replace('-', '_'),
+            self.config.collection_name.replace('_', '-'),
+        }
+        for variant in collection_slug_variants:
+            for suffix in ("", "_chunked"):
+                candidate = repo_output_root / f"{variant}{suffix}"
                 if candidate not in search_roots:
                     search_roots.append(candidate)
 
