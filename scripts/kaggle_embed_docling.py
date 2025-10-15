@@ -67,10 +67,9 @@ BATCH_SIZE = 8  # Conservative for T4 GPUs
 COLLECTION_NAME = "docling"
 USE_MODEL_PARALLEL = True  # Use multi-GPU if available
 
-# Paths - Adjust based on your Kaggle dataset
-# If you upload output/docling/chunked as a dataset named "docling-chunks"
-# the path would be: /kaggle/input/docling-chunks/
-CHUNKED_INPUT_DIR = Path("/kaggle/input/docling-chunks")
+# Paths - Works with git cloned repo in Kaggle
+# Auto-detects if running in Kaggle or locally
+CHUNKED_INPUT_DIR = Path("/kaggle/working/rad_clean/output/docling/chunked")
 
 # Fallback to local path if not on Kaggle
 if not CHUNKED_INPUT_DIR.exists():
