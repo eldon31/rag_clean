@@ -37,13 +37,14 @@ class Embedding(BaseModel):
     @classmethod
     def validate_dimensions(cls, v: List[float]) -> List[float]:
         """
-        Validate vector has supported dimensions (768/1536/3072).
+        Validate vector has supported dimensions (768/1536/3072/3584).
 
         768: BERT-based models
         1536: OpenAI text-embedding-3-small
         3072: OpenAI text-embedding-3-large
+        3584: nomic-ai/nomic-embed-code (BEST for code, APIs, workflows)
         """
-        valid_dims = [768, 1536, 3072]
+        valid_dims = [768, 1536, 3072, 3584]
         dim = len(v)
         if dim not in valid_dims:
             raise ValueError(

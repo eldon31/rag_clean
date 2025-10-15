@@ -24,9 +24,23 @@ load_dotenv()
 
 logger = logging.getLogger(__name__)
 
-# Initialize client with flexible provider
-embedding_client = get_embedding_client()
-EMBEDDING_MODEL = get_embedding_model()
+# Lazy initialization of embedding client (avoids error if API key not set)
+_embedding_client = None
+_embedding_model = None
+
+def _get_embedding_client():
+    """Lazy initialization of embedding client"""
+    global _embedding_client
+    if _embedding_client is None:
+        _embedding_client = get_embedding_client()
+    return _embedding_client
+
+def _get_embedding_model():
+    """Lazy initialization of embedding model"""
+    global _embedding_model
+    if _embedding_model is None:
+        _embedding_model = get_embedding_model()
+    return _embedding_model
 
 
 class EmbeddingConfig(BaseModel):
@@ -35,7 +49,7 @@ class EmbeddingConfig(BaseModel):
     
     REFACTORED: Changed to Pydantic BaseModel for validation.
     """
-    model: str = Field(default=EMBEDDING_MODEL, description="Embedding model")
+    model: str = Field(default="nomic-ai/nomic-embed-code", description="Embedding model (nomic-embed-code for code/APIs)")
     batch_size: int = Field(default=100, ge=1, le=100, description="Batch size")
     max_retries: int = Field(default=3, ge=1, description="Max retry attempts")
     retry_delay: float = Field(default=1.0, ge=0.1, description="Retry delay in seconds")
@@ -47,7 +61,7 @@ class EmbeddingGenerator:
     
     def __init__(
         self,
-        model: str = EMBEDDING_MODEL,
+        model: str = "nomic-ai/nomic-embed-code",
         batch_size: int = 100,
         max_retries: int = 3,
         retry_delay: float = 1.0
@@ -56,7 +70,7 @@ class EmbeddingGenerator:
         Initialize embedding generator.
         
         Args:
-            model: OpenAI embedding model to use
+            model: Embedding model to use (nomic-embed-code for code/APIs)
             batch_size: Number of texts to process in parallel
             max_retries: Maximum number of retry attempts
             retry_delay: Delay between retries in seconds
@@ -68,14 +82,15 @@ class EmbeddingGenerator:
         
         # Model-specific configurations
         self.model_configs = {
+            "nomic-ai/nomic-embed-code": {"dimensions": 3584, "max_tokens": 2048},
             "text-embedding-3-small": {"dimensions": 1536, "max_tokens": 8191},
             "text-embedding-3-large": {"dimensions": 3072, "max_tokens": 8191},
             "text-embedding-ada-002": {"dimensions": 1536, "max_tokens": 8191}
         }
         
         if model not in self.model_configs:
-            logger.warning(f"Unknown model {model}, using default config")
-            self.config = {"dimensions": 1536, "max_tokens": 8191}
+            logger.warning(f"Unknown model {model}, using default config (assuming nomic-embed-code)")
+            self.config = {"dimensions": 3584, "max_tokens": 2048}
         else:
             self.config = self.model_configs[model]
     
@@ -95,7 +110,8 @@ class EmbeddingGenerator:
         
         for attempt in range(self.max_retries):
             try:
-                response = await embedding_client.embeddings.create(
+                client = _get_embedding_client()
+                response = await client.embeddings.create(
                     model=self.model,
                     input=text
                 )
@@ -154,7 +170,8 @@ class EmbeddingGenerator:
         
         for attempt in range(self.max_retries):
             try:
-                response = await embedding_client.embeddings.create(
+                client = _get_embedding_client()
+                response = await client.embeddings.create(
                     model=self.model,
                     input=processed_texts
                 )
@@ -347,7 +364,7 @@ class EmbeddingCache:
 
 
 def create_embedder(
-    model: str = EMBEDDING_MODEL,
+    model: str = "nomic-ai/nomic-embed-code",
     use_cache: bool = True,
     **kwargs
 ) -> EmbeddingGenerator:
