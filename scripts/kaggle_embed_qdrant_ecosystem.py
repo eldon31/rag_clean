@@ -1,6 +1,6 @@
 """
 Kaggle-optimized Qdrant Ecosystem Embedding Pipeline
-For GPU T4 x2 with nomic-ai/nomic-embed-code (3584-dim) + DATA PARALLELISM
+For GPU T4 x2 with nomic-ai/nomic-embed-code (3584-dim) + MEMORY-OPTIMIZED DATA PARALLELISM
 
 This script embeds pre-processed chunks from output/qdrant_ecosystem/
 Collection name: qdrant_ecosystem
@@ -13,11 +13,12 @@ Subdirectories (processed by process_qdrant_ecosystem.py):
 5. qdrant_qdrant/          - Qdrant core repository
 6. qdrant_qdrant-client/   - Qdrant client library
 
-PARALLELISM STRATEGY:
-- Multi-process data parallelism (1 process per GPU)
-- Each process handles a subset of subdirectories
-- Shared model loading across processes
-- Efficient batching within each process
+MEMORY-OPTIMIZED PARALLELISM STRATEGY:
+- Sequential worker execution to prevent OOM
+- Each worker uses one GPU exclusively
+- Aggressive memory cleanup between workers
+- Reduced batch sizes for memory efficiency
+- PyTorch memory fragmentation prevention
 
 UNIQUE ID STRATEGY:
 - Format: qdrant_ecosystem:{subdir}:{filename}:chunk:{index}
@@ -26,19 +27,19 @@ UNIQUE ID STRATEGY:
 """
 
 import os
+import gc
 
-# Prevent transformers from attempting to load TensorFlow
+# Memory optimization environment variables
 os.environ.setdefault("TRANSFORMERS_NO_TF", "1")
 os.environ.setdefault("HF_HUB_DISABLE_TELEMETRY", "1")
-# Enable PyTorch memory optimization
-os.environ.setdefault("PYTORCH_CUDA_ALLOC_CONF", "expandable_segments:True")
+os.environ.setdefault("PYTORCH_CUDA_ALLOC_CONF", "expandable_segments:True,max_split_size_mb:128")
+os.environ.setdefault("TOKENIZERS_PARALLELISM", "false")
 
 import json
 from pathlib import Path
 from datetime import datetime
 from typing import List, Dict, Tuple
-import multiprocessing as mp
-from functools import partial
+import time
 
 import numpy as np
 import torch
@@ -82,11 +83,11 @@ OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 # Model configuration
 MODEL_NAME = "nomic-ai/nomic-embed-code"
 EMBEDDING_DIM = 3584
-BATCH_SIZE = 32  # Per GPU
+BATCH_SIZE = 16  # Reduced for memory efficiency
 MAX_SEQ_LENGTH = 8192
 
-# Parallelism configuration
-NUM_WORKERS = min(num_gpus, mp.cpu_count())  # 1 worker per GPU
+# Memory-optimized configuration
+MEMORY_CLEANUP_INTERVAL = 2  # Clean memory every N subdirectories
 
 
 def load_chunks_from_subdirectory(subdir_path: Path) -> List[Dict]:
@@ -114,66 +115,68 @@ def load_chunks_from_subdirectory(subdir_path: Path) -> List[Dict]:
     return chunks
 
 
-def embed_chunks_worker(
-    subdir_names: List[str],
-    worker_id: int,
-    gpu_id: int,
+def clear_gpu_memory():
+    """Clear GPU memory cache and run garbage collection"""
+    if torch.cuda.is_available():
+        torch.cuda.empty_cache()
+        torch.cuda.synchronize()
+    gc.collect()
+
+
+def embed_subdirectory_gpu(
+    subdir_name: str,
     input_dir: Path,
-    output_dir: Path
-) -> Tuple[int, int]:
+    output_dir: Path,
+    gpu_id: int = 0
+) -> Tuple[int, bool]:
     """
-    Worker function to embed chunks from assigned subdirectories.
-    Each worker runs on a dedicated GPU.
+    Embed chunks from a single subdirectory using specified GPU.
+    Memory-optimized for T4 GPUs.
     
     Args:
-        subdir_names: List of subdirectory names to process
-        worker_id: Worker process ID
-        gpu_id: GPU device ID for this worker
+        subdir_name: Name of subdirectory to process
         input_dir: Input directory path
         output_dir: Output directory path
+        gpu_id: GPU device ID to use
     
     Returns:
-        Tuple of (total_chunks_processed, total_subdirs_processed)
+        Tuple of (chunks_processed, success)
     """
-    # Set GPU for this worker
     device = f"cuda:{gpu_id}" if torch.cuda.is_available() else "cpu"
-    print(f"\n[Worker {worker_id}] Starting on {device}")
-    print(f"[Worker {worker_id}] Assigned subdirectories: {subdir_names}")
+    subdir_path = input_dir / subdir_name
     
-    # Load model on assigned GPU
-    print(f"[Worker {worker_id}] Loading {MODEL_NAME}...")
-    model = SentenceTransformer(
-        MODEL_NAME,
-        device=device,
-        trust_remote_code=True
-    )
-    model.max_seq_length = MAX_SEQ_LENGTH
-    print(f"[Worker {worker_id}] Model loaded (dim={model.get_sentence_embedding_dimension()})")
+    if not subdir_path.is_dir():
+        print(f"⚠️  Skipping {subdir_name} (not a directory)")
+        return 0, False
     
-    total_chunks = 0
-    total_subdirs = 0
+    print(f"\n🚀 Processing {subdir_name} on {device}...")
     
-    for subdir_name in subdir_names:
-        subdir_path = input_dir / subdir_name
-        
-        if not subdir_path.is_dir():
-            print(f"[Worker {worker_id}] ⚠️  Skipping {subdir_name} (not a directory)")
-            continue
-        
-        print(f"\n[Worker {worker_id}] Processing {subdir_name}...")
-        
-        # Load chunks
-        chunks = load_chunks_from_subdirectory(subdir_path)
-        
-        if not chunks:
-            print(f"[Worker {worker_id}] ⚠️  No chunks found in {subdir_name}")
-            continue
+    # Clear memory before starting
+    clear_gpu_memory()
+    
+    # Load chunks
+    chunks = load_chunks_from_subdirectory(subdir_path)
+    
+    if not chunks:
+        print(f"⚠️  No chunks found in {subdir_name}")
+        return 0, False
+    
+    try:
+        # Load model on specified GPU with memory optimization
+        print(f"📥 Loading {MODEL_NAME} on {device}...")
+        model = SentenceTransformer(
+            MODEL_NAME,
+            device=device,
+            trust_remote_code=True
+        )
+        model.max_seq_length = MAX_SEQ_LENGTH
+        print(f"✅ Model loaded (dim={model.get_sentence_embedding_dimension()})")
         
         # Prepare texts for embedding (use search_document task)
         texts = [chunk['content'] for chunk in chunks]
         
-        # Embed with batching and prompt_name for Nomic models
-        print(f"[Worker {worker_id}] Embedding {len(texts)} chunks...")
+        # Embed with smaller batches for memory efficiency
+        print(f"🔄 Embedding {len(texts)} chunks with batch_size={BATCH_SIZE}...")
         embeddings = model.encode(
             texts,
             batch_size=BATCH_SIZE,
@@ -200,27 +203,91 @@ def embed_chunks_worker(
                 'chunks': chunks
             }, f, indent=2, ensure_ascii=False)
         
-        print(f"[Worker {worker_id}] ✅ Saved {len(chunks)} embedded chunks to {output_file.name}")
-        total_chunks += len(chunks)
-        total_subdirs += 1
+        print(f"✅ {subdir_name}: {len(chunks)} chunks → {output_file.name}")
+        
+        # Clear model and memory immediately after processing
+        del model
+        del embeddings
+        clear_gpu_memory()
+        
+        return len(chunks), True
+        
+    except Exception as e:
+        print(f"❌ Error processing {subdir_name}: {e}")
+        # Clear memory on error
+        clear_gpu_memory()
+        return 0, False
+
+
+def process_with_sequential_gpus(
+    subdirs: List[str],
+    input_dir: Path,
+    output_dir: Path,
+    available_gpus: int
+) -> Tuple[int, int]:
+    """
+    Process subdirectories sequentially across available GPUs.
+    Memory-optimized to prevent OOM errors.
     
-    print(f"\n[Worker {worker_id}] Finished: {total_subdirs} subdirectories, {total_chunks} chunks")
+    Args:
+        subdirs: List of subdirectory names
+        input_dir: Input directory path  
+        output_dir: Output directory path
+        available_gpus: Number of available GPUs
+    
+    Returns:
+        Tuple of (total_chunks, total_subdirs_processed)
+    """
+    total_chunks = 0
+    total_subdirs = 0
+    current_gpu = 0
+    
+    print(f"\n🚀 Starting sequential processing with {available_gpus} GPU(s)...")
+    print(f"📁 Processing {len(subdirs)} subdirectories...")
+    
+    for i, subdir_name in enumerate(subdirs):
+        # Use GPU round-robin if multiple GPUs available
+        gpu_id = current_gpu % available_gpus if available_gpus > 0 else 0
+        
+        print(f"\n[{i+1}/{len(subdirs)}] GPU {gpu_id}: {subdir_name}")
+        
+        chunks_processed, success = embed_subdirectory_gpu(
+            subdir_name=subdir_name,
+            input_dir=input_dir,
+            output_dir=output_dir,
+            gpu_id=gpu_id
+        )
+        
+        if success:
+            total_chunks += chunks_processed
+            total_subdirs += 1
+        
+        # Memory cleanup every few subdirectories
+        if (i + 1) % MEMORY_CLEANUP_INTERVAL == 0:
+            print(f"🧹 Memory cleanup after {i+1} subdirectories...")
+            clear_gpu_memory()
+            time.sleep(1)  # Brief pause for cleanup
+        
+        # Move to next GPU
+        current_gpu += 1
+    
     return total_chunks, total_subdirs
 
 
 def main():
-    """Main execution with data parallelism."""
+    """Main execution with memory-optimized sequential processing."""
     start_time = datetime.now()
     
     print(f"\n{'='*60}")
-    print(f"QDRANT ECOSYSTEM EMBEDDING PIPELINE")
+    print(f"QDRANT ECOSYSTEM EMBEDDING PIPELINE (MEMORY-OPTIMIZED)")
     print(f"{'='*60}")
     print(f"Collection: {COLLECTION_NAME}")
     print(f"Input: {INPUT_DIR}")
     print(f"Output: {OUTPUT_DIR}")
     print(f"Model: {MODEL_NAME}")
-    print(f"Workers: {NUM_WORKERS} (parallel processes)")
-    print(f"Batch size: {BATCH_SIZE} per GPU")
+    print(f"Batch size: {BATCH_SIZE} (memory-optimized)")
+    print(f"GPUs available: {num_gpus}")
+    print(f"Processing: Sequential (memory-safe)")
     print(f"{'='*60}\n")
     
     # Discover all subdirectories
@@ -235,57 +302,16 @@ def main():
         print("❌ No subdirectories found. Exiting.")
         return
     
-    # Split subdirectories across workers (data parallelism)
-    subdirs_per_worker = [[] for _ in range(NUM_WORKERS)]
-    for i, name in enumerate(subdir_names):
-        worker_idx = i % NUM_WORKERS
-        subdirs_per_worker[worker_idx].append(name)
-    
-    print(f"\n{'='*60}")
-    print("WORK DISTRIBUTION")
-    print(f"{'='*60}")
-    for worker_id, assigned_subdirs in enumerate(subdirs_per_worker):
-        gpu_id = worker_id % num_gpus if torch.cuda.is_available() else 0
-        print(f"Worker {worker_id} (GPU {gpu_id}): {len(assigned_subdirs)} subdirs - {assigned_subdirs}")
-    print(f"{'='*60}\n")
-    
-    # Create worker function with partial application
-    worker_fn = partial(
-        embed_chunks_worker,
+    # Process sequentially across available GPUs
+    total_chunks, total_subdirs = process_with_sequential_gpus(
+        subdirs=subdir_names,
         input_dir=INPUT_DIR,
-        output_dir=OUTPUT_DIR
+        output_dir=OUTPUT_DIR,
+        available_gpus=num_gpus
     )
     
-    # Run workers in parallel
-    if NUM_WORKERS > 1:
-        print(f"🚀 Starting {NUM_WORKERS} parallel workers...\n")
-        
-        with mp.Pool(processes=NUM_WORKERS) as pool:
-            # Create arguments for each worker
-            worker_args = [
-                (subdirs, worker_id, worker_id % num_gpus if torch.cuda.is_available() else 0)
-                for worker_id, subdirs in enumerate(subdirs_per_worker)
-                if subdirs  # Skip empty assignments
-            ]
-            
-            # Execute in parallel
-            results = pool.starmap(worker_fn, worker_args)
-        
-        # Aggregate results
-        total_chunks = sum(r[0] for r in results)
-        total_subdirs = sum(r[1] for r in results)
-    else:
-        print(f"🚀 Starting single worker (no parallelism)...\n")
-        
-        # Single worker mode
-        gpu_id = 0 if torch.cuda.is_available() else 0
-        total_chunks, total_subdirs = embed_chunks_worker(
-            subdir_names=subdir_names,
-            worker_id=0,
-            gpu_id=gpu_id,
-            input_dir=INPUT_DIR,
-            output_dir=OUTPUT_DIR
-        )
+    # Final memory cleanup
+    clear_gpu_memory()
     
     # Summary
     elapsed_time = (datetime.now() - start_time).total_seconds()
@@ -296,7 +322,8 @@ def main():
     print(f"Total subdirectories: {total_subdirs}")
     print(f"Total chunks embedded: {total_chunks:,}")
     print(f"Elapsed time: {elapsed_time:.2f}s")
-    print(f"Throughput: {total_chunks/elapsed_time:.2f} chunks/sec")
+    if total_chunks > 0 and elapsed_time > 0:
+        print(f"Throughput: {total_chunks/elapsed_time:.2f} chunks/sec")
     print(f"Output directory: {OUTPUT_DIR}")
     print(f"{'='*60}\n")
     
@@ -308,9 +335,8 @@ def main():
         print(f"  - {file.name} ({size_mb:.2f} MB)")
     
     print(f"\n✅ All embeddings saved to {OUTPUT_DIR}")
+    print("💡 Memory usage optimized for T4 GPUs")
 
 
 if __name__ == "__main__":
-    # Set multiprocessing start method
-    mp.set_start_method('spawn', force=True)
     main()
