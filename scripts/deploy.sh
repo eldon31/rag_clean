@@ -1,0 +1,60 @@
+#!/bin/bash
+killall unattended-upgrades apt-get 2>/dev/null || true
+sleep 3
+ufw --force enable
+ufw allow 6333/tcp
+ufw allow 6334/tcp
+ufw allow 5432/tcp
+ufw allow 7474/tcp
+ufw allow 7687/tcp
+ufw reload
+mkdir -p /opt/rag-stack
+cd /opt/rag-stack
+cat > docker-compose.yml << 'EOF'
+version: '3.8'
+services:
+  qdrant:
+    image: qdrant/qdrant:latest
+    container_name: qdrant
+    ports:
+      - "6333:6333"
+      - "6334:6334"
+    volumes:
+      - qdrant_storage:/qdrant/storage
+    restart: unless-stopped
+  postgres:
+    image: postgres:16-alpine
+    container_name: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=raguser
+      - POSTGRES_PASSWORD=ragpass123
+      - POSTGRES_DB=rag_knowledge
+    restart: unless-stopped
+  neo4j:
+    image: neo4j:5.15-community
+    container_name: neo4j
+    ports:
+      - "7474:7474"
+      - "7687:7687"
+    volumes:
+      - neo4j_data:/data
+    environment:
+      - NEO4J_AUTH=neo4j/ragpass123
+      - NEO4J_dbms_memory_pagecache_size=512M
+      - NEO4J_dbms_memory_heap_max__size=1G
+    restart: unless-stopped
+volumes:
+  qdrant_storage:
+  postgres_data:
+  neo4j_data:
+EOF
+docker compose up -d
+sleep 20
+docker compose ps
+curl http://localhost:6333/
+echo ""
+echo "Deployment complete! Qdrant: http://165.232.174.154:6333"
