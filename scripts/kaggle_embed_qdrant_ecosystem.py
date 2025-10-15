@@ -31,7 +31,7 @@ os.environ.setdefault("PYTORCH_CUDA_ALLOC_CONF", "expandable_segments:True")
 import json
 from pathlib import Path
 from datetime import datetime
-from typing import List, Dict
+from typing import List, Dict, Callable, Optional
 import hashlib
 
 import numpy as np
@@ -126,6 +126,8 @@ MODEL_MAX_TOKENS = 2048
 CHUNK_VRAM_ESTIMATE_GB = 0.15  # Estimated VRAM per chunk
 VRAM_BUFFER_GB = 2.0  # Safety buffer
 EXPECTED_GPU_VRAM_GB = 15.83  # Tesla T4 VRAM
+MODEL_TORCH_DTYPE = torch.float16 if torch.cuda.is_available() else torch.float32
+MODEL_KWARGS = {"torch_dtype": MODEL_TORCH_DTYPE}
 
 # Paths - Works with git cloned repo in Kaggle
 # Auto-detects if running in Kaggle or locally
@@ -261,82 +263,125 @@ def embed_chunks(chunks: List[dict]) -> List[dict]:
     print("GENERATING EMBEDDINGS")
     print(f"{'='*60}")
     print(f"Model: {EMBEDDING_MODEL}")
-    print(f"Vector dimension: 768")
+    print(f"Vector dimension: {MODEL_DIMENSION}")
     print(f"Batch size: {BATCH_SIZE}")
+    print(f"Model dtype: {MODEL_TORCH_DTYPE}")
 
     num_gpus = torch.cuda.device_count()
     print(f"Available GPUs: {num_gpus}")
-    print(f"Using data parallelism: {USE_DATA_PARALLEL and num_gpus >= 2}")
+
+    desired_parallel = USE_DATA_PARALLEL and num_gpus >= 2
+    print(f"Desired data parallelism: {desired_parallel}")
 
     start_time = datetime.now()
     all_embeddings = []
+    encode_batch_fn: Optional[Callable[[List[str]], np.ndarray]] = None
+    actual_parallel = False
+    model_gpu0 = model_gpu1 = None
+    model = None
 
-    if USE_DATA_PARALLEL and num_gpus >= 2:
-        print("\n🚀 Loading model with DATA PARALLELISM for MAXIMUM SPEED...")
-        print("   Strategy: Full model on each GPU, split batches")
-        print("   GPU 0: Process batch[0::2] (even indices)")
-        print("   GPU 1: Process batch[1::2] (odd indices)")
-        print(f"   Effective batch size: {BATCH_SIZE} ({BATCH_SIZE//2} per GPU)")
+    if desired_parallel:
+        try:
+            print("\n🚀 Loading model with DATA PARALLELISM for MAXIMUM SPEED...")
+            print("   Strategy: Full model on each GPU, split batches")
+            print("   GPU 0: Process batch[0::2] (even indices)")
+            print("   GPU 1: Process batch[1::2] (odd indices)")
+            print(f"   Effective batch size: {BATCH_SIZE} ({BATCH_SIZE//2} per GPU)")
 
-        # Load model on GPU 0
-        model_gpu0 = SentenceTransformer(EMBEDDING_MODEL, trust_remote_code=True, device='cuda:0')
-        model_gpu0.eval()
+            # Load model on GPU 0
+            model_gpu0 = SentenceTransformer(
+                EMBEDDING_MODEL,
+                trust_remote_code=True,
+                device='cuda:0',
+                model_kwargs=MODEL_KWARGS,
+            )
+            model_gpu0.eval()
 
-        # Load model on GPU 1
-        model_gpu1 = SentenceTransformer(EMBEDDING_MODEL, trust_remote_code=True, device='cuda:1')
-        model_gpu1.eval()
+            # Load model on GPU 1
+            model_gpu1 = SentenceTransformer(
+                EMBEDDING_MODEL,
+                trust_remote_code=True,
+                device='cuda:1',
+                model_kwargs=MODEL_KWARGS,
+            )
+            model_gpu1.eval()
 
-        print("✓ Models loaded on both GPUs")
+            actual_parallel = True
+            print("✓ Models loaded on both GPUs")
 
-        def encode_batch(texts: List[str]) -> np.ndarray:
-            """Encode texts using data parallelism across 2 GPUs"""
-            if not texts:
-                return np.empty((0, MODEL_DIMENSION))
+            def encode_batch_parallel(texts: List[str]) -> np.ndarray:
+                """Encode texts using data parallelism across 2 GPUs"""
+                if not texts:
+                    return np.empty((0, MODEL_DIMENSION))
 
-            # Ensure neither GPU receives an empty slice when batch size < 2
-            split_point = max(1, len(texts) // 2)
-            texts_gpu0 = texts[:split_point]
-            texts_gpu1 = texts[split_point:]
+                split_point = max(1, len(texts) // 2)
+                texts_gpu0 = texts[:split_point]
+                texts_gpu1 = texts[split_point:]
 
-            embeddings_parts = []
-            with torch.no_grad():
-                if texts_gpu0:
-                    embeddings_parts.append(
-                        model_gpu0.encode(
-                            texts_gpu0,
-                            batch_size=len(texts_gpu0),
-                            show_progress_bar=False,
-                            convert_to_numpy=True
+                embeddings_parts = []
+                with torch.no_grad():
+                    if texts_gpu0:
+                        embeddings_parts.append(
+                            model_gpu0.encode(
+                                texts_gpu0,
+                                batch_size=len(texts_gpu0),
+                                show_progress_bar=False,
+                                convert_to_numpy=True,
+                            )
                         )
-                    )
-                if texts_gpu1:
-                    embeddings_parts.append(
-                        model_gpu1.encode(
-                            texts_gpu1,
-                            batch_size=len(texts_gpu1),
-                            show_progress_bar=False,
-                            convert_to_numpy=True
+                    if texts_gpu1:
+                        embeddings_parts.append(
+                            model_gpu1.encode(
+                                texts_gpu1,
+                                batch_size=len(texts_gpu1),
+                                show_progress_bar=False,
+                                convert_to_numpy=True,
+                            )
                         )
-                    )
 
-            if not embeddings_parts:
-                return np.empty((0, MODEL_DIMENSION))
+                if not embeddings_parts:
+                    return np.empty((0, MODEL_DIMENSION))
 
-            return np.vstack(embeddings_parts)
+                return np.vstack(embeddings_parts)
 
-    else:
-        # Single GPU or CPU fallback
-        print("\n🚀 Loading model with SentenceTransformer...")
-        model = SentenceTransformer(EMBEDDING_MODEL, trust_remote_code=True)
+            encode_batch_fn = encode_batch_parallel
+
+        except RuntimeError as e:
+            if "out of memory" in str(e).lower():
+                print("⚠ Data parallel model load ran out of memory. Falling back to single GPU mode.")
+                torch.cuda.empty_cache()
+                model_gpu0 = model_gpu1 = None
+            else:
+                raise e
+
+    if not actual_parallel:
+        print("\n🚀 Loading model on single GPU/CPU...")
+        model = SentenceTransformer(
+            EMBEDDING_MODEL,
+            trust_remote_code=True,
+            model_kwargs=MODEL_KWARGS,
+        )
 
         if torch.cuda.is_available():
-            model = model.to('cuda')
-            print("✓ Model loaded on GPU")
+            model = model.to('cuda:0')
+            print("✓ Model loaded on GPU 0")
         else:
             print("✓ Model loaded on CPU (will be slow)")
 
-        def encode_batch(texts: List[str]) -> np.ndarray:
-            return model.encode(texts, batch_size=BATCH_SIZE, show_progress_bar=False)
+        def encode_batch_single(texts: List[str]) -> np.ndarray:
+            return model.encode(
+                texts,
+                batch_size=max(1, min(len(texts), BATCH_SIZE)),
+                show_progress_bar=False,
+                convert_to_numpy=True,
+            )
+
+        encode_batch_fn = encode_batch_single
+
+    print(f"Using data parallelism: {actual_parallel}")
+
+    if encode_batch_fn is None:
+        raise RuntimeError("Failed to initialize embedding model.")
 
     # Process chunks in batches
     total_chunks = len(chunks)
@@ -355,7 +400,7 @@ def embed_chunks(chunks: List[dict]) -> List[dict]:
 
         # Generate embeddings with OOM handling
         try:
-            embeddings = encode_batch(texts)
+            embeddings = encode_batch_fn(texts)
         except RuntimeError as e:
             if ("out of memory" in str(e).lower() and
                     oom_count < max_oom_retries and
