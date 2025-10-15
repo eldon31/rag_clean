@@ -366,102 +366,134 @@ class QdrantEcosystemProcessor:
         output_base_path: Path
     ):
         """
-        Save processing results in collection/subdirectory structure.
+        Save processing results mirroring original folder structure.
         
-        Creates structure:
-        output/
-          qdrant_ecosystem/  ← Collection folder
-            qdrant_documentation/  ← Subdirectory folder
-              chunks.json
-            qdrant_examples/  ← Subdirectory folder
-              chunks.json
-            ...
-            summary.json
+        Structure (exactly mirrors source):
+        output/qdrant_ecosystem/
+          ├── summary.json
+          ├── qdrant_documentation/
+          │   ├── file1_chunks.json
+          │   ├── file2_chunks.json
+          │   └── ... (all .md files as separate chunk files)
+          ├── qdrant_examples/
+          ├── qdrant_fastembed/
+          ├── qdrant_mcp-server-qdrant/
+          ├── qdrant_qdrant/
+          └── qdrant_qdrant-client/
+        
+        Each .md file becomes one _chunks.json file with all chunks from that file.
         
         Args:
             results: Processing results
             output_base_path: Base output directory
         """
         logger.info(f"\n{'='*80}")
-        logger.info(f"SAVING RESULTS - COLLECTION/SUBDIRECTORY STRUCTURE")
+        logger.info(f"SAVING RESULTS - MIRRORING ORIGINAL STRUCTURE")
         logger.info(f"{'='*80}")
         
-        # Collection folder
-        collection_dir = output_base_path / self.collection_name
-        collection_dir.mkdir(parents=True, exist_ok=True)
+        base_dir = output_base_path / "qdrant_ecosystem"
+        base_dir.mkdir(parents=True, exist_ok=True)
         
-        # Organize chunks by repository (subdirectory)
-        chunks_by_repo = {}
-        all_chunks = []
+        total_files_saved = 0
+        total_chunks_saved = 0
+        repo_stats = {}
         
+        # Process each repository
         for repo_name, repo_results in results["results"].items():
-            chunks_by_repo[repo_name] = []
+            logger.info(f"\n📁 Repository: {repo_name}")
             
+            # Create repository folder
+            repo_dir = base_dir / repo_name
+            repo_dir.mkdir(parents=True, exist_ok=True)
+            
+            files_saved = 0
+            chunks_saved = 0
+            
+            # Process each file in the repository
             for result in repo_results:
-                if result.get("success"):
-                    chunks = result.get("chunks", [])
-                    
-                    for chunk in chunks:
-                        # Convert chunk to dict with FULL content
-                        chunk_dict = {
-                            "content": chunk.content,  # FULL CONTENT for Kaggle
-                            "index": chunk.index,
-                            "token_count": chunk.token_count,
-                            "metadata": chunk.metadata,
-                            "start_char": chunk.start_char,
-                            "end_char": chunk.end_char
-                        }
-                        
-                        chunks_by_repo[repo_name].append(chunk_dict)
-                        all_chunks.append(chunk_dict)
-        
-        # Save each repository as a subdirectory with chunks.json
-        logger.info(f"\nSaving subdirectory folders:")
-        for repo_name, chunks in chunks_by_repo.items():
-            # Create subdirectory folder
-            repo_dir = collection_dir / repo_name
-            repo_dir.mkdir(exist_ok=True)
+                if not result.get("success"):
+                    continue
+                
+                # Get original file path
+                original_file_path = Path(result["file_path"])
+                original_file_name = original_file_path.stem  # Without .md extension
+                
+                # Get chunks
+                chunks = result.get("chunks", [])
+                
+                if not chunks:
+                    continue
+                
+                # Convert chunks to serializable format
+                chunk_dicts = []
+                for chunk in chunks:
+                    chunk_dicts.append({
+                        "content": chunk.content,
+                        "index": chunk.index,
+                        "token_count": chunk.token_count,
+                        "metadata": chunk.metadata,
+                        "start_char": chunk.start_char,
+                        "end_char": chunk.end_char
+                    })
+                
+                # Create output filename: original_name_chunks.json
+                output_filename = f"{original_file_name}_chunks.json"
+                output_file_path = repo_dir / output_filename
+                
+                # Save file with chunks
+                file_data = {
+                    "source_file": str(original_file_path),
+                    "source_repo": repo_name,
+                    "total_chunks": len(chunk_dicts),
+                    "chunks": chunk_dicts
+                }
+                
+                with open(output_file_path, 'w', encoding='utf-8') as f:
+                    json.dump(file_data, f, indent=2, ensure_ascii=False)
+                
+                files_saved += 1
+                chunks_saved += len(chunk_dicts)
+                
+                logger.info(f"  ✅ {output_filename} ({len(chunk_dicts)} chunks)")
             
-            # Save chunks.json in subdirectory
-            chunks_file = repo_dir / "chunks.json"
-            repo_data = {
-                "collection": self.collection_name,
-                "subdirectory": repo_name,
-                "total_chunks": len(chunks),
-                "chunks": chunks
+            repo_stats[repo_name] = {
+                "files": files_saved,
+                "chunks": chunks_saved
             }
-            with open(chunks_file, 'w', encoding='utf-8') as f:
-                json.dump(repo_data, f, indent=2, ensure_ascii=False)
-            logger.info(f"  ✅ {repo_name}/chunks.json ({len(chunks)} chunks)")
+            
+            total_files_saved += files_saved
+            total_chunks_saved += chunks_saved
+            
+            logger.info(f"  📊 Total: {files_saved} files, {chunks_saved} chunks")
         
-        # Save collection summary
+        # Save summary
         summary = {
             "collection_name": self.collection_name,
             "total_repos": results["stats"]["total_repos"],
-            "total_files": results["stats"]["total_files"],
-            "total_chunks": results["stats"]["total_chunks"],
+            "total_files_processed": results["stats"]["total_files"],
+            "total_files_saved": total_files_saved,
+            "total_chunks": total_chunks_saved,
             "failed_files": results["stats"]["failed_files"],
             "start_time": results["stats"]["start_time"].isoformat(),
             "end_time": results["stats"]["end_time"].isoformat(),
-            "subdirectories": list(chunks_by_repo.keys()),
-            "chunks_by_subdirectory": {k: len(v) for k, v in chunks_by_repo.items()}
+            "repo_stats": repo_stats
         }
         
-        summary_path = collection_dir / "summary.json"
+        summary_path = base_dir / "summary.json"
         with open(summary_path, 'w', encoding='utf-8') as f:
             json.dump(summary, f, indent=2, ensure_ascii=False)
-        logger.info(f"\n✅ Collection summary: {summary_path}")
         
         logger.info(f"\n{'='*80}")
-        logger.info(f"📁 OUTPUT STRUCTURE:")
+        logger.info(f"📁 OUTPUT STRUCTURE")
         logger.info(f"{'='*80}")
-        logger.info(f"{collection_dir}/")
-        logger.info(f"  ├── summary.json (collection stats)")
-        for repo_name in chunks_by_repo.keys():
-            logger.info(f"  ├── {repo_name}/")
-            logger.info(f"  │   └── chunks.json ({chunks_by_repo[repo_name].__len__()} chunks)")
+        logger.info(f"{base_dir}/")
+        logger.info(f"  ├── summary.json")
+        for repo_name, stats in repo_stats.items():
+            logger.info(f"  ├── {repo_name}/ ({stats['files']} files, {stats['chunks']} chunks)")
         logger.info(f"{'='*80}")
-        logger.info(f"\n✅ Ready for Kaggle upload!")
+        logger.info(f"✅ Summary saved: {summary_path}")
+        logger.info(f"✅ Total files saved: {total_files_saved}")
+        logger.info(f"✅ Total chunks saved: {total_chunks_saved}")
 
 
 async def main():
@@ -472,7 +504,7 @@ async def main():
     output_path = Path(__file__).parent.parent / "output"
     
     # PRODUCTION MODE: Process ALL files
-    TEST_MODE = False  # Changed to False
+    TEST_MODE = False  # Changed to False - process everything!
     MAX_FILES_PER_REPO = 5 if TEST_MODE else None
     
     # Optional: Process only specific repos
@@ -496,7 +528,7 @@ async def main():
         repos_to_process=REPOS_TO_PROCESS
     )
     
-    # Save results in collection/subdirectory structure
+    # Save results (individual files per subdirectory)
     processor.save_results(results, output_path)
     
     # Print final stats
@@ -515,14 +547,18 @@ async def main():
         print(f"    Chunks: {stats['total_chunks']}")
     print("="*80)
     
-    print(f"\n✅ Output structure:")
-    print(f"   output/qdrant_ecosystem/")
-    print(f"     ├── summary.json")
-    print(f"     ├── qdrant_documentation/chunks.json")
-    print(f"     ├── qdrant_examples/chunks.json")
-    print(f"     ├── qdrant_fastembed/chunks.json")
-    print(f"     └── ...")
-    print("\n📦 Ready for Kaggle upload!")
+    print(f"\n✅ Output saved to: output/qdrant_ecosystem/")
+    print("\nOutput structure:")
+    print("  qdrant_ecosystem/")
+    print("    ├── summary.json (overall stats)")
+    print("    ├── documentation_concepts/ (individual chunk files)")
+    print("    ├── documentation_tutorials/ (individual chunk files)")
+    print("    └── ... (more subdirectories)")
+    print("\nNext steps:")
+    print("1. Check output/qdrant_ecosystem/summary.json for stats")
+    print("2. Each subdirectory contains individual chunk files")
+    print("3. Upload to Kaggle or embed locally")
+    print("4. Use metadata for filtering by repo/subdir")
 
 
 if __name__ == "__main__":
