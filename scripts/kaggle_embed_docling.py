@@ -63,9 +63,9 @@ from sentence_transformers import SentenceTransformer
 
 # Configuration
 EMBEDDING_MODEL = "nomic-ai/nomic-embed-code"
-BATCH_SIZE = 8  # Conservative for T4 GPUs
+BATCH_SIZE = 16  # Increased for data parallelism (8 per GPU)
 COLLECTION_NAME = "docling"
-USE_MODEL_PARALLEL = True  # Use multi-GPU if available
+USE_DATA_PARALLEL = True  # Use data parallelism for speed
 
 # Paths - Works with git cloned repo in Kaggle
 # Auto-detects if running in Kaggle or locally
@@ -140,47 +140,52 @@ def embed_chunks(chunks: List[dict]) -> List[dict]:
     
     num_gpus = torch.cuda.device_count()
     print(f"Available GPUs: {num_gpus}")
-    print(f"Using model parallelism: {USE_MODEL_PARALLEL and num_gpus >= 2}")
+    print(f"Using data parallelism: {USE_DATA_PARALLEL and num_gpus >= 2}")
     
     start_time = datetime.now()
     all_embeddings = []
     
-    if USE_MODEL_PARALLEL and num_gpus >= 2:
-        print("\n🚀 Loading model with OPTIMIZED model parallelism...")
-        print("   Strategy: Layers distributed across GPUs")
-        print("   Memory limits: GPU0=13GB, GPU1=13GB")
+    if USE_DATA_PARALLEL and num_gpus >= 2:
+        print("\n🚀 Loading model with DATA PARALLELISM for MAXIMUM SPEED...")
+        print("   Strategy: Full model on each GPU, split batches")
+        print("   GPU 0: Process batch[0::2] (even indices)")
+        print("   GPU 1: Process batch[1::2] (odd indices)")
+        print(f"   Effective batch size: {BATCH_SIZE} ({BATCH_SIZE//2} per GPU)")
         
-        tokenizer = AutoTokenizer.from_pretrained(EMBEDDING_MODEL, trust_remote_code=True)
+        # Load model on GPU 0
+        model_gpu0 = SentenceTransformer(EMBEDDING_MODEL, trust_remote_code=True, device='cuda:0')
+        model_gpu0.eval()
         
-        # Load model with automatic device mapping (model parallelism)
-        model = AutoModel.from_pretrained(
-            EMBEDDING_MODEL,
-            torch_dtype=torch.float16,  # Half precision for memory efficiency
-            device_map="auto",  # Automatic layer distribution
-            trust_remote_code=True
-        )
+        # Load model on GPU 1
+        model_gpu1 = SentenceTransformer(EMBEDDING_MODEL, trust_remote_code=True, device='cuda:1')
+        model_gpu1.eval()
         
-        print("✓ Model loaded with multi-GPU distribution")
+        print("✓ Models loaded on both GPUs")
         
         def encode_batch(texts: List[str]) -> np.ndarray:
-            """Encode texts using model parallelism"""
-            inputs = tokenizer(
-                texts,
-                padding=True,
-                truncation=True,
-                max_length=2048,
-                return_tensors="pt"
-            )
+            """Encode texts using data parallelism across 2 GPUs"""
+            # Split batch into two halves
+            mid = len(texts) // 2
+            texts_gpu0 = texts[:mid]
+            texts_gpu1 = texts[mid:]
             
-            # Move inputs to first GPU
-            inputs = {k: v.to('cuda:0') for k, v in inputs.items()}
-            
+            # Process in parallel (PyTorch handles async execution)
             with torch.no_grad():
-                outputs = model(**inputs)
-                # Mean pooling
-                embeddings = outputs.last_hidden_state.mean(dim=1)
+                embeddings_gpu0 = model_gpu0.encode(
+                    texts_gpu0, 
+                    batch_size=len(texts_gpu0),
+                    show_progress_bar=False,
+                    convert_to_numpy=True
+                )
+                embeddings_gpu1 = model_gpu1.encode(
+                    texts_gpu1,
+                    batch_size=len(texts_gpu1),
+                    show_progress_bar=False,
+                    convert_to_numpy=True
+                )
             
-            return embeddings.cpu().numpy()
+            # Concatenate results
+            return np.vstack([embeddings_gpu0, embeddings_gpu1])
     
     else:
         # Single GPU or CPU fallback
