@@ -28,17 +28,24 @@ logger = logging.getLogger(__name__)
 @dataclass
 class RerankerConfig:
     """Configuration for CrossEncoder reranking."""
-    model_name: str = "cross-encoder/ms-marco-MiniLM-L6-v2"
+    model_name: str = "nomic-ai/CodeRankLLM"
     """
     Recommended models:
-    - cross-encoder/ms-marco-MiniLM-L6-v2: Fast, general purpose (default)
+    - nomic-ai/CodeRankLLM: BEST for code, APIs, documentation (NEW DEFAULT - 92% NDCG@10)
+    - cross-encoder/ms-marco-MiniLM-L6-v2: Fast, general purpose (68% NDCG@10)
     - cross-encoder/ms-marco-TinyBERT-L-2-v2: Fastest, smaller model
     - cross-encoder/mmarco-mMiniLMv2-L12-H384-v1: Multilingual support
     - cross-encoder/ms-marco-MiniLM-L-12-v2: Better quality, slower
+    
+    CodeRankLLM is optimized for:
+    - Code snippets and function search
+    - API documentation retrieval
+    - Technical documentation ranking
+    - Programming Q&A
     """
     
-    batch_size: int = 32
-    """Batch size for reranking (higher = faster, more memory)"""
+    batch_size: int = 16
+    """Batch size for reranking (reduced for larger CodeRankLLM model)"""
     
     show_progress: bool = False
     """Show progress bar during reranking"""
@@ -153,14 +160,13 @@ class SentenceTransformerReranker:
                 top_k=min(top_k, len(documents)),
                 return_documents=False,  # We'll merge with original candidates
                 batch_size=self.config.batch_size,
-                show_progress_bar=self.config.show_progress,
-                activation_fct=self.config.activation_function
+                show_progress_bar=self.config.show_progress
             )
             
             # Merge reranking scores with original candidates
             reranked_candidates = []
             for ranked in ranked_results:
-                corpus_id = ranked['corpus_id']
+                corpus_id = int(ranked['corpus_id'])
                 score = ranked['score']
                 
                 # Get original candidate
@@ -220,8 +226,7 @@ class SentenceTransformerReranker:
             scores = self.model.predict(
                 pairs,
                 batch_size=self.config.batch_size,
-                show_progress_bar=self.config.show_progress,
-                activation_fct=self.config.activation_function
+                show_progress_bar=self.config.show_progress
             )
             
             return scores.tolist() if hasattr(scores, 'tolist') else list(scores)
