@@ -131,23 +131,39 @@ EXPECTED_GPU_VRAM_GB = 15.83  # Tesla T4 VRAM
 # Auto-detects if running in Kaggle or locally
 ECOSYSTEM_INPUT_DIR = Path("/kaggle/working/rad_clean/output/qdrant_ecosystem")
 
-# Fallback to local path if not on Kaggle
+# Fallback to local path if not on Kaggle or repo cloned elsewhere
 if not ECOSYSTEM_INPUT_DIR.exists():
     ECOSYSTEM_INPUT_DIR = Path("output/qdrant_ecosystem")
 
-# Check for Kaggle input datasets and copy if needed
-kaggle_input_dir = Path("/kaggle/input")
-if kaggle_input_dir.exists():
-    # Look for any dataset containing qdrant_ecosystem
-    for dataset_dir in kaggle_input_dir.iterdir():
-        if dataset_dir.is_dir():
-            potential_data = dataset_dir / "output" / "qdrant_ecosystem"
-            if potential_data.exists() and not ECOSYSTEM_INPUT_DIR.exists():
-                print(f"Found data in Kaggle input: {potential_data}")
-                import shutil
-                shutil.copytree(potential_data, ECOSYSTEM_INPUT_DIR, dirs_exist_ok=True)
-                print(f"Copied data to: {ECOSYSTEM_INPUT_DIR}")
-                break
+
+def _maybe_copy_from_kaggle_inputs(target_dir: Path) -> None:
+    """Copy dataset from /kaggle/input into target_dir if present."""
+    kaggle_input_root = Path("/kaggle/input")
+    if not kaggle_input_root.exists():
+        return
+
+    import shutil
+
+    for dataset_dir in sorted(kaggle_input_root.iterdir()):
+        if not dataset_dir.is_dir():
+            continue
+
+        candidate_paths = [
+            dataset_dir / "output" / "qdrant_ecosystem",
+            dataset_dir / "qdrant_ecosystem",
+        ]
+
+        for candidate in candidate_paths:
+            if candidate.exists() and any(candidate.glob("**/*_chunks.json")):
+                print(f"Found qdrant_ecosystem data in Kaggle dataset: {candidate}")
+                target_dir.mkdir(parents=True, exist_ok=True)
+                shutil.copytree(candidate, target_dir, dirs_exist_ok=True)
+                print(f"Copied dataset to: {target_dir.resolve()}")
+                return
+
+
+if not ECOSYSTEM_INPUT_DIR.exists():
+    _maybe_copy_from_kaggle_inputs(ECOSYSTEM_INPUT_DIR)
 
 # Output to /kaggle/working for easy download
 KAGGLE_WORKING = Path("/kaggle/working")
