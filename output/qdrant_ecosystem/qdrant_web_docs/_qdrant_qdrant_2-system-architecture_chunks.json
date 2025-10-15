@@ -1,0 +1,367 @@
+{
+  "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_web_docs\\_qdrant_qdrant_2-system-architecture.md",
+  "source_repo": "qdrant_web_docs",
+  "total_chunks": 18,
+  "chunks": [
+    {
+      "content": "System Architecture | qdrant/qdrant | DeepWiki\n\n[Index your code with Devin](private-repo.md)\n\n[DeepWiki](https://deepwiki.com)\n\n[DeepWiki](.md)\n\n[qdrant/qdrant](https://github.com/qdrant/qdrant \"Open repository\")\n\n[Index your code with](private-repo.md)\n\n[Devin](private-repo.md)\n\nShare\n\nLast indexed: 4 October 2025 ([48203e](https://github.com/qdrant/qdrant/commits/48203e41))\n\n- [Introduction to Qdrant](qdrant/qdrant/1-introduction-to-qdrant.md)\n- [Key Concepts and Terminology](qdrant/qdrant/1.1-key-concepts-and-terminology.md)\n- [System Architecture](qdrant/qdrant/2-system-architecture.md)\n- [Application Initialization and Runtime](qdrant/qdrant/2.1-application-initialization-and-runtime.md)\n- [Collections and Table of Content](qdrant/qdrant/2.2-collections-and-table-of-content.md)\n- [Shards and Replica Sets](qdrant/qdrant/2.3-shards-and-replica-sets.md)\n- [Local Shard Architecture](qdrant/qdrant/2.4-local-shard-architecture.md)\n- [Segment Lifecycle and Construction](qdrant/qdrant/2.5-segment-lifecycle-and-construction.md)\n- [Vector Storage and Indexing](qdrant/qdrant/3-vector-storage-and-indexing.md)\n- [Vector Storage Formats](qdrant/qdrant/3.1-vector-storage-formats.md)\n- [HNSW Index Implementation](qdrant/qdrant/3.2-hnsw-index-implementation.md)\n- [Vector Quantization](qdrant/qdrant/3.3-vector-quantization.md)\n- [Sparse Vector Indexing](qdrant/qdrant/3.4-sparse-vector-indexing.md)\n- [Payload Indexing and Filtering](qdrant/qdrant/4-payload-indexing-and-filtering.md)\n- [Field Index Types](qdrant/qdrant/4.1-field-index-types.md)\n- [Index Selection and Storage Backends](qdrant/qdrant/4.2-index-selection-and-storage-backends.md)\n- [Search and Query Processing](qdrant/qdrant/5-search-and-query-processing.md)\n- [Query Request Flow](qdrant/qdrant/5.1-query-request-flow.md)\n- [Filtering and Scoring](qdrant/qdrant/5.2-filtering-and-scoring.md)\n- [Data Updates and Consistency](qdrant/qdrant/6-data-updates-and-consistency.md)\n- [Update Processing Pipeline](qdrant/qdrant/6.1-update-processing-pipeline.md)",
+      "index": 0,
+      "token_count": 624,
+      "metadata": {
+        "title": "_qdrant_qdrant_2-system-architecture",
+        "source": "qdrant_web_docs\\_qdrant_qdrant_2-system-architecture.md",
+        "chunk_method": "simple_fallback",
+        "source_repo": "qdrant_web_docs",
+        "source_subdir": "root",
+        "category": "general",
+        "file_path": "_qdrant_qdrant_2-system-architecture.md",
+        "file_name": "_qdrant_qdrant_2-system-architecture.md",
+        "collection": "qdrant_ecosystem",
+        "processed_date": "2025-10-16T01:58:35.130301",
+        "total_chunks": 18
+      },
+      "start_char": 0,
+      "end_char": 2033
+    },
+    {
+      "content": "and-consistency.md)\n- [Update Processing Pipeline](qdrant/qdrant/6.1-update-processing-pipeline.md)\n- [Write Consistency and Replication](qdrant/qdrant/6.2-write-consistency-and-replication.md)\n- [Distributed System Features](qdrant/qdrant/7-distributed-system-features.md)\n- [Raft Consensus Protocol](qdrant/qdrant/7.1-raft-consensus-protocol.md)\n- [Shard Transfers and Resharding](qdrant/qdrant/7.2-shard-transfers-and-resharding.md)\n- [Snapshots and Recovery](qdrant/qdrant/8-snapshots-and-recovery.md)\n- [API Reference](qdrant/qdrant/9-api-reference.md)\n- [REST API Endpoints](qdrant/qdrant/9.1-rest-api-endpoints.md)\n- [gRPC API Services](qdrant/qdrant/9.2-grpc-api-services.md)\n- [Data Types and Conversions](qdrant/qdrant/9.3-data-types-and-conversions.md)\n- [Configuration and Deployment](qdrant/qdrant/10-configuration-and-deployment.md)\n- [Configuration System](qdrant/qdrant/10.1-configuration-system.md)\n- [Docker Deployment](qdrant/qdrant/10.2-docker-deployment.md)\n- [Building and CI/CD](qdrant/qdrant/10.3-building-and-cicd.md)\n- [Development Guide](qdrant/qdrant/11-development-guide.md)\n\nMenu\n\n# System Architecture\n\nRelevant source files\n\n- [Cargo.lock](https://github.com/qdrant/qdrant/blob/48203e41/Cargo.lock)\n- [Cargo.toml](https://github.com/qdrant/qdrant/blob/48203e41/Cargo.toml)\n- [config/config.yaml](https://github.com/qdrant/qdrant/blob/48203e41/config/config.yaml)\n- [docs/redoc/default\\_version.js](https://github.com/qdrant/qdrant/blob/48203e41/docs/redoc/default_version.js)\n- [docs/redoc/index.html](https://github.com/qdrant/qdrant/blob/48203e41/docs/redoc/index.html)\n- [docs/redoc/v0.10.3/openapi.json](https://github.com/qdrant/qdrant/blob/48203e41/docs/redoc/v0.10.3/openapi.json)\n- [docs/redoc/v0.10.4/openapi.json](https://github.com/qdrant/qdrant/blob/48203e41/docs/redoc/v0.10.4/openapi.json)\n- [docs/redoc/v0.10.5/openapi.json](https://github.com/qdrant/qdrant/blob/48203e41/docs/redoc/v0.10.5/openapi.json)\n- [docs/redoc/v1.10.x/openapi.json](https://github.com/qdrant/qdrant/blob/48203e41/docs/redoc/v1.",
+      "index": 1,
+      "token_count": 718,
+      "metadata": {
+        "title": "_qdrant_qdrant_2-system-architecture",
+        "source": "qdrant_web_docs\\_qdrant_qdrant_2-system-architecture.md",
+        "chunk_method": "simple_fallback",
+        "source_repo": "qdrant_web_docs",
+        "source_subdir": "root",
+        "category": "general",
+        "file_path": "_qdrant_qdrant_2-system-architecture.md",
+        "file_name": "_qdrant_qdrant_2-system-architecture.md",
+        "collection": "qdrant_ecosystem",
+        "processed_date": "2025-10-16T01:58:35.130301",
+        "total_chunks": 18
+      },
+      "start_char": 1933,
+      "end_char": 3982
+    },
+    {
+      "content": "n)\n- [docs/redoc/v1.10.x/openapi.json](https://github.com/qdrant/qdrant/blob/48203e41/docs/redoc/v1.10.x/openapi.json)\n- [docs/redoc/v1.11.x/openapi.json](https://github.com/qdrant/qdrant/blob/48203e41/docs/redoc/v1.11.x/openapi.json)\n- [docs/redoc/v1.13.x/openapi.json](https://github.com/qdrant/qdrant/blob/48203e41/docs/redoc/v1.13.x/openapi.json)\n- [docs/redoc/v1.15.x/openapi.json](https://github.com/qdrant/qdrant/blob/48203e41/docs/redoc/v1.15.x/openapi.json)\n- [lib/api/Cargo.toml](https://github.com/qdrant/qdrant/blob/48203e41/lib/api/Cargo.toml)\n- [lib/collection/Cargo.toml](https://github.com/qdrant/qdrant/blob/48203e41/lib/collection/Cargo.toml)\n- [lib/collection/src/common/snapshots\\_manager.rs](https://github.com/qdrant/qdrant/blob/48203e41/lib/collection/src/common/snapshots_manager.rs)\n- [lib/collection/src/operations/shared\\_storage\\_config.rs](https://github.com/qdrant/qdrant/blob/48203e41/lib/collection/src/operations/shared_storage_config.rs)\n- [lib/common/common/src/defaults.rs](https://github.com/qdrant/qdrant/blob/48203e41/lib/common/common/src/defaults.rs)\n- [lib/common/dataset/Cargo.toml](https://github.com/qdrant/qdrant/blob/48203e41/lib/common/dataset/Cargo.toml)\n- [lib/common/issues/Cargo.toml](https://github.com/qdrant/qdrant/blob/48203e41/lib/common/issues/Cargo.toml)\n- [lib/segment/Cargo.toml](https://github.com/qdrant/qdrant/blob/48203e41/lib/segment/Cargo.toml)\n- [lib/sparse/Cargo.toml](https://github.com/qdrant/qdrant/blob/48203e41/lib/sparse/Cargo.toml)\n- [lib/storage/Cargo.toml](https://github.com/qdrant/qdrant/blob/48203e41/lib/storage/Cargo.toml)\n- [lib/storage/src/content\\_manager/mod.rs](https://github.com/qdrant/qdrant/blob/48203e41/lib/storage/src/content_manager/mod.rs)\n- [lib/storage/src/types.rs](https://github.com/qdrant/qdrant/blob/48203e41/lib/storage/src/types.rs)\n- [src/actix/api/cluster\\_api.rs](https://github.com/qdrant/qdrant/blob/48203e41/src/actix/api/cluster_api.rs)\n- [src/actix/api/mod.rs](https://github.com/qdrant/qdrant/blob/48203e41/src/actix/api/mod.rs)",
+      "index": 2,
+      "token_count": 741,
+      "metadata": {
+        "title": "_qdrant_qdrant_2-system-architecture",
+        "source": "qdrant_web_docs\\_qdrant_qdrant_2-system-architecture.md",
+        "chunk_method": "simple_fallback",
+        "source_repo": "qdrant_web_docs",
+        "source_subdir": "root",
+        "category": "general",
+        "file_path": "_qdrant_qdrant_2-system-architecture.md",
+        "file_name": "_qdrant_qdrant_2-system-architecture.md",
+        "collection": "qdrant_ecosystem",
+        "processed_date": "2025-10-16T01:58:35.130301",
+        "total_chunks": 18
+      },
+      "start_char": 3882,
+      "end_char": 5926
+    },
+    {
+      "content": "i.rs)\n- [src/actix/api/mod.rs](https://github.com/qdrant/qdrant/blob/48203e41/src/actix/api/mod.rs)\n- [src/actix/certificate\\_helpers.rs](https://github.com/qdrant/qdrant/blob/48203e41/src/actix/certificate_helpers.rs)\n- [src/actix/mod.rs](https://github.com/qdrant/qdrant/blob/48203e41/src/actix/mod.rs)\n- [src/common/helpers.rs](https://github.com/qdrant/qdrant/blob/48203e41/src/common/helpers.rs)\n- [src/common/http\\_client.rs](https://github.com/qdrant/qdrant/blob/48203e41/src/common/http_client.rs)\n- [src/consensus.rs](https://github.com/qdrant/qdrant/blob/48203e41/src/consensus.rs)\n- [src/main.rs](https://github.com/qdrant/qdrant/blob/48203e41/src/main.rs)\n- [src/settings.rs](https://github.com/qdrant/qdrant/blob/48203e41/src/settings.rs)\n- [src/tonic/api/raft\\_api.rs](https://github.com/qdrant/qdrant/blob/48203e41/src/tonic/api/raft_api.rs)\n- [src/tonic/mod.rs](https://github.com/qdrant/qdrant/blob/48203e41/src/tonic/mod.rs)\n- [tools/missed\\_cherry\\_picks.sh](https://github.com/qdrant/qdrant/blob/48203e41/tools/missed_cherry_picks.sh)\n\n## Purpose and Scope\n\nThis document provides a comprehensive overview of Qdrant's system architecture, describing the layered design from the API layer down to persistent storage. It covers both standalone and distributed deployment modes, the core abstractions at each layer, and how components interact to serve search and update operations.\n\nFor specific details on:\n\n- Application startup and runtime initialization, see [Application Initialization and Runtime](qdrant/qdrant/2.1-application-initialization-and-runtime.md)\n- Collection management and the table of content system, see [Collections and Table of Content](qdrant/qdrant/2.2-collections-and-table-of-content.md)\n- Shard distribution and replica coordination, see [Shards and Replica Sets](qdrant/qdrant/2.3-shards-and-replica-sets.md)\n- Internal structure of local shards, see [Local Shard Architecture](qdrant/qdrant/2.4-local-shard-architecture.md)",
+      "index": 3,
+      "token_count": 599,
+      "metadata": {
+        "title": "_qdrant_qdrant_2-system-architecture",
+        "source": "qdrant_web_docs\\_qdrant_qdrant_2-system-architecture.md",
+        "chunk_method": "simple_fallback",
+        "source_repo": "qdrant_web_docs",
+        "source_subdir": "root",
+        "category": "general",
+        "file_path": "_qdrant_qdrant_2-system-architecture.md",
+        "file_name": "_qdrant_qdrant_2-system-architecture.md",
+        "collection": "qdrant_ecosystem",
+        "processed_date": "2025-10-16T01:58:35.130301",
+        "total_chunks": 18
+      },
+      "start_char": 5826,
+      "end_char": 7799
+    },
+    {
+      "content": "ture of local shards, see [Local Shard Architecture](qdrant/qdrant/2.4-local-shard-architecture.md)\n- Segment construction and optimization, see [Segment Lifecycle and Construction](qdrant/qdrant/2.5-segment-lifecycle-and-construction.md)\n- Vector indexing strategies, see [Vector Storage and Indexing](qdrant/qdrant/3-vector-storage-and-indexing.md)\n- Consensus and distributed features, see [Distributed System Features](qdrant/qdrant/7-distributed-system-features.md)\n\n---\n\n## Architectural Overview\n\nQdrant employs a **layered architecture** with clear separation of concerns. The system is organized into six primary layers, each responsible for specific aspects of data management and query processing.\n\n### System Layers\n\n```\n```\n\n**Sources:** [src/main.rs1-700](https://github.com/qdrant/qdrant/blob/48203e41/src/main.rs#L1-L700) [lib/storage/src/dispatcher.rs](https://github.com/qdrant/qdrant/blob/48203e41/lib/storage/src/dispatcher.rs) [lib/storage/src/content\\_manager/toc/mod.rs](https://github.com/qdrant/qdrant/blob/48203e41/lib/storage/src/content_manager/toc/mod.rs) [lib/collection/src/collection.rs](https://github.com/qdrant/qdrant/blob/48203e41/lib/collection/src/collection.rs) [lib/segment/src/segment.rs](https://github.com/qdrant/qdrant/blob/48203e41/lib/segment/src/segment.rs)\n\n### Layer Responsibilities\n\n| Layer                     | Primary Components                                 | Responsibilities                                                         |\n| ------------------------- | -------------------------------------------------- | ------------------------------------------------------------------------ |\n| **API Layer**             | `actix::init`, `tonic::init`                       | HTTP/REST and gRPC endpoints, request validation, authentication         |\n| **Service Orchestration** | `Dispatcher`, `ConsensusManager`, `TableOfContent` | Request routing, consensus coordination, collection lifecycle management |",
+      "index": 4,
+      "token_count": 457,
+      "metadata": {
+        "title": "_qdrant_qdrant_2-system-architecture",
+        "source": "qdrant_web_docs\\_qdrant_qdrant_2-system-architecture.md",
+        "chunk_method": "simple_fallback",
+        "source_repo": "qdrant_web_docs",
+        "source_subdir": "root",
+        "category": "general",
+        "file_path": "_qdrant_qdrant_2-system-architecture.md",
+        "file_name": "_qdrant_qdrant_2-system-architecture.md",
+        "collection": "qdrant_ecosystem",
+        "processed_date": "2025-10-16T01:58:35.130301",
+        "total_chunks": 18
+      },
+      "start_char": 7699,
+      "end_char": 9665
+    },
+    {
+      "content": "ger`, `TableOfContent` | Request routing, consensus coordination, collection lifecycle management |\n| **Collection Layer**      | `Collection`, `ShardHolder`                        | Logical data containers, shard key routing, collection-level operations  |\n| **Shard Layer**           | `ShardReplicaSet`, `LocalShard`, `RemoteShard`     | Data partitioning, replication, replica coordination, update ordering    |\n| **Segment Layer**         | `Segment`, `SegmentHolder`, `UpdateHandler`        | Data unit management, indexing, background optimization                  |\n| **Storage/Index Layer**   | Vector/Payload indices and storage                 | Physical data storage, index structures, persistence                     |\n\n**Sources:** [src/actix/mod.rs55-205](https://github.com/qdrant/qdrant/blob/48203e41/src/actix/mod.rs#L55-L205) [src/tonic/mod.rs147-240](https://github.com/qdrant/qdrant/blob/48203e41/src/tonic/mod.rs#L147-L240) [lib/storage/src/dispatcher.rs](https://github.com/qdrant/qdrant/blob/48203e41/lib/storage/src/dispatcher.rs)\n\n---\n\n## Deployment Modes\n\nQdrant supports two deployment modes configured via the `cluster.enabled` setting in [config/config.yaml301-303](https://github.com/qdrant/qdrant/blob/48203e41/config/config.yaml#L301-L303)\n\n### Standalone Mode\n\nIn standalone mode, Qdrant runs as a single node without distributed consensus. The `Dispatcher` routes requests directly to `TableOfContent` without going through the consensus layer.\n\n```\n```\n\n**Sources:** [src/main.rs494-502](https://github.com/qdrant/qdrant/blob/48203e41/src/main.rs#L494-L502) [lib/storage/src/dispatcher.rs](https://github.com/qdrant/qdrant/blob/48203e41/lib/storage/src/dispatcher.rs)\n\n### Distributed Mode\n\nIn distributed mode (when `cluster.enabled = true`), the system uses Raft consensus for metadata coordination. The `Dispatcher` routes metadata operations through `ConsensusManager`, while data operations go directly to shards with optimistic replication.\n\n```\n```\n\n**Sources:** [src/main.rs395-493](https://github.",
+      "index": 5,
+      "token_count": 553,
+      "metadata": {
+        "title": "_qdrant_qdrant_2-system-architecture",
+        "source": "qdrant_web_docs\\_qdrant_qdrant_2-system-architecture.md",
+        "chunk_method": "simple_fallback",
+        "source_repo": "qdrant_web_docs",
+        "source_subdir": "root",
+        "category": "general",
+        "file_path": "_qdrant_qdrant_2-system-architecture.md",
+        "file_name": "_qdrant_qdrant_2-system-architecture.md",
+        "collection": "qdrant_ecosystem",
+        "processed_date": "2025-10-16T01:58:35.130301",
+        "total_chunks": 18
+      },
+      "start_char": 9565,
+      "end_char": 11607
+    },
+    {
+      "content": "y to shards with optimistic replication.\n\n```\n```\n\n**Sources:** [src/main.rs395-493](https://github.com/qdrant/qdrant/blob/48203e41/src/main.rs#L395-L493) [src/consensus.rs45-283](https://github.com/qdrant/qdrant/blob/48203e41/src/consensus.rs#L45-L283) [lib/storage/src/content\\_manager/consensus\\_manager.rs](https://github.com/qdrant/qdrant/blob/48203e41/lib/storage/src/content_manager/consensus_manager.rs)\n\n---\n\n## API Layer\n\nThe API layer provides REST and gRPC interfaces for client communication. Both protocols expose equivalent functionality.\n\n### REST API (Actix-web)\n\nThe REST API runs on port 6333 (configurable via `service.http_port`) and uses the Actix-web framework.\n\n**Key components:**\n\n- **Entry point:** `actix::init` in [src/actix/mod.rs55-205](https://github.com/qdrant/qdrant/blob/48203e41/src/actix/mod.rs#L55-L205)\n\n- **HTTP server configuration:** [src/actix/mod.rs99-200](https://github.com/qdrant/qdrant/blob/48203e41/src/actix/mod.rs#L99-L200)\n\n- **Endpoint modules:**\n\n  - Collections API: [src/actix/api/collections\\_api.rs](https://github.com/qdrant/qdrant/blob/48203e41/src/actix/api/collections_api.rs)\n  - Search API: [src/actix/api/search\\_api.rs](https://github.com/qdrant/qdrant/blob/48203e41/src/actix/api/search_api.rs)\n  - Update API: [src/actix/api/update\\_api.rs](https://github.com/qdrant/qdrant/blob/48203e41/src/actix/api/update_api.rs)\n  - Cluster API: [src/actix/api/cluster\\_api.rs](https://github.com/qdrant/qdrant/blob/48203e41/src/actix/api/cluster_api.rs)\n  - Snapshots API: [src/actix/api/snapshot\\_api.rs](https://github.com/qdrant/qdrant/blob/48203e41/src/actix/api/snapshot_api.rs)\n\n**Sources:** [src/actix/mod.rs1-264](https://github.com/qdrant/qdrant/blob/48203e41/src/actix/mod.rs#L1-L264) [config/config.yaml234-246](https://github.com/qdrant/qdrant/blob/48203e41/config/config.yaml#L234-L246)\n\n### gRPC API (Tonic)\n\nThe gRPC API runs on port 6334 (configurable via `service.grpc_port`) and uses the Tonic framework. It provides:",
+      "index": 6,
+      "token_count": 704,
+      "metadata": {
+        "title": "_qdrant_qdrant_2-system-architecture",
+        "source": "qdrant_web_docs\\_qdrant_qdrant_2-system-architecture.md",
+        "chunk_method": "simple_fallback",
+        "source_repo": "qdrant_web_docs",
+        "source_subdir": "root",
+        "category": "general",
+        "file_path": "_qdrant_qdrant_2-system-architecture.md",
+        "file_name": "_qdrant_qdrant_2-system-architecture.md",
+        "collection": "qdrant_ecosystem",
+        "processed_date": "2025-10-16T01:58:35.130301",
+        "total_chunks": 18
+      },
+      "start_char": 11507,
+      "end_char": 13501
+    },
+    {
+      "content": "uns on port 6334 (configurable via `service.grpc_port`) and uses the Tonic framework. It provides:\n\n- **Public gRPC services:** `QdrantServer`, `CollectionsServer`, `PointsServer`, `SnapshotsServer`\n- **Internal gRPC services:** `QdrantInternalServer`, `RaftServer` (for peer-to-peer communication)\n\n**Key components:**\n\n- **Entry point:** `tonic::init` in [src/tonic/mod.rs147-240](https://github.com/qdrant/qdrant/blob/48203e41/src/tonic/mod.rs#L147-L240)\n- **Service implementations:** [src/tonic/api/](https://github.com/qdrant/qdrant/blob/48203e41/src/tonic/api/)\n- **Internal P2P port:** Configured via `cluster.p2p.port` [config/config.yaml306-308](https://github.com/qdrant/qdrant/blob/48203e41/config/config.yaml#L306-L308)\n\n**Sources:** [src/tonic/mod.rs1-290](https://github.com/qdrant/qdrant/blob/48203e41/src/tonic/mod.rs#L1-L290) [config/config.yaml248-251](https://github.com/qdrant/qdrant/blob/48203e41/config/config.yaml#L248-L251)\n\n### Authentication and Authorization\n\nBoth API layers support:\n\n- **API key authentication:** Via `service.api_key` and `service.read_only_api_key` [config/config.yaml266-285](https://github.com/qdrant/qdrant/blob/48203e41/config/config.yaml#L266-L285)\n- **JWT RBAC:** Via `service.jwt_rbac` for fine-grained access control\n- **TLS encryption:** Via `service.enable_tls` and `cluster.p2p.enable_tls` [config/config.yaml259-312](https://github.com/qdrant/qdrant/blob/48203e41/config/config.yaml#L259-L312)\n\n**Sources:** [src/actix/auth.rs](https://github.com/qdrant/qdrant/blob/48203e41/src/actix/auth.rs) [src/tonic/auth.rs](https://github.com/qdrant/qdrant/blob/48203e41/src/tonic/auth.rs) [src/settings.rs22-66](https://github.com/qdrant/qdrant/blob/48203e41/src/settings.rs#L22-L66)\n\n---\n\n## Service Orchestration Layer\n\nThis layer coordinates request routing, consensus, and collection management.\n\n### Dispatcher\n\nThe `Dispatcher` is the central request router that determines whether operations should:\n\n1. Go directly to `TableOfContent` (standalone mode or data operations)\n2.",
+      "index": 7,
+      "token_count": 676,
+      "metadata": {
+        "title": "_qdrant_qdrant_2-system-architecture",
+        "source": "qdrant_web_docs\\_qdrant_qdrant_2-system-architecture.md",
+        "chunk_method": "simple_fallback",
+        "source_repo": "qdrant_web_docs",
+        "source_subdir": "root",
+        "category": "general",
+        "file_path": "_qdrant_qdrant_2-system-architecture.md",
+        "file_name": "_qdrant_qdrant_2-system-architecture.md",
+        "collection": "qdrant_ecosystem",
+        "processed_date": "2025-10-16T01:58:35.130301",
+        "total_chunks": 18
+      },
+      "start_char": 13401,
+      "end_char": 15435
+    },
+    {
+      "content": "ether operations should:\n\n1. Go directly to `TableOfContent` (standalone mode or data operations)\n2. Pass through `ConsensusManager` (distributed mode metadata operations)\n\n**Code entity:** `storage::dispatcher::Dispatcher` in [lib/storage/src/dispatcher.rs](https://github.com/qdrant/qdrant/blob/48203e41/lib/storage/src/dispatcher.rs)\n\n```\n```\n\n**Sources:** [lib/storage/src/dispatcher.rs](https://github.com/qdrant/qdrant/blob/48203e41/lib/storage/src/dispatcher.rs) [src/main.rs391-407](https://github.com/qdrant/qdrant/blob/48203e41/src/main.rs#L391-L407)\n\n### ConsensusManager\n\nThe `ConsensusManager` wraps the Raft state machine and manages consensus operations for cluster metadata.\n\n**Key responsibilities:**\n\n- Proposing operations to Raft consensus\n- Applying committed operations to `TableOfContent`\n- Managing peer membership and addresses\n- Handling snapshot requests and transfers\n\n**Code entity:** `storage::content_manager::consensus_manager::ConsensusManager` in [lib/storage/src/content\\_manager/consensus\\_manager.rs](https://github.com/qdrant/qdrant/blob/48203e41/lib/storage/src/content_manager/consensus_manager.rs)\n\n**Metadata operations** managed by consensus (defined in [lib/storage/src/content\\_manager/mod.rs20-146](https://github.com/qdrant/qdrant/blob/48203e41/lib/storage/src/content_manager/mod.rs#L20-L146)):\n\n- `CollectionMetaOperations` - collection creation, deletion, updates\n- `AddPeer`, `RemovePeer` - peer membership changes\n- `UpdatePeerMetadata` - peer metadata updates\n- `RequestSnapshot`, `ReportSnapshot` - snapshot coordination\n\n**Sources:** [lib/storage/src/content\\_manager/consensus\\_manager.rs](https://github.com/qdrant/qdrant/blob/48203e41/lib/storage/src/content_manager/consensus_manager.rs) [lib/storage/src/content\\_manager/mod.rs20-146](https://github.com/qdrant/qdrant/blob/48203e41/lib/storage/src/content_manager/mod.rs#L20-L146) [src/consensus.rs44-627](https://github.com/qdrant/qdrant/blob/48203e41/src/consensus.rs#L44-L627)\n\n### TableOfContent",
+      "index": 8,
+      "token_count": 569,
+      "metadata": {
+        "title": "_qdrant_qdrant_2-system-architecture",
+        "source": "qdrant_web_docs\\_qdrant_qdrant_2-system-architecture.md",
+        "chunk_method": "simple_fallback",
+        "source_repo": "qdrant_web_docs",
+        "source_subdir": "root",
+        "category": "general",
+        "file_path": "_qdrant_qdrant_2-system-architecture.md",
+        "file_name": "_qdrant_qdrant_2-system-architecture.md",
+        "collection": "qdrant_ecosystem",
+        "processed_date": "2025-10-16T01:58:35.130301",
+        "total_chunks": 18
+      },
+      "start_char": 15335,
+      "end_char": 17346
+    },
+    {
+      "content": "627](https://github.com/qdrant/qdrant/blob/48203e41/src/consensus.rs#L44-L627)\n\n### TableOfContent\n\nThe `TableOfContent` (TOC) manages all collections in the system. It acts as the collection registry and provides methods for collection lifecycle management.\n\n**Code entity:** `storage::content_manager::toc::TableOfContent` in [lib/storage/src/content\\_manager/toc/mod.rs](https://github.com/qdrant/qdrant/blob/48203e41/lib/storage/src/content_manager/toc/mod.rs)\n\n**Key responsibilities:**\n\n- Collection creation, deletion, and updates\n- Collection metadata persistence\n- Collection access control\n- Coordinating collection operations across the cluster\n\n**Initialization** in [src/main.rs365-377](https://github.com/qdrant/qdrant/blob/48203e41/src/main.rs#L365-L377):\n\n```\nlet toc = TableOfContent::new(\n    &settings.storage,\n    search_runtime,\n    update_runtime,\n    general_runtime,\n    optimizer_resource_budget,\n    channel_service.clone(),\n    persistent_consensus_state.this_peer_id(),\n    propose_operation_sender.clone(),\n);\n```\n\n**Sources:** [lib/storage/src/content\\_manager/toc/mod.rs](https://github.com/qdrant/qdrant/blob/48203e41/lib/storage/src/content_manager/toc/mod.rs) [src/main.rs365-383](https://github.com/qdrant/qdrant/blob/48203e41/src/main.rs#L365-L383)\n\n---\n\n## Collection and Shard Layer\n\n### Collection\n\nA `Collection` is the primary logical container for vector data. Each collection has:\n\n- A unique name\n- Configuration (vector dimensions, distance metric, etc.)\n- One or more shards for data partitioning\n- Optional shard keys for custom partitioning\n\n**Code entity:** `collection::Collection` in [lib/collection/src/collection.rs](https://github.com/qdrant/qdrant/blob/48203e41/lib/collection/src/collection.rs)\n\n**Key components:**\n\n- `ShardHolder` - manages shard distribution\n- `CollectionConfig` - collection configuration\n- `CollectionParams` - collection parameters\n\n**Sources:** [lib/collection/src/collection.rs](https://github.com/qdrant/qdrant/blob/48203e41/lib/collection/src/collection.",
+      "index": 9,
+      "token_count": 544,
+      "metadata": {
+        "title": "_qdrant_qdrant_2-system-architecture",
+        "source": "qdrant_web_docs\\_qdrant_qdrant_2-system-architecture.md",
+        "chunk_method": "simple_fallback",
+        "source_repo": "qdrant_web_docs",
+        "source_subdir": "root",
+        "category": "general",
+        "file_path": "_qdrant_qdrant_2-system-architecture.md",
+        "file_name": "_qdrant_qdrant_2-system-architecture.md",
+        "collection": "qdrant_ecosystem",
+        "processed_date": "2025-10-16T01:58:35.130301",
+        "total_chunks": 18
+      },
+      "start_char": 17246,
+      "end_char": 19283
+    },
+    {
+      "content": "ion/src/collection.rs](https://github.com/qdrant/qdrant/blob/48203e41/lib/collection/src/collection.rs) [lib/collection/src/config.rs](https://github.com/qdrant/qdrant/blob/48203e41/lib/collection/src/config.rs)\n\n### ShardHolder\n\nThe `ShardHolder` maps data to shards and manages shard distribution. It supports two partitioning strategies:\n\n1. **Hash-based partitioning** - automatic distribution using `HashRing`\n2. **Shard key-based partitioning** - custom partitioning using user-defined shard keys\n\n**Code entity:** `collection::shards::shard_holder::ShardHolder` in [lib/collection/src/shards/shard\\_holder.rs](https://github.com/qdrant/qdrant/blob/48203e41/lib/collection/src/shards/shard_holder.rs)\n\n```\n```\n\n**Sources:** [lib/collection/src/shards/shard\\_holder.rs](https://github.com/qdrant/qdrant/blob/48203e41/lib/collection/src/shards/shard_holder.rs) [lib/collection/src/shards/mod.rs](https://github.com/qdrant/qdrant/blob/48203e41/lib/collection/src/shards/mod.rs)\n\n### ShardReplicaSet\n\nA `ShardReplicaSet` coordinates multiple replicas of a single shard across peers. It handles:\n\n- Replica state management (Active, Dead, Listener, Initializing, etc.)\n- Update ordering and clock synchronization\n- Write consistency enforcement\n- Replica failover\n\n**Code entity:** `collection::shards::replica_set::ShardReplicaSet` in [lib/collection/src/shards/replica\\_set/mod.rs](https://github.com/qdrant/qdrant/blob/48203e41/lib/collection/src/shards/replica_set/mod.rs)\n\n**Replica types:**\n\n- `LocalShard` - replica hosted on current peer\n- `RemoteShard` - proxy to replica on another peer\n- `QueueProxyShard` - proxy for updates during shard transfers\n\n**Sources:** [lib/collection/src/shards/replica\\_set/mod.rs](https://github.com/qdrant/qdrant/blob/48203e41/lib/collection/src/shards/replica_set/mod.rs) [lib/collection/src/shards/replica\\_set/replica\\_state.rs](https://github.com/qdrant/qdrant/blob/48203e41/lib/collection/src/shards/replica_set/replica_state.rs)\n\n---\n\n## Shard and Segment Layer\n\n### LocalShard",
+      "index": 10,
+      "token_count": 578,
+      "metadata": {
+        "title": "_qdrant_qdrant_2-system-architecture",
+        "source": "qdrant_web_docs\\_qdrant_qdrant_2-system-architecture.md",
+        "chunk_method": "simple_fallback",
+        "source_repo": "qdrant_web_docs",
+        "source_subdir": "root",
+        "category": "general",
+        "file_path": "_qdrant_qdrant_2-system-architecture.md",
+        "file_name": "_qdrant_qdrant_2-system-architecture.md",
+        "collection": "qdrant_ecosystem",
+        "processed_date": "2025-10-16T01:58:35.130301",
+        "total_chunks": 18
+      },
+      "start_char": 19183,
+      "end_char": 21211
+    },
+    {
+      "content": "llection/src/shards/replica_set/replica_state.rs)\n\n---\n\n## Shard and Segment Layer\n\n### LocalShard\n\nA `LocalShard` is the core data-holding component on each peer. It contains:\n\n- `SegmentHolder` - manages multiple segments\n- `RecoverableWal` - write-ahead log for durability\n- `UpdateHandler` - background optimization workers\n- `LocalShardClocks` - logical clocks for update ordering\n\n**Code entity:** `collection::shards::local_shard::LocalShard` in [lib/collection/src/shards/local\\_shard/mod.rs](https://github.com/qdrant/qdrant/blob/48203e41/lib/collection/src/shards/local_shard/mod.rs)\n\n```\n```\n\n**Update flow:**\n\n1. Write to WAL [lib/collection/src/shards/local\\_shard/mod.rs](https://github.com/qdrant/qdrant/blob/48203e41/lib/collection/src/shards/local_shard/mod.rs)\n2. Apply to segments via `SegmentHolder`\n3. Trigger optimization check via `UpdateHandler`\n\n**Sources:** [lib/collection/src/shards/local\\_shard/mod.rs](https://github.com/qdrant/qdrant/blob/48203e41/lib/collection/src/shards/local_shard/mod.rs) [lib/collection/src/shards/update\\_tracker.rs](https://github.com/qdrant/qdrant/blob/48203e41/lib/collection/src/shards/update_tracker.rs)\n\n### Segment\n\nA `Segment` is the fundamental unit of data storage and indexing. Each segment contains:\n\n- `IdTracker` - maps external IDs to internal IDs\n- `VectorData` - one or more named vector storages and indices\n- `PayloadStorage` - JSON payload data\n- `StructPayloadIndex` - field indices for filtering\n\n**Code entity:** `segment::segment::Segment` in [lib/segment/src/segment.rs](https://github.com/qdrant/qdrant/blob/48203e41/lib/segment/src/segment.rs)\n\n**Segment types:**\n\n- **Plain segments** - unindexed, for small datasets or during construction\n- **Indexed segments** - with HNSW or other vector indices\n\n**Sources:** [lib/segment/src/segment.rs](https://github.com/qdrant/qdrant/blob/48203e41/lib/segment/src/segment.rs) [lib/segment/src/types.rs](https://github.com/qdrant/qdrant/blob/48203e41/lib/segment/src/types.rs)\n\n### SegmentHolder",
+      "index": 11,
+      "token_count": 568,
+      "metadata": {
+        "title": "_qdrant_qdrant_2-system-architecture",
+        "source": "qdrant_web_docs\\_qdrant_qdrant_2-system-architecture.md",
+        "chunk_method": "simple_fallback",
+        "source_repo": "qdrant_web_docs",
+        "source_subdir": "root",
+        "category": "general",
+        "file_path": "_qdrant_qdrant_2-system-architecture.md",
+        "file_name": "_qdrant_qdrant_2-system-architecture.md",
+        "collection": "qdrant_ecosystem",
+        "processed_date": "2025-10-16T01:58:35.130301",
+        "total_chunks": 18
+      },
+      "start_char": 21111,
+      "end_char": 23131
+    },
+    {
+      "content": "es.rs](https://github.com/qdrant/qdrant/blob/48203e41/lib/segment/src/types.rs)\n\n### SegmentHolder\n\nThe `SegmentHolder` manages all segments within a shard and coordinates segment-level operations.\n\n**Code entity:** `collection::shards::segment_holder::SegmentHolder` in [lib/collection/src/shards/local\\_shard/segment\\_holder.rs](https://github.com/qdrant/qdrant/blob/48203e41/lib/collection/src/shards/local_shard/segment_holder.rs)\n\n**Key operations:**\n\n- Read operations across all segments\n- Append-only segments for new data\n- Locked segments during optimization\n- Segment replacement during optimization\n\n**Sources:** [lib/collection/src/shards/local\\_shard/segment\\_holder.rs](https://github.com/qdrant/qdrant/blob/48203e41/lib/collection/src/shards/local_shard/segment_holder.rs)\n\n---\n\n## Storage and Index Layer\n\n### Vector Storage\n\nVector data is stored in specialized storage backends optimized for different access patterns:\n\n| Storage Type              | Use Case                   | Code Entity                                            |\n| ------------------------- | -------------------------- | ------------------------------------------------------ |\n| `DenseSimpleStorage`      | In-memory, fast access     | `segment::vector_storage::simple_dense_vector_storage` |\n| `DenseMmapStorage`        | Memory-mapped, low memory  | `segment::vector_storage::mmap_dense_vector_storage`   |\n| `SparseVectorStorage`     | Sparse vectors             | `sparse::index::sparse_vector_index`                   |\n| `MultiDenseVectorStorage` | Multiple vectors per point | `segment::vector_storage::multi_dense`                 |\n\n**Configuration:** [config/config.yaml192-197](https://github.com/qdrant/qdrant/blob/48203e41/config/config.yaml#L192-L197)\n\n**Sources:** [lib/segment/src/vector\\_storage/mod.rs](https://github.com/qdrant/qdrant/blob/48203e41/lib/segment/src/vector_storage/mod.rs) [lib/sparse/src/index/mod.rs](https://github.com/qdrant/qdrant/blob/48203e41/lib/sparse/src/index/mod.rs)\n\n### Vector Indices",
+      "index": 12,
+      "token_count": 494,
+      "metadata": {
+        "title": "_qdrant_qdrant_2-system-architecture",
+        "source": "qdrant_web_docs\\_qdrant_qdrant_2-system-architecture.md",
+        "chunk_method": "simple_fallback",
+        "source_repo": "qdrant_web_docs",
+        "source_subdir": "root",
+        "category": "general",
+        "file_path": "_qdrant_qdrant_2-system-architecture.md",
+        "file_name": "_qdrant_qdrant_2-system-architecture.md",
+        "collection": "qdrant_ecosystem",
+        "processed_date": "2025-10-16T01:58:35.130301",
+        "total_chunks": 18
+      },
+      "start_char": 23031,
+      "end_char": 25059
+    },
+    {
+      "content": "s](https://github.com/qdrant/qdrant/blob/48203e41/lib/sparse/src/index/mod.rs)\n\n### Vector Indices\n\nVector similarity search is accelerated using various index types:\n\n| Index Type    | Algorithm              | Best For                         |\n| ------------- | ---------------------- | -------------------------------- |\n| `HnswIndex`   | Hierarchical NSW graph | General purpose, fast searches   |\n| `PlainIndex`  | Brute force            | Small datasets, perfect accuracy |\n| `SparseIndex` | Inverted index         | Sparse vectors, keyword search   |\n\n**Configuration:** [config/config.yaml151-174](https://github.com/qdrant/qdrant/blob/48203e41/config/config.yaml#L151-L174)\n\n**Sources:** [lib/segment/src/index/hnsw\\_index/mod.rs](https://github.com/qdrant/qdrant/blob/48203e41/lib/segment/src/index/hnsw_index/mod.rs) [lib/segment/src/index/plain\\_payload\\_index.rs](https://github.com/qdrant/qdrant/blob/48203e41/lib/segment/src/index/plain_payload_index.rs) [lib/sparse/src/index/inverted\\_index/mod.rs](https://github.com/qdrant/qdrant/blob/48203e41/lib/sparse/src/index/inverted_index/mod.rs)\n\n### Payload Storage and Indices\n\nPayload data (JSON documents) is stored and indexed for filtering:\n\n**Payload storage backends:**\n\n- `SimplePayloadStorage` - in-memory\n- `OnDiskPayloadStorage` - RocksDB or Gridstore\n- `MmapPayloadStorage` - memory-mapped\n\n**Payload index types:**\n\n- `NumericIndex` - range queries on numbers\n- `KeywordIndex` - exact match on strings\n- `FullTextIndex` - tokenized text search\n- `GeoIndex` - geospatial queries\n- `BoolIndex` - boolean values\n- `NullIndex` - existence checks\n\n**Sources:** [lib/segment/src/payload\\_storage/mod.rs](https://github.com/qdrant/qdrant/blob/48203e41/lib/segment/src/payload_storage/mod.rs) [lib/segment/src/index/field\\_index/mod.rs](https://github.com/qdrant/qdrant/blob/48203e41/lib/segment/src/index/field_index/mod.rs)\n\n### Write-Ahead Log\n\nThe WAL ensures durability by persisting operations before applying them to segments.",
+      "index": 13,
+      "token_count": 545,
+      "metadata": {
+        "title": "_qdrant_qdrant_2-system-architecture",
+        "source": "qdrant_web_docs\\_qdrant_qdrant_2-system-architecture.md",
+        "chunk_method": "simple_fallback",
+        "source_repo": "qdrant_web_docs",
+        "source_subdir": "root",
+        "category": "general",
+        "file_path": "_qdrant_qdrant_2-system-architecture.md",
+        "file_name": "_qdrant_qdrant_2-system-architecture.md",
+        "collection": "qdrant_ecosystem",
+        "processed_date": "2025-10-16T01:58:35.130301",
+        "total_chunks": 18
+      },
+      "start_char": 24959,
+      "end_char": 26961
+    },
+    {
+      "content": "e-Ahead Log\n\nThe WAL ensures durability by persisting operations before applying them to segments.\n\n**Code entity:** `wal::RecoverableWal` from external crate [Cargo.toml70](https://github.com/qdrant/qdrant/blob/48203e41/Cargo.toml#L70-L70) and [Cargo.toml275](https://github.com/qdrant/qdrant/blob/48203e41/Cargo.toml#L275-L275)\n\n**Configuration:** [config/config.yaml49-56](https://github.com/qdrant/qdrant/blob/48203e41/config/config.yaml#L49-L56)\n\n**Sources:** [lib/collection/src/shards/local\\_shard/mod.rs](https://github.com/qdrant/qdrant/blob/48203e41/lib/collection/src/shards/local_shard/mod.rs) [config/config.yaml49-56](https://github.com/qdrant/qdrant/blob/48203e41/config/config.yaml#L49-L56)\n\n---\n\n## Runtime Architecture\n\nQdrant uses multiple Tokio runtimes for workload isolation:\n\n### Runtime Separation\n\n```\n```\n\n**Runtime creation** in [src/main.rs309-322](https://github.com/qdrant/qdrant/blob/48203e41/src/main.rs#L309-L322):\n\n```\nlet search_runtime = create_search_runtime(settings.storage.performance.max_search_threads)\nlet update_runtime = create_update_runtime(settings.storage.performance.max_optimization_runtime_threads)\nlet general_runtime = create_general_purpose_runtime()\n```\n\n**Runtime functions:**\n\n- `create_search_runtime` - [src/common/helpers.rs20-32](https://github.com/qdrant/qdrant/blob/48203e41/src/common/helpers.rs#L20-L32)\n- `create_update_runtime` - [src/common/helpers.rs34-50](https://github.com/qdrant/qdrant/blob/48203e41/src/common/helpers.rs#L34-L50)\n- `create_general_purpose_runtime` - [src/common/helpers.rs52-63](https://github.com/qdrant/qdrant/blob/48203e41/src/common/helpers.rs#L52-L63)\n\n**Sources:** [src/main.rs309-322](https://github.com/qdrant/qdrant/blob/48203e41/src/main.rs#L309-L322) [src/common/helpers.rs20-63](https://github.com/qdrant/qdrant/blob/48203e41/src/common/helpers.rs#L20-L63) [config/config.yaml64-96](https://github.com/qdrant/qdrant/blob/48203e41/config/config.yaml#L64-L96)\n\n### Resource Budgets",
+      "index": 14,
+      "token_count": 665,
+      "metadata": {
+        "title": "_qdrant_qdrant_2-system-architecture",
+        "source": "qdrant_web_docs\\_qdrant_qdrant_2-system-architecture.md",
+        "chunk_method": "simple_fallback",
+        "source_repo": "qdrant_web_docs",
+        "source_subdir": "root",
+        "category": "general",
+        "file_path": "_qdrant_qdrant_2-system-architecture.md",
+        "file_name": "_qdrant_qdrant_2-system-architecture.md",
+        "collection": "qdrant_ecosystem",
+        "processed_date": "2025-10-16T01:58:35.130301",
+        "total_chunks": 18
+      },
+      "start_char": 26861,
+      "end_char": 28846
+    },
+    {
+      "content": "](https://github.com/qdrant/qdrant/blob/48203e41/config/config.yaml#L64-L96)\n\n### Resource Budgets\n\nQdrant uses CPU and IO budgets to control resource usage during optimization:\n\n**CPU Budget:** Configured via `optimizer_cpu_budget` [config/config.yaml68-72](https://github.com/qdrant/qdrant/blob/48203e41/config/config.yaml#L68-L72)\n\n- If `0`: auto-select, reserve CPUs based on system size\n- If negative: subtract this number from available CPUs\n- If positive: use this exact number of CPUs\n\n**IO Budget:** Configured via `optimizer_io_budget` [lib/storage/src/types.rs43-48](https://github.com/qdrant/qdrant/blob/48203e41/lib/storage/src/types.rs#L43-L48)\n\n- Controls parallel IO operations during optimization\n- Defaults to one IO operation per CPU\n\n**Budget initialization** in [src/main.rs325-327](https://github.com/qdrant/qdrant/blob/48203e41/src/main.rs#L325-L327):\n\n```\nlet cpu_budget = get_cpu_budget(settings.storage.performance.optimizer_cpu_budget);\nlet io_budget = get_io_budget(settings.storage.performance.optimizer_io_budget, cpu_budget);\nlet optimizer_resource_budget = ResourceBudget::new(cpu_budget, io_budget);\n```\n\n**Sources:** [src/main.rs325-327](https://github.com/qdrant/qdrant/blob/48203e41/src/main.rs#L325-L327) [lib/common/common/src/cpu.rs](https://github.com/qdrant/qdrant/blob/48203e41/lib/common/common/src/cpu.rs) [lib/common/common/src/budget.rs](https://github.com/qdrant/qdrant/blob/48203e41/lib/common/common/src/budget.rs)\n\n---\n\n## Data Flow Overview\n\n### Write Path\n\n```\n```\n\n**Sources:** [lib/storage/src/dispatcher.rs](https://github.com/qdrant/qdrant/blob/48203e41/lib/storage/src/dispatcher.rs) [lib/collection/src/collection.rs](https://github.com/qdrant/qdrant/blob/48203e41/lib/collection/src/collection.rs) [lib/collection/src/shards/replica\\_set/mod.rs](https://github.com/qdrant/qdrant/blob/48203e41/lib/collection/src/shards/replica_set/mod.rs) [lib/collection/src/shards/local\\_shard/mod.rs](https://github.com/qdrant/qdrant/blob/48203e41/lib/collection/src/shards/local_shard/mod.rs)",
+      "index": 15,
+      "token_count": 621,
+      "metadata": {
+        "title": "_qdrant_qdrant_2-system-architecture",
+        "source": "qdrant_web_docs\\_qdrant_qdrant_2-system-architecture.md",
+        "chunk_method": "simple_fallback",
+        "source_repo": "qdrant_web_docs",
+        "source_subdir": "root",
+        "category": "general",
+        "file_path": "_qdrant_qdrant_2-system-architecture.md",
+        "file_name": "_qdrant_qdrant_2-system-architecture.md",
+        "collection": "qdrant_ecosystem",
+        "processed_date": "2025-10-16T01:58:35.130301",
+        "total_chunks": 18
+      },
+      "start_char": 28746,
+      "end_char": 30786
+    },
+    {
+      "content": "d.rs](https://github.com/qdrant/qdrant/blob/48203e41/lib/collection/src/shards/local_shard/mod.rs)\n\n### Search Path\n\n```\n```\n\n**Sources:** [lib/collection/src/collection.rs](https://github.com/qdrant/qdrant/blob/48203e41/lib/collection/src/collection.rs) [lib/collection/src/shards/local\\_shard/mod.rs](https://github.com/qdrant/qdrant/blob/48203e41/lib/collection/src/shards/local_shard/mod.rs) [lib/segment/src/segment.rs](https://github.com/qdrant/qdrant/blob/48203e41/lib/segment/src/segment.rs) [lib/segment/src/index/hnsw\\_index/mod.rs](https://github.com/qdrant/qdrant/blob/48203e41/lib/segment/src/index/hnsw_index/mod.rs)\n\n---\n\n## Configuration\n\nThe system is configured via YAML files with environment variable overrides. The configuration hierarchy is:\n\n1. Compile-time defaults [src/settings.rs20](https://github.com/qdrant/qdrant/blob/48203e41/src/settings.rs#L20-L20)\n2. `config/config.yaml` [config/config.yaml1-355](https://github.com/qdrant/qdrant/blob/48203e41/config/config.yaml#L1-L355)\n3. Environment-specific config (e.g., `config/development.yaml`)\n4. Local config `config/local.yaml` (not tracked in git)\n5. Custom config via `--config-path` CLI argument\n6. Environment variables prefixed with `QDRANT__`\n\n**Configuration loading** in [src/settings.rs230-285](https://github.com/qdrant/qdrant/blob/48203e41/src/settings.rs#L230-L285)\n\n**Key configuration sections:**\n\n- `storage` - storage paths, performance, optimizers\n- `service` - HTTP/gRPC ports, TLS, API keys\n- `cluster` - distributed mode, consensus, P2P\n- `log_level` - logging configuration\n\n**Sources:** [src/settings.rs196-326](https://github.com/qdrant/qdrant/blob/48203e41/src/settings.rs#L196-L326) [config/config.yaml1-355](https://github.com/qdrant/qdrant/blob/48203e41/config/config.yaml#L1-L355)\n\nDismiss\n\nRefresh this wiki\n\nEnter email to refresh\n\n### On this page\n\n- [System Architecture](#system-architecture.md)\n- [Purpose and Scope](#purpose-and-scope.md)\n- [Architectural Overview](#architectural-overview.md)\n- [System Layers](#system-layers.md)",
+      "index": 16,
+      "token_count": 641,
+      "metadata": {
+        "title": "_qdrant_qdrant_2-system-architecture",
+        "source": "qdrant_web_docs\\_qdrant_qdrant_2-system-architecture.md",
+        "chunk_method": "simple_fallback",
+        "source_repo": "qdrant_web_docs",
+        "source_subdir": "root",
+        "category": "general",
+        "file_path": "_qdrant_qdrant_2-system-architecture.md",
+        "file_name": "_qdrant_qdrant_2-system-architecture.md",
+        "collection": "qdrant_ecosystem",
+        "processed_date": "2025-10-16T01:58:35.130301",
+        "total_chunks": 18
+      },
+      "start_char": 30686,
+      "end_char": 32732
+    },
+    {
+      "content": "ope.md)\n- [Architectural Overview](#architectural-overview.md)\n- [System Layers](#system-layers.md)\n- [Layer Responsibilities](#layer-responsibilities.md)\n- [Deployment Modes](#deployment-modes.md)\n- [Standalone Mode](#standalone-mode.md)\n- [Distributed Mode](#distributed-mode.md)\n- [API Layer](#api-layer.md)\n- [REST API (Actix-web)](#rest-api-actix-web.md)\n- [gRPC API (Tonic)](#grpc-api-tonic.md)\n- [Authentication and Authorization](#authentication-and-authorization.md)\n- [Service Orchestration Layer](#service-orchestration-layer.md)\n- [Dispatcher](#dispatcher.md)\n- [ConsensusManager](#consensusmanager.md)\n- [TableOfContent](#tableofcontent.md)\n- [Collection and Shard Layer](#collection-and-shard-layer.md)\n- [Collection](#collection.md)\n- [ShardHolder](#shardholder.md)\n- [ShardReplicaSet](#shardreplicaset.md)\n- [Shard and Segment Layer](#shard-and-segment-layer.md)\n- [LocalShard](#localshard.md)\n- [Segment](#segment.md)\n- [SegmentHolder](#segmentholder.md)\n- [Storage and Index Layer](#storage-and-index-layer.md)\n- [Vector Storage](#vector-storage.md)\n- [Vector Indices](#vector-indices.md)\n- [Payload Storage and Indices](#payload-storage-and-indices.md)\n- [Write-Ahead Log](#write-ahead-log.md)\n- [Runtime Architecture](#runtime-architecture.md)\n- [Runtime Separation](#runtime-separation.md)\n- [Resource Budgets](#resource-budgets.md)\n- [Data Flow Overview](#data-flow-overview.md)\n- [Write Path](#write-path.md)\n- [Search Path](#search-path.md)\n- [Configuration](#configuration.md)",
+      "index": 17,
+      "token_count": 418,
+      "metadata": {
+        "title": "_qdrant_qdrant_2-system-architecture",
+        "source": "qdrant_web_docs\\_qdrant_qdrant_2-system-architecture.md",
+        "chunk_method": "simple_fallback",
+        "source_repo": "qdrant_web_docs",
+        "source_subdir": "root",
+        "category": "general",
+        "file_path": "_qdrant_qdrant_2-system-architecture.md",
+        "file_name": "_qdrant_qdrant_2-system-architecture.md",
+        "collection": "qdrant_ecosystem",
+        "processed_date": "2025-10-16T01:58:35.130301",
+        "total_chunks": 18
+      },
+      "start_char": 32632,
+      "end_char": 34680
+    }
+  ]
+}
