@@ -68,7 +68,14 @@ print(f"{'='*60}\n")
 
 # Configuration
 COLLECTION_NAME = "qdrant_ecosystem"
-INPUT_DIR = Path("/kaggle/working/rad_clean/output/qdrant_ecosystem")
+
+# Auto-detect path (GitHub clones into rad_clean, not RAG_CLEAN)
+if Path("/kaggle/working/rad_clean/output/qdrant_ecosystem").exists():
+    INPUT_DIR = Path("/kaggle/working/rad_clean/output/qdrant_ecosystem")
+else:
+    # Fallback for local testing
+    INPUT_DIR = Path("output/qdrant_ecosystem")
+
 OUTPUT_DIR = Path("/kaggle/working/embeddings")
 OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
