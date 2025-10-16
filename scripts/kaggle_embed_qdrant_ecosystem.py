@@ -37,7 +37,7 @@ sys.path.insert(0, '/kaggle/working/rad_clean/src/templates')
 sys.path.insert(0, str(Path(__file__).parent.parent / 'src' / 'templates'))
 
 # Import embedder template
-from embedder_template import UniversalEmbedder, EmbedderConfig
+from embedder_template import UniversalEmbedder, EmbedderConfig  # type: ignore
 
 def main():
     """Embed qdrant_ecosystem collection."""
@@ -59,6 +59,13 @@ def main():
     # Run embedder
     embedder = UniversalEmbedder(config)
     embedder.run()
+
+    if config.output_path.exists():
+        with open(config.output_path, 'r', encoding='utf-8') as f:
+            line_count = sum(1 for _ in f if _.strip())
+        print(f"JSONL VALIDATION: {line_count:,} records written to {config.output_path.name}")
+        if line_count <= 1:
+            print("WARNING: Expected multiple JSONL records. Inspect the output file before uploading.")
     
     print()
     print("=" * 60)
