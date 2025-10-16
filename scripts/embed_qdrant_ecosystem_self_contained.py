@@ -249,81 +249,41 @@ class UniversalEmbedder:
     
     def load_chunks(self) -> List[Dict[str, Any]]:
         """
-        Load pre-chunked JSON files.
+        Load pre-chunked JSON files from the specified input path.
         
         Returns:
-            List of chunk dictionaries
+            List of chunk dictionaries.
         """
         logger.info(f"📂 Loading pre-chunked JSON from: {self.config.input_path}")
-        
-        all_chunks: List[Dict[str, Any]] = []
-        search_roots: List[Path] = [self.config.input_path]
 
-        # Allow automatic fallback to additional Kaggle runtime locations so
-        # Template 2 remains standalone regardless of where the chunk artifacts
-        # were produced (dataset, /kaggle/output, or repo workspace).
-        input_str = str(self.config.input_path)
-        if input_str.startswith("/kaggle/input/"):
-            suffix = input_str[len("/kaggle/input/"):]
-            output_candidate = Path("/kaggle/output") / suffix
-            working_candidate = Path("/kaggle/working") / suffix
-            # Avoid duplicates if the candidates already exist in search_roots
-            for candidate in (output_candidate, working_candidate):
-                if candidate not in search_roots:
-                    search_roots.append(candidate)
+        if not self.config.input_path.exists():
+            logger.error(f"❌ Input directory not found: {self.config.input_path}")
+            raise FileNotFoundError(f"Input directory not found: {self.config.input_path}")
 
-        # When running in a Kaggle notebook that cloned the repository, the
-        # chunk outputs often reside under /kaggle/working/rad_clean/output/*.
-        repo_root = Path(__file__).resolve().parents[2]
-        repo_output_root = repo_root / "output"
-        if repo_output_root not in search_roots:
-            search_roots.append(repo_output_root)
-
-        # Add collection-specific folder heuristics (hyphen vs underscore)
-        collection_slug_variants = {
-            self.config.collection_name,
-            self.config.collection_name.replace('-', '_'),
-            self.config.collection_name.replace('_', '-'),
-        }
-        for variant in collection_slug_variants:
-            for suffix in ("", "_chunked"):
-                candidate = repo_output_root / f"{variant}{suffix}"
-                if candidate not in search_roots:
-                    search_roots.append(candidate)
-
-        chunk_files: List[Path] = []
-        for root in search_roots:
-            if not root.exists():
-                continue
-            matches = sorted(root.glob("**/*_chunks.json"))
-            if matches:
-                logger.info(f"  ✓ Found {len(matches)} chunk files under {root}")
-                chunk_files = matches
-                break
+        chunk_files = sorted(self.config.input_path.glob("**/*_chunks.json"))
 
         if not chunk_files:
-            searched_locations = " | ".join(str(path) for path in search_roots)
-            raise FileNotFoundError(
-                "No *_chunks.json files found.'''n"
-                f"Searched locations: {searched_locations}'''n"
-                "Ensure Template 1 output is available (upload dataset or copy files)."
-            )
-        logger.info(f"  Found {len(chunk_files)} chunk files")
-        
+            logger.error(f"❌ No '*_chunks.json' files found in {self.config.input_path}")
+            raise FileNotFoundError(f"No '*_chunks.json' files found in {self.config.input_path}")
+
+        logger.info(f"  Found {len(chunk_files)} chunk files.")
+
+        all_chunks: List[Dict[str, Any]] = []
         for chunk_file in chunk_files:
             try:
                 with open(chunk_file, 'r', encoding='utf-8') as f:
                     chunks = json.load(f)
-                
                 if chunks:
                     all_chunks.extend(chunks)
-                    logger.info(f"  ✓ {chunk_file.name}: {len(chunks)} chunks")
-            
+                    logger.info(f"  ✓ Loaded {len(chunks)} chunks from {chunk_file.name}")
             except Exception as e:
                 logger.error(f"  ✗ Error loading {chunk_file.name}: {e}")
-        
-        logger.info(f"✓ Loaded {len(all_chunks)} chunks total'''n")
-        
+
+        if not all_chunks:
+            logger.error("❌ No chunks were loaded from the found files.")
+            raise ValueError("No chunks were loaded from the found files.")
+
+        logger.info(f"✓ Loaded {len(all_chunks)} chunks in total.\n")
         return all_chunks
     
     def embed_all(self, chunks: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
