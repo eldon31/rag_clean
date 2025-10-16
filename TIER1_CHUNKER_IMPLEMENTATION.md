@@ -84,7 +84,7 @@ Some content here.
 
 **Implementation:**
 - Added `_validate_token_count()` method
-- Uses actual tokenizer (nomic-embed-code)
+- Uses actual tokenizer (CodeRankEmbed)
 - Returns `(is_valid, token_count)` tuple
 - Adds `token_count_valid` to chunk metadata
 - Logs warning if chunk exceeds `max_tokens`

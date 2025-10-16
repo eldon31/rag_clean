@@ -11,8 +11,8 @@
 ### Created Scripts (4 new files)
 
 1. **`scripts/remove_old_collections.py`**
-   - Removes old 3584-dim collections
-   - Safety checks (only deletes 3584-dim)
+   - Removes old 768-dim collections
+   - Safety checks (only deletes 768-dim)
    - Optional metadata backup
    - **Usage**: `python scripts/remove_old_collections.py --backup`
 
@@ -111,7 +111,7 @@ Before executing:
 - [ ] Embedding files exist in `output/embed_results/`
 - [ ] Python dependencies installed: `qdrant-client`, `tqdm`
 - [ ] Backup space available (~50 MB)
-- [ ] Current collections are 3584-dim (will be deleted)
+- [ ] Current collections are 768-dim (will be deleted)
 
 **Check Qdrant:**
 ```powershell
@@ -140,7 +140,7 @@ ls output/embed_results/*.jsonl
    - Location: `output/collection_backups/`
 
 3. **Remove Phase**
-   - Delete old 3584-dim collections
+   - Delete old 768-dim collections
    - Safety: Only deletes if dimension=3584
 
 4. **Upload Phase**
@@ -169,7 +169,7 @@ CODERANK MIGRATION - Automated Execution
 
 📦 STEP 1: Backup Old Collections
 ==============================================================
-🗑️  Deleted qdrant_ecosystem: 1,344 points, 3584-dim
+🗑️  Deleted qdrant_ecosystem: 1,344 points, 768-dim
 ✅ Backup saved to: output/collection_backups/...
 
 ⬆️  STEP 2: Upload 768-dim Embeddings

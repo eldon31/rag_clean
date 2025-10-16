@@ -12,7 +12,7 @@ from sentence_transformers import SentenceTransformer
 client = QdrantClient(url="http://localhost:6333")
 
 # 2. Load embedding model (same one used for embedding)
-model = SentenceTransformer("nomic-ai/nomic-embed-code", trust_remote_code=True)
+model = SentenceTransformer("nomic-ai/CodeRankEmbed", trust_remote_code=True)
 
 # 3. Your search query
 query = "How do I convert PDF to markdown with Docling?"
@@ -64,7 +64,7 @@ curl -X POST 'http://localhost:6333/collections/docling/points/search' \
 def rag_query(user_question: str, llm_client):
     # 1. Vector search
     client = QdrantClient(url="http://localhost:6333")
-    model = SentenceTransformer("nomic-ai/nomic-embed-code", trust_remote_code=True)
+    model = SentenceTransformer("nomic-ai/CodeRankEmbed", trust_remote_code=True)
     
     query_vector = model.encode(user_question).tolist()
     results = client.search(

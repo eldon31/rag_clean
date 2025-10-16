@@ -12,7 +12,7 @@ from src.storage.qdrant_store import QdrantStoreConfig, QdrantStore
 async def test_search():
     print("Initializing embedder...")
     embedder = SentenceTransformerEmbedder(
-        EmbedderConfig(model_name='nomic-ai/nomic-embed-code')
+        EmbedderConfig(model_name='nomic-ai/CodeRankEmbed')
     )
     
     print("Generating query embedding...")
@@ -31,7 +31,7 @@ async def test_search():
                     host='host.docker.internal',
                     port=6333,
                     collection_name=collection,
-                    vector_size=3584,
+                    vector_size=768,
                     prefer_grpc=False
                 )
             )

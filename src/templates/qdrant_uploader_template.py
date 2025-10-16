@@ -36,7 +36,7 @@ FEATURES:
     - Count verification
     - Resume capability (skips duplicate IDs)
     - Binary quantization for 768-dim vectors (40x speedup)
-    - Scalar quantization for 3584-dim vectors (2x speedup)
+    - Scalar quantization for 768-dim vectors (2x speedup)
 
 QDRANT OPTIMIZATION (for 768-dim CodeRankEmbed):
     - HNSW index: m=16, ef_construct=100
@@ -124,7 +124,7 @@ class UniversalQdrantUploader:
     - Auto-detection of vector dimension
     - Optimized HNSW settings
     - Binary quantization for 768-dim (40x speedup)
-    - Scalar quantization for 3584-dim (2x speedup)
+    - Scalar quantization for 768-dim (2x speedup)
     - Batch upload with retry
     - Count verification
     """

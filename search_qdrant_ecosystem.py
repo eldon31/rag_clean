@@ -11,7 +11,7 @@ async def main():
     # Initialize embedder (CPU-based)
     print("Initializing embedder (this may take 30+ seconds on CPU)...")
     embedder_config = EmbedderConfig(
-        model_name='nomic-ai/nomic-embed-code',
+        model_name='nomic-ai/CodeRankEmbed',
         device='cpu',
         batch_size=1
     )
@@ -83,7 +83,7 @@ async def main():
     
     print(f"\n{'='*80}")
     print(f"TOTAL EMBEDDING TIME: {elapsed + elapsed2:.2f} seconds for 2 queries")
-    print(f"This demonstrates why CPU-based nomic-embed-code is problematic for MCP server!")
+    print(f"This demonstrates why CPU-based CodeRankEmbed is problematic for MCP server!")
     print(f"{'='*80}")
 
 

@@ -1,0 +1,1 @@
+model = SentenceTransformer('clip-ViT-B-32')

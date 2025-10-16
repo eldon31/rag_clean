@@ -1,0 +1,22 @@
+[
+  {
+    "text": "from sentence_transformers.models import CLIPModel\nclip_model = CLIPModel(\n    model_name='openai/clip-vit-base-patch32',\n    processor_name='openai/clip-vit-base-patch32'\n)\n```\n\nThe `CLIPModel.load()` class method handles model restoration from disk, ensuring both the `transformers.CLIPModel` and `transformers.CLIPProcessor` components are properly loaded.\n\nSources: [sentence_transformers/models/CLIPModel.py:18-25](), [sentence_transformers/models/CLIPModel.py:102-121]()\n\n## Serialization and Persistence\n\nThe `CLIPModel` implements custom save/load methods to properly handle both the model and processor components:\n\n```mermaid\ngraph LR\n    subgraph Save[\"save() Method\"]\n        SAVEMODEL[\"model.save_pretrained()\"]\n        SAVEPROC[\"processor.save_pretrained()\"]\n    end\n    \n    subgraph Load[\"load() Method\"] \n        LOADPATH[\"load_dir_path()\"]\n        CONSTRUCT[\"CLIPModel(local_path)\"]\n    end\n    \n    Save --> DISK[\"Disk Storage\"]\n    DISK --> Load\n```\n\nThis ensures that both the vision and text processing components are preserved during model serialization.\n\nSources: [sentence_transformers/models/CLIPModel.py:98-121]()",
+    "metadata": {
+      "chunk_id": 0,
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\Sentence_Transformers\\UKPLab\\sentence-transformers\\Direct_CLIPModel_construction.md",
+      "input_type": "sentence_transformers",
+      "chunking_strategy": "programming_language_documentation",
+      "token_count": 273,
+      "character_count": 1140,
+      "created_at": "2025-10-16T17:42:32.830833",
+      "parent_context": null,
+      "semantic_type": "sentence_transformers",
+      "collection_name": "Sentence_Transformers",
+      "subfolder_name": "UKPLab",
+      "collection_strategy": "programming_language_documentation",
+      "chunk_index_in_file": 0,
+      "file_relative_path": "UKPLab\\sentence-transformers\\Direct_CLIPModel_construction.md",
+      "collection_context": "Sentence_Transformers/UKPLab"
+    }
+  }
+]

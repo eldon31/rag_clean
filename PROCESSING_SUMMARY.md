@@ -7,7 +7,7 @@
 ```python
 # Every script has this configuration:
 model = AutoModel.from_pretrained(
-    "nomic-ai/nomic-embed-code",
+    "nomic-ai/CodeRankEmbed",
     trust_remote_code=True,
     device_map="auto",      # ✅ Splits 26GB model across 2 GPUs
     torch_dtype=torch.float16  # ✅ FP16 reduces memory per GPU
@@ -59,7 +59,7 @@ model = AutoModel.from_pretrained(
 └─────────────────────────────────────────────────────────┘
                     ↓
 ┌─────────────────────────────────────────────────────────┐
-│ STEP 3: Embed Chunks (nomic-embed-code)                │
+│ STEP 3: Embed Chunks (CodeRankEmbed)                │
 │   • Model: 26GB across 2 GPUs                          │
 │   • Batch size: 8                                       │
 │   • Dimension: 768                                      │
@@ -98,7 +98,7 @@ Duration: ~7-10 minutes
 └─────────────────────────────────────────────────────────┘
                     ↓
 ┌─────────────────────────────────────────────────────────┐
-│ STEP 2: Embed Chunks (nomic-embed-code)                │
+│ STEP 2: Embed Chunks (CodeRankEmbed)                │
 │   • Model: 26GB across 2 GPUs                          │
 │   • Batch size: 8                                       │
 │   • Dimension: 768                                      │
@@ -135,7 +135,7 @@ Duration: ~15-20 minutes
 └─────────────────────────────────────────────────────────┘
                     ↓
 ┌─────────────────────────────────────────────────────────┐
-│ STEP 2: Embed Chunks (nomic-embed-code)                │
+│ STEP 2: Embed Chunks (CodeRankEmbed)                │
 │   • Model: 26GB across 2 GPUs                          │
 │   • Batch size: 8                                       │
 │   • Dimension: 768                                      │
@@ -173,7 +173,7 @@ Duration: ~25-35 minutes
 └─────────────────────────────────────────────────────────┘
                     ↓
 ┌─────────────────────────────────────────────────────────┐
-│ STEP 2: Embed Chunks (nomic-embed-code)                │
+│ STEP 2: Embed Chunks (CodeRankEmbed)                │
 │   • Model: 26GB across 2 GPUs                          │
 │   • Batch size: 8                                       │
 │   • Dimension: 768                                      │

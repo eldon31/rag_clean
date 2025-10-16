@@ -43,7 +43,7 @@ class Embedding(BaseModel):
         - 768: CodeRankEmbed (current default), BERT-based models
         - 1536: OpenAI text-embedding-3-small, text-embedding-ada-002
         - 3072: OpenAI text-embedding-3-large
-        - 3584: nomic-ai/nomic-embed-code (legacy)
+        - 3584: nomic-ai/CodeRankEmbed (legacy)
         """
         valid_dims = [768, 1536, 3072, 3584]  # 768 is primary, 3584 is legacy
         dim = len(v)

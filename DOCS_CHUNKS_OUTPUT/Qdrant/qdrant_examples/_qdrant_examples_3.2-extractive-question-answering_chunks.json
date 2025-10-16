@@ -1,0 +1,122 @@
+[
+  {
+    "text": "Extractive Question Answering | qdrant/examples | DeepWiki\n\n[Index your code with Devin](private-repo.md)\n\n[DeepWiki](https://deepwiki.com)\n\n[DeepWiki](.md)\n\n[qdrant/examples](https://github.com/qdrant/examples \"Open repository\")\n\n[Index your code with](private-repo.md)\n\n[Devin](private-repo.md)\n\nShare\n\nLast indexed: 26 June 2025 ([b3c4b2](https://github.com/qdrant/examples/commits/b3c4b28f))\n\n- [Overview](qdrant/examples/1-overview.md)\n- [Getting Started with Qdrant](qdrant/examples/2-getting-started-with-qdrant.md)\n- [Text Data Applications](qdrant/examples/3-text-data-applications.md)\n- [Code Search with Dual Embeddings](qdrant/examples/3.1-code-search-with-dual-embeddings.md)\n- [Extractive Question Answering](qdrant/examples/3.2-extractive-question-answering.md)\n- [Movie Recommendations with Sparse Vectors](qdrant/examples/3.3-movie-recommendations-with-sparse-vectors.md)\n- [Image Data Applications](qdrant/examples/4-image-data-applications.md)\n- [E-commerce Reverse Image Search](qdrant/examples/4.1-e-commerce-reverse-image-search.md)\n- [Medical Image Search with Vision Transformers](qdrant/examples/4.2-medical-image-search-with-vision-transformers.md)\n- [Audio Data Applications](qdrant/examples/5-audio-data-applications.md)\n- [Music Recommendation Engine](qdrant/examples/5.1-music-recommendation-engine.md)\n- [Advanced RAG Systems](qdrant/examples/6-advanced-rag-systems.md)\n- [Multivector RAG with DSPy](qdrant/examples/6.1-multivector-rag-with-dspy.md)\n- [Graph-Enhanced RAG with Neo4j](qdrant/examples/6.2-graph-enhanced-rag-with-neo4j.md)\n- [PDF Retrieval at Scale](qdrant/examples/6.3-pdf-retrieval-at-scale.md)\n- [Agentic Systems with CrewAI](qdrant/examples/7-agentic-systems-with-crewai.md)\n- [Meeting Analysis with Agentic RAG](qdrant/examples/7.1-meeting-analysis-with-agentic-rag.md)\n- [Additional Use Cases](qdrant/examples/8-additional-use-cases.md)\n- [Self-Query Systems with LangChain](qdrant/examples/8.1-self-query-systems-with-langchain.md)\n- [Development Environment Setup](qdrant/examples/8.2-development-environment-setup.md)\n\nMenu\n\n# Extractive Question Answering\n\nRelevant source files\n\n- [extractive\\_qa/extractive-question-answering.ipynb](https://github.com/qdrant/examples/blob/b3c4b28f/extractive_qa/extractive-question-answering.ipynb)\n- [qdrant\\_101\\_text\\_data/qdrant\\_and\\_text\\_data.ipynb](https://github.com/qdrant/examples/blob/b3c4b28f/qdrant_101_text_data/qdrant_and_text_data.ipynb)\n\n## Overview\n\nThe Extractive Question Answering system implements a retriever-reader architecture that extracts precise answers from movie plot data. The system uses the DuoRC dataset containing movie plots from Wikipedia and IMDb to demonstrate semantic search and answer extraction capabilities.\n\n**Key Components:**\n\n- **Retriever**: `TextEmbedding` model (`BAAI/bge-small-en-v1.5`) for semantic search\n- **Vector Database**: Qdrant collection named `extractive-question-answering`\n- **Reader**: `bert-large-uncased-whole-word-masking-finetuned-squad` for answer extraction\n\nThe system extracts answers directly from source text rather than generating new content, ensuring factual accuracy and traceability.",
+    "metadata": {
+      "chunk_id": 0,
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\Qdrant\\qdrant_examples\\_qdrant_examples_3.2-extractive-question-answering.md",
+      "input_type": "qdrant",
+      "chunking_strategy": "platform_documentation",
+      "token_count": 860,
+      "character_count": 3158,
+      "created_at": "2025-10-16T17:42:29.373120",
+      "parent_context": null,
+      "semantic_type": "qdrant",
+      "collection_name": "Qdrant",
+      "subfolder_name": "qdrant_examples",
+      "collection_strategy": "platform_documentation",
+      "chunk_index_in_file": 0,
+      "file_relative_path": "Qdrant\\qdrant_examples\\_qdrant_examples_3.2-extractive-question-answering.md",
+      "collection_context": "Qdrant/qdrant_examples"
+    }
+  },
+  {
+    "text": "Sources: [extractive\\_qa/extractive-question-answering.ipynb17-27](https://github.com/qdrant/examples/blob/b3c4b28f/extractive_qa/extractive-question-answering.ipynb#L17-L27) [extractive\\_qa/extractive-question-answering.ipynb622-623](https://github.com/qdrant/examples/blob/b3c4b28f/extractive_qa/extractive-question-answering.ipynb#L622-L623) [extractive\\_qa/extractive-question-answering.ipynb733-737](https://github.com/qdrant/examples/blob/b3c4b28f/extractive_qa/extractive-question-answering.ipynb#L733-L737)\n\n## Architecture\n\n**System Architecture with Code Entities**\n\n```\n```\n\n**Component Mapping:**\n\n| Component       | Code Entity                                                                                     | Purpose                                  |\n| --------------- | ----------------------------------------------------------------------------------------------- | ---------------------------------------- |\n| Retriever       | `TextEmbedding(\"BAAI/bge-small-en-v1.5\")`                                                       | Converts text to 384-dimensional vectors |\n| Vector Database | `QdrantClient(\":memory:\")`                                                                      | Stores and searches embeddings           |\n| Collection      | `\"extractive-question-answering\"`                                                               | Named collection with cosine distance    |\n| Reader          | `pipeline(\"question-answering\", model=\"bert-large-uncased-whole-word-masking-finetuned-squad\")` | Extracts answer spans                    |\n\nSources: [extractive\\_qa/extractive-question-answering.ipynb91-96](https://github.com/qdrant/examples/blob/b3c4b28f/extractive_qa/extractive-question-answering.ipynb#L91-L96) [extractive\\_qa/extractive-question-answering.ipynb473](https://github.com/qdrant/examples/blob/b3c4b28f/extractive_qa/extractive-question-answering.ipynb#L473-L473) [extractive\\_qa/extractive-question-answering.ipynb522](https://github.com/qdrant/examples/blob/b3c4b28f/extractive_qa/extractive-question-answering.ipynb#L522-L522) [extractive\\_qa/extractive-question-answering.ipynb735-737](https://github.com/qdrant/examples/blob/b3c4b28f/extractive_qa/extractive-question-answering.ipynb#L735-L737)\n\n## Implementation Details\n\n### Data Preparation\n\n**Dataset Processing Pipeline**\n\n```\n```\n\nThe implementation processes 9,919 unique movie plots from the DuoRC dataset:\n\n- Dataset loading: `load_dataset(\"duorc\", \"ParaphraseRC\", split=\"train\")`\n- Deduplication: `df.drop_duplicates(subset=\"plot\")`\n- Batch processing: 64 documents per batch for efficient embedding generation\n- Storage format: `models.Batch(ids=ids, vectors=emb, payloads=meta)`\n\nSources: [extractive\\_qa/extractive-question-answering.ipynb442-449](https://github.com/qdrant/examples/blob/b3c4b28f/extractive_qa/extractive-question-answering.ipynb#L442-L449) [extractive\\_qa/extractive-question-answering.ipynb688-702](https://github.com/qdrant/examples/blob/b3c4b28f/extractive_qa/extractive-question-answering.ipynb#L688-L702)\n\n### Retriever Component\n\n**TextEmbedding Configuration**\n\n| Parameter  | Value                      | Purpose                       |\n| ---------- | -------------------------- | ----------------------------- |\n| Model      | `\"BAAI/bge-small-en-v1.5\"` | Optimized for semantic search |\n| Dimensions | 384                        | Vector size for embeddings    |\n| Library    | `fastembed.TextEmbedding`  | Fast embedding generation     |\n\n**Core Functions:**\n\n- **Indexing**: `retriever.embed(batch[\"plot\"].tolist())` - converts plot text to vectors\n- **Querying**: `retriever.query_embed(question)` - converts questions to search vectors\n\nThe retriever ensures semantic similarity between questions and relevant contexts by mapping both to the same 384-dimensional vector space.",
+    "metadata": {
+      "chunk_id": 1,
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\Qdrant\\qdrant_examples\\_qdrant_examples_3.2-extractive-question-answering.md",
+      "input_type": "qdrant",
+      "chunking_strategy": "platform_documentation",
+      "token_count": 944,
+      "character_count": 3830,
+      "created_at": "2025-10-16T17:42:29.379873",
+      "parent_context": null,
+      "semantic_type": "qdrant",
+      "collection_name": "Qdrant",
+      "subfolder_name": "qdrant_examples",
+      "collection_strategy": "platform_documentation",
+      "chunk_index_in_file": 1,
+      "file_relative_path": "Qdrant\\qdrant_examples\\_qdrant_examples_3.2-extractive-question-answering.md",
+      "collection_context": "Qdrant/qdrant_examples"
+    }
+  },
+  {
+    "text": "Sources: [extractive\\_qa/extractive-question-answering.ipynb622-623](https://github.com/qdrant/examples/blob/b3c4b28f/extractive_qa/extractive-question-answering.ipynb#L622-L623) [extractive\\_qa/extractive-question-answering.ipynb693](https://github.com/qdrant/examples/blob/b3c4b28f/extractive_qa/extractive-question-answering.ipynb#L693-L693) [extractive\\_qa/extractive-question-answering.ipynb786](https://github.com/qdrant/examples/blob/b3c4b28f/extractive_qa/extractive-question-answering.ipynb#L786-L786)\n\n### Qdrant Vector Database\n\n**Collection Configuration**\n\n```\n```\n\n**Key Implementation Details:**\n\n- Client: `QdrantClient(\":memory:\")` for demonstration\n- Collection: `\"extractive-question-answering\"`\n- Vector configuration: `models.VectorParams(size=384, distance=models.Distance.COSINE)`\n- Search method: `client.query_points(collection_name, query, limit)`\n\nSources: [extractive\\_qa/extractive-question-answering.ipynb473](https://github.com/qdrant/examples/blob/b3c4b28f/extractive_qa/extractive-question-answering.ipynb#L473-L473) [extractive\\_qa/extractive-question-answering.ipynb529-535](https://github.com/qdrant/examples/blob/b3c4b28f/extractive_qa/extractive-question-answering.ipynb#L529-L535) [extractive\\_qa/extractive-question-answering.ipynb788-792](https://github.com/qdrant/examples/blob/b3c4b28f/extractive_qa/extractive-question-answering.ipynb#L788-L792)\n\n### Reader Model\n\nThe reader model extracts the precise answer from the retrieved context passages:\n\n- Model: `bert-large-uncased-whole-word-masking-finetuned-squad`\n- Type: Transformer-based question answering model\n- Training: Fine-tuned on the SQuAD dataset\n\nThe reader processes each retrieved context separately and returns:\n\n- The extracted answer text\n- A confidence score\n- The title of the source document\n\nSources: [extractive\\_qa/extractive-question-answering.ipynb718-721](https://github.com/qdrant/examples/blob/b3c4b28f/extractive_qa/extractive-question-answering.ipynb#L718-L721) [extractive\\_qa/extractive-question-answering.ipynb735-737](https://github.com/qdrant/examples/blob/b3c4b28f/extractive_qa/extractive-question-answering.ipynb#L735-L737)\n\n## Workflow\n\n**Function Call Sequence**\n\n```\n```\n\n**Core Function Implementations:**\n\n| Function              | Input                               | Output                     | Line Reference                                                                                                                                                            |\n| --------------------- | ----------------------------------- | -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |\n| `get_relevant_plot()` | `question: str, top_k: int`         | `List[str]` context pairs  | [extractive\\_qa/extractive-question-answering.ipynb774-800](https://github.com/qdrant/examples/blob/b3c4b28f/extractive_qa/extractive-question-answering.ipynb#L774-L800) |\n| `extract_answer()`    | `question: str, context: List[str]` | Ranked answers with scores | [extractive\\_qa/extractive-question-answering.ipynb835-863](https://github.com/qdrant/examples/blob/b3c4b28f/extractive_qa/extractive-question-answering.ipynb#L835-L863) |",
+    "metadata": {
+      "chunk_id": 2,
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\Qdrant\\qdrant_examples\\_qdrant_examples_3.2-extractive-question-answering.md",
+      "input_type": "qdrant",
+      "chunking_strategy": "platform_documentation",
+      "token_count": 854,
+      "character_count": 3302,
+      "created_at": "2025-10-16T17:42:29.384293",
+      "parent_context": null,
+      "semantic_type": "qdrant",
+      "collection_name": "Qdrant",
+      "subfolder_name": "qdrant_examples",
+      "collection_strategy": "platform_documentation",
+      "chunk_index_in_file": 2,
+      "file_relative_path": "Qdrant\\qdrant_examples\\_qdrant_examples_3.2-extractive-question-answering.md",
+      "collection_context": "Qdrant/qdrant_examples"
+    }
+  },
+  {
+    "text": "Sources: [extractive\\_qa/extractive-question-answering.ipynb774-800](https://github.com/qdrant/examples/blob/b3c4b28f/extractive_qa/extractive-question-answering.ipynb#L774-L800) [extractive\\_qa/extractive-question-answering.ipynb835-863](https://github.com/qdrant/examples/blob/b3c4b28f/extractive_qa/extractive-question-answering.ipynb#L835-L863) [extractive\\_qa/extractive-question-answering.ipynb786](https://github.com/qdrant/examples/blob/b3c4b28f/extractive_qa/extractive-question-answering.ipynb#L786-L786) [extractive\\_qa/extractive-question-answering.ipynb846](https://github.com/qdrant/examples/blob/b3c4b28f/extractive_qa/extractive-question-answering.ipynb#L846-L846)\n\n## Data Flow Details\n\n**Code Entity Data Transformation**\n\n```\n```\n\n**Variable Flow:**\n\n- Input: `question: str`, `top_k: int`\n- Embedding: `encoded_query = next(retriever.query_embed(question)).tolist()`\n- Search: `result = client.query_points(...).points`\n- Context: `context = [[x.payload[\"title\"], x.payload[\"plot\"]] for x in result]`\n- Answers: `answer = reader(question=question, context=c[1])`\n\nSources: [extractive\\_qa/extractive-question-answering.ipynb786](https://github.com/qdrant/examples/blob/b3c4b28f/extractive_qa/extractive-question-answering.ipynb#L786-L786) [extractive\\_qa/extractive-question-answering.ipynb788-796](https://github.com/qdrant/examples/blob/b3c4b28f/extractive_qa/extractive-question-answering.ipynb#L788-L796) [extractive\\_qa/extractive-question-answering.ipynb844-853](https://github.com/qdrant/examples/blob/b3c4b28f/extractive_qa/extractive-question-answering.ipynb#L844-L853)\n\n## Implementation Code Structure\n\n**Function Signatures and Dependencies**\n\n| Function              | Signature                                  | Dependencies          | Purpose                                   |\n| --------------------- | ------------------------------------------ | --------------------- | ----------------------------------------- |\n| `get_relevant_plot()` | `(question: str, top_k: int) -> List[str]` | `retriever`, `client` | Vector search for relevant contexts       |\n| `extract_answer()`    | `(question: str, context: List[str])`      | `reader` pipeline     | Answer extraction with confidence scoring |\n\n**Batch Processing Implementation**\n\n```\n```\n\n**Key Variables:**\n\n- `batch_size = 64` for memory-efficient processing\n- `collection_name = \"extractive-question-answering\"`\n- `retriever = TextEmbedding(model_name=\"BAAI/bge-small-en-v1.5\")`\n- `reader = pipeline(\"question-answering\", model=\"bert-large-uncased-whole-word-masking-finetuned-squad\")`\n\nSources: [extractive\\_qa/extractive-question-answering.ipynb688-702](https://github.com/qdrant/examples/blob/b3c4b28f/extractive_qa/extractive-question-answering.ipynb#L688-L702) [extractive\\_qa/extractive-question-answering.ipynb774-800](https://github.com/qdrant/examples/blob/b3c4b28f/extractive_qa/extractive-question-answering.ipynb#L774-L800) [extractive\\_qa/extractive-question-answering.ipynb835-863](https://github.com/qdrant/examples/blob/b3c4b28f/extractive_qa/extractive-question-answering.ipynb#L835-L863)\n\n## Example Usage\n\nThe system can answer various types of questions about movie plots. Here are some examples from the implementation:\n\n### Example 1: College Name in \"3 Idiots\"\n\n```\nQuestion: \"In the movie 3 Idiots, what is the name of the college where the main characters Rancho, Farhan, and Raju study\"\nAnswer: \"Imperial College of Engineering\" (Score: 0.90)\nTitle: \"Three Idiots\"\n```\n\n### Example 2: Escape Tool in \"The Shawshank Redemption\"",
+    "metadata": {
+      "chunk_id": 3,
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\Qdrant\\qdrant_examples\\_qdrant_examples_3.2-extractive-question-answering.md",
+      "input_type": "qdrant",
+      "chunking_strategy": "platform_documentation",
+      "token_count": 1009,
+      "character_count": 3545,
+      "created_at": "2025-10-16T17:42:29.390527",
+      "parent_context": null,
+      "semantic_type": "qdrant",
+      "collection_name": "Qdrant",
+      "subfolder_name": "qdrant_examples",
+      "collection_strategy": "platform_documentation",
+      "chunk_index_in_file": 3,
+      "file_relative_path": "Qdrant\\qdrant_examples\\_qdrant_examples_3.2-extractive-question-answering.md",
+      "collection_context": "Qdrant/qdrant_examples"
+    }
+  },
+  {
+    "text": "```\nQuestion: \"In the movie The Shawshank Redemption, what was the item that Andy Dufresne used to escape from Shawshank State Penitentiary?\"\nAnswer: \"rock hammer\" (Score: 0.87)\nTitle: \"The Shawshank Redemption\"\n```\n\n### Example 3: Multiple Sources\n\n```\nQuestion: \"who killed the spy\"\nAnswers: \n1. \"Soviet agents\" (Score: 0.79)\n   Title: \"Tinker, Tailor, Soldier, Spy\"\n2. \"Gila\" (Score: 0.12)\n   Title: \"Our Man Flint\"\n3. \"Gabriel's assassins\" (Score: 0.06)\n   Title: \"Live Free or Die Hard\"\n```\n\nSources: [extractive\\_qa/extractive-question-answering.ipynb905-906](https://github.com/qdrant/examples/blob/b3c4b28f/extractive_qa/extractive-question-answering.ipynb#L905-L906) [extractive\\_qa/extractive-question-answering.ipynb1006-1008](https://github.com/qdrant/examples/blob/b3c4b28f/extractive_qa/extractive-question-answering.ipynb#L1006-L1008) [extractive\\_qa/extractive-question-answering.ipynb1048-1050](https://github.com/qdrant/examples/blob/b3c4b28f/extractive_qa/extractive-question-answering.ipynb#L1048-L1050)\n\n## Limitations and Considerations\n\n1. **Answer Confidence**: The system might return low-confidence answers when the question is difficult or the answer isn't clearly stated in the context\n2. **Context Relevance**: The quality of answers depends on retrieving relevant contexts\n3. **Exact Answer Extraction**: The system is designed to extract spans of text, not generate new content\n\nFor implementing a more advanced question answering system that can generate responses, consider exploring the RAG systems documented in [Advanced RAG Systems](qdrant/examples/6-advanced-rag-systems.md).\n\nSources: [extractive\\_qa/extractive-question-answering.ipynb915-916](https://github.com/qdrant/examples/blob/b3c4b28f/extractive_qa/extractive-question-answering.ipynb#L915-L916) [extractive\\_qa/extractive-question-answering.ipynb949-954](https://github.com/qdrant/examples/blob/b3c4b28f/extractive_qa/extractive-question-answering.ipynb#L949-L954)\n\n## Technical Requirements\n\nThe implementation requires the following libraries:\n\n- datasets (2.12.0)\n- qdrant-client (1.10.1)\n- fastembed (0.3.3)\n- sentence-transformers (2.2.2)\n- torch (2.0.1)\n- transformers (for the reader model)\n\nSources: [extractive\\_qa/extractive-question-answering.ipynb67](https://github.com/qdrant/examples/blob/b3c4b28f/extractive_qa/extractive-question-answering.ipynb#L67-L67) [extractive\\_qa/extractive-question-answering.ipynb90-96](https://github.com/qdrant/examples/blob/b3c4b28f/extractive_qa/extractive-question-answering.ipynb#L90-L96)\n\nDismiss\n\nRefresh this wiki\n\nEnter email to refresh\n\n### On this page",
+    "metadata": {
+      "chunk_id": 4,
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\Qdrant\\qdrant_examples\\_qdrant_examples_3.2-extractive-question-answering.md",
+      "input_type": "qdrant",
+      "chunking_strategy": "platform_documentation",
+      "token_count": 783,
+      "character_count": 2605,
+      "created_at": "2025-10-16T17:42:29.395358",
+      "parent_context": null,
+      "semantic_type": "qdrant",
+      "collection_name": "Qdrant",
+      "subfolder_name": "qdrant_examples",
+      "collection_strategy": "platform_documentation",
+      "chunk_index_in_file": 4,
+      "file_relative_path": "Qdrant\\qdrant_examples\\_qdrant_examples_3.2-extractive-question-answering.md",
+      "collection_context": "Qdrant/qdrant_examples"
+    }
+  },
+  {
+    "text": "- [Extractive Question Answering](#extractive-question-answering.md)\n- [Overview](#overview.md)\n- [Architecture](#architecture.md)\n- [Implementation Details](#implementation-details.md)\n- [Data Preparation](#data-preparation.md)\n- [Retriever Component](#retriever-component.md)\n- [Qdrant Vector Database](#qdrant-vector-database.md)\n- [Reader Model](#reader-model.md)\n- [Workflow](#workflow.md)\n- [Data Flow Details](#data-flow-details.md)\n- [Implementation Code Structure](#implementation-code-structure.md)\n- [Example Usage](#example-usage.md)\n- [Example 1: College Name in \"3 Idiots\"](#example-1-college-name-in-3-idiots.md)\n- [Example 2: Escape Tool in \"The Shawshank Redemption\"](#example-2-escape-tool-in-the-shawshank-redemption.md)\n- [Example 3: Multiple Sources](#example-3-multiple-sources.md)\n- [Limitations and Considerations](#limitations-and-considerations.md)\n- [Technical Requirements](#technical-requirements.md)",
+    "metadata": {
+      "chunk_id": 5,
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\Qdrant\\qdrant_examples\\_qdrant_examples_3.2-extractive-question-answering.md",
+      "input_type": "qdrant",
+      "chunking_strategy": "platform_documentation",
+      "token_count": 249,
+      "character_count": 929,
+      "created_at": "2025-10-16T17:42:29.395497",
+      "parent_context": null,
+      "semantic_type": "qdrant",
+      "collection_name": "Qdrant",
+      "subfolder_name": "qdrant_examples",
+      "collection_strategy": "platform_documentation",
+      "chunk_index_in_file": 5,
+      "file_relative_path": "Qdrant\\qdrant_examples\\_qdrant_examples_3.2-extractive-question-answering.md",
+      "collection_context": "Qdrant/qdrant_examples"
+    }
+  }
+]

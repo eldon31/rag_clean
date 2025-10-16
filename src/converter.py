@@ -96,7 +96,7 @@ class DocumentConverter:
         self.chunker = create_chunker(self.chunker_config)
         
         # Initialize embedder with optimization
-        model_name = embedding_model or os.getenv("EMBEDDING_MODEL", "nomic-ai/nomic-embed-code")
+        model_name = embedding_model or os.getenv("EMBEDDING_MODEL", "nomic-ai/CodeRankEmbed")
         optimization = embedding_optimization or os.getenv("EMBEDDING_OPTIMIZATION", "none")
         
         if optimization != "none":

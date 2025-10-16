@@ -43,7 +43,7 @@ You asked: *"tier 1 is enough, now proceed with it"*
 
 ### 3. Token Count Validation
 **What:** Validates chunks fit embedding model limits  
-**Why:** Prevents embedding errors (nomic-embed-code = 2048 max)  
+**Why:** Prevents embedding errors (CodeRankEmbed = 2048 max)  
 **How:** Uses actual tokenizer to count tokens  
 **Metadata:** `token_count_valid: true/false`
 

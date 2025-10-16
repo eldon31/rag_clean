@@ -42,7 +42,7 @@ class QdrantStoreConfig(BaseModel):
     host: str = "localhost"
     port: int = 6333
     collection_name: str = "documents"
-    vector_size: int = 3584  # nomic-ai/nomic-embed-code dimension (default)
+    vector_size: int = 3584  # nomic-ai/CodeRankEmbed dimension (default)
     distance_metric: str = "Cosine"  # Cosine, Euclidean, Dot
     enable_quantization: bool = True  # 4x memory savings
     quantization_type: str = "int8"  # int8 or binary

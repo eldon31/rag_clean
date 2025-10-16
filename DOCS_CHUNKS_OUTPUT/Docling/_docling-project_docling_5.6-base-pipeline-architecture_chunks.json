@@ -1,0 +1,142 @@
+[
+  {
+    "text": "Base Pipeline Architecture | docling-project/docling | DeepWiki\n\n[Index your code with Devin](private-repo.md)\n\n[DeepWiki](https://deepwiki.com)\n\n[DeepWiki](.md)\n\n[docling-project/docling](https://github.com/docling-project/docling \"Open repository\")\n\n[Index your code with](private-repo.md)\n\n[Devin](private-repo.md)\n\nShare\n\nLast indexed: 12 October 2025 ([f7244a](https://github.com/docling-project/docling/commits/f7244a43))",
+    "metadata": {
+      "chunk_id": 0,
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\Docling\\_docling-project_docling_5.6-base-pipeline-architecture.md",
+      "input_type": "docling",
+      "chunking_strategy": "hybrid_adaptive",
+      "token_count": 115,
+      "character_count": 427,
+      "created_at": "2025-10-16T17:42:17.394165",
+      "parent_context": null,
+      "semantic_type": "docling",
+      "collection_name": "Docling",
+      "subfolder_name": null,
+      "collection_strategy": "hybrid_adaptive",
+      "chunk_index_in_file": 0,
+      "file_relative_path": "Docs\\Docling\\_docling-project_docling_5.6-base-pipeline-architecture.md",
+      "collection_context": "Docling"
+    }
+  },
+  {
+    "text": "- [Overview](docling-project/docling/1-overview.md)\n- [Installation](docling-project/docling/1.1-installation.md)\n- [Quick Start](docling-project/docling/1.2-quick-start.md)\n- [Core Architecture](docling-project/docling/2-core-architecture.md)\n- [Document Conversion Flow](docling-project/docling/2.1-document-conversion-flow.md)\n- [DoclingDocument Data Model](docling-project/docling/2.2-doclingdocument-data-model.md)\n- [Configuration and Pipeline Options](docling-project/docling/2.3-configuration-and-pipeline-options.md)\n- [Format Detection and Routing](docling-project/docling/2.4-format-detection-and-routing.md)\n- [Document Backends](docling-project/docling/3-document-backends.md)\n- [PDF Processing Backends](docling-project/docling/3.1-pdf-processing-backends.md)\n- [Office Document Backends](docling-project/docling/3.2-office-document-backends.md)\n- [Web and Markup Backends](docling-project/docling/3.3-web-and-markup-backends.md)\n- [AI/ML Models](docling-project/docling/4-aiml-models.md)\n- [OCR Models](docling-project/docling/4.1-ocr-models.md)\n- [Layout and Table Structure Models](docling-project/docling/4.2-layout-and-table-structure-models.md)\n- [Vision Language Models](docling-project/docling/4.3-vision-language-models.md)\n- [Inline VLM Models](docling-project/docling/4.3.1-inline-vlm-models.md)\n- [API-Based VLM Models](docling-project/docling/4.3.2-api-based-vlm-models.md)\n- [Enrichment Models](docling-project/docling/4.4-enrichment-models.md)\n- [Processing Pipelines](docling-project/docling/5-processing-pipelines.md)\n- [Standard PDF Pipeline](docling-project/docling/5.1-standard-pdf-pipeline.md)\n- [Threaded PDF Pipeline](docling-project/docling/5.2-threaded-pdf-pipeline.md)\n- [VLM Pipeline](docling-project/docling/5.3-vlm-pipeline.md)\n- [Extraction Pipeline](docling-project/docling/5.4-extraction-pipeline.md)\n- [ASR Pipeline](docling-project/docling/5.5-asr-pipeline.md)\n- [Base Pipeline Architecture](docling-project/docling/5.6-base-pipeline-architecture.md)\n- [Command Line Interface](docling-project/docling/6-command-line-interface.md)\n- [Document Conversion CLI](docling-project/docling/6.1-document-conversion-cli.md)\n- [Model Management CLI](docling-project/docling/6.2-model-management-cli.md)\n- [Python SDK](docling-project/docling/7-python-sdk.md)\n- [DocumentConverter API](docling-project/docling/7.1-documentconverter-api.md)\n- [DocumentExtractor API](docling-project/docling/7.2-documentextractor-api.md)\n- [Usage Examples](docling-project/docling/7.3-usage-examples.md)\n- [Output and Integration](docling-project/docling/8-output-and-integration.md)\n- [Export Formats](docling-project/docling/8.1-export-formats.md)\n- [Document Chunking](docling-project/docling/8.2-document-chunking.md)\n- [Framework Integrations](docling-project/docling/8.3-framework-integrations.md)\n- [Development and Testing](docling-project/docling/9-development-and-testing.md)\n- [Testing Framework](docling-project/docling/9.1-testing-framework.md)\n- [Ground Truth Data](docling-project/docling/9.2-ground-truth-data.md)\n- [CI/CD and Development Workflow](docling-project/docling/9.3-cicd-and-development-workflow.md)\n- [Deployment](docling-project/docling/10-deployment.md)\n- [Docker Deployment](docling-project/docling/10.1-docker-deployment.md)\n- [Model Artifacts Management](docling-project/docling/10.2-model-artifacts-management.md)\n\nMenu\n\n# Base Pipeline Architecture\n\nRelevant source files",
+    "metadata": {
+      "chunk_id": 1,
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\Docling\\_docling-project_docling_5.6-base-pipeline-architecture.md",
+      "input_type": "docling",
+      "chunking_strategy": "hybrid_adaptive",
+      "token_count": 927,
+      "character_count": 3425,
+      "created_at": "2025-10-16T17:42:17.397274",
+      "parent_context": null,
+      "semantic_type": "docling",
+      "collection_name": "Docling",
+      "subfolder_name": null,
+      "collection_strategy": "hybrid_adaptive",
+      "chunk_index_in_file": 1,
+      "file_relative_path": "Docs\\Docling\\_docling-project_docling_5.6-base-pipeline-architecture.md",
+      "collection_context": "Docling"
+    }
+  },
+  {
+    "text": "- [docling/cli/main.py](https://github.com/docling-project/docling/blob/f7244a43/docling/cli/main.py)\n- [docling/datamodel/base\\_models.py](https://github.com/docling-project/docling/blob/f7244a43/docling/datamodel/base_models.py)\n- [docling/datamodel/document.py](https://github.com/docling-project/docling/blob/f7244a43/docling/datamodel/document.py)\n- [docling/datamodel/extraction.py](https://github.com/docling-project/docling/blob/f7244a43/docling/datamodel/extraction.py)\n- [docling/datamodel/pipeline\\_options.py](https://github.com/docling-project/docling/blob/f7244a43/docling/datamodel/pipeline_options.py)\n- [docling/document\\_converter.py](https://github.com/docling-project/docling/blob/f7244a43/docling/document_converter.py)\n- [docling/document\\_extractor.py](https://github.com/docling-project/docling/blob/f7244a43/docling/document_extractor.py)\n- [docling/models/vlm\\_models\\_inline/nuextract\\_transformers\\_model.py](https://github.com/docling-project/docling/blob/f7244a43/docling/models/vlm_models_inline/nuextract_transformers_model.py)\n- [docling/pipeline/asr\\_pipeline.py](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/asr_pipeline.py)\n- [docling/pipeline/base\\_extraction\\_pipeline.py](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/base_extraction_pipeline.py)\n- [docling/pipeline/base\\_pipeline.py](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/base_pipeline.py)\n- [docling/pipeline/extraction\\_vlm\\_pipeline.py](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/extraction_vlm_pipeline.py)\n- [docling/pipeline/simple\\_pipeline.py](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/simple_pipeline.py)\n- [docling/pipeline/threaded\\_standard\\_pdf\\_pipeline.py](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/threaded_standard_pdf_pipeline.py)\n- [docling/pipeline/vlm\\_pipeline.py](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/vlm_pipeline.py)\n\nThis document covers the foundational pipeline framework in Docling that enables extensible document processing workflows. The base pipeline architecture defines abstract interfaces, execution patterns, model integration points, and caching mechanisms that allow different processing strategies to be implemented consistently.\n\nThe key architectural components include:\n\n- `BasePipeline`: Abstract base class defining the three-phase execution model (build, assemble, enrich)\n- `ConvertPipeline`: Specialization that adds enrichment model support\n- `PaginatedPipeline`: Specialization that adds page-by-page processing for paginated formats\n- Pipeline caching: Instance reuse based on pipeline class and options hash to avoid redundant model loading\n\nFor information about specific pipeline implementations like PDF processing, see page 5.1 (Standard PDF Pipeline) and page 5.3 (VLM Pipeline). For document backends that pipelines operate on, see page 3 (Document Backends).\n\n## Pipeline Hierarchy\n\nThe Docling pipeline architecture is built around a hierarchy of abstract base classes that define different processing paradigms:\n\n```\n```",
+    "metadata": {
+      "chunk_id": 2,
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\Docling\\_docling-project_docling_5.6-base-pipeline-architecture.md",
+      "input_type": "docling",
+      "chunking_strategy": "hybrid_adaptive",
+      "token_count": 740,
+      "character_count": 3196,
+      "created_at": "2025-10-16T17:42:17.400696",
+      "parent_context": null,
+      "semantic_type": "docling",
+      "collection_name": "Docling",
+      "subfolder_name": null,
+      "collection_strategy": "hybrid_adaptive",
+      "chunk_index_in_file": 2,
+      "file_relative_path": "Docs\\Docling\\_docling-project_docling_5.6-base-pipeline-architecture.md",
+      "collection_context": "Docling"
+    }
+  },
+  {
+    "text": "**Sources:** [docling/pipeline/base\\_pipeline.py43-133](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/base_pipeline.py#L43-L133) [docling/pipeline/base\\_pipeline.py135-182](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/base_pipeline.py#L135-L182) [docling/pipeline/base\\_pipeline.py184-319](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/base_pipeline.py#L184-L319) [docling/pipeline/simple\\_pipeline.py16-56](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/simple_pipeline.py#L16-L56) [docling/pipeline/vlm\\_pipeline.py50-389](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/vlm_pipeline.py#L50-L389) [docling/pipeline/threaded\\_standard\\_pdf\\_pipeline.py296-648](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/threaded_standard_pdf_pipeline.py#L296-L648) [docling/pipeline/asr\\_pipeline.py204-242](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/asr_pipeline.py#L204-L242) [docling/pipeline/extraction\\_vlm\\_pipeline.py32-198](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/extraction_vlm_pipeline.py#L32-L198) [docling/pipeline/base\\_extraction\\_pipeline.py15-73](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/base_extraction_pipeline.py#L15-L73)\n\n## Core Pipeline Execution Flow\n\nThe `BasePipeline.execute()` method defines the standard three-phase execution pattern that all pipelines follow. This method serves as a template, delegating to abstract methods that subclasses implement:\n\n```\n```\n\nThe execution flow guarantees that `_unload()` is called in the `finally` block to clean up resources regardless of success or failure.\n\n**Sources:** [docling/pipeline/base\\_pipeline.py62-84](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/base_pipeline.py#L62-L84)\n\n## Pipeline Processing Phases\n\nThe three-phase execution model provides clear separation of concerns during document processing:\n\n### Phase 1: Build (\\_build\\_document)\n\nThe `_build_document()` abstract method is responsible for extracting and processing raw content from the input document. This is where format-specific parsing occurs:\n\n| Pipeline Type       | Build Strategy                                                                |\n| ------------------- | ----------------------------------------------------------------------------- |\n| `SimplePipeline`    | Directly calls `backend.convert()` for declarative formats (DOCX, HTML, etc.) |\n| `PaginatedPipeline` | Processes pages in batches through a sequential model pipeline                |\n| `VlmPipeline`       | Generates VLM predictions for each page image                                 |\n| `AsrPipeline`       | Transcribes audio using Whisper models                                        |\n\nThe build phase populates `conv_res.pages` with raw predictions from models (layout, tables, OCR, etc.) but does not yet construct the final document hierarchy.\n\n**Sources:** [docling/pipeline/base\\_pipeline.py86-88](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/base_pipeline.py#L86-L88) [docling/pipeline/simple\\_pipeline.py26-41](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/simple_pipeline.py#L26-L41) [docling/pipeline/base\\_pipeline.py197-283](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/base_pipeline.py#L197-L283) [docling/pipeline/vlm\\_pipeline.py114-123](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/vlm_pipeline.py#L114-L123) [docling/pipeline/asr\\_pipeline.py260-265](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/asr_pipeline.py#L260-L265)\n\n### Phase 2: Assemble (\\_assemble\\_document)\n\nThe `_assemble_document()` method takes processed content and constructs the final `DoclingDocument` structure. The base implementation is a no-op, but subclasses override it to:\n\n- Construct document hierarchy from page-level predictions\n- Generate page images at configured scale\n- Crop element images for pictures and tables\n- Determine reading order\n- Convert VLM outputs (DOCTAGS/Markdown/HTML) into `DoclingDocument`",
+    "metadata": {
+      "chunk_id": 3,
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\Docling\\_docling-project_docling_5.6-base-pipeline-architecture.md",
+      "input_type": "docling",
+      "chunking_strategy": "hybrid_adaptive",
+      "token_count": 1010,
+      "character_count": 4266,
+      "created_at": "2025-10-16T17:42:17.406831",
+      "parent_context": null,
+      "semantic_type": "docling",
+      "collection_name": "Docling",
+      "subfolder_name": null,
+      "collection_strategy": "hybrid_adaptive",
+      "chunk_index_in_file": 3,
+      "file_relative_path": "Docs\\Docling\\_docling-project_docling_5.6-base-pipeline-architecture.md",
+      "collection_context": "Docling"
+    }
+  },
+  {
+    "text": "**Sources:** [docling/pipeline/base\\_pipeline.py90-91](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/base_pipeline.py#L90-L91) [docling/pipeline/vlm\\_pipeline.py136-186](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/vlm_pipeline.py#L136-L186) [docling/pipeline/threaded\\_standard\\_pdf\\_pipeline.py535-628](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/threaded_standard_pdf_pipeline.py#L535-L628)\n\n### Phase 3: Enrich (\\_enrich\\_document)\n\nThe `_enrich_document()` method applies enrichment models to enhance the document content after assembly. This phase operates on the `DoclingDocument` structure, iterating through items and applying models from `enrichment_pipe`:\n\n```\n```\n\nEnrichment models include:\n\n- `CodeFormulaModel`: Extracts LaTeX from code/formula images\n- `DocumentPictureClassifier`: Classifies figure types\n- `PictureDescriptionVlmModel` or `PictureDescriptionApiModel`: Generates image captions\n\n**Sources:** [docling/pipeline/base\\_pipeline.py93-115](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/base_pipeline.py#L93-L115)\n\n## ConvertPipeline Specialization\n\nThe `ConvertPipeline` class extends `BasePipeline` to add enrichment model support. It is the base class for most document conversion pipelines (excluding extraction pipelines):\n\n```\n```\n\n**Title:** ConvertPipeline and Its Options\n\n`ConvertPipeline.__init__()` initializes the `enrichment_pipe` with two models:\n\n1. `DocumentPictureClassifier`: Classifies pictures into categories (Chart, Table, Natural Image, etc.)\n2. Picture description model (either `PictureDescriptionVlmModel` or `PictureDescriptionApiModel` based on `picture_description_options.kind`)\n\nThe picture description model is instantiated using a plugin factory system, allowing third-party plugins to register custom implementations.\n\n**Sources:** [docling/pipeline/base\\_pipeline.py135-182](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/base_pipeline.py#L135-L182) [docling/datamodel/pipeline\\_options.py283-292](https://github.com/docling-project/docling/blob/f7244a43/docling/datamodel/pipeline_options.py#L283-L292)\n\n## Model Integration Architecture\n\nPipelines integrate with two main types of models:\n\n### Page Processing Models (Build Phase)\n\nPage models are stored in the `build_pipe` list and process pages sequentially during the build phase. Each model implements a callable interface `__call__(conv_res: ConversionResult, page_batch: Iterable[Page]) -> Iterable[Page]`:\n\n```\n```\n\n**Title:** Page Processing Models\n\n**Sources:** [docling/models/base\\_model.py38-43](https://github.com/docling-project/docling/blob/f7244a43/docling/models/base_model.py#L38-L43) [docling/pipeline/threaded\\_standard\\_pdf\\_pipeline.py318-336](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/threaded_standard_pdf_pipeline.py#L318-L336)\n\n### Enrichment Models (Enrich Phase)\n\nEnrichment models are stored in the `enrichment_pipe` list and process document elements after assembly:\n\n```\n```\n\n**Title:** Enrichment Models Hierarchy\n\n**Sources:** [docling/models/base\\_model.py131-148](https://github.com/docling-project/docling/blob/f7244a43/docling/models/base_model.py#L131-L148) [docling/models/base\\_model.py151-158](https://github.com/docling-project/docling/blob/f7244a43/docling/models/base_model.py#L151-L158) [docling/models/base\\_model.py160-211](https://github.com/docling-project/docling/blob/f7244a43/docling/models/base_model.py#L160-L211) [docling/pipeline/base\\_pipeline.py152-162](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/base_pipeline.py#L152-L162) [docling/pipeline/threaded\\_standard\\_pdf\\_pipeline.py339-352](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/threaded_standard_pdf_pipeline.py#L339-L352)\n\n## PaginatedPipeline Specialization\n\nThe `PaginatedPipeline` class extends `ConvertPipeline` to handle document formats that require page-by-page processing, such as PDFs. It introduces the abstract method `initialize_page(conv_res, page)` that subclasses must implement:\n\n```\n```\n\n**Title:** PaginatedPipeline and Its Options",
+    "metadata": {
+      "chunk_id": 4,
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\Docling\\_docling-project_docling_5.6-base-pipeline-architecture.md",
+      "input_type": "docling",
+      "chunking_strategy": "hybrid_adaptive",
+      "token_count": 1020,
+      "character_count": 4213,
+      "created_at": "2025-10-16T17:42:17.420423",
+      "parent_context": null,
+      "semantic_type": "docling",
+      "collection_name": "Docling",
+      "subfolder_name": null,
+      "collection_strategy": "hybrid_adaptive",
+      "chunk_index_in_file": 4,
+      "file_relative_path": "Docs\\Docling\\_docling-project_docling_5.6-base-pipeline-architecture.md",
+      "collection_context": "Docling"
+    }
+  },
+  {
+    "text": "The `_build_document()` implementation processes pages in batches:\n\n```\n```\n\n**Title:** PaginatedPipeline Build Flow\n\nThe `_apply_on_pages()` method chains models from `build_pipe`:\n\n```\n```\n\nEach model receives the output of the previous model, forming a sequential processing pipeline.\n\n**Sources:** [docling/pipeline/base\\_pipeline.py184-319](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/base_pipeline.py#L184-L319)\n\n## Pipeline Options and Configuration\n\nEach pipeline class defines its configuration through options classes:\n\n| Pipeline Class                | Options Class                  | Key Configuration                        |\n| ----------------------------- | ------------------------------ | ---------------------------------------- |\n| `SimplePipeline`              | `ConvertPipelineOptions`       | Picture description, classification      |\n| `VlmPipeline`                 | `VlmPipelineOptions`           | VLM model, response format, backend text |\n| `ThreadedStandardPdfPipeline` | `ThreadedPdfPipelineOptions`   | Batch sizes, queue sizes, timeouts       |\n| `AsrPipeline`                 | `AsrPipelineOptions`           | ASR model, temperature, timestamps       |\n| `ExtractionVlmPipeline`       | `VlmExtractionPipelineOptions` | Extraction VLM model, scale              |\n\n**Sources:** [docling/pipeline/simple\\_pipeline.py50-51](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/simple_pipeline.py#L50-L51) [docling/pipeline/vlm\\_pipeline.py383-384](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/vlm_pipeline.py#L383-L384) [docling/pipeline/threaded\\_standard\\_pdf\\_pipeline.py632-633](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/threaded_standard_pdf_pipeline.py#L632-L633) [docling/pipeline/asr\\_pipeline.py229-230](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/asr_pipeline.py#L229-L230) [docling/pipeline/extraction\\_vlm\\_pipeline.py195-197](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/extraction_vlm_pipeline.py#L195-L197)\n\n## Backend Compatibility\n\nEach pipeline implementation defines which document backends it supports through the `is_backend_supported()` class method:\n\n```\n```\n\n**Sources:** [docling/pipeline/simple\\_pipeline.py54-55](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/simple_pipeline.py#L54-L55) [docling/pipeline/vlm\\_pipeline.py387-388](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/vlm_pipeline.py#L387-L388) [docling/pipeline/threaded\\_standard\\_pdf\\_pipeline.py636-637](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/threaded_standard_pdf_pipeline.py#L636-L637) [docling/pipeline/asr\\_pipeline.py240-241](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/asr_pipeline.py#L240-L241)\n\n## Error Handling and Status Determination\n\nPipelines implement different strategies for determining conversion status:\n\n- **SimplePipeline**: Always returns `SUCCESS` if no exceptions occur\n- **VlmPipeline**: Checks for valid pages and backend status\n- **ThreadedStandardPdfPipeline**: Preserves status from threaded processing\n- **AsrPipeline**: Always returns `SUCCESS` for valid transcription\n\nAll pipelines support graceful error handling through the `raises_on_error` parameter in `execute()`, allowing partial results to be returned instead of exceptions.",
+    "metadata": {
+      "chunk_id": 5,
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\Docling\\_docling-project_docling_5.6-base-pipeline-architecture.md",
+      "input_type": "docling",
+      "chunking_strategy": "hybrid_adaptive",
+      "token_count": 807,
+      "character_count": 3480,
+      "created_at": "2025-10-16T17:42:17.424211",
+      "parent_context": null,
+      "semantic_type": "docling",
+      "collection_name": "Docling",
+      "subfolder_name": null,
+      "collection_strategy": "hybrid_adaptive",
+      "chunk_index_in_file": 5,
+      "file_relative_path": "Docs\\Docling\\_docling-project_docling_5.6-base-pipeline-architecture.md",
+      "collection_context": "Docling"
+    }
+  },
+  {
+    "text": "**Sources:** [docling/pipeline/simple\\_pipeline.py43-47](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/simple_pipeline.py#L43-L47) [docling/pipeline/base\\_pipeline.py295-314](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/base_pipeline.py#L295-L314) [docling/pipeline/threaded\\_standard\\_pdf\\_pipeline.py639-640](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/threaded_standard_pdf_pipeline.py#L639-L640) [docling/pipeline/asr\\_pipeline.py224-226](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/asr_pipeline.py#L224-L226) [docling/pipeline/base\\_pipeline.py77-81](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/base_pipeline.py#L77-L81)\n\nDismiss\n\nRefresh this wiki\n\nThis wiki was recently refreshed. Please wait 4 days to refresh again.\n\n### On this page\n\n- [Base Pipeline Architecture](#base-pipeline-architecture.md)\n- [Pipeline Hierarchy](#pipeline-hierarchy.md)\n- [Core Pipeline Execution Flow](#core-pipeline-execution-flow.md)\n- [Pipeline Processing Phases](#pipeline-processing-phases.md)\n- [Phase 1: Build (\\_build\\_document)](#phase-1-build-_build_document.md)\n- [Phase 2: Assemble (\\_assemble\\_document)](#phase-2-assemble-_assemble_document.md)\n- [Phase 3: Enrich (\\_enrich\\_document)](#phase-3-enrich-_enrich_document.md)\n- [ConvertPipeline Specialization](#convertpipeline-specialization.md)\n- [Model Integration Architecture](#model-integration-architecture.md)\n- [Page Processing Models (Build Phase)](#page-processing-models-build-phase.md)\n- [Enrichment Models (Enrich Phase)](#enrichment-models-enrich-phase.md)\n- [PaginatedPipeline Specialization](#paginatedpipeline-specialization.md)\n- [Pipeline Options and Configuration](#pipeline-options-and-configuration.md)\n- [Backend Compatibility](#backend-compatibility.md)\n- [Error Handling and Status Determination](#error-handling-and-status-determination.md)",
+    "metadata": {
+      "chunk_id": 6,
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\Docling\\_docling-project_docling_5.6-base-pipeline-architecture.md",
+      "input_type": "docling",
+      "chunking_strategy": "hybrid_adaptive",
+      "token_count": 506,
+      "character_count": 1961,
+      "created_at": "2025-10-16T17:42:17.425035",
+      "parent_context": null,
+      "semantic_type": "docling",
+      "collection_name": "Docling",
+      "subfolder_name": null,
+      "collection_strategy": "hybrid_adaptive",
+      "chunk_index_in_file": 6,
+      "file_relative_path": "Docs\\Docling\\_docling-project_docling_5.6-base-pipeline-architecture.md",
+      "collection_context": "Docling"
+    }
+  }
+]

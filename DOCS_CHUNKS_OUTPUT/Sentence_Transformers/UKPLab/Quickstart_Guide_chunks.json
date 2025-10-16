@@ -1,0 +1,22 @@
+[
+  {
+    "text": "This guide provides essential examples for getting started with the three core model types in sentence-transformers: **SentenceTransformer** for dense embeddings, **SparseEncoder** for sparse embeddings, and **CrossEncoder** for reranking. Each model type serves different use cases in natural language processing and information retrieval systems.\n\nFor installation instructions, see [Installation & Setup](#2). For detailed training information, see [Training](#3). For comprehensive usage documentation, see the specific model sections: [SentenceTransformer Models](#5.1), [SparseEncoder Models](#5.2), and [CrossEncoder Models](#5.3).\n\n## Core Model Types Overview\n\nThe sentence-transformers library provides three main model architectures that complement each other in modern NLP workflows:\n\n```mermaid\ngraph TB\n    subgraph \"Core Classes\"\n        ST[\"SentenceTransformer<br/>sentence_transformers/SentenceTransformer.py\"]\n        SE[\"SparseEncoder<br/>sentence_transformers/sparse_encoder/SparseEncoder.py\"]\n        CE[\"CrossEncoder<br/>sentence_transformers/cross_encoder/CrossEncoder.py\"]\n    end\n    \n    subgraph \"Output Types\"\n        ST --> Dense[\"Dense Vectors<br/>[batch_size, embedding_dim]\"]\n        SE --> Sparse[\"Sparse Vectors<br/>[batch_size, vocab_size]\"]\n        CE --> Scores[\"Similarity Scores<br/>[batch_size] or [batch_size, num_labels]\"]\n    end\n    \n    subgraph \"Primary Use Cases\"\n        Dense --> SemanticSearch[\"Semantic Search<br/>Clustering<br/>Similarity\"]\n        Sparse --> LexicalSearch[\"Neural Lexical Search<br/>Hybrid Retrieval\"]\n        Scores --> Reranking[\"Reranking<br/>Classification\"]\n    end\n```\n\n**Sources:** [sentence_transformers/SentenceTransformer.py:61](), [sentence_transformers/sparse_encoder/SparseEncoder.py:27](), [sentence_transformers/cross_encoder/CrossEncoder.py:48](), [README.md:15-17]()\n\n## SentenceTransformer: Dense Embeddings\n\n`SentenceTransformer` models encode text into fixed-size dense vector representations, ideal for semantic similarity tasks and vector databases.\n\n### Basic Usage\n\n```python\nfrom sentence_transformers import SentenceTransformer\n\n# Load a pre-trained model\nmodel = SentenceTransformer(\"all-MiniLM-L6-v2\")\n\n# Encode sentences into dense vectors\nsentences = [\n    \"The weather is lovely today.\",\n    \"It's so sunny outside!\",\n    \"He drove to the stadium.\",\n]\nembeddings = model.encode(sentences)\nprint(embeddings.shape)\n# (3, 384)\n\n# Calculate similarity scores\nsimilarities = model.similarity(embeddings, embeddings)\nprint(similarities)\n# tensor([[1.0000, 0.6660, 0.1046],\n#         [0.6660, 1.0000, 0.1411],\n#         [0.1046, 0.1411, 1.0000]])\n```\n\n### Specialized Encoding Methods\n\nFor information retrieval tasks, use task-specific encoding methods:\n\n```python",
+    "metadata": {
+      "chunk_id": 0,
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\Sentence_Transformers\\UKPLab\\sentence-transformers\\Quickstart_Guide.md",
+      "input_type": "sentence_transformers",
+      "chunking_strategy": "programming_language_documentation",
+      "token_count": 633,
+      "character_count": 2759,
+      "created_at": "2025-10-16T17:42:33.101316",
+      "parent_context": null,
+      "semantic_type": "sentence_transformers",
+      "collection_name": "Sentence_Transformers",
+      "subfolder_name": "UKPLab",
+      "collection_strategy": "programming_language_documentation",
+      "chunk_index_in_file": 0,
+      "file_relative_path": "UKPLab\\sentence-transformers\\Quickstart_Guide.md",
+      "collection_context": "Sentence_Transformers/UKPLab"
+    }
+  }
+]

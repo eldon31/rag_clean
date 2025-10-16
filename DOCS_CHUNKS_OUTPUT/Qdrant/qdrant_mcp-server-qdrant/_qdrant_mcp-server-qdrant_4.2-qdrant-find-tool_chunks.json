@@ -1,0 +1,62 @@
+[
+  {
+    "text": "qdrant-find Tool | qdrant/mcp-server-qdrant | DeepWiki\n\n[Index your code with Devin](private-repo.md)\n\n[DeepWiki](https://deepwiki.com)\n\n[DeepWiki](.md)\n\n[qdrant/mcp-server-qdrant](https://github.com/qdrant/mcp-server-qdrant \"Open repository\")\n\n[Index your code with](private-repo.md)\n\n[Devin](private-repo.md)\n\nShare\n\nLast indexed: 20 April 2025 ([a3ab0b](https://github.com/qdrant/mcp-server-qdrant/commits/a3ab0b96))\n\n- [Overview](qdrant/mcp-server-qdrant/1-overview.md)\n- [Architecture](qdrant/mcp-server-qdrant/2-architecture.md)\n- [Core Components](qdrant/mcp-server-qdrant/2.1-core-components.md)\n- [Embedding System](qdrant/mcp-server-qdrant/2.2-embedding-system.md)\n- [Configuration System](qdrant/mcp-server-qdrant/2.3-configuration-system.md)\n- [Installation & Deployment](qdrant/mcp-server-qdrant/3-installation-and-deployment.md)\n- [Configuration Options](qdrant/mcp-server-qdrant/3.1-configuration-options.md)\n- [Client Integration](qdrant/mcp-server-qdrant/3.2-client-integration.md)\n- [API Reference](qdrant/mcp-server-qdrant/4-api-reference.md)\n- [qdrant-store Tool](qdrant/mcp-server-qdrant/4.1-qdrant-store-tool.md)\n- [qdrant-find Tool](qdrant/mcp-server-qdrant/4.2-qdrant-find-tool.md)\n- [QdrantConnector Reference](qdrant/mcp-server-qdrant/5-qdrantconnector-reference.md)\n- [Embedding Providers](qdrant/mcp-server-qdrant/6-embedding-providers.md)\n- [Development Guide](qdrant/mcp-server-qdrant/7-development-guide.md)\n\nMenu\n\n# qdrant-find Tool\n\nRelevant source files\n\n- [README.md](https://github.com/qdrant/mcp-server-qdrant/blob/a3ab0b96/README.md)\n- [src/mcp\\_server\\_qdrant/mcp\\_server.py](https://github.com/qdrant/mcp-server-qdrant/blob/a3ab0b96/src/mcp_server_qdrant/mcp_server.py)\n\n## Purpose and Overview\n\nThe `qdrant-find` tool is a core component of the mcp-server-qdrant system that enables semantic search capabilities within a Qdrant vector database. This tool allows LLM applications to retrieve information previously stored in the database based on the semantic meaning of a query, rather than exact keyword matching.\n\nThis page documents the `qdrant-find` tool specifically. For information about storing information in the Qdrant database, see the [qdrant-store Tool](qdrant/mcp-server-qdrant/4.1-qdrant-store-tool.md) page.\n\nSources: [README.md31-37](https://github.com/qdrant/mcp-server-qdrant/blob/a3ab0b96/README.md#L31-L37)\n\n## How It Works\n\nThe `qdrant-find` tool operates by converting natural language queries into vector embeddings, then using these embeddings to perform similarity searches against stored information in the Qdrant vector database.\n\n```\n```\n\nSources: [src/mcp\\_server\\_qdrant/mcp\\_server.py100-138](https://github.com/qdrant/mcp-server-qdrant/blob/a3ab0b96/src/mcp_server_qdrant/mcp_server.py#L100-L138)\n\n### Technical Implementation\n\nThe `qdrant-find` tool is implemented in the `QdrantMCPServer` class through either the `find` or `find_with_default_collection` functions, depending on whether a default collection name is configured.\n\n```\n```\n\nSources: [src/mcp\\_server\\_qdrant/mcp\\_server.py100-131](https://github.com/qdrant/mcp-server-qdrant/blob/a3ab0b96/src/mcp_server_qdrant/mcp_server.py#L100-L131) [README.md31-37](https://github.com/qdrant/mcp-server-qdrant/blob/a3ab0b96/README.md#L31-L37)\n\n## Parameters\n\nThe `qdrant-find` tool accepts the following parameters:",
+    "metadata": {
+      "chunk_id": 0,
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\Qdrant\\qdrant_mcp-server-qdrant\\_qdrant_mcp-server-qdrant_4.2-qdrant-find-tool.md",
+      "input_type": "qdrant",
+      "chunking_strategy": "platform_documentation",
+      "token_count": 978,
+      "character_count": 3342,
+      "created_at": "2025-10-16T17:42:30.659975",
+      "parent_context": null,
+      "semantic_type": "qdrant",
+      "collection_name": "Qdrant",
+      "subfolder_name": "qdrant_mcp-server-qdrant",
+      "collection_strategy": "platform_documentation",
+      "chunk_index_in_file": 0,
+      "file_relative_path": "Qdrant\\qdrant_mcp-server-qdrant\\_qdrant_mcp-server-qdrant_4.2-qdrant-find-tool.md",
+      "collection_context": "Qdrant/qdrant_mcp-server-qdrant"
+    }
+  },
+  {
+    "text": "| Parameter         | Type   | Required    | Description                                                                               |\n| ----------------- | ------ | ----------- | ----------------------------------------------------------------------------------------- |\n| `query`           | string | Yes         | The natural language query to search for                                                  |\n| `collection_name` | string | Conditional | Name of the collection to search in. Required only if no default collection is configured |\n\nSources: [src/mcp\\_server\\_qdrant/mcp\\_server.py101-104](https://github.com/qdrant/mcp-server-qdrant/blob/a3ab0b96/src/mcp_server_qdrant/mcp_server.py#L101-L104) [README.md33-36](https://github.com/qdrant/mcp-server-qdrant/blob/a3ab0b96/README.md#L33-L36)\n\n## Return Value\n\nThe tool returns a list of strings containing:\n\n1. A header message indicating the query that was used\n2. Zero or more formatted entries that match the query\n3. If no entries are found, a message indicating no information was found\n\nEach entry is formatted by the `format_entry` method, which by default returns a string in the following format:\n\n```\n<entry><content>The content of the entry</content><metadata>{\"metadata_field\": \"value\"}</metadata></entry>\n```\n\nSources: [src/mcp\\_server\\_qdrant/mcp\\_server.py51-56](https://github.com/qdrant/mcp-server-qdrant/blob/a3ab0b96/src/mcp_server_qdrant/mcp_server.py#L51-L56) [src/mcp\\_server\\_qdrant/mcp\\_server.py119-131](https://github.com/qdrant/mcp-server-qdrant/blob/a3ab0b96/src/mcp_server_qdrant/mcp_server.py#L119-L131)\n\n## Configuration\n\nThe `qdrant-find` tool can be configured using several environment variables:\n\n| Environment Variable    | Description                                | Default                                  |\n| ----------------------- | ------------------------------------------ | ---------------------------------------- |\n| `QDRANT_URL`            | URL of the Qdrant server                   | None                                     |\n| `QDRANT_API_KEY`        | API key for the Qdrant server              | None                                     |\n| `COLLECTION_NAME`       | Default collection name to use             | None                                     |\n| `QDRANT_SEARCH_LIMIT`   | Maximum number of search results to return | (Not specified in provided files)        |\n| `TOOL_FIND_DESCRIPTION` | Custom description for the find tool       | (Default in settings.py)                 |\n| `EMBEDDING_PROVIDER`    | Embedding provider to use                  | `fastembed`                              |\n| `EMBEDDING_MODEL`       | Name of the embedding model to use         | `sentence-transformers/all-MiniLM-L6-v2` |\n\nSources: [README.md43-52](https://github.com/qdrant/mcp-server-qdrant/blob/a3ab0b96/README.md#L43-L52)\n\n## Usage Examples\n\n### Basic Usage with Default Collection\n\nWhen a default collection is configured:\n\n```\nqdrant-find(\"How to implement a binary search algorithm?\")\n```\n\n### Specifying a Collection\n\nWhen no default collection is configured, or to override the default:\n\n```\nqdrant-find(\"How to implement a binary search algorithm?\", \"code-examples\")\n```\n\n### Integration in Cursor/Windsurf\n\nThe `qdrant-find` tool can be customized for specific use cases, such as code search in Cursor/Windsurf, by modifying the tool description:\n\n```\n```\n\nSources: [README.md166-178](https://github.com/qdrant/mcp-server-qdrant/blob/a3ab0b96/README.md#L166-L178)\n\n## Implementation Details\n\nThe search operation is performed through several key steps:\n\n1. The query string is converted to a vector embedding using the configured embedding provider\n2. The QdrantConnector's search method is called with the query, collection name, and limit\n3. The Qdrant database performs a similarity search on the vector embeddings\n4. Matching entries are returned to the server\n5. The server formats each entry using the format\\_entry method\n6. A list of formatted strings is returned to the client\n\nSources: [src/mcp\\_server\\_qdrant/mcp\\_server.py100-138](https://github.com/qdrant/mcp-server-qdrant/blob/a3ab0b96/src/mcp_server_qdrant/mcp_server.py#L100-L138)\n\n## Related Components\n\nThe `qdrant-find` tool relies on two key components:\n\n1. **EmbeddingProvider**: Responsible for converting text queries into vector embeddings\n2. **QdrantConnector**: Handles communication with the Qdrant database, including vector similarity searches",
+    "metadata": {
+      "chunk_id": 1,
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\Qdrant\\qdrant_mcp-server-qdrant\\_qdrant_mcp-server-qdrant_4.2-qdrant-find-tool.md",
+      "input_type": "qdrant",
+      "chunking_strategy": "platform_documentation",
+      "token_count": 1008,
+      "character_count": 4452,
+      "created_at": "2025-10-16T17:42:30.669510",
+      "parent_context": null,
+      "semantic_type": "qdrant",
+      "collection_name": "Qdrant",
+      "subfolder_name": "qdrant_mcp-server-qdrant",
+      "collection_strategy": "platform_documentation",
+      "chunk_index_in_file": 1,
+      "file_relative_path": "Qdrant\\qdrant_mcp-server-qdrant\\_qdrant_mcp-server-qdrant_4.2-qdrant-find-tool.md",
+      "collection_context": "Qdrant/qdrant_mcp-server-qdrant"
+    }
+  },
+  {
+    "text": "For more information about the embedding system, see the [Embedding System](qdrant/mcp-server-qdrant/2.2-embedding-system.md) page. For more details about the QdrantConnector, see the [QdrantConnector Reference](qdrant/mcp-server-qdrant/5-qdrantconnector-reference.md) page.\n\nSources: [src/mcp\\_server\\_qdrant/mcp\\_server.py37-45](https://github.com/qdrant/mcp-server-qdrant/blob/a3ab0b96/src/mcp_server_qdrant/mcp_server.py#L37-L45) [README.md19-37](https://github.com/qdrant/mcp-server-qdrant/blob/a3ab0b96/README.md#L19-L37)\n\nDismiss\n\nRefresh this wiki\n\nEnter email to refresh\n\n### On this page\n\n- [qdrant-find Tool](#qdrant-find-tool.md)\n- [Purpose and Overview](#purpose-and-overview.md)\n- [How It Works](#how-it-works.md)\n- [Technical Implementation](#technical-implementation.md)\n- [Parameters](#parameters.md)\n- [Return Value](#return-value.md)\n- [Configuration](#configuration.md)\n- [Usage Examples](#usage-examples.md)\n- [Basic Usage with Default Collection](#basic-usage-with-default-collection.md)\n- [Specifying a Collection](#specifying-a-collection.md)\n- [Integration in Cursor/Windsurf](#integration-in-cursorwindsurf.md)\n- [Implementation Details](#implementation-details.md)\n- [Related Components](#related-components.md)",
+    "metadata": {
+      "chunk_id": 2,
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\Qdrant\\qdrant_mcp-server-qdrant\\_qdrant_mcp-server-qdrant_4.2-qdrant-find-tool.md",
+      "input_type": "qdrant",
+      "chunking_strategy": "platform_documentation",
+      "token_count": 344,
+      "character_count": 1238,
+      "created_at": "2025-10-16T17:42:30.670170",
+      "parent_context": null,
+      "semantic_type": "qdrant",
+      "collection_name": "Qdrant",
+      "subfolder_name": "qdrant_mcp-server-qdrant",
+      "collection_strategy": "platform_documentation",
+      "chunk_index_in_file": 2,
+      "file_relative_path": "Qdrant\\qdrant_mcp-server-qdrant\\_qdrant_mcp-server-qdrant_4.2-qdrant-find-tool.md",
+      "collection_context": "Qdrant/qdrant_mcp-server-qdrant"
+    }
+  }
+]

@@ -60,7 +60,7 @@ usin## 1. Audit & Fix Migration Script
   - [ ] Run sample searches for each collection
 - [ ] 5.3 Create integration test
   - [ ] Test semantic search with CodeRankEmbed queries
-  - [ ] Compare results with old 3584-dim (if backup exists)
+  - [ ] Compare results with old 768-dim (if backup exists)
   - [ ] Verify metadata filtering works
 
 ## 6. Update MCP Servers
@@ -82,7 +82,7 @@ usin## 1. Audit & Fix Migration Script
   - [ ] Document rollback procedure (if needed)
   - [ ] Update `README.md` with new embedding model
 - [ ] 7.2 Clean up old files (optional)
-  - [ ] Archive old 3584-dim embedding files
+  - [ ] Archive old 768-dim embedding files
   - [ ] Remove or deprecate old upload scripts
   - [ ] Update config examples
 - [ ] 7.3 Add monitoring

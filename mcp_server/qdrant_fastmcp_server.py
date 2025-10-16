@@ -1,5 +1,5 @@
 """
-FastMCP-based Qdrant server with nomic-ai/nomic-embed-code embeddings.
+FastMCP-based Qdrant server with nomic-ai/CodeRankEmbed embeddings.
 Supports viator_api, fast_docs, pydantic_docs, and inngest_ecosystem collections.
 """
 
@@ -32,7 +32,7 @@ mcp = FastMCP("qdrant-codes")
 embedder: Optional[SentenceTransformerEmbedder] = None
 stores: dict[str, QdrantStore] = {}
 
-EMBEDDING_MODEL = "nomic-ai/nomic-embed-code"
+EMBEDDING_MODEL = "nomic-ai/CodeRankEmbed"
 VECTOR_SIZE = 3584
 COLLECTIONS = ["docling", "viator_api", "fast_docs", "pydantic_docs", "inngest_ecosystem"]
 QDRANT_HOST = os.getenv("QDRANT_HOST", "localhost")

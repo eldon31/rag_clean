@@ -58,7 +58,7 @@ class QdrantEcosystemProcessor:
         
         # Initialize chunker with optimized config
         self.chunking_config = ChunkingConfig(
-            max_tokens=2048,  # nomic-embed-code limit
+            max_tokens=2048,  # CodeRankEmbed limit
             chunk_overlap=100,
             chunk_size=2048
         )

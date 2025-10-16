@@ -1,0 +1,42 @@
+[
+  {
+    "text": "This document covers the loss functions available for training CrossEncoder models in the sentence-transformers library. CrossEncoder loss functions are specialized for tasks that require joint encoding of text pairs, such as reranking, classification, and learning-to-rank applications.\n\nFor information about SentenceTransformer loss functions, see [Loss Functions for SentenceTransformer](#3.4). For SparseEncoder loss functions, see [Loss Functions for SparseEncoder](#3.5).\n\n## Overview\n\nCrossEncoder loss functions are designed to train models that process text pairs jointly through a single transformer encoder. These loss functions fall into three main categories:\n\n- **Learning-to-Rank Losses**: Optimize ranking metrics like NDCG for information retrieval tasks\n- **Classification Losses**: Handle binary or multi-class classification scenarios  \n- **Regression Losses**: Predict continuous similarity scores between text pairs\n\n## Loss Function Hierarchy\n\nThe following diagram shows the inheritance and relationship structure of CrossEncoder loss functions:\n\n```mermaid\ngraph TD\n    Module[\"nn.Module\"]\n    \n    subgraph \"Learning-to-Rank Losses\"\n        LambdaLoss[\"LambdaLoss\"]\n        ListNetLoss[\"ListNetLoss\"] \n        PListMLELoss[\"PListMLELoss\"]\n        ListMLELoss[\"ListMLELoss\"]\n        RankNetLoss[\"RankNetLoss\"]\n    end\n    \n    subgraph \"Classification Losses\"\n        BinaryCrossEntropyLoss[\"BinaryCrossEntropyLoss\"]\n        CrossEntropyLoss[\"CrossEntropyLoss\"]\n        MultipleNegativesRankingLoss[\"MultipleNegativesRankingLoss\"]\n        CachedMultipleNegativesRankingLoss[\"CachedMultipleNegativesRankingLoss\"]\n    end\n    \n    subgraph \"Regression Losses\"\n        MSELoss[\"MSELoss\"]\n        MarginMSELoss[\"MarginMSELoss\"]\n    end\n    \n    subgraph \"Weighting Schemes\"\n        BaseWeightingScheme[\"BaseWeightingScheme\"]\n        NoWeightingScheme[\"NoWeightingScheme\"]\n        NDCGLoss1Scheme[\"NDCGLoss1Scheme\"]\n        NDCGLoss2Scheme[\"NDCGLoss2Scheme\"]\n        LambdaRankScheme[\"LambdaRankScheme\"]\n        NDCGLoss2PPScheme[\"NDCGLoss2PPScheme\"]\n        PListMLELambdaWeight[\"PListMLELambdaWeight\"]\n    end\n    \n    Module --> LambdaLoss\n    Module --> ListNetLoss\n    Module --> PListMLELoss\n    Module --> BinaryCrossEntropyLoss\n    Module --> CrossEntropyLoss\n    Module --> MultipleNegativesRankingLoss\n    Module --> CachedMultipleNegativesRankingLoss\n    Module --> MSELoss\n    Module --> MarginMSELoss\n    Module --> BaseWeightingScheme\n    \n    ListMLELoss --> PListMLELoss\n    LambdaLoss --> RankNetLoss\n    BaseWeightingScheme --> NoWeightingScheme\n    BaseWeightingScheme --> NDCGLoss1Scheme\n    BaseWeightingScheme --> NDCGLoss2Scheme\n    BaseWeightingScheme --> LambdaRankScheme\n    BaseWeightingScheme --> NDCGLoss2PPScheme\n    Module --> PListMLELambdaWeight\n    \n    LambdaLoss -.-> BaseWeightingScheme\n    PListMLELoss -.-> PListMLELambdaWeight\n```\n\nSources: [sentence_transformers/cross_encoder/losses/LambdaLoss.py:103-361](), [sentence_transformers/cross_encoder/losses/ListNetLoss.py:10-198](), [sentence_transformers/cross_encoder/losses/PListMLELoss.py:45-295](), [sentence_transformers/cross_encoder/losses/ListMLELoss.py:9-127](), [sentence_transformers/cross_encoder/losses/RankNetLoss.py:11-124](), [docs/package_reference/cross_encoder/losses.md:1-68]()\n\n## Learning-to-Rank Loss Functions\n\nLearning-to-rank losses are designed for information retrieval tasks where the goal is to rank documents by relevance for a given query. These losses work with listwise data formats.\n\n### Data Format Requirements\n\nAll learning-to-rank losses expect the following input format:\n\n| Component | Format | Description |\n|-----------|--------|-------------|\n| Inputs | `(queries, documents_list)` | List of query strings and list of document lists |\n| Labels | `[score1, score2, ..., scoreN]` | List of relevance scores per query |\n| Model Output | 1 label | Single relevance score per query-document pair |\n\n### LambdaLoss Framework\n\nThe `LambdaLoss` class implements a comprehensive framework for ranking metric optimization with multiple weighting schemes:",
+    "metadata": {
+      "chunk_id": 0,
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\Sentence_Transformers\\UKPLab\\sentence-transformers\\Loss_Functions_for_CrossEncoder.md",
+      "input_type": "sentence_transformers",
+      "chunking_strategy": "programming_language_documentation",
+      "token_count": 933,
+      "character_count": 4098,
+      "created_at": "2025-10-16T17:42:32.894617",
+      "parent_context": null,
+      "semantic_type": "sentence_transformers",
+      "collection_name": "Sentence_Transformers",
+      "subfolder_name": "UKPLab",
+      "collection_strategy": "programming_language_documentation",
+      "chunk_index_in_file": 0,
+      "file_relative_path": "UKPLab\\sentence-transformers\\Loss_Functions_for_CrossEncoder.md",
+      "collection_context": "Sentence_Transformers/UKPLab"
+    }
+  },
+  {
+    "text": "```mermaid\ngraph LR\n    subgraph \"Input Processing\"\n        QueryDocs[\"queries + docs_list\"] --> Pairs[\"query-document pairs\"]\n        Labels[\"labels list\"] --> LabelMatrix[\"labels_matrix\"]\n    end\n    \n    subgraph \"Model Processing\"\n        Pairs --> CrossEncoder[\"model.forward()\"]\n        CrossEncoder --> Logits[\"logits\"]\n        Logits --> ActivationFn[\"activation_fn\"]\n        ActivationFn --> LogitsMatrix[\"logits_matrix\"]\n    end\n    \n    subgraph \"LambdaLoss Computation\"\n        LogitsMatrix --> Sorting[\"sort by logits\"]\n        LabelMatrix --> Sorting\n        Sorting --> TrueDiffs[\"true_diffs\"]\n        Sorting --> Gains[\"gain calculation\"]\n        Sorting --> Discounts[\"discount calculation\"]\n        \n        Gains --> WeightingScheme[\"weighting_scheme.forward()\"]\n        Discounts --> WeightingScheme\n        WeightingScheme --> Weights[\"weights\"]\n        \n        TrueDiffs --> ScoreDiffs[\"score differences\"]\n        ScoreDiffs --> WeightedProbas[\"weighted probabilities\"]\n        Weights --> WeightedProbas\n        WeightedProbas --> Loss[\"final loss\"]\n    end\n```\n\nThe `LambdaLoss` supports five weighting schemes:\n\n| Scheme | Class | Purpose |\n|--------|-------|---------|\n| No Weighting | `NoWeightingScheme` | Uniform weights (RankNet equivalent) |\n| NDCG Loss1 | `NDCGLoss1Scheme` | Basic NDCG optimization |\n| NDCG Loss2 | `NDCGLoss2Scheme` | Improved NDCG with tighter bounds |\n| LambdaRank | `LambdaRankScheme` | Coarse upper bound optimization |\n| NDCG Loss2++ | `NDCGLoss2PPScheme` | Hybrid scheme (recommended) |\n\nSources: [sentence_transformers/cross_encoder/losses/LambdaLoss.py:103-361](), [sentence_transformers/cross_encoder/losses/LambdaLoss.py:12-101]()\n\n### ListNet Loss\n\nThe `ListNetLoss` implements the ListNet ranking algorithm using cross-entropy between predicted and ground truth ranking distributions:\n\n```python",
+    "metadata": {
+      "chunk_id": 1,
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\Sentence_Transformers\\UKPLab\\sentence-transformers\\Loss_Functions_for_CrossEncoder.md",
+      "input_type": "sentence_transformers",
+      "chunking_strategy": "programming_language_documentation",
+      "token_count": 440,
+      "character_count": 1860,
+      "created_at": "2025-10-16T17:42:32.896079",
+      "parent_context": null,
+      "semantic_type": "sentence_transformers",
+      "collection_name": "Sentence_Transformers",
+      "subfolder_name": "UKPLab",
+      "collection_strategy": "programming_language_documentation",
+      "chunk_index_in_file": 1,
+      "file_relative_path": "UKPLab\\sentence-transformers\\Loss_Functions_for_CrossEncoder.md",
+      "collection_context": "Sentence_Transformers/UKPLab"
+    }
+  }
+]

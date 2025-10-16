@@ -1,10 +1,10 @@
 """
 Production-ready Docling Configuration
 
-Optimized for code documentation processing with nomic-embed-code embedding model.
+Optimized for code documentation processing with CodeRankEmbed embedding model.
 
 Key Features:
-- Code enrichment enabled (CRITICAL for nomic-embed-code)
+- Code enrichment enabled (CRITICAL for CodeRankEmbed)
 - Table structure extraction
 - OCR with multi-language support
 - Formula parsing for technical documents
@@ -34,7 +34,7 @@ class DoclingConfig:
     # Default settings
     DEFAULT_OCR_ENABLED = True
     DEFAULT_TABLE_EXTRACTION = True
-    DEFAULT_CODE_ENRICHMENT = True  # CRITICAL for nomic-embed-code!
+    DEFAULT_CODE_ENRICHMENT = True  # CRITICAL for CodeRankEmbed!
     DEFAULT_FORMULA_ENRICHMENT = True
     DEFAULT_IMAGE_SCALE = 2.0
     DEFAULT_MAX_FILE_SIZE_MB = 500
@@ -115,7 +115,7 @@ class DoclingConfig:
             table_structure_options=table_options,
             
             # CRITICAL: Code & Formula Enhancement
-            # This is essential for nomic-embed-code embeddings!
+            # This is essential for CodeRankEmbed embeddings!
             do_code_enrichment=DoclingConfig.DEFAULT_CODE_ENRICHMENT,
             do_formula_enrichment=DoclingConfig.DEFAULT_FORMULA_ENRICHMENT,
             

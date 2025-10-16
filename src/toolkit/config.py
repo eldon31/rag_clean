@@ -15,7 +15,7 @@ class ToolkitSettings(BaseModel):
     """Global settings for the knowledge ingestion toolkit."""
 
     embedding_model: str = Field(
-        default=os.getenv("EMBEDDING_MODEL", "nomic-ai/nomic-embed-code"),
+        default=os.getenv("EMBEDDING_MODEL", "nomic-ai/CodeRankEmbed"),
         description="Sentence-transformers model to use for embeddings.",
     )
     embedding_device: str = Field(

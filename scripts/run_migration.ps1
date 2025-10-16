@@ -1,5 +1,5 @@
 # CodeRank Migration Automation Script
-# Executes full migration from 3584-dim to 768-dim
+# Executes full migration from 768-dim to 768-dim
 
 param(
     [switch]$DryRun,
@@ -67,7 +67,7 @@ Write-Host "=" * 70 -ForegroundColor Cyan
 # Ask for confirmation unless DryRun or Force
 if (-not $DryRun -and -not $Force) {
     Write-Host ""
-    Write-Host "⚠️  WARNING: This will DELETE old 3584-dim collections!" -ForegroundColor Yellow
+    Write-Host "⚠️  WARNING: This will DELETE old 768-dim collections!" -ForegroundColor Yellow
     Write-Host ""
     $confirm = Read-Host "Continue with migration? (yes/no)"
     

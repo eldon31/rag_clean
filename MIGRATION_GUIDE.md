@@ -1,6 +1,6 @@
 # CodeRank Migration Guide
 
-Complete guide for migrating from nomic-embed-code (3584-dim) to CodeRankEmbed (768-dim).
+Complete guide for migrating from CodeRankEmbed (768-dim) to CodeRankEmbed (768-dim).
 
 **Date**: October 16, 2025  
 **Status**: Ready to execute  
@@ -11,7 +11,7 @@ Complete guide for migrating from nomic-embed-code (3584-dim) to CodeRankEmbed (
 ## 🎯 Migration Overview
 
 ### What's Changing
-- **Model**: `nomic-ai/nomic-embed-code` → `nomic-ai/CodeRankEmbed`
+- **Model**: `nomic-ai/CodeRankEmbed` → `nomic-ai/CodeRankEmbed`
 - **Dimension**: 3584 → 768 (4.7x smaller)
 - **Query Speed**: 30+ seconds → ~400ms (75x faster)
 - **Memory**: ~4x reduction with quantization
@@ -49,7 +49,7 @@ python scripts/migrate_to_coderank.py --all --dry-run
 ```
 
 **Expected Output:**
-- Lists existing 3584-dim collections
+- Lists existing 768-dim collections
 - Shows which embedding files will be used
 - No actual changes made
 
@@ -71,7 +71,7 @@ python scripts/remove_old_collections.py --backup
 
 ### Step 3: Remove Old Collections
 
-Delete 3584-dim collections:
+Delete 768-dim collections:
 
 ```powershell
 # With backup (safer)
@@ -200,7 +200,7 @@ docker-compose up -d
 - **Query Embedding**: 30+ sec → ~400ms (75x faster)
 - **Search Latency**: <100ms with quantization
 - **Memory Usage**: ~75% reduction (768-dim + quantization)
-- **Disk Space**: ~80% smaller than 3584-dim
+- **Disk Space**: ~80% smaller than 768-dim
 
 ---
 
@@ -242,7 +242,7 @@ Once verification passes:
 3. **Update All Dimension Constants** (13 files):
    - See audit results for complete list
    - Change `3584` → `768`
-   - Change `nomic-ai/nomic-embed-code` → `nomic-ai/CodeRankEmbed`
+   - Change `nomic-ai/CodeRankEmbed` → `nomic-ai/CodeRankEmbed`
 
 4. **Run Integration Tests**:
    ```powershell

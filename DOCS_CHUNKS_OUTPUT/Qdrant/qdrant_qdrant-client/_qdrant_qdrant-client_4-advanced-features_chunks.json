@@ -1,0 +1,62 @@
+[
+  {
+    "text": "Advanced Features | qdrant/qdrant-client | DeepWiki\n\n[Index your code with Devin](private-repo.md)\n\n[DeepWiki](https://deepwiki.com)\n\n[DeepWiki](.md)\n\n[qdrant/qdrant-client](https://github.com/qdrant/qdrant-client \"Open repository\")\n\n[Index your code with](private-repo.md)\n\n[Devin](private-repo.md)\n\nShare\n\nLast indexed: 9 July 2025 ([ac6f6c](https://github.com/qdrant/qdrant-client/commits/ac6f6cd2))\n\n- [Overview](qdrant/qdrant-client/1-overview.md)\n- [Client Architecture](qdrant/qdrant-client/2-client-architecture.md)\n- [Client Interface](qdrant/qdrant-client/2.1-client-interface.md)\n- [Local Mode](qdrant/qdrant-client/2.2-local-mode.md)\n- [Remote Mode](qdrant/qdrant-client/2.3-remote-mode.md)\n- [Protocol Handling](qdrant/qdrant-client/2.4-protocol-handling.md)\n- [Core Operations](qdrant/qdrant-client/3-core-operations.md)\n- [Search Operations](qdrant/qdrant-client/3.1-search-operations.md)\n- [Collection Management](qdrant/qdrant-client/3.2-collection-management.md)\n- [Point Operations](qdrant/qdrant-client/3.3-point-operations.md)\n- [Advanced Features](qdrant/qdrant-client/4-advanced-features.md)\n- [FastEmbed Integration](qdrant/qdrant-client/4.1-fastembed-integration.md)\n- [Batch Operations](qdrant/qdrant-client/4.2-batch-operations.md)\n- [Hybrid Search](qdrant/qdrant-client/4.3-hybrid-search.md)\n- [Local Inference](qdrant/qdrant-client/4.4-local-inference.md)\n- [Implementation Details](qdrant/qdrant-client/5-implementation-details.md)\n- [Payload Filtering](qdrant/qdrant-client/5.1-payload-filtering.md)\n- [Type Inspector System](qdrant/qdrant-client/5.2-type-inspector-system.md)\n- [Expression Evaluation](qdrant/qdrant-client/5.3-expression-evaluation.md)\n- [Development & Testing](qdrant/qdrant-client/6-development-and-testing.md)\n- [Project Setup](qdrant/qdrant-client/6.1-project-setup.md)\n- [Testing Framework](qdrant/qdrant-client/6.2-testing-framework.md)\n- [Documentation System](qdrant/qdrant-client/6.3-documentation-system.md)\n\nMenu\n\n# Advanced Features\n\nRelevant source files\n\n- [qdrant\\_client/async\\_qdrant\\_fastembed.py](https://github.com/qdrant/qdrant-client/blob/ac6f6cd2/qdrant_client/async_qdrant_fastembed.py)\n- [qdrant\\_client/qdrant\\_fastembed.py](https://github.com/qdrant/qdrant-client/blob/ac6f6cd2/qdrant_client/qdrant_fastembed.py)\n- [tests/test\\_fastembed.py](https://github.com/qdrant/qdrant-client/blob/ac6f6cd2/tests/test_fastembed.py)\n- [tools/async\\_client\\_generator/fastembed\\_generator.py](https://github.com/qdrant/qdrant-client/blob/ac6f6cd2/tools/async_client_generator/fastembed_generator.py)\n\nThis document covers the advanced functionality of the qdrant-client Python library, including embedding integration, batch processing, and specialized search capabilities. These features extend the basic client operations to provide higher-level abstractions for common vector database workflows.\n\nFor basic client operations and collection management, see [Core Operations](qdrant/qdrant-client/3-core-operations.md). For implementation details of filtering and type inspection systems, see [Implementation Details](qdrant/qdrant-client/5-implementation-details.md).\n\n## FastEmbed Integration\n\nThe qdrant-client provides seamless integration with FastEmbed for automatic text and image embedding generation through the `QdrantFastembedMixin` and `AsyncQdrantFastembedMixin` classes.\n\n```\n```\n\nThe `QdrantFastembedMixin` class provides several key methods for model management:",
+    "metadata": {
+      "chunk_id": 0,
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\Qdrant\\qdrant_qdrant-client\\_qdrant_qdrant-client_4-advanced-features.md",
+      "input_type": "qdrant",
+      "chunking_strategy": "platform_documentation",
+      "token_count": 947,
+      "character_count": 3442,
+      "created_at": "2025-10-16T17:42:32.455098",
+      "parent_context": null,
+      "semantic_type": "qdrant",
+      "collection_name": "Qdrant",
+      "subfolder_name": "qdrant_qdrant-client",
+      "collection_strategy": "platform_documentation",
+      "chunk_index_in_file": 0,
+      "file_relative_path": "Qdrant\\qdrant_qdrant-client\\_qdrant_qdrant-client_4-advanced-features.md",
+      "collection_context": "Qdrant/qdrant_qdrant-client"
+    }
+  },
+  {
+    "text": "| Method                 | Purpose                          | Returns                           |\n| ---------------------- | -------------------------------- | --------------------------------- |\n| `set_model()`          | Configure dense embedding model  | None                              |\n| `set_sparse_model()`   | Configure sparse embedding model | None                              |\n| `list_text_models()`   | List available text models       | `dict[str, tuple[int, Distance]]` |\n| `list_sparse_models()` | List available sparse models     | `dict[str, dict[str, Any]]`       |\n| `get_embedding_size()` | Get model embedding dimensions   | `int`                             |\n\nThe embedding models are managed through the `ModelEmbedder` class, which handles both dense and sparse embeddings. The default dense model is `BAAI/bge-small-en`, as defined in the `DEFAULT_EMBEDDING_MODEL` constant.\n\n**Sources:** [qdrant\\_client/qdrant\\_fastembed.py31-157](https://github.com/qdrant/qdrant-client/blob/ac6f6cd2/qdrant_client/qdrant_fastembed.py#L31-L157) [qdrant\\_client/async\\_qdrant\\_fastembed.py37-212](https://github.com/qdrant/qdrant-client/blob/ac6f6cd2/qdrant_client/async_qdrant_fastembed.py#L37-L212)\n\n## Batch Operations\n\nThe client provides efficient batch processing capabilities for high-volume data ingestion through the `add()` method and underlying batch uploaders.\n\n```\n```\n\nThe batch processing system handles several key operations:\n\n1. **Document Embedding**: The `_embed_documents()` method processes documents in batches using the configured embedding model\n2. **Sparse Embedding**: The `_sparse_embed_documents()` method generates sparse vectors for hybrid search\n3. **Point Construction**: The `_points_iterator()` method combines embeddings with metadata to create `PointStruct` objects\n4. **Parallel Upload**: The `upload_points()` method handles efficient batch upload with configurable parallelism\n\nKey parameters for batch operations:\n\n| Parameter            | Default | Purpose                          |\n| -------------------- | ------- | -------------------------------- |\n| `batch_size`         | 32      | Documents per batch              |\n| `parallel`           | None    | Parallel workers for embedding   |\n| `DEFAULT_BATCH_SIZE` | 8       | Default batch size for embedding |\n\n**Sources:** [qdrant\\_client/qdrant\\_fastembed.py518-610](https://github.com/qdrant/qdrant-client/blob/ac6f6cd2/qdrant_client/qdrant_fastembed.py#L518-L610) [qdrant\\_client/qdrant\\_fastembed.py270-318](https://github.com/qdrant/qdrant-client/blob/ac6f6cd2/qdrant_client/qdrant_fastembed.py#L270-L318)\n\n## Hybrid Search\n\nThe client supports hybrid search combining dense and sparse vectors through reciprocal rank fusion (RRF). This is implemented in the `query()` and `query_batch()` methods.\n\n```\n```\n\nThe hybrid search process involves:\n\n1. **Dual Embedding**: Query text is embedded using both dense and sparse models\n2. **Parallel Search**: Both dense and sparse searches are executed via `search_batch()`\n3. **Result Fusion**: Results are combined using `reciprocal_rank_fusion()` from the `qdrant_client.hybrid.fusion` module\n4. **Response Formatting**: Results are converted to `QueryResponse` objects\n\nVector field naming follows a consistent pattern:\n\n- Dense vectors: `\"fast-{model_name}\"` (e.g., `\"fast-bge-small-en\"`)\n- Sparse vectors: `\"fast-sparse-{model_name}\"` (e.g., `\"fast-sparse-splade_pp_en_v1\"`)\n\n**Sources:** [qdrant\\_client/qdrant\\_fastembed.py612-696](https://github.com/qdrant/qdrant-client/blob/ac6f6cd2/qdrant_client/qdrant_fastembed.py#L612-L696) [qdrant\\_client/qdrant\\_fastembed.py18](https://github.com/qdrant/qdrant-client/blob/ac6f6cd2/qdrant_client/qdrant_fastembed.py#L18-L18)\n\n## Local Inference\n\nThe client provides local inference capabilities through the `ModelEmbedder` class and related inference object detection systems.\n\n```\n```\n\nThe local inference system provides several key capabilities:\n\n1. **Query Resolution**: The `_resolve_query()` method handles various query types including inference objects\n2. **Model Embedding**: The `_embed_models()` and `_embed_models_strict()` methods process Pydantic models with embedded inference objects\n3. **Type Detection**: The system uses `INFERENCE_OBJECT_TYPES` to identify objects requiring inference\n4. **Schema Parsing**: The `ModelSchemaParser` analyzes model schemas to identify inference fields\n\nSupported inference object types include:",
+    "metadata": {
+      "chunk_id": 1,
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\Qdrant\\qdrant_qdrant-client\\_qdrant_qdrant-client_4-advanced-features.md",
+      "input_type": "qdrant",
+      "chunking_strategy": "platform_documentation",
+      "token_count": 1016,
+      "character_count": 4454,
+      "created_at": "2025-10-16T17:42:32.462366",
+      "parent_context": null,
+      "semantic_type": "qdrant",
+      "collection_name": "Qdrant",
+      "subfolder_name": "qdrant_qdrant-client",
+      "collection_strategy": "platform_documentation",
+      "chunk_index_in_file": 1,
+      "file_relative_path": "Qdrant\\qdrant_qdrant-client\\_qdrant_qdrant-client_4-advanced-features.md",
+      "collection_context": "Qdrant/qdrant_qdrant-client"
+    }
+  },
+  {
+    "text": "- `models.Document` - Text documents for embedding\n- `models.Image` - Images for vision model embedding\n- `models.InferenceObject` - Generic inference objects\n\nThe system integrates with both synchronous and asynchronous workflows, with the `AsyncQdrantFastembedMixin` providing the same interface for async operations.\n\n**Sources:** [qdrant\\_client/qdrant\\_fastembed.py789-892](https://github.com/qdrant/qdrant-client/blob/ac6f6cd2/qdrant_client/qdrant_fastembed.py#L789-L892) [qdrant\\_client/qdrant\\_fastembed.py16](https://github.com/qdrant/qdrant-client/blob/ac6f6cd2/qdrant_client/qdrant_fastembed.py#L16-L16) [qdrant\\_client/qdrant\\_fastembed.py36-40](https://github.com/qdrant/qdrant-client/blob/ac6f6cd2/qdrant_client/qdrant_fastembed.py#L36-L40)\n\nDismiss\n\nRefresh this wiki\n\nEnter email to refresh\n\n### On this page\n\n- [Advanced Features](#advanced-features.md)\n- [FastEmbed Integration](#fastembed-integration.md)\n- [Batch Operations](#batch-operations.md)\n- [Hybrid Search](#hybrid-search.md)\n- [Local Inference](#local-inference.md)",
+    "metadata": {
+      "chunk_id": 2,
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\Qdrant\\qdrant_qdrant-client\\_qdrant_qdrant-client_4-advanced-features.md",
+      "input_type": "qdrant",
+      "chunking_strategy": "platform_documentation",
+      "token_count": 293,
+      "character_count": 1044,
+      "created_at": "2025-10-16T17:42:32.462981",
+      "parent_context": null,
+      "semantic_type": "qdrant",
+      "collection_name": "Qdrant",
+      "subfolder_name": "qdrant_qdrant-client",
+      "collection_strategy": "platform_documentation",
+      "chunk_index_in_file": 2,
+      "file_relative_path": "Qdrant\\qdrant_qdrant-client\\_qdrant_qdrant-client_4-advanced-features.md",
+      "collection_context": "Qdrant/qdrant_qdrant-client"
+    }
+  }
+]

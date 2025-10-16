@@ -1,5 +1,5 @@
 """
-Custom MCP server for Qdrant with nomic-ai/nomic-embed-code embeddings.
+Custom MCP server for Qdrant with nomic-ai/CodeRankEmbed embeddings.
 Supports both agent_kit and inngest_overall collections.
 """
 
@@ -39,7 +39,7 @@ logger = logging.getLogger("qdrant-code-mcp")
 embedder: Optional[SentenceTransformerEmbedder] = None
 stores: dict[str, QdrantStore] = {}
 
-EMBEDDING_MODEL = "nomic-ai/nomic-embed-code"
+EMBEDDING_MODEL = "nomic-ai/CodeRankEmbed"
 VECTOR_SIZE = 3584
 COLLECTIONS = ["agent_kit", "inngest_overall"]
 
@@ -87,7 +87,7 @@ async def handle_list_tools() -> list[Tool]:
     return [
         Tool(
             name="qdrant_search_agent_kit",
-            description="Search the agent_kit collection (AI agent documentation) using semantic similarity with nomic-embed-code",
+            description="Search the agent_kit collection (AI agent documentation) using semantic similarity with CodeRankEmbed",
             inputSchema={
                 "type": "object",
                 "properties": {
@@ -111,7 +111,7 @@ async def handle_list_tools() -> list[Tool]:
         ),
         Tool(
             name="qdrant_search_inngest",
-            description="Search the inngest_overall collection (Inngest workflow platform docs) using semantic similarity with nomic-embed-code",
+            description="Search the inngest_overall collection (Inngest workflow platform docs) using semantic similarity with CodeRankEmbed",
             inputSchema={
                 "type": "object",
                 "properties": {

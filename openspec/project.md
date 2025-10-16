@@ -24,7 +24,7 @@
 
 ### Vector Database & Embeddings
 - **Qdrant**: Production vector database with quantization support
-- **nomic-ai/CodeRankEmbed**: 768-dim embeddings (migrated from nomic-embed-code)
+- **nomic-ai/CodeRankEmbed**: 768-dim embeddings (migrated from CodeRankEmbed)
 - **sentence-transformers**: Embedding and reranking models
 - **ONNX Runtime + Optimum**: 2-4x faster CPU inference (optional)
 
@@ -108,7 +108,7 @@ This project builds RAG infrastructure for LLM applications:
 - **Metadata Filtering**: Use document structure (headings, code blocks) to improve precision
 
 ### Embedding Model Migration
-- **Old**: `nomic-ai/nomic-embed-code` (3584-dim)
+- **Old**: `nomic-ai/CodeRankEmbed` (768-dim)
 - **New**: `nomic-ai/CodeRankEmbed` (768-dim)
 - **Benefit**: 75x faster queries (30s → 400ms), 4.7x smaller vectors, 4x memory reduction
 - **Status**: Embeddings generated, migration scripts ready
@@ -129,7 +129,7 @@ Zero-cost metadata enrichment for 4% accuracy improvement:
 ### Technical Constraints
 - **Python 3.11+**: Minimum version requirement
 - **Pydantic v2**: All models must use Pydantic BaseModel (not dataclasses)
-- **Token Limits**: nomic-embed-code/CodeRankEmbed max 2048 tokens per chunk
+- **Token Limits**: CodeRankEmbed/CodeRankEmbed max 2048 tokens per chunk
 - **Memory**: Optimize for CPU inference (ONNX Runtime) not GPU
 - **Windows Environment**: Default shell is PowerShell v5.1
 

@@ -18,9 +18,9 @@ async def test_search():
     print("=== Testing Qdrant Search ===\n")
     
     # Initialize embedder
-    print("Initializing embedder (nomic-ai/nomic-embed-code)...")
+    print("Initializing embedder (nomic-ai/CodeRankEmbed)...")
     embedder_config = EmbedderConfig(
-        model_name="nomic-ai/nomic-embed-code",
+        model_name="nomic-ai/CodeRankEmbed",
         device="cpu",
         batch_size=32
     )
@@ -33,7 +33,7 @@ async def test_search():
             host="localhost",
             port=6333,
             collection_name="agent_kit",
-            vector_size=3584,
+            vector_size=768,
             enable_quantization=True,
             prefer_grpc=False
         )),
@@ -41,7 +41,7 @@ async def test_search():
             host="localhost",
             port=6333,
             collection_name="inngest_overall",
-            vector_size=3584,
+            vector_size=768,
             enable_quantization=True,
             prefer_grpc=False
         ))

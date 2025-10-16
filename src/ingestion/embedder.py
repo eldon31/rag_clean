@@ -49,7 +49,7 @@ class EmbeddingConfig(BaseModel):
     
     REFACTORED: Changed to Pydantic BaseModel for validation.
     """
-    model: str = Field(default="nomic-ai/nomic-embed-code", description="Embedding model (nomic-embed-code for code/APIs)")
+    model: str = Field(default="nomic-ai/CodeRankEmbed", description="Embedding model (CodeRankEmbed for code/APIs)")
     batch_size: int = Field(default=100, ge=1, le=100, description="Batch size")
     max_retries: int = Field(default=3, ge=1, description="Max retry attempts")
     retry_delay: float = Field(default=1.0, ge=0.1, description="Retry delay in seconds")
@@ -61,7 +61,7 @@ class EmbeddingGenerator:
     
     def __init__(
         self,
-        model: str = "nomic-ai/nomic-embed-code",
+        model: str = "nomic-ai/CodeRankEmbed",
         batch_size: int = 100,
         max_retries: int = 3,
         retry_delay: float = 1.0
@@ -70,7 +70,7 @@ class EmbeddingGenerator:
         Initialize embedding generator.
         
         Args:
-            model: Embedding model to use (nomic-embed-code for code/APIs)
+            model: Embedding model to use (CodeRankEmbed for code/APIs)
             batch_size: Number of texts to process in parallel
             max_retries: Maximum number of retry attempts
             retry_delay: Delay between retries in seconds
@@ -82,7 +82,7 @@ class EmbeddingGenerator:
         
         # Model-specific configurations
         self.model_configs = {
-            "nomic-ai/nomic-embed-code": {"dimensions": 3584, "max_tokens": 2048},  # Legacy
+            "nomic-ai/CodeRankEmbed": {"dimensions": 3584, "max_tokens": 2048},  # Legacy
             "nomic-ai/CodeRankEmbed": {"dimensions": 768, "max_tokens": 2048},  # Current default
             "text-embedding-3-small": {"dimensions": 1536, "max_tokens": 8191},
             "text-embedding-3-large": {"dimensions": 3072, "max_tokens": 8191},
@@ -365,7 +365,7 @@ class EmbeddingCache:
 
 
 def create_embedder(
-    model: str = "nomic-ai/nomic-embed-code",
+    model: str = "nomic-ai/CodeRankEmbed",
     use_cache: bool = True,
     **kwargs
 ) -> EmbeddingGenerator:

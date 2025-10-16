@@ -1,8 +1,8 @@
 ## Context
 
-This change migrates the RAG system from `nomic-embed-code` (3584-dim) to `CodeRankEmbed` (768-dim) for production performance and efficiency. The migration involves:
+This change migrates the RAG system from `CodeRankEmbed` (768-dim) to `CodeRankEmbed` (768-dim) for production performance and efficiency. The migration involves:
 
-1. **Deleting old 3584-dim collections** with safety checks
+1. **Deleting old 768-dim collections** with safety checks
 2. **Refactoring all dimension references** from 3584 → 768
 3. **Uploading pre-generated 768-dim embeddings** from `output/embed_outputs/`
 4. **Enabling binary quantization** for 40x query speedup
@@ -23,12 +23,12 @@ This change migrates the RAG system from `nomic-embed-code` (3584-dim) to `CodeR
 - ❌ Re-generating embeddings (already pre-generated in `output/embed_outputs/`)
 - ❌ Changing collection names or schema structure
 - ❌ Migrating historical queries or analytics
-- ❌ Supporting both 3584-dim and 768-dim simultaneously (full migration only)
+- ❌ Supporting both 768-dim and 768-dim simultaneously (full migration only)
 
 ## Decisions
 
 ### Decision 1: Complete Migration (No Coexistence)
-**Choice**: Delete old 3584-dim collections and replace with 768-dim
+**Choice**: Delete old 768-dim collections and replace with 768-dim
 
 **Rationale**:
 - Simplifies codebase (single dimension to support)
@@ -128,9 +128,9 @@ def convert_hex_id_to_uuid(hex_id: str) -> str:
 4. Review validation output for any warnings
 
 ### Phase 2: Deletion (Clean Slate)
-1. Delete old 3584-dim collections: `scripts/remove_old_collections.py --force`
+1. Delete old 768-dim collections: `scripts/remove_old_collections.py --force`
 2. Verify collections are deleted via Qdrant dashboard
-3. Confirm only 3584-dim collections were removed
+3. Confirm only 768-dim collections were removed
 
 ### Phase 3: Upload (Bulk Migration)
 1. Upload all 768-dim embeddings: `scripts/migrate_to_coderank.py --all --force`
@@ -166,7 +166,7 @@ If migration fails or results are unsatisfactory:
 
 3. **Re-upload old embeddings** (if available):
    ```bash
-   # Use old 3584-dim embeddings if still available
+   # Use old 768-dim embeddings if still available
    python scripts/upload_qdrant_embeddings.py --collection qdrant_ecosystem
    ```
 
@@ -177,7 +177,7 @@ If migration fails or results are unsatisfactory:
 
 ## Open Questions
 
-1. ✅ **RESOLVED**: Should we keep old 3584-dim embeddings as backup?
+1. ✅ **RESOLVED**: Should we keep old 768-dim embeddings as backup?
    - **Answer**: No, but optionally backup collections before deletion (`--backup` flag)
 
 2. ✅ **RESOLVED**: What happens if binary quantization fails?

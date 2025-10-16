@@ -1,0 +1,102 @@
+[
+  {
+    "text": "Component System Architecture | jlowin/fastmcp | DeepWiki\n\n[Index your code with Devin](private-repo.md)\n\n[DeepWiki](https://deepwiki.com)\n\n[DeepWiki](.md)\n\n[jlowin/fastmcp](https://github.com/jlowin/fastmcp \"Open repository\")\n\n[Index your code with](private-repo.md)\n\n[Devin](private-repo.md)\n\nShare\n\nLast indexed: 30 September 2025 ([66221e](https://github.com/jlowin/fastmcp/commits/66221ed3))\n\n- [FastMCP Overview](jlowin/fastmcp/1-fastmcp-overview.md)\n- [Installation and Setup](jlowin/fastmcp/1.1-installation-and-setup.md)\n- [FastMCP Server Core](jlowin/fastmcp/2-fastmcp-server-core.md)\n- [Component System Architecture](jlowin/fastmcp/2.1-component-system-architecture.md)\n- [Context System and Dependencies](jlowin/fastmcp/2.2-context-system-and-dependencies.md)\n- [Server Composition and Proxying](jlowin/fastmcp/2.3-server-composition-and-proxying.md)\n- [FastMCP Client System](jlowin/fastmcp/3-fastmcp-client-system.md)\n- [Transport Mechanisms](jlowin/fastmcp/3.1-transport-mechanisms.md)\n- [Client Authentication](jlowin/fastmcp/3.2-client-authentication.md)\n- [HTTP Server and Deployment](jlowin/fastmcp/4-http-server-and-deployment.md)\n- [Authentication and Security](jlowin/fastmcp/4.1-authentication-and-security.md)\n- [Middleware System](jlowin/fastmcp/4.2-middleware-system.md)\n- [Command Line Interface](jlowin/fastmcp/5-command-line-interface.md)\n- [OpenAPI Integration](jlowin/fastmcp/6-openapi-integration.md)\n- [Configuration Management](jlowin/fastmcp/7-configuration-management.md)\n- [Testing and Development Framework](jlowin/fastmcp/8-testing-and-development-framework.md)\n- [Project Infrastructure](jlowin/fastmcp/9-project-infrastructure.md)\n- [Documentation and Updates](jlowin/fastmcp/10-documentation-and-updates.md)\n\nMenu\n\n# Component System Architecture\n\nRelevant source files",
+    "metadata": {
+      "chunk_id": 0,
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\jlowin_fastmcp\\_jlowin_fastmcp_2.1-component-system-architecture.md",
+      "input_type": "fast_docs",
+      "chunking_strategy": "api_documentation",
+      "token_count": 515,
+      "character_count": 1812,
+      "created_at": "2025-10-16T17:42:18.824700",
+      "parent_context": null,
+      "semantic_type": "fast_docs",
+      "collection_name": "FAST_DOCS",
+      "subfolder_name": "jlowin_fastmcp",
+      "collection_strategy": "api_documentation",
+      "chunk_index_in_file": 0,
+      "file_relative_path": "FAST_DOCS\\jlowin_fastmcp\\_jlowin_fastmcp_2.1-component-system-architecture.md",
+      "collection_context": "FAST_DOCS/jlowin_fastmcp"
+    }
+  },
+  {
+    "text": "- [docs/patterns/tool-transformation.mdx](https://github.com/jlowin/fastmcp/blob/66221ed3/docs/patterns/tool-transformation.mdx)\n- [src/fastmcp/prompts/prompt.py](https://github.com/jlowin/fastmcp/blob/66221ed3/src/fastmcp/prompts/prompt.py)\n- [src/fastmcp/prompts/prompt\\_manager.py](https://github.com/jlowin/fastmcp/blob/66221ed3/src/fastmcp/prompts/prompt_manager.py)\n- [src/fastmcp/resources/resource.py](https://github.com/jlowin/fastmcp/blob/66221ed3/src/fastmcp/resources/resource.py)\n- [src/fastmcp/resources/resource\\_manager.py](https://github.com/jlowin/fastmcp/blob/66221ed3/src/fastmcp/resources/resource_manager.py)\n- [src/fastmcp/resources/template.py](https://github.com/jlowin/fastmcp/blob/66221ed3/src/fastmcp/resources/template.py)\n- [src/fastmcp/resources/types.py](https://github.com/jlowin/fastmcp/blob/66221ed3/src/fastmcp/resources/types.py)\n- [src/fastmcp/tools/tool.py](https://github.com/jlowin/fastmcp/blob/66221ed3/src/fastmcp/tools/tool.py)\n- [src/fastmcp/tools/tool\\_manager.py](https://github.com/jlowin/fastmcp/blob/66221ed3/src/fastmcp/tools/tool_manager.py)\n- [src/fastmcp/tools/tool\\_transform.py](https://github.com/jlowin/fastmcp/blob/66221ed3/src/fastmcp/tools/tool_transform.py)\n- [src/fastmcp/utilities/components.py](https://github.com/jlowin/fastmcp/blob/66221ed3/src/fastmcp/utilities/components.py)\n- [tests/prompts/test\\_prompt.py](https://github.com/jlowin/fastmcp/blob/66221ed3/tests/prompts/test_prompt.py)\n- [tests/prompts/test\\_prompt\\_manager.py](https://github.com/jlowin/fastmcp/blob/66221ed3/tests/prompts/test_prompt_manager.py)\n- [tests/resources/test\\_function\\_resources.py](https://github.com/jlowin/fastmcp/blob/66221ed3/tests/resources/test_function_resources.py)\n- [tests/resources/test\\_resource\\_manager.py](https://github.com/jlowin/fastmcp/blob/66221ed3/tests/resources/test_resource_manager.py)\n- [tests/resources/test\\_resource\\_template.py](https://github.com/jlowin/fastmcp/blob/66221ed3/tests/resources/test_resource_template.py)\n- [tests/resources/test\\_resources.py](https://github.com/jlowin/fastmcp/blob/66221ed3/tests/resources/test_resources.py)\n- [tests/server/test\\_server\\_interactions.py](https://github.com/jlowin/fastmcp/blob/66221ed3/tests/server/test_server_interactions.py)\n- [tests/tools/test\\_tool.py](https://github.com/jlowin/fastmcp/blob/66221ed3/tests/tools/test_tool.py)\n- [tests/tools/test\\_tool\\_manager.py](https://github.com/jlowin/fastmcp/blob/66221ed3/tests/tools/test_tool_manager.py)\n- [tests/tools/test\\_tool\\_transform.py](https://github.com/jlowin/fastmcp/blob/66221ed3/tests/tools/test_tool_transform.py)\n\nThis document covers the FastMCP component system, which provides a unified framework for managing Tools, Resources, Prompts, and Resource Templates. It explains how these components are created, registered, managed, and composed within FastMCP servers.\n\nFor information about server composition and mounting mechanisms, see [Server Composition and Proxying](jlowin/fastmcp/2.3-server-composition-and-proxying.md). For details about dependency injection and the Context system, see [Context System and Dependencies](jlowin/fastmcp/2.2-context-system-and-dependencies.md).\n\n## Component Type Hierarchy\n\nFastMCP organizes all server capabilities into four main component types, each sharing common functionality through a base class architecture.\n\n### Component Class Structure\n\n```\n```",
+    "metadata": {
+      "chunk_id": 1,
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\jlowin_fastmcp\\_jlowin_fastmcp_2.1-component-system-architecture.md",
+      "input_type": "fast_docs",
+      "chunking_strategy": "api_documentation",
+      "token_count": 892,
+      "character_count": 3397,
+      "created_at": "2025-10-16T17:42:18.827831",
+      "parent_context": null,
+      "semantic_type": "fast_docs",
+      "collection_name": "FAST_DOCS",
+      "subfolder_name": "jlowin_fastmcp",
+      "collection_strategy": "api_documentation",
+      "chunk_index_in_file": 1,
+      "file_relative_path": "FAST_DOCS\\jlowin_fastmcp\\_jlowin_fastmcp_2.1-component-system-architecture.md",
+      "collection_context": "FAST_DOCS/jlowin_fastmcp"
+    }
+  },
+  {
+    "text": "**Sources**: [src/fastmcp/utilities/components.py28-125](https://github.com/jlowin/fastmcp/blob/66221ed3/src/fastmcp/utilities/components.py#L28-L125) [src/fastmcp/tools/tool.py105-240](https://github.com/jlowin/fastmcp/blob/66221ed3/src/fastmcp/tools/tool.py#L105-L240) [src/fastmcp/resources/resource.py34-219](https://github.com/jlowin/fastmcp/blob/66221ed3/src/fastmcp/resources/resource.py#L34-L219) [src/fastmcp/resources/template.py53-314](https://github.com/jlowin/fastmcp/blob/66221ed3/src/fastmcp/resources/template.py#L53-L314) [src/fastmcp/prompts/prompt.py65-262](https://github.com/jlowin/fastmcp/blob/66221ed3/src/fastmcp/prompts/prompt.py#L65-L262)\n\n### Base Component Properties\n\nAll FastMCP components inherit from `FastMCPComponent` and share these properties:\n\n| Property      | Type                     | Purpose                                                |\n| ------------- | ------------------------ | ------------------------------------------------------ |\n| `name`        | `str`                    | Unique identifier for the component                    |\n| `title`       | `str \\| None`            | Display title for UI purposes                          |\n| `description` | `str \\| None`            | Human-readable description                             |\n| `tags`        | `set[str]`               | Categorization tags for filtering                      |\n| `meta`        | `dict[str, Any] \\| None` | Additional metadata                                    |\n| `enabled`     | `bool`                   | Whether component is active                            |\n| `key`         | `str`                    | Internal bookkeeping identifier (may include prefixes) |\n\n**Sources**: [src/fastmcp/utilities/components.py28-69](https://github.com/jlowin/fastmcp/blob/66221ed3/src/fastmcp/utilities/components.py#L28-L69)\n\n## Component Manager Architecture\n\nEach component type has a dedicated manager class that handles registration, retrieval, and execution. The managers follow a consistent pattern and support server composition through mounting.\n\n### Manager System Overview\n\n```\n```\n\n**Sources**: [src/fastmcp/tools/tool\\_manager.py25-255](https://github.com/jlowin/fastmcp/blob/66221ed3/src/fastmcp/tools/tool_manager.py#L25-L255) [src/fastmcp/resources/resource\\_manager.py28-344](https://github.com/jlowin/fastmcp/blob/66221ed3/src/fastmcp/resources/resource_manager.py#L28-L344) [src/fastmcp/prompts/prompt\\_manager.py21-204](https://github.com/jlowin/fastmcp/blob/66221ed3/src/fastmcp/prompts/prompt_manager.py#L21-L204)\n\n### Manager Responsibilities\n\nEach manager provides these core operations:\n\n| Operation           | Tool Manager           | Resource Manager               | Prompt Manager              |\n| ------------------- | ---------------------- | ------------------------------ | --------------------------- |\n| **Add Component**   | `add_tool(tool)`       | `add_resource(resource)`       | `add_prompt(prompt)`        |\n| **Get Component**   | `get_tool(key)`        | `read_resource(uri)`           | `get_prompt(key)`           |\n| **List Components** | `list_tools()`         | `list_resources()`             | `list_prompts()`            |\n| **Execute/Use**     | `call_tool(key, args)` | Templates: `create_resource()` | `render_prompt(name, args)` |\n\n**Sources**: [src/fastmcp/tools/tool\\_manager.py108-254](https://github.com/jlowin/fastmcp/blob/66221ed3/src/fastmcp/tools/tool_manager.py#L108-L254) [src/fastmcp/resources/resource\\_manager.py275-344](https://github.com/jlowin/fastmcp/blob/66221ed3/src/fastmcp/resources/resource_manager.py#L275-L344) [src/fastmcp/prompts/prompt\\_manager.py91-204](https://github.com/jlowin/fastmcp/blob/66221ed3/src/fastmcp/prompts/prompt_manager.py#L91-L204)\n\n## Component Creation from Functions\n\nFastMCP provides a consistent pattern for creating components from Python functions using static factory methods.\n\n### Function-to-Component Creation Flow\n\n```\n```",
+    "metadata": {
+      "chunk_id": 2,
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\jlowin_fastmcp\\_jlowin_fastmcp_2.1-component-system-architecture.md",
+      "input_type": "fast_docs",
+      "chunking_strategy": "api_documentation",
+      "token_count": 945,
+      "character_count": 3957,
+      "created_at": "2025-10-16T17:42:18.834370",
+      "parent_context": null,
+      "semantic_type": "fast_docs",
+      "collection_name": "FAST_DOCS",
+      "subfolder_name": "jlowin_fastmcp",
+      "collection_strategy": "api_documentation",
+      "chunk_index_in_file": 2,
+      "file_relative_path": "FAST_DOCS\\jlowin_fastmcp\\_jlowin_fastmcp_2.1-component-system-architecture.md",
+      "collection_context": "FAST_DOCS/jlowin_fastmcp"
+    }
+  },
+  {
+    "text": "**Sources**: [src/fastmcp/tools/tool.py354-491](https://github.com/jlowin/fastmcp/blob/66221ed3/src/fastmcp/tools/tool.py#L354-L491) [src/fastmcp/resources/resource.py168-219](https://github.com/jlowin/fastmcp/blob/66221ed3/src/fastmcp/resources/resource.py#L168-L219) [src/fastmcp/prompts/prompt.py156-262](https://github.com/jlowin/fastmcp/blob/66221ed3/src/fastmcp/prompts/prompt.py#L156-L262) [src/fastmcp/resources/template.py214-313](https://github.com/jlowin/fastmcp/blob/66221ed3/src/fastmcp/resources/template.py#L214-L313)\n\n### Context Injection\n\nAll function-based components support automatic Context injection for accessing server capabilities:\n\n```\n```\n\nThe parameter detection uses `find_kwarg_by_type()` to identify Context parameters and excludes them from the component's public schema.\n\n**Sources**: [src/fastmcp/utilities/types.py](https://github.com/jlowin/fastmcp/blob/66221ed3/src/fastmcp/utilities/types.py#LNaN-LNaN) [src/fastmcp/tools/tool.py407-412](https://github.com/jlowin/fastmcp/blob/66221ed3/src/fastmcp/tools/tool.py#L407-L412) [src/fastmcp/resources/template.py245-246](https://github.com/jlowin/fastmcp/blob/66221ed3/src/fastmcp/resources/template.py#L245-L246)\n\n## Tool Transformation System\n\nTools can be transformed to create modified versions with different schemas, argument mappings, or custom behavior. This enables adaptation without code duplication.\n\n### Tool Transformation Architecture\n\n```\n```\n\n**Sources**: [src/fastmcp/tools/tool\\_transform.py232-517](https://github.com/jlowin/fastmcp/blob/66221ed3/src/fastmcp/tools/tool_transform.py#L232-L517) [src/fastmcp/tools/tool\\_transform.py37-91](https://github.com/jlowin/fastmcp/blob/66221ed3/src/fastmcp/tools/tool_transform.py#L37-L91) [src/fastmcp/tools/tool\\_transform.py93-207](https://github.com/jlowin/fastmcp/blob/66221ed3/src/fastmcp/tools/tool_transform.py#L93-L207)\n\n### Argument Transformation Options\n\nThe `ArgTransform` class provides fine-grained control over individual arguments:\n\n| Transform Type      | Purpose                   | Example                               |\n| ------------------- | ------------------------- | ------------------------------------- |\n| **Rename**          | Change argument name      | `name=\"new_name\"`                     |\n| **Hide**            | Remove from public schema | `hide=True, default=\"constant\"`       |\n| **Default Value**   | Add/change default        | `default=42`                          |\n| **Default Factory** | Dynamic defaults          | `default_factory=lambda: time.time()` |\n| **Type Change**     | Modify expected type      | `type=str`                            |\n| **Make Required**   | Remove default value      | `required=True`                       |\n\n**Sources**: [src/fastmcp/tools/tool\\_transform.py93-207](https://github.com/jlowin/fastmcp/blob/66221ed3/src/fastmcp/tools/tool_transform.py#L93-L207)\n\n## Server Composition and Component Mounting\n\nManagers support mounting other servers to create hierarchical component structures. This enables composition of multiple FastMCP servers into larger systems.\n\n### Component Loading Paths\n\n```\n```\n\n**Sources**: [src/fastmcp/tools/tool\\_manager.py55-101](https://github.com/jlowin/fastmcp/blob/66221ed3/src/fastmcp/tools/tool_manager.py#L55-L101) [src/fastmcp/resources/resource\\_manager.py72-190](https://github.com/jlowin/fastmcp/blob/66221ed3/src/fastmcp/resources/resource_manager.py#L72-L190) [src/fastmcp/prompts/prompt\\_manager.py49-89](https://github.com/jlowin/fastmcp/blob/66221ed3/src/fastmcp/prompts/prompt_manager.py#L49-L89)\n\n## Component Lifecycle Management\n\nComponents support enable/disable operations and automatic notifications to trigger list change events in the MCP protocol.\n\n### Component State Management\n\nEach component can be enabled or disabled, and state changes automatically notify the Context system:\n\n```\n```\n\nThis ensures that MCP clients receive updated component lists when components are dynamically enabled or disabled.",
+    "metadata": {
+      "chunk_id": 3,
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\jlowin_fastmcp\\_jlowin_fastmcp_2.1-component-system-architecture.md",
+      "input_type": "fast_docs",
+      "chunking_strategy": "api_documentation",
+      "token_count": 966,
+      "character_count": 3988,
+      "created_at": "2025-10-16T17:42:18.842396",
+      "parent_context": null,
+      "semantic_type": "fast_docs",
+      "collection_name": "FAST_DOCS",
+      "subfolder_name": "jlowin_fastmcp",
+      "collection_strategy": "api_documentation",
+      "chunk_index_in_file": 3,
+      "file_relative_path": "FAST_DOCS\\jlowin_fastmcp\\_jlowin_fastmcp_2.1-component-system-architecture.md",
+      "collection_context": "FAST_DOCS/jlowin_fastmcp"
+    }
+  },
+  {
+    "text": "**Sources**: [src/fastmcp/tools/tool.py123-137](https://github.com/jlowin/fastmcp/blob/66221ed3/src/fastmcp/tools/tool.py#L123-L137) [src/fastmcp/resources/resource.py53-67](https://github.com/jlowin/fastmcp/blob/66221ed3/src/fastmcp/resources/resource.py#L53-L67) [src/fastmcp/prompts/prompt.py72-86](https://github.com/jlowin/fastmcp/blob/66221ed3/src/fastmcp/prompts/prompt.py#L72-L86) [src/fastmcp/resources/template.py72-86](https://github.com/jlowin/fastmcp/blob/66221ed3/src/fastmcp/resources/template.py#L72-L86)\n\nDismiss\n\nRefresh this wiki\n\nEnter email to refresh\n\n### On this page\n\n- [Component System Architecture](#component-system-architecture.md)\n- [Component Type Hierarchy](#component-type-hierarchy.md)\n- [Component Class Structure](#component-class-structure.md)\n- [Base Component Properties](#base-component-properties.md)\n- [Component Manager Architecture](#component-manager-architecture.md)\n- [Manager System Overview](#manager-system-overview.md)\n- [Manager Responsibilities](#manager-responsibilities.md)\n- [Component Creation from Functions](#component-creation-from-functions.md)\n- [Function-to-Component Creation Flow](#function-to-component-creation-flow.md)\n- [Context Injection](#context-injection.md)\n- [Tool Transformation System](#tool-transformation-system.md)\n- [Tool Transformation Architecture](#tool-transformation-architecture.md)\n- [Argument Transformation Options](#argument-transformation-options.md)\n- [Server Composition and Component Mounting](#server-composition-and-component-mounting.md)\n- [Component Loading Paths](#component-loading-paths.md)\n- [Component Lifecycle Management](#component-lifecycle-management.md)\n- [Component State Management](#component-state-management.md)",
+    "metadata": {
+      "chunk_id": 4,
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\jlowin_fastmcp\\_jlowin_fastmcp_2.1-component-system-architecture.md",
+      "input_type": "fast_docs",
+      "chunking_strategy": "api_documentation",
+      "token_count": 418,
+      "character_count": 1726,
+      "created_at": "2025-10-16T17:42:18.843138",
+      "parent_context": null,
+      "semantic_type": "fast_docs",
+      "collection_name": "FAST_DOCS",
+      "subfolder_name": "jlowin_fastmcp",
+      "collection_strategy": "api_documentation",
+      "chunk_index_in_file": 4,
+      "file_relative_path": "FAST_DOCS\\jlowin_fastmcp\\_jlowin_fastmcp_2.1-component-system-architecture.md",
+      "collection_context": "FAST_DOCS/jlowin_fastmcp"
+    }
+  }
+]

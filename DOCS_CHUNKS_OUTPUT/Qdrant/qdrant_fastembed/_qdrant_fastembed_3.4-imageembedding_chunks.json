@@ -1,0 +1,62 @@
+[
+  {
+    "text": "ImageEmbedding | qdrant/fastembed | DeepWiki\n\n[Index your code with Devin](private-repo.md)\n\n[DeepWiki](https://deepwiki.com)\n\n[DeepWiki](.md)\n\n[qdrant/fastembed](https://github.com/qdrant/fastembed \"Open repository\")\n\n[Index your code with](private-repo.md)\n\n[Devin](private-repo.md)\n\nShare\n\nLast indexed: 20 April 2025 ([b78564](https://github.com/qdrant/fastembed/commits/b785640b))\n\n- [Overview](qdrant/fastembed/1-overview.md)\n- [Installation and Setup](qdrant/fastembed/2-installation-and-setup.md)\n- [Core Embedding Classes](qdrant/fastembed/3-core-embedding-classes.md)\n- [TextEmbedding](qdrant/fastembed/3.1-textembedding.md)\n- [SparseTextEmbedding](qdrant/fastembed/3.2-sparsetextembedding.md)\n- [LateInteractionTextEmbedding](qdrant/fastembed/3.3-lateinteractiontextembedding.md)\n- [ImageEmbedding](qdrant/fastembed/3.4-imageembedding.md)\n- [LateInteractionMultimodalEmbedding](qdrant/fastembed/3.5-lateinteractionmultimodalembedding.md)\n- [TextCrossEncoder](qdrant/fastembed/3.6-textcrossencoder.md)\n- [Architecture](qdrant/fastembed/4-architecture.md)\n- [Model Management](qdrant/fastembed/4.1-model-management.md)\n- [ONNX Runtime Integration](qdrant/fastembed/4.2-onnx-runtime-integration.md)\n- [Parallel Processing](qdrant/fastembed/4.3-parallel-processing.md)\n- [Implementation Details](qdrant/fastembed/5-implementation-details.md)\n- [Dense Text Embeddings](qdrant/fastembed/5.1-dense-text-embeddings.md)\n- [Sparse Text Embeddings](qdrant/fastembed/5.2-sparse-text-embeddings.md)\n- [Late Interaction Models](qdrant/fastembed/5.3-late-interaction-models.md)\n- [Multimodal Models](qdrant/fastembed/5.4-multimodal-models.md)\n- [Supported Models](qdrant/fastembed/6-supported-models.md)\n- [Usage Examples](qdrant/fastembed/7-usage-examples.md)\n- [Basic Text Embedding](qdrant/fastembed/7.1-basic-text-embedding.md)\n- [Sparse and Hybrid Search](qdrant/fastembed/7.2-sparse-and-hybrid-search.md)\n- [ColBERT and Late Interaction](qdrant/fastembed/7.3-colbert-and-late-interaction.md)\n- [Image Embedding](qdrant/fastembed/7.4-image-embedding.md)\n- [Performance Optimization](qdrant/fastembed/8-performance-optimization.md)\n- [Integration with Qdrant](qdrant/fastembed/9-integration-with-qdrant.md)\n- [Development Guide](qdrant/fastembed/10-development-guide.md)\n\nMenu\n\n# ImageEmbedding\n\nRelevant source files\n\n- [README.md](https://github.com/qdrant/fastembed/blob/b785640b/README.md)\n- [docs/examples/FastEmbed\\_GPU.ipynb](https://github.com/qdrant/fastembed/blob/b785640b/docs/examples/FastEmbed_GPU.ipynb)\n- [fastembed/image/onnx\\_embedding.py](https://github.com/qdrant/fastembed/blob/b785640b/fastembed/image/onnx_embedding.py)\n\n## Purpose and Scope\n\nThe `ImageEmbedding` class provides a high-level interface for generating vector representations (embeddings) from images. These embeddings can be used for various tasks including image search, image similarity, and multimodal applications. The class offers a simplified API while leveraging ONNX Runtime for efficient inference.\n\nFor text embedding functionality, see [TextEmbedding](qdrant/fastembed/3.1-textembedding.md). For multimodal embedding that combines both text and images, see [LateInteractionMultimodalEmbedding](qdrant/fastembed/3.5-lateinteractionmultimodalembedding.md).\n\nSources: [README.md137-156](https://github.com/qdrant/fastembed/blob/b785640b/README.md#L137-L156)\n\n## Architecture Overview\n\n`ImageEmbedding` serves as an entry point class that abstracts the underlying implementation details of image embedding models. The class follows FastEmbed's pattern of providing a clean, user-friendly interface while leveraging optimized implementations underneath.\n\n### Class Hierarchy\n\n```\n```",
+    "metadata": {
+      "chunk_id": 0,
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\Qdrant\\qdrant_fastembed\\_qdrant_fastembed_3.4-imageembedding.md",
+      "input_type": "qdrant",
+      "chunking_strategy": "platform_documentation",
+      "token_count": 994,
+      "character_count": 3676,
+      "created_at": "2025-10-16T17:42:30.006850",
+      "parent_context": null,
+      "semantic_type": "qdrant",
+      "collection_name": "Qdrant",
+      "subfolder_name": "qdrant_fastembed",
+      "collection_strategy": "platform_documentation",
+      "chunk_index_in_file": 0,
+      "file_relative_path": "Qdrant\\qdrant_fastembed\\_qdrant_fastembed_3.4-imageembedding.md",
+      "collection_context": "Qdrant/qdrant_fastembed"
+    }
+  },
+  {
+    "text": "Sources: [fastembed/image/onnx\\_embedding.py1-10](https://github.com/qdrant/fastembed/blob/b785640b/fastembed/image/onnx_embedding.py#L1-L10)\n\n## Supported Models\n\n`ImageEmbedding` supports several pre-trained models optimized for ONNX runtime:\n\n| Model                       | Dimensions | Description                              | Year | License    |\n| --------------------------- | ---------- | ---------------------------------------- | ---- | ---------- |\n| Qdrant/clip-ViT-B-32-vision | 512        | Multimodal (text & image)                | 2021 | MIT        |\n| Qdrant/resnet50-onnx        | 2048       | Unimodal (image only)                    | 2016 | Apache-2.0 |\n| Qdrant/Unicom-ViT-B-16      | 768        | Multimodal with detailed representations | 2023 | Apache-2.0 |\n| Qdrant/Unicom-ViT-B-32      | 512        | Multimodal (text & image)                | 2023 | Apache-2.0 |\n| jinaai/jina-clip-v1         | 768        | Multimodal (text & image)                | 2024 | Apache-2.0 |\n\nSources: [fastembed/image/onnx\\_embedding.py13-59](https://github.com/qdrant/fastembed/blob/b785640b/fastembed/image/onnx_embedding.py#L13-L59)\n\n## Basic Usage\n\nUsing `ImageEmbedding` is straightforward:\n\n```\n```\n\nSources: [README.md137-156](https://github.com/qdrant/fastembed/blob/b785640b/README.md#L137-L156)\n\n## Embedding Process\n\nThe image embedding process consists of several steps:\n\n```\n```\n\nSources: [fastembed/image/onnx\\_embedding.py148-181](https://github.com/qdrant/fastembed/blob/b785640b/fastembed/image/onnx_embedding.py#L148-L181)\n\n## Class Initialization Parameters\n\nWhen initializing an `ImageEmbedding` instance, you can customize its behavior with several parameters:\n\n```\n```\n\n### Key Parameters\n\n- `model_name`: The name of the embedding model to use\n- `cache_dir`: Custom location for storing downloaded models\n- `providers`: ONNX runtime providers (e.g., \"CUDAExecutionProvider\" for GPU)\n- `cuda`: Enable CUDA for inference\n- `device_ids`: List of GPU device IDs for parallel processing\n\nSources: [fastembed/image/onnx\\_embedding.py63-96](https://github.com/qdrant/fastembed/blob/b785640b/fastembed/image/onnx_embedding.py#L63-L96)\n\n## GPU Acceleration\n\n`ImageEmbedding` supports GPU acceleration through ONNX Runtime's CUDA Execution Provider. To use GPU acceleration:\n\n1. Install the GPU version of FastEmbed:\n\n```\n   ```\n\n2. Initialize the model with GPU support:\n\n```\n   ```\n\nSources: [docs/examples/FastEmbed\\_GPU.ipynb1-108](https://github.com/qdrant/fastembed/blob/b785640b/docs/examples/FastEmbed_GPU.ipynb#L1-L108) [docs/examples/FastEmbed\\_GPU.ipynb184-229](https://github.com/qdrant/fastembed/blob/b785640b/docs/examples/FastEmbed_GPU.ipynb#L184-L229)\n\n## Embedding Method Parameters\n\nThe `embed` method accepts several parameters to control the embedding process:\n\n```\n```\n\n### Key Parameters\n\n- `images`: List of image paths or image objects to embed\n\n- `batch_size`: Number of images to process in a single batch (higher values use more memory)\n\n- `parallel`: Number of parallel workers for data-parallel processing\n\n- If > 1, that many workers will be used\n  - If 0, all available cores will be used\n  - If None, parallel processing is disabled\n\nSources: [fastembed/image/onnx\\_embedding.py148-169](https://github.com/qdrant/fastembed/blob/b785640b/fastembed/image/onnx_embedding.py#L148-L169)\n\n## Implementation Details\n\n### Embedding Process Flow\n\n```\n```\n\nSources: [fastembed/image/onnx\\_embedding.py148-181](https://github.com/qdrant/fastembed/blob/b785640b/fastembed/image/onnx_embedding.py#L148-L181) [fastembed/image/onnx\\_embedding.py125-136](https://github.com/qdrant/fastembed/blob/b785640b/fastembed/image/onnx_embedding.py#L125-L136) [fastembed/image/onnx\\_embedding.py187-197](https://github.com/qdrant/fastembed/blob/b785640b/fastembed/image/onnx_embedding.py#L187-L197)\n\n### Normalization\n\nAfter obtaining raw embeddings from the model, they are normalized to unit length to ensure consistent similarity calculations.",
+    "metadata": {
+      "chunk_id": 1,
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\Qdrant\\qdrant_fastembed\\_qdrant_fastembed_3.4-imageembedding.md",
+      "input_type": "qdrant",
+      "chunking_strategy": "platform_documentation",
+      "token_count": 1023,
+      "character_count": 3976,
+      "created_at": "2025-10-16T17:42:30.017691",
+      "parent_context": null,
+      "semantic_type": "qdrant",
+      "collection_name": "Qdrant",
+      "subfolder_name": "qdrant_fastembed",
+      "collection_strategy": "platform_documentation",
+      "chunk_index_in_file": 1,
+      "file_relative_path": "Qdrant\\qdrant_fastembed\\_qdrant_fastembed_3.4-imageembedding.md",
+      "collection_context": "Qdrant/qdrant_fastembed"
+    }
+  },
+  {
+    "text": "Sources: [fastembed/image/onnx\\_embedding.py196-197](https://github.com/qdrant/fastembed/blob/b785640b/fastembed/image/onnx_embedding.py#L196-L197)\n\n## Integration with Qdrant\n\nFastEmbed's `ImageEmbedding` can be easily integrated with Qdrant vector database for image search applications:\n\n```\n```\n\nFor more detailed information on using FastEmbed with Qdrant, see [Integration with Qdrant](qdrant/fastembed/9-integration-with-qdrant.md).\n\nSources: [README.md232-280](https://github.com/qdrant/fastembed/blob/b785640b/README.md#L232-L280)\n\n## Performance Considerations\n\n- **Batch Size**: Larger batch sizes generally improve throughput but increase memory usage.\n- **Parallel Processing**: For large datasets, enabling parallel processing (`parallel > 0`) can significantly improve performance.\n- **GPU Acceleration**: Using GPU acceleration can provide substantial speedups, especially for batch processing.\n- **Model Selection**: Different models offer different trade-offs between accuracy, embedding dimension, and speed.\n\nSources: [docs/examples/FastEmbed\\_GPU.ipynb398-512](https://github.com/qdrant/fastembed/blob/b785640b/docs/examples/FastEmbed_GPU.ipynb#L398-L512)\n\nDismiss\n\nRefresh this wiki\n\nEnter email to refresh\n\n### On this page\n\n- [ImageEmbedding](#imageembedding.md)\n- [Purpose and Scope](#purpose-and-scope.md)\n- [Architecture Overview](#architecture-overview.md)\n- [Class Hierarchy](#class-hierarchy.md)\n- [Supported Models](#supported-models.md)\n- [Basic Usage](#basic-usage.md)\n- [Embedding Process](#embedding-process.md)\n- [Class Initialization Parameters](#class-initialization-parameters.md)\n- [Key Parameters](#key-parameters.md)\n- [GPU Acceleration](#gpu-acceleration.md)\n- [Embedding Method Parameters](#embedding-method-parameters.md)\n- [Key Parameters](#key-parameters-1.md)\n- [Implementation Details](#implementation-details.md)\n- [Embedding Process Flow](#embedding-process-flow.md)\n- [Normalization](#normalization.md)\n- [Integration with Qdrant](#integration-with-qdrant.md)\n- [Performance Considerations](#performance-considerations.md)",
+    "metadata": {
+      "chunk_id": 2,
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\Qdrant\\qdrant_fastembed\\_qdrant_fastembed_3.4-imageembedding.md",
+      "input_type": "qdrant",
+      "chunking_strategy": "platform_documentation",
+      "token_count": 496,
+      "character_count": 2074,
+      "created_at": "2025-10-16T17:42:30.019046",
+      "parent_context": null,
+      "semantic_type": "qdrant",
+      "collection_name": "Qdrant",
+      "subfolder_name": "qdrant_fastembed",
+      "collection_strategy": "platform_documentation",
+      "chunk_index_in_file": 2,
+      "file_relative_path": "Qdrant\\qdrant_fastembed\\_qdrant_fastembed_3.4-imageembedding.md",
+      "collection_context": "Qdrant/qdrant_fastembed"
+    }
+  }
+]

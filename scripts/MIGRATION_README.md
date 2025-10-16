@@ -1,6 +1,6 @@
 # CodeRank Migration Scripts
 
-Quick reference for migrating from nomic-embed-code (3584-dim) to CodeRankEmbed (768-dim).
+Quick reference for migrating from CodeRankEmbed (768-dim) to CodeRankEmbed (768-dim).
 
 ## 🚀 Quick Start
 
@@ -25,7 +25,7 @@ Quick reference for migrating from nomic-embed-code (3584-dim) to CodeRankEmbed 
 ## 📁 Available Scripts
 
 ### 1. `remove_old_collections.py`
-Removes old 3584-dim collections with safety checks.
+Removes old 768-dim collections with safety checks.
 
 ```powershell
 # Preview what will be deleted

@@ -1,10 +1,10 @@
 """
-Remove old 3584-dim collections and backup metadata.
+Remove old 768-dim collections and backup metadata.
 
 This script prepares for CodeRank migration by:
 1. Backing up collection metadata
 2. Optionally creating snapshots
-3. Deleting old 3584-dim collections
+3. Deleting old 768-dim collections
 
 USAGE:
     # Dry run (show what will be deleted)
@@ -37,7 +37,7 @@ logger = logging.getLogger(__name__)
 QDRANT_URL = os.getenv("QDRANT_URL", "http://localhost:6333")
 QDRANT_API_KEY = os.getenv("QDRANT_API_KEY")
 
-# Collections to remove (old 3584-dim collections)
+# Collections to remove (old 768-dim collections)
 OLD_COLLECTIONS = [
     "agent_kit",
     "inngest_overall", 
@@ -118,7 +118,7 @@ def delete_collections(client: QdrantClient, collections: List[str], dry_run: bo
         
         dimension = info.get("dimension")
         
-        # Safety check: only delete 3584-dim collections
+        # Safety check: only delete 768-dim collections
         if dimension != OLD_DIMENSION:
             logger.warning(
                 f"⚠️  {collection_name}: Dimension is {dimension}, expected {OLD_DIMENSION}. "
@@ -149,7 +149,7 @@ def delete_collections(client: QdrantClient, collections: List[str], dry_run: bo
 
 def main():
     parser = argparse.ArgumentParser(
-        description="Remove old 3584-dim collections before CodeRank migration",
+        description="Remove old 768-dim collections before CodeRank migration",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog=__doc__
     )

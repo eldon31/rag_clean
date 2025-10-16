@@ -40,7 +40,7 @@ class ChunkingConfig(BaseModel):
     min_chunk_size: int = Field(default=100, ge=1, description="Minimum chunk size")
     use_semantic_splitting: bool = Field(default=True, description="Use HybridChunker")
     preserve_structure: bool = Field(default=True, description="Preserve document structure")
-    max_tokens: int = Field(default=2048, description="Maximum tokens for nomic-embed-code model")
+    max_tokens: int = Field(default=2048, description="Maximum tokens for CodeRankEmbed model")
 
     def model_post_init(self, __context: Any) -> None:
         """Validate configuration after initialization."""
@@ -92,7 +92,7 @@ class DoclingHybridChunker:
 
         # Initialize tokenizer for token-aware chunking
         # Use Nomic model tokenizer for consistency with embeddings
-        model_id = os.getenv("EMBEDDING_MODEL", "nomic-ai/nomic-embed-code")
+        model_id = os.getenv("EMBEDDING_MODEL", "nomic-ai/CodeRankEmbed")
         logger.info(f"Initializing tokenizer for code chunking: {model_id}")
         self.tokenizer = AutoTokenizer.from_pretrained(model_id, trust_remote_code=True)
 

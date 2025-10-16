@@ -1,0 +1,82 @@
+[
+  {
+    "text": "Code Quality and Pre-commit | fastapi/fastapi | DeepWiki\n\n[Index your code with Devin](private-repo.md)\n\n[DeepWiki](https://deepwiki.com)\n\n[DeepWiki](.md)\n\n[fastapi/fastapi](https://github.com/fastapi/fastapi \"Open repository\")\n\n[Index your code with](private-repo.md)\n\n[Devin](private-repo.md)\n\nShare\n\nLast indexed: 5 September 2025 ([3e2dbf](https://github.com/fastapi/fastapi/commits/3e2dbf91))\n\n- [FastAPI Overview](fastapi/fastapi/1-fastapi-overview.md)\n- [Core Architecture](fastapi/fastapi/2-core-architecture.md)\n- [Application and Routing System](fastapi/fastapi/2.1-application-and-routing-system.md)\n- [Dependency Injection](fastapi/fastapi/2.2-dependency-injection.md)\n- [Parameter Validation and Handling](fastapi/fastapi/2.3-parameter-validation-and-handling.md)\n- [Response Handling](fastapi/fastapi/2.4-response-handling.md)\n- [Security Components](fastapi/fastapi/2.5-security-components.md)\n- [Settings Management](fastapi/fastapi/2.6-settings-management.md)\n- [Error Handling](fastapi/fastapi/2.7-error-handling.md)\n- [API Documentation System](fastapi/fastapi/3-api-documentation-system.md)\n- [OpenAPI Schema Generation](fastapi/fastapi/3.1-openapi-schema-generation.md)\n- [Customizing API Documentation UI](fastapi/fastapi/3.2-customizing-api-documentation-ui.md)\n- [Advanced Features](fastapi/fastapi/4-advanced-features.md)\n- [Asynchronous Support](fastapi/fastapi/4.1-asynchronous-support.md)\n- [Database Integration](fastapi/fastapi/4.2-database-integration.md)\n- [Background Tasks](fastapi/fastapi/4.3-background-tasks.md)\n- [Deployment and Production Considerations](fastapi/fastapi/4.4-deployment-and-production-considerations.md)\n- [Testing Infrastructure](fastapi/fastapi/5-testing-infrastructure.md)\n- [Test Framework and Tools](fastapi/fastapi/5.1-test-framework-and-tools.md)\n- [Code Quality and Pre-commit](fastapi/fastapi/5.2-code-quality-and-pre-commit.md)\n- [Project Infrastructure](fastapi/fastapi/6-project-infrastructure.md)\n- [Documentation System](fastapi/fastapi/6.1-documentation-system.md)\n- [CI/CD Pipeline](fastapi/fastapi/6.2-cicd-pipeline.md)\n- [Development Workflow](fastapi/fastapi/6.3-development-workflow.md)\n- [Community Ecosystem](fastapi/fastapi/7-community-ecosystem.md)\n- [Contributors and Experts Management](fastapi/fastapi/7.1-contributors-and-experts-management.md)\n- [Translation Management](fastapi/fastapi/7.2-translation-management.md)\n- [External Resources and Sponsorship](fastapi/fastapi/7.3-external-resources-and-sponsorship.md)\n- [Community Automation](fastapi/fastapi/7.4-community-automation.md)\n\nMenu\n\n# Code Quality and Pre-commit\n\nRelevant source files",
+    "metadata": {
+      "chunk_id": 0,
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\fastapi_fastapi\\_fastapi_fastapi_5.2-code-quality-and-pre-commit.md",
+      "input_type": "fast_docs",
+      "chunking_strategy": "api_documentation",
+      "token_count": 694,
+      "character_count": 2629,
+      "created_at": "2025-10-16T17:42:18.456272",
+      "parent_context": null,
+      "semantic_type": "fast_docs",
+      "collection_name": "FAST_DOCS",
+      "subfolder_name": "fastapi_fastapi",
+      "collection_strategy": "api_documentation",
+      "chunk_index_in_file": 0,
+      "file_relative_path": "FAST_DOCS\\fastapi_fastapi\\_fastapi_fastapi_5.2-code-quality-and-pre-commit.md",
+      "collection_context": "FAST_DOCS/fastapi_fastapi"
+    }
+  },
+  {
+    "text": "- [.pre-commit-config.yaml](https://github.com/fastapi/fastapi/blob/3e2dbf91/.pre-commit-config.yaml)\n- [requirements-tests.txt](https://github.com/fastapi/fastapi/blob/3e2dbf91/requirements-tests.txt)\n- [requirements.txt](https://github.com/fastapi/fastapi/blob/3e2dbf91/requirements.txt)\n- [scripts/format.sh](https://github.com/fastapi/fastapi/blob/3e2dbf91/scripts/format.sh)\n- [scripts/lint.sh](https://github.com/fastapi/fastapi/blob/3e2dbf91/scripts/lint.sh)\n- [scripts/test-cov-html.sh](https://github.com/fastapi/fastapi/blob/3e2dbf91/scripts/test-cov-html.sh)\n- [scripts/test.sh](https://github.com/fastapi/fastapi/blob/3e2dbf91/scripts/test.sh)\n- [tests/test\\_tutorial/test\\_cookie\\_param\\_models/test\\_tutorial002.py](https://github.com/fastapi/fastapi/blob/3e2dbf91/tests/test_tutorial/test_cookie_param_models/test_tutorial002.py)\n- [tests/test\\_tutorial/test\\_sql\\_databases/test\\_tutorial002.py](https://github.com/fastapi/fastapi/blob/3e2dbf91/tests/test_tutorial/test_sql_databases/test_tutorial002.py)\n- [tests/test\\_typing\\_python39.py](https://github.com/fastapi/fastapi/blob/3e2dbf91/tests/test_typing_python39.py)\n- [tests/test\\_union\\_body.py](https://github.com/fastapi/fastapi/blob/3e2dbf91/tests/test_union_body.py)\n- [tests/test\\_union\\_inherited\\_body.py](https://github.com/fastapi/fastapi/blob/3e2dbf91/tests/test_union_inherited_body.py)\n- [tests/utils.py](https://github.com/fastapi/fastapi/blob/3e2dbf91/tests/utils.py)\n\nThis document covers the code quality infrastructure and pre-commit hook system used in the FastAPI repository. It details the configuration and usage of linting, formatting, type checking, and automated quality gates that ensure code consistency and reliability.\n\nFor information about the actual test framework and testing utilities, see [Test Framework and Tools](fastapi/fastapi/5.1-test-framework-and-tools.md). For CI/CD automation that runs these quality checks, see [CI/CD Pipeline](fastapi/fastapi/6.2-cicd-pipeline.md).\n\n## Pre-commit Hook System\n\nFastAPI uses a comprehensive pre-commit hook system to enforce code quality standards before commits are made to the repository. The configuration is defined in [.pre-commit-config.yaml1-26](https://github.com/fastapi/fastapi/blob/3e2dbf91/.pre-commit-config.yaml#L1-L26)\n\n### Hook Configuration\n\nThe pre-commit system is configured with Python 3.10 as the default language version and includes two main repository sources:\n\n```\n```\n\nThe system includes validation hooks for file formats and content, plus automated code quality enforcement through Ruff.\n\n**Sources:** [.pre-commit-config.yaml1-26](https://github.com/fastapi/fastapi/blob/3e2dbf91/.pre-commit-config.yaml#L1-L26)\n\n### Pre-commit.ci Integration\n\nThe configuration includes integration with pre-commit.ci for automated maintenance:\n\n| Feature              | Configuration                                              | Description                            |\n| -------------------- | ---------------------------------------------------------- | -------------------------------------- |\n| Auto-fix Messages    | `🎨 [pre-commit.ci] Auto format from pre-commit.com hooks` | Commit messages for automatic fixes    |\n| Auto-update Messages | `⬆ [pre-commit.ci] pre-commit autoupdate`                  | Commit messages for dependency updates |\n\n**Sources:** [.pre-commit-config.yaml24-25](https://github.com/fastapi/fastapi/blob/3e2dbf91/.pre-commit-config.yaml#L24-L25)\n\n## Code Linting and Formatting with Ruff\n\nFastAPI uses Ruff as its primary tool for both code linting and formatting, replacing multiple traditional tools with a single, fast implementation.\n\n### Ruff Configuration\n\nThe Ruff configuration includes two main hooks:\n\n```\n```\n\n**Sources:** [.pre-commit-config.yaml16-22](https://github.com/fastapi/fastapi/blob/3e2dbf91/.pre-commit-config.yaml#L16-L22) [scripts/lint.sh7-8](https://github.com/fastapi/fastapi/blob/3e2dbf91/scripts/lint.sh#L7-L8) [scripts/format.sh4-5](https://github.com/fastapi/fastapi/blob/3e2dbf91/scripts/format.sh#L4-L5)\n\n### Manual Code Quality Scripts\n\nThe repository provides several scripts for manual execution of code quality tools:",
+    "metadata": {
+      "chunk_id": 1,
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\fastapi_fastapi\\_fastapi_fastapi_5.2-code-quality-and-pre-commit.md",
+      "input_type": "fast_docs",
+      "chunking_strategy": "api_documentation",
+      "token_count": 1008,
+      "character_count": 4153,
+      "created_at": "2025-10-16T17:42:18.463495",
+      "parent_context": null,
+      "semantic_type": "fast_docs",
+      "collection_name": "FAST_DOCS",
+      "subfolder_name": "fastapi_fastapi",
+      "collection_strategy": "api_documentation",
+      "chunk_index_in_file": 1,
+      "file_relative_path": "FAST_DOCS\\fastapi_fastapi\\_fastapi_fastapi_5.2-code-quality-and-pre-commit.md",
+      "collection_context": "FAST_DOCS/fastapi_fastapi"
+    }
+  },
+  {
+    "text": "| Script              | Purpose                       | Commands                                            |\n| ------------------- | ----------------------------- | --------------------------------------------------- |\n| `scripts/lint.sh`   | Run linting and type checking | `mypy fastapi`, `ruff check`, `ruff format --check` |\n| `scripts/format.sh` | Apply code formatting         | `ruff check --fix`, `ruff format`                   |\n\n**Sources:** [scripts/lint.sh1-9](https://github.com/fastapi/fastapi/blob/3e2dbf91/scripts/lint.sh#L1-L9) [scripts/format.sh1-6](https://github.com/fastapi/fastapi/blob/3e2dbf91/scripts/format.sh#L1-L6)\n\n## Type Checking with mypy\n\nFastAPI uses mypy for static type checking to ensure type safety across the codebase.\n\n### mypy Configuration\n\nThe mypy version is pinned in the test requirements and executed as part of the linting process:\n\n```\n```\n\n**Sources:** [requirements-tests.txt5](https://github.com/fastapi/fastapi/blob/3e2dbf91/requirements-tests.txt#L5-L5) [scripts/lint.sh6](https://github.com/fastapi/fastapi/blob/3e2dbf91/scripts/lint.sh#L6-L6)\n\n## Test Coverage Infrastructure\n\nThe repository includes comprehensive test coverage tracking using the `coverage` tool.\n\n### Coverage Configuration\n\n```\n```\n\nThe test execution includes setting `PYTHONPATH=./docs_src` to include documentation source code in the test environment.\n\n**Sources:** [requirements-tests.txt3-4](https://github.com/fastapi/fastapi/blob/3e2dbf91/requirements-tests.txt#L3-L4) [scripts/test.sh6-7](https://github.com/fastapi/fastapi/blob/3e2dbf91/scripts/test.sh#L6-L7) [scripts/test-cov-html.sh6-9](https://github.com/fastapi/fastapi/blob/3e2dbf91/scripts/test-cov-html.sh#L6-L9)\n\n## Testing Infrastructure Dependencies\n\nThe testing infrastructure includes several specialized testing libraries and utilities:\n\n| Dependency        | Version          | Purpose                   |\n| ----------------- | ---------------- | ------------------------- |\n| `pytest`          | `>=7.1.3,<9.0.0` | Main testing framework    |\n| `coverage[toml]`  | `>= 6.5.0,< 8.0` | Test coverage measurement |\n| `mypy`            | `==1.8.0`        | Static type checking      |\n| `dirty-equals`    | `==0.9.0`        | Flexible equality testing |\n| `inline-snapshot` | `>=0.21.1`       | Snapshot testing          |\n\n**Sources:** [requirements-tests.txt3-6](https://github.com/fastapi/fastapi/blob/3e2dbf91/requirements-tests.txt#L3-L6) [requirements-tests.txt13](https://github.com/fastapi/fastapi/blob/3e2dbf91/requirements-tests.txt#L13-L13)\n\n### Testing Utilities and Patterns\n\nThe repository includes specialized testing utilities for handling different Python versions and Pydantic versions:\n\n```\n```\n\nThe `pydantic_snapshot` function enables version-specific snapshot testing for maintaining compatibility across Pydantic versions.\n\n**Sources:** [tests/utils.py7-12](https://github.com/fastapi/fastapi/blob/3e2dbf91/tests/utils.py#L7-L12) [tests/utils.py15-34](https://github.com/fastapi/fastapi/blob/3e2dbf91/tests/utils.py#L15-L34)\n\n## Quality Assurance Integration\n\nThe code quality system integrates with the broader development workflow through standardized scripts and dependency management:\n\n### Development Dependencies\n\nThe main requirements file includes pre-commit as a development dependency:\n\n```\n```\n\n**Sources:** [requirements.txt1-7](https://github.com/fastapi/fastapi/blob/3e2dbf91/requirements.txt#L1-L7)\n\n### Script Integration Patterns\n\nThe quality assurance scripts follow consistent patterns for error handling and output:\n\n| Script Feature    | Implementation                 | Purpose                      |\n| ----------------- | ------------------------------ | ---------------------------- |\n| Error Handling    | `set -e`                       | Exit on any command failure  |\n| Verbose Output    | `set -x`                       | Display executed commands    |\n| Environment Setup | `export PYTHONPATH=./docs_src` | Include docs in Python path  |\n| Parameter Passing | `${@}`                         | Forward all script arguments |",
+    "metadata": {
+      "chunk_id": 2,
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\fastapi_fastapi\\_fastapi_fastapi_5.2-code-quality-and-pre-commit.md",
+      "input_type": "fast_docs",
+      "chunking_strategy": "api_documentation",
+      "token_count": 961,
+      "character_count": 4073,
+      "created_at": "2025-10-16T17:42:18.470713",
+      "parent_context": null,
+      "semantic_type": "fast_docs",
+      "collection_name": "FAST_DOCS",
+      "subfolder_name": "fastapi_fastapi",
+      "collection_strategy": "api_documentation",
+      "chunk_index_in_file": 2,
+      "file_relative_path": "FAST_DOCS\\fastapi_fastapi\\_fastapi_fastapi_5.2-code-quality-and-pre-commit.md",
+      "collection_context": "FAST_DOCS/fastapi_fastapi"
+    }
+  },
+  {
+    "text": "**Sources:** [scripts/test.sh3-4](https://github.com/fastapi/fastapi/blob/3e2dbf91/scripts/test.sh#L3-L4) [scripts/lint.sh3-4](https://github.com/fastapi/fastapi/blob/3e2dbf91/scripts/lint.sh#L3-L4) [scripts/format.sh2](https://github.com/fastapi/fastapi/blob/3e2dbf91/scripts/format.sh#L2-L2)\n\nDismiss\n\nRefresh this wiki\n\nEnter email to refresh\n\n### On this page\n\n- [Code Quality and Pre-commit](#code-quality-and-pre-commit.md)\n- [Pre-commit Hook System](#pre-commit-hook-system.md)\n- [Hook Configuration](#hook-configuration.md)\n- [Pre-commit.ci Integration](#pre-commitci-integration.md)\n- [Code Linting and Formatting with Ruff](#code-linting-and-formatting-with-ruff.md)\n- [Ruff Configuration](#ruff-configuration.md)\n- [Manual Code Quality Scripts](#manual-code-quality-scripts.md)\n- [Type Checking with mypy](#type-checking-with-mypy.md)\n- [mypy Configuration](#mypy-configuration.md)\n- [Test Coverage Infrastructure](#test-coverage-infrastructure.md)\n- [Coverage Configuration](#coverage-configuration.md)\n- [Testing Infrastructure Dependencies](#testing-infrastructure-dependencies.md)\n- [Testing Utilities and Patterns](#testing-utilities-and-patterns.md)\n- [Quality Assurance Integration](#quality-assurance-integration.md)\n- [Development Dependencies](#development-dependencies.md)\n- [Script Integration Patterns](#script-integration-patterns.md)",
+    "metadata": {
+      "chunk_id": 3,
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\fastapi_fastapi\\_fastapi_fastapi_5.2-code-quality-and-pre-commit.md",
+      "input_type": "fast_docs",
+      "chunking_strategy": "api_documentation",
+      "token_count": 350,
+      "character_count": 1359,
+      "created_at": "2025-10-16T17:42:18.471171",
+      "parent_context": null,
+      "semantic_type": "fast_docs",
+      "collection_name": "FAST_DOCS",
+      "subfolder_name": "fastapi_fastapi",
+      "collection_strategy": "api_documentation",
+      "chunk_index_in_file": 3,
+      "file_relative_path": "FAST_DOCS\\fastapi_fastapi\\_fastapi_fastapi_5.2-code-quality-and-pre-commit.md",
+      "collection_context": "FAST_DOCS/fastapi_fastapi"
+    }
+  }
+]

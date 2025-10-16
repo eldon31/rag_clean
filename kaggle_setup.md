@@ -81,7 +81,7 @@ Then upload to Qdrant locally:
 
 - **GPU VRAM**: 2x 16GB = 32GB (model loads here, not disk)
 - **Disk Storage**: 20GB limit (only for temporary files)
-- **Model Size**: nomic-embed-code is 26.35GB but loads into GPU VRAM
+- **Model Size**: CodeRankEmbed is 26.35GB but loads into GPU VRAM
 - **Batch Size**: Reduced to 8 to prevent GPU OOM
 - **Session Time**: 12 hours max per session, 30 hours/week free
 

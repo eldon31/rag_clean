@@ -1,0 +1,22 @@
+[
+  {
+    "text": "loss = {\n    \"dataset1\": CoSENTLoss(model),\n    \"dataset2\": MultipleNegativesRankingLoss(model)\n}\n```\n\nSources: [sentence_transformers/trainer.py:291-310]()\n\n## Multi-Dataset Training\n\nThe training system supports training on multiple datasets simultaneously using `DatasetDict`:\n\n```mermaid\ngraph TB\n    subgraph \"Multi-Dataset Input\"\n        DD[\"DatasetDict\"]\n        DS1[\"Dataset 'nli'\"]\n        DS2[\"Dataset 'sts'\"] \n        DS3[\"Dataset 'quora'\"]\n    end\n    \n    subgraph \"Loss Mapping\"\n        LossDict[\"Loss Dictionary\"]\n        L1[\"nli: CoSENTLoss\"]\n        L2[\"sts: CosineSimilarityLoss\"]\n        L3[\"quora: MNRL\"]\n    end\n    \n    subgraph \"Batch Sampling\"\n        BatchSampler[\"MultiDatasetBatchSampler\"]\n        RoundRobin[\"RoundRobinBatchSampler\"]\n        Proportional[\"ProportionalBatchSampler\"]\n    end\n    \n    subgraph \"Training Process\"\n        DataCollator[\"add_dataset_name_column()\"]\n        ComputeLoss[\"compute_loss()\"]\n        LossSelect[\"Select loss by dataset_name\"]\n    end\n    \n    DD --> DS1\n    DD --> DS2\n    DD --> DS3\n    \n    LossDict --> L1\n    LossDict --> L2  \n    LossDict --> L3\n    \n    DS1 --> BatchSampler\n    DS2 --> BatchSampler\n    DS3 --> BatchSampler\n    \n    BatchSampler --> RoundRobin\n    BatchSampler --> Proportional\n    \n    BatchSampler --> DataCollator\n    DataCollator --> ComputeLoss\n    LossDict --> LossSelect\n    ComputeLoss --> LossSelect\n```\n\n**Multi-Dataset Training Architecture**\n\nSources: [sentence_transformers/trainer.py:295-310](), [sentence_transformers/trainer.py:416-422](), [sentence_transformers/trainer.py:785-800]()\n\n## Router Support for Asymmetric Training\n\nThe training system integrates with the `Router` module to enable asymmetric architectures where different paths are used for queries vs documents:\n\n### Router Configuration\n\n```python",
+    "metadata": {
+      "chunk_id": 0,
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\Sentence_Transformers\\UKPLab\\sentence-transformers\\Multi-dataset_losses.md",
+      "input_type": "sentence_transformers",
+      "chunking_strategy": "programming_language_documentation",
+      "token_count": 441,
+      "character_count": 1821,
+      "created_at": "2025-10-16T17:42:33.001506",
+      "parent_context": null,
+      "semantic_type": "sentence_transformers",
+      "collection_name": "Sentence_Transformers",
+      "subfolder_name": "UKPLab",
+      "collection_strategy": "programming_language_documentation",
+      "chunk_index_in_file": 0,
+      "file_relative_path": "UKPLab\\sentence-transformers\\Multi-dataset_losses.md",
+      "collection_context": "Sentence_Transformers/UKPLab"
+    }
+  }
+]

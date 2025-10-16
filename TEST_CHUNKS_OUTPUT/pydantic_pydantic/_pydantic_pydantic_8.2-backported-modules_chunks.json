@@ -1,0 +1,122 @@
+[
+  {
+    "text": "Backported Modules | pydantic/pydantic | DeepWiki\n\n[Index your code with Devin](private-repo.md)\n\n[DeepWiki](https://deepwiki.com)\n\n[DeepWiki](.md)\n\n[pydantic/pydantic](https://github.com/pydantic/pydantic \"Open repository\")\n\n[Index your code with](private-repo.md)\n\n[Devin](private-repo.md)\n\nShare\n\nLast indexed: 11 October 2025 ([76ef0b](https://github.com/pydantic/pydantic/commits/76ef0b08))\n\n- [Overview](pydantic/pydantic/1-overview.md)\n- [Core Model System](pydantic/pydantic/2-core-model-system.md)\n- [BaseModel](pydantic/pydantic/2.1-basemodel.md)\n- [Field System](pydantic/pydantic/2.2-field-system.md)\n- [Model Configuration](pydantic/pydantic/2.3-model-configuration.md)\n- [Type System](pydantic/pydantic/3-type-system.md)\n- [Constrained Types](pydantic/pydantic/3.1-constrained-types.md)\n- [Network Types](pydantic/pydantic/3.2-network-types.md)\n- [TypeAdapter](pydantic/pydantic/3.3-typeadapter.md)\n- [Generics and Forward References](pydantic/pydantic/3.4-generics-and-forward-references.md)\n- [Validation and Serialization](pydantic/pydantic/4-validation-and-serialization.md)\n- [Validators](pydantic/pydantic/4.1-validators.md)\n- [Serializers](pydantic/pydantic/4.2-serializers.md)\n- [JSON Conversion](pydantic/pydantic/4.3-json-conversion.md)\n- [Schema Generation](pydantic/pydantic/5-schema-generation.md)\n- [Core Schema Generation](pydantic/pydantic/5.1-core-schema-generation.md)\n- [JSON Schema Generation](pydantic/pydantic/5.2-json-schema-generation.md)\n- [Advanced Features](pydantic/pydantic/6-advanced-features.md)\n- [Dataclass Support](pydantic/pydantic/6.1-dataclass-support.md)\n- [Function Validation](pydantic/pydantic/6.2-function-validation.md)\n- [RootModel and Computed Fields](pydantic/pydantic/6.3-rootmodel-and-computed-fields.md)\n- [Plugin System](pydantic/pydantic/6.4-plugin-system.md)\n- [Development and Deployment](pydantic/pydantic/7-development-and-deployment.md)\n- [Testing Framework](pydantic/pydantic/7.1-testing-framework.md)\n- [CI/CD Pipeline](pydantic/pydantic/7.2-cicd-pipeline.md)\n- [Documentation System](pydantic/pydantic/7.3-documentation-system.md)\n- [Versioning and Dependencies](pydantic/pydantic/7.4-versioning-and-dependencies.md)\n- [Migration and Compatibility](pydantic/pydantic/8-migration-and-compatibility.md)\n- [V1 to V2 Migration](pydantic/pydantic/8.1-v1-to-v2-migration.md)\n- [Backported Modules](pydantic/pydantic/8.2-backported-modules.md)\n\nMenu\n\n# Backported Modules\n\nRelevant source files\n\n- [pydantic/decorator.py](https://github.com/pydantic/pydantic/blob/76ef0b08/pydantic/decorator.py)\n- [pydantic/env\\_settings.py](https://github.com/pydantic/pydantic/blob/76ef0b08/pydantic/env_settings.py)\n- [pydantic/schema.py](https://github.com/pydantic/pydantic/blob/76ef0b08/pydantic/schema.py)\n- [pydantic/typing.py](https://github.com/pydantic/pydantic/blob/76ef0b08/pydantic/typing.py)\n- [pydantic/utils.py](https://github.com/pydantic/pydantic/blob/76ef0b08/pydantic/utils.py)\n- [tests/test\\_utils.py](https://github.com/pydantic/pydantic/blob/76ef0b08/tests/test_utils.py)\n\n## Purpose and Scope",
+    "metadata": {
+      "chunk_id": 0,
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\pydantic_pydantic\\_pydantic_pydantic_8.2-backported-modules.md",
+      "input_type": "pydantic_pydantic",
+      "chunking_strategy": "programming_language_documentation",
+      "token_count": 946,
+      "character_count": 3067,
+      "created_at": "2025-10-16T17:41:46.514328",
+      "parent_context": null,
+      "semantic_type": "pydantic_pydantic",
+      "collection_name": "pydantic_pydantic",
+      "subfolder_name": null,
+      "collection_strategy": "programming_language_documentation",
+      "chunk_index_in_file": 0,
+      "file_relative_path": "Docs\\pydantic_pydantic\\_pydantic_pydantic_8.2-backported-modules.md",
+      "collection_context": "pydantic_pydantic"
+    }
+  },
+  {
+    "text": "This document covers the V1 compatibility layer provided by Pydantic V2 through backported modules. These modules (`pydantic.schema`, `pydantic.utils`, `pydantic.typing`, `pydantic.env_settings`, and `pydantic.decorator`) serve as migration shims that redirect imports from their V1 locations to appropriate V2 equivalents while issuing deprecation warnings.\n\nFor information about broader migration strategies and API changes between V1 and V2, see [V1 to V2 Migration](pydantic/pydantic/8.1-v1-to-v2-migration.md).\n\n---\n\n## Overview\n\nPydantic V2 reorganized its internal structure significantly compared to V1. To ease the transition for users with existing codebases, several commonly-imported V1 modules were preserved as \"backported modules\" that use the `getattr_migration` mechanism to provide backwards compatibility.\n\n**Sources:** [pydantic/schema.py1-5](https://github.com/pydantic/pydantic/blob/76ef0b08/pydantic/schema.py#L1-L5) [pydantic/utils.py1-5](https://github.com/pydantic/pydantic/blob/76ef0b08/pydantic/utils.py#L1-L5) [pydantic/typing.py1-5](https://github.com/pydantic/pydantic/blob/76ef0b08/pydantic/typing.py#L1-L5)\n\n---\n\n## Migration Architecture\n\nThe backported modules use a dynamic attribute resolution mechanism to intercept imports and redirect them to their new V2 locations.\n\n### Import Resolution Flow\n\n```\n```\n\n**How it Works:**\n\n1. User imports from a V1 module location (e.g., `from pydantic.schema import schema_of`)\n2. Python invokes `__getattr__` on the module\n3. `getattr_migration` function intercepts the attribute lookup\n4. A deprecation warning is issued\n5. The attribute is resolved from its new V2 location and returned\n\n**Sources:** [pydantic/schema.py1-5](https://github.com/pydantic/pydantic/blob/76ef0b08/pydantic/schema.py#L1-L5) [pydantic/utils.py1-5](https://github.com/pydantic/pydantic/blob/76ef0b08/pydantic/utils.py#L1-L5)\n\n---\n\n## Backported Module List\n\nAll backported modules follow the same pattern: they import `getattr_migration` and assign it as their module-level `__getattr__` function.\n\n### Module Mapping\n\n| V1 Module               | Status     | Common Use Cases in V1                            |\n| ----------------------- | ---------- | ------------------------------------------------- |\n| `pydantic.schema`       | Backported | Schema generation utilities                       |\n| `pydantic.utils`        | Backported | General utility functions                         |\n| `pydantic.typing`       | Backported | Type annotation utilities                         |\n| `pydantic.env_settings` | Backported | Environment-based settings (now separate library) |\n| `pydantic.decorator`    | Backported | Decorator utilities for validation                |\n\n**Sources:** [pydantic/schema.py1](https://github.com/pydantic/pydantic/blob/76ef0b08/pydantic/schema.py#L1-L1) [pydantic/utils.py1](https://github.com/pydantic/pydantic/blob/76ef0b08/pydantic/utils.py#L1-L1) [pydantic/typing.py1](https://github.com/pydantic/pydantic/blob/76ef0b08/pydantic/typing.py#L1-L1) [pydantic/env\\_settings.py1](https://github.com/pydantic/pydantic/blob/76ef0b08/pydantic/env_settings.py#L1-L1) [pydantic/decorator.py1](https://github.com/pydantic/pydantic/blob/76ef0b08/pydantic/decorator.py#L1-L1)\n\n---\n\n## Implementation Pattern\n\nEach backported module uses an identical implementation pattern:\n\n```\n```\n\n### Code Structure\n\nAll five backported modules follow this template:\n\n```\n```\n\n**Key Components:**\n\n- **Module docstring**: Identifies the module as a V1 backport\n- **`getattr_migration` import**: Brings in the migration function from `pydantic._migration`\n- **`__getattr__` assignment**: Python's special module-level attribute that is called when an attribute is not found through normal lookup",
+    "metadata": {
+      "chunk_id": 1,
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\pydantic_pydantic\\_pydantic_pydantic_8.2-backported-modules.md",
+      "input_type": "pydantic_pydantic",
+      "chunking_strategy": "programming_language_documentation",
+      "token_count": 956,
+      "character_count": 3757,
+      "created_at": "2025-10-16T17:41:46.521471",
+      "parent_context": null,
+      "semantic_type": "pydantic_pydantic",
+      "collection_name": "pydantic_pydantic",
+      "subfolder_name": null,
+      "collection_strategy": "programming_language_documentation",
+      "chunk_index_in_file": 1,
+      "file_relative_path": "Docs\\pydantic_pydantic\\_pydantic_pydantic_8.2-backported-modules.md",
+      "collection_context": "pydantic_pydantic"
+    }
+  },
+  {
+    "text": "**Sources:** [pydantic/schema.py1-5](https://github.com/pydantic/pydantic/blob/76ef0b08/pydantic/schema.py#L1-L5) [pydantic/utils.py1-5](https://github.com/pydantic/pydantic/blob/76ef0b08/pydantic/utils.py#L1-L5) [pydantic/typing.py1-5](https://github.com/pydantic/pydantic/blob/76ef0b08/pydantic/typing.py#L1-L5) [pydantic/env\\_settings.py1-5](https://github.com/pydantic/pydantic/blob/76ef0b08/pydantic/env_settings.py#L1-L5) [pydantic/decorator.py1-5](https://github.com/pydantic/pydantic/blob/76ef0b08/pydantic/decorator.py#L1-L5)\n\n---\n\n## Specific Backported Modules\n\n### pydantic.schema\n\nThe `schema` module in V1 contained utilities for generating JSON schemas from Pydantic models. In V2, this functionality has been reorganized.\n\n**File Location:** [pydantic/schema.py](https://github.com/pydantic/pydantic/blob/76ef0b08/pydantic/schema.py)\n\n**V1 Usage Example:**\n\n```\n```\n\n**Sources:** [pydantic/schema.py1-5](https://github.com/pydantic/pydantic/blob/76ef0b08/pydantic/schema.py#L1-L5)\n\n---\n\n### pydantic.utils\n\nThe `utils` module in V1 contained various utility functions. In V2, these utilities have been moved to internal modules or replaced with new implementations.\n\n**File Location:** [pydantic/utils.py](https://github.com/pydantic/pydantic/blob/76ef0b08/pydantic/utils.py)\n\n**V1 Usage Example:**\n\n```\n```\n\n**Note:** Test utilities like `import_string` are now located in `pydantic._internal._validators`.\n\n**Sources:** [pydantic/utils.py1-5](https://github.com/pydantic/pydantic/blob/76ef0b08/pydantic/utils.py#L1-L5) [tests/test\\_utils.py35-47](https://github.com/pydantic/pydantic/blob/76ef0b08/tests/test_utils.py#L35-L47)\n\n---\n\n### pydantic.typing\n\nThe `typing` module in V1 contained type-related utilities. In V2, typing utilities have been reorganized into `pydantic._internal._typing_extra`.\n\n**File Location:** [pydantic/typing.py](https://github.com/pydantic/pydantic/blob/76ef0b08/pydantic/typing.py)\n\n**V1 Usage Example:**\n\n```\n```\n\n**Sources:** [pydantic/typing.py1-5](https://github.com/pydantic/pydantic/blob/76ef0b08/pydantic/typing.py#L1-L5)\n\n---\n\n### pydantic.env\\_settings\n\nThe `env_settings` module provided the `BaseSettings` class for environment-based configuration in V1. In V2, this functionality has been moved to a separate package: `pydantic-settings`.\n\n**File Location:** [pydantic/env\\_settings.py](https://github.com/pydantic/pydantic/blob/76ef0b08/pydantic/env_settings.py)\n\n**Migration Path:**\n\n```\n```\n\n**Sources:** [pydantic/env\\_settings.py1-5](https://github.com/pydantic/pydantic/blob/76ef0b08/pydantic/env_settings.py#L1-L5)\n\n---\n\n### pydantic.decorator\n\nThe `decorator` module in V1 contained decorator utilities. In V2, the `@validate_call` decorator and related functionality are available directly from the main `pydantic` module.\n\n**File Location:** [pydantic/decorator.py](https://github.com/pydantic/pydantic/blob/76ef0b08/pydantic/decorator.py)\n\n**V1 Usage Example:**\n\n```\n```\n\n**Sources:** [pydantic/decorator.py1-5](https://github.com/pydantic/pydantic/blob/76ef0b08/pydantic/decorator.py#L1-L5)\n\n---\n\n## getattr\\_migration Mechanism\n\nThe `getattr_migration` function is the core of the backport system. It creates a custom `__getattr__` handler for a module that:",
+    "metadata": {
+      "chunk_id": 2,
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\pydantic_pydantic\\_pydantic_pydantic_8.2-backported-modules.md",
+      "input_type": "pydantic_pydantic",
+      "chunking_strategy": "programming_language_documentation",
+      "token_count": 968,
+      "character_count": 3232,
+      "created_at": "2025-10-16T17:41:46.531372",
+      "parent_context": null,
+      "semantic_type": "pydantic_pydantic",
+      "collection_name": "pydantic_pydantic",
+      "subfolder_name": null,
+      "collection_strategy": "programming_language_documentation",
+      "chunk_index_in_file": 2,
+      "file_relative_path": "Docs\\pydantic_pydantic\\_pydantic_pydantic_8.2-backported-modules.md",
+      "collection_context": "pydantic_pydantic"
+    }
+  },
+  {
+    "text": "1. **Intercepts attribute access** when an attribute is not found in the module\n2. **Issues deprecation warnings** to inform users that the import location is deprecated\n3. **Resolves the new location** of the requested attribute in V2's structure\n4. **Returns the attribute** from its new location\n\n### Attribute Resolution Process\n\n```\n```\n\n**Sources:** [pydantic/schema.py3-5](https://github.com/pydantic/pydantic/blob/76ef0b08/pydantic/schema.py#L3-L5) [pydantic/utils.py3-5](https://github.com/pydantic/pydantic/blob/76ef0b08/pydantic/utils.py#L3-L5)\n\n---\n\n## Usage Behavior\n\n### Import Compatibility\n\nWhen code attempts to import from a backported module location:\n\n```\n```\n\n**Runtime Behavior:**\n\n1. Python loads the backport module (e.g., `pydantic/utils.py`)\n2. `some_utility` is not in the module's `__dict__`\n3. Python calls `__getattr__('some_utility')`\n4. `getattr_migration` is invoked\n5. A `DeprecationWarning` is issued\n6. The function resolves the new location\n7. The attribute from the new location is returned\n\n**Sources:** [pydantic/utils.py1-5](https://github.com/pydantic/pydantic/blob/76ef0b08/pydantic/utils.py#L1-L5)\n\n---\n\n### Deprecation Warnings\n\nThe backport system issues deprecation warnings to encourage migration to V2 patterns. These warnings:\n\n- Identify the deprecated import path\n- Suggest the new V2 import location\n- Provide context for migration\n\nThis approach allows existing code to continue working while guiding users toward V2 best practices.\n\n**Sources:** [pydantic/schema.py1](https://github.com/pydantic/pydantic/blob/76ef0b08/pydantic/schema.py#L1-L1) [pydantic/utils.py1](https://github.com/pydantic/pydantic/blob/76ef0b08/pydantic/utils.py#L1-L1)\n\n---\n\n## Migration Recommendations\n\n### Short-term Strategy\n\nFor immediate V2 compatibility:\n\n1. **Accept the warnings**: The backported modules allow code to run without immediate changes\n2. **Plan migration**: Use deprecation warnings as a guide for what needs updating\n3. **Prioritize changes**: Focus on frequently-used imports first\n\n### Long-term Strategy\n\nFor sustainable V2 code:\n\n1. **Remove backport dependencies**: Update imports to use V2 locations\n2. **Install separate packages**: For `env_settings`, migrate to `pydantic-settings`\n3. **Update to V2 APIs**: Use new V2 methods and patterns (see [V1 to V2 Migration](pydantic/pydantic/8.1-v1-to-v2-migration.md))\n4. **Test thoroughly**: Ensure behavior matches expectations after migration\n\n**Sources:** [pydantic/env\\_settings.py1-5](https://github.com/pydantic/pydantic/blob/76ef0b08/pydantic/env_settings.py#L1-L5)\n\n---\n\n## Testing Considerations\n\nThe test suite validates utility functions that were historically part of these backported modules:\n\n### Utility Function Tests\n\nThe test file `tests/test_utils.py` covers various utilities that were part of the V1 `utils` module:",
+    "metadata": {
+      "chunk_id": 3,
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\pydantic_pydantic\\_pydantic_pydantic_8.2-backported-modules.md",
+      "input_type": "pydantic_pydantic",
+      "chunking_strategy": "programming_language_documentation",
+      "token_count": 726,
+      "character_count": 2841,
+      "created_at": "2025-10-16T17:41:46.538277",
+      "parent_context": null,
+      "semantic_type": "pydantic_pydantic",
+      "collection_name": "pydantic_pydantic",
+      "subfolder_name": null,
+      "collection_strategy": "programming_language_documentation",
+      "chunk_index_in_file": 3,
+      "file_relative_path": "Docs\\pydantic_pydantic\\_pydantic_pydantic_8.2-backported-modules.md",
+      "collection_context": "pydantic_pydantic"
+    }
+  },
+  {
+    "text": "- **`import_string`**: Dynamic module/attribute importing ([tests/test\\_utils.py35-46](https://github.com/pydantic/pydantic/blob/76ef0b08/tests/test_utils.py#L35-L46))\n- **`display_as_type`**: Type representation formatting ([tests/test\\_utils.py60-102](https://github.com/pydantic/pydantic/blob/76ef0b08/tests/test_utils.py#L60-L102))\n- **`lenient_issubclass`**: Safe subclass checking ([tests/test\\_utils.py105-120](https://github.com/pydantic/pydantic/blob/76ef0b08/tests/test_utils.py#L105-L120))\n- **`unique_list`**: Deduplication utilities ([tests/test\\_utils.py123-133](https://github.com/pydantic/pydantic/blob/76ef0b08/tests/test_utils.py#L123-L133))\n- **`ValueItems`**: Include/exclude logic for nested data ([tests/test\\_utils.py136-246](https://github.com/pydantic/pydantic/blob/76ef0b08/tests/test_utils.py#L136-L246))\n- **Alias generators**: `to_camel`, `to_pascal`, `to_snake` ([tests/test\\_utils.py445-523](https://github.com/pydantic/pydantic/blob/76ef0b08/tests/test_utils.py#L445-L523))\n\nThese utilities demonstrate the types of functions that were available through `pydantic.utils` in V1 and are now accessible through internal modules in V2.\n\n**Sources:** [tests/test\\_utils.py1-528](https://github.com/pydantic/pydantic/blob/76ef0b08/tests/test_utils.py#L1-L528)\n\n---\n\n## Summary\n\nThe backported modules provide a compatibility layer that:\n\n- **Enables gradual migration** from Pydantic V1 to V2\n- **Maintains backwards compatibility** for existing import paths\n- **Issues clear warnings** to guide users toward V2 patterns\n- **Uses a consistent mechanism** across all five modules (`schema`, `utils`, `typing`, `env_settings`, `decorator`)\n\nAll backported modules rely on the `getattr_migration` function to intercept attribute access and redirect to new V2 locations, making the transition smoother for users with large existing codebases.\n\n**Sources:** [pydantic/schema.py1-5](https://github.com/pydantic/pydantic/blob/76ef0b08/pydantic/schema.py#L1-L5) [pydantic/utils.py1-5](https://github.com/pydantic/pydantic/blob/76ef0b08/pydantic/utils.py#L1-L5) [pydantic/typing.py1-5](https://github.com/pydantic/pydantic/blob/76ef0b08/pydantic/typing.py#L1-L5) [pydantic/env\\_settings.py1-5](https://github.com/pydantic/pydantic/blob/76ef0b08/pydantic/env_settings.py#L1-L5) [pydantic/decorator.py1-5](https://github.com/pydantic/pydantic/blob/76ef0b08/pydantic/decorator.py#L1-L5)\n\nDismiss\n\nRefresh this wiki\n\nThis wiki was recently refreshed. Please wait 4 days to refresh again.\n\n### On this page",
+    "metadata": {
+      "chunk_id": 4,
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\pydantic_pydantic\\_pydantic_pydantic_8.2-backported-modules.md",
+      "input_type": "pydantic_pydantic",
+      "chunking_strategy": "programming_language_documentation",
+      "token_count": 724,
+      "character_count": 2518,
+      "created_at": "2025-10-16T17:41:46.542325",
+      "parent_context": null,
+      "semantic_type": "pydantic_pydantic",
+      "collection_name": "pydantic_pydantic",
+      "subfolder_name": null,
+      "collection_strategy": "programming_language_documentation",
+      "chunk_index_in_file": 4,
+      "file_relative_path": "Docs\\pydantic_pydantic\\_pydantic_pydantic_8.2-backported-modules.md",
+      "collection_context": "pydantic_pydantic"
+    }
+  },
+  {
+    "text": "- [Backported Modules](#backported-modules.md)\n- [Purpose and Scope](#purpose-and-scope.md)\n- [Overview](#overview.md)\n- [Migration Architecture](#migration-architecture.md)\n- [Import Resolution Flow](#import-resolution-flow.md)\n- [Backported Module List](#backported-module-list.md)\n- [Module Mapping](#module-mapping.md)\n- [Implementation Pattern](#implementation-pattern.md)\n- [Code Structure](#code-structure.md)\n- [Specific Backported Modules](#specific-backported-modules.md)\n- [pydantic.schema](#pydanticschema.md)\n- [pydantic.utils](#pydanticutils.md)\n- [pydantic.typing](#pydantictyping.md)\n- [pydantic.env\\_settings](#pydanticenv_settings.md)\n- [pydantic.decorator](#pydanticdecorator.md)\n- [getattr\\_migration Mechanism](#getattr_migration-mechanism.md)\n- [Attribute Resolution Process](#attribute-resolution-process.md)\n- [Usage Behavior](#usage-behavior.md)\n- [Import Compatibility](#import-compatibility.md)\n- [Deprecation Warnings](#deprecation-warnings.md)\n- [Migration Recommendations](#migration-recommendations.md)\n- [Short-term Strategy](#short-term-strategy.md)\n- [Long-term Strategy](#long-term-strategy.md)\n- [Testing Considerations](#testing-considerations.md)\n- [Utility Function Tests](#utility-function-tests.md)\n- [Summary](#summary.md)",
+    "metadata": {
+      "chunk_id": 5,
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\pydantic_pydantic\\_pydantic_pydantic_8.2-backported-modules.md",
+      "input_type": "pydantic_pydantic",
+      "chunking_strategy": "programming_language_documentation",
+      "token_count": 331,
+      "character_count": 1264,
+      "created_at": "2025-10-16T17:41:46.542532",
+      "parent_context": null,
+      "semantic_type": "pydantic_pydantic",
+      "collection_name": "pydantic_pydantic",
+      "subfolder_name": null,
+      "collection_strategy": "programming_language_documentation",
+      "chunk_index_in_file": 5,
+      "file_relative_path": "Docs\\pydantic_pydantic\\_pydantic_pydantic_8.2-backported-modules.md",
+      "collection_context": "pydantic_pydantic"
+    }
+  }
+]

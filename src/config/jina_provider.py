@@ -5,12 +5,12 @@ Provides local embeddings using sentence-transformers library.
 No API calls needed - runs locally with batching support.
 
 Recommended Models for Code/Documentation:
-- nomic-ai/nomic-embed-code (3584 dim, BEST for code, APIs, workflows)
+- nomic-ai/CodeRankEmbed (3584 dim, BEST for code, APIs, workflows)
 - jinaai/jina-embeddings-v2-base-code (768 dim, code-specific)
 - sentence-transformers/all-MiniLM-L6-v2 (384 dim, fast, general purpose)
 - codellama/CodeLlama-7b-Instruct-hf (4096 dim, very specialized)
 
-For your use case (code/docs/workflows): nomic-ai/nomic-embed-code
+For your use case (code/docs/workflows): nomic-ai/CodeRankEmbed
 """
 
 import logging
@@ -29,8 +29,8 @@ class EmbedderConfig(BaseModel):
     """Configuration for sentence-transformers embeddings."""
     
     model_name: str = Field(
-        default="nomic-ai/nomic-embed-code",
-        description="Sentence-transformers model name (nomic-embed-code for code/APIs)"
+        default="nomic-ai/CodeRankEmbed",
+        description="Sentence-transformers model name (CodeRankEmbed for code/APIs)"
     )
     device: str = Field(
         default="cpu",
@@ -55,7 +55,7 @@ class EmbedderConfig(BaseModel):
     def from_env(cls) -> "EmbedderConfig":
         """Create config from environment variables."""
         return cls(
-            model_name=os.getenv("EMBEDDING_MODEL", "nomic-ai/nomic-embed-code"),
+            model_name=os.getenv("EMBEDDING_MODEL", "nomic-ai/CodeRankEmbed"),
             device=os.getenv("EMBEDDING_DEVICE", "cpu"),
             batch_size=int(os.getenv("EMBEDDING_BATCH_SIZE", "32")),
         )

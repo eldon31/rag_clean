@@ -1,0 +1,42 @@
+[
+  {
+    "text": "samples = [\n    {\n        \"query\": \"What is machine learning?\",\n        \"positive\": [\"Machine learning is a subset of AI\"],\n        \"negative\": [\"The weather is nice today\", \"Cats are animals\"]\n    }\n]\n\nevaluator = RerankingEvaluator(samples=samples, name=\"rerank_test\")\nresults = evaluator(model)\nprint(f\"NDCG@10: {results['rerank_test_ndcg@10']}\")\n```\n\n### Information Retrieval Evaluation\n\n```python\nfrom sentence_transformers.evaluation import InformationRetrievalEvaluator\n\n# Prepare queries, corpus, and relevance judgments\nqueries = {\"q1\": \"machine learning definition\"}\ncorpus = {\"d1\": \"ML is AI subset\", \"d2\": \"Weather is sunny\"}  \nrelevant_docs = {\"q1\": {\"d1\"}}\n\nevaluator = InformationRetrievalEvaluator(\n    queries=queries,\n    corpus=corpus, \n    relevant_docs=relevant_docs,\n    name=\"ir_test\"\n)\nresults = evaluator(model)\nprint(f\"MAP@100: {results['ir_test_cosine_map@100']}\")\n```\n\nSources: [sentence_transformers/evaluation/BinaryClassificationEvaluator.py:49-83](), [sentence_transformers/evaluation/RerankingEvaluator.py:48-87](), [sentence_transformers/evaluation/InformationRetrievalEvaluator.py:54-123](), [tests/test_pretrained_stsb.py:74-79]()\n\n## Training Integration\n\nEvaluators integrate with training systems to monitor model performance during training. They are called at specified intervals to compute metrics and store results in CSV files and model metadata.\n\n**Training and Evaluation Integration**\n```mermaid\nflowchart TD\n    subgraph training[\"Training System\"]\n        TR[\"Trainer\"]\n        TD[\"Training Data\"]\n        LOSS[\"Loss Functions\"]\n    end\n    \n    subgraph evaluation[\"Evaluation System\"]  \n        BCE[\"BinaryClassificationEvaluator\"]\n        RE[\"RerankingEvaluator\"]\n        IRE[\"InformationRetrievalEvaluator\"] \n        CSV[\"CSV Results\"]\n        MCD[\"ModelCardData\"]\n    end\n    \n    subgraph model[\"Model\"]\n        CE[\"CrossEncoder\"]\n    end\n    \n    TD --> TR\n    LOSS --> TR\n    TR --> CE\n    \n    CE --> BCE\n    CE --> RE  \n    CE --> IRE\n    \n    BCE --> CSV\n    RE --> CSV\n    IRE --> CSV\n    \n    BCE --> MCD\n    RE --> MCD\n    IRE --> MCD\n    \n    MCD --> CE\n```\n\n### Evaluation During Training\n\nEvaluators are called with epoch and step parameters to track training progress:\n\n```python\n# Called automatically during training\nresults = evaluator(model, output_path=\"./results\", epoch=1, steps=100)\n\n# Results are written to CSV files like:\n# - binary_classification_evaluation_results.csv  \n# - RerankingEvaluator_results_@10.csv\n# - Information-Retrieval_evaluation_results.csv\n```\n\n### Model Card Integration\n\nEvaluation results are automatically stored in the model's metadata via the `store_metrics_in_model_card_data()` method, which updates `model.model_card_data` with performance metrics.\n\nSources: [sentence_transformers/evaluation/BinaryClassificationEvaluator.py:151-221](), [sentence_transformers/evaluation/RerankingEvaluator.py:137-198](), [sentence_transformers/evaluation/InformationRetrievalEvaluator.py:211-290]()\n\n## 6. Creating Custom Evaluators\n\nYou can create custom evaluators for specialized evaluation tasks by:\n\n1. Inheriting from the base evaluator class\n2. Implementing the required evaluation methods\n3. Defining metrics that are relevant to your task\n\nA custom evaluator class typically implements:\n- An initialization method that accepts test data\n- An evaluation method that computes scores for the test data\n- Methods to compute task-specific metrics\n\n## 7. Common Evaluation Metrics\n\nDifferent tasks require different evaluation metrics:\n\n| Task Type | Common Metrics | Description |\n|-----------|----------------|-------------|\n| Binary Classification | Accuracy, F1, AUC | Measure classification performance |\n| Ranking | nDCG, MAP, MRR | Assess ranking quality |\n| Retrieval | Precision@k, Recall@k | Evaluate retrieval effectiveness |\n| Regression | MSE, Pearson/Spearman correlation | Measure score prediction accuracy |\n\nSources: System architecture diagrams from prompt, tests/test_pretrained_stsb.py (lines 39-46)\n\n## 8. Performance Considerations\n\nWhen evaluating large datasets, consider:\n\n- Batch processing: Evaluate models in batches to avoid memory issues\n- Caching: Cache model outputs to avoid redundant computation\n- Metrics selection: Choose metrics appropriate for your task and dataset size\n\nEfficient evaluation is especially important when working with resource-intensive models or large test sets.\n\n## 9. Comparison with SentenceTransformer Evaluators\n\nWhile both types of evaluators assess model performance, they differ in key ways:",
+    "metadata": {
+      "chunk_id": 0,
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\Sentence_Transformers\\UKPLab\\sentence-transformers\\Prepare_samples_with_queries_positives_and_negatives.md",
+      "input_type": "sentence_transformers",
+      "chunking_strategy": "programming_language_documentation",
+      "token_count": 1009,
+      "character_count": 4552,
+      "created_at": "2025-10-16T17:42:33.094502",
+      "parent_context": null,
+      "semantic_type": "sentence_transformers",
+      "collection_name": "Sentence_Transformers",
+      "subfolder_name": "UKPLab",
+      "collection_strategy": "programming_language_documentation",
+      "chunk_index_in_file": 0,
+      "file_relative_path": "UKPLab\\sentence-transformers\\Prepare_samples_with_queries_positives_and_negatives.md",
+      "collection_context": "Sentence_Transformers/UKPLab"
+    }
+  },
+  {
+    "text": "| CrossEncoder Evaluators | SentenceTransformer Evaluators |\n|------------------------|--------------------------------|\n| Evaluate pair scoring | Evaluate embedding quality |\n| Focus on classification/ranking metrics | Focus on similarity and retrieval metrics |\n| Work with direct text pair inputs | Work with embeddings |\n| Suited for reranking tasks | Suited for retrieval and similarity tasks |\n\nUnderstanding these differences helps in selecting the appropriate evaluation method for your model type and task.",
+    "metadata": {
+      "chunk_id": 1,
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\Sentence_Transformers\\UKPLab\\sentence-transformers\\Prepare_samples_with_queries_positives_and_negatives.md",
+      "input_type": "sentence_transformers",
+      "chunking_strategy": "programming_language_documentation",
+      "token_count": 86,
+      "character_count": 515,
+      "created_at": "2025-10-16T17:42:33.094620",
+      "parent_context": null,
+      "semantic_type": "sentence_transformers",
+      "collection_name": "Sentence_Transformers",
+      "subfolder_name": "UKPLab",
+      "collection_strategy": "programming_language_documentation",
+      "chunk_index_in_file": 1,
+      "file_relative_path": "UKPLab\\sentence-transformers\\Prepare_samples_with_queries_positives_and_negatives.md",
+      "collection_context": "Sentence_Transformers/UKPLab"
+    }
+  }
+]

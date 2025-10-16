@@ -1,0 +1,62 @@
+[
+  {
+    "text": "stats = SparseEncoder.sparsity(sparse_embeddings)\nprint(f\"Sparsity: {stats['sparsity_ratio']:.2%}\")\n```\n\n```python\n# CrossEncoder - Pairwise scoring and ranking\nfrom sentence_transformers import CrossEncoder\n\nmodel = CrossEncoder(\"cross-encoder/ms-marco-MiniLM-L6-v2\")\n\n# Predict similarity scores\nquery = \"What is machine learning?\"\npassages = [\"ML is a subset of AI\", \"Weather prediction models\"]\nscores = model.predict([(query, passage) for passage in passages])\n\n# Rank passages by relevance\nranked_results = model.rank(query, passages, return_documents=True)\n```\n\n### Model Organization and Naming\n\n| Model Source | Loading Pattern | Example |\n|---|---|---|\n| Official sentence-transformers | Direct name | `SentenceTransformer(\"all-mpnet-base-v2\")` |\n| Community models | Full path | `SentenceTransformer(\"BAAI/bge-large-en\")` |\n| Organization-specific | Org/model format | `SparseEncoder(\"naver/splade-cocondenser-ensembledistil\")` |\n\n**Sources:** [README.md:58-167](), [index.rst:37-132](), [docs/sentence_transformer/pretrained_models.md:16-27]()\n\n## Model Versioning and Evolution\n\nThe library maintains version histories for major model series to track improvements over time:\n\n```mermaid\ngraph TD\n    subgraph \"MSMARCO Evolution\"\n        V1[\"v1: Initial Models<br/>MultipleNegativesRankingLoss<br/>In-batch negatives\"]\n        V2[\"v2: Improved Training<br/>Better hard negatives<br/>Performance gains\"]\n        V3[\"v3: Cross-Encoder Mining<br/>electra-base cross-encoder<br/>Hard negative mining\"]\n        V5[\"v5: Normalized + MarginMSE<br/>normalized_embeddings<br/>MarginMSE loss\"]\n    end\n    \n    V1 --> V2\n    V2 --> V3\n    V3 --> V5\n    \n    subgraph \"Performance Trends\"\n        P1[\"MRR@10: ~23\"]\n        P2[\"MRR@10: ~29\"] \n        P3[\"MRR@10: ~33\"]\n        P5[\"MRR@10: ~37\"]\n    end\n    \n    V1 --> P1\n    V2 --> P2\n    V3 --> P3\n    V5 --> P5\n```\n\n**Sources:** [docs/pretrained-models/msmarco-v1.md:10-11](), [docs/pretrained-models/msmarco-v3.md:53-58](), [docs/pretrained-models/msmarco-v5.md:53-65]()\n\nEach version incorporates training improvements, better negative sampling strategies, and architectural refinements that progressively enhance model performance on downstream tasks.\n\n# SentenceTransformer Models\n\nThis page provides a comprehensive guide to pretrained SentenceTransformer models for dense text embeddings. SentenceTransformer models encode text into fixed-size vector representations that capture semantic meaning, enabling applications like semantic search, clustering, and similarity comparison.\n\nFor sparse embedding models, see [SparseEncoder Models](#5.2). For pairwise scoring models, see [CrossEncoder Models](#5.3). For MSMARCO-specific models, see [MSMARCO Models](#5.4).\n\n## Model Architecture Overview\n\nSentenceTransformer models generate dense embeddings by combining transformer layers with pooling mechanisms:\n\n```mermaid\ngraph LR\n    subgraph \"SentenceTransformer Architecture\"\n        Input[\"Input Text\"] --> Tokenizer[\"AutoTokenizer\"]\n        Tokenizer --> Transformer[\"Transformer Module\"]\n        Transformer --> Pooling[\"Pooling Module\"]\n        Pooling --> Normalize[\"Normalize (Optional)\"]\n        Normalize --> Output[\"Dense Embeddings\"]\n    end\n    \n    subgraph \"Core Components\"\n        ST[\"SentenceTransformer\"] --> TF[\"sentence_transformers.models.Transformer\"]\n        ST --> PL[\"sentence_transformers.models.Pooling\"]\n        ST --> NM[\"sentence_transformers.models.Normalize\"]\n    end\n```\n\nThe `SentenceTransformer` class in [sentence_transformers/SentenceTransformer.py:61-163]() serves as the main interface, orchestrating sequential modules to transform text into embeddings.\n\nSources: [sentence_transformers/SentenceTransformer.py:61-163](), [sentence_transformers/models/Transformer.py](), [sentence_transformers/models/Pooling.py]()\n\n## Model Categories\n\n### General Purpose Models\n\n**All-series Models**: Trained on diverse datasets (1B+ training pairs) for broad applicability.",
+    "metadata": {
+      "chunk_id": 0,
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\Sentence_Transformers\\UKPLab\\sentence-transformers\\Check_sparsity_statistics.md",
+      "input_type": "sentence_transformers",
+      "chunking_strategy": "programming_language_documentation",
+      "token_count": 933,
+      "character_count": 3958,
+      "created_at": "2025-10-16T17:42:32.771989",
+      "parent_context": null,
+      "semantic_type": "sentence_transformers",
+      "collection_name": "Sentence_Transformers",
+      "subfolder_name": "UKPLab",
+      "collection_strategy": "programming_language_documentation",
+      "chunk_index_in_file": 0,
+      "file_relative_path": "UKPLab\\sentence-transformers\\Check_sparsity_statistics.md",
+      "collection_context": "Sentence_Transformers/UKPLab"
+    }
+  },
+  {
+    "text": "| Model | Dimensions | Speed (GPU/CPU) | Performance | Use Case |\n|-------|------------|-----------------|-------------|----------|\n| `all-mpnet-base-v2` | 768 | 2,800 / 170 | 67.97 | Best quality |\n| `all-MiniLM-L6-v2` | 384 | 14,200 / 750 | 64.82 | Balanced speed/quality |\n| `all-MiniLM-L12-v2` | 384 | 7,500 / 400 | 66.01 | Higher quality MiniLM |\n\n**Paraphrase Models**: Optimized for sentence similarity and paraphrase detection.\n\n| Model | Base Architecture | Training Data | Performance |\n|-------|------------------|---------------|-------------|\n| `paraphrase-mpnet-base-v2` | MPNet | Multi-domain paraphrases | 67.97 |\n| `paraphrase-MiniLM-L6-v2` | MiniLM | Efficient paraphrase model | 64.82 |\n| `paraphrase-distilroberta-base-v2` | DistilRoBERTa | RoBERTa-based paraphrase | 66.27 |\n\nSources: [docs/_static/html/models_en_sentence_embeddings.html:342-355](), [docs/sentence_transformer/pretrained_models.md:41-49]()\n\n### Semantic Search Models\n\nSpecialized for query-document retrieval tasks:\n\n```mermaid\ngraph TB\n    subgraph \"Multi-QA Models\"\n        MQ1[\"multi-qa-mpnet-base-cos-v1<br/>57.46 performance<br/>4,000 qps\"]\n        MQ2[\"multi-qa-distilbert-cos-v1<br/>52.83 performance<br/>7,000 qps\"] \n        MQ3[\"multi-qa-MiniLM-L6-cos-v1<br/>51.83 performance<br/>18,000 qps\"]\n    end\n    \n    subgraph \"MSMARCO Models\"\n        MS1[\"msmarco-bert-base-dot-v5<br/>38.08 MRR@10<br/>4,000 qps\"]\n        MS2[\"msmarco-distilbert-dot-v5<br/>37.25 MRR@10<br/>7,000 qps\"]\n        MS3[\"msmarco-distilbert-cos-v5<br/>33.79 MRR@10<br/>7,000 qps\"]\n    end\n    \n    subgraph \"Usage Patterns\"\n        Query[\"encode_query()\"] --> MQ1\n        Documents[\"encode_document()\"] --> MQ1\n        MQ1 --> Similarity[\"similarity()\"]\n    end\n```\n\n**Multi-QA Models** are trained on 215M+ question-answer pairs from diverse sources. **MSMARCO Models** are trained on Bing search queries with web passages.\n\nSources: [docs/sentence_transformer/pretrained_models.md:84-124](), [docs/pretrained-models/msmarco-v5.md:29-44]()\n\n### Multilingual Models\n\nSupport 50+ languages with aligned vector spaces:\n\n| Model | Languages | Architecture | Use Case |\n|-------|-----------|--------------|----------|\n| `distiluse-base-multilingual-cased-v2` | 50+ | DistilUSE | General multilingual |\n| `paraphrase-multilingual-mpnet-base-v2` | 50+ | MPNet | High-quality multilingual |\n| `LaBSE` | 109 | BERT | Bitext mining/translation |\n\nSources: [docs/sentence_transformer/pretrained_models.md:128-144]()\n\n## Model Selection Guide\n\n```mermaid\nflowchart TD\n    Start[\"Model Selection\"] --> Task{\"Task Type?\"}\n    \n    Task -->|\"General Purpose\"| Speed{\"Speed vs Quality?\"}\n    Task -->|\"Semantic Search\"| Domain{\"Domain?\"}\n    Task -->|\"Multilingual\"| Languages{\"Language Count?\"}\n    \n    Speed -->|\"Best Quality\"| MPNet[\"all-mpnet-base-v2\"]\n    Speed -->|\"Balanced\"| MiniLM6[\"all-MiniLM-L6-v2\"]\n    Speed -->|\"Fastest\"| MiniLM3[\"paraphrase-MiniLM-L3-v2\"]\n    \n    Domain -->|\"Web Search\"| MSMARCO[\"msmarco-distilbert-dot-v5\"]\n    Domain -->|\"QA Diverse\"| MultiQA[\"multi-qa-mpnet-base-cos-v1\"]\n    Domain -->|\"Scientific\"| Specter[\"allenai-specter\"]\n    \n    Languages -->|\"15 Major\"| DistilUSE1[\"distiluse-base-multilingual-cased-v1\"]\n    Languages -->|\"50+\"| DistilUSE2[\"distiluse-base-multilingual-cased-v2\"]\n    Languages -->|\"Translation\"| LaBSE[\"LaBSE\"]\n```\n\n### Performance Considerations",
+    "metadata": {
+      "chunk_id": 1,
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\Sentence_Transformers\\UKPLab\\sentence-transformers\\Check_sparsity_statistics.md",
+      "input_type": "sentence_transformers",
+      "chunking_strategy": "programming_language_documentation",
+      "token_count": 1001,
+      "character_count": 3366,
+      "created_at": "2025-10-16T17:42:32.776601",
+      "parent_context": null,
+      "semantic_type": "sentence_transformers",
+      "collection_name": "Sentence_Transformers",
+      "subfolder_name": "UKPLab",
+      "collection_strategy": "programming_language_documentation",
+      "chunk_index_in_file": 1,
+      "file_relative_path": "UKPLab\\sentence-transformers\\Check_sparsity_statistics.md",
+      "collection_context": "Sentence_Transformers/UKPLab"
+    }
+  },
+  {
+    "text": "**Embedding Dimensions**: Higher dimensions generally provide better quality but require more storage and compute:\n- 384-dim: Efficient for most applications\n- 768-dim: Better quality for complex tasks\n- 1024-dim: Highest quality for specialized domains\n\n**Normalization**: Models with normalized embeddings enable efficient dot-product similarity:\n- Normalized: Use `util.dot_score()` for fastest similarity\n- Non-normalized: Use `util.cos_sim()` for cosine similarity\n\nSources: [docs/_static/html/models_en_sentence_embeddings.html:184-202](), [sentence_transformers/SentenceTransformer.py:139-163]()\n\n## Loading and Usage Patterns\n\n### Basic Model Loading\n\n```python\nfrom sentence_transformers import SentenceTransformer",
+    "metadata": {
+      "chunk_id": 2,
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\Sentence_Transformers\\UKPLab\\sentence-transformers\\Check_sparsity_statistics.md",
+      "input_type": "sentence_transformers",
+      "chunking_strategy": "programming_language_documentation",
+      "token_count": 149,
+      "character_count": 723,
+      "created_at": "2025-10-16T17:42:32.776983",
+      "parent_context": null,
+      "semantic_type": "sentence_transformers",
+      "collection_name": "Sentence_Transformers",
+      "subfolder_name": "UKPLab",
+      "collection_strategy": "programming_language_documentation",
+      "chunk_index_in_file": 2,
+      "file_relative_path": "UKPLab\\sentence-transformers\\Check_sparsity_statistics.md",
+      "collection_context": "Sentence_Transformers/UKPLab"
+    }
+  }
+]

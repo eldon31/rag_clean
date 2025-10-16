@@ -1,0 +1,82 @@
+[
+  {
+    "text": "OpenAPI Integration | jlowin/fastmcp | DeepWiki\n\n[Index your code with Devin](private-repo.md)\n\n[DeepWiki](https://deepwiki.com)\n\n[DeepWiki](.md)\n\n[jlowin/fastmcp](https://github.com/jlowin/fastmcp \"Open repository\")\n\n[Index your code with](private-repo.md)\n\n[Devin](private-repo.md)\n\nShare\n\nLast indexed: 30 September 2025 ([66221e](https://github.com/jlowin/fastmcp/commits/66221ed3))\n\n- [FastMCP Overview](jlowin/fastmcp/1-fastmcp-overview.md)\n- [Installation and Setup](jlowin/fastmcp/1.1-installation-and-setup.md)\n- [FastMCP Server Core](jlowin/fastmcp/2-fastmcp-server-core.md)\n- [Component System Architecture](jlowin/fastmcp/2.1-component-system-architecture.md)\n- [Context System and Dependencies](jlowin/fastmcp/2.2-context-system-and-dependencies.md)\n- [Server Composition and Proxying](jlowin/fastmcp/2.3-server-composition-and-proxying.md)\n- [FastMCP Client System](jlowin/fastmcp/3-fastmcp-client-system.md)\n- [Transport Mechanisms](jlowin/fastmcp/3.1-transport-mechanisms.md)\n- [Client Authentication](jlowin/fastmcp/3.2-client-authentication.md)\n- [HTTP Server and Deployment](jlowin/fastmcp/4-http-server-and-deployment.md)\n- [Authentication and Security](jlowin/fastmcp/4.1-authentication-and-security.md)\n- [Middleware System](jlowin/fastmcp/4.2-middleware-system.md)\n- [Command Line Interface](jlowin/fastmcp/5-command-line-interface.md)\n- [OpenAPI Integration](jlowin/fastmcp/6-openapi-integration.md)\n- [Configuration Management](jlowin/fastmcp/7-configuration-management.md)\n- [Testing and Development Framework](jlowin/fastmcp/8-testing-and-development-framework.md)\n- [Project Infrastructure](jlowin/fastmcp/9-project-infrastructure.md)\n- [Documentation and Updates](jlowin/fastmcp/10-documentation-and-updates.md)\n\nMenu\n\n# OpenAPI Integration\n\nRelevant source files\n\n- [src/fastmcp/server/openapi.py](https://github.com/jlowin/fastmcp/blob/66221ed3/src/fastmcp/server/openapi.py)\n- [src/fastmcp/utilities/openapi.py](https://github.com/jlowin/fastmcp/blob/66221ed3/src/fastmcp/utilities/openapi.py)\n- [tests/server/openapi/test\\_optional\\_parameters.py](https://github.com/jlowin/fastmcp/blob/66221ed3/tests/server/openapi/test_optional_parameters.py)\n- [tests/utilities/openapi/test\\_openapi.py](https://github.com/jlowin/fastmcp/blob/66221ed3/tests/utilities/openapi/test_openapi.py)\n- [tests/utilities/openapi/test\\_openapi\\_advanced.py](https://github.com/jlowin/fastmcp/blob/66221ed3/tests/utilities/openapi/test_openapi_advanced.py)\n- [tests/utilities/openapi/test\\_openapi\\_fastapi.py](https://github.com/jlowin/fastmcp/blob/66221ed3/tests/utilities/openapi/test_openapi_fastapi.py)\n\nFastMCP's OpenAPI integration enables automatic generation of FastMCP servers from OpenAPI specifications, converting HTTP API definitions into MCP Tools, Resources, and ResourceTemplates. This system parses OpenAPI schemas and creates appropriate MCP components based on configurable route mapping rules.\n\nFor general FastMCP server functionality, see [FastMCP Server Core](jlowin/fastmcp/2-fastmcp-server-core.md). For HTTP server deployment, see [HTTP Server and Deployment](jlowin/fastmcp/4-http-server-and-deployment.md). For client-side API consumption, see [FastMCP Client System](jlowin/fastmcp/3-fastmcp-client-system.md).\n\n## Architecture Overview\n\nThe OpenAPI integration consists of three main layers: schema parsing, route mapping, and component generation. The system transforms OpenAPI specifications into FastMCP components through an intermediate representation.\n\n```\n```",
+    "metadata": {
+      "chunk_id": 0,
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\jlowin_fastmcp\\_jlowin_fastmcp_6-openapi-integration.md",
+      "input_type": "fast_docs",
+      "chunking_strategy": "api_documentation",
+      "token_count": 935,
+      "character_count": 3506,
+      "created_at": "2025-10-16T17:42:19.036279",
+      "parent_context": null,
+      "semantic_type": "fast_docs",
+      "collection_name": "FAST_DOCS",
+      "subfolder_name": "jlowin_fastmcp",
+      "collection_strategy": "api_documentation",
+      "chunk_index_in_file": 0,
+      "file_relative_path": "FAST_DOCS\\jlowin_fastmcp\\_jlowin_fastmcp_6-openapi-integration.md",
+      "collection_context": "FAST_DOCS/jlowin_fastmcp"
+    }
+  },
+  {
+    "text": "**Sources:** [src/fastmcp/server/openapi.py1-100](https://github.com/jlowin/fastmcp/blob/66221ed3/src/fastmcp/server/openapi.py#L1-L100) [src/fastmcp/utilities/openapi.py200-250](https://github.com/jlowin/fastmcp/blob/66221ed3/src/fastmcp/utilities/openapi.py#L200-L250)\n\n## Core Components\n\n### FastMCPOpenAPI Server Class\n\nThe `FastMCPOpenAPI` class extends `FastMCP` to provide OpenAPI-based server creation. It parses OpenAPI specifications and automatically generates appropriate MCP components.\n\n```\n```\n\n**Sources:** [src/fastmcp/server/openapi.py696-831](https://github.com/jlowin/fastmcp/blob/66221ed3/src/fastmcp/server/openapi.py#L696-L831) [src/fastmcp/server/openapi.py833-887](https://github.com/jlowin/fastmcp/blob/66221ed3/src/fastmcp/server/openapi.py#L833-L887)\n\n### OpenAPI Component Types\n\nThree specialized component classes handle different types of HTTP endpoints:\n\n| Component                 | Purpose               | HTTP Methods             | Use Case                       |\n| ------------------------- | --------------------- | ------------------------ | ------------------------------ |\n| `OpenAPITool`             | Executable operations | POST, PUT, PATCH, DELETE | API actions, data modification |\n| `OpenAPIResource`         | Static data endpoints | GET (no path params)     | Fixed data retrieval           |\n| `OpenAPIResourceTemplate` | Parameterized data    | GET (with path params)   | Dynamic data retrieval         |\n\n**Sources:** [src/fastmcp/server/openapi.py229-521](https://github.com/jlowin/fastmcp/blob/66221ed3/src/fastmcp/server/openapi.py#L229-L521) [src/fastmcp/server/openapi.py523-640](https://github.com/jlowin/fastmcp/blob/66221ed3/src/fastmcp/server/openapi.py#L523-L640) [src/fastmcp/server/openapi.py642-694](https://github.com/jlowin/fastmcp/blob/66221ed3/src/fastmcp/server/openapi.py#L642-L694)\n\n## Route Mapping System\n\n### MCPType Enumeration\n\nThe `MCPType` enum defines the target component types for HTTP routes:\n\n```\n```\n\n**Sources:** [src/fastmcp/server/openapi.py78-94](https://github.com/jlowin/fastmcp/blob/66221ed3/src/fastmcp/server/openapi.py#L78-L94)\n\n### RouteMap Configuration\n\n`RouteMap` objects define mapping rules from HTTP routes to MCP component types:\n\n```\n```\n\n**Sources:** [src/fastmcp/server/openapi.py110-182](https://github.com/jlowin/fastmcp/blob/66221ed3/src/fastmcp/server/openapi.py#L110-L182) [src/fastmcp/server/openapi.py184-227](https://github.com/jlowin/fastmcp/blob/66221ed3/src/fastmcp/server/openapi.py#L184-L227)\n\n### Default Route Mapping\n\nBy default, all routes are converted to Tools unless custom mappings specify otherwise:\n\n```\n```\n\n**Sources:** [src/fastmcp/server/openapi.py177-181](https://github.com/jlowin/fastmcp/blob/66221ed3/src/fastmcp/server/openapi.py#L177-L181)\n\n## Schema Parsing System\n\n### HTTPRoute Intermediate Representation\n\nThe parsing system converts OpenAPI specifications into `HTTPRoute` objects that capture all necessary information for component generation:\n\n```\n```\n\n**Sources:** [src/fastmcp/utilities/openapi.py201-253](https://github.com/jlowin/fastmcp/blob/66221ed3/src/fastmcp/utilities/openapi.py#L201-L253) [src/fastmcp/utilities/openapi.py379-477](https://github.com/jlowin/fastmcp/blob/66221ed3/src/fastmcp/utilities/openapi.py#L379-L477) [src/fastmcp/utilities/openapi.py479-543](https://github.com/jlowin/fastmcp/blob/66221ed3/src/fastmcp/utilities/openapi.py#L479-L543)\n\n### Parameter Processing\n\nThe system handles complex parameter scenarios including location conflicts and array formatting:",
+    "metadata": {
+      "chunk_id": 1,
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\jlowin_fastmcp\\_jlowin_fastmcp_6-openapi-integration.md",
+      "input_type": "fast_docs",
+      "chunking_strategy": "api_documentation",
+      "token_count": 939,
+      "character_count": 3542,
+      "created_at": "2025-10-16T17:42:19.044187",
+      "parent_context": null,
+      "semantic_type": "fast_docs",
+      "collection_name": "FAST_DOCS",
+      "subfolder_name": "jlowin_fastmcp",
+      "collection_strategy": "api_documentation",
+      "chunk_index_in_file": 1,
+      "file_relative_path": "FAST_DOCS\\jlowin_fastmcp\\_jlowin_fastmcp_6-openapi-integration.md",
+      "collection_context": "FAST_DOCS/jlowin_fastmcp"
+    }
+  },
+  {
+    "text": "| Parameter Location | Handling                   | Example              |\n| ------------------ | -------------------------- | -------------------- |\n| `path`             | Required, URL substitution | `/users/{userId}`    |\n| `query`            | Optional, query string     | `?limit=10&offset=0` |\n| `header`           | Optional, HTTP headers     | `X-API-Key: secret`  |\n| `cookie`           | Optional, cookie values    | `session=abc123`     |\n\n**Sources:** [src/fastmcp/utilities/openapi.py124-135](https://github.com/jlowin/fastmcp/blob/66221ed3/src/fastmcp/utilities/openapi.py#L124-L135) [src/fastmcp/server/openapi.py264-418](https://github.com/jlowin/fastmcp/blob/66221ed3/src/fastmcp/server/openapi.py#L264-L418)\n\n## Component Creation Process\n\n### Schema Combination\n\nThe `_combine_schemas` function merges parameter schemas with request body schemas, handling name collisions by suffixing parameter names with their location:\n\n```\n```\n\n**Sources:** [src/fastmcp/utilities/openapi.py892-1050](https://github.com/jlowin/fastmcp/blob/66221ed3/src/fastmcp/utilities/openapi.py#L892-L1050)\n\n### Name Generation and Collision Handling\n\nThe system generates unique component names using operation IDs, summaries, or path-based naming with collision detection:\n\n```\n```\n\n**Sources:** [src/fastmcp/server/openapi.py833-856](https://github.com/jlowin/fastmcp/blob/66221ed3/src/fastmcp/server/openapi.py#L833-L856) [src/fastmcp/server/openapi.py858-886](https://github.com/jlowin/fastmcp/blob/66221ed3/src/fastmcp/server/openapi.py#L858-L886) [src/fastmcp/server/openapi.py44-64](https://github.com/jlowin/fastmcp/blob/66221ed3/src/fastmcp/server/openapi.py#L44-L64)\n\n## HTTP Request Execution\n\n### Parameter Serialization\n\nOpenAPI components handle complex parameter serialization including arrays, objects, and style-specific formatting:\n\n```\n```\n\n**Sources:** [src/fastmcp/server/openapi.py288-417](https://github.com/jlowin/fastmcp/blob/66221ed3/src/fastmcp/server/openapi.py#L288-L417) [src/fastmcp/utilities/openapi.py41-121](https://github.com/jlowin/fastmcp/blob/66221ed3/src/fastmcp/utilities/openapi.py#L41-L121)\n\n### Response Processing\n\nThe system handles various response types and content negotiation:\n\n| Content Type       | Processing                      | Output                               |\n| ------------------ | ------------------------------- | ------------------------------------ |\n| `application/json` | JSON parsing, structured output | `ToolResult(structured_content=...)` |\n| `text/*`           | Text content                    | `ToolResult(content=...)`            |\n| `application/xml`  | Text content                    | `ToolResult(content=...)`            |\n| Binary             | Raw bytes                       | `ToolResult(content=...)`            |\n\n**Sources:** [src/fastmcp/server/openapi.py482-502](https://github.com/jlowin/fastmcp/blob/66221ed3/src/fastmcp/server/openapi.py#L482-L502) [src/fastmcp/server/openapi.py614-621](https://github.com/jlowin/fastmcp/blob/66221ed3/src/fastmcp/server/openapi.py#L614-L621)\n\n## Advanced Features\n\n### Custom Route Mapping Functions\n\nAdvanced route mapping through `route_map_fn` and `mcp_component_fn` callbacks:\n\n```\n```\n\n**Sources:** [src/fastmcp/server/openapi.py798-812](https://github.com/jlowin/fastmcp/blob/66221ed3/src/fastmcp/server/openapi.py#L798-L812) [src/fastmcp/server/openapi.py930-939](https://github.com/jlowin/fastmcp/blob/66221ed3/src/fastmcp/server/openapi.py#L930-L939)\n\n### Output Schema Generation\n\nThe system extracts output schemas from OpenAPI response definitions for structured tool results:\n\n```\n```\n\n**Sources:** [src/fastmcp/utilities/openapi.py1098-1200](https://github.com/jlowin/fastmcp/blob/66221ed3/src/fastmcp/utilities/openapi.py#L1098-L1200)\n\n### Error Handling\n\nComprehensive error handling for HTTP requests, parameter validation, and schema resolution:",
+    "metadata": {
+      "chunk_id": 2,
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\jlowin_fastmcp\\_jlowin_fastmcp_6-openapi-integration.md",
+      "input_type": "fast_docs",
+      "chunking_strategy": "api_documentation",
+      "token_count": 985,
+      "character_count": 3888,
+      "created_at": "2025-10-16T17:42:19.053520",
+      "parent_context": null,
+      "semantic_type": "fast_docs",
+      "collection_name": "FAST_DOCS",
+      "subfolder_name": "jlowin_fastmcp",
+      "collection_strategy": "api_documentation",
+      "chunk_index_in_file": 2,
+      "file_relative_path": "FAST_DOCS\\jlowin_fastmcp\\_jlowin_fastmcp_6-openapi-integration.md",
+      "collection_context": "FAST_DOCS/jlowin_fastmcp"
+    }
+  },
+  {
+    "text": "- **Parameter Validation**: Missing required path parameters raise `ToolError`\n- **HTTP Errors**: 4xx/5xx responses converted to `ValueError` with detailed messages\n- **Schema Resolution**: External references raise clear error messages\n- **Connection Errors**: Network issues converted to `ValueError`\n\n**Sources:** [src/fastmcp/server/openapi.py504-520](https://github.com/jlowin/fastmcp/blob/66221ed3/src/fastmcp/server/openapi.py#L504-L520) [src/fastmcp/server/openapi.py623-639](https://github.com/jlowin/fastmcp/blob/66221ed3/src/fastmcp/server/openapi.py#L623-L639) [tests/utilities/openapi/test\\_openapi\\_advanced.py655-665](https://github.com/jlowin/fastmcp/blob/66221ed3/tests/utilities/openapi/test_openapi_advanced.py#L655-L665)\n\nDismiss\n\nRefresh this wiki\n\nEnter email to refresh\n\n### On this page\n\n- [OpenAPI Integration](#openapi-integration.md)\n- [Architecture Overview](#architecture-overview.md)\n- [Core Components](#core-components.md)\n- [FastMCPOpenAPI Server Class](#fastmcpopenapi-server-class.md)\n- [OpenAPI Component Types](#openapi-component-types.md)\n- [Route Mapping System](#route-mapping-system.md)\n- [MCPType Enumeration](#mcptype-enumeration.md)\n- [RouteMap Configuration](#routemap-configuration.md)\n- [Default Route Mapping](#default-route-mapping.md)\n- [Schema Parsing System](#schema-parsing-system.md)\n- [HTTPRoute Intermediate Representation](#httproute-intermediate-representation.md)\n- [Parameter Processing](#parameter-processing.md)\n- [Component Creation Process](#component-creation-process.md)\n- [Schema Combination](#schema-combination.md)\n- [Name Generation and Collision Handling](#name-generation-and-collision-handling.md)\n- [HTTP Request Execution](#http-request-execution.md)\n- [Parameter Serialization](#parameter-serialization.md)\n- [Response Processing](#response-processing.md)\n- [Advanced Features](#advanced-features.md)\n- [Custom Route Mapping Functions](#custom-route-mapping-functions.md)\n- [Output Schema Generation](#output-schema-generation.md)\n- [Error Handling](#error-handling.md)",
+    "metadata": {
+      "chunk_id": 3,
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\jlowin_fastmcp\\_jlowin_fastmcp_6-openapi-integration.md",
+      "input_type": "fast_docs",
+      "chunking_strategy": "api_documentation",
+      "token_count": 504,
+      "character_count": 2045,
+      "created_at": "2025-10-16T17:42:19.054529",
+      "parent_context": null,
+      "semantic_type": "fast_docs",
+      "collection_name": "FAST_DOCS",
+      "subfolder_name": "jlowin_fastmcp",
+      "collection_strategy": "api_documentation",
+      "chunk_index_in_file": 3,
+      "file_relative_path": "FAST_DOCS\\jlowin_fastmcp\\_jlowin_fastmcp_6-openapi-integration.md",
+      "collection_context": "FAST_DOCS/jlowin_fastmcp"
+    }
+  }
+]

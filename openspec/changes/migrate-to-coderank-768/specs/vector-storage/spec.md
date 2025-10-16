@@ -97,7 +97,7 @@ The system SHALL convert hex-based embedding IDs to valid UUIDs using determinis
 - **AND** re-uploading SHALL update existing points (not duplicate)
 
 ### Requirement: Migration Safety and Dry-Run Mode
-The system SHALL provide dry-run and backup capabilities for safe migration from 3584-dim to 768-dim vectors.
+The system SHALL provide dry-run and backup capabilities for safe migration from 768-dim to 768-dim vectors.
 
 #### Scenario: Dry-run validates without changes
 - **WHEN** migration is run with `--dry-run` flag

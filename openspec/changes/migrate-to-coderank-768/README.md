@@ -23,15 +23,15 @@ openspec/changes/migrate-to-coderank-768/
 ## 📋 Quick Summary
 
 ### What This Does
-Migrates your RAG system from **nomic-embed-code (3584-dim)** to **CodeRankEmbed (768-dim)** for production performance:
+Migrates your RAG system from **CodeRankEmbed (768-dim)** to **CodeRankEmbed (768-dim)** for production performance:
 
 - ⚡ **75x faster queries**: 30+ seconds → ~400ms
-- 💾 **4.7x smaller vectors**: 3584-dim → 768-dim
+- 💾 **4.7x smaller vectors**: 768-dim → 768-dim
 - 🧠 **4x memory reduction**: With binary quantization
 - ✅ **Pre-generated embeddings**: Already in `output/embed_outputs/`
 
 ### Key Actions
-1. **Delete** old 3584-dim collections (with safety checks)
+1. **Delete** old 768-dim collections (with safety checks)
 2. **Refactor** all code using `vector_dim: 3584` → `768`
 3. **Upload** 768-dim embeddings (9,654 points × 3 collections)
 4. **Enable** binary quantization (40x speedup)
@@ -40,7 +40,7 @@ Migrates your RAG system from **nomic-embed-code (3584-dim)** to **CodeRankEmbed
 ### Safety Features
 - ✅ Dry-run mode (`--dry-run`)
 - ✅ Backup option (`--backup`)
-- ✅ Dimension-based deletion (only 3584-dim collections)
+- ✅ Dimension-based deletion (only 768-dim collections)
 - ✅ Pre/post upload validation
 - ✅ Rollback procedure documented
 
@@ -160,7 +160,7 @@ for record in batch:
 ## ⚠️ Important Notes
 
 ### Breaking Changes
-1. **Deletes all 3584-dim collections** (use `--backup` if you want to save them)
+1. **Deletes all 768-dim collections** (use `--backup` if you want to save them)
 2. **Changes default dimension to 768** across codebase
 3. **Requires MCP server updates** to use CodeRankEmbed
 

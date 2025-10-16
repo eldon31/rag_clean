@@ -1,0 +1,122 @@
+[
+  {
+    "text": "Serializers | pydantic/pydantic | DeepWiki\n\n[Index your code with Devin](private-repo.md)\n\n[DeepWiki](https://deepwiki.com)\n\n[DeepWiki](.md)\n\n[pydantic/pydantic](https://github.com/pydantic/pydantic \"Open repository\")\n\n[Index your code with](private-repo.md)\n\n[Devin](private-repo.md)\n\nShare\n\nLast indexed: 11 October 2025 ([76ef0b](https://github.com/pydantic/pydantic/commits/76ef0b08))\n\n- [Overview](pydantic/pydantic/1-overview.md)\n- [Core Model System](pydantic/pydantic/2-core-model-system.md)\n- [BaseModel](pydantic/pydantic/2.1-basemodel.md)\n- [Field System](pydantic/pydantic/2.2-field-system.md)\n- [Model Configuration](pydantic/pydantic/2.3-model-configuration.md)\n- [Type System](pydantic/pydantic/3-type-system.md)\n- [Constrained Types](pydantic/pydantic/3.1-constrained-types.md)\n- [Network Types](pydantic/pydantic/3.2-network-types.md)\n- [TypeAdapter](pydantic/pydantic/3.3-typeadapter.md)\n- [Generics and Forward References](pydantic/pydantic/3.4-generics-and-forward-references.md)\n- [Validation and Serialization](pydantic/pydantic/4-validation-and-serialization.md)\n- [Validators](pydantic/pydantic/4.1-validators.md)\n- [Serializers](pydantic/pydantic/4.2-serializers.md)\n- [JSON Conversion](pydantic/pydantic/4.3-json-conversion.md)\n- [Schema Generation](pydantic/pydantic/5-schema-generation.md)\n- [Core Schema Generation](pydantic/pydantic/5.1-core-schema-generation.md)\n- [JSON Schema Generation](pydantic/pydantic/5.2-json-schema-generation.md)\n- [Advanced Features](pydantic/pydantic/6-advanced-features.md)\n- [Dataclass Support](pydantic/pydantic/6.1-dataclass-support.md)\n- [Function Validation](pydantic/pydantic/6.2-function-validation.md)\n- [RootModel and Computed Fields](pydantic/pydantic/6.3-rootmodel-and-computed-fields.md)\n- [Plugin System](pydantic/pydantic/6.4-plugin-system.md)\n- [Development and Deployment](pydantic/pydantic/7-development-and-deployment.md)\n- [Testing Framework](pydantic/pydantic/7.1-testing-framework.md)\n- [CI/CD Pipeline](pydantic/pydantic/7.2-cicd-pipeline.md)\n- [Documentation System](pydantic/pydantic/7.3-documentation-system.md)\n- [Versioning and Dependencies](pydantic/pydantic/7.4-versioning-and-dependencies.md)\n- [Migration and Compatibility](pydantic/pydantic/8-migration-and-compatibility.md)\n- [V1 to V2 Migration](pydantic/pydantic/8.1-v1-to-v2-migration.md)\n- [Backported Modules](pydantic/pydantic/8.2-backported-modules.md)\n\nMenu\n\n# Serializers\n\nRelevant source files",
+    "metadata": {
+      "chunk_id": 0,
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\pydantic_pydantic\\_pydantic_pydantic_4.2-serializers.md",
+      "input_type": "pydantic_pydantic",
+      "chunking_strategy": "programming_language_documentation",
+      "token_count": 745,
+      "character_count": 2446,
+      "created_at": "2025-10-16T17:42:20.334030",
+      "parent_context": null,
+      "semantic_type": "pydantic_pydantic",
+      "collection_name": "pydantic_pydantic",
+      "subfolder_name": null,
+      "collection_strategy": "programming_language_documentation",
+      "chunk_index_in_file": 0,
+      "file_relative_path": "Docs\\pydantic_pydantic\\_pydantic_pydantic_4.2-serializers.md",
+      "collection_context": "pydantic_pydantic"
+    }
+  },
+  {
+    "text": "- [pydantic/\\_internal/\\_decorators.py](https://github.com/pydantic/pydantic/blob/76ef0b08/pydantic/_internal/_decorators.py)\n- [pydantic/\\_internal/\\_validate\\_call.py](https://github.com/pydantic/pydantic/blob/76ef0b08/pydantic/_internal/_validate_call.py)\n- [pydantic/functional\\_serializers.py](https://github.com/pydantic/pydantic/blob/76ef0b08/pydantic/functional_serializers.py)\n- [pydantic/functional\\_validators.py](https://github.com/pydantic/pydantic/blob/76ef0b08/pydantic/functional_validators.py)\n- [pydantic/plugin/\\_\\_init\\_\\_.py](https://github.com/pydantic/pydantic/blob/76ef0b08/pydantic/plugin/__init__.py)\n- [pydantic/plugin/\\_schema\\_validator.py](https://github.com/pydantic/pydantic/blob/76ef0b08/pydantic/plugin/_schema_validator.py)\n- [pydantic/root\\_model.py](https://github.com/pydantic/pydantic/blob/76ef0b08/pydantic/root_model.py)\n- [pydantic/type\\_adapter.py](https://github.com/pydantic/pydantic/blob/76ef0b08/pydantic/type_adapter.py)\n- [pydantic/validate\\_call\\_decorator.py](https://github.com/pydantic/pydantic/blob/76ef0b08/pydantic/validate_call_decorator.py)\n- [tests/test\\_computed\\_fields.py](https://github.com/pydantic/pydantic/blob/76ef0b08/tests/test_computed_fields.py)\n- [tests/test\\_construction.py](https://github.com/pydantic/pydantic/blob/76ef0b08/tests/test_construction.py)\n- [tests/test\\_plugins.py](https://github.com/pydantic/pydantic/blob/76ef0b08/tests/test_plugins.py)\n- [tests/test\\_serialize.py](https://github.com/pydantic/pydantic/blob/76ef0b08/tests/test_serialize.py)\n- [tests/test\\_type\\_adapter.py](https://github.com/pydantic/pydantic/blob/76ef0b08/tests/test_type_adapter.py)\n- [tests/test\\_validate\\_call.py](https://github.com/pydantic/pydantic/blob/76ef0b08/tests/test_validate_call.py)\n- [tests/test\\_validators.py](https://github.com/pydantic/pydantic/blob/76ef0b08/tests/test_validators.py)\n\nPydantic's serialization system converts model instances into serializable formats such as Python dictionaries or JSON strings. This page explains how serializers work in Pydantic, including field serializers, model serializers, and functional serializers. For information about validators (which handle input data validation), see [Validators](pydantic/pydantic/4.1-validators.md).\n\n## Overview of the Serialization System\n\nIn Pydantic, serialization is the process of converting a model instance into a simplified representation suitable for storage or transmission. While validation transforms input data into model instances, serialization converts model instances back into primitive data types.\n\n```\n```\n\nSources:\n\n- [tests/test\\_serialize.py1-29](https://github.com/pydantic/pydantic/blob/76ef0b08/tests/test_serialize.py#L1-L29)\n- [pydantic/functional\\_serializers.py1-20](https://github.com/pydantic/pydantic/blob/76ef0b08/pydantic/functional_serializers.py#L1-L20)\n\n## Core Serialization Components\n\nPydantic offers several components for customizing serialization behavior:\n\n```\n```\n\nSources:\n\n- [pydantic/functional\\_serializers.py18-165](https://github.com/pydantic/pydantic/blob/76ef0b08/pydantic/functional_serializers.py#L18-L165)\n- [pydantic/\\_internal/\\_decorators.py90-130](https://github.com/pydantic/pydantic/blob/76ef0b08/pydantic/_internal/_decorators.py#L90-L130)\n\n### Serialization Modes\n\nSerializers can operate in two modes:\n\n1. **Plain mode**: The serializer receives the value and returns a transformed value\n2. **Wrap mode**: The serializer receives the value and a handler function, allowing for more complex transformations\n\nAdditionally, serializers can be configured to run in specific scenarios using the `when_used` parameter:",
+    "metadata": {
+      "chunk_id": 1,
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\pydantic_pydantic\\_pydantic_pydantic_4.2-serializers.md",
+      "input_type": "pydantic_pydantic",
+      "chunking_strategy": "programming_language_documentation",
+      "token_count": 964,
+      "character_count": 3630,
+      "created_at": "2025-10-16T17:42:20.339724",
+      "parent_context": null,
+      "semantic_type": "pydantic_pydantic",
+      "collection_name": "pydantic_pydantic",
+      "subfolder_name": null,
+      "collection_strategy": "programming_language_documentation",
+      "chunk_index_in_file": 1,
+      "file_relative_path": "Docs\\pydantic_pydantic\\_pydantic_pydantic_4.2-serializers.md",
+      "collection_context": "pydantic_pydantic"
+    }
+  },
+  {
+    "text": "| `when_used` value    | Python serialization | JSON serialization | When value is None |\n| -------------------- | -------------------- | ------------------ | ------------------ |\n| `\"always\"` (default) | Yes                  | Yes                | Yes                |\n| `\"json\"`             | No                   | Yes                | Yes                |\n| `\"unless-none\"`      | Yes                  | Yes                | No                 |\n| `\"json-unless-none\"` | No                   | Yes                | No                 |\n\nSources:\n\n- [tests/test\\_serialize.py82-197](https://github.com/pydantic/pydantic/blob/76ef0b08/tests/test_serialize.py#L82-L197)\n- [pydantic/functional\\_serializers.py45-52](https://github.com/pydantic/pydantic/blob/76ef0b08/pydantic/functional_serializers.py#L45-L52)\n\n## Field Serializers\n\nField serializers allow you to customize the serialization of individual model fields. They can be applied using the `@field_serializer` decorator.\n\n```\n```\n\n### Using the field\\_serializer Decorator\n\nThe `@field_serializer` decorator is used to define custom serialization logic for specific fields:\n\n```\n```\n\nThe decorator accepts the following parameters:\n\n- `field`: Field name(s) to which the serializer should be applied\n- `mode`: Serialization mode (`\"plain\"` or `\"wrap\"`)\n- `when_used`: When the serializer should be applied (`\"always\"`, `\"json\"`, `\"unless-none\"`, or `\"json-unless-none\"`)\n- `return_type`: The return type of the serializer function (optional)\n\nSources:\n\n- [tests/test\\_serialize.py148-197](https://github.com/pydantic/pydantic/blob/76ef0b08/tests/test_serialize.py#L148-L197)\n- [tests/test\\_serialize.py225-271](https://github.com/pydantic/pydantic/blob/76ef0b08/tests/test_serialize.py#L225-L271)\n- [pydantic/\\_internal/\\_decorators.py90-111](https://github.com/pydantic/pydantic/blob/76ef0b08/pydantic/_internal/_decorators.py#L90-L111)\n\n### Field Serializer Signature\n\nField serializers can have several valid function signatures:\n\n```\n```\n\nThe `info` parameter provides context about the serialization process, including the field name and serialization mode.\n\nSources:\n\n- [tests/test\\_serialize.py225-271](https://github.com/pydantic/pydantic/blob/76ef0b08/tests/test_serialize.py#L225-L271)\n- [pydantic/\\_internal/\\_decorators.py90-111](https://github.com/pydantic/pydantic/blob/76ef0b08/pydantic/_internal/_decorators.py#L90-L111)\n\n## Functional Serializers\n\nFunctional serializers are used with the `Annotated` type to define custom serialization logic for specific types. This allows you to reuse serialization logic across multiple models.\n\n```\n```\n\nPydantic provides two main types of functional serializers:\n\n1. **PlainSerializer**: Applies a transformation function directly to the value\n2. **WrapSerializer**: Provides both the value and a handler function for more complex transformations\n\n### PlainSerializer\n\n```\n```\n\nThe `PlainSerializer` class accepts:\n\n- `func`: The serializer function\n- `return_type`: The return type of the serializer (optional)\n- `when_used`: When the serializer should be applied (optional)\n\nSources:\n\n- [tests/test\\_serialize.py82-102](https://github.com/pydantic/pydantic/blob/76ef0b08/tests/test_serialize.py#L82-L102)\n- [pydantic/functional\\_serializers.py18-86](https://github.com/pydantic/pydantic/blob/76ef0b08/pydantic/functional_serializers.py#L18-L86)\n\n### WrapSerializer\n\n```\n```\n\nThe `WrapSerializer` class accepts:\n\n- `func`: The serializer function (which receives both a value and a handler)\n- `return_type`: The return type of the serializer (optional)\n- `when_used`: When the serializer should be applied (optional)\n\nSources:\n\n- [tests/test\\_serialize.py104-129](https://github.com/pydantic/pydantic/blob/76ef0b08/tests/test_serialize.py#L104-L129)\n- [pydantic/functional\\_serializers.py89-247](https://github.com/pydantic/pydantic/blob/76ef0b08/pydantic/functional_serializers.py#L89-L247)\n\n## Model Serializers\n\nModel serializers allow you to customize the serialization of an entire model. This is useful when you need complete control over the serialization process.\n\n```\n```\n\n### Using the model\\_serializer Decorator\n\nThe `@model_serializer` decorator is used to define custom serialization logic for an entire model:\n\n```\n```\n\nThe decorator accepts:",
+    "metadata": {
+      "chunk_id": 2,
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\pydantic_pydantic\\_pydantic_pydantic_4.2-serializers.md",
+      "input_type": "pydantic_pydantic",
+      "chunking_strategy": "programming_language_documentation",
+      "token_count": 1024,
+      "character_count": 4275,
+      "created_at": "2025-10-16T17:42:20.352347",
+      "parent_context": null,
+      "semantic_type": "pydantic_pydantic",
+      "collection_name": "pydantic_pydantic",
+      "subfolder_name": null,
+      "collection_strategy": "programming_language_documentation",
+      "chunk_index_in_file": 2,
+      "file_relative_path": "Docs\\pydantic_pydantic\\_pydantic_pydantic_4.2-serializers.md",
+      "collection_context": "pydantic_pydantic"
+    }
+  },
+  {
+    "text": "- `mode`: Serialization mode (`\"plain\"` or `\"wrap\"`)\n- `when_used`: When the serializer should be applied\n- `return_type`: The return type of the serializer function (optional)\n\nSources:\n\n- [tests/test\\_serialize.py374-464](https://github.com/pydantic/pydantic/blob/76ef0b08/tests/test_serialize.py#L374-L464)\n- [pydantic/\\_internal/\\_decorators.py113-130](https://github.com/pydantic/pydantic/blob/76ef0b08/pydantic/_internal/_decorators.py#L113-L130)\n\n### Model Serializer Modes\n\nModel serializers can operate in two modes:\n\n1. **Plain mode**: The serializer has complete control over the serialization process\n\n```\n   ```\n\n2. **Wrap mode**: The serializer receives the standard serialized output and can modify it\n\n```\n   ```\n\nIn wrap mode, the handler function performs the standard serialization, allowing you to modify the result before returning it.\n\nSources:\n\n- [tests/test\\_serialize.py374-422](https://github.com/pydantic/pydantic/blob/76ef0b08/tests/test_serialize.py#L374-L422)\n- [tests/test\\_serialize.py423-464](https://github.com/pydantic/pydantic/blob/76ef0b08/tests/test_serialize.py#L423-L464)\n\n## Serialization Process\n\nThe serialization process in Pydantic involves converting model instances to Python dictionaries or JSON strings. This is handled by the `model_dump()` and `model_dump_json()` methods.\n\n```\n```\n\n### Core Serialization Methods\n\nPydantic models provide two main methods for serialization:\n\n1. **model\\_dump()**: Converts a model instance to a Python dictionary\n2. **model\\_dump\\_json()**: Converts a model instance to a JSON string\n\nThese methods accept various parameters:\n\n- `mode`: Serialization mode (`\"python\"` or `\"json\"`)\n- `include`: Fields to include in the output\n- `exclude`: Fields to exclude from the output\n- `by_alias`: Whether to use field aliases\n- `exclude_unset`: Whether to exclude unset fields\n- `exclude_defaults`: Whether to exclude fields with default values\n- `exclude_none`: Whether to exclude None values\n- `round_trip`: Whether to preserve exact types for round-trip conversions\n\nSources:\n\n- [tests/test\\_serialize.py33-79](https://github.com/pydantic/pydantic/blob/76ef0b08/tests/test_serialize.py#L33-L79)\n- [pydantic/type\\_adapter.py376-535](https://github.com/pydantic/pydantic/blob/76ef0b08/pydantic/type_adapter.py#L376-L535)\n\n### Serialization in TypeAdapter\n\nThe `TypeAdapter` class provides similar serialization functionality for arbitrary types:\n\n- `dump_python()`: Serializes a value to a Python object\n- `dump_json()`: Serializes a value to a JSON string\n\nThese methods have similar parameters to the model serialization methods.\n\nSources:\n\n- [pydantic/type\\_adapter.py519-584](https://github.com/pydantic/pydantic/blob/76ef0b08/pydantic/type_adapter.py#L519-L584)\n\n### Serialization with Computed Fields\n\nComputed fields (defined using the `@computed_field` decorator) are included in serialization by default:\n\n```\n```\n\nWhen serializing a `Rectangle` instance, the `area` field will be included in the output.\n\nSources:\n\n- [tests/test\\_computed\\_fields.py27-66](https://github.com/pydantic/pydantic/blob/76ef0b08/tests/test_computed_fields.py#L27-L66)\n\n## Advanced Serialization Techniques\n\n### Conditional Serialization\n\nYou can conditionally apply serializers based on the serialization mode:\n\n```\n```\n\nIn this example, the serializer is only applied when serializing to JSON.\n\nSources:\n\n- [tests/test\\_serialize.py171-182](https://github.com/pydantic/pydantic/blob/76ef0b08/tests/test_serialize.py#L171-L182)\n\n### Serialization in Dataclasses\n\nPydantic's dataclasses support the same serialization features as models:\n\n```\n```\n\nSources:\n\n- [pydantic/dataclasses.py170-180](https://github.com/pydantic/pydantic/blob/76ef0b08/pydantic/dataclasses.py#L170-L180)\n- [tests/test\\_dataclasses.py1220-1272](https://github.com/pydantic/pydantic/blob/76ef0b08/tests/test_dataclasses.py#L1220-L1272)\n\n### Root Model Serialization\n\n`RootModel` instances are serialized to their root value rather than a dictionary:\n\n```\n```\n\nSources:",
+    "metadata": {
+      "chunk_id": 3,
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\pydantic_pydantic\\_pydantic_pydantic_4.2-serializers.md",
+      "input_type": "pydantic_pydantic",
+      "chunking_strategy": "programming_language_documentation",
+      "token_count": 987,
+      "character_count": 4004,
+      "created_at": "2025-10-16T17:42:20.365635",
+      "parent_context": null,
+      "semantic_type": "pydantic_pydantic",
+      "collection_name": "pydantic_pydantic",
+      "subfolder_name": null,
+      "collection_strategy": "programming_language_documentation",
+      "chunk_index_in_file": 3,
+      "file_relative_path": "Docs\\pydantic_pydantic\\_pydantic_pydantic_4.2-serializers.md",
+      "collection_context": "pydantic_pydantic"
+    }
+  },
+  {
+    "text": "- [pydantic/root\\_model.py119-146](https://github.com/pydantic/pydantic/blob/76ef0b08/pydantic/root_model.py#L119-L146)\n\n## Integration with pydantic-core\n\nPydantic uses `pydantic-core` for the actual serialization logic. The `SchemaSerializer` class from `pydantic-core` handles the serialization process.\n\n```\n```\n\nDuring model definition, Pydantic generates a serialization schema that incorporates all custom serializers. This schema is then used by `pydantic-core` to perform the actual serialization.\n\nSources:\n\n- [pydantic/\\_internal/\\_schema\\_generation\\_shared.py1-142](https://github.com/pydantic/pydantic/blob/76ef0b08/pydantic/_internal/_schema_generation_shared.py#L1-L142)\n- [pydantic/\\_internal/\\_mock\\_val\\_ser.py1-69](https://github.com/pydantic/pydantic/blob/76ef0b08/pydantic/_internal/_mock_val_ser.py#L1-L69)\n\n### Deferred Building and Mocking\n\nPydantic supports deferred building of serializers. When `defer_build=True` is set in the config, Pydantic creates mock serializers that are replaced with real serializers when needed.\n\nThis allows for forward references and circular dependencies in models:\n\n```\n```\n\nSources:\n\n- [pydantic/\\_internal/\\_mock\\_val\\_ser.py70-110](https://github.com/pydantic/pydantic/blob/76ef0b08/pydantic/_internal/_mock_val_ser.py#L70-L110)\n- [pydantic/\\_internal/\\_dataclasses.py128-134](https://github.com/pydantic/pydantic/blob/76ef0b08/pydantic/_internal/_dataclasses.py#L128-L134)\n\n## Best Practices for Serializers\n\n1. **Choose the right serializer type**:\n\n- Use field serializers for customizing individual fields\n   - Use model serializers for complex model-level serialization\n   - Use functional serializers for reusable serialization logic\n\n2. **Respect the serialization mode**:\n\n- Use the `info.mode` parameter to adjust behavior based on the serialization mode\n   - Use `when_used` to apply serializers only in specific scenarios\n\n3. **Be mindful of performance**:\n\n- Use plain serializers for simple transformations\n   - Use wrap serializers when you need to modify the default serialization behavior\n\n4. **Handle None values appropriately**:\n\n- Use `when_used='unless-none'` to skip serialization of None values\n   - Explicitly handle None values in your serializers to avoid errors\n\n5. **Provide return types**:\n\n- Specify the `return_type` parameter to ensure correct JSON schema generation\n   - Use type annotations in your serializer functions for better IDE support\n\nSources:\n\n- [tests/test\\_serialize.py171-197](https://github.com/pydantic/pydantic/blob/76ef0b08/tests/test_serialize.py#L171-L197)\n- [pydantic/functional\\_serializers.py18-52](https://github.com/pydantic/pydantic/blob/76ef0b08/pydantic/functional_serializers.py#L18-L52)\n\nDismiss\n\nRefresh this wiki\n\nThis wiki was recently refreshed. Please wait 4 days to refresh again.\n\n### On this page",
+    "metadata": {
+      "chunk_id": 4,
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\pydantic_pydantic\\_pydantic_pydantic_4.2-serializers.md",
+      "input_type": "pydantic_pydantic",
+      "chunking_strategy": "programming_language_documentation",
+      "token_count": 703,
+      "character_count": 2828,
+      "created_at": "2025-10-16T17:42:20.372027",
+      "parent_context": null,
+      "semantic_type": "pydantic_pydantic",
+      "collection_name": "pydantic_pydantic",
+      "subfolder_name": null,
+      "collection_strategy": "programming_language_documentation",
+      "chunk_index_in_file": 4,
+      "file_relative_path": "Docs\\pydantic_pydantic\\_pydantic_pydantic_4.2-serializers.md",
+      "collection_context": "pydantic_pydantic"
+    }
+  },
+  {
+    "text": "- [Serializers](#serializers.md)\n- [Overview of the Serialization System](#overview-of-the-serialization-system.md)\n- [Core Serialization Components](#core-serialization-components.md)\n- [Serialization Modes](#serialization-modes.md)\n- [Field Serializers](#field-serializers.md)\n- [Using the field\\_serializer Decorator](#using-the-field_serializer-decorator.md)\n- [Field Serializer Signature](#field-serializer-signature.md)\n- [Functional Serializers](#functional-serializers.md)\n- [PlainSerializer](#plainserializer.md)\n- [WrapSerializer](#wrapserializer.md)\n- [Model Serializers](#model-serializers.md)\n- [Using the model\\_serializer Decorator](#using-the-model_serializer-decorator.md)\n- [Model Serializer Modes](#model-serializer-modes.md)\n- [Serialization Process](#serialization-process.md)\n- [Core Serialization Methods](#core-serialization-methods.md)\n- [Serialization in TypeAdapter](#serialization-in-typeadapter.md)\n- [Serialization with Computed Fields](#serialization-with-computed-fields.md)\n- [Advanced Serialization Techniques](#advanced-serialization-techniques.md)\n- [Conditional Serialization](#conditional-serialization.md)\n- [Serialization in Dataclasses](#serialization-in-dataclasses.md)\n- [Root Model Serialization](#root-model-serialization.md)\n- [Integration with pydantic-core](#integration-with-pydantic-core.md)\n- [Deferred Building and Mocking](#deferred-building-and-mocking.md)\n- [Best Practices for Serializers](#best-practices-for-serializers.md)",
+    "metadata": {
+      "chunk_id": 5,
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\pydantic_pydantic\\_pydantic_pydantic_4.2-serializers.md",
+      "input_type": "pydantic_pydantic",
+      "chunking_strategy": "programming_language_documentation",
+      "token_count": 338,
+      "character_count": 1481,
+      "created_at": "2025-10-16T17:42:20.372207",
+      "parent_context": null,
+      "semantic_type": "pydantic_pydantic",
+      "collection_name": "pydantic_pydantic",
+      "subfolder_name": null,
+      "collection_strategy": "programming_language_documentation",
+      "chunk_index_in_file": 5,
+      "file_relative_path": "Docs\\pydantic_pydantic\\_pydantic_pydantic_4.2-serializers.md",
+      "collection_context": "pydantic_pydantic"
+    }
+  }
+]
