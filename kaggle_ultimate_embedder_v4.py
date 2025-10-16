@@ -44,6 +44,7 @@ from functools import lru_cache
 # Core ML libraries
 from sentence_transformers import SentenceTransformer, CrossEncoder
 from sklearn.metrics.pairwise import cosine_similarity
+from sklearn.preprocessing import normalize
 import faiss
 
 # Advanced optimization libraries (optional on Kaggle)
@@ -150,7 +151,39 @@ KAGGLE_OPTIMIZED_MODELS = {
         max_tokens=256,
         recommended_batch_size=128,  # Large batch for tiny model
         memory_efficient=True
+    ),
+    
+    # 🔥 Missing models from V3
+    "gte-qwen2-7b": ModelConfig(
+        name="gte-qwen2-7b",
+        hf_model_id="Alibaba-NLP/gte-Qwen2-7B-instruct", 
+        vector_dim=3584,
+        max_tokens=32768,
+        query_prefix="Instruct: Given a web search query, retrieve relevant passages that answer the query\nQuery: ",
+        recommended_batch_size=4,  # Very small for 7B model
+        supports_flash_attention=True
+    ),
+    
+    "bge-small": ModelConfig(
+        name="bge-small", 
+        hf_model_id="BAAI/bge-small-en-v1.5",
+        vector_dim=384,
+        max_tokens=512,
+        recommended_batch_size=64,
+        memory_efficient=True
     )
+}
+
+# 🎯 CROSSENCODER RERANKING MODELS (Production Ready)
+RERANKING_MODELS = {
+    # Fast and efficient rerankers for T4 x2
+    "ms-marco-v2": "cross-encoder/ms-marco-MiniLM-L-6-v2",  # Fast, good quality
+    "ms-marco-v3": "cross-encoder/ms-marco-MiniLM-L-12-v2", # Better quality
+    "sbert-distil": "cross-encoder/stsb-distilroberta-base", # General purpose
+    "msmarco-distil": "cross-encoder/ms-marco-TinyBERT-L-2-v2", # Ultra fast
+    # Advanced rerankers
+    "bge-reranker-v2": "BAAI/bge-reranker-v2-m3",  # State-of-the-art
+    "jina-reranker": "jinaai/jina-reranker-v1-turbo-en"  # Fast multilingual
 }
 
 @dataclass
@@ -241,7 +274,56 @@ class KaggleExportConfig:
         return os.path.join(self.working_dir, base)
 
 @dataclass
+class EnsembleConfig:
+    """🚀 Multi-model ensemble configuration"""
+    # Ensemble models to use
+    ensemble_models: List[str] = field(default_factory=lambda: ["nomic-coderank", "bge-m3"])
+    
+    # Ensemble weighting strategy
+    weighting_strategy: str = "equal"  # equal, performance_based, adaptive
+    model_weights: Optional[Dict[str, float]] = None
+    
+    # Ensemble aggregation
+    aggregation_method: str = "weighted_average"  # weighted_average, max_pooling, concat
+    
+    # Performance optimization
+    parallel_encoding: bool = True
+    memory_efficient: bool = True
+
+@dataclass
+class RerankingConfig:
+    """🎯 CrossEncoder reranking configuration"""
+    # Reranking model
+    model_name: str = "ms-marco-v2"  # Default reranker
+    enable_reranking: bool = False
+    
+    # Reranking parameters
+    top_k_candidates: int = 100  # Initial retrieval candidates
+    rerank_top_k: int = 20      # Final reranked results
+    batch_size: int = 32        # Reranking batch size
+    
+    # Performance optimization
+    enable_caching: bool = True
+    cache_size: int = 1000
+
+@dataclass
 class AdvancedPreprocessingConfig:
+    """🧠 Advanced document preprocessing with caching"""
+    # Text preprocessing
+    enable_text_caching: bool = True
+    normalize_whitespace: bool = True
+    remove_excessive_newlines: bool = True
+    trim_long_sequences: bool = True
+    
+    # Token optimization
+    enable_tokenizer_caching: bool = True
+    max_cache_size: int = 10000
+    cache_hit_threshold: float = 0.8
+    
+    # Memory scaling
+    enable_memory_scaling: bool = True
+    memory_scale_factor: float = 0.8
+    adaptive_batch_sizing: bool = True
     """🧠 Advanced document preprocessing with caching"""
     # Text preprocessing
     enable_text_caching: bool = True
@@ -330,7 +412,9 @@ class UltimateKaggleEmbedderV4:
         gpu_config: Optional[KaggleGPUConfig] = None,
         export_config: Optional[KaggleExportConfig] = None,
         preprocessing_config: Optional[AdvancedPreprocessingConfig] = None,
-        enable_ensemble: bool = False
+        enable_ensemble: bool = False,
+        ensemble_config: Optional[EnsembleConfig] = None,
+        reranking_config: Optional[RerankingConfig] = None
     ):
         """Initialize Ultimate Kaggle Embedder V4"""
         
@@ -350,6 +434,8 @@ class UltimateKaggleEmbedderV4:
         self.export_config = export_config or KaggleExportConfig()
         self.preprocessing_config = preprocessing_config or AdvancedPreprocessingConfig()
         self.enable_ensemble = enable_ensemble
+        self.ensemble_config = ensemble_config or EnsembleConfig() if enable_ensemble else None
+        self.reranking_config = reranking_config or RerankingConfig()
         
         # Kaggle environment detection
         self.is_kaggle = '/kaggle' in os.getcwd() or os.path.exists('/kaggle')
@@ -379,7 +465,12 @@ class UltimateKaggleEmbedderV4:
         # Initialize models
         self.models = {}  # For ensemble support
         self.primary_model = None
+        self.reranker = None  # CrossEncoder reranking model
         self._initialize_embedding_models()
+        
+        # Initialize reranker if enabled
+        if self.reranking_config.enable_reranking:
+            self._initialize_reranking_model()
         
         # Storage
         self.embeddings = None
@@ -437,10 +528,251 @@ class UltimateKaggleEmbedderV4:
         # Store for ensemble if needed
         self.models[self.model_name] = self.primary_model
         
+        # Initialize ensemble models if enabled
+        if self.enable_ensemble:
+            self._initialize_ensemble_models()
+        
         # Memory optimization
         if self.device == "cuda":
             torch.cuda.empty_cache()
             logger.info("🧹 GPU memory cache cleared")
+    
+    def _initialize_reranking_model(self):
+        """Initialize CrossEncoder for reranking"""
+        
+        if not self.reranking_config.model_name in RERANKING_MODELS:
+            logger.warning(f"Unknown reranker {self.reranking_config.model_name}, defaulting to ms-marco-v2")
+            self.reranking_config.model_name = "ms-marco-v2"
+        
+        reranker_model = RERANKING_MODELS[self.reranking_config.model_name]
+        logger.info(f"🔄 Loading reranking model: {reranker_model}")
+        
+        try:
+            self.reranker = CrossEncoder(reranker_model, device=self.device)
+            logger.info("✅ CrossEncoder reranking model loaded successfully")
+        except Exception as e:
+            logger.error(f"❌ Failed to load reranking model: {e}")
+            self.reranking_config.enable_reranking = False
+            self.reranker = None
+    
+    def _initialize_ensemble_models(self):
+        """Initialize multiple models for ensemble embedding"""
+        
+        if not self.enable_ensemble or not self.ensemble_config:
+            return
+        
+        logger.info(f"🔄 Loading ensemble models: {self.ensemble_config.ensemble_models}")
+        
+        for model_name in self.ensemble_config.ensemble_models:
+            if model_name not in KAGGLE_OPTIMIZED_MODELS:
+                logger.warning(f"Unknown ensemble model {model_name}, skipping")
+                continue
+            
+            if model_name == self.model_name:
+                # Primary model already loaded
+                continue
+            
+            try:
+                model_config = KAGGLE_OPTIMIZED_MODELS[model_name]
+                logger.info(f"📦 Loading ensemble model: {model_config.hf_model_id}")
+                
+                # Load with minimal configuration for ensemble
+                ensemble_model = SentenceTransformer(
+                    model_config.hf_model_id,
+                    trust_remote_code=model_config.trust_remote_code,
+                    device=self.device
+                )
+                
+                # Apply FP16 if needed
+                if self.gpu_config.precision == "fp16" and self.device == "cuda":
+                    ensemble_model = ensemble_model.half()
+                
+                self.models[model_name] = ensemble_model
+                logger.info(f"✅ Ensemble model {model_name} loaded")
+                
+            except Exception as e:
+                logger.error(f"❌ Failed to load ensemble model {model_name}: {e}")
+    
+    def generate_ensemble_embeddings(self, texts: List[str]) -> np.ndarray:
+        """Generate embeddings using ensemble of models"""
+        
+        if not self.enable_ensemble or not self.ensemble_config:
+            # Fallback to primary model
+            return self.primary_model.encode(
+                texts,
+                convert_to_numpy=True,
+                normalize_embeddings=True,
+                device=self.device
+            )
+        
+        all_embeddings = []
+        model_weights = {}
+        
+        # Get embeddings from each model
+        for model_name, model in self.models.items():
+            try:
+                logger.debug(f"🔄 Generating embeddings with {model_name}")
+                
+                embeddings = model.encode(
+                    texts,
+                    convert_to_numpy=True,
+                    normalize_embeddings=True,
+                    device=self.device
+                )
+                
+                all_embeddings.append(embeddings)
+                
+                # Set weights
+                if self.ensemble_config.model_weights:
+                    weight = self.ensemble_config.model_weights.get(model_name, 1.0)
+                else:
+                    weight = 1.0
+                
+                model_weights[model_name] = weight
+                
+            except Exception as e:
+                logger.warning(f"Failed to generate embeddings with {model_name}: {e}")
+        
+        if not all_embeddings:
+            raise RuntimeError("No ensemble models generated embeddings successfully")
+        
+        # Aggregate embeddings
+        if self.ensemble_config.aggregation_method == "weighted_average":
+            # Weighted average of embeddings
+            total_weight = sum(model_weights.values())
+            weighted_embeddings = []
+            
+            for i, (model_name, embeddings) in enumerate(zip(self.models.keys(), all_embeddings)):
+                weight = model_weights.get(model_name, 1.0) / total_weight
+                weighted_embeddings.append(embeddings * weight)
+            
+            final_embeddings = np.sum(weighted_embeddings, axis=0)
+            
+        elif self.ensemble_config.aggregation_method == "max_pooling":
+            # Max pooling across models
+            final_embeddings = np.maximum.reduce(all_embeddings)
+            
+        elif self.ensemble_config.aggregation_method == "concat":
+            # Concatenate embeddings
+            final_embeddings = np.concatenate(all_embeddings, axis=1)
+            
+        else:
+            # Default to simple average
+            final_embeddings = np.mean(all_embeddings, axis=0)
+        
+        # Normalize final embeddings
+        final_embeddings = normalize(final_embeddings, norm='l2', axis=1)
+        
+        return final_embeddings
+    
+    def search_with_reranking(
+        self,
+        query: str,
+        top_k: int = 20,
+        initial_candidates: int = 100
+    ) -> List[Dict[str, Any]]:
+        """
+        Perform semantic search with CrossEncoder reranking
+        
+        Args:
+            query: Search query
+            top_k: Final number of results
+            initial_candidates: Initial retrieval candidates for reranking
+            
+        Returns:
+            List of reranked results with scores
+        """
+        
+        if self.embeddings is None:
+            raise ValueError("No embeddings available. Generate embeddings first.")
+        
+        if not self.reranking_config.enable_reranking or not self.reranker:
+            logger.warning("Reranking not enabled, falling back to embedding similarity")
+            return self._embedding_only_search(query, top_k)
+        
+        # Step 1: Generate query embedding
+        query_embedding = self.primary_model.encode(
+            [query], 
+            convert_to_numpy=True,
+            normalize_embeddings=True,
+            device=self.device
+        )[0]
+        
+        # Step 2: Initial retrieval with embedding similarity
+        similarities = cosine_similarity(np.array([query_embedding]), self.embeddings)[0]
+        
+        # Get top candidates for reranking
+        top_indices = np.argsort(similarities)[::-1][:initial_candidates]
+        
+        # Step 3: Prepare query-document pairs for reranking
+        query_doc_pairs = []
+        candidate_indices = []
+        
+        for idx in top_indices:
+            if idx < len(self.chunk_texts):
+                query_doc_pairs.append([query, self.chunk_texts[idx]])
+                candidate_indices.append(idx)
+        
+        if not query_doc_pairs:
+            logger.warning("No valid candidates for reranking")
+            return []
+        
+        # Step 4: Rerank with CrossEncoder
+        logger.info(f"🔄 Reranking {len(query_doc_pairs)} candidates...")
+        
+        try:
+            rerank_scores = self.reranker.predict(query_doc_pairs)
+            
+            # Sort by reranking scores
+            reranked_indices = np.argsort(rerank_scores)[::-1][:top_k]
+            
+            # Prepare results
+            results = []
+            for rank, idx in enumerate(reranked_indices):
+                original_idx = candidate_indices[idx]
+                
+                result = {
+                    "rank": rank + 1,
+                    "score": float(rerank_scores[idx]),
+                    "embedding_similarity": float(similarities[original_idx]),
+                    "text": self.chunk_texts[original_idx],
+                    "metadata": self.chunks_metadata[original_idx],
+                    "chunk_id": original_idx
+                }
+                results.append(result)
+            
+            logger.info(f"✅ Reranking complete. Top score: {results[0]['score']:.4f}")
+            return results
+            
+        except Exception as e:
+            logger.error(f"❌ Reranking failed: {e}")
+            return self._embedding_only_search(query, top_k)
+    
+    def _embedding_only_search(self, query: str, top_k: int) -> List[Dict[str, Any]]:
+        """Fallback search using only embedding similarity"""
+        
+        query_embedding = self.primary_model.encode(
+            [query], 
+            convert_to_numpy=True,
+            normalize_embeddings=True,
+            device=self.device
+        )[0]
+        
+        similarities = cosine_similarity(np.array([query_embedding]), self.embeddings)[0]
+        top_indices = np.argsort(similarities)[::-1][:top_k]
+        
+        results = []
+        for rank, idx in enumerate(top_indices):
+            result = {
+                "rank": rank + 1,
+                "score": float(similarities[idx]),
+                "text": self.chunk_texts[idx],
+                "metadata": self.chunks_metadata[idx],
+                "chunk_id": idx
+            }
+            results.append(result)
+        
+        return results
     
     def _load_pytorch_model(self, model_kwargs: Dict, optimal_batch: int) -> SentenceTransformer:
         """Load PyTorch model with optimization"""
@@ -754,7 +1086,10 @@ class UltimateKaggleEmbedderV4:
                 
                 # Generate embeddings with T4 optimization
                 with torch.autocast(device_type="cuda", enabled=self.gpu_config.enable_mixed_precision):
-                    if hasattr(self.primary_model, 'encode'):
+                    if self.enable_ensemble:
+                        # Use ensemble of models
+                        batch_embeddings = self.generate_ensemble_embeddings(batch_texts)
+                    elif hasattr(self.primary_model, 'encode'):
                         # Standard SentenceTransformer
                         batch_embeddings = self.primary_model.encode(
                             batch_texts,
@@ -1190,9 +1525,9 @@ if __name__ == "__main__":
             logger.info("📊 Performance monitoring stopped")
 
 def main():
-    """Main function for Kaggle usage"""
+    """Main function for Kaggle usage with V4 features demo"""
     
-    logger.info("🚀 Ultimate Kaggle Embedder V4 - Split Architecture Demo")
+    logger.info("🚀 Ultimate Kaggle Embedder V4 - Complete Feature Demo")
     
     # Configuration for Kaggle T4 x2
     gpu_config = KaggleGPUConfig(
@@ -1210,19 +1545,45 @@ def main():
         compress_embeddings=True
     )
     
-    # Test different models
-    test_models = ["nomic-coderank", "bge-m3", "gte-large"]
+    # V4 Feature Configurations
+    ensemble_config = EnsembleConfig(
+        ensemble_models=["nomic-coderank", "bge-m3"],
+        weighting_strategy="equal",
+        aggregation_method="weighted_average"
+    )
     
-    for model_name in test_models:
-        logger.info(f"\n🔄 Testing model: {model_name}")
+    reranking_config = RerankingConfig(
+        model_name="ms-marco-v2",
+        enable_reranking=True,
+        top_k_candidates=100,
+        rerank_top_k=20
+    )
+    
+    # Test different V4 modes
+    test_configs = [
+        {"name": "Standard Mode", "ensemble": False, "reranking": False},
+        {"name": "Ensemble Mode", "ensemble": True, "reranking": False},
+        {"name": "Reranking Mode", "ensemble": False, "reranking": True},
+        {"name": "Full V4 Mode", "ensemble": True, "reranking": True}
+    ]
+    
+    for config in test_configs:
+        logger.info(f"\n🔄 Testing {config['name']}")
         
         try:
-            # Initialize embedder
+            # Initialize embedder with V4 features
             embedder = UltimateKaggleEmbedderV4(
-                model_name=model_name,
+                model_name="nomic-coderank",
                 gpu_config=gpu_config,
-                export_config=export_config
+                export_config=export_config,
+                enable_ensemble=config["ensemble"],
+                ensemble_config=ensemble_config if config["ensemble"] else None,
+                reranking_config=reranking_config if config["reranking"] else RerankingConfig()
             )
+            
+            # Set reranking based on config
+            if config["reranking"]:
+                embedder.reranking_config.enable_reranking = True
             
             # Load chunks
             logger.info("📂 Loading chunks...")
@@ -1238,12 +1599,26 @@ def main():
             logger.info("🔥 Generating embeddings...")
             embedding_results = embedder.generate_embeddings_kaggle_optimized()
             
+            # Demo search with reranking (if enabled)
+            if config["reranking"] and embedding_results.get('total_embeddings_generated', 0) > 0:
+                logger.info("🔍 Testing semantic search with reranking...")
+                try:
+                    search_results = embedder.search_with_reranking(
+                        query="How to optimize vector search performance?",
+                        top_k=5
+                    )
+                    logger.info(f"✅ Found {len(search_results)} reranked results")
+                    if search_results:
+                        logger.info(f"  Top result score: {search_results[0]['score']:.4f}")
+                except Exception as e:
+                    logger.warning(f"Search demo failed: {e}")
+            
             # Export for local Qdrant
             logger.info("📦 Exporting for local Qdrant...")
             exported_files = embedder.export_for_local_qdrant()
             
             # Results summary
-            logger.info(f"\n📊 Results for {model_name}:")
+            logger.info(f"\n📊 Results for {config['name']}:")
             logger.info(f"  🎯 Embeddings: {embedding_results['total_embeddings_generated']}")
             logger.info(f"  📏 Dimension: {embedding_results['embedding_dimension']}")
             logger.info(f"  ⏱️ Time: {embedding_results['processing_time_seconds']:.2f}s")
@@ -1251,14 +1626,15 @@ def main():
             logger.info(f"  💾 Memory: {embedding_results['embedding_memory_mb']:.1f}MB")
             logger.info(f"  📦 Exported files: {len(exported_files)}")
             
-            # Only test first model in demo
+            # Only test first config in demo to save time
             break
             
         except Exception as e:
-            logger.error(f"❌ Failed with {model_name}: {e}")
+            logger.error(f"❌ Failed with {config['name']}: {e}")
             continue
     
-    logger.info("\n🎯 Demo complete! Download exported files and run upload script locally.")
+    logger.info("\n🎯 V4 Demo complete! Download exported files and run upload script locally.")
+    logger.info("✨ V4 Features tested: Enhanced models, ensemble embedding, CrossEncoder reranking")
 
 if __name__ == "__main__":
     main()
