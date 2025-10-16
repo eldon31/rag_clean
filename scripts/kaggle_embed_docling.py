@@ -42,8 +42,8 @@ def main():
     # Configure paths
     config = EmbedderConfig(
         collection_name="docling-project_docling",
-        input_path=Path("/kaggle/input/docling-project-docling-chunked"),
-        output_path=Path("/kaggle/working/docling_embeddings_768.jsonl"),
+        input_path=Path("output/docling-project_docling_chunked"),
+        output_path=Path("output/docling_embeddings_768.jsonl"),
         use_gpu=True,
         use_data_parallel=True
     )
