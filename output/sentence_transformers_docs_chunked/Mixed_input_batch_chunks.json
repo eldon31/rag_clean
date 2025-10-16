@@ -1,0 +1,50 @@
+[
+  {
+    "chunk_id": "sentence_transformers_docs:UKPLab\\sentence-transformers\\Mixed_input_batch.md:chunk:0",
+    "content": "inputs = [\n    Image.open('image1.jpg'),\n    \"Text description 1\", \n    Image.open('image2.jpg'),\n    \"Text description 2\"\n]\n\nembeddings = model.encode(inputs)\n```\n\nSources: [tests/test_image_embeddings.py:14-31]()\n\n## Integration with SentenceTransformer Ecosystem\n\nThe `CLIPModel` integrates with the sentence-transformers ecosystem through the modular architecture and supports the same operations as text-only models.\n\n**Integration Architecture**\n```mermaid\ngraph TB\n    subgraph SentenceTransformer[\"SentenceTransformer Class\"]\n        ENCODE[\"encode() method\"]\n        SIMILARITY[\"similarity() method\"]\n        MODULES[\"_modules list\"]\n    end\n    \n    subgraph CLIPModule[\"CLIPModel Module\"]\n        CLIPMOD[\"CLIPModel(InputModule)\"]\n        TOKENIZE[\"tokenize()\"]\n        FORWARD[\"forward()\"]\n    end\n    \n    subgraph Processing[\"Shared Processing\"]\n        MULTIPROC[\"Multi-processing support\"]\n        NORMALIZE[\"normalize_embeddings\"]\n        TENSOR[\"convert_to_tensor\"]\n    end",
+    "metadata": {
+      "source_file": "UKPLab\\sentence-transformers\\Mixed_input_batch.md",
+      "source_collection": "sentence_transformers_docs",
+      "subdirectory": "UKPLab",
+      "filename": "Mixed_input_batch.md",
+      "file_extension": ".md",
+      "chunk_index": 0,
+      "token_count": 221,
+      "char_count": 991,
+      "start_char": 0,
+      "end_char": 997
+    }
+  },
+  {
+    "chunk_id": "sentence_transformers_docs:UKPLab\\sentence-transformers\\Mixed_input_batch.md:chunk:1",
+    "content": "upport\"]\n        NORMALIZE[\"normalize_embeddings\"]\n        TENSOR[\"convert_to_tensor\"]\n    end\n    \n    subgraph Applications[\"Application Support\"]\n        SEARCH[\"Semantic search\"]\n        SIMILARITY_COMP[\"Cosine similarity\"]\n        RETRIEVAL[\"Cross-modal retrieval\"]\n    end\n    \n    SentenceTransformer --> CLIPModule\n    CLIPModule --> Processing\n    Processing --> Applications\n```\n\n**Module System Integration**\n\n| Component | Role | Implementation |\n|-----------|------|----------------|\n| `CLIPModel` | Input processing | Inherits from `InputModule` |\n| `Pooling` | Optional embedding processing | Can be added after `CLIPModel` |\n| `Normalize` | L2 normalization | Applied to final embeddings |\n\nThe `CLIPModel` appears in the module registry and supports the same configuration patterns as other sentence-transformers modules.\n\nSources: [sentence_transformers/models/CLIPModel.py:15](), [sentence_transformers/models/__init__.py:6,40]()\n\n## Model Loading and Configuration",
+    "metadata": {
+      "source_file": "UKPLab\\sentence-transformers\\Mixed_input_batch.md",
+      "source_collection": "sentence_transformers_docs",
+      "subdirectory": "UKPLab",
+      "filename": "Mixed_input_batch.md",
+      "file_extension": ".md",
+      "chunk_index": 1,
+      "token_count": 211,
+      "char_count": 984,
+      "start_char": 897,
+      "end_char": 1883
+    }
+  },
+  {
+    "chunk_id": "sentence_transformers_docs:UKPLab\\sentence-transformers\\Mixed_input_batch.md:chunk:2",
+    "content": "el.py:15](), [sentence_transformers/models/__init__.py:6,40]()\n\n## Model Loading and Configuration\n\nCLIP models are loaded through the standard `SentenceTransformer` interface or by constructing `CLIPModel` instances directly.\n\n**Configuration Options**\n\n| Parameter | Purpose | Default | Example |\n|-----------|---------|---------|---------|\n| `model_name` | Base CLIP model | Required | `'openai/clip-vit-base-patch32'` |\n| `processor_name` | Processor configuration | `model_name` | Custom processor path |\n| `max_seq_length` | Text sequence limit | From tokenizer | 77 for CLIP models |\n\n**Loading Patterns**\n\n```python",
+    "metadata": {
+      "source_file": "UKPLab\\sentence-transformers\\Mixed_input_batch.md",
+      "source_collection": "sentence_transformers_docs",
+      "subdirectory": "UKPLab",
+      "filename": "Mixed_input_batch.md",
+      "file_extension": ".md",
+      "chunk_index": 2,
+      "token_count": 149,
+      "char_count": 623,
+      "start_char": 1783,
+      "end_char": 2807
+    }
+  }
+]

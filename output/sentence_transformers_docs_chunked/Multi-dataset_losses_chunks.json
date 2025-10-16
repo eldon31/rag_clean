@@ -1,0 +1,34 @@
+[
+  {
+    "chunk_id": "sentence_transformers_docs:UKPLab\\sentence-transformers\\Multi-dataset_losses.md:chunk:0",
+    "content": "loss = {\n    \"dataset1\": CoSENTLoss(model),\n    \"dataset2\": MultipleNegativesRankingLoss(model)\n}\n```\n\nSources: [sentence_transformers/trainer.py:291-310]()\n\n## Multi-Dataset Training\n\nThe training system supports training on multiple datasets simultaneously using `DatasetDict`:\n\n```mermaid\ngraph TB\n    subgraph \"Multi-Dataset Input\"\n        DD[\"DatasetDict\"]\n        DS1[\"Dataset 'nli'\"]\n        DS2[\"Dataset 'sts'\"] \n        DS3[\"Dataset 'quora'\"]\n    end\n    \n    subgraph \"Loss Mapping\"\n        LossDict[\"Loss Dictionary\"]\n        L1[\"nli: CoSENTLoss\"]\n        L2[\"sts: CosineSimilarityLoss\"]\n        L3[\"quora: MNRL\"]\n    end\n    \n    subgraph \"Batch Sampling\"\n        BatchSampler[\"MultiDatasetBatchSampler\"]\n        RoundRobin[\"RoundRobinBatchSampler\"]\n        Proportional[\"ProportionalBatchSampler\"]\n    end\n    \n    subgraph \"Training Process\"\n        DataCollator[\"add_dataset_name_column()\"]\n        ComputeLoss[\"compute_loss()\"]\n        LossSelect[\"Select loss by dataset_name\"]\n    end\n    \n    DD --> DS1",
+    "metadata": {
+      "source_file": "UKPLab\\sentence-transformers\\Multi-dataset_losses.md",
+      "source_collection": "sentence_transformers_docs",
+      "subdirectory": "UKPLab",
+      "filename": "Multi-dataset_losses.md",
+      "file_extension": ".md",
+      "chunk_index": 0,
+      "token_count": 258,
+      "char_count": 1021,
+      "start_char": 0,
+      "end_char": 1022
+    }
+  },
+  {
+    "chunk_id": "sentence_transformers_docs:UKPLab\\sentence-transformers\\Multi-dataset_losses.md:chunk:1",
+    "content": "oss[\"compute_loss()\"]\n        LossSelect[\"Select loss by dataset_name\"]\n    end\n    \n    DD --> DS1\n    DD --> DS2\n    DD --> DS3\n    \n    LossDict --> L1\n    LossDict --> L2  \n    LossDict --> L3\n    \n    DS1 --> BatchSampler\n    DS2 --> BatchSampler\n    DS3 --> BatchSampler\n    \n    BatchSampler --> RoundRobin\n    BatchSampler --> Proportional\n    \n    BatchSampler --> DataCollator\n    DataCollator --> ComputeLoss\n    LossDict --> LossSelect\n    ComputeLoss --> LossSelect\n```\n\n**Multi-Dataset Training Architecture**\n\nSources: [sentence_transformers/trainer.py:295-310](), [sentence_transformers/trainer.py:416-422](), [sentence_transformers/trainer.py:785-800]()\n\n## Router Support for Asymmetric Training\n\nThe training system integrates with the `Router` module to enable asymmetric architectures where different paths are used for queries vs documents:\n\n### Router Configuration\n\n```python",
+    "metadata": {
+      "source_file": "UKPLab\\sentence-transformers\\Multi-dataset_losses.md",
+      "source_collection": "sentence_transformers_docs",
+      "subdirectory": "UKPLab",
+      "filename": "Multi-dataset_losses.md",
+      "file_extension": ".md",
+      "chunk_index": 1,
+      "token_count": 224,
+      "char_count": 899,
+      "start_char": 922,
+      "end_char": 1946
+    }
+  }
+]

@@ -1,0 +1,242 @@
+[
+  {
+    "chunk_id": "sentence_transformers_docs:UKPLab\\sentence-transformers\\Compute_similarity_matrix.md:chunk:0",
+    "content": "similarity_matrix = util.cos_sim(query_embeddings, passage_embeddings)\n```\n\n**Sources:** [docs/pretrained-models/msmarco-v3.md:7-16](), [docs/cross_encoder/pretrained_models.md:16-23]()\n\n## Model Training Evolution\n\nThe MS MARCO models have evolved through multiple versions with different training methodologies:\n\n### Training Code Flow\n\n```mermaid\ngraph TB\n    subgraph \"Training Components\"\n        TRAINER[\"SentenceTransformerTrainer\"]\n        LOSS_FUNC[\"MultipleNegativesRankingLoss\"]\n        EVALUATOR[\"InformationRetrievalEvaluator\"]\n        MINING[\"util.mine_hard_negatives()\"]\n    end\n    \n    subgraph \"Version Evolution\"\n        V1_DATA[\"Basic Pairs<br/>msmarco-v1 datasets\"]\n        V2_DATA[\"Improved Negatives<br/>msmarco-v2 datasets\"] \n        V3_PROCESS[\"Hard Negative Mining<br/>cross-encoder/ms-marco-electra-base\"]\n        V4_DATA[\"Refined Training<br/>msmarco-v4 models\"]\n    end\n    \n    subgraph \"Training Pipeline\"\n        LOAD_MODEL[\"SentenceTransformer.load()\"]\n        TRAIN[\"trainer.train()\"]",
+    "metadata": {
+      "source_file": "UKPLab\\sentence-transformers\\Compute_similarity_matrix.md",
+      "source_collection": "sentence_transformers_docs",
+      "subdirectory": "UKPLab",
+      "filename": "Compute_similarity_matrix.md",
+      "file_extension": ".md",
+      "chunk_index": 0,
+      "token_count": 244,
+      "char_count": 1018,
+      "start_char": 0,
+      "end_char": 1019
+    }
+  },
+  {
+    "chunk_id": "sentence_transformers_docs:UKPLab\\sentence-transformers\\Compute_similarity_matrix.md:chunk:1",
+    "content": "raining Pipeline\"\n        LOAD_MODEL[\"SentenceTransformer.load()\"]\n        TRAIN[\"trainer.train()\"]\n        EVAL[\"evaluator.evaluate()\"]\n        SAVE[\"model.save()\"]\n    end\n    \n    V1_DATA --> V2_DATA\n    V2_DATA --> V3_PROCESS\n    V3_PROCESS --> V4_DATA\n    \n    TRAINER --> TRAIN\n    LOSS_FUNC --> TRAINER\n    EVALUATOR --> EVAL\n    MINING --> V3_PROCESS\n    \n    LOAD_MODEL --> TRAIN\n    TRAIN --> EVAL\n    EVAL --> SAVE\n```\n\n### Version 3 Hard Negative Mining Process\n\nThe v3 models used an automated hard negative mining pipeline implemented with sentence-transformers utilities:\n\n1. **Initial Retrieval**: v2 `SentenceTransformer` models encoded queries and retrieved similar passages\n2. **Cross-Encoder Scoring**: `CrossEncoder(\"cross-encoder/ms-marco-electra-base\")` scored query-passage pairs\n3. **Hard Negative Mining**: `util.mine_hard_negatives()` identified passages with high bi-encoder similarity but low cross-encoder relevance scores\n4.",
+    "metadata": {
+      "source_file": "UKPLab\\sentence-transformers\\Compute_similarity_matrix.md",
+      "source_collection": "sentence_transformers_docs",
+      "subdirectory": "UKPLab",
+      "filename": "Compute_similarity_matrix.md",
+      "file_extension": ".md",
+      "chunk_index": 1,
+      "token_count": 222,
+      "char_count": 955,
+      "start_char": 919,
+      "end_char": 1874
+    }
+  },
+  {
+    "chunk_id": "sentence_transformers_docs:UKPLab\\sentence-transformers\\Compute_similarity_matrix.md:chunk:2",
+    "content": "ves()` identified passages with high bi-encoder similarity but low cross-encoder relevance scores\n4. **Retraining**: Models trained with `MultipleNegativesRankingLoss` using the mined hard negatives\n\n### Training Loss Functions Used\n\n| Model Version | Primary Loss | Secondary Loss | Evaluation |\n|---------------|-------------|----------------|------------|\n| v1-v2 | `MultipleNegativesRankingLoss` | - | `InformationRetrievalEvaluator` |\n| v3 | `MultipleNegativesRankingLoss` | Hard negative augmentation | `InformationRetrievalEvaluator` |\n| v4 | `MultipleNegativesRankingLoss` | Advanced hard negatives | `InformationRetrievalEvaluator` |\n\n**Sources:** [docs/pretrained-models/msmarco-v3.md:53-58](), [docs/sentence_transformer/dataset_overview.md:78-89]()\n\n## Model Selection Guidelines\n\n### Choose Based on Similarity Method\n\n- **Cosine Similarity Models**: Use when you need normalized similarity scores and prefer shorter, focused passages",
+    "metadata": {
+      "source_file": "UKPLab\\sentence-transformers\\Compute_similarity_matrix.md",
+      "source_collection": "sentence_transformers_docs",
+      "subdirectory": "UKPLab",
+      "filename": "Compute_similarity_matrix.md",
+      "file_extension": ".md",
+      "chunk_index": 2,
+      "token_count": 221,
+      "char_count": 947,
+      "start_char": 1774,
+      "end_char": 2722
+    }
+  },
+  {
+    "chunk_id": "sentence_transformers_docs:UKPLab\\sentence-transformers\\Compute_similarity_matrix.md:chunk:3",
+    "content": "arity Models**: Use when you need normalized similarity scores and prefer shorter, focused passages\n- **Dot Product Models**: Use when longer, comprehensive passages are preferred and unnormalized scores are acceptable\n\n### Choose Based on Architecture\n\n```mermaid\ngraph TD\n    RETRIEVAL_TASK[\"Retrieval Task\"]\n    \n    RETRIEVAL_TASK --> FIRST_STAGE[\"First Stage Retrieval<br/>encode() + similarity search\"]\n    RETRIEVAL_TASK --> SECOND_STAGE[\"Second Stage Reranking<br/>predict() on pairs\"]\n    \n    FIRST_STAGE --> ST_CLASS[\"SentenceTransformer class\"]\n    SECOND_STAGE --> CE_CLASS[\"CrossEncoder class\"]\n    \n    ST_CLASS --> ST_FAST[\"Fast: msmarco-MiniLM-L6-v3<br/>18k queries/sec GPU\"]\n    ST_CLASS --> ST_BALANCED[\"Balanced: msmarco-distilbert-base-v4<br/>7k queries/sec, 70.24 NDCG@10\"]\n    ST_CLASS --> ST_ACCURATE[\"Accurate: msmarco-distilbert-base-tas-b<br/>71.04 NDCG@10, 34.43 MRR@10\"]\n    \n    CE_CLASS --> CE_FAST[\"Fast: cross-encoder/ms-marco-TinyBERT-L2-v2<br/>9k docs/sec\"]",
+    "metadata": {
+      "source_file": "UKPLab\\sentence-transformers\\Compute_similarity_matrix.md",
+      "source_collection": "sentence_transformers_docs",
+      "subdirectory": "UKPLab",
+      "filename": "Compute_similarity_matrix.md",
+      "file_extension": ".md",
+      "chunk_index": 3,
+      "token_count": 278,
+      "char_count": 992,
+      "start_char": 2622,
+      "end_char": 3615
+    }
+  },
+  {
+    "chunk_id": "sentence_transformers_docs:UKPLab\\sentence-transformers\\Compute_similarity_matrix.md:chunk:4",
+    "content": "R@10\"]\n    \n    CE_CLASS --> CE_FAST[\"Fast: cross-encoder/ms-marco-TinyBERT-L2-v2<br/>9k docs/sec\"]\n    CE_CLASS --> CE_ACCURATE[\"Accurate: cross-encoder/ms-marco-MiniLM-L6-v2<br/>74.30 NDCG@10, 39.01 MRR@10\"]\n    \n    subgraph \"Integration Methods\"\n        UTIL_COS[\"util.cos_sim()\"]\n        UTIL_DOT[\"util.dot_score()\"] \n        PREDICT_METHOD[\"predict() method\"]\n    end\n    \n    ST_FAST --> UTIL_COS\n    ST_BALANCED --> UTIL_COS\n    ST_ACCURATE --> UTIL_DOT\n    CE_FAST --> PREDICT_METHOD\n    CE_ACCURATE --> PREDICT_METHOD\n```\n\n### Performance vs Speed Trade-offs\n\n- **Fastest**: `msmarco-MiniLM-L6-v3` (18,000 queries/sec GPU)\n- **Best Balance**: `msmarco-distilbert-base-v4` (7,000 queries/sec GPU, highest accuracy)\n- **Highest Quality**: `msmarco-distilbert-base-tas-b` (34.43 MRR@10)\n\n**Sources:** [docs/pretrained-models/msmarco-v3.md:45-50]()\n\n## Integration with Search Systems\n\nMS MARCO models integrate with various search architectures for production deployment.",
+    "metadata": {
+      "source_file": "UKPLab\\sentence-transformers\\Compute_similarity_matrix.md",
+      "source_collection": "sentence_transformers_docs",
+      "subdirectory": "UKPLab",
+      "filename": "Compute_similarity_matrix.md",
+      "file_extension": ".md",
+      "chunk_index": 4,
+      "token_count": 310,
+      "char_count": 978,
+      "start_char": 3515,
+      "end_char": 4493
+    }
+  },
+  {
+    "chunk_id": "sentence_transformers_docs:UKPLab\\sentence-transformers\\Compute_similarity_matrix.md:chunk:5",
+    "content": "arch Systems\n\nMS MARCO models integrate with various search architectures for production deployment. For detailed integration patterns, see [Retrieve & Rerank Architecture](#6.3) and [Semantic Search](#6.1).\n\n**Sources:** [docs/pretrained-models/msmarco-v3.md:19](), [docs/cross_encoder/pretrained_models.md:44]()\n\n# Applications\n\n\n\n\nThis page provides an overview of real-world applications and integration patterns using sentence-transformers models. It covers how the three core model types (`SentenceTransformer`, `SparseEncoder`, and `CrossEncoder`) are deployed in production systems for semantic search, retrieval, reranking, and other natural language processing tasks.\n\nFor specific implementation details of individual applications, see [Semantic Search](#6.1), [Sparse Search Integration](#6.2), [Retrieve & Rerank Architecture](#6.3), [Semantic Textual Similarity](#6.4), and [Multimodal Applications](#6.5).",
+    "metadata": {
+      "source_file": "UKPLab\\sentence-transformers\\Compute_similarity_matrix.md",
+      "source_collection": "sentence_transformers_docs",
+      "subdirectory": "UKPLab",
+      "filename": "Compute_similarity_matrix.md",
+      "file_extension": ".md",
+      "chunk_index": 5,
+      "token_count": 207,
+      "char_count": 920,
+      "start_char": 4393,
+      "end_char": 5313
+    }
+  },
+  {
+    "chunk_id": "sentence_transformers_docs:UKPLab\\sentence-transformers\\Compute_similarity_matrix.md:chunk:6",
+    "content": "erank Architecture](#6.3), [Semantic Textual Similarity](#6.4), and [Multimodal Applications](#6.5). For information about available pretrained models optimized for specific applications, see [Pretrained Models](#5).\n\n## Core Application Categories\n\nThe sentence-transformers library enables three primary categories of applications, each leveraging different model architectures optimized for specific use cases:\n\n### Application Architecture Overview\n\n```mermaid\ngraph TB\n    subgraph \"Dense Embedding Applications\"\n        ST[\"SentenceTransformer\"]\n        ST --> SemanticSearch[\"Semantic Search\"]\n        ST --> Clustering[\"Document Clustering\"]\n        ST --> STS[\"Semantic Textual Similarity\"]\n        ST --> Recommendation[\"Content Recommendation\"]\n    end\n    \n    subgraph \"Sparse Embedding Applications\" \n        SE[\"SparseEncoder\"]\n        SE --> NeuralLexical[\"Neural Lexical Search\"]\n        SE --> HybridRetrieval[\"Hybrid Dense-Sparse Retrieval\"]\n        SE --> KeywordSearch[\"Enhanced Keyword Search\"]\n    end",
+    "metadata": {
+      "source_file": "UKPLab\\sentence-transformers\\Compute_similarity_matrix.md",
+      "source_collection": "sentence_transformers_docs",
+      "subdirectory": "UKPLab",
+      "filename": "Compute_similarity_matrix.md",
+      "file_extension": ".md",
+      "chunk_index": 6,
+      "token_count": 210,
+      "char_count": 1024,
+      "start_char": 5213,
+      "end_char": 6238
+    }
+  },
+  {
+    "chunk_id": "sentence_transformers_docs:UKPLab\\sentence-transformers\\Compute_similarity_matrix.md:chunk:7",
+    "content": "al[\"Hybrid Dense-Sparse Retrieval\"]\n        SE --> KeywordSearch[\"Enhanced Keyword Search\"]\n    end\n    \n    subgraph \"Cross-Attention Applications\"\n        CE[\"CrossEncoder\"]\n        CE --> Reranking[\"Search Result Reranking\"]\n        CE --> Classification[\"Text Pair Classification\"]\n        CE --> ScoreRegression[\"Similarity Score Regression\"]\n    end\n    \n    subgraph \"Output Formats\"\n        SemanticSearch --> DenseVectors[\"Dense Vectors (384-1024 dim)\"]\n        NeuralLexical --> SparseVectors[\"Sparse Vectors (30k+ dim)\"]\n        Reranking --> SimilarityScores[\"Similarity Scores (0-1)\"]\n    end\n```\n\n**Dense embedding applications** use `SentenceTransformer` models to convert text into fixed-size dense vectors that capture semantic meaning. These applications excel at finding semantically similar content even when lexical overlap is minimal.",
+    "metadata": {
+      "source_file": "UKPLab\\sentence-transformers\\Compute_similarity_matrix.md",
+      "source_collection": "sentence_transformers_docs",
+      "subdirectory": "UKPLab",
+      "filename": "Compute_similarity_matrix.md",
+      "file_extension": ".md",
+      "chunk_index": 7,
+      "token_count": 188,
+      "char_count": 856,
+      "start_char": 6138,
+      "end_char": 6996
+    }
+  },
+  {
+    "chunk_id": "sentence_transformers_docs:UKPLab\\sentence-transformers\\Compute_similarity_matrix.md:chunk:8",
+    "content": "e applications excel at finding semantically similar content even when lexical overlap is minimal.\n\n**Sparse embedding applications** use `SparseEncoder` models to generate high-dimensional sparse vectors that preserve lexical information while adding semantic understanding. These applications bridge the gap between traditional keyword search and semantic search.\n\n**Cross-attention applications** use `CrossEncoder` models that jointly process text pairs to produce precise similarity scores. These applications provide the highest accuracy for ranking and classification tasks but with higher computational cost.\n\nSources: [docs/pretrained-models/msmarco-v2.md:1-39]()\n\n## Integration Patterns\n\nProduction systems typically integrate sentence-transformers models through several common patterns, each optimized for different scalability and accuracy requirements:\n\n### System Integration Architecture\n\n```mermaid\ngraph LR\n    subgraph \"Data Sources\"\n        Documents[\"Document Corpus\"]\n        Queries[\"User Queries\"]",
+    "metadata": {
+      "source_file": "UKPLab\\sentence-transformers\\Compute_similarity_matrix.md",
+      "source_collection": "sentence_transformers_docs",
+      "subdirectory": "UKPLab",
+      "filename": "Compute_similarity_matrix.md",
+      "file_extension": ".md",
+      "chunk_index": 8,
+      "token_count": 173,
+      "char_count": 1022,
+      "start_char": 6896,
+      "end_char": 7919
+    }
+  },
+  {
+    "chunk_id": "sentence_transformers_docs:UKPLab\\sentence-transformers\\Compute_similarity_matrix.md:chunk:9",
+    "content": "LR\n    subgraph \"Data Sources\"\n        Documents[\"Document Corpus\"]\n        Queries[\"User Queries\"]\n        TextPairs[\"Text Pairs\"]\n    end\n    \n    subgraph \"sentence_transformers\"\n        STModel[\"SentenceTransformer.encode()\"]\n        SEModel[\"SparseEncoder.encode_query()\"]\n        CEModel[\"CrossEncoder.predict()\"]\n    end\n    \n    subgraph \"Storage Systems\"\n        VectorDB[\"Vector Databases<br/>Pinecone, Weaviate, Qdrant\"]\n        SearchEngines[\"Search Engines<br/>Elasticsearch, OpenSearch\"]\n        Cache[\"Embedding Cache<br/>Redis, Memcached\"]\n    end\n    \n    subgraph \"Application Layer\"\n        SearchAPI[\"Search API\"]\n        RerankAPI[\"Reranking API\"]\n        SimilarityAPI[\"Similarity API\"]\n    end\n    \n    Documents --> STModel\n    Documents --> SEModel\n    STModel --> VectorDB\n    SEModel --> SearchEngines\n    \n    Queries --> STModel\n    Queries --> SEModel\n    Queries --> CEModel\n    \n    VectorDB --> SearchAPI\n    SearchEngines --> SearchAPI\n    Cache --> SearchAPI\n    \n    TextPairs --> CEModel",
+    "metadata": {
+      "source_file": "UKPLab\\sentence-transformers\\Compute_similarity_matrix.md",
+      "source_collection": "sentence_transformers_docs",
+      "subdirectory": "UKPLab",
+      "filename": "Compute_similarity_matrix.md",
+      "file_extension": ".md",
+      "chunk_index": 9,
+      "token_count": 241,
+      "char_count": 1024,
+      "start_char": 7819,
+      "end_char": 8844
+    }
+  },
+  {
+    "chunk_id": "sentence_transformers_docs:UKPLab\\sentence-transformers\\Compute_similarity_matrix.md:chunk:10",
+    "content": "-> SearchAPI\n    SearchEngines --> SearchAPI\n    Cache --> SearchAPI\n    \n    TextPairs --> CEModel\n    CEModel --> RerankAPI\n    CEModel --> SimilarityAPI\n    \n    SearchAPI --> RerankAPI\n```\n\n**Vector database integration** stores dense embeddings from `SentenceTransformer.encode()` in specialized vector databases optimized for similarity search. Common databases include Pinecone, Weaviate, and Qdrant, which provide approximate nearest neighbor search capabilities.\n\n**Search engine integration** indexes sparse embeddings from `SparseEncoder.encode_query()` and `SparseEncoder.encode_document()` in traditional search engines like Elasticsearch or OpenSearch, enabling hybrid lexical-semantic search.\n\n**API-based reranking** uses `CrossEncoder.predict()` to refine initial retrieval results, typically processing the top-k candidates from a faster first-stage retrieval system.\n\nSources: [docs/pretrained-models/msmarco-v2.md:7-16]()\n\n## Production Deployment Patterns\n\n### Two-Stage Retrieval Architecture",
+    "metadata": {
+      "source_file": "UKPLab\\sentence-transformers\\Compute_similarity_matrix.md",
+      "source_collection": "sentence_transformers_docs",
+      "subdirectory": "UKPLab",
+      "filename": "Compute_similarity_matrix.md",
+      "file_extension": ".md",
+      "chunk_index": 10,
+      "token_count": 204,
+      "char_count": 1014,
+      "start_char": 8744,
+      "end_char": 9760
+    }
+  },
+  {
+    "chunk_id": "sentence_transformers_docs:UKPLab\\sentence-transformers\\Compute_similarity_matrix.md:chunk:11",
+    "content": "els/msmarco-v2.md:7-16]()\n\n## Production Deployment Patterns\n\n### Two-Stage Retrieval Architecture\n\nThe most common production pattern combines fast retrieval with precise reranking:\n\n```mermaid\ngraph TD\n    UserQuery[\"User Query\"]\n    \n    subgraph \"Stage 1: Fast Retrieval\"\n        BiEncoder[\"SentenceTransformer<br/>or SparseEncoder\"]\n        CandidateRetrieval[\"Retrieve Top-100<br/>Candidates\"]\n    end\n    \n    subgraph \"Stage 2: Precise Reranking\"\n        CrossEncoder[\"CrossEncoder.predict()\"]\n        FinalRanking[\"Return Top-10<br/>Results\"]\n    end\n    \n    UserQuery --> BiEncoder\n    BiEncoder --> CandidateRetrieval\n    CandidateRetrieval --> CrossEncoder\n    CrossEncoder --> FinalRanking\n```\n\nThis architecture balances computational efficiency with accuracy by using fast bi-encoder models for initial retrieval and slower but more accurate cross-encoder models for final ranking.\n\n### Model Selection by Application Requirements",
+    "metadata": {
+      "source_file": "UKPLab\\sentence-transformers\\Compute_similarity_matrix.md",
+      "source_collection": "sentence_transformers_docs",
+      "subdirectory": "UKPLab",
+      "filename": "Compute_similarity_matrix.md",
+      "file_extension": ".md",
+      "chunk_index": 11,
+      "token_count": 210,
+      "char_count": 946,
+      "start_char": 9660,
+      "end_char": 10608
+    }
+  },
+  {
+    "chunk_id": "sentence_transformers_docs:UKPLab\\sentence-transformers\\Compute_similarity_matrix.md:chunk:12",
+    "content": "accurate cross-encoder models for final ranking.\n\n### Model Selection by Application Requirements\n\n| Application Type | Model Architecture | Latency | Accuracy | Storage Requirements |\n|------------------|-------------------|---------|----------|---------------------|\n| Real-time search | `SentenceTransformer` | ~1ms | Good | Dense vectors (384-1024 dim) |\n| Hybrid search | `SparseEncoder` | ~2ms | Better | Sparse vectors (30k+ dim) |\n| Reranking | `CrossEncoder` | ~10ms | Best | No storage (computed on-demand) |\n| Batch processing | Any | Variable | Highest | Depends on architecture |\n\n### Memory and Scaling Considerations\n\nProduction deployments must consider memory requirements and scaling patterns:\n\n- **Dense embeddings**: Require 4 bytes per dimension per document (e.g., 1.5KB for 384-dim embeddings)\n- **Sparse embeddings**: Store only non-zero values, typically 50-200 active dimensions per document\n- **Cross-encoders**: No storage overhead but higher compute cost per query",
+    "metadata": {
+      "source_file": "UKPLab\\sentence-transformers\\Compute_similarity_matrix.md",
+      "source_collection": "sentence_transformers_docs",
+      "subdirectory": "UKPLab",
+      "filename": "Compute_similarity_matrix.md",
+      "file_extension": ".md",
+      "chunk_index": 12,
+      "token_count": 229,
+      "char_count": 993,
+      "start_char": 10508,
+      "end_char": 11504
+    }
+  },
+  {
+    "chunk_id": "sentence_transformers_docs:UKPLab\\sentence-transformers\\Compute_similarity_matrix.md:chunk:13",
+    "content": "imensions per document\n- **Cross-encoders**: No storage overhead but higher compute cost per query\n\n## Common Integration Libraries\n\nThe sentence-transformers library integrates with numerous downstream frameworks and applications:\n\n| Integration Type | Libraries | Use Case |\n|------------------|-----------|----------|\n| RAG Frameworks | LangChain, LlamaIndex, Haystack | Document retrieval for LLMs |\n| Topic Modeling | BERTopic, Top2Vec | Document clustering and topic discovery |\n| Few-shot Learning | SetFit | Classification with minimal training data |\n| Keyword Extraction | KeyBERT | Semantic keyword extraction |\n| Search Applications | txtai | End-to-end search applications |\n\nThese integrations typically use the standard `encode()` and `predict()` methods provided by the core model classes, enabling drop-in replacement of embedding models without changing application code.\n\nSources: [docs/pretrained-models/msmarco-v2.md:19-38]()",
+    "metadata": {
+      "source_file": "UKPLab\\sentence-transformers\\Compute_similarity_matrix.md",
+      "source_collection": "sentence_transformers_docs",
+      "subdirectory": "UKPLab",
+      "filename": "Compute_similarity_matrix.md",
+      "file_extension": ".md",
+      "chunk_index": 13,
+      "token_count": 191,
+      "char_count": 946,
+      "start_char": 11404,
+      "end_char": 12428
+    }
+  },
+  {
+    "chunk_id": "sentence_transformers_docs:UKPLab\\sentence-transformers\\Compute_similarity_matrix.md:chunk:14",
+    "content": "msmarco-v2.md:19-38]()",
+    "metadata": {
+      "source_file": "UKPLab\\sentence-transformers\\Compute_similarity_matrix.md",
+      "source_collection": "sentence_transformers_docs",
+      "subdirectory": "UKPLab",
+      "filename": "Compute_similarity_matrix.md",
+      "file_extension": ".md",
+      "chunk_index": 14,
+      "token_count": 13,
+      "char_count": 22,
+      "start_char": 12328,
+      "end_char": 13352
+    }
+  }
+]

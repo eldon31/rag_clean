@@ -1,0 +1,210 @@
+[
+  {
+    "chunk_id": "sentence_transformers_docs:UKPLab\\sentence-transformers\\Router_module_validation_in_trainer.md:chunk:0",
+    "content": "if Router in [module.__class__ for module in model.children()] and not args.router_mapping:\n    raise ValueError(\n        \"You are using a Router module in your model, but you did not provide a \"\n        \"`router_mapping` in the training arguments.\"\n    )\n\nargs = SentenceTransformerTrainingArguments(\n    router_mapping={\n        \"question\": \"query\", \n        \"answer\": \"document\"\n    },\n    learning_rate_mapping={\n        r\"SparseStaticEmbedding\\.*\": 1e-3,  # Higher LR for static embeddings\n        r\".*\": 2e-5                         # Lower LR for transformer layers\n    }\n)\n```\n\n**Sources:** [sentence_transformers/trainer.py:206-212](), [sentence_transformers/models/Router.py:47-68](), [tests/models/test_router.py:414-454]()\n\n## Performance Considerations\n\n### Memory vs Speed Trade-offs\n\n| Technique | Memory Reduction | Speed Impact | Use Case |\n|-----------|------------------|--------------|----------|\n| Cached Losses | ~75% | -20% | Large batch training |",
+    "metadata": {
+      "source_file": "UKPLab\\sentence-transformers\\Router_module_validation_in_trainer.md",
+      "source_collection": "sentence_transformers_docs",
+      "subdirectory": "UKPLab",
+      "filename": "Router_module_validation_in_trainer.md",
+      "file_extension": ".md",
+      "chunk_index": 0,
+      "token_count": 240,
+      "char_count": 971,
+      "start_char": 0,
+      "end_char": 972
+    }
+  },
+  {
+    "chunk_id": "sentence_transformers_docs:UKPLab\\sentence-transformers\\Router_module_validation_in_trainer.md:chunk:1",
+    "content": "-----------------|--------------|----------|\n| Cached Losses | ~75% | -20% | Large batch training |\n| Mini-batching | Configurable | Variable | Memory-constrained environments |\n| Matryoshka | None | +10% | Multi-resolution embeddings |\n| Router | ~50% for queries | +5% | Asymmetric retrieval |\n\n### Optimal Configuration Guidelines\n\n1. **Cached losses**: Use `mini_batch_size` as large as your GPU memory allows\n2. **Matryoshka**: Set `n_dims_per_step=1` for memory efficiency, `-1` for speed\n3. **Router**: Use lightweight query encoders with powerful document encoders\n4. **Gradient accumulation**: Generally unnecessary with cached losses\n\n**Sources:** [sentence_transformers/losses/CachedMultipleNegativesRankingLoss.py:88-92](), [sentence_transformers/losses/MatryoshkaLoss.py:140-144]()\n\n# Evaluation\n\n\n\n\nThe evaluation system in sentence-transformers provides comprehensive metrics and benchmarking capabilities for assessing model performance across diverse tasks.",
+    "metadata": {
+      "source_file": "UKPLab\\sentence-transformers\\Router_module_validation_in_trainer.md",
+      "source_collection": "sentence_transformers_docs",
+      "subdirectory": "UKPLab",
+      "filename": "Router_module_validation_in_trainer.md",
+      "file_extension": ".md",
+      "chunk_index": 1,
+      "token_count": 233,
+      "char_count": 974,
+      "start_char": 872,
+      "end_char": 1846
+    }
+  },
+  {
+    "chunk_id": "sentence_transformers_docs:UKPLab\\sentence-transformers\\Router_module_validation_in_trainer.md:chunk:2",
+    "content": "ehensive metrics and benchmarking capabilities for assessing model performance across diverse tasks. This system supports evaluation during training for model selection, standalone evaluation for benchmarking, and integration with various downstream applications.\n\nFor training-specific guidance including how evaluators integrate with the training loop, see [Training](#3). For task-specific evaluator details, see [SentenceTransformer Evaluators](#4.1), [SparseEncoder Evaluators](#4.2), and [CrossEncoder Evaluators](#4.3).\n\n## Evaluation Architecture\n\nThe evaluation system is built around a modular architecture where all evaluators inherit from the `SentenceEvaluator` base class. This design provides consistent interfaces while allowing specialized implementations for different task types.\n\n### Core Evaluation Flow\n\n```mermaid\ngraph TD\n    Model[\"SentenceTransformer\"] --> Evaluator[\"SentenceEvaluator\"]\n    Evaluator --> EmbedInputs[\"embed_inputs()\"]\n    Evaluator --> ComputeMetrics[\"compute_metrics()\"]",
+    "metadata": {
+      "source_file": "UKPLab\\sentence-transformers\\Router_module_validation_in_trainer.md",
+      "source_collection": "sentence_transformers_docs",
+      "subdirectory": "UKPLab",
+      "filename": "Router_module_validation_in_trainer.md",
+      "file_extension": ".md",
+      "chunk_index": 2,
+      "token_count": 188,
+      "char_count": 1015,
+      "start_char": 1746,
+      "end_char": 2762
+    }
+  },
+  {
+    "chunk_id": "sentence_transformers_docs:UKPLab\\sentence-transformers\\Router_module_validation_in_trainer.md:chunk:3",
+    "content": "Evaluator --> EmbedInputs[\"embed_inputs()\"]\n    Evaluator --> ComputeMetrics[\"compute_metrics()\"]\n    ComputeMetrics --> Metrics[\"Primary & Secondary Metrics\"]\n    Metrics --> CSV[\"CSV Results\"]\n    Metrics --> ModelCard[\"Model Card Data\"]\n    Metrics --> Selection[\"Model Selection\"]\n    \n    EmbedInputs --> Encode[\"model.encode()\"]\n    Encode --> Embeddings[\"Text Embeddings\"]\n    Embeddings --> ComputeMetrics\n```\n\n**Evaluation Flow in sentence-transformers**\n\nThe base `SentenceEvaluator` class defines the evaluation interface and common functionality shared across all evaluators. Every evaluator implements the `__call__` method to perform evaluation and return metrics.\n\nSources: [sentence_transformers/evaluation/SentenceEvaluator.py:13-121]()\n\n### Key Evaluation Concepts\n\n| Concept | Description | Implementation |\n|---------|-------------|----------------|\n| **Primary Metric** | Main metric used for model selection | `evaluator.primary_metric` attribute |",
+    "metadata": {
+      "source_file": "UKPLab\\sentence-transformers\\Router_module_validation_in_trainer.md",
+      "source_collection": "sentence_transformers_docs",
+      "subdirectory": "UKPLab",
+      "filename": "Router_module_validation_in_trainer.md",
+      "file_extension": ".md",
+      "chunk_index": 3,
+      "token_count": 195,
+      "char_count": 970,
+      "start_char": 2662,
+      "end_char": 3635
+    }
+  },
+  {
+    "chunk_id": "sentence_transformers_docs:UKPLab\\sentence-transformers\\Router_module_validation_in_trainer.md:chunk:4",
+    "content": "**Primary Metric** | Main metric used for model selection | `evaluator.primary_metric` attribute |\n| **Greater is Better** | Whether higher scores indicate better performance | `evaluator.greater_is_better` boolean |\n| **CSV Logging** | Track metrics over training epochs/steps | `write_csv` parameter across evaluators |\n| **Model Card Integration** | Store evaluation results in model metadata | `store_metrics_in_model_card_data()` method |\n\n```mermaid\ngraph LR\n    subgraph \"Base Class\"\n        SentenceEvaluator[\"SentenceEvaluator\"]\n    end\n    \n    subgraph \"Task-Specific Evaluators\"\n        IRE[\"InformationRetrievalEvaluator\"]\n        BCE[\"BinaryClassificationEvaluator\"]\n        ESE[\"EmbeddingSimilarityEvaluator\"]\n        RE[\"RerankingEvaluator\"]\n        TE[\"TripletEvaluator\"]\n        PME[\"ParaphraseMiningEvaluator\"]\n        TRE[\"TranslationEvaluator\"]\n        MSE[\"MSEEvaluator\"]\n        LAE[\"LabelAccuracyEvaluator\"]\n    end\n    \n    SentenceEvaluator --> IRE\n    SentenceEvaluator --> BCE",
+    "metadata": {
+      "source_file": "UKPLab\\sentence-transformers\\Router_module_validation_in_trainer.md",
+      "source_collection": "sentence_transformers_docs",
+      "subdirectory": "UKPLab",
+      "filename": "Router_module_validation_in_trainer.md",
+      "file_extension": ".md",
+      "chunk_index": 4,
+      "token_count": 215,
+      "char_count": 1004,
+      "start_char": 3535,
+      "end_char": 4541
+    }
+  },
+  {
+    "chunk_id": "sentence_transformers_docs:UKPLab\\sentence-transformers\\Router_module_validation_in_trainer.md:chunk:5",
+    "content": "[\"LabelAccuracyEvaluator\"]\n    end\n    \n    SentenceEvaluator --> IRE\n    SentenceEvaluator --> BCE\n    SentenceEvaluator --> ESE\n    SentenceEvaluator --> RE\n    SentenceEvaluator --> TE\n    SentenceEvaluator --> PME\n    SentenceEvaluator --> TRE\n    SentenceEvaluator --> MSE\n    SentenceEvaluator --> LAE\n```\n\n**Evaluator Class Hierarchy**\n\nSources: [sentence_transformers/evaluation/SentenceEvaluator.py:13-121](), [sentence_transformers/evaluation/InformationRetrievalEvaluator.py:23-568](), [sentence_transformers/evaluation/BinaryClassificationEvaluator.py:27-379]()\n\n## Evaluation Categories\n\n### Information Retrieval Evaluation\n\nThe `InformationRetrievalEvaluator` is the most comprehensive evaluator, designed for search and retrieval tasks. It computes standard IR metrics including Mean Reciprocal Rank (MRR), Normalized Discounted Cumulative Gain (NDCG), Mean Average Precision (MAP), precision, recall, and accuracy at various k values.\n\n```mermaid\ngraph TD",
+    "metadata": {
+      "source_file": "UKPLab\\sentence-transformers\\Router_module_validation_in_trainer.md",
+      "source_collection": "sentence_transformers_docs",
+      "subdirectory": "UKPLab",
+      "filename": "Router_module_validation_in_trainer.md",
+      "file_extension": ".md",
+      "chunk_index": 5,
+      "token_count": 219,
+      "char_count": 972,
+      "start_char": 4441,
+      "end_char": 5414
+    }
+  },
+  {
+    "chunk_id": "sentence_transformers_docs:UKPLab\\sentence-transformers\\Router_module_validation_in_trainer.md:chunk:6",
+    "content": "Average Precision (MAP), precision, recall, and accuracy at various k values.\n\n```mermaid\ngraph TD\n    Queries[\"queries: Dict[str, str]\"] --> IRE[\"InformationRetrievalEvaluator\"]\n    Corpus[\"corpus: Dict[str, str]\"] --> IRE\n    RelevantDocs[\"relevant_docs: Dict[str, Set[str]]\"] --> IRE\n    \n    IRE --> QueryEmb[\"Query Embeddings\"]\n    IRE --> CorpusEmb[\"Corpus Embeddings\"]\n    \n    QueryEmb --> SimilarityScores[\"Similarity Computation\"]\n    CorpusEmb --> SimilarityScores\n    \n    SimilarityScores --> TopK[\"Top-k Retrieval\"]\n    TopK --> IRMetrics[\"IR Metrics Computation\"]\n    \n    IRMetrics --> MRR[\"MRR@k\"]\n    IRMetrics --> NDCG[\"NDCG@k\"]\n    IRMetrics --> MAP[\"MAP@k\"]\n    IRMetrics --> Accuracy[\"Accuracy@k\"]\n    IRMetrics --> PrecisionRecall[\"Precision/Recall@k\"]\n```\n\n**Information Retrieval Evaluation Pipeline**\n\nKey parameters for IR evaluation:\n- `corpus_chunk_size`: Controls memory usage during large corpus evaluation\n- `score_functions`: Multiple similarity functions can be evaluated simultaneously",
+    "metadata": {
+      "source_file": "UKPLab\\sentence-transformers\\Router_module_validation_in_trainer.md",
+      "source_collection": "sentence_transformers_docs",
+      "subdirectory": "UKPLab",
+      "filename": "Router_module_validation_in_trainer.md",
+      "file_extension": ".md",
+      "chunk_index": 6,
+      "token_count": 253,
+      "char_count": 1020,
+      "start_char": 5314,
+      "end_char": 6336
+    }
+  },
+  {
+    "chunk_id": "sentence_transformers_docs:UKPLab\\sentence-transformers\\Router_module_validation_in_trainer.md:chunk:7",
+    "content": "orpus evaluation\n- `score_functions`: Multiple similarity functions can be evaluated simultaneously\n- `write_predictions`: Enable writing retrieval results for downstream analysis\n\nSources: [sentence_transformers/evaluation/InformationRetrievalEvaluator.py:23-568]()\n\n### Similarity and Classification Evaluation\n\nFor tasks involving sentence pair similarity or binary classification:\n\n| Evaluator | Primary Use Case | Key Metrics |\n|-----------|------------------|-------------|\n| `EmbeddingSimilarityEvaluator` | Semantic textual similarity | Pearson, Spearman correlation |\n| `BinaryClassificationEvaluator` | Binary similarity classification | Accuracy, F1, Precision, Recall, AP |\n| `TripletEvaluator` | Triplet-based ranking | Accuracy with configurable margins |\n\n```mermaid\ngraph LR\n    subgraph \"Similarity Tasks\"\n        STS[\"Semantic Textual Similarity\"]\n        BinClass[\"Binary Classification\"]\n        Triplets[\"Triplet Ranking\"]\n    end\n    \n    subgraph \"Evaluators\"",
+    "metadata": {
+      "source_file": "UKPLab\\sentence-transformers\\Router_module_validation_in_trainer.md",
+      "source_collection": "sentence_transformers_docs",
+      "subdirectory": "UKPLab",
+      "filename": "Router_module_validation_in_trainer.md",
+      "file_extension": ".md",
+      "chunk_index": 7,
+      "token_count": 199,
+      "char_count": 982,
+      "start_char": 6236,
+      "end_char": 7219
+    }
+  },
+  {
+    "chunk_id": "sentence_transformers_docs:UKPLab\\sentence-transformers\\Router_module_validation_in_trainer.md:chunk:8",
+    "content": "\"Binary Classification\"]\n        Triplets[\"Triplet Ranking\"]\n    end\n    \n    subgraph \"Evaluators\"\n        ESE[\"EmbeddingSimilarityEvaluator\"]\n        BCE[\"BinaryClassificationEvaluator\"] \n        TE[\"TripletEvaluator\"]\n    end\n    \n    subgraph \"Similarity Functions\"\n        Cosine[\"cosine\"]\n        Dot[\"dot\"]\n        Euclidean[\"euclidean\"]\n        Manhattan[\"manhattan\"]\n    end\n    \n    STS --> ESE\n    BinClass --> BCE\n    Triplets --> TE\n    \n    ESE --> Cosine\n    ESE --> Dot\n    ESE --> Euclidean\n    ESE --> Manhattan\n    \n    BCE --> Cosine\n    BCE --> Dot\n    BCE --> Euclidean\n    BCE --> Manhattan\n    \n    TE --> Cosine\n    TE --> Dot\n    TE --> Euclidean\n    TE --> Manhattan\n```\n\n**Similarity and Classification Evaluation Framework**\n\nSources: [sentence_transformers/evaluation/EmbeddingSimilarityEvaluator.py:27-272](), [sentence_transformers/evaluation/BinaryClassificationEvaluator.py:27-379](), [sentence_transformers/evaluation/TripletEvaluator.py:26-271]()\n\n### Specialized Task Evaluation",
+    "metadata": {
+      "source_file": "UKPLab\\sentence-transformers\\Router_module_validation_in_trainer.md",
+      "source_collection": "sentence_transformers_docs",
+      "subdirectory": "UKPLab",
+      "filename": "Router_module_validation_in_trainer.md",
+      "file_extension": ".md",
+      "chunk_index": 8,
+      "token_count": 256,
+      "char_count": 1015,
+      "start_char": 7119,
+      "end_char": 8136
+    }
+  },
+  {
+    "chunk_id": "sentence_transformers_docs:UKPLab\\sentence-transformers\\Router_module_validation_in_trainer.md:chunk:9",
+    "content": ", [sentence_transformers/evaluation/TripletEvaluator.py:26-271]()\n\n### Specialized Task Evaluation\n\nSeveral evaluators target specific applications:\n\n**Reranking Evaluation**: The `RerankingEvaluator` assesses models on reranking tasks where queries are paired with positive and negative documents. It computes MAP, MRR@k, and NDCG@k metrics.\n\n**Paraphrase Mining**: The `ParaphraseMiningEvaluator` evaluates paraphrase detection by mining similar sentence pairs from a corpus and comparing against gold standard duplicates.\n\n**Translation/Multilingual**: The `TranslationEvaluator` tests cross-lingual sentence alignment by checking if translated sentence pairs have the highest mutual similarity.\n\n**Knowledge Distillation**: The `MSEEvaluator` measures mean squared error between teacher and student model embeddings for distillation tasks.\n\nSources: [sentence_transformers/evaluation/RerankingEvaluator.py:25-372](), [sentence_transformers/evaluation/ParaphraseMiningEvaluator.",
+    "metadata": {
+      "source_file": "UKPLab\\sentence-transformers\\Router_module_validation_in_trainer.md",
+      "source_collection": "sentence_transformers_docs",
+      "subdirectory": "UKPLab",
+      "filename": "Router_module_validation_in_trainer.md",
+      "file_extension": ".md",
+      "chunk_index": 9,
+      "token_count": 205,
+      "char_count": 981,
+      "start_char": 8036,
+      "end_char": 9017
+    }
+  },
+  {
+    "chunk_id": "sentence_transformers_docs:UKPLab\\sentence-transformers\\Router_module_validation_in_trainer.md:chunk:10",
+    "content": "uation/RerankingEvaluator.py:25-372](), [sentence_transformers/evaluation/ParaphraseMiningEvaluator.py:18-279](), [sentence_transformers/evaluation/TranslationEvaluator.py:22-192](), [sentence_transformers/evaluation/MSEEvaluator.py:18-158]()\n\n## Integration with Training\n\nEvaluators integrate seamlessly with the training pipeline for model selection and progress tracking. During training, evaluators are called at specified intervals to assess model performance.\n\n```mermaid\ngraph TD\n    TrainingLoop[\"Training Loop\"] --> EvalInterval[\"Evaluation Interval\"]\n    EvalInterval --> CallEvaluator[\"evaluator(model, output_path, epoch, steps)\"]\n    \n    CallEvaluator --> ComputeMetrics[\"Compute Evaluation Metrics\"]\n    ComputeMetrics --> LogResults[\"Log Results\"]\n    ComputeMetrics --> SaveCSV[\"Save CSV Results\"]\n    ComputeMetrics --> UpdateModelCard[\"Update Model Card\"]\n    \n    LogResults --> BestModelSelection[\"Best Model Selection\"]\n    BestModelSelection --> LoadBestModel[\"load_best_model_at_end\"]",
+    "metadata": {
+      "source_file": "UKPLab\\sentence-transformers\\Router_module_validation_in_trainer.md",
+      "source_collection": "sentence_transformers_docs",
+      "subdirectory": "UKPLab",
+      "filename": "Router_module_validation_in_trainer.md",
+      "file_extension": ".md",
+      "chunk_index": 10,
+      "token_count": 225,
+      "char_count": 1009,
+      "start_char": 8917,
+      "end_char": 9932
+    }
+  },
+  {
+    "chunk_id": "sentence_transformers_docs:UKPLab\\sentence-transformers\\Router_module_validation_in_trainer.md:chunk:11",
+    "content": "ion[\"Best Model Selection\"]\n    BestModelSelection --> LoadBestModel[\"load_best_model_at_end\"]\n    \n    SaveCSV --> TrackingFile[\"evaluation_results.csv\"]\n    UpdateModelCard --> ModelCardData[\"model.model_card_data\"]\n```\n\n**Evaluation Integration in Training Pipeline**\n\n### Model Selection Mechanism\n\nThe training system uses the `primary_metric` and `greater_is_better` attributes to determine the best performing checkpoint:\n\n- Each evaluator defines a `primary_metric` (e.g., `\"ndcg@10\"`, `\"spearman_cosine\"`)\n- The `greater_is_better` boolean indicates optimization direction\n- Best model loading occurs when `load_best_model_at_end=True` in training arguments\n\n### Configuration and Extensibility\n\nCommon configuration options across evaluators:\n\n| Parameter | Purpose | Available In |\n|-----------|---------|--------------|\n| `truncate_dim` | Embedding dimension truncation | Most evaluators |\n| `batch_size` | Encoding batch size | All evaluators |\n| `show_progress_bar` | Progress display | Most evaluators |",
+    "metadata": {
+      "source_file": "UKPLab\\sentence-transformers\\Router_module_validation_in_trainer.md",
+      "source_collection": "sentence_transformers_docs",
+      "subdirectory": "UKPLab",
+      "filename": "Router_module_validation_in_trainer.md",
+      "file_extension": ".md",
+      "chunk_index": 11,
+      "token_count": 219,
+      "char_count": 1018,
+      "start_char": 9832,
+      "end_char": 10851
+    }
+  },
+  {
+    "chunk_id": "sentence_transformers_docs:UKPLab\\sentence-transformers\\Router_module_validation_in_trainer.md:chunk:12",
+    "content": "Encoding batch size | All evaluators |\n| `show_progress_bar` | Progress display | Most evaluators |\n| `write_csv` | CSV result logging | All evaluators |\n| `name` | Evaluator identifier | All evaluators |\n\nSources: [sentence_transformers/evaluation/SentenceEvaluator.py:71-75](), [sentence_transformers/evaluation/InformationRetrievalEvaluator.py:272-290]()\n\n## Advanced Features\n\n### Multi-Function Evaluation\n\nMany evaluators support multiple similarity functions simultaneously, enabling comprehensive comparison:\n\n```python",
+    "metadata": {
+      "source_file": "UKPLab\\sentence-transformers\\Router_module_validation_in_trainer.md",
+      "source_collection": "sentence_transformers_docs",
+      "subdirectory": "UKPLab",
+      "filename": "Router_module_validation_in_trainer.md",
+      "file_extension": ".md",
+      "chunk_index": 12,
+      "token_count": 117,
+      "char_count": 527,
+      "start_char": 10751,
+      "end_char": 11775
+    }
+  }
+]

@@ -1,0 +1,210 @@
+[
+  {
+    "chunk_id": "qdrant_ecosystem:qdrant_mcp-server-qdrant\\_qdrant_mcp-server-qdrant_3.1-configuration-options.md:chunk:0",
+    "content": "Configuration Options | qdrant/mcp-server-qdrant | DeepWiki\n\n[Index your code with Devin](private-repo.md)\n\n[DeepWiki](https://deepwiki.com)\n\n[DeepWiki](.md)\n\n[qdrant/mcp-server-qdrant](https://github.com/qdrant/mcp-server-qdrant \"Open repository\")\n\n[Index your code with](private-repo.md)\n\n[Devin](private-repo.md)\n\nShare\n\nLast indexed: 20 April 2025 ([a3ab0b](https://github.com/qdrant/mcp-server-qdrant/commits/a3ab0b96))\n\n- [Overview](qdrant/mcp-server-qdrant/1-overview.md)\n- [Architecture](qdrant/mcp-server-qdrant/2-architecture.md)\n- [Core Components](qdrant/mcp-server-qdrant/2.1-core-components.md)\n- [Embedding System](qdrant/mcp-server-qdrant/2.2-embedding-system.md)\n- [Configuration System](qdrant/mcp-server-qdrant/2.3-configuration-system.md)\n- [Installation & Deployment](qdrant/mcp-server-qdrant/3-installation-and-deployment.md)\n- [Configuration Options](qdrant/mcp-server-qdrant/3.1-configuration-options.md)\n- [Client Integration](qdrant/mcp-server-qdrant/3.2-client-integration.md)",
+    "metadata": {
+      "source_file": "qdrant_mcp-server-qdrant\\_qdrant_mcp-server-qdrant_3.1-configuration-options.md",
+      "source_collection": "qdrant_ecosystem",
+      "subdirectory": "qdrant_mcp-server-qdrant",
+      "filename": "_qdrant_mcp-server-qdrant_3.1-configuration-options.md",
+      "file_extension": ".md",
+      "chunk_index": 0,
+      "token_count": 312,
+      "char_count": 1003,
+      "start_char": 0,
+      "end_char": 1004
+    }
+  },
+  {
+    "chunk_id": "qdrant_ecosystem:qdrant_mcp-server-qdrant\\_qdrant_mcp-server-qdrant_3.1-configuration-options.md:chunk:1",
+    "content": "onfiguration-options.md)\n- [Client Integration](qdrant/mcp-server-qdrant/3.2-client-integration.md)\n- [API Reference](qdrant/mcp-server-qdrant/4-api-reference.md)\n- [qdrant-store Tool](qdrant/mcp-server-qdrant/4.1-qdrant-store-tool.md)\n- [qdrant-find Tool](qdrant/mcp-server-qdrant/4.2-qdrant-find-tool.md)\n- [QdrantConnector Reference](qdrant/mcp-server-qdrant/5-qdrantconnector-reference.md)\n- [Embedding Providers](qdrant/mcp-server-qdrant/6-embedding-providers.md)\n- [Development Guide](qdrant/mcp-server-qdrant/7-development-guide.md)\n\nMenu\n\n# Configuration Options\n\nRelevant source files\n\n- [README.md](https://github.com/qdrant/mcp-server-qdrant/blob/a3ab0b96/README.md)\n- [src/mcp\\_server\\_qdrant/settings.py](https://github.com/qdrant/mcp-server-qdrant/blob/a3ab0b96/src/mcp_server_qdrant/settings.py)\n\nThis page details all configuration options available for the mcp-server-qdrant. The server's behavior can be customized entirely through environment variables that map to internal settings classes.",
+    "metadata": {
+      "source_file": "qdrant_mcp-server-qdrant\\_qdrant_mcp-server-qdrant_3.1-configuration-options.md",
+      "source_collection": "qdrant_ecosystem",
+      "subdirectory": "qdrant_mcp-server-qdrant",
+      "filename": "_qdrant_mcp-server-qdrant_3.1-configuration-options.md",
+      "file_extension": ".md",
+      "chunk_index": 1,
+      "token_count": 294,
+      "char_count": 1010,
+      "start_char": 904,
+      "end_char": 1914
+    }
+  },
+  {
+    "chunk_id": "qdrant_ecosystem:qdrant_mcp-server-qdrant\\_qdrant_mcp-server-qdrant_3.1-configuration-options.md:chunk:2",
+    "content": "vior can be customized entirely through environment variables that map to internal settings classes. This page documents all supported environment variables, their purposes, default values, and usage patterns.\n\nFor information about installation and deployment methods, see [Installation & Deployment](qdrant/mcp-server-qdrant/3-installation-and-deployment.md), and for details about client integration, see [Client Integration](qdrant/mcp-server-qdrant/3.2-client-integration.md).\n\n## Configuration System Overview\n\nThe mcp-server-qdrant configuration is organized into three logical groups, each managed by a dedicated settings class:\n\n1. **Qdrant Connection Settings**: Configure how the server connects to Qdrant vector database\n2. **Embedding Provider Settings**: Configure which embedding model to use\n3. **Tool Settings**: Customize the descriptions of the MCP tools\n\n## Core Settings Classes",
+    "metadata": {
+      "source_file": "qdrant_mcp-server-qdrant\\_qdrant_mcp-server-qdrant_3.1-configuration-options.md",
+      "source_collection": "qdrant_ecosystem",
+      "subdirectory": "qdrant_mcp-server-qdrant",
+      "filename": "_qdrant_mcp-server-qdrant_3.1-configuration-options.md",
+      "file_extension": ".md",
+      "chunk_index": 2,
+      "token_count": 179,
+      "char_count": 899,
+      "start_char": 1814,
+      "end_char": 2715
+    }
+  },
+  {
+    "chunk_id": "qdrant_ecosystem:qdrant_mcp-server-qdrant\\_qdrant_mcp-server-qdrant_3.1-configuration-options.md:chunk:3",
+    "content": "to use\n3. **Tool Settings**: Customize the descriptions of the MCP tools\n\n## Core Settings Classes\n\nThe configuration system is implemented through three Pydantic settings classes that map environment variables to typed Python objects:\n\n```\n```\n\n**Figure: Settings Class Hierarchy**\n\nSources: [src/mcp\\_server\\_qdrant/settings.py19-63](https://github.com/qdrant/mcp-server-qdrant/blob/a3ab0b96/src/mcp_server_qdrant/settings.py#L19-L63)\n\n## Environment Variables Reference\n\nThe following table lists all environment variables that can be used to configure the server:\n\n| Environment Variable     | Description                       | Default Value                            | Settings Class            | Required |\n| ------------------------ | --------------------------------- | ---------------------------------------- | ------------------------- | -------- |\n| `QDRANT_URL`             | URL of the Qdrant server          | None                                     | QdrantSettings            | Yes\\*    |",
+    "metadata": {
+      "source_file": "qdrant_mcp-server-qdrant\\_qdrant_mcp-server-qdrant_3.1-configuration-options.md",
+      "source_collection": "qdrant_ecosystem",
+      "subdirectory": "qdrant_mcp-server-qdrant",
+      "filename": "_qdrant_mcp-server-qdrant_3.1-configuration-options.md",
+      "file_extension": ".md",
+      "chunk_index": 3,
+      "token_count": 199,
+      "char_count": 1009,
+      "start_char": 2615,
+      "end_char": 3625
+    }
+  },
+  {
+    "chunk_id": "qdrant_ecosystem:qdrant_mcp-server-qdrant\\_qdrant_mcp-server-qdrant_3.1-configuration-options.md:chunk:4",
+    "content": "server          | None                                     | QdrantSettings            | Yes\\*    |\n| `QDRANT_API_KEY`         | API key for the Qdrant server     | None                                     | QdrantSettings            | No       |\n| `COLLECTION_NAME`        | Name of the default collection    | None                                     | QdrantSettings            | Yes      |\n| `QDRANT_LOCAL_PATH`      | Path to local Qdrant database     | None                                     | QdrantSettings            | Yes\\*    |\n| `QDRANT_SEARCH_LIMIT`    | Maximum number of search results  | 10                                       | QdrantSettings            | No       |\n| `QDRANT_READ_ONLY`       | Run in read-only mode             | False                                    | QdrantSettings            | No       |\n| `EMBEDDING_PROVIDER`     | Embedding provider to use         | \"fastembed\"                              | EmbeddingProviderSettings | No       |",
+    "metadata": {
+      "source_file": "qdrant_mcp-server-qdrant\\_qdrant_mcp-server-qdrant_3.1-configuration-options.md",
+      "source_collection": "qdrant_ecosystem",
+      "subdirectory": "qdrant_mcp-server-qdrant",
+      "filename": "_qdrant_mcp-server-qdrant_3.1-configuration-options.md",
+      "file_extension": ".md",
+      "chunk_index": 4,
+      "token_count": 200,
+      "char_count": 981,
+      "start_char": 3525,
+      "end_char": 4507
+    }
+  },
+  {
+    "chunk_id": "qdrant_ecosystem:qdrant_mcp-server-qdrant\\_qdrant_mcp-server-qdrant_3.1-configuration-options.md:chunk:5",
+    "content": "to use         | \"fastembed\"                              | EmbeddingProviderSettings | No       |\n| `EMBEDDING_MODEL`        | Name of the embedding model       | \"sentence-transformers/all-MiniLM-L6-v2\" | EmbeddingProviderSettings | No       |\n| `TOOL_STORE_DESCRIPTION` | Custom description for store tool | See below                                | ToolSettings              | No       |\n| `TOOL_FIND_DESCRIPTION`  | Custom description for find tool  | See below                                | ToolSettings              | No       |\n\n\\* Either `QDRANT_URL` or `QDRANT_LOCAL_PATH` must be provided, but not both.\n\nSources: [src/mcp\\_server\\_qdrant/settings.py19-63](https://github.com/qdrant/mcp-server-qdrant/blob/a3ab0b96/src/mcp_server_qdrant/settings.py#L19-L63) [README.md39-54](https://github.com/qdrant/mcp-server-qdrant/blob/a3ab0b96/README.md#L39-L54)\n\n### Default Tool Descriptions\n\nThe default tool descriptions are defined in [src/mcp\\_server\\_qdrant/settings.py8-16](https://github.",
+    "metadata": {
+      "source_file": "qdrant_mcp-server-qdrant\\_qdrant_mcp-server-qdrant_3.1-configuration-options.md",
+      "source_collection": "qdrant_ecosystem",
+      "subdirectory": "qdrant_mcp-server-qdrant",
+      "filename": "_qdrant_mcp-server-qdrant_3.1-configuration-options.md",
+      "file_extension": ".md",
+      "chunk_index": 5,
+      "token_count": 267,
+      "char_count": 1001,
+      "start_char": 4407,
+      "end_char": 5409
+    }
+  },
+  {
+    "chunk_id": "qdrant_ecosystem:qdrant_mcp-server-qdrant\\_qdrant_mcp-server-qdrant_3.1-configuration-options.md:chunk:6",
+    "content": "e default tool descriptions are defined in [src/mcp\\_server\\_qdrant/settings.py8-16](https://github.com/qdrant/mcp-server-qdrant/blob/a3ab0b96/src/mcp_server_qdrant/settings.py#L8-L16):\n\nFor `TOOL_STORE_DESCRIPTION`:\n\n```\nKeep the memory for later use, when you are asked to remember something.\n```\n\nFor `TOOL_FIND_DESCRIPTION`:\n\n```\nLook up memories in Qdrant. Use this tool when you need to:\n - Find memories by their content\n - Access memories for further analysis\n - Get some personal information about the user\n```\n\nSources: [src/mcp\\_server\\_qdrant/settings.py8-16](https://github.com/qdrant/mcp-server-qdrant/blob/a3ab0b96/src/mcp_server_qdrant/settings.py#L8-L16)\n\n## Configuration Flow\n\nThe following diagram illustrates how environment variables flow through the system to configure its behavior:\n\n```\n```\n\n**Figure: Configuration Flow Through System Components**\n\nSources: [src/mcp\\_server\\_qdrant/settings.py19-63](https://github.com/qdrant/mcp-server-qdrant/blob/a3ab0b96/src/mcp_server_qdrant/settings.",
+    "metadata": {
+      "source_file": "qdrant_mcp-server-qdrant\\_qdrant_mcp-server-qdrant_3.1-configuration-options.md",
+      "source_collection": "qdrant_ecosystem",
+      "subdirectory": "qdrant_mcp-server-qdrant",
+      "filename": "_qdrant_mcp-server-qdrant_3.1-configuration-options.md",
+      "file_extension": ".md",
+      "chunk_index": 6,
+      "token_count": 278,
+      "char_count": 1016,
+      "start_char": 5309,
+      "end_char": 6325
+    }
+  },
+  {
+    "chunk_id": "qdrant_ecosystem:qdrant_mcp-server-qdrant\\_qdrant_mcp-server-qdrant_3.1-configuration-options.md:chunk:7",
+    "content": "s.py19-63](https://github.com/qdrant/mcp-server-qdrant/blob/a3ab0b96/src/mcp_server_qdrant/settings.py#L19-L63) [README.md39-54](https://github.com/qdrant/mcp-server-qdrant/blob/a3ab0b96/README.md#L39-L54)\n\n## Configuration Examples\n\n### Basic Qdrant Cloud Configuration\n\n```\n```\n\n### Local Qdrant Configuration\n\n```\n```\n\n### In-Memory Configuration (for Testing)\n\n```\n```\n\n### Custom Embedding Model Configuration\n\n```\n```\n\nSources: [README.md62-70](https://github.com/qdrant/mcp-server-qdrant/blob/a3ab0b96/README.md#L62-L70) [README.md112-152](https://github.com/qdrant/mcp-server-qdrant/blob/a3ab0b96/README.md#L112-L152)\n\n## Configuration Use Cases\n\n### Customizing Tool Descriptions for Code Search\n\nCustomizing the tool descriptions can adapt the server for specific use cases, such as code search:\n\n```\n```\n\nSources: [README.md166-178](https://github.com/qdrant/mcp-server-qdrant/blob/a3ab0b96/README.md#L166-L178)\n\n## Integration with Deployment Methods",
+    "metadata": {
+      "source_file": "qdrant_mcp-server-qdrant\\_qdrant_mcp-server-qdrant_3.1-configuration-options.md",
+      "source_collection": "qdrant_ecosystem",
+      "subdirectory": "qdrant_mcp-server-qdrant",
+      "filename": "_qdrant_mcp-server-qdrant_3.1-configuration-options.md",
+      "file_extension": ".md",
+      "chunk_index": 7,
+      "token_count": 317,
+      "char_count": 962,
+      "start_char": 6225,
+      "end_char": 7189
+    }
+  },
+  {
+    "chunk_id": "qdrant_ecosystem:qdrant_mcp-server-qdrant\\_qdrant_mcp-server-qdrant_3.1-configuration-options.md:chunk:8",
+    "content": "drant/mcp-server-qdrant/blob/a3ab0b96/README.md#L166-L178)\n\n## Integration with Deployment Methods\n\nThe following diagram shows how configuration options integrate with different deployment methods:\n\n```\n```\n\n**Figure: Configuration Integration with Deployment Methods**\n\nSources: [README.md59-147](https://github.com/qdrant/mcp-server-qdrant/blob/a3ab0b96/README.md#L59-L147) [README.md156-187](https://github.com/qdrant/mcp-server-qdrant/blob/a3ab0b96/README.md#L156-L187)\n\n## Configuration Method Evolution\n\n> \\[!IMPORTANT] Command-line arguments are not supported anymore! Please use environment variables for all configuration.\n\nAll configuration must be done through environment variables. The system previously supported command-line arguments, but this approach has been deprecated in favor of environment variables for consistency across deployment methods.\n\nSources: [README.md56-57](https://github.com/qdrant/mcp-server-qdrant/blob/a3ab0b96/README.md#L56-L57)\n\n## Important Constraints\n\n1.",
+    "metadata": {
+      "source_file": "qdrant_mcp-server-qdrant\\_qdrant_mcp-server-qdrant_3.1-configuration-options.md",
+      "source_collection": "qdrant_ecosystem",
+      "subdirectory": "qdrant_mcp-server-qdrant",
+      "filename": "_qdrant_mcp-server-qdrant_3.1-configuration-options.md",
+      "file_extension": ".md",
+      "chunk_index": 8,
+      "token_count": 261,
+      "char_count": 1000,
+      "start_char": 7089,
+      "end_char": 8089
+    }
+  },
+  {
+    "chunk_id": "qdrant_ecosystem:qdrant_mcp-server-qdrant\\_qdrant_mcp-server-qdrant_3.1-configuration-options.md:chunk:9",
+    "content": "//github.com/qdrant/mcp-server-qdrant/blob/a3ab0b96/README.md#L56-L57)\n\n## Important Constraints\n\n1. You cannot provide both `QDRANT_URL` and `QDRANT_LOCAL_PATH` at the same time.\n2. If no `COLLECTION_NAME` is provided, the server will require it as a parameter to the tools.\n3. For production use with Qdrant Cloud, both `QDRANT_URL` and `QDRANT_API_KEY` should be provided.\n\nSources: [README.md54](https://github.com/qdrant/mcp-server-qdrant/blob/a3ab0b96/README.md#L54-L54)\n\n## Client-Specific Configuration\n\n### Claude Desktop Configuration\n\nAdd the following to your `claude_desktop_config.json` file:\n\n```\n```\n\nSources: [README.md118-130](https://github.com/qdrant/mcp-server-qdrant/blob/a3ab0b96/README.md#L118-L130)\n\n### VS Code Configuration\n\nAdd the following to your VS Code settings or `.vscode/mcp.json` file:\n\n```\n```\n\nSources: [README.md356-386](https://github.com/qdrant/mcp-server-qdrant/blob/a3ab0b96/README.md#L356-L386)\n\n## Development Configuration",
+    "metadata": {
+      "source_file": "qdrant_mcp-server-qdrant\\_qdrant_mcp-server-qdrant_3.1-configuration-options.md",
+      "source_collection": "qdrant_ecosystem",
+      "subdirectory": "qdrant_mcp-server-qdrant",
+      "filename": "_qdrant_mcp-server-qdrant_3.1-configuration-options.md",
+      "file_extension": ".md",
+      "chunk_index": 9,
+      "token_count": 309,
+      "char_count": 969,
+      "start_char": 7989,
+      "end_char": 8960
+    }
+  },
+  {
+    "chunk_id": "qdrant_ecosystem:qdrant_mcp-server-qdrant\\_qdrant_mcp-server-qdrant_3.1-configuration-options.md:chunk:10",
+    "content": "thub.com/qdrant/mcp-server-qdrant/blob/a3ab0b96/README.md#L356-L386)\n\n## Development Configuration\n\nWhen developing or testing the server, you can use the MCP inspector:\n\n```\n```\n\nThis runs the server with an in-memory Qdrant database and opens the MCP inspector in your browser for interactive testing.\n\nSources: [README.md444-447](https://github.com/qdrant/mcp-server-qdrant/blob/a3ab0b96/README.md#L444-L447)\n\nDismiss\n\nRefresh this wiki\n\nEnter email to refresh\n\n### On this page\n\n- [Configuration Options](#configuration-options.md)\n- [Configuration System Overview](#configuration-system-overview.md)\n- [Core Settings Classes](#core-settings-classes.md)\n- [Environment Variables Reference](#environment-variables-reference.md)\n- [Default Tool Descriptions](#default-tool-descriptions.md)\n- [Configuration Flow](#configuration-flow.md)\n- [Configuration Examples](#configuration-examples.md)\n- [Basic Qdrant Cloud Configuration](#basic-qdrant-cloud-configuration.md)",
+    "metadata": {
+      "source_file": "qdrant_mcp-server-qdrant\\_qdrant_mcp-server-qdrant_3.1-configuration-options.md",
+      "source_collection": "qdrant_ecosystem",
+      "subdirectory": "qdrant_mcp-server-qdrant",
+      "filename": "_qdrant_mcp-server-qdrant_3.1-configuration-options.md",
+      "file_extension": ".md",
+      "chunk_index": 10,
+      "token_count": 245,
+      "char_count": 968,
+      "start_char": 8860,
+      "end_char": 9829
+    }
+  },
+  {
+    "chunk_id": "qdrant_ecosystem:qdrant_mcp-server-qdrant\\_qdrant_mcp-server-qdrant_3.1-configuration-options.md:chunk:11",
+    "content": "nfiguration-examples.md)\n- [Basic Qdrant Cloud Configuration](#basic-qdrant-cloud-configuration.md)\n- [Local Qdrant Configuration](#local-qdrant-configuration.md)\n- [In-Memory Configuration (for Testing)](#in-memory-configuration-for-testing.md)\n- [Custom Embedding Model Configuration](#custom-embedding-model-configuration.md)\n- [Configuration Use Cases](#configuration-use-cases.md)\n- [Customizing Tool Descriptions for Code Search](#customizing-tool-descriptions-for-code-search.md)\n- [Integration with Deployment Methods](#integration-with-deployment-methods.md)\n- [Configuration Method Evolution](#configuration-method-evolution.md)\n- [Important Constraints](#important-constraints.md)\n- [Client-Specific Configuration](#client-specific-configuration.md)\n- [Claude Desktop Configuration](#claude-desktop-configuration.md)\n- [VS Code Configuration](#vs-code-configuration.md)\n- [Development Configuration](#development-configuration.md)",
+    "metadata": {
+      "source_file": "qdrant_mcp-server-qdrant\\_qdrant_mcp-server-qdrant_3.1-configuration-options.md",
+      "source_collection": "qdrant_ecosystem",
+      "subdirectory": "qdrant_mcp-server-qdrant",
+      "filename": "_qdrant_mcp-server-qdrant_3.1-configuration-options.md",
+      "file_extension": ".md",
+      "chunk_index": 11,
+      "token_count": 207,
+      "char_count": 941,
+      "start_char": 9729,
+      "end_char": 10753
+    }
+  },
+  {
+    "chunk_id": "qdrant_ecosystem:qdrant_mcp-server-qdrant\\_qdrant_mcp-server-qdrant_3.1-configuration-options.md:chunk:12",
+    "content": "configuration.md)",
+    "metadata": {
+      "source_file": "qdrant_mcp-server-qdrant\\_qdrant_mcp-server-qdrant_3.1-configuration-options.md",
+      "source_collection": "qdrant_ecosystem",
+      "subdirectory": "qdrant_mcp-server-qdrant",
+      "filename": "_qdrant_mcp-server-qdrant_3.1-configuration-options.md",
+      "file_extension": ".md",
+      "chunk_index": 12,
+      "token_count": 3,
+      "char_count": 17,
+      "start_char": 10653,
+      "end_char": 11677
+    }
+  }
+]

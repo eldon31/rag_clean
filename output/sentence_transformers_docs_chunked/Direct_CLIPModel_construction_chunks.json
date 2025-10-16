@@ -1,0 +1,34 @@
+[
+  {
+    "chunk_id": "sentence_transformers_docs:UKPLab\\sentence-transformers\\Direct_CLIPModel_construction.md:chunk:0",
+    "content": "from sentence_transformers.models import CLIPModel\nclip_model = CLIPModel(\n    model_name='openai/clip-vit-base-patch32',\n    processor_name='openai/clip-vit-base-patch32'\n)\n```\n\nThe `CLIPModel.load()` class method handles model restoration from disk, ensuring both the `transformers.CLIPModel` and `transformers.CLIPProcessor` components are properly loaded.\n\nSources: [sentence_transformers/models/CLIPModel.py:18-25](), [sentence_transformers/models/CLIPModel.py:102-121]()\n\n## Serialization and Persistence\n\nThe `CLIPModel` implements custom save/load methods to properly handle both the model and processor components:\n\n```mermaid\ngraph LR\n    subgraph Save[\"save() Method\"]\n        SAVEMODEL[\"model.save_pretrained()\"]\n        SAVEPROC[\"processor.save_pretrained()\"]\n    end\n    \n    subgraph Load[\"load() Method\"] \n        LOADPATH[\"load_dir_path()\"]\n        CONSTRUCT[\"CLIPModel(local_path)\"]\n    end\n    \n    Save --> DISK[\"Disk Storage\"]\n    DISK --> Load\n```",
+    "metadata": {
+      "source_file": "UKPLab\\sentence-transformers\\Direct_CLIPModel_construction.md",
+      "source_collection": "sentence_transformers_docs",
+      "subdirectory": "UKPLab",
+      "filename": "Direct_CLIPModel_construction.md",
+      "file_extension": ".md",
+      "chunk_index": 0,
+      "token_count": 248,
+      "char_count": 969,
+      "start_char": 0,
+      "end_char": 971
+    }
+  },
+  {
+    "chunk_id": "sentence_transformers_docs:UKPLab\\sentence-transformers\\Direct_CLIPModel_construction.md:chunk:1",
+    "content": "RUCT[\"CLIPModel(local_path)\"]\n    end\n    \n    Save --> DISK[\"Disk Storage\"]\n    DISK --> Load\n```\n\nThis ensures that both the vision and text processing components are preserved during model serialization.\n\nSources: [sentence_transformers/models/CLIPModel.py:98-121]()",
+    "metadata": {
+      "source_file": "UKPLab\\sentence-transformers\\Direct_CLIPModel_construction.md",
+      "source_collection": "sentence_transformers_docs",
+      "subdirectory": "UKPLab",
+      "filename": "Direct_CLIPModel_construction.md",
+      "file_extension": ".md",
+      "chunk_index": 1,
+      "token_count": 66,
+      "char_count": 269,
+      "start_char": 871,
+      "end_char": 1895
+    }
+  }
+]

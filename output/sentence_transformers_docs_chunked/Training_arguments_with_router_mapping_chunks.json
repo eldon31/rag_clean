@@ -1,0 +1,274 @@
+[
+  {
+    "chunk_id": "sentence_transformers_docs:UKPLab\\sentence-transformers\\Training_arguments_with_router_mapping.md:chunk:0",
+    "content": "args = SentenceTransformerTrainingArguments(\n    router_mapping={\n        \"question\": \"query\",\n        \"positive\": \"document\", \n        \"negative\": \"document\"\n    }\n)\n```\n\n### Data Collator Integration\n\nThe data collator uses `router_mapping` to pass task information to the `Router.tokenize()` method:\n\nSources: [sentence_transformers/data_collator.py:55-68](), [sentence_transformers/data_collator.py:92-94](), [sentence_transformers/models/Router.py:287-324]()\n\n### Validation\n\nThe trainer validates that models using `Router` modules have proper `router_mapping` configured:\n\nSources: [sentence_transformers/trainer.py:206-212]()\n\n## Memory-Efficient Training Features\n\nThe training system includes several memory optimization features:\n\n| Feature | Purpose | Implementation |\n|---------|---------|----------------|\n| Gradient Caching | Enables larger effective batch sizes | `CachedMultipleNegativesRankingLoss` |\n| Multi-Dataset Batching | Efficient sampling across datasets | `MultiDatasetBatchSampler` classes |",
+    "metadata": {
+      "source_file": "UKPLab\\sentence-transformers\\Training_arguments_with_router_mapping.md",
+      "source_collection": "sentence_transformers_docs",
+      "subdirectory": "UKPLab",
+      "filename": "Training_arguments_with_router_mapping.md",
+      "file_extension": ".md",
+      "chunk_index": 0,
+      "token_count": 229,
+      "char_count": 1019,
+      "start_char": 0,
+      "end_char": 1020
+    }
+  },
+  {
+    "chunk_id": "sentence_transformers_docs:UKPLab\\sentence-transformers\\Training_arguments_with_router_mapping.md:chunk:1",
+    "content": "Multi-Dataset Batching | Efficient sampling across datasets | `MultiDatasetBatchSampler` classes |\n| Loss Component Tracking | Monitors complex loss breakdowns | `track_loss_components()` |\n| Model Card Generation | Automatic documentation | `SentenceTransformerModelCardCallback` |\n\nSources: [sentence_transformers/trainer.py:443-462](), [sentence_transformers/trainer.py:327-345]()\n\n## Next Steps\n\nFor detailed training guides specific to each model type:\n- [SentenceTransformer Training](#3.1) - Dense embedding model training\n- [SparseEncoder Training](#3.2) - Sparse embedding model training  \n- [CrossEncoder Training](#3.3) - Cross-encoder reranking model training\n- [Memory-Efficient Training](#3.7) - Advanced memory optimization techniques\n\n# SentenceTransformer Training\n\n\n\n\nThis document covers the comprehensive training system for SentenceTransformer models, including the trainer architecture, data processing pipeline, loss functions, and evaluation mechanisms.",
+    "metadata": {
+      "source_file": "UKPLab\\sentence-transformers\\Training_arguments_with_router_mapping.md",
+      "source_collection": "sentence_transformers_docs",
+      "subdirectory": "UKPLab",
+      "filename": "Training_arguments_with_router_mapping.md",
+      "file_extension": ".md",
+      "chunk_index": 1,
+      "token_count": 209,
+      "char_count": 977,
+      "start_char": 920,
+      "end_char": 1898
+    }
+  },
+  {
+    "chunk_id": "sentence_transformers_docs:UKPLab\\sentence-transformers\\Training_arguments_with_router_mapping.md:chunk:2",
+    "content": "uding the trainer architecture, data processing pipeline, loss functions, and evaluation mechanisms. It focuses on the `SentenceTransformerTrainer` class and its supporting infrastructure for training dense embedding models.\n\nFor information about training sparse encoder models, see [SparseEncoder Training](#3.2). For training cross-encoder models, see [CrossEncoder Training](#3.3). For detailed information about available loss functions, see [Loss Functions for SentenceTransformer](#3.4).\n\n## Training System Architecture\n\nThe SentenceTransformer training system is built around the `SentenceTransformerTrainer` class, which extends the Hugging Face Transformers `Trainer` with specialized functionality for embedding model training.\n\n```mermaid\ngraph TB\n    subgraph \"Training Infrastructure\"\n        ST[\"SentenceTransformerTrainer\"]\n        STA[\"SentenceTransformerTrainingArguments\"]\n        DC[\"SentenceTransformerDataCollator\"]\n        MC[\"SentenceTransformerModelCardCallback\"]\n    end",
+    "metadata": {
+      "source_file": "UKPLab\\sentence-transformers\\Training_arguments_with_router_mapping.md",
+      "source_collection": "sentence_transformers_docs",
+      "subdirectory": "UKPLab",
+      "filename": "Training_arguments_with_router_mapping.md",
+      "file_extension": ".md",
+      "chunk_index": 2,
+      "token_count": 187,
+      "char_count": 997,
+      "start_char": 1798,
+      "end_char": 2801
+    }
+  },
+  {
+    "chunk_id": "sentence_transformers_docs:UKPLab\\sentence-transformers\\Training_arguments_with_router_mapping.md:chunk:3",
+    "content": "[\"SentenceTransformerDataCollator\"]\n        MC[\"SentenceTransformerModelCardCallback\"]\n    end\n    \n    subgraph \"Model Components\"\n        Model[\"SentenceTransformer\"]\n        Router[\"Router Module\"]\n        Transformer[\"Transformer\"]\n        Pooling[\"Pooling\"]\n    end\n    \n    subgraph \"Data Processing\"\n        Dataset[\"Dataset/DatasetDict\"]\n        Prompts[\"Prompts System\"]\n        RouterMapping[\"Router Mapping\"]\n        BatchSampler[\"Batch Samplers\"]\n    end\n    \n    subgraph \"Loss & Evaluation\"\n        Loss[\"Loss Functions\"]\n        Evaluator[\"SentenceEvaluator\"]\n        SequentialEvaluator[\"SequentialEvaluator\"]\n    end\n    \n    ST --> Model\n    ST --> STA\n    ST --> DC\n    ST --> MC\n    ST --> Dataset\n    ST --> Loss\n    ST --> Evaluator\n    \n    STA --> Prompts\n    STA --> RouterMapping\n    STA --> BatchSampler\n    \n    DC --> Prompts\n    DC --> RouterMapping\n    \n    Model --> Router\n    Model --> Transformer\n    Model --> Pooling\n    \n    Evaluator --> SequentialEvaluator\n```",
+    "metadata": {
+      "source_file": "UKPLab\\sentence-transformers\\Training_arguments_with_router_mapping.md",
+      "source_collection": "sentence_transformers_docs",
+      "subdirectory": "UKPLab",
+      "filename": "Training_arguments_with_router_mapping.md",
+      "file_extension": ".md",
+      "chunk_index": 3,
+      "token_count": 215,
+      "char_count": 1000,
+      "start_char": 2701,
+      "end_char": 3703
+    }
+  },
+  {
+    "chunk_id": "sentence_transformers_docs:UKPLab\\sentence-transformers\\Training_arguments_with_router_mapping.md:chunk:4",
+    "content": "ter\n    Model --> Transformer\n    Model --> Pooling\n    \n    Evaluator --> SequentialEvaluator\n```\n\n**Sources:** [sentence_transformers/trainer.py:59-127](), [sentence_transformers/training_args.py](), [sentence_transformers/data_collator.py:13-23]()\n\n## Core Training Flow\n\nThe training process follows a structured pipeline from data input to model optimization:\n\n```mermaid\ngraph TD\n    Input[\"Input Dataset\"] --> Validate[\"validate_column_names()\"]\n    Validate --> Preprocess[\"preprocess_dataset()\"]\n    Preprocess --> DC[\"SentenceTransformerDataCollator\"]\n    \n    subgraph \"Data Collation\"\n        DC --> ExtractLabels[\"Extract Labels\"]\n        DC --> ApplyPrompts[\"Apply Prompts\"]\n        DC --> Tokenize[\"tokenize_fn()\"]\n        DC --> RouterMap[\"Apply Router Mapping\"]\n    end\n    \n    Tokenize --> Features[\"Tokenized Features\"]\n    Features --> ComputeLoss[\"compute_loss()\"]\n    \n    subgraph \"Loss Computation\"\n        ComputeLoss --> CollectFeatures[\"collect_features()\"]",
+    "metadata": {
+      "source_file": "UKPLab\\sentence-transformers\\Training_arguments_with_router_mapping.md",
+      "source_collection": "sentence_transformers_docs",
+      "subdirectory": "UKPLab",
+      "filename": "Training_arguments_with_router_mapping.md",
+      "file_extension": ".md",
+      "chunk_index": 4,
+      "token_count": 223,
+      "char_count": 985,
+      "start_char": 3603,
+      "end_char": 4589
+    }
+  },
+  {
+    "chunk_id": "sentence_transformers_docs:UKPLab\\sentence-transformers\\Training_arguments_with_router_mapping.md:chunk:5",
+    "content": "subgraph \"Loss Computation\"\n        ComputeLoss --> CollectFeatures[\"collect_features()\"]\n        CollectFeatures --> LossForward[\"loss.forward()\"]\n        LossForward --> TrackComponents[\"track_loss_components()\"]\n    end\n    \n    TrackComponents --> Optimizer[\"Optimizer Step\"]\n    Optimizer --> Evaluate[\"evaluation_loop()\"]\n    \n    subgraph \"Evaluation\"\n        Evaluate --> EvalDataset[\"Eval Dataset Loss\"]\n        Evaluate --> Evaluator[\"evaluator()\"]\n        Evaluator --> Metrics[\"Evaluation Metrics\"]\n    end\n    \n    Metrics --> Log[\"log()\"]\n    Log --> SaveModel[\"Save Model/Checkpoint\"]\n```\n\n**Sources:** [sentence_transformers/trainer.py:391-441](), [sentence_transformers/trainer.py:531-592](), [sentence_transformers/data_collator.py:35-119]()\n\n## SentenceTransformerTrainer\n\nThe `SentenceTransformerTrainer` class is the central component that orchestrates the entire training process. It extends the Hugging Face `Trainer` with specialized functionality for embedding models.\n\n### Key Features",
+    "metadata": {
+      "source_file": "UKPLab\\sentence-transformers\\Training_arguments_with_router_mapping.md",
+      "source_collection": "sentence_transformers_docs",
+      "subdirectory": "UKPLab",
+      "filename": "Training_arguments_with_router_mapping.md",
+      "file_extension": ".md",
+      "chunk_index": 5,
+      "token_count": 227,
+      "char_count": 1011,
+      "start_char": 4489,
+      "end_char": 5512
+    }
+  },
+  {
+    "chunk_id": "sentence_transformers_docs:UKPLab\\sentence-transformers\\Training_arguments_with_router_mapping.md:chunk:6",
+    "content": "the Hugging Face `Trainer` with specialized functionality for embedding models.\n\n### Key Features\n\n- **Multi-dataset training support** through `DatasetDict`\n- **Loss component tracking** for complex loss functions that return dictionaries\n- **Router module integration** for asymmetric training architectures\n- **Prompt system support** for instruction-based training\n- **Automatic model card generation** during training\n\n### Initialization and Configuration\n\nThe trainer accepts several key parameters:\n\n```python\n# Key trainer initialization parameters from trainer.py:129-148\nmodel: SentenceTransformer | None = None\nargs: SentenceTransformerTrainingArguments | None = None\ntrain_dataset: Dataset | DatasetDict | IterableDataset | dict[str, Dataset] | None = None\neval_dataset: Dataset | DatasetDict | IterableDataset | dict[str, Dataset] | None = None\nloss: nn.Module | dict[str, nn.Module] | Callable | dict[str, Callable] | None = None\nevaluator: SentenceEvaluator | list[SentenceEvaluator] | None = None\n```",
+    "metadata": {
+      "source_file": "UKPLab\\sentence-transformers\\Training_arguments_with_router_mapping.md",
+      "source_collection": "sentence_transformers_docs",
+      "subdirectory": "UKPLab",
+      "filename": "Training_arguments_with_router_mapping.md",
+      "file_extension": ".md",
+      "chunk_index": 6,
+      "token_count": 214,
+      "char_count": 1016,
+      "start_char": 5412,
+      "end_char": 6431
+    }
+  },
+  {
+    "chunk_id": "sentence_transformers_docs:UKPLab\\sentence-transformers\\Training_arguments_with_router_mapping.md:chunk:7",
+    "content": ", Callable] | None = None\nevaluator: SentenceEvaluator | list[SentenceEvaluator] | None = None\n```\n\n**Sources:** [sentence_transformers/trainer.py:129-148](), [sentence_transformers/trainer.py:291-310]()\n\n### Loss Computation Pipeline\n\nThe trainer implements a sophisticated loss computation system that supports both single and multi-dataset training:\n\n```mermaid\ngraph TD\n    ComputeLoss[\"compute_loss()\"] --> ExtractDataset[\"Extract dataset_name\"]\n    ExtractDataset --> CollectFeatures[\"collect_features()\"]\n    CollectFeatures --> SelectLoss[\"Select Loss Function\"]\n    \n    subgraph \"Feature Collection\"\n        CollectFeatures --> ParseColumns[\"Parse Input Columns\"]\n        ParseColumns --> ExtractLabels[\"Extract Labels\"]\n        ParseColumns --> GroupFeatures[\"Group by Prefix\"]\n    end\n    \n    subgraph \"Loss Selection\"\n        SelectLoss --> SingleLoss[\"Single Loss\"]\n        SelectLoss --> DictLoss[\"Dictionary Loss\"]\n        DictLoss --> DatasetMapping[\"Map dataset_name to loss\"]\n    end",
+    "metadata": {
+      "source_file": "UKPLab\\sentence-transformers\\Training_arguments_with_router_mapping.md",
+      "source_collection": "sentence_transformers_docs",
+      "subdirectory": "UKPLab",
+      "filename": "Training_arguments_with_router_mapping.md",
+      "file_extension": ".md",
+      "chunk_index": 7,
+      "token_count": 218,
+      "char_count": 1003,
+      "start_char": 6331,
+      "end_char": 7340
+    }
+  },
+  {
+    "chunk_id": "sentence_transformers_docs:UKPLab\\sentence-transformers\\Training_arguments_with_router_mapping.md:chunk:8",
+    "content": "oss[\"Dictionary Loss\"]\n        DictLoss --> DatasetMapping[\"Map dataset_name to loss\"]\n    end\n    \n    GroupFeatures --> LossForward[\"loss.forward(features, labels)\"]\n    DatasetMapping --> LossForward\n    SingleLoss --> LossForward\n    \n    LossForward --> CheckDict[\"Loss is dict?\"]\n    CheckDict -->|Yes| TrackComponents[\"track_loss_components()\"]\n    CheckDict -->|No| ReturnLoss[\"Return Loss\"]\n    TrackComponents --> SumComponents[\"Sum Loss Components\"]\n    SumComponents --> ReturnLoss\n```\n\n**Sources:** [sentence_transformers/trainer.py:391-441](), [sentence_transformers/trainer.py:496-529](), [sentence_transformers/trainer.py:443-462]()\n\n## Training Arguments\n\nThe `SentenceTransformerTrainingArguments` class extends Hugging Face's `TrainingArguments` with additional parameters specific to embedding model training.\n\n### Key SentenceTransformer-Specific Arguments\n\n- **`batch_sampler`**: Controls how batches are constructed (e.g., `NO_DUPLICATES`, `GROUP_BY_LABEL`)",
+    "metadata": {
+      "source_file": "UKPLab\\sentence-transformers\\Training_arguments_with_router_mapping.md",
+      "source_collection": "sentence_transformers_docs",
+      "subdirectory": "UKPLab",
+      "filename": "Training_arguments_with_router_mapping.md",
+      "file_extension": ".md",
+      "chunk_index": 8,
+      "token_count": 228,
+      "char_count": 980,
+      "start_char": 7240,
+      "end_char": 8221
+    }
+  },
+  {
+    "chunk_id": "sentence_transformers_docs:UKPLab\\sentence-transformers\\Training_arguments_with_router_mapping.md:chunk:9",
+    "content": "**`batch_sampler`**: Controls how batches are constructed (e.g., `NO_DUPLICATES`, `GROUP_BY_LABEL`)\n- **`multi_dataset_batch_sampler`**: Strategy for sampling from multiple datasets\n- **`prompts`**: System for adding prompts to input text\n- **`router_mapping`**: Maps dataset columns to Router module routes\n- **`learning_rate_mapping`**: Allows different learning rates for different model components\n\n**Sources:** [sentence_transformers/training_args.py](), [sentence_transformers/trainer.py:156-163]()\n\n## Data Processing System\n\n### SentenceTransformerDataCollator\n\nThe data collator handles the conversion from raw dataset samples to tokenized model inputs:\n\n```mermaid\ngraph TD\n    DataCollator[\"SentenceTransformerDataCollator\"] --> ProcessFeatures[\"Process Features\"]\n    \n    subgraph \"Feature Processing\"\n        ProcessFeatures --> ExtractDatasetName[\"Extract dataset_name\"]\n        ProcessFeatures --> ExtractLabels[\"Extract Labels\"]\n        ProcessFeatures --> ProcessColumns[\"Process Text Columns\"]\n    end",
+    "metadata": {
+      "source_file": "UKPLab\\sentence-transformers\\Training_arguments_with_router_mapping.md",
+      "source_collection": "sentence_transformers_docs",
+      "subdirectory": "UKPLab",
+      "filename": "Training_arguments_with_router_mapping.md",
+      "file_extension": ".md",
+      "chunk_index": 9,
+      "token_count": 217,
+      "char_count": 1020,
+      "start_char": 8121,
+      "end_char": 9142
+    }
+  },
+  {
+    "chunk_id": "sentence_transformers_docs:UKPLab\\sentence-transformers\\Training_arguments_with_router_mapping.md:chunk:10",
+    "content": "Labels[\"Extract Labels\"]\n        ProcessFeatures --> ProcessColumns[\"Process Text Columns\"]\n    end\n    \n    subgraph \"Column Processing\"\n        ProcessColumns --> GetTask[\"Get Router Task\"]\n        ProcessColumns --> GetPrompt[\"Get Column Prompt\"]\n        ProcessColumns --> ApplyPrompt[\"Apply Prompt Prefix\"]\n        ProcessColumns --> TokenizeColumn[\"tokenize_fn(texts, task)\"]\n    end\n    \n    subgraph \"Prompt System\"\n        GetPrompt --> SinglePrompt[\"Single String Prompt\"]\n        GetPrompt --> DatasetPrompts[\"Dataset-specific Prompts\"]\n        GetPrompt --> ColumnPrompts[\"Column-specific Prompts\"]\n    end\n    \n    TokenizeColumn --> PrefixKeys[\"Prefix with column_name\"]\n    PrefixKeys --> BatchOutput[\"Final Batch Dict\"]\n```\n\n**Sources:** [sentence_transformers/data_collator.py:35-119](), [sentence_transformers/data_collator.py:90-118]()\n\n### Prompt System\n\nThe training system supports a flexible prompting mechanism:\n\n- **Single prompt**: Applied to all columns and datasets",
+    "metadata": {
+      "source_file": "UKPLab\\sentence-transformers\\Training_arguments_with_router_mapping.md",
+      "source_collection": "sentence_transformers_docs",
+      "subdirectory": "UKPLab",
+      "filename": "Training_arguments_with_router_mapping.md",
+      "file_extension": ".md",
+      "chunk_index": 10,
+      "token_count": 214,
+      "char_count": 993,
+      "start_char": 9042,
+      "end_char": 10036
+    }
+  },
+  {
+    "chunk_id": "sentence_transformers_docs:UKPLab\\sentence-transformers\\Training_arguments_with_router_mapping.md:chunk:11",
+    "content": "supports a flexible prompting mechanism:\n\n- **Single prompt**: Applied to all columns and datasets\n- **Column-specific prompts**: Different prompts for different input columns\n- **Dataset-specific prompts**: Different prompts for different datasets in multi-dataset training\n- **Combined prompts**: Dataset and column-specific combinations\n\n**Sources:** [sentence_transformers/data_collator.py:69-89](), [sentence_transformers/data_collator.py:96-101]()\n\n## Router Module Integration\n\nThe Router module enables asymmetric training architectures where different input types (e.g., queries vs documents) are processed through different model paths.\n\n### Router Training Requirements\n\nWhen using a Router module, specific training arguments are required:\n\n```mermaid\ngraph TD\n    RouterModel[\"Model with Router\"] --> CheckMapping[\"Check router_mapping\"]\n    CheckMapping -->|Missing| Error[\"ValueError: router_mapping required\"]\n    CheckMapping -->|Present| ValidateMapping[\"Validate Mapping\"]",
+    "metadata": {
+      "source_file": "UKPLab\\sentence-transformers\\Training_arguments_with_router_mapping.md",
+      "source_collection": "sentence_transformers_docs",
+      "subdirectory": "UKPLab",
+      "filename": "Training_arguments_with_router_mapping.md",
+      "file_extension": ".md",
+      "chunk_index": 11,
+      "token_count": 196,
+      "char_count": 991,
+      "start_char": 9936,
+      "end_char": 10934
+    }
+  },
+  {
+    "chunk_id": "sentence_transformers_docs:UKPLab\\sentence-transformers\\Training_arguments_with_router_mapping.md:chunk:12",
+    "content": "r: router_mapping required\"]\n    CheckMapping -->|Present| ValidateMapping[\"Validate Mapping\"]\n    \n    subgraph \"Router Mapping\"\n        ValidateMapping --> ColumnMapping[\"Column → Route Mapping\"]\n        ColumnMapping --> QueryRoute[\"'query' route\"]\n        ColumnMapping --> DocumentRoute[\"'document' route\"]\n    end\n    \n    subgraph \"Data Collation\"\n        ColumnMapping --> DataCollator[\"SentenceTransformerDataCollator\"]\n        DataCollator --> ApplyRouting[\"Apply router_mapping\"]\n        ApplyRouting --> TokenizeWithTask[\"tokenize_fn(texts, task)\"]\n    end\n    \n    TokenizeWithTask --> RouterForward[\"router.forward(features, task)\"]\n```\n\n**Sources:** [sentence_transformers/trainer.py:206-212](), [sentence_transformers/models/Router.py:217-245](), [sentence_transformers/data_collator.py:92-94]()\n\n### Router Configuration Example\n\n```python\n# Router mapping example from training arguments\nrouter_mapping = {\n    \"question\": \"query\",\n    \"positive\": \"document\", \n    \"negative\": \"document\"\n}\n```",
+    "metadata": {
+      "source_file": "UKPLab\\sentence-transformers\\Training_arguments_with_router_mapping.md",
+      "source_collection": "sentence_transformers_docs",
+      "subdirectory": "UKPLab",
+      "filename": "Training_arguments_with_router_mapping.md",
+      "file_extension": ".md",
+      "chunk_index": 12,
+      "token_count": 238,
+      "char_count": 1011,
+      "start_char": 10834,
+      "end_char": 11847
+    }
+  },
+  {
+    "chunk_id": "sentence_transformers_docs:UKPLab\\sentence-transformers\\Training_arguments_with_router_mapping.md:chunk:13",
+    "content": "mapping = {\n    \"question\": \"query\",\n    \"positive\": \"document\", \n    \"negative\": \"document\"\n}\n```\n\n**Sources:** [sentence_transformers/models/Router.py:45-54](), [tests/models/test_router.py:432-433]()\n\n## Evaluation System\n\nThe training system supports evaluation through both dataset-based metrics and custom evaluators.\n\n### Evaluation Pipeline\n\n```mermaid\ngraph TD\n    EvaluationLoop[\"evaluation_loop()\"] --> EvalDataset[\"Eval Dataset Loss\"]\n    EvaluationLoop --> CheckEvaluator[\"evaluator exists?\"]\n    \n    CheckEvaluator -->|No| ReturnMetrics[\"Return Dataset Metrics\"]\n    CheckEvaluator -->|Yes| RunEvaluator[\"evaluator(model, output_path, epoch, steps)\"]\n    \n    subgraph \"Evaluator Execution\"\n        RunEvaluator --> SingleEvaluator[\"Single Evaluator\"]\n        RunEvaluator --> SequentialEvaluator[\"SequentialEvaluator\"]\n        SequentialEvaluator --> MultipleEvaluators[\"Multiple Evaluators\"]\n    end\n    \n    SingleEvaluator --> EvaluatorMetrics[\"Evaluator Metrics\"]",
+    "metadata": {
+      "source_file": "UKPLab\\sentence-transformers\\Training_arguments_with_router_mapping.md",
+      "source_collection": "sentence_transformers_docs",
+      "subdirectory": "UKPLab",
+      "filename": "Training_arguments_with_router_mapping.md",
+      "file_extension": ".md",
+      "chunk_index": 13,
+      "token_count": 214,
+      "char_count": 983,
+      "start_char": 11747,
+      "end_char": 12731
+    }
+  },
+  {
+    "chunk_id": "sentence_transformers_docs:UKPLab\\sentence-transformers\\Training_arguments_with_router_mapping.md:chunk:14",
+    "content": "s[\"Multiple Evaluators\"]\n    end\n    \n    SingleEvaluator --> EvaluatorMetrics[\"Evaluator Metrics\"]\n    MultipleEvaluators --> EvaluatorMetrics\n    \n    EvaluatorMetrics --> PrefixMetrics[\"Prefix with eval_\"]\n    PrefixMetrics --> MergeMetrics[\"Merge with Dataset Metrics\"]\n    MergeMetrics --> FinalMetrics[\"Final Evaluation Output\"]\n```\n\n**Sources:** [sentence_transformers/trainer.py:545-592](), [sentence_transformers/trainer.py:312-315]()\n\n## Batch Sampling Strategies\n\nThe training system provides several batch sampling strategies to optimize training performance:\n\n### Available Batch Samplers\n\n- **`DefaultBatchSampler`**: Standard random sampling\n- **`NoDuplicatesBatchSampler`**: Ensures no duplicate samples in batch (useful for in-batch negatives)\n- **`GroupByLabelBatchSampler`**: Groups samples by label\n- **`ProportionalBatchSampler`**: Maintains dataset proportions in multi-dataset training\n- **`RoundRobinBatchSampler`**: Alternates between datasets\n\n**Sources:** [sentence_transformers/trainer.",
+    "metadata": {
+      "source_file": "UKPLab\\sentence-transformers\\Training_arguments_with_router_mapping.md",
+      "source_collection": "sentence_transformers_docs",
+      "subdirectory": "UKPLab",
+      "filename": "Training_arguments_with_router_mapping.md",
+      "file_extension": ".md",
+      "chunk_index": 14,
+      "token_count": 225,
+      "char_count": 1014,
+      "start_char": 12631,
+      "end_char": 13645
+    }
+  },
+  {
+    "chunk_id": "sentence_transformers_docs:UKPLab\\sentence-transformers\\Training_arguments_with_router_mapping.md:chunk:15",
+    "content": "RoundRobinBatchSampler`**: Alternates between datasets\n\n**Sources:** [sentence_transformers/trainer.py:623-684](), [sentence_transformers/sampler.py]()\n\n## Model Card Generation\n\nThe training system automatically generates model cards that document the training process:\n\n```mermaid\ngraph TD\n    TrainingStart[\"Training Initialization\"] --> AddCallback[\"add_model_card_callback()\"]\n    AddCallback --> ModelCardCallback[\"SentenceTransformerModelCardCallback\"]\n    \n    subgraph \"Callback Lifecycle\"\n        ModelCardCallback --> OnInitEnd[\"on_init_end()\"]\n        ModelCardCallback --> OnTrainEnd[\"on_train_end()\"]\n        ModelCardCallback --> OnEvaluate[\"on_evaluate()\"]\n    end\n    \n    OnInitEnd --> TrackArgs[\"Track Training Arguments\"]\n    OnTrainEnd --> TrackMetrics[\"Track Training Metrics\"]\n    OnEvaluate --> TrackEvalMetrics[\"Track Evaluation Metrics\"]\n    \n    TrackArgs --> GenerateCard[\"Generate Model Card\"]\n    TrackMetrics --> GenerateCard\n    TrackEvalMetrics --> GenerateCard",
+    "metadata": {
+      "source_file": "UKPLab\\sentence-transformers\\Training_arguments_with_router_mapping.md",
+      "source_collection": "sentence_transformers_docs",
+      "subdirectory": "UKPLab",
+      "filename": "Training_arguments_with_router_mapping.md",
+      "file_extension": ".md",
+      "chunk_index": 15,
+      "token_count": 209,
+      "char_count": 994,
+      "start_char": 13545,
+      "end_char": 14545
+    }
+  },
+  {
+    "chunk_id": "sentence_transformers_docs:UKPLab\\sentence-transformers\\Training_arguments_with_router_mapping.md:chunk:16",
+    "content": "\"Generate Model Card\"]\n    TrackMetrics --> GenerateCard\n    TrackEvalMetrics --> GenerateCard\n    \n    GenerateCard --> SaveCard[\"Save README.md\"]\n```\n\n**Sources:** [sentence_transformers/trainer.py:327-345](), [sentence_transformers/model_card.py]()",
+    "metadata": {
+      "source_file": "UKPLab\\sentence-transformers\\Training_arguments_with_router_mapping.md",
+      "source_collection": "sentence_transformers_docs",
+      "subdirectory": "UKPLab",
+      "filename": "Training_arguments_with_router_mapping.md",
+      "file_extension": ".md",
+      "chunk_index": 16,
+      "token_count": 61,
+      "char_count": 251,
+      "start_char": 14445,
+      "end_char": 15469
+    }
+  }
+]

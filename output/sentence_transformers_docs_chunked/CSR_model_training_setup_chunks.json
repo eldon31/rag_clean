@@ -1,0 +1,34 @@
+[
+  {
+    "chunk_id": "sentence_transformers_docs:UKPLab\\sentence-transformers\\CSR_model_training_setup.md:chunk:0",
+    "content": "model = SparseEncoder(\"sentence-transformers/all-MiniLM-L6-v2\")\n\nloss = CSRLoss(\n    model=model,\n    loss=SparseMultipleNegativesRankingLoss(model),\n    beta=0.1,  # L_aux weight\n    gamma=1.0  # Main loss weight\n)\n```\n\n### Architecture Requirements\n\n```mermaid\ngraph TD\n    subgraph \"Model Architecture Requirements\"\n        SPLADE[\"SPLADE Models\"]\n        CSR[\"CSR Models\"]\n        \n        MLMTransformer[\"MLMTransformer<br/>MLM head access\"]\n        SpladePooling[\"SpladePooling<br/>Sparse pooling\"]\n        \n        Autoencoder[\"Autoencoder Components<br/>encode/decode methods\"]\n        BackboneEmb[\"sentence_embedding_backbone\"]\n        DecodedEmb[\"decoded_embedding_k/4k/aux\"]\n        \n        SPLADE --> MLMTransformer\n        SPLADE --> SpladePooling\n        \n        CSR --> Autoencoder\n        CSR --> BackboneEmb\n        CSR --> DecodedEmb\n    end\n```\n\nSources: [sentence_transformers/sparse_encoder/models/MLMTransformer.py:26-54](), [sentence_transformers/sparse_encoder/models/SpladePooling.",
+    "metadata": {
+      "source_file": "UKPLab\\sentence-transformers\\CSR_model_training_setup.md",
+      "source_collection": "sentence_transformers_docs",
+      "subdirectory": "UKPLab",
+      "filename": "CSR_model_training_setup.md",
+      "file_extension": ".md",
+      "chunk_index": 0,
+      "token_count": 243,
+      "char_count": 1008,
+      "start_char": 0,
+      "end_char": 1008
+    }
+  },
+  {
+    "chunk_id": "sentence_transformers_docs:UKPLab\\sentence-transformers\\CSR_model_training_setup.md:chunk:1",
+    "content": "coder/models/MLMTransformer.py:26-54](), [sentence_transformers/sparse_encoder/models/SpladePooling.py:13-39](), [sentence_transformers/sparse_encoder/losses/CSRLoss.py:68-98]()",
+    "metadata": {
+      "source_file": "UKPLab\\sentence-transformers\\CSR_model_training_setup.md",
+      "source_collection": "sentence_transformers_docs",
+      "subdirectory": "UKPLab",
+      "filename": "CSR_model_training_setup.md",
+      "file_extension": ".md",
+      "chunk_index": 1,
+      "token_count": 58,
+      "char_count": 177,
+      "start_char": 908,
+      "end_char": 1932
+    }
+  }
+]

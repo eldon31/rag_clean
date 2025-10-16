@@ -1,0 +1,34 @@
+[
+  {
+    "chunk_id": "sentence_transformers_docs:UKPLab\\sentence-transformers\\Load_with_specific_configuration.md:chunk:0",
+    "content": "model = SentenceTransformer(\n    \"all-mpnet-base-v2\",\n    device=\"cuda\",\n    truncate_dim=512,  # Reduce dimensions\n    model_kwargs={\"torch_dtype\": \"float16\"}  # Memory optimization\n)\n```\n\nThe `SentenceTransformer.__init__()` method in [sentence_transformers/SentenceTransformer.py:167-187]() handles model loading with various configuration options.\n\n### Encoding Methods\n\n```mermaid\ngraph LR\n    subgraph \"Encoding Methods\"\n        GenEnc[\"encode()\"] --> Text1[\"General text encoding\"]\n        QueryEnc[\"encode_query()\"] --> Text2[\"Query-optimized encoding\"]\n        DocEnc[\"encode_document()\"] --> Text3[\"Document-optimized encoding\"]\n    end\n    \n    subgraph \"Internal Flow\"\n        Input[\"Input Text\"] --> Prompt[\"Apply Prompts\"]\n        Prompt --> Task[\"Task Routing\"]\n        Task --> Modules[\"Sequential Modules\"]\n        Modules --> Embeddings[\"Dense Embeddings\"]\n    end\n    \n    subgraph \"Configuration\"\n        Prompts[\"model.prompts\"] --> QueryEnc\n        DefaultPrompt[\"model.default_prompt_name\"] --> GenEnc",
+    "metadata": {
+      "source_file": "UKPLab\\sentence-transformers\\Load_with_specific_configuration.md",
+      "source_collection": "sentence_transformers_docs",
+      "subdirectory": "UKPLab",
+      "filename": "Load_with_specific_configuration.md",
+      "file_extension": ".md",
+      "chunk_index": 0,
+      "token_count": 239,
+      "char_count": 1024,
+      "start_char": 0,
+      "end_char": 1025
+    }
+  },
+  {
+    "chunk_id": "sentence_transformers_docs:UKPLab\\sentence-transformers\\Load_with_specific_configuration.md:chunk:1",
+    "content": "Prompts[\"model.prompts\"] --> QueryEnc\n        DefaultPrompt[\"model.default_prompt_name\"] --> GenEnc\n        TaskType[\"task parameter\"] --> Router[\"Router Module\"]\n    end\n```\n\n**Method Selection**:\n- `encode()`: General-purpose encoding for similarity tasks\n- `encode_query()`: Optimized for search queries, applies \"query\" prompt if available\n- `encode_document()`: Optimized for documents, applies \"document\"/\"passage\"/\"corpus\" prompts\n\nSources: [sentence_transformers/SentenceTransformer.py:416-543](), [sentence_transformers/SentenceTransformer.py:545-675]()\n\n### Advanced Configuration\n\n**Prompts and Task Types**: Many models support prompts for different use cases:\n\n```python",
+    "metadata": {
+      "source_file": "UKPLab\\sentence-transformers\\Load_with_specific_configuration.md",
+      "source_collection": "sentence_transformers_docs",
+      "subdirectory": "UKPLab",
+      "filename": "Load_with_specific_configuration.md",
+      "file_extension": ".md",
+      "chunk_index": 1,
+      "token_count": 164,
+      "char_count": 683,
+      "start_char": 925,
+      "end_char": 1949
+    }
+  }
+]

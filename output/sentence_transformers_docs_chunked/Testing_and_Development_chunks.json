@@ -1,0 +1,66 @@
+[
+  {
+    "chunk_id": "sentence_transformers_docs:UKPLab\\sentence-transformers\\Testing_and_Development.md:chunk:0",
+    "content": "This page covers the testing framework, development environment setup, and contribution guidelines for the sentence-transformers library. It provides information about running tests, building documentation, and maintaining code quality standards.\n\nFor information about training models, see [Training](#3). For details about evaluation methods, see [Evaluation](#4).\n\n## Test Framework Overview\n\nThe sentence-transformers library uses a comprehensive pytest-based testing framework that validates functionality across all three core model types: SentenceTransformer, SparseEncoder, and CrossEncoder.\n\n```mermaid\ngraph TB\n    subgraph \"Test Structure\"\n        TestRoot[\"tests/\"]\n        MainTests[\"tests/*.py\"]\n        CrossTests[\"tests/cross_encoder/\"]\n        SparseTests[\"tests/sparse_encoder/\"]\n    end\n    \n    subgraph \"Test Categories\"\n        UnitTests[\"Unit Tests\"]\n        IntegrationTests[\"Integration Tests\"]\n        SlowTests[\"Slow Tests (@pytest.mark.slow)\"]\n        ModelTests[\"Pretrained Model Tests\"]",
+    "metadata": {
+      "source_file": "UKPLab\\sentence-transformers\\Testing_and_Development.md",
+      "source_collection": "sentence_transformers_docs",
+      "subdirectory": "UKPLab",
+      "filename": "Testing_and_Development.md",
+      "file_extension": ".md",
+      "chunk_index": 0,
+      "token_count": 195,
+      "char_count": 1016,
+      "start_char": 0,
+      "end_char": 1017
+    }
+  },
+  {
+    "chunk_id": "sentence_transformers_docs:UKPLab\\sentence-transformers\\Testing_and_Development.md:chunk:1",
+    "content": "\"]\n        SlowTests[\"Slow Tests (@pytest.mark.slow)\"]\n        ModelTests[\"Pretrained Model Tests\"]\n        TrainingTests[\"Training Tests\"]\n    end\n    \n    subgraph \"Test Configuration\"\n        MainConf[\"tests/conftest.py\"]\n        CrossConf[\"tests/cross_encoder/conftest.py\"]\n        SparseConf[\"tests/sparse_encoder/conftest.py\"]\n    end\n    \n    TestRoot --> MainTests\n    TestRoot --> CrossTests\n    TestRoot --> SparseTests\n    \n    MainConf --> UnitTests\n    MainConf --> IntegrationTests\n    CrossConf --> CrossTests\n    SparseConf --> SparseTests\n    \n    SlowTests --> ModelTests\n    SlowTests --> TrainingTests\n```\n\nSources: [tests/conftest.py:1-115](), [tests/cross_encoder/conftest.py:1-23](), [tests/sparse_encoder/conftest.py:1-46]()\n\n## Test Configuration and Fixtures\n\nThe testing framework uses pytest fixtures to manage test dependencies and ensure proper isolation between tests.\n\n### Core Test Fixtures\n\n| Fixture | Scope | Purpose | Location |\n|---------|-------|---------|----------|",
+    "metadata": {
+      "source_file": "UKPLab\\sentence-transformers\\Testing_and_Development.md",
+      "source_collection": "sentence_transformers_docs",
+      "subdirectory": "UKPLab",
+      "filename": "Testing_and_Development.md",
+      "file_extension": ".md",
+      "chunk_index": 1,
+      "token_count": 240,
+      "char_count": 1006,
+      "start_char": 917,
+      "end_char": 1924
+    }
+  },
+  {
+    "chunk_id": "sentence_transformers_docs:UKPLab\\sentence-transformers\\Testing_and_Development.md:chunk:2",
+    "content": "re Test Fixtures\n\n| Fixture | Scope | Purpose | Location |\n|---------|-------|---------|----------|\n| `stsb_bert_tiny_model` | Function | SentenceTransformer model for testing | [tests/conftest.py:26-28]() |\n| `splade_bert_tiny_model` | Function | SparseEncoder model for testing | [tests/sparse_encoder/conftest.py:17-19]() |\n| `reranker_bert_tiny_model` | Function | CrossEncoder model for testing | [tests/cross_encoder/conftest.py:20-22]() |\n| `cache_dir` | Function | Temporary directory for CI environments | [tests/conftest.py:102-114]() |\n\n### Model Loading Strategy\n\n```mermaid\ngraph LR\n    subgraph \"Session Fixtures\"\n        SessionModel[\"_stsb_bert_tiny_model<br/>(session scope)\"]\n        SessionSparse[\"_splade_bert_tiny_model<br/>(session scope)\"]\n    end\n    \n    subgraph \"Function Fixtures\"\n        FuncModel[\"stsb_bert_tiny_model<br/>(function scope)\"]\n        FuncSparse[\"splade_bert_tiny_model<br/>(function scope)\"]\n    end\n    \n    SessionModel --> |\"deepcopy()\"| FuncModel",
+    "metadata": {
+      "source_file": "UKPLab\\sentence-transformers\\Testing_and_Development.md",
+      "source_collection": "sentence_transformers_docs",
+      "subdirectory": "UKPLab",
+      "filename": "Testing_and_Development.md",
+      "file_extension": ".md",
+      "chunk_index": 2,
+      "token_count": 277,
+      "char_count": 996,
+      "start_char": 1824,
+      "end_char": 2821
+    }
+  },
+  {
+    "chunk_id": "sentence_transformers_docs:UKPLab\\sentence-transformers\\Testing_and_Development.md:chunk:3",
+    "content": "e_bert_tiny_model<br/>(function scope)\"]\n    end\n    \n    SessionModel --> |\"deepcopy()\"| FuncModel\n    SessionSparse --> |\"deepcopy()\"| FuncSparse\n    \n    FuncModel --> TestCase1[\"test_encode()\"]\n    FuncModel --> TestCase2[\"test_similarity()\"]\n    FuncSparse --> TestCase3[\"test_sparse_encode()\"]\n```\n\nThe testing framework uses session-scoped fixtures to load models once per test session, then creates function-scoped copies using `deepcopy()` to ensure test isolation without the overhead of repeatedly loading models.\n\nSources: [tests/conftest.py:19-40](), [tests/sparse_encoder/conftest.py:10-31](), [tests/cross_encoder/conftest.py:15-22]()\n\n## Test Categories\n\n### Performance Validation Tests\n\nThe `test_pretrained_stsb.py` module validates that pretrained models maintain expected performance on the STSbenchmark dataset:\n\n```python",
+    "metadata": {
+      "source_file": "UKPLab\\sentence-transformers\\Testing_and_Development.md",
+      "source_collection": "sentence_transformers_docs",
+      "subdirectory": "UKPLab",
+      "filename": "Testing_and_Development.md",
+      "file_extension": ".md",
+      "chunk_index": 3,
+      "token_count": 202,
+      "char_count": 844,
+      "start_char": 2721,
+      "end_char": 3745
+    }
+  }
+]
