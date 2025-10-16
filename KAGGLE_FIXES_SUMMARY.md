@@ -63,17 +63,29 @@ def _load_pytorch_model(self, model_kwargs: Dict, optimal_batch: int) -> Sentenc
 
 ## 📦 Dependencies Required
 
-### Install in Kaggle Notebook (Cell 2):
+### Install in Kaggle Notebook (Cell 3):
 ```python
-!pip install -q sentence-transformers==2.2.2 faiss-gpu torch transformers accelerate
+# Install dependencies (use faiss-gpu-cu11 for GPU-accelerated FAISS)
+!pip install -q sentence-transformers faiss-gpu-cu11
 ```
 
-### Why These Versions?
-- **sentence-transformers==2.2.2**: Stable version compatible with both `torch_dtype` approaches
-- **faiss-gpu**: For efficient similarity search (required for FAISS export)
-- **torch**: PyTorch for model loading and GPU operations
-- **transformers**: Required by sentence-transformers
-- **accelerate**: For multi-GPU support and optimization
+### Why These Packages?
+- **sentence-transformers**: For loading CodeRankEmbed model and generating embeddings
+- **faiss-gpu-cu11**: GPU-accelerated FAISS for CUDA 11 (Kaggle's CUDA version)
+  - ✅ Provides GPU acceleration for similarity search on T4 x2
+  - ⚠️ Must use CUDA-specific version (`faiss-gpu-cu11`), not generic `faiss-gpu`
+- **torch, transformers, accelerate**: Already pre-installed in Kaggle environment
+
+### ⚠️ Important: FAISS Package in Kaggle
+Kaggle requires the **CUDA-specific** version for GPU acceleration:
+```python
+!pip install faiss-gpu-cu11  # ✅ CORRECT - Works in Kaggle (CUDA 11)
+```
+The generic version will fail:
+```python
+!pip install faiss-gpu  # ❌ FAILS - "No matching distribution found"
+```
+Also includes dependencies: `nvidia-cuda-runtime-cu11` and `nvidia-cublas-cu11`
 
 ---
 
