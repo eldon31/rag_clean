@@ -988,15 +988,31 @@ class UltimateKaggleEmbedderV4:
         
         else:
             # Multi-collection mode: iterate through subdirectories
-            for collection_dir in chunks_path.iterdir():
-                if collection_dir.is_dir() and collection_dir.name != "__pycache__":
-                    collection_name = collection_dir.name
-                    collection_chunks = 0
-                    
-                    logger.info(f"📁 Loading collection: {collection_name}")
-                    priority = collection_priorities.get(collection_name, 0.5)
-                    
-                    for chunk_file in collection_dir.rglob("*_chunks.json"):
+            logger.info(f"🔍 Multi-collection mode: scanning subdirectories in {chunks_path}")
+            subdirs = [d for d in chunks_path.iterdir() if d.is_dir() and d.name != "__pycache__"]
+            logger.info(f"📁 Found {len(subdirs)} subdirectories: {[d.name for d in subdirs]}")
+            
+            for collection_dir in subdirs:
+                collection_name = collection_dir.name
+                collection_chunks = 0
+                
+                logger.info(f"📁 Processing subdirectory: {collection_name}")
+                priority = collection_priorities.get(collection_name, 0.5)
+                
+                # Enhanced debugging for multi-collection mode
+                chunk_files_found = list(collection_dir.rglob("*_chunks.json"))
+                logger.info(f"   🔍 Pattern *_chunks.json: Found {len(chunk_files_found)} files")
+                
+                if not chunk_files_found:
+                    # Debug: Try other patterns
+                    all_json = list(collection_dir.rglob("*.json"))
+                    logger.warning(f"   ⚠️ No *_chunks.json found, but found {len(all_json)} total JSON files")
+                    if all_json:
+                        logger.warning(f"      Example files: {[f.name for f in all_json[:5]]}")
+                        # Try loading all JSON files as fallback
+                        chunk_files_found = all_json
+                
+                for chunk_file in chunk_files_found:
                         try:
                             with open(chunk_file, 'r', encoding='utf-8') as f:
                                 file_chunks = json.load(f)
