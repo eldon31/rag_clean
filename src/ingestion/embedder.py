@@ -82,15 +82,16 @@ class EmbeddingGenerator:
         
         # Model-specific configurations
         self.model_configs = {
-            "nomic-ai/nomic-embed-code": {"dimensions": 3584, "max_tokens": 2048},
+            "nomic-ai/nomic-embed-code": {"dimensions": 3584, "max_tokens": 2048},  # Legacy
+            "nomic-ai/CodeRankEmbed": {"dimensions": 768, "max_tokens": 2048},  # Current default
             "text-embedding-3-small": {"dimensions": 1536, "max_tokens": 8191},
             "text-embedding-3-large": {"dimensions": 3072, "max_tokens": 8191},
             "text-embedding-ada-002": {"dimensions": 1536, "max_tokens": 8191}
         }
         
         if model not in self.model_configs:
-            logger.warning(f"Unknown model {model}, using default config (assuming nomic-embed-code)")
-            self.config = {"dimensions": 3584, "max_tokens": 2048}
+            logger.warning(f"Unknown model {model}, using default config (assuming CodeRankEmbed)")
+            self.config = {"dimensions": 768, "max_tokens": 2048}  # CodeRankEmbed defaults
         else:
             self.config = self.model_configs[model]
     

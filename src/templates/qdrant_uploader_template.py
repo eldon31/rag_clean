@@ -204,25 +204,12 @@ class UniversalQdrantUploader:
                 logger.info(f"  Collection exists (will resume upload)")
                 return
         
-        # Determine quantization strategy
-        if dimension == 768 and self.config.enable_quantization:
-            # Binary quantization for 768-dim (40x speedup)
-            quantization = BinaryQuantization(
-                binary=BinaryQuantization()
-            )
-            logger.info(f"  Quantization: Binary (40x speedup)")
-        elif dimension == 3584 and self.config.enable_quantization:
-            # Scalar quantization for 3584-dim (2x speedup)
-            quantization = ScalarQuantization(
-                scalar=ScalarQuantization(
-                    type=ScalarType.INT8,
-                    quantile=0.99,
-                    always_ram=True
-                )
-            )
-            logger.info(f"  Quantization: Scalar INT8 (2x speedup)")
+        # Determine quantization strategy (applied after collection creation)
+        # Binary quantization works best for 768-dim (40x speedup)
+        quantization = None  # Will be applied post-creation
+        if self.config.enable_quantization:
+            logger.info(f"  Quantization: Will be enabled after upload")
         else:
-            quantization = None
             logger.info(f"  Quantization: Disabled")
         
         # Create collection

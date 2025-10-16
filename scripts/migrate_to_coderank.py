@@ -28,6 +28,7 @@ import logging
 from pathlib import Path
 from typing import List, Dict, Any, Optional
 from datetime import datetime
+import uuid
 from qdrant_client import QdrantClient
 from qdrant_client.models import (
     Distance, VectorParams, PointStruct,
@@ -47,12 +48,13 @@ logger = logging.getLogger(__name__)
 QDRANT_URL = os.getenv("QDRANT_URL", "http://localhost:6333")
 QDRANT_API_KEY = os.getenv("QDRANT_API_KEY")
 
-EMBED_RESULTS_DIR = Path("output/embed_results")
+EMBED_RESULTS_DIR = Path("output/embed_outputs")
 
 # Collection mapping: collection_name -> embedding_file
 COLLECTION_MAPPING = {
-    "qdrant_ecosystem": "qdrant_ecosystem_embeddings_768.jsonl",
-    "docling": "docling_embeddings_768.jsonl",
+    "qdrant_ecosystem": "qdrant_ecosystem_embeddings_768 (1).jsonl",
+    "docling": "docling_embeddings_768 (3).jsonl",
+    "sentence_transformers": "sentence_transformers_embeddings_768 (1).jsonl",
     # Add more as files become available:
     # "agent_kit": "agent_kit_embeddings_768.jsonl",
     # "inngest_overall": "inngest_overall_embeddings_768.jsonl",
@@ -119,8 +121,97 @@ def enable_quantization(client: QdrantClient, collection_name: str):
             logger.error(f"  ❌ Quantization failed: {e2}")
 
 
+def convert_hex_id_to_uuid(hex_id: str) -> str:
+    """Convert 16-character hex ID to valid UUID format.
+    
+    Args:
+        hex_id: 16-character hex string (e.g., "7b54a84c32a7a66d")
+        
+    Returns:
+        Valid UUID string (e.g., "7b54a84c-32a7-a66d-0000-000000000000")
+    """
+    # Ensure it's 32 characters by padding with zeros
+    hex_padded = hex_id.ljust(32, '0')
+    
+    # Convert to UUID format
+    uuid_str = f"{hex_padded[0:8]}-{hex_padded[8:12]}-{hex_padded[12:16]}-{hex_padded[16:20]}-{hex_padded[20:32]}"
+    
+    return uuid_str
+
+
+def validate_embedding_file(file_path: Path, sample_size: int = 10) -> Dict[str, Any]:
+    """Validate embedding file exists and has correct schema.
+    
+    Args:
+        file_path: Path to JSONL embedding file
+        sample_size: Number of records to validate
+        
+    Returns:
+        Dict with validation results and statistics
+    """
+    result = {
+        'valid': True,
+        'errors': [],
+        'total_lines': 0,
+        'sample_dimension': None,
+        'has_text': 0,
+        'has_metadata': 0
+    }
+    
+    # Check file exists
+    if not file_path.exists():
+        result['valid'] = False
+        result['errors'].append(f"File not found: {file_path}")
+        return result
+    
+    # Validate sample records
+    with open(file_path, 'r', encoding='utf-8') as f:
+        for line_num, line in enumerate(f, 1):
+            result['total_lines'] += 1
+            
+            # Only validate first N records
+            if line_num > sample_size:
+                continue
+            
+            try:
+                record = json.loads(line.strip())
+                
+                # Check required fields
+                if 'id' not in record:
+                    result['errors'].append(f"Line {line_num}: Missing 'id' field")
+                if 'embedding' not in record:
+                    result['errors'].append(f"Line {line_num}: Missing 'embedding' field")
+                    continue
+                
+                # Validate dimension
+                dim = len(record['embedding'])
+                if result['sample_dimension'] is None:
+                    result['sample_dimension'] = dim
+                elif dim != result['sample_dimension']:
+                    result['errors'].append(f"Line {line_num}: Dimension mismatch {dim} vs {result['sample_dimension']}")
+                
+                # Check dimension is correct
+                if dim != VECTOR_DIMENSION:
+                    result['errors'].append(f"Line {line_num}: Wrong dimension {dim}, expected {VECTOR_DIMENSION}")
+                    result['valid'] = False
+                
+                # Track optional fields
+                if record.get('text'):
+                    result['has_text'] += 1
+                if record.get('metadata'):
+                    result['has_metadata'] += 1
+                    
+            except json.JSONDecodeError as e:
+                result['errors'].append(f"Line {line_num}: Invalid JSON - {e}")
+    
+    if result['errors']:
+        result['valid'] = len([e for e in result['errors'] if 'Wrong dimension' in e or 'Missing' in e]) == 0
+    
+    return result
+
+
 def load_embeddings(file_path: Path) -> List[Dict[str, Any]]:
-    """Load embeddings from JSONL file."""
+    """Load embeddings from JSONL file with validation."""
     embeddings = []
     
     logger.info(f"📂 Loading embeddings from: {file_path.name}")
@@ -181,11 +272,16 @@ def upload_embeddings(
         points = []
         for record in batch:
             try:
+                # Convert hex ID to valid UUID format
+                original_id = record['id']
+                uuid_id = convert_hex_id_to_uuid(original_id)
+                
                 point = PointStruct(
-                    id=record['id'],
+                    id=uuid_id,
                     vector=record['embedding'],
                     payload={
                         'text': record.get('text', ''),
+                        'original_id': original_id,  # Keep original ID in payload
                         **record.get('metadata', {})
                     }
                 )
@@ -227,6 +323,22 @@ def migrate_collection(
     logger.info(f"\n{'='*60}")
     logger.info(f"MIGRATING: {collection_name}")
     logger.info(f"{'='*60}")
+    
+    # Validate embedding file first
+    logger.info("📋 Validating embedding file...")
+    validation = validate_embedding_file(embedding_file, sample_size=10)
+    
+    if not validation['valid']:
+        logger.error("❌ Validation failed:")
+        for error in validation['errors']:
+            logger.error(f"  - {error}")
+        return False
+    
+    logger.info(f"  ✅ Valid embedding file:")
+    logger.info(f"     Total lines: {validation['total_lines']}")
+    logger.info(f"     Dimension: {validation['sample_dimension']}")
+    logger.info(f"     Has text: {validation['has_text']}/10")
+    logger.info(f"     Has metadata: {validation['has_metadata']}/10")
     
     # Check if collection exists
     try:
@@ -285,7 +397,17 @@ def migrate_collection(
         info = client.get_collection(collection_name)
         logger.info(f"\n✅ MIGRATION COMPLETE: {collection_name}")
         logger.info(f"  Points: {info.points_count}")
-        logger.info(f"  Dimension: {info.config.params.vectors.size}")
+        
+        # Fix: Handle vectors config properly
+        vectors_config = info.config.params.vectors
+        if isinstance(vectors_config, dict):
+            # Multiple named vectors
+            dimension = list(vectors_config.values())[0].size if vectors_config else VECTOR_DIMENSION
+        else:
+            # Single vector config
+            dimension = vectors_config.size if vectors_config else VECTOR_DIMENSION
+        
+        logger.info(f"  Dimension: {dimension}")
         logger.info(f"  Indexed: {info.indexed_vectors_count}")
         
         if info.points_count != len(embeddings):

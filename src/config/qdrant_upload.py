@@ -19,7 +19,7 @@ class QdrantUploadConfig:
     
     # Collection settings
     collection_name: str = "qdrant_ecosystem"
-    vector_dim: int = 3584  # Updated to match actual embeddings
+    vector_dim: int = 768  # CodeRankEmbed dimension (migrated from 3584)
     distance_metric: Distance = Distance.COSINE
     
     # Payload schema (fields to index)

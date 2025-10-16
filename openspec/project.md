@@ -1,259 +1,167 @@
 # Project Context
 
 ## Purpose
-**Universal File-to-Knowledge Converter** - Transform any file (PDF, DOCX, TXT, MD, HTML, MP3) into LLM-ready knowledge with automatic embeddings and semantic search capabilities.
+**Universal File-to-Knowledge Converter** - Transform any file (PDF, DOCX, TXT, MD, HTML, MP3) into LLM-ready knowledge with automatic embeddings and vector search capabilities.
 
-**Core Goals:**
-- Multi-format document ingestion with zero manual preprocessing
-- Production-ready vector search using Qdrant with optimized embeddings
-- MCP (Model Context Protocol) server integration for AI assistant workflows
-- Batch processing with parallel execution and progress tracking
-- Zero-cost optimizations prioritized over expensive LLM calls
+### Goals
+- **Multi-format document processing**: Support PDF, DOCX, TXT, MD, HTML, and MP3 (audio transcription)
+- **Production-ready RAG**: Semantic search using Qdrant vector database with optimized embeddings
+- **Intelligent chunking**: Preserve document structure and code context using Docling's HybridChunker
+- **MCP integration**: Expose functionality as Model Context Protocol servers for LLM agents
+- **Zero-cost optimizations**: Maximize accuracy without API costs (achieved 4% improvement in Tier 1)
 
 ## Tech Stack
 
-### Core Framework
-- **Python 3.11+** - Primary language
-- **Pydantic v2** - Data validation and settings management
-- **Pydantic-AI 0.7.4+** - LLM integration framework
-- **FastAPI 0.115.13+** - RESTful API framework
-- **MCP 0.9.0+** - Model Context Protocol server
+### Core Technologies
+- **Python 3.11+**: Primary language
+- **Pydantic v2**: Data validation and settings management (strict compliance required)
+- **Pydantic AI**: LLM integration framework
 
 ### Document Processing
-- **Docling 2.55.0+** - Multi-format document conversion (PDF, DOCX, HTML)
-- **Docling HybridChunker** - Intelligent token-aware chunking
-- **Transformers 4.30.0+** - HuggingFace tokenizers for accurate token counting
+- **Docling v2.55+**: Multi-format document conversion (PDF, DOCX, HTML, etc.)
+- **transformers**: Tokenization for Docling HybridChunker
+- **Docling HybridChunker**: Token-aware, structure-preserving chunking
 
-### Vector Database & Search
-- **Qdrant 1.7.0+** - Production vector database (HNSW indexes, quantization)
-- **nomic-embed-code** - 768-dim embeddings optimized for code and technical docs
-- **sentence-transformers 2.2.0+** - Embedding model framework
-- **PyTorch 2.0.0+** - Deep learning backend
-- **ONNX Runtime 1.16.0+** - 2-4x faster CPU inference (optional optimization)
+### Vector Database & Embeddings
+- **Qdrant**: Production vector database with quantization support
+- **nomic-ai/CodeRankEmbed**: 768-dim embeddings (migrated from nomic-embed-code)
+- **sentence-transformers**: Embedding and reranking models
+- **ONNX Runtime + Optimum**: 2-4x faster CPU inference (optional)
 
-### LLM Providers
-- **OpenAI API 1.0.0+** - GPT models
-- **Anthropic API 0.8.0+** - Claude models
-
-### Infrastructure
-- **Docker & Docker Compose** - Container orchestration
-- **Uvicorn** - ASGI server with standard extras
-- **python-multipart** - File upload handling
-- **SSE-starlette** - Server-sent events for streaming
+### API & Services
+- **FastAPI**: REST API framework
+- **MCP (Model Context Protocol)**: Server implementations for LLM agents
+- **uvicorn**: ASGI server
+- **Docker Compose**: Service orchestration (Qdrant)
 
 ### Development Tools
-- **pytest 8.0.0+** - Testing framework with async support
-- **ruff** - Fast Python linter and formatter
-- **mypy** - Static type checking
-- **rich** - Terminal formatting and progress bars
-- **click** - CLI framework
+- **pytest**: Testing framework with async support
+- **ruff**: Fast Python linter and formatter
+- **mypy**: Static type checking
+- **black**: Code formatting
 
 ## Project Conventions
 
 ### Code Style
-- **Type Hints:** All functions must have type annotations (enforced by mypy)
-- **Pydantic Models:** Use Pydantic BaseModel for all data structures (no dataclasses)
-- **Field Validation:** Use `Field()` with descriptions for all model fields
-- **Naming:**
-  - Classes: `PascalCase` (e.g., `DocumentChunk`, `ChunkingConfig`)
-  - Functions/variables: `snake_case` (e.g., `chunk_document`, `token_count`)
-  - Constants: `UPPER_SNAKE_CASE` (e.g., `MAX_CHUNK_SIZE`)
-  - Private members: prefix with `_` (e.g., `_validate_config`)
-- **Docstrings:** Use triple-quoted strings with clear descriptions
-- **Line Length:** 120 characters max (ruff default)
-- **Imports:** Group by standard library, third-party, local (sorted alphabetically within groups)
+- **Pydantic Models**: Use `BaseModel` instead of dataclasses for all configuration and data structures
+- **Type Hints**: Mandatory for all function signatures and class attributes
+- **Docstrings**: Google-style docstrings required for all public functions/classes
+- **Imports**: Absolute imports from `src.*` modules; group into stdlib, third-party, local
+- **Naming**:
+  - Classes: `PascalCase`
+  - Functions/variables: `snake_case`
+  - Constants: `UPPER_SNAKE_CASE`
+  - Private members: `_leading_underscore`
 
 ### Architecture Patterns
 
 #### Modular Structure
 ```
 src/
-├── api/          # FastAPI routes and middleware
-├── cli/          # Click-based command-line interface
-├── config/       # Pydantic settings and provider configs
-├── ingestion/    # Document processing pipeline (chunker, embedder, processor)
-├── models/       # Pydantic domain models (chunk, document, collection, etc.)
-├── retrieval/    # Vector and hybrid search implementations
-├── storage/      # Qdrant client wrapper and collection management
-├── monitoring/   # Logging, metrics, profiling
-└── worker/       # Background job processing
+├── agent/          # LLM agent integration
+├── api/            # FastAPI endpoints
+├── config/         # Pydantic configuration models
+├── ingestion/      # Document processing & chunking
+├── retrieval/      # Vector search & reranking
+├── storage/        # Qdrant client abstraction
+├── models/         # Shared data models
+└── monitoring/     # Logging & metrics
 ```
 
-#### Key Design Principles
-1. **Dependency Injection:** Pass dependencies explicitly (no globals)
-2. **Configuration as Code:** Pydantic Settings for all config (12-factor app)
-3. **Fail Fast:** Validate inputs early with Pydantic validators
-4. **Immutability Preferred:** Use frozen Pydantic models where possible
-5. **Single Responsibility:** Each module has one clear purpose
-6. **Zero-Cost First:** Optimize with heuristics before calling LLM APIs
-7. **Battle-Tested Libraries:** Prefer Docling HybridChunker over custom chunking logic
+#### Key Patterns
+- **Configuration**: Environment-based using Pydantic Settings (`from_env()` class methods)
+- **Dependency Injection**: Prefer explicit configuration passing over globals
+- **Error Handling**: Use custom exceptions from `src/exceptions.py`
+- **Async-First**: Use `async/await` for I/O operations (Qdrant, embeddings, API endpoints)
+- **Metadata Enrichment**: All chunks include structured metadata (heading paths, code block detection, token counts)
 
-#### Data Flow Pattern
-```
-Document → Docling Converter → HybridChunker → Embedder → Qdrant Storage → Vector Search
-```
+#### Design Decisions
+- **Docling HybridChunker**: Battle-tested, token-precise, preserves document structure (no custom chunking)
+- **Qdrant Only**: Removed Chroma/ChromaDB; Qdrant is production-ready with quantization
+- **No Knowledge Graphs**: Removed Neo4j/Graphiti; focus on vector search + metadata filtering
+- **Zero-Cost First**: Optimize with metadata, structure, tokenization before adding API costs
 
 ### Testing Strategy
-
-#### Test Organization
-- **Unit Tests:** `tests/unit/` - Pure function tests with mocks
-- **Integration Tests:** `tests/integration/` - Component interaction tests
-- **End-to-End Tests:** `tests/e2e/` - Full pipeline tests with real data
-
-#### Testing Requirements
-- **Coverage Target:** 80%+ for core modules (ingestion, retrieval, storage)
-- **Async Support:** Use `pytest-asyncio` for async code
-- **Fixtures:** Create reusable fixtures in `conftest.py`
-- **Mocking:** Use `pytest-mock` for external dependencies (Qdrant, LLM APIs)
-- **Test Naming:** `test_<function>_<scenario>` (e.g., `test_chunk_document_with_code_blocks`)
-
-#### Run Tests
-```bash
-pytest                     # Run all tests
-pytest -v --cov=src        # With coverage report
-pytest tests/unit          # Specific test directory
-pytest -k "chunk"          # Tests matching pattern
-```
+- **Test Framework**: pytest with async support (`pytest-asyncio`)
+- **Coverage**: Use `pytest-cov` for coverage reporting
+- **Test Structure**:
+  - Unit tests: `tests/unit/`
+  - Integration tests: `tests/integration/`
+  - Verification scripts: `scripts/verify_*.py`
+- **Mocking**: Use `pytest-mock` for external dependencies
+- **Validation Scripts**: Standalone verification for major features (e.g., `verify_tier1_chunker.py`)
+- **Example Tests**: See `test_mcp_search.py`, `mcp_server/test_qdrant_server.py`
 
 ### Git Workflow
-
-#### Branch Strategy
-- `main` - Production-ready code (protected)
-- `feature/*` - New features (e.g., `feature/add-reranking`)
-- `fix/*` - Bug fixes (e.g., `fix/chunker-token-overflow`)
-- `refactor/*` - Code improvements (e.g., `refactor/pydantic-models`)
-
-#### Commit Conventions (Conventional Commits)
-```
-<type>(<scope>): <subject>
-
-feat(chunker): add tier 1 optimizations for code block detection
-fix(embedder): handle token overflow in nomic-embed-code
-refactor(models): migrate from dataclass to Pydantic BaseModel
-docs(readme): update quick start guide with Docker commands
-test(ingestion): add integration tests for batch processor
-```
-
-**Types:** `feat`, `fix`, `refactor`, `docs`, `test`, `chore`, `perf`
-
-#### Pull Request Requirements
-- PR must include tests for new functionality
-- All CI checks must pass (pytest, ruff, mypy)
-- Code review required before merge
-- Squash commits on merge to main
+- **Branch**: `main` (default branch)
+- **Commits**: Descriptive messages following conventional commits format preferred
+- **Repository**: `eldonrey0531/rad_clean`
+- **Documentation**: Keep migration guides, implementation summaries, and quick references up-to-date
 
 ## Domain Context
 
 ### RAG (Retrieval-Augmented Generation)
-This project focuses on the **retrieval** pipeline for RAG systems:
-- **Ingestion:** Convert documents → chunks → embeddings → vector store
-- **Retrieval:** Query → semantic search → top-K chunks → context for LLM
-- **No Generation:** This system provides context; external LLMs handle generation
+This project builds RAG infrastructure for LLM applications:
+- **Chunking**: Break documents into semantically meaningful pieces with context
+- **Embeddings**: Convert chunks to dense vectors for similarity search
+- **Retrieval**: Find relevant chunks based on semantic similarity
+- **Metadata Filtering**: Use document structure (headings, code blocks) to improve precision
 
-### Vector Search Concepts
-- **Embeddings:** Dense vectors (768-dim) representing semantic meaning
-- **HNSW Index:** Approximate nearest neighbor search (fast, scalable)
-- **Semantic Similarity:** Cosine similarity between query and chunk embeddings
-- **Top-K Retrieval:** Return K most similar chunks to query
+### Embedding Model Migration
+- **Old**: `nomic-ai/nomic-embed-code` (3584-dim)
+- **New**: `nomic-ai/CodeRankEmbed` (768-dim)
+- **Benefit**: 75x faster queries (30s → 400ms), 4.7x smaller vectors, 4x memory reduction
+- **Status**: Embeddings generated, migration scripts ready
 
-### Document Chunking Strategy
-- **HybridChunker:** Combines token-aware + structure-aware chunking
-- **Token Limits:** nomic-embed-code supports max 2048 tokens per chunk
-- **Overlap:** 100 chars overlap between chunks for context continuity
-- **Heading Preservation:** Chunks include hierarchical heading paths for context
+### MCP (Model Context Protocol)
+Expose vector search as MCP servers so LLM agents can query documentation:
+- `mcp_server/qdrant_code_server.py`: Main MCP implementation
+- Collections: `docling`, `qdrant_ecosystem`, `sentence_transformers`
 
-### MCP Server Architecture
-MCP (Model Context Protocol) servers expose tools to AI assistants (Claude, ChatGPT):
-- **Tools:** `search_collection`, `get_collection_stats`, `list_collections`
-- **Resources:** Pre-indexed documentation (Qdrant, FastAPI, Pydantic, etc.)
-- **Prompts:** Reusable search templates for common queries
+### Tier 1 Optimizations (Completed)
+Zero-cost metadata enrichment for 4% accuracy improvement:
+1. **Code Block Detection**: Identify incomplete code fences
+2. **Heading Path Extraction**: Hierarchical context (e.g., "Installation > Quick Start")
+3. **Token Count Validation**: Ensure chunks fit embedding model limits (2048 tokens)
 
 ## Important Constraints
 
-### Performance Requirements
-- **Embedding Speed:** Use ONNX Runtime for 2-4x CPU inference speedup
-- **GPU Support:** Auto device mapping for multi-GPU environments (Kaggle, Colab)
-- **Batch Processing:** Process 8 chunks per batch for embedding efficiency
-- **Memory Limits:** nomic-embed-code is 26GB model (use FP16 + device_map="auto")
+### Technical Constraints
+- **Python 3.11+**: Minimum version requirement
+- **Pydantic v2**: All models must use Pydantic BaseModel (not dataclasses)
+- **Token Limits**: nomic-embed-code/CodeRankEmbed max 2048 tokens per chunk
+- **Memory**: Optimize for CPU inference (ONNX Runtime) not GPU
+- **Windows Environment**: Default shell is PowerShell v5.1
 
-### Cost Optimization
-- **Zero LLM Calls for Chunking:** Use HybridChunker (deterministic, free)
-- **No Reranking by Default:** Qdrant HNSW is fast enough for most queries
-- **Local Embeddings:** sentence-transformers runs locally (no API costs)
+### Business Constraints
+- **Zero-Cost Preference**: Avoid LLM API calls for chunking/processing where possible
+- **Production-Ready**: Prioritize Qdrant quantization, ONNX optimization over experimental features
+- **Code-Focused**: Optimized for technical documentation and code repositories
 
-### Data Quality
-- **Minimum Chunk Size:** 100 characters (avoid noise)
-- **Maximum Chunk Size:** 4096 characters (respect token limits)
-- **Token Count Validation:** Use actual tokenizer (not character estimates)
-- **Code Block Detection:** Validate complete code fences (```) in chunks
-
-### Security
-- **API Key Authentication:** All API endpoints require `X-API-Key` header
-- **No Arbitrary Code Execution:** Validate all inputs with Pydantic
-- **Rate Limiting:** Implement in production deployments
-- **Docker Isolation:** Run services in containers
+### Regulatory Constraints
+- None currently (open-source project)
 
 ## External Dependencies
 
-### Required Services
-- **Qdrant Vector Database** - `localhost:6333` (HTTP), `localhost:6334` (gRPC)
-  - Docker: `qdrant/qdrant:latest`
-  - Persistent storage: `qdrant_storage` volume
-  - Required for: Vector search, collection management
+### Vector Database
+- **Qdrant**: `http://localhost:6333` (Docker container)
+  - API: REST + gRPC (port 6334)
+  - Storage: Persistent volume (`qdrant_storage`)
+  - Authentication: Optional API key via `QDRANT_API_KEY`
 
-### Optional Services
-- **Neo4j Graph Database** - Knowledge graph (future enhancement)
-- **Redis** - Caching layer (future enhancement)
+### Embedding Models
+- **nomic-ai/CodeRankEmbed**: Primary embedding model (768-dim)
+- **sentence-transformers**: Reranking and alternative embeddings
+- **Hugging Face Transformers**: Tokenizers for chunking
 
-### External APIs
-- **OpenAI API** - GPT models (optional, for agent workflows)
-- **Anthropic API** - Claude models (optional, for agent workflows)
-- **HuggingFace Hub** - Download pretrained models (nomic-embed-code, tokenizers)
+### LLM Providers (Optional)
+- **OpenAI**: API key via `OPENAI_API_KEY`
+- **Anthropic**: API key via `ANTHROPIC_API_KEY`
 
-### Python Package Ecosystem
-- **Docling** - Document processing (critical dependency, no alternatives)
-- **Qdrant Client** - Vector database SDK (production-ready, actively maintained)
-- **sentence-transformers** - Embedding models (HuggingFace ecosystem)
-- **FastMCP** - MCP server framework (active development, breaking changes possible)
+### Document Processing
+- **Docling**: Multi-format document conversion (requires model artifacts)
+- **VLM Models**: Optional vision-language models for advanced PDF processing
 
-### Development Infrastructure
-- **Docker Desktop** - Container runtime (Windows, macOS)
-- **WSL2** - Linux subsystem for Windows development
-- **Kaggle Notebooks** - GPU environments for batch processing (2x Tesla T4)
-- **GitHub Actions** - CI/CD (future enhancement)
-
----
-
-## Quick Reference
-
-### Start Development Environment
-```bash
-# Start Qdrant
-docker-compose up -d
-
-# Activate virtual environment
-.venv\Scripts\activate  # Windows
-source .venv/bin/activate  # Linux/macOS
-
-# Install dependencies
-pip install -e ".[dev]"
-
-# Run tests
-pytest -v
-```
-
-### Common Commands
-```bash
-# CLI tool
-ufk --help
-
-# Run MCP server
-python mcp_server/qdrant_fastmcp_server.py
-
-# Start API server
-uvicorn src.api.main:app --reload
-
-# Code quality
-ruff check src/
-mypy src/
-```
+### Infrastructure
+- **Docker & Docker Compose**: Required for Qdrant deployment
+- **ONNX Runtime**: Optional for faster CPU inference
