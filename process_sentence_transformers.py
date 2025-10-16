@@ -96,7 +96,7 @@ def process_sentence_transformers_collection():
         chunks_loaded = embedder.load_chunks_from_processing(
             chunks_dir=parent_dir
         )
-        print(f"✅ Loaded {chunks_loaded['total_chunks']} chunks")
+        print(f"✅ Loaded {chunks_loaded.get('total_chunks_loaded', 0)} chunks")
         
         print(f"\n🔄 STEP 3: Generating embeddings...")
         embedding_results = embedder.generate_embeddings_kaggle_optimized(
