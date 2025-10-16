@@ -91,10 +91,9 @@ def process_sentence_transformers_collection():
         print(f"✅ V4 initialized! GPU Count: {embedder.device_count}")
         
         print(f"\n🔄 STEP 2: Loading chunks...")
-        # Point to parent directory, V4 auto-discovers Sentence_Transformers subdirectory
-        parent_dir = os.path.dirname(collection_path)  # Gets DOCS_CHUNKS_OUTPUT directory
+        # Point directly to this collection's directory
         chunks_loaded = embedder.load_chunks_from_processing(
-            chunks_dir=parent_dir
+            chunks_dir=collection_path
         )
         print(f"✅ Loaded {chunks_loaded.get('total_chunks_loaded', 0)} chunks")
         

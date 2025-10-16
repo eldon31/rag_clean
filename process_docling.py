@@ -99,10 +99,9 @@ def process_docling_collection():
         # STEP 2: Load Chunks (V4 auto-discovers collections in directory)
         print(f"\n🔄 STEP 2: Loading {COLLECTION_NAME} chunks...")
         
-        # Point to the parent directory containing Docling folder
-        parent_dir = os.path.dirname(collection_path)
+        # Point directly to this collection's directory
         chunks_loaded = embedder.load_chunks_from_processing(
-            chunks_dir=parent_dir
+            chunks_dir=collection_path
         )
         
         print(f"✅ Chunks loaded!")
