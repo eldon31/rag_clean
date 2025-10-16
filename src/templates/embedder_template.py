@@ -298,87 +298,45 @@ class UniversalEmbedder:
         """
         logger.info(f"📂 Loading pre-chunked JSON from: {self.config.input_path}")
         
+        input_dir = self.config.input_path
+        if not input_dir.exists():
+            raise FileNotFoundError(f"Input directory does not exist: {input_dir}")
+
         all_chunks: List[Dict[str, Any]] = []
-        search_roots: List[Path] = [self.config.input_path]
-
-        # Allow automatic fallback to additional Kaggle runtime locations so
-        # Template 2 remains standalone regardless of where the chunk artifacts
-        # were produced (dataset, /kaggle/output, or repo workspace).
-        input_str = str(self.config.input_path)
-        if input_str.startswith("/kaggle/input/"):
-            suffix = input_str[len("/kaggle/input/"):]
-            output_candidate = Path("/kaggle/output") / suffix
-            working_candidate = Path("/kaggle/working") / suffix
-            # Avoid duplicates if the candidates already exist in search_roots
-            for candidate in (output_candidate, working_candidate):
-                if candidate not in search_roots:
-                    search_roots.append(candidate)
-
-        # When running in a Kaggle notebook that cloned the repository, the
-        # chunk outputs often reside under /kaggle/working/rad_clean/output/*.
-        repo_root = Path(__file__).resolve().parents[2]
-        repo_output_root = repo_root / "output"
-        if repo_output_root not in search_roots:
-            search_roots.append(repo_output_root)
-
-        # Add collection-specific folder heuristics (hyphen vs underscore)
-        collection_slug_variants = {
-            self.config.collection_name,
-            self.config.collection_name.replace('-', '_'),
-            self.config.collection_name.replace('_', '-'),
-        }
-        for variant in collection_slug_variants:
-            for suffix in ("", "_chunked"):
-                candidate = repo_output_root / f"{variant}{suffix}"
-                if candidate not in search_roots:
-                    search_roots.append(candidate)
-
-        chunk_files: List[Path] = []
+        
+        # Simplified search for chunk files
         search_patterns = [
             "**/*_chunks.json",
             "**/*_chunks.jsonl",
             "**/*chunks.json",
             "**/*chunks.jsonl",
-            "**/*chunked.json",
-            "**/*chunked.jsonl",
         ]
-
-        for root in search_roots:
-            if not root.exists():
-                continue
-
-            for pattern in search_patterns:
-                matches = sorted(p for p in root.glob(pattern) if p.is_file())
-                if matches:
-                    logger.info(
-                        "  ✓ Found %s chunk file(s) under %s using pattern '%s'",
-                        len(matches),
-                        root,
-                        pattern,
-                    )
-                    chunk_files = matches
-                    break
-
-            if chunk_files:
-                break
+        chunk_files: List[Path] = []
+        for pattern in search_patterns:
+            chunk_files.extend(input_dir.glob(pattern))
+        
+        # Remove duplicates and sort
+        chunk_files = sorted(list(set(chunk_files)))
 
         if not chunk_files:
-            searched_locations = " | ".join(str(path) for path in search_roots)
             raise FileNotFoundError(
-                "No *_chunks.json files found.\n"
-                f"Searched locations: {searched_locations}\n"
-                "Ensure Template 1 output is available (upload dataset or copy files)."
+                f"No chunk files (*_chunks.json, etc.) found in {input_dir}"
             )
-        logger.info(f"  Found {len(chunk_files)} chunk files")
+        
+        logger.info(f"  Found {len(chunk_files)} chunk files to process")
         
         for chunk_file in chunk_files:
             try:
                 with open(chunk_file, 'r', encoding='utf-8') as f:
-                    chunks = json.load(f)
+                    # Handle both JSON and JSONL
+                    if chunk_file.suffix == '.jsonl':
+                        file_chunks = [json.loads(line) for line in f if line.strip()]
+                    else:
+                        file_chunks = json.load(f)
                 
-                if chunks:
-                    all_chunks.extend(chunks)
-                    logger.info(f"  ✓ {chunk_file.name}: {len(chunks)} chunks")
+                if file_chunks:
+                    all_chunks.extend(file_chunks)
+                    logger.info(f"  ✓ {chunk_file.name}: {len(file_chunks)} chunks")
             
             except Exception as e:
                 logger.error(f"  ✗ Error loading {chunk_file.name}: {e}")
