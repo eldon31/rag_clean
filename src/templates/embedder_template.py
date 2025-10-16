@@ -334,13 +334,32 @@ class UniversalEmbedder:
                     search_roots.append(candidate)
 
         chunk_files: List[Path] = []
+        search_patterns = [
+            "**/*_chunks.json",
+            "**/*_chunks.jsonl",
+            "**/*chunks.json",
+            "**/*chunks.jsonl",
+            "**/*chunked.json",
+            "**/*chunked.jsonl",
+        ]
+
         for root in search_roots:
             if not root.exists():
                 continue
-            matches = sorted(root.glob("**/*_chunks.json"))
-            if matches:
-                logger.info(f"  ✓ Found {len(matches)} chunk files under {root}")
-                chunk_files = matches
+
+            for pattern in search_patterns:
+                matches = sorted(p for p in root.glob(pattern) if p.is_file())
+                if matches:
+                    logger.info(
+                        "  ✓ Found %s chunk file(s) under %s using pattern '%s'",
+                        len(matches),
+                        root,
+                        pattern,
+                    )
+                    chunk_files = matches
+                    break
+
+            if chunk_files:
                 break
 
         if not chunk_files:
