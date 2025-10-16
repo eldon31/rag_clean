@@ -445,27 +445,7 @@ class UltimateKaggleEmbedderV4:
     def _load_pytorch_model(self, model_kwargs: Dict, optimal_batch: int) -> SentenceTransformer:
         """Load PyTorch model with optimization"""
         
-        # Remove torch_dtype if not supported by sentence-transformers version
-        st_kwargs = model_kwargs.copy()
-        torch_dtype = st_kwargs.pop('torch_dtype', None)
-        
-        try:
-            # Try with torch_dtype first (newer versions)
-            if torch_dtype is not None:
-                st_kwargs['torch_dtype'] = torch_dtype
-            model = SentenceTransformer(self.model_config.hf_model_id, **st_kwargs)
-        except TypeError as e:
-            if 'torch_dtype' in str(e):
-                # Older sentence-transformers version - load without torch_dtype
-                logger.warning(f"⚠️ torch_dtype not supported, loading model without it")
-                st_kwargs.pop('torch_dtype', None)
-                model = SentenceTransformer(self.model_config.hf_model_id, **st_kwargs)
-                # Apply dtype after loading
-                if torch_dtype is not None and self.device == "cuda":
-                    model = model.half()  # Convert to FP16
-                    logger.info("✅ Converted model to FP16 after loading")
-            else:
-                raise
+        model = SentenceTransformer(self.model_config.hf_model_id, **model_kwargs)
         
         # Multi-GPU setup for T4 x2
         if self.device_count > 1:
