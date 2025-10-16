@@ -15,6 +15,7 @@ import os
 import json
 import time
 import logging
+import zipfile
 from datetime import datetime
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -162,9 +163,32 @@ def process_docling_collection():
         with open(results_file, 'w') as f:
             json.dump(results, f, indent=2, default=str)
         
+        # Create ZIP archive of all output files
+        print(f"\n📦 Creating ZIP archive...")
+        zip_filename = f"{COLLECTION_NAME}_v4_outputs.zip"
+        zip_path = f"{WORKING_DIR}/{zip_filename}"
+        
+        # Collect all output files
+        files_to_zip = []
+        for file_type, file_path in export_files.items():
+            if os.path.exists(file_path):
+                files_to_zip.append((file_path, os.path.basename(file_path)))
+        # Add results JSON
+        files_to_zip.append((results_file, os.path.basename(results_file)))
+        
+        # Create ZIP
+        with zipfile.ZipFile(zip_path, 'w', zipfile.ZIP_DEFLATED) as zipf:
+            for file_path, arcname in files_to_zip:
+                zipf.write(file_path, arcname)
+                size_kb = os.path.getsize(file_path) / 1024
+                print(f"   ✅ Added: {arcname:40s} {size_kb:8.1f} KB")
+        
+        zip_size_mb = os.path.getsize(zip_path) / 1024 / 1024
+        
         print(f"\n🎉 {COLLECTION_NAME} PROCESSING COMPLETE!")
         print(f"   ⏱️ Total time: {results['processing_time_seconds']:.2f}s")
-        print(f"   📄 Results saved: {results_file}")
+        print(f"   � ZIP archive: {zip_filename} ({zip_size_mb:.2f} MB)")
+        print(f"   📥 Download from: /kaggle/working/{zip_filename}")
         
         return results
         
