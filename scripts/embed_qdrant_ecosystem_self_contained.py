@@ -448,10 +448,14 @@ def main():
     print("=" * 60)
     print()
     
-    # Configure paths
+    # Determine project root from script location
+    script_dir = Path(__file__).parent.resolve()
+    project_root = script_dir.parent
+    
+    # Configure paths relative to the project root
     config = EmbedderConfig(
         collection_name="qdrant_ecosystem",
-        input_path=Path("/kaggle/input/qdrant-ecosystem-chunked"),
+        input_path=project_root / "output" / "qdrant_ecosystem_chunked",
         output_path=Path("/kaggle/working/qdrant_ecosystem_embeddings_768.jsonl"),
         use_gpu=True,
         use_data_parallel=True
@@ -474,7 +478,7 @@ def main():
     print("=" * 60)
     print()
     print("DOWNLOAD OUTPUT:")
-    print("   File: /kaggle/working/qdrant_ecosystem_embeddings_768.jsonl")
+    print(f"   File: {config.output_path}")
     print("   Location: Kaggle notebook -> Output tab -> Download")
     print()
 

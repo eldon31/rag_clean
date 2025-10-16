@@ -448,10 +448,14 @@ def main():
     print("=" * 60)
     print()
     
-    # Configure paths
+    # Determine project root from script location
+    script_dir = Path(__file__).parent.resolve()
+    project_root = script_dir.parent
+    
+    # Configure paths relative to the project root
     config = EmbedderConfig(
         collection_name="sentence_transformers_docs",
-        input_path=Path("/kaggle/input/sentence-transformers-docs-chunked"),
+        input_path=project_root / "output" / "sentence_transformers_docs_chunked",
         output_path=Path("/kaggle/working/sentence_transformers_embeddings_768.jsonl"),
         use_gpu=True,
         use_data_parallel=True
@@ -474,7 +478,7 @@ def main():
     print("=" * 60)
     print()
     print("DOWNLOAD OUTPUT:")
-    print("   File: /kaggle/working/sentence_transformers_embeddings_768.jsonl")
+    print(f"   File: {config.output_path}")
     print("   Location: Kaggle notebook -> Output tab -> Download")
     print()
 

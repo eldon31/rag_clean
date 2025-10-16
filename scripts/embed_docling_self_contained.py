@@ -448,10 +448,14 @@ def main():
     print("=" * 60)
     print()
     
-    # Configure paths
+    # Determine project root from script location
+    script_dir = Path(__file__).parent.resolve()
+    project_root = script_dir.parent
+    
+    # Configure paths relative to the project root
     config = EmbedderConfig(
         collection_name="docling-project_docling",
-        input_path=Path("/kaggle/input/docling-project_docling_chunked"),
+        input_path=project_root / "output" / "docling-project_docling_chunked",
         output_path=Path("/kaggle/working/docling_embeddings_768.jsonl"),
         use_gpu=True,
         use_data_parallel=True
@@ -460,8 +464,7 @@ def main():
     # Run embedder
     embedder = UniversalEmbedder(config)
     embedder.run()
-    
-    # Quick validation that the output is newline-delimited JSON
+
     if config.output_path.exists():
         with open(config.output_path, 'r', encoding='utf-8') as f:
             line_count = sum(1 for _ in f if _.strip())
@@ -475,7 +478,7 @@ def main():
     print("=" * 60)
     print()
     print("DOWNLOAD OUTPUT:")
-    print("   File: /kaggle/working/docling_embeddings_768.jsonl")
+    print(f"   File: {config.output_path}")
     print("   Location: Kaggle notebook -> Output tab -> Download")
     print()
 
