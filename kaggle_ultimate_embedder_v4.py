@@ -1013,48 +1013,48 @@ class UltimateKaggleEmbedderV4:
                         chunk_files_found = all_json
                 
                 for chunk_file in chunk_files_found:
-                        try:
-                            with open(chunk_file, 'r', encoding='utf-8') as f:
-                                file_chunks = json.load(f)
+                    try:
+                        with open(chunk_file, 'r', encoding='utf-8') as f:
+                            file_chunks = json.load(f)
+                        
+                        for chunk in file_chunks:
+                            # Quality filtering
+                            token_count = chunk["metadata"].get("token_count", 0)
+                            if token_count < 50:  # Skip very small chunks
+                                continue
                             
-                            for chunk in file_chunks:
-                                # Quality filtering
-                                token_count = chunk["metadata"].get("token_count", 0)
-                                if token_count < 50:  # Skip very small chunks
-                                    continue
-                                
-                                # Advanced text preprocessing
-                                original_text = chunk["text"]
-                                processed_text = self.preprocess_text_advanced(original_text)
-                                
-                                # Enhanced metadata
-                                chunk_id = len(self.chunks_metadata)
-                                chunk["metadata"].update({
-                                    "global_chunk_id": chunk_id,
-                                    "collection_priority": priority,
-                                    "quality_score": min(1.0, token_count / 1000),
-                                    "text_preprocessing_applied": True,
-                                    "original_length": len(original_text),
-                                    "processed_length": len(processed_text),
-                                    "kaggle_processing_timestamp": datetime.now().isoformat(),
-                                    "model_target": self.model_name,
-                                    "embedding_dimension": self.model_config.vector_dim
-                                })
-                                
-                                self.chunks_metadata.append(chunk["metadata"])
-                                self.chunk_texts.append(processed_text)
-                                collection_chunks += 1
+                            # Advanced text preprocessing
+                            original_text = chunk["text"]
+                            processed_text = self.preprocess_text_advanced(original_text)
                             
-                            logger.debug(f"  📄 Loaded {len(file_chunks)} chunks from {chunk_file.name}")
+                            # Enhanced metadata
+                            chunk_id = len(self.chunks_metadata)
+                            chunk["metadata"].update({
+                                "global_chunk_id": chunk_id,
+                                "collection_priority": priority,
+                                "quality_score": min(1.0, token_count / 1000),
+                                "text_preprocessing_applied": True,
+                                "original_length": len(original_text),
+                                "processed_length": len(processed_text),
+                                "kaggle_processing_timestamp": datetime.now().isoformat(),
+                                "model_target": self.model_name,
+                                "embedding_dimension": self.model_config.vector_dim
+                            })
                             
-                        except Exception as e:
-                            error_msg = f"Error loading {chunk_file}: {e}"
-                            logger.error(f"❌ {error_msg}")
-                            results["loading_errors"].append(error_msg)
-                    
-                    results["chunks_by_collection"][collection_name] = collection_chunks
-                    results["collections_loaded"] += 1
-                    logger.info(f"✅ Collection '{collection_name}': {collection_chunks} chunks (priority: {priority})")
+                            self.chunks_metadata.append(chunk["metadata"])
+                            self.chunk_texts.append(processed_text)
+                            collection_chunks += 1
+                        
+                        logger.debug(f"  📄 Loaded {len(file_chunks)} chunks from {chunk_file.name}")
+                        
+                    except Exception as e:
+                        error_msg = f"Error loading {chunk_file}: {e}"
+                        logger.error(f"❌ {error_msg}")
+                        results["loading_errors"].append(error_msg)
+                
+                results["chunks_by_collection"][collection_name] = collection_chunks
+                results["collections_loaded"] += 1
+                logger.info(f"✅ Collection '{collection_name}': {collection_chunks} chunks (priority: {priority})")
         
         results["total_chunks_loaded"] = len(self.chunks_metadata)
         results["memory_usage_mb"] = psutil.Process().memory_info().rss / 1024 / 1024
