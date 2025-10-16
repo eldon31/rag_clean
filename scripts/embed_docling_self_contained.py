@@ -405,10 +405,10 @@ class UniversalEmbedder:
         self.config.output_path.parent.mkdir(parents=True, exist_ok=True)
 
         lines_written = 0
-        with open(self.config.output_path, 'w', encoding='utf-8', newline='''n') as f:
+        with open(self.config.output_path, 'w', encoding='utf-8', newline='\n') as f:
             for record in embeddings:
                 json.dump(record, f, ensure_ascii=False)
-                f.write('''n')
+                f.write('\n')
                 lines_written += 1
 
         # Validate that the file is newline-delimited JSON for Kaggle downloads
