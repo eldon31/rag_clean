@@ -102,7 +102,7 @@ def process_pydantic_collection():
             enable_monitoring=True,
             save_intermediate=True
         )
-        print(f"✅ Generated {embedding_results.get('total_embeddings', 0)} embeddings")
+        print(f"✅ Generated {embedding_results.get('total_embeddings_generated', 0)} embeddings")
         print(f"   ⚡ Speed: {embedding_results.get('chunks_per_second', 0):.1f} chunks/sec")
         
         print(f"\n🔄 STEP 4: Exporting...")

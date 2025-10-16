@@ -121,11 +121,11 @@ def process_docling_collection():
         )
         
         print(f"✅ Embeddings generated!")
-        print(f"   📊 Total: {embedding_results.get('total_embeddings', 0)}")
+        print(f"   📊 Total: {embedding_results.get('total_embeddings_generated', 0)}")
         print(f"   📏 Dimension: {embedding_results.get('embedding_dimension', 768)}")
         print(f"   ⚡ Speed: {embedding_results.get('chunks_per_second', 0):.1f} chunks/sec")
-        print(f"   ⏱️ Time: {embedding_results.get('total_time_seconds', 0):.2f}s")
-        print(f"   💾 Memory: {embedding_results.get('total_memory_mb', 0):.1f}MB")
+        print(f"   ⏱️ Time: {embedding_results.get('processing_time_seconds', 0):.2f}s")
+        print(f"   💾 Memory: {embedding_results.get('embedding_memory_mb', 0):.1f}MB")
         
         # Performance assessment
         speed = embedding_results['chunks_per_second']
