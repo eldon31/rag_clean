@@ -909,7 +909,11 @@ class UltimateKaggleEmbedderV4:
         }
         
         # Detect if we're loading a single collection or multiple
-        has_json_files = any(f.suffix == '.json' for f in chunks_path.iterdir() if f.is_file())
+        # Ignore processing summary files when detecting structure
+        has_json_files = any(
+            f.suffix == '.json' and not f.name.endswith('_processing_summary.json') 
+            for f in chunks_path.iterdir() if f.is_file()
+        )
         
         if has_json_files:
             # Single collection mode: load JSON files directly from this path
