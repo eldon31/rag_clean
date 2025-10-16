@@ -1,12 +1,22 @@
 #!/usr/bin/env python3
 """
 🚀 KAGGLE PROCESSOR: FAST_DOCS Collection (CORRECTED V4 API)
-Ultimate Embedder V4 - Single Collection Processing
+Ultimate Embedder V4 - Single Collection with Subdirectories
+
+⚠️ IMPORTANT PATH STRUCTURE:
+   FAST_DOCS contains SUBDIRECTORIES (each is a separate repo):
+   - DOCS_CHUNKS_OUTPUT/FAST_DOCS/fastapi_fastapi/*.json
+   - DOCS_CHUNKS_OUTPUT/FAST_CHUNKS/jlowin_fastmcp/*.json
+   - DOCS_CHUNKS_OUTPUT/FAST_DOCS/modelcontextprotocol_python-sdk/*.json
+   
+   ✅ Point to: DOCS_CHUNKS_OUTPUT/FAST_DOCS (this script's collection)
+   ✅ Embedder uses .rglob() to recurse into all subdirectories
+   ✅ Each script processes its OWN collection independently
 
 ✅ CORRECTED PARAMETERS (verified from source audit):
    - enable_ensemble=False (NOT enable_reranking)
    - output_prefix in KaggleExportConfig (NOT collection_name)
-   - chunks_dir in load_chunks_from_processing (auto-discovers collections)
+   - chunks_dir in load_chunks_from_processing (auto-discovers sub-collections)
    - enable_monitoring, save_intermediate in generate_embeddings_kaggle_optimized
    - export_for_local_qdrant() takes NO parameters
 
@@ -41,6 +51,8 @@ def process_fast_docs_collection():
     COLLECTION_NAME = "FAST_DOCS"
     WORKING_DIR = "/kaggle/working"
     
+    # ⚠️ FAST_DOCS has SUBDIRECTORIES (fastapi_fastapi, jlowin_fastmcp, etc.)
+    # Point to the FAST_DOCS folder - embedder will recurse into subdirs
     POSSIBLE_PATHS = [
         f"/kaggle/working/rad_clean/DOCS_CHUNKS_OUTPUT/{COLLECTION_NAME}",  # Cloned repo location
         f"/kaggle/input/docs-chunks-output/DOCS_CHUNKS_OUTPUT/{COLLECTION_NAME}",
@@ -91,11 +103,11 @@ def process_fast_docs_collection():
         print(f"✅ V4 initialized! GPU Count: {embedder.device_count}")
         
         print(f"\n🔄 STEP 2: Loading chunks...")
-        # Point directly to this collection's directory
+        # Load all collections from DOCS_CHUNKS_OUTPUT - will auto-discover FAST_DOCS subdirs
         chunks_loaded = embedder.load_chunks_from_processing(
             chunks_dir=collection_path
         )
-        print(f"✅ Loaded {chunks_loaded.get('total_chunks_loaded', 0)} chunks")
+        print(f"✅ Loaded {chunks_loaded.get('total_chunks_loaded', 0)} chunks from {chunks_loaded.get('collections_loaded', 0)} sub-collections")
         
         print(f"\n🔄 STEP 3: Generating embeddings...")
         embedding_results = embedder.generate_embeddings_kaggle_optimized(

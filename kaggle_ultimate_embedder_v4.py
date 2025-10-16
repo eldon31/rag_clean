@@ -919,7 +919,30 @@ class UltimateKaggleEmbedderV4:
             
             logger.info(f"📁 Loading single collection: {collection_name}")
             
-            for chunk_file in chunks_path.glob("*_chunks.json"):
+            # Enhanced glob patterns to catch all chunk file variations
+            chunk_file_patterns = [
+                "*_chunks.json",    # Standard pattern
+                "*chunks.json",     # Without underscore
+                "*.json"            # Any JSON file
+            ]
+            
+            chunk_files_found = []
+            for pattern in chunk_file_patterns:
+                chunk_files_found.extend(list(chunks_path.glob(pattern)))
+            
+            # Remove duplicates
+            chunk_files_found = list(set(chunk_files_found))
+            
+            logger.info(f"🔍 Found {len(chunk_files_found)} JSON files matching patterns")
+            
+            if not chunk_files_found:
+                # List all files in directory for debugging
+                all_files = list(chunks_path.iterdir())
+                logger.warning(f"⚠️ No chunk files found! Directory contains {len(all_files)} items:")
+                for f in all_files[:10]:  # Show first 10 items
+                    logger.warning(f"   - {f.name} ({'file' if f.is_file() else 'dir'})")
+            
+            for chunk_file in chunk_files_found:
                 try:
                     with open(chunk_file, 'r', encoding='utf-8') as f:
                         file_chunks = json.load(f)
