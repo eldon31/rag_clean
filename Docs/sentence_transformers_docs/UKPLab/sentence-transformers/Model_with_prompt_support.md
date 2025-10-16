@@ -1,1 +1,0 @@
-model = SentenceTransformer("mixedbread-ai/mxbai-embed-large-v1")

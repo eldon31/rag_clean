@@ -1,1 +1,0 @@
-model = SentenceTransformer("msmarco-distilbert-base-v4")

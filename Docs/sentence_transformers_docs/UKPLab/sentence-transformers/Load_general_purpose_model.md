@@ -1,1 +1,0 @@
-model = SentenceTransformer("all-mpnet-base-v2")

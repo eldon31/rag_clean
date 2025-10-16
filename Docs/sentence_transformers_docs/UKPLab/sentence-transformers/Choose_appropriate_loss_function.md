@@ -1,1 +1,0 @@
-loss = losses.LambdaLoss(model)  # Recommended for ranking

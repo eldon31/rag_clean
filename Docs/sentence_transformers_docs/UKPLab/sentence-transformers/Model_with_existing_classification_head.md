@@ -1,1 +1,0 @@
-model = CrossEncoder("cross-encoder/ms-marco-MiniLM-L6-v2")

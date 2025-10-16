@@ -168,7 +168,7 @@ class UniversalEmbedder:
                 logger.info(f"GPU {i}: {torch.cuda.get_device_name(i)}")
                 props = torch.cuda.get_device_properties(i)
                 logger.info(f"  Memory: {props.total_memory / 1e9:.2f} GB")
-        logger.info(f"{'='*60}\\n")
+        logger.info(f"{'='*60}\n")
         
         # Batch size selection
         if self.use_gpu:
@@ -187,7 +187,7 @@ class UniversalEmbedder:
         
         # Load model(s)
         if self.use_data_parallel:
-            logger.info(f"\\n🚀 Loading models with DATA PARALLELISM (2 GPUs)")
+            logger.info(f"\n🚀 Loading models with DATA PARALLELISM (2 GPUs)")
             logger.info(f"   GPU 0: Process even batches")
             logger.info(f"   GPU 1: Process odd batches")
             
@@ -207,7 +207,7 @@ class UniversalEmbedder:
             
             logger.info(f"✓ Models loaded on 2 GPUs")
         else:
-            logger.info(f"\\n🚀 Loading single model")
+            logger.info(f"\n🚀 Loading single model")
             
             self.model = SentenceTransformer(
                 self.model_config.hf_model_id,
@@ -230,7 +230,7 @@ class UniversalEmbedder:
             f"Dimension mismatch: expected {self.model_config.vector_dim}, got {actual_dim}"
         )
         
-        logger.info(f"✓ Verified dimension: {actual_dim}\\n")
+        logger.info(f"✓ Verified dimension: {actual_dim}\n")
     
     def embed_batch(self, texts: List[str]) -> np.ndarray:
         """
@@ -364,7 +364,7 @@ class UniversalEmbedder:
             except Exception as e:
                 logger.error(f"  ✗ Error loading {chunk_file.name}: {e}")
         
-        logger.info(f"✓ Loaded {len(all_chunks)} chunks total\\n")
+        logger.info(f"✓ Loaded {len(all_chunks)} chunks total\n")
         
         return all_chunks
     
@@ -431,7 +431,7 @@ class UniversalEmbedder:
                     f"{rate:.1f} chunks/sec - ETA: {eta/60:.1f} min"
                 )
         
-        logger.info(f"✓ Embedded {len(embeddings_data)} chunks\\n")
+        logger.info(f"✓ Embedded {len(embeddings_data)} chunks\n")
         
         return embeddings_data
     
@@ -448,9 +448,9 @@ class UniversalEmbedder:
         
         with open(self.config.output_path, 'w', encoding='utf-8') as f:
             for record in embeddings:
-                f.write(json.dumps(record, ensure_ascii=False) + '\\n')
+                f.write(json.dumps(record, ensure_ascii=False) + '\n')
         
-        logger.info(f"✓ Saved {len(embeddings)} embeddings\\n")
+        logger.info(f"✓ Saved {len(embeddings)} embeddings\n")
     
     def run(self):
         """Run the embedding pipeline."""
@@ -480,7 +480,7 @@ class UniversalEmbedder:
         logger.info(f"Average speed: {len(embeddings)/elapsed:.1f} chunks/sec")
         logger.info(f"Output file: {self.config.output_path}")
         logger.info(f"File size: {self.config.output_path.stat().st_size / 1e6:.1f} MB")
-        logger.info(f"{'='*60}\\n")
+        logger.info(f"{'='*60}\n")
         
         logger.info(f"📦 NEXT STEPS:")
         logger.info(f"1. Download {self.config.output_path.name} from Kaggle /working/")
@@ -554,10 +554,10 @@ def main():
         embedder.run()
     
     except KeyboardInterrupt:
-        logger.info("\\n⚠️  Embedding interrupted by user")
+        logger.info("\n⚠️  Embedding interrupted by user")
         exit(1)
     except Exception as e:
-        logger.error(f"\\n❌ Embedding failed: {e}", exc_info=True)
+        logger.error(f"\n❌ Embedding failed: {e}", exc_info=True)
         exit(1)
 
 
