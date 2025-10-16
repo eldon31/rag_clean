@@ -90,20 +90,45 @@ def process_qdrant_collection():
         
         print(f"✅ V4 initialized! GPU Count: {embedder.device_count}")
         
-        print(f"\n🔄 STEP 2: Loading chunks...")
+        # STEP 2: Load Chunks
+        print(f"\n🔄 STEP 2: Loading {COLLECTION_NAME} chunks...")
+        
         # Point directly to this collection's directory
         chunks_loaded = embedder.load_chunks_from_processing(
             chunks_dir=collection_path
         )
-        print(f"✅ Loaded {chunks_loaded.get('total_chunks_loaded', 0)} chunks")
         
+        print(f"✅ Chunks loaded!")
+        print(f"   📊 Total chunks: {chunks_loaded.get('total_chunks_loaded', 0)}")
+        print(f"   📦 Collections: {chunks_loaded.get('collections_loaded', 0)}")
+        if 'chunks_by_collection' in chunks_loaded:
+            for coll, count in chunks_loaded['chunks_by_collection'].items():
+                print(f"   📦 {coll}: {count} chunks")
+        
+        # STEP 3: Generate Embeddings
         print(f"\n🔄 STEP 3: Generating embeddings...")
+        print(f"   🎯 Target: 310-516 chunks/sec")
+        
         embedding_results = embedder.generate_embeddings_kaggle_optimized(
             enable_monitoring=True,
             save_intermediate=True
         )
-        print(f"✅ Generated {embedding_results.get('total_embeddings_generated', 0)} embeddings")
+        
+        print(f"✅ Embeddings generated!")
+        print(f"   📊 Total: {embedding_results.get('total_embeddings_generated', 0)}")
+        print(f"   📏 Dimension: {embedding_results.get('embedding_dimension', 768)}")
         print(f"   ⚡ Speed: {embedding_results.get('chunks_per_second', 0):.1f} chunks/sec")
+        print(f"   ⏱️ Time: {embedding_results.get('processing_time_seconds', 0):.2f}s")
+        print(f"   💾 Memory: {embedding_results.get('embedding_memory_mb', 0):.1f}MB")
+        
+        # Performance assessment
+        speed = embedding_results.get('chunks_per_second', 0)
+        if speed >= 310:
+            print(f"   🏆 EXCELLENT! Meeting V4 targets")
+        elif speed >= 200:
+            print(f"   ✅ GOOD! Production-ready")
+        else:
+            print(f"   ⚠️ Below target")
         
         print(f"\n🔄 STEP 4: Exporting...")
         export_files = embedder.export_for_local_qdrant()
