@@ -172,10 +172,9 @@ def process_collection_with_v4(
             ),
             preprocessing_config=AdvancedPreprocessingConfig(
                 enable_text_caching=True,
-                quality_filtering=True,
-                min_chunk_length=50
+                normalize_whitespace=True
             ),
-            enable_reranking=False  # Disable for speed
+            enable_ensemble=False  # Disable for speed (corrected from enable_reranking)
         )
         
         logger.info(f"✅ V4 Embedder initialized!")
