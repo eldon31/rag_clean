@@ -200,28 +200,38 @@ class UniversalEmbedder:
         Returns:
             Numpy array of embeddings
         """
+        if not texts:
+            return np.array([])
+
         if self.use_data_parallel:
             # Split batch across 2 GPUs
             mid = len(texts) // 2
             texts_gpu0 = texts[:mid]
             texts_gpu1 = texts[mid:]
             
+            emb0 = np.array([])
+            emb1 = np.array([])
+
             # TRUE PARALLELISM: Run both GPUs simultaneously using threads
             def encode_gpu0():
+                if not texts_gpu0:
+                    return np.array([])
                 with torch.no_grad():
                     return self.model_gpu0.encode(
                         texts_gpu0,
-                        batch_size=len(texts_gpu0),
+                        batch_size=self.batch_size,
                         show_progress_bar=False,
                         convert_to_numpy=True,
                         normalize_embeddings=True
                     )
             
             def encode_gpu1():
+                if not texts_gpu1:
+                    return np.array([])
                 with torch.no_grad():
                     return self.model_gpu1.encode(
                         texts_gpu1,
-                        batch_size=len(texts_gpu1),
+                        batch_size=self.batch_size,
                         show_progress_bar=False,
                         convert_to_numpy=True,
                         normalize_embeddings=True
@@ -233,6 +243,11 @@ class UniversalEmbedder:
                 future1 = executor.submit(encode_gpu1)
                 emb0 = future0.result()
                 emb1 = future1.result()
+            
+            if emb0.size == 0:
+                return emb1
+            if emb1.size == 0:
+                return emb0
             
             return np.vstack([emb0, emb1])
         else:
