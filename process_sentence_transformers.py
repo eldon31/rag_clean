@@ -41,6 +41,7 @@ def process_sentence_transformers_collection():
     WORKING_DIR = "/kaggle/working"
     
     POSSIBLE_PATHS = [
+        f"/kaggle/working/rad_clean/DOCS_CHUNKS_OUTPUT/{COLLECTION_NAME}",  # Cloned repo location
         f"/kaggle/input/docs-chunks-output/DOCS_CHUNKS_OUTPUT/{COLLECTION_NAME}",
         f"/kaggle/working/DOCS_CHUNKS_OUTPUT/{COLLECTION_NAME}",
         f"/kaggle/input/your-dataset/{COLLECTION_NAME}"
