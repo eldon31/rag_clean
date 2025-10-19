@@ -201,6 +201,7 @@ def _run_for_collection(
 
     perf = embedder.generate_embeddings_kaggle_optimized()
     exports = embedder.export_for_local_qdrant()
+    target_collection = embedder.get_target_collection_name()
 
     archive_path: Path | None = None
     if zip_output:
@@ -215,6 +216,7 @@ def _run_for_collection(
         "chunks": total_chunks,
         "performance": perf,
         "exports": exports,
+        "target_qdrant_collection": target_collection,
     }
     if archive_path is not None:
         summary["archive"] = str(archive_path)

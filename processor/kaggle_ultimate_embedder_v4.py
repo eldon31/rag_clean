@@ -39,7 +39,7 @@ import warnings
 from pathlib import Path
 from typing import Dict, List, Any, Optional, Tuple, Union, Set
 from datetime import datetime
-from collections import defaultdict
+from collections import defaultdict, Counter
 import time
 import psutil
 from dataclasses import dataclass, field
@@ -446,6 +446,8 @@ class UltimateKaggleEmbedderV4:
         self.enable_ensemble = enable_ensemble
         self.ensemble_config = ensemble_config or EnsembleConfig() if enable_ensemble else None
         self.reranking_config = reranking_config or RerankingConfig()
+        self._canonical_collection_hint: Optional[str] = None
+        self._target_collection_cache: Optional[str] = None
         
         # Kaggle environment detection
         self.is_kaggle = '/kaggle' in os.getcwd() or os.path.exists('/kaggle')
@@ -952,6 +954,40 @@ class UltimateKaggleEmbedderV4:
 
         return normalized
 
+    def get_target_collection_name(self) -> str:
+        """Infer the Qdrant collection name that should receive the current export."""
+
+        if self._target_collection_cache:
+            return self._target_collection_cache
+
+        candidates: Counter[str] = Counter()
+
+        for metadata in self.chunks_metadata:
+            candidate = metadata.get("qdrant_collection") if isinstance(metadata, dict) else None
+            if not candidate:
+                hints = metadata.get("collection_hints") if isinstance(metadata, dict) else None
+                if isinstance(hints, list):
+                    for hint in hints:
+                        if isinstance(hint, str) and hint.strip():
+                            candidate = hint
+                            break
+            if isinstance(candidate, str) and candidate.strip():
+                normalized = self._normalize_collection_name(candidate)
+                candidates[normalized] += 1
+
+        canonical = None
+        if candidates:
+            canonical = candidates.most_common(1)[0][0]
+        elif self._canonical_collection_hint:
+            canonical = self._normalize_collection_name(self._canonical_collection_hint)
+        else:
+            canonical = "ultimate_embeddings"
+
+        safe_model = self.model_name.replace(" ", "_").replace("-", "_")
+        collection_name = f"{canonical}_v4_{safe_model}"
+        self._target_collection_cache = collection_name
+        return collection_name
+
     @staticmethod
     def _ensure_document_id(metadata: Dict[str, Any]) -> None:
         """Ensure metadata contains a stable document identifier."""
@@ -1164,6 +1200,8 @@ class UltimateKaggleEmbedderV4:
         self.chunk_texts = []
         self.raw_chunk_texts = []
         self.sparse_vectors = []
+        self._canonical_collection_hint = None
+        self._target_collection_cache = None
 
         modal_hint_distribution: defaultdict[str, int] = defaultdict(int)
         
@@ -1191,6 +1229,7 @@ class UltimateKaggleEmbedderV4:
             priority = collection_priorities.get(canonical_collection, 0.5)
             
             logger.info(f"Loading single collection: {collection_name} -> {canonical_collection}")
+            self._canonical_collection_hint = canonical_collection
             
             # Enhanced glob patterns to catch all chunk file variations
             chunk_file_patterns = [
@@ -1676,6 +1715,7 @@ class UltimateKaggleEmbedderV4:
         script_path = f"{base_path}_upload_script.py"
         self._generate_upload_script(script_path, exported_files)
         exported_files["upload_script"] = script_path
+        exported_files["qdrant_collection"] = self.get_target_collection_name()
         
         logger.info("Export complete; files ready for download:")
         for file_type, file_path in exported_files.items():
@@ -1815,6 +1855,8 @@ class UltimateKaggleEmbedderV4:
     def _generate_upload_script(self, file_path: str, exported_files: Dict[str, str]):
         """Generate Python script for local Qdrant upload"""
 
+        collection_name = self.get_target_collection_name()
+
         script_content = textwrap.dedent(f'''#!/usr/bin/env python3
 """
 Auto-generated Qdrant upload script for Ultimate Kaggle Embedder V4
@@ -1846,7 +1888,7 @@ def upload_to_qdrant():
     # Configuration
     qdrant_host = "localhost"
     qdrant_port = 6333
-    collection_name = "ultimate_embeddings_v4_{self.model_name}"
+    collection_name = "{collection_name}"
 
     # File paths (adjust if needed)
     files = {{
