@@ -6,6 +6,7 @@ from __future__ import annotations
 import argparse
 import json
 import logging
+import shutil
 import sys
 from pathlib import Path
 from typing import Dict, List
@@ -33,6 +34,7 @@ KAGGLE_DEFAULTS = {
     "enable_ensemble": True,
     "skip_existing": True,
     "summary": "embedding_summary.json",
+    "zip_output": True,
 }
 
 from processor.kaggle_ultimate_embedder_v4 import (
@@ -93,6 +95,12 @@ def _parse_args(argv: List[str]) -> argparse.Namespace:
         default=KAGGLE_DEFAULTS["summary"] if IS_KAGGLE else "embedding_summary.json",
         help="Filename (relative to output root) for the run summary JSON file.",
     )
+    parser.add_argument(
+        "--zip-output",
+        action="store_true",
+        default=KAGGLE_DEFAULTS.get("zip_output", False) if IS_KAGGLE else False,
+        help="Compress the output directory into a .zip archive for easier download.",
+    )
     return parser.parse_args(argv)
 
 
@@ -142,6 +150,20 @@ def _build_export_config(output_dir: Path, collection_name: str, model_name: str
         working_dir=str(output_dir),
         output_prefix=f"{collection_name}_embedder_v4_{model_name}",
     )
+
+
+def _zip_output_directory(output_root: Path) -> Path:
+    archive_base = output_root
+    archive_path = Path(
+        shutil.make_archive(
+            str(archive_base),
+            "zip",
+            root_dir=str(output_root.parent),
+            base_dir=output_root.name,
+        )
+    )
+    LOGGER.info("Created zip archive at %s", archive_path)
+    return archive_path
 
 
 def _run_for_collection(
@@ -239,8 +261,21 @@ def main(argv: List[str]) -> int:
         json.dump(run_summaries, handle, indent=2)
     LOGGER.info("Wrote summary to %s", summary_path)
 
+    archive_path: Path | None = None
+    if args.zip_output:
+        try:
+            archive_path = _zip_output_directory(output_root)
+        except Exception:  # pragma: no cover - defensive logging
+            LOGGER.exception("Failed to create zip archive for %s", output_root)
+
     failures = [item for item in run_summaries if item.get("status") == "failed"]
-    return 1 if failures else 0
+    if failures:
+        return 1
+
+    if archive_path is not None:
+        LOGGER.info("Output archive ready at %s", archive_path)
+
+    return 0
 
 
 if __name__ == "__main__":
