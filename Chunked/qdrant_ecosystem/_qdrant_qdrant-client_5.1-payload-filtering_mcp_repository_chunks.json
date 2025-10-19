@@ -1,0 +1,898 @@
+[
+  {
+    "text": "## 3. Field Matchers Implementation",
+    "metadata": {
+      "chunk_id": "1b284a8030d3-0006",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant-client\\_qdrant_qdrant-client_5.1-payload-filtering.md",
+      "filename": "_qdrant_qdrant-client_5.1-payload-filtering.md",
+      "file_extension": ".md",
+      "chunk_index": 6,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "3. Field Matchers Implementation"
+      ],
+      "heading_text": "3. Field Matchers Implementation",
+      "token_count": 7,
+      "char_count": 35,
+      "start_char": 0,
+      "end_char": 35,
+      "semantic_score": 0.8,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.59,
+      "chunking_strategy": "hybrid_adaptive",
+      "content_type": "hierarchical_section",
+      "embedding_model": "nomic-ai/CodeRankEmbed",
+      "processing_timestamp": "2025-10-19T15:48:29.685396",
+      "document_id": "1b284a8030d3",
+      "document_name": "_qdrant_qdrant-client_5.1-payload-filtering",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant-client\\_qdrant_qdrant-client_5.1-payload-filtering.md",
+      "source_filename": "_qdrant_qdrant-client_5.1-payload-filtering.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant-client",
+      "relative_path": "Docs\\qdrant_ecosystem\\qdrant_qdrant-client\\_qdrant_qdrant-client_5.1-payload-filtering.md",
+      "hierarchy_path": "3. Field Matchers Implementation",
+      "chunk_hash": "ca0e971eb5e78398",
+      "content_digest": "ca0e971eb5e78398",
+      "chunk_length": 35,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "field",
+          "matchers",
+          "implementation"
+        ],
+        "term_weights": [
+          {
+            "term": "field",
+            "tf": 1,
+            "weight": 0.333333
+          },
+          {
+            "term": "matchers",
+            "tf": 1,
+            "weight": 0.333333
+          },
+          {
+            "term": "implementation",
+            "tf": 1,
+            "weight": 0.333333
+          }
+        ],
+        "unique_terms": 3,
+        "total_terms": 3
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "3. Field Matchers Implementation",
+        "field",
+        "implementation",
+        "matchers"
+      ],
+      "quality_fallback": true,
+      "quality_notes": "Promoted via relaxed thresholds"
+    },
+    "advanced_scores": {
+      "semantic": 0.8,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.59,
+      "overall": 0.7633333333333333
+    }
+  },
+  {
+    "text": "## 5. Filter Processing Flow  When a search request includes a filter, the filtering process follows these steps:  Filter Processing Flow Diagram ``` ``` The key function in this process is `calculate_payload_mask`, which applies the filter to all payloads and returns a boolean mask that indicates which points match the filter. Sources: [qdrant\\_client/local/payload\\_filters.py315-333](https://github.com/qdrant/qdrant-client/blob/ac6f6cd2/qdrant_client/local/payload_filters.py#L315-L333)",
+    "metadata": {
+      "chunk_id": "1b284a8030d3-0012",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant-client\\_qdrant_qdrant-client_5.1-payload-filtering.md",
+      "filename": "_qdrant_qdrant-client_5.1-payload-filtering.md",
+      "file_extension": ".md",
+      "chunk_index": 12,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "5. Filter Processing Flow"
+      ],
+      "heading_text": "5. Filter Processing Flow",
+      "token_count": 113,
+      "char_count": 492,
+      "start_char": 0,
+      "end_char": 492,
+      "semantic_score": 0.22175917029380798,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.7220754716981131,
+      "chunking_strategy": "hybrid_adaptive",
+      "content_type": "hierarchical_section",
+      "embedding_model": "nomic-ai/CodeRankEmbed",
+      "processing_timestamp": "2025-10-19T15:48:29.691194",
+      "document_id": "1b284a8030d3",
+      "document_name": "_qdrant_qdrant-client_5.1-payload-filtering",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant-client\\_qdrant_qdrant-client_5.1-payload-filtering.md",
+      "source_filename": "_qdrant_qdrant-client_5.1-payload-filtering.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant-client",
+      "relative_path": "Docs\\qdrant_ecosystem\\qdrant_qdrant-client\\_qdrant_qdrant-client_5.1-payload-filtering.md",
+      "hierarchy_path": "5. Filter Processing Flow",
+      "chunk_hash": "4158ef6d36f96365",
+      "content_digest": "4158ef6d36f96365",
+      "chunk_length": 492,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "filter",
+          "the",
+          "qdrant",
+          "payload",
+          "client",
+          "processing",
+          "flow",
+          "process",
+          "mask",
+          "which",
+          "local",
+          "filters",
+          "when",
+          "search",
+          "request",
+          "includes",
+          "filtering",
+          "follows",
+          "these",
+          "steps"
+        ],
+        "term_weights": [
+          {
+            "term": "filter",
+            "tf": 5,
+            "weight": 0.075758
+          },
+          {
+            "term": "the",
+            "tf": 4,
+            "weight": 0.060606
+          },
+          {
+            "term": "qdrant",
+            "tf": 4,
+            "weight": 0.060606
+          },
+          {
+            "term": "payload",
+            "tf": 3,
+            "weight": 0.045455
+          },
+          {
+            "term": "client",
+            "tf": 3,
+            "weight": 0.045455
+          },
+          {
+            "term": "processing",
+            "tf": 2,
+            "weight": 0.030303
+          },
+          {
+            "term": "flow",
+            "tf": 2,
+            "weight": 0.030303
+          },
+          {
+            "term": "process",
+            "tf": 2,
+            "weight": 0.030303
+          },
+          {
+            "term": "mask",
+            "tf": 2,
+            "weight": 0.030303
+          },
+          {
+            "term": "which",
+            "tf": 2,
+            "weight": 0.030303
+          },
+          {
+            "term": "local",
+            "tf": 2,
+            "weight": 0.030303
+          },
+          {
+            "term": "filters",
+            "tf": 2,
+            "weight": 0.030303
+          },
+          {
+            "term": "when",
+            "tf": 1,
+            "weight": 0.015152
+          },
+          {
+            "term": "search",
+            "tf": 1,
+            "weight": 0.015152
+          },
+          {
+            "term": "request",
+            "tf": 1,
+            "weight": 0.015152
+          },
+          {
+            "term": "includes",
+            "tf": 1,
+            "weight": 0.015152
+          },
+          {
+            "term": "filtering",
+            "tf": 1,
+            "weight": 0.015152
+          },
+          {
+            "term": "follows",
+            "tf": 1,
+            "weight": 0.015152
+          },
+          {
+            "term": "these",
+            "tf": 1,
+            "weight": 0.015152
+          },
+          {
+            "term": "steps",
+            "tf": 1,
+            "weight": 0.015152
+          }
+        ],
+        "unique_terms": 45,
+        "total_terms": 66
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "5. Filter Processing Flow",
+        "client",
+        "filter",
+        "flow",
+        "mask",
+        "payload",
+        "process",
+        "processing",
+        "qdrant",
+        "the",
+        "which"
+      ],
+      "quality_fallback": true,
+      "quality_notes": "Promoted via relaxed thresholds"
+    },
+    "advanced_scores": {
+      "semantic": 0.22175917029380798,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.7220754716981131,
+      "overall": 0.6146115473306404
+    }
+  },
+  {
+    "text": "## 7. Integration with Formula Expressions  Payload filters can also be used within formula expressions to adjust scores based on payload values: ``` ``` The `check_condition` function is reused in the formula expression evaluation to determine if conditions are met. Sources: [qdrant\\_client/hybrid/formula.py33-36](https://github.com/qdrant/qdrant-client/blob/ac6f6cd2/qdrant_client/hybrid/formula.py#L33-L36)  This integration allows for powerful hybrid search capabilities where both vector similarity and metadata influence the final ranking. Dismiss  Refresh this wiki  Enter email to refresh",
+    "metadata": {
+      "chunk_id": "1b284a8030d3-0014",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant-client\\_qdrant_qdrant-client_5.1-payload-filtering.md",
+      "filename": "_qdrant_qdrant-client_5.1-payload-filtering.md",
+      "file_extension": ".md",
+      "chunk_index": 14,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "7. Integration with Formula Expressions"
+      ],
+      "heading_text": "7. Integration with Formula Expressions",
+      "token_count": 130,
+      "char_count": 598,
+      "start_char": 0,
+      "end_char": 598,
+      "semantic_score": 0.29424071311950684,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5370588235294117,
+      "chunking_strategy": "hybrid_adaptive",
+      "content_type": "hierarchical_section",
+      "embedding_model": "nomic-ai/CodeRankEmbed",
+      "processing_timestamp": "2025-10-19T15:48:29.692786",
+      "document_id": "1b284a8030d3",
+      "document_name": "_qdrant_qdrant-client_5.1-payload-filtering",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant-client\\_qdrant_qdrant-client_5.1-payload-filtering.md",
+      "source_filename": "_qdrant_qdrant-client_5.1-payload-filtering.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant-client",
+      "relative_path": "Docs\\qdrant_ecosystem\\qdrant_qdrant-client\\_qdrant_qdrant-client_5.1-payload-filtering.md",
+      "hierarchy_path": "7. Integration with Formula Expressions",
+      "chunk_hash": "94e3e59fb36a4a3f",
+      "content_digest": "94e3e59fb36a4a3f",
+      "chunk_length": 598,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "formula",
+          "qdrant",
+          "the",
+          "client",
+          "hybrid",
+          "integration",
+          "expressions",
+          "payload",
+          "this",
+          "refresh",
+          "with",
+          "filters",
+          "can",
+          "also",
+          "used",
+          "within",
+          "adjust",
+          "scores",
+          "based",
+          "values"
+        ],
+        "term_weights": [
+          {
+            "term": "formula",
+            "tf": 5,
+            "weight": 0.066667
+          },
+          {
+            "term": "qdrant",
+            "tf": 4,
+            "weight": 0.053333
+          },
+          {
+            "term": "the",
+            "tf": 3,
+            "weight": 0.04
+          },
+          {
+            "term": "client",
+            "tf": 3,
+            "weight": 0.04
+          },
+          {
+            "term": "hybrid",
+            "tf": 3,
+            "weight": 0.04
+          },
+          {
+            "term": "integration",
+            "tf": 2,
+            "weight": 0.026667
+          },
+          {
+            "term": "expressions",
+            "tf": 2,
+            "weight": 0.026667
+          },
+          {
+            "term": "payload",
+            "tf": 2,
+            "weight": 0.026667
+          },
+          {
+            "term": "this",
+            "tf": 2,
+            "weight": 0.026667
+          },
+          {
+            "term": "refresh",
+            "tf": 2,
+            "weight": 0.026667
+          },
+          {
+            "term": "with",
+            "tf": 1,
+            "weight": 0.013333
+          },
+          {
+            "term": "filters",
+            "tf": 1,
+            "weight": 0.013333
+          },
+          {
+            "term": "can",
+            "tf": 1,
+            "weight": 0.013333
+          },
+          {
+            "term": "also",
+            "tf": 1,
+            "weight": 0.013333
+          },
+          {
+            "term": "used",
+            "tf": 1,
+            "weight": 0.013333
+          },
+          {
+            "term": "within",
+            "tf": 1,
+            "weight": 0.013333
+          },
+          {
+            "term": "adjust",
+            "tf": 1,
+            "weight": 0.013333
+          },
+          {
+            "term": "scores",
+            "tf": 1,
+            "weight": 0.013333
+          },
+          {
+            "term": "based",
+            "tf": 1,
+            "weight": 0.013333
+          },
+          {
+            "term": "values",
+            "tf": 1,
+            "weight": 0.013333
+          }
+        ],
+        "unique_terms": 57,
+        "total_terms": 75
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "7. Integration with Formula Expressions",
+        "client",
+        "expressions",
+        "formula",
+        "hybrid",
+        "integration",
+        "payload",
+        "qdrant",
+        "refresh",
+        "the",
+        "this"
+      ],
+      "quality_fallback": true,
+      "quality_notes": "Promoted via relaxed thresholds"
+    },
+    "advanced_scores": {
+      "semantic": 0.29424071311950684,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5370588235294117,
+      "overall": 0.5770998455496396
+    }
+  },
+  {
+    "text": "# Payload Filtering  Relevant source files  - [qdrant\\_client/local/geo.py](https://github.com/qdrant/qdrant-client/blob/ac6f6cd2/qdrant_client/local/geo.py) - [qdrant\\_client/local/payload\\_filters.py](https://github.com/qdrant/qdrant-client/blob/ac6f6cd2/qdrant_client/local/payload_filters.py) - [qdrant\\_client/local/payload\\_value\\_extractor.py](https://github.com/qdrant/qdrant-client/blob/ac6f6cd2/qdrant_client/local/payload_value_extractor.py) - [tests/fixtures/filters.py](https://github.com/qdrant/qdrant-client/blob/ac6f6cd2/tests/fixtures/filters.py) - [tests/fixtures/payload.py](https://github.com/qdrant/qdrant-client/blob/ac6f6cd2/tests/fixtures/payload.py)  Payload filtering is a core functionality in the Qdrant client that enables filtering vector search results based on metadata attached to vectors. This document explains how payload filtering works in the client implementation, the available filter types, and how they are processed. For information about search operations that use these filters, see [Search Operations](qdrant/qdrant-client/3.1-search-operations.md). For details about expression evaluation involving filters, see [Expression Evaluation](qdrant/qdrant-client/4.3-hybrid-search.md).",
+    "metadata": {
+      "chunk_id": "1b284a8030d3-0000",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant-client\\_qdrant_qdrant-client_5.1-payload-filtering.md",
+      "filename": "_qdrant_qdrant-client_5.1-payload-filtering.md",
+      "file_extension": ".md",
+      "chunk_index": 0,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Payload Filtering"
+      ],
+      "heading_text": "Payload Filtering",
+      "token_count": 308,
+      "char_count": 1226,
+      "start_char": 0,
+      "end_char": 1226,
+      "semantic_score": 0.3059349060058594,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5174,
+      "chunking_strategy": "hybrid_adaptive",
+      "content_type": "hierarchical_section",
+      "embedding_model": "nomic-ai/CodeRankEmbed",
+      "processing_timestamp": "2025-10-19T15:48:29.680366",
+      "document_id": "1b284a8030d3",
+      "document_name": "_qdrant_qdrant-client_5.1-payload-filtering",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant-client\\_qdrant_qdrant-client_5.1-payload-filtering.md",
+      "source_filename": "_qdrant_qdrant-client_5.1-payload-filtering.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant-client",
+      "relative_path": "Docs\\qdrant_ecosystem\\qdrant_qdrant-client\\_qdrant_qdrant-client_5.1-payload-filtering.md",
+      "hierarchy_path": "Payload Filtering",
+      "chunk_hash": "ee5b8b47a5201e3a",
+      "content_digest": "ee5b8b47a5201e3a",
+      "chunk_length": 1226,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "qdrant",
+          "client",
+          "payload",
+          "local",
+          "filters",
+          "https",
+          "github",
+          "com",
+          "blob",
+          "ac6f6cd2",
+          "search",
+          "filtering",
+          "tests",
+          "fixtures",
+          "the",
+          "operations",
+          "geo",
+          "value",
+          "extractor",
+          "that"
+        ],
+        "term_weights": [
+          {
+            "term": "qdrant",
+            "tf": 21,
+            "weight": 0.135484
+          },
+          {
+            "term": "client",
+            "tf": 15,
+            "weight": 0.096774
+          },
+          {
+            "term": "payload",
+            "tf": 9,
+            "weight": 0.058065
+          },
+          {
+            "term": "local",
+            "tf": 6,
+            "weight": 0.03871
+          },
+          {
+            "term": "filters",
+            "tf": 6,
+            "weight": 0.03871
+          },
+          {
+            "term": "https",
+            "tf": 5,
+            "weight": 0.032258
+          },
+          {
+            "term": "github",
+            "tf": 5,
+            "weight": 0.032258
+          },
+          {
+            "term": "com",
+            "tf": 5,
+            "weight": 0.032258
+          },
+          {
+            "term": "blob",
+            "tf": 5,
+            "weight": 0.032258
+          },
+          {
+            "term": "ac6f6cd2",
+            "tf": 5,
+            "weight": 0.032258
+          },
+          {
+            "term": "search",
+            "tf": 5,
+            "weight": 0.032258
+          },
+          {
+            "term": "filtering",
+            "tf": 4,
+            "weight": 0.025806
+          },
+          {
+            "term": "tests",
+            "tf": 4,
+            "weight": 0.025806
+          },
+          {
+            "term": "fixtures",
+            "tf": 4,
+            "weight": 0.025806
+          },
+          {
+            "term": "the",
+            "tf": 3,
+            "weight": 0.019355
+          },
+          {
+            "term": "operations",
+            "tf": 3,
+            "weight": 0.019355
+          },
+          {
+            "term": "geo",
+            "tf": 2,
+            "weight": 0.012903
+          },
+          {
+            "term": "value",
+            "tf": 2,
+            "weight": 0.012903
+          },
+          {
+            "term": "extractor",
+            "tf": 2,
+            "weight": 0.012903
+          },
+          {
+            "term": "that",
+            "tf": 2,
+            "weight": 0.012903
+          }
+        ],
+        "unique_terms": 56,
+        "total_terms": 155
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Payload Filtering",
+        "ac6f6cd2",
+        "blob",
+        "client",
+        "com",
+        "filters",
+        "github",
+        "https",
+        "local",
+        "payload",
+        "qdrant"
+      ],
+      "quality_fallback": true,
+      "quality_notes": "Promoted via relaxed thresholds"
+    },
+    "advanced_scores": {
+      "semantic": 0.3059349060058594,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5174,
+      "overall": 0.5744449686686197
+    }
+  },
+  {
+    "text": "## 6. Performance Considerations  Payload filtering takes place after vector similarity search in the Qdrant client implementation. This means that:  1. The filter is applied to the top-k results from the vector search 2. If you need to filter first, consider using `prefiltration=True` in your search request 3. Complex filters on large result sets can impact performance  For optimal performance:  - Use simple conditions when possible - Avoid deeply nested filters - Consider indexing frequently filtered fields (server-side) - For local mode, filters operate in-memory without indexing  Sources: [qdrant\\_client/local/payload\\_filters.py315-333](https://github.com/qdrant/qdrant-client/blob/ac6f6cd2/qdrant_client/local/payload_filters.py#L315-L333)",
+    "metadata": {
+      "chunk_id": "1b284a8030d3-0013",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant-client\\_qdrant_qdrant-client_5.1-payload-filtering.md",
+      "filename": "_qdrant_qdrant-client_5.1-payload-filtering.md",
+      "file_extension": ".md",
+      "chunk_index": 13,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "6. Performance Considerations"
+      ],
+      "heading_text": "6. Performance Considerations",
+      "token_count": 169,
+      "char_count": 753,
+      "start_char": 0,
+      "end_char": 753,
+      "semantic_score": 0.2692083716392517,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5293258426966292,
+      "chunking_strategy": "hybrid_adaptive",
+      "content_type": "hierarchical_section",
+      "embedding_model": "nomic-ai/CodeRankEmbed",
+      "processing_timestamp": "2025-10-19T15:48:29.692007",
+      "document_id": "1b284a8030d3",
+      "document_name": "_qdrant_qdrant-client_5.1-payload-filtering",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant-client\\_qdrant_qdrant-client_5.1-payload-filtering.md",
+      "source_filename": "_qdrant_qdrant-client_5.1-payload-filtering.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant-client",
+      "relative_path": "Docs\\qdrant_ecosystem\\qdrant_qdrant-client\\_qdrant_qdrant-client_5.1-payload-filtering.md",
+      "hierarchy_path": "6. Performance Considerations",
+      "chunk_hash": "72fda592c0698227",
+      "content_digest": "72fda592c0698227",
+      "chunk_length": 753,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "qdrant",
+          "filters",
+          "the",
+          "client",
+          "performance",
+          "payload",
+          "search",
+          "local",
+          "vector",
+          "filter",
+          "consider",
+          "for",
+          "indexing",
+          "considerations",
+          "filtering",
+          "takes",
+          "place",
+          "after",
+          "similarity",
+          "implementation"
+        ],
+        "term_weights": [
+          {
+            "term": "qdrant",
+            "tf": 5,
+            "weight": 0.052083
+          },
+          {
+            "term": "filters",
+            "tf": 5,
+            "weight": 0.052083
+          },
+          {
+            "term": "the",
+            "tf": 4,
+            "weight": 0.041667
+          },
+          {
+            "term": "client",
+            "tf": 4,
+            "weight": 0.041667
+          },
+          {
+            "term": "performance",
+            "tf": 3,
+            "weight": 0.03125
+          },
+          {
+            "term": "payload",
+            "tf": 3,
+            "weight": 0.03125
+          },
+          {
+            "term": "search",
+            "tf": 3,
+            "weight": 0.03125
+          },
+          {
+            "term": "local",
+            "tf": 3,
+            "weight": 0.03125
+          },
+          {
+            "term": "vector",
+            "tf": 2,
+            "weight": 0.020833
+          },
+          {
+            "term": "filter",
+            "tf": 2,
+            "weight": 0.020833
+          },
+          {
+            "term": "consider",
+            "tf": 2,
+            "weight": 0.020833
+          },
+          {
+            "term": "for",
+            "tf": 2,
+            "weight": 0.020833
+          },
+          {
+            "term": "indexing",
+            "tf": 2,
+            "weight": 0.020833
+          },
+          {
+            "term": "considerations",
+            "tf": 1,
+            "weight": 0.010417
+          },
+          {
+            "term": "filtering",
+            "tf": 1,
+            "weight": 0.010417
+          },
+          {
+            "term": "takes",
+            "tf": 1,
+            "weight": 0.010417
+          },
+          {
+            "term": "place",
+            "tf": 1,
+            "weight": 0.010417
+          },
+          {
+            "term": "after",
+            "tf": 1,
+            "weight": 0.010417
+          },
+          {
+            "term": "similarity",
+            "tf": 1,
+            "weight": 0.010417
+          },
+          {
+            "term": "implementation",
+            "tf": 1,
+            "weight": 0.010417
+          }
+        ],
+        "unique_terms": 69,
+        "total_terms": 96
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "6. Performance Considerations",
+        "client",
+        "filter",
+        "filters",
+        "local",
+        "payload",
+        "performance",
+        "qdrant",
+        "search",
+        "the",
+        "vector"
+      ],
+      "quality_fallback": true,
+      "quality_notes": "Promoted via relaxed thresholds"
+    },
+    "advanced_scores": {
+      "semantic": 0.2692083716392517,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5293258426966292,
+      "overall": 0.5661780714452936
+    }
+  }
+]

@@ -1,0 +1,592 @@
+[
+  {
+    "text": "## Core Verification Functions",
+    "metadata": {
+      "chunk_id": "3bb69fb3ac18-0004",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling\\_docling-project_docling_9.1-testing-framework.md",
+      "filename": "_docling-project_docling_9.1-testing-framework.md",
+      "file_extension": ".md",
+      "chunk_index": 4,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Core Verification Functions"
+      ],
+      "heading_text": "Core Verification Functions",
+      "token_count": 4,
+      "char_count": 30,
+      "start_char": 0,
+      "end_char": 30,
+      "semantic_score": 0.8,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.59,
+      "chunking_strategy": "hierarchical_balanced",
+      "content_type": "hierarchical_section",
+      "embedding_model": "nomic-ai/CodeRankEmbed",
+      "processing_timestamp": "2025-10-19T14:49:27.289225",
+      "document_id": "3bb69fb3ac18",
+      "document_name": "_docling-project_docling_9.1-testing-framework",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling\\_docling-project_docling_9.1-testing-framework.md",
+      "source_filename": "_docling-project_docling_9.1-testing-framework.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling",
+      "relative_path": "Docs\\docling\\_docling-project_docling_9.1-testing-framework.md",
+      "hierarchy_path": "Core Verification Functions",
+      "chunk_hash": "884437755103675f",
+      "content_digest": "884437755103675f",
+      "chunk_length": 30,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "core",
+          "verification",
+          "functions"
+        ],
+        "term_weights": [
+          {
+            "term": "core",
+            "tf": 1,
+            "weight": 0.333333
+          },
+          {
+            "term": "verification",
+            "tf": 1,
+            "weight": 0.333333
+          },
+          {
+            "term": "functions",
+            "tf": 1,
+            "weight": 0.333333
+          }
+        ],
+        "unique_terms": 3,
+        "total_terms": 3
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Core Verification Functions",
+        "core",
+        "functions",
+        "verification"
+      ],
+      "quality_fallback": true,
+      "quality_notes": "Promoted via relaxed thresholds"
+    },
+    "advanced_scores": {
+      "semantic": 0.8,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.59,
+      "overall": 0.7633333333333333
+    }
+  },
+  {
+    "text": "# Testing Framework  Relevant source files  - [docling/backend/html\\_backend.py](https://github.com/docling-project/docling/blob/f7244a43/docling/backend/html_backend.py) - [docling/models/tesseract\\_ocr\\_cli\\_model.py](https://github.com/docling-project/docling/blob/f7244a43/docling/models/tesseract_ocr_cli_model.py) - [docling/models/tesseract\\_ocr\\_model.py](https://github.com/docling-project/docling/blob/f7244a43/docling/models/tesseract_ocr_model.py) - [tests/data/groundtruth/docling\\_v2/example\\_06.html.itxt](https://github.com/docling-project/docling/blob/f7244a43/tests/data/groundtruth/docling_v2/example_06.html.itxt) - [tests/data/groundtruth/docling\\_v2/example\\_06.html.json](https://github.com/docling-project/docling/blob/f7244a43/tests/data/groundtruth/docling_v2/example_06.html.json) - [tests/data/groundtruth/docling\\_v2/example\\_06.html.md](https://github.com/docling-project/docling/blob/f7244a43/tests/data/groundtruth/docling_v2/example_06.html.md) - [tests/data/groundtruth/docling\\_v2/example\\_09.html.itxt](https://github.com/docling-project/docling/blob/f7244a43/tests/data/groundtruth/docling_v2/example_09.html.itxt) - [tests/data/groundtruth/docling\\_v2/example\\_09.html.json](https://github.com/docling-project/docling/blob/f7244a43/tests/data/groundtruth/docling_v2/example_09.html.json) - [tests/data/groundtruth/docling\\_v2/example\\_09.html.md](https://github.com/docling-project/docling/blob/f7244a43/tests/data/groundtruth/docling_v2/example_09.html.md) - [tests/data/groundtruth/docling\\_v2/wiki\\_duck.html.itxt](https://github.com/docling-project/docling/blob/f7244a43/tests/data/groundtruth/docling_v2/wiki_duck.html.itxt) - [tests/data/groundtruth/docling\\_v2/wiki\\_duck.html.json](https://github.com/docling-project/docling/blob/f7244a43/tests/data/groundtruth/docling_v2/wiki_duck.html.json) - [tests/data/groundtruth/docling\\_v2/wiki\\_duck.html.md](https://github.com/docling-project/docling/blob/f7244a43/tests/data/groundtruth/docling_v2/wiki_duck.html.md) - [tests/data\\_scanned/sample\\_with\\_rotation\\_mismatch.pdf](https://github.com/docling-project/docling/blob/f7244a43/tests/data_scanned/sample_with_rotation_mismatch.pdf) - [tests/test\\_backend\\_docling\\_parse.py](https://github.com/docling-project/docling/blob/f7244a43/tests/test_backend_docling_parse.py) - [tests/test\\_backend\\_docling\\_parse\\_v2.py](https://github.com/docling-project/docling/blob/f7244a43/tests/test_backend_docling_parse_v2.py) - [tests/test\\_backend\\_html.py](https://github.com/docling-project/docling/blob/f7244a43/tests/test_backend_html.py) - [tests/test\\_backend\\_pdfium.py](https://github.com/docling-project/docling/blob/f7244a43/tests/test_backend_pdfium.py) - [tests/test\\_e2e\\_ocr\\_conversion.py](https://github.com/docling-project/docling/blob/f7244a43/tests/test_e2e_ocr_conversion.py)  This document covers Docling's comprehensive testing infrastructure, including verification utilities, ground truth data management, and test patterns for document backends. For information about CI/CD workflows and development processes, see [CI/CD and Development Workflow](docling-project/docling/9.3-cicd-and-development-workflow.md). For details on ground truth data formats and schema evolution, see [Ground Truth Data](docling-project/docling/9.2-ground-truth-data.md).",
+    "metadata": {
+      "chunk_id": "3bb69fb3ac18-0000",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling\\_docling-project_docling_9.1-testing-framework.md",
+      "filename": "_docling-project_docling_9.1-testing-framework.md",
+      "file_extension": ".md",
+      "chunk_index": 0,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Testing Framework"
+      ],
+      "heading_text": "Testing Framework",
+      "token_count": 878,
+      "char_count": 3309,
+      "start_char": 0,
+      "end_char": 3309,
+      "semantic_score": 0.37039074301719666,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.898876404494382,
+      "chunking_strategy": "hierarchical_balanced",
+      "content_type": "hierarchical_section",
+      "embedding_model": "nomic-ai/CodeRankEmbed",
+      "processing_timestamp": "2025-10-19T14:49:27.287873",
+      "document_id": "3bb69fb3ac18",
+      "document_name": "_docling-project_docling_9.1-testing-framework",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling\\_docling-project_docling_9.1-testing-framework.md",
+      "source_filename": "_docling-project_docling_9.1-testing-framework.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling",
+      "relative_path": "Docs\\docling\\_docling-project_docling_9.1-testing-framework.md",
+      "hierarchy_path": "Testing Framework",
+      "chunk_hash": "c53f8443f8e40093",
+      "content_digest": "c53f8443f8e40093",
+      "chunk_length": 3309,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "docling",
+          "tests",
+          "data",
+          "html",
+          "project",
+          "https",
+          "github",
+          "com",
+          "blob",
+          "f7244a43",
+          "groundtruth",
+          "backend",
+          "example",
+          "test",
+          "ocr",
+          "itxt",
+          "json",
+          "wiki",
+          "duck",
+          "and"
+        ],
+        "term_weights": [
+          {
+            "term": "docling",
+            "tf": 69,
+            "weight": 0.162736
+          },
+          {
+            "term": "tests",
+            "tf": 30,
+            "weight": 0.070755
+          },
+          {
+            "term": "data",
+            "tf": 24,
+            "weight": 0.056604
+          },
+          {
+            "term": "html",
+            "tf": 22,
+            "weight": 0.051887
+          },
+          {
+            "term": "project",
+            "tf": 20,
+            "weight": 0.04717
+          },
+          {
+            "term": "https",
+            "tf": 18,
+            "weight": 0.042453
+          },
+          {
+            "term": "github",
+            "tf": 18,
+            "weight": 0.042453
+          },
+          {
+            "term": "com",
+            "tf": 18,
+            "weight": 0.042453
+          },
+          {
+            "term": "blob",
+            "tf": 18,
+            "weight": 0.042453
+          },
+          {
+            "term": "f7244a43",
+            "tf": 18,
+            "weight": 0.042453
+          },
+          {
+            "term": "groundtruth",
+            "tf": 18,
+            "weight": 0.042453
+          },
+          {
+            "term": "backend",
+            "tf": 12,
+            "weight": 0.028302
+          },
+          {
+            "term": "example",
+            "tf": 12,
+            "weight": 0.028302
+          },
+          {
+            "term": "test",
+            "tf": 11,
+            "weight": 0.025943
+          },
+          {
+            "term": "ocr",
+            "tf": 6,
+            "weight": 0.014151
+          },
+          {
+            "term": "itxt",
+            "tf": 6,
+            "weight": 0.014151
+          },
+          {
+            "term": "json",
+            "tf": 6,
+            "weight": 0.014151
+          },
+          {
+            "term": "wiki",
+            "tf": 6,
+            "weight": 0.014151
+          },
+          {
+            "term": "duck",
+            "tf": 6,
+            "weight": 0.014151
+          },
+          {
+            "term": "and",
+            "tf": 5,
+            "weight": 0.011792
+          }
+        ],
+        "unique_terms": 65,
+        "total_terms": 424
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Testing Framework",
+        "blob",
+        "com",
+        "data",
+        "docling",
+        "f7244a43",
+        "github",
+        "html",
+        "https",
+        "project",
+        "tests"
+      ],
+      "quality_fallback": true,
+      "quality_notes": "Promoted via relaxed thresholds"
+    },
+    "advanced_scores": {
+      "semantic": 0.37039074301719666,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.898876404494382,
+      "overall": 0.7230890491705262
+    }
+  },
+  {
+    "text": "## Ground Truth Data Management",
+    "metadata": {
+      "chunk_id": "3bb69fb3ac18-0007",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling\\_docling-project_docling_9.1-testing-framework.md",
+      "filename": "_docling-project_docling_9.1-testing-framework.md",
+      "file_extension": ".md",
+      "chunk_index": 7,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Ground Truth Data Management"
+      ],
+      "heading_text": "Ground Truth Data Management",
+      "token_count": 5,
+      "char_count": 31,
+      "start_char": 0,
+      "end_char": 31,
+      "semantic_score": 0.8,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.39,
+      "chunking_strategy": "hierarchical_balanced",
+      "content_type": "hierarchical_section",
+      "embedding_model": "nomic-ai/CodeRankEmbed",
+      "processing_timestamp": "2025-10-19T14:49:27.290627",
+      "document_id": "3bb69fb3ac18",
+      "document_name": "_docling-project_docling_9.1-testing-framework",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling\\_docling-project_docling_9.1-testing-framework.md",
+      "source_filename": "_docling-project_docling_9.1-testing-framework.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling",
+      "relative_path": "Docs\\docling\\_docling-project_docling_9.1-testing-framework.md",
+      "hierarchy_path": "Ground Truth Data Management",
+      "chunk_hash": "c849d10dc75eb165",
+      "content_digest": "c849d10dc75eb165",
+      "chunk_length": 31,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "ground",
+          "truth",
+          "data",
+          "management"
+        ],
+        "term_weights": [
+          {
+            "term": "ground",
+            "tf": 1,
+            "weight": 0.25
+          },
+          {
+            "term": "truth",
+            "tf": 1,
+            "weight": 0.25
+          },
+          {
+            "term": "data",
+            "tf": 1,
+            "weight": 0.25
+          },
+          {
+            "term": "management",
+            "tf": 1,
+            "weight": 0.25
+          }
+        ],
+        "unique_terms": 4,
+        "total_terms": 4
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Ground Truth Data Management",
+        "data",
+        "ground",
+        "management",
+        "truth"
+      ],
+      "quality_fallback": true,
+      "quality_notes": "Promoted via relaxed thresholds"
+    },
+    "advanced_scores": {
+      "semantic": 0.8,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.39,
+      "overall": 0.6966666666666667
+    }
+  },
+  {
+    "text": "## Test Backend Patterns",
+    "metadata": {
+      "chunk_id": "3bb69fb3ac18-0010",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling\\_docling-project_docling_9.1-testing-framework.md",
+      "filename": "_docling-project_docling_9.1-testing-framework.md",
+      "file_extension": ".md",
+      "chunk_index": 10,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Test Backend Patterns"
+      ],
+      "heading_text": "Test Backend Patterns",
+      "token_count": 4,
+      "char_count": 24,
+      "start_char": 0,
+      "end_char": 24,
+      "semantic_score": 0.8,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.39,
+      "chunking_strategy": "hierarchical_balanced",
+      "content_type": "hierarchical_section",
+      "embedding_model": "nomic-ai/CodeRankEmbed",
+      "processing_timestamp": "2025-10-19T14:49:27.291519",
+      "document_id": "3bb69fb3ac18",
+      "document_name": "_docling-project_docling_9.1-testing-framework",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling\\_docling-project_docling_9.1-testing-framework.md",
+      "source_filename": "_docling-project_docling_9.1-testing-framework.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling",
+      "relative_path": "Docs\\docling\\_docling-project_docling_9.1-testing-framework.md",
+      "hierarchy_path": "Test Backend Patterns",
+      "chunk_hash": "29fc537927276b4a",
+      "content_digest": "29fc537927276b4a",
+      "chunk_length": 24,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "test",
+          "backend",
+          "patterns"
+        ],
+        "term_weights": [
+          {
+            "term": "test",
+            "tf": 1,
+            "weight": 0.333333
+          },
+          {
+            "term": "backend",
+            "tf": 1,
+            "weight": 0.333333
+          },
+          {
+            "term": "patterns",
+            "tf": 1,
+            "weight": 0.333333
+          }
+        ],
+        "unique_terms": 3,
+        "total_terms": 3
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Test Backend Patterns",
+        "backend",
+        "patterns",
+        "test"
+      ],
+      "quality_fallback": true,
+      "quality_notes": "Promoted via relaxed thresholds"
+    },
+    "advanced_scores": {
+      "semantic": 0.8,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.39,
+      "overall": 0.6966666666666667
+    }
+  },
+  {
+    "text": "## Fuzzy Matching and OCR Testing",
+    "metadata": {
+      "chunk_id": "3bb69fb3ac18-0013",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling\\_docling-project_docling_9.1-testing-framework.md",
+      "filename": "_docling-project_docling_9.1-testing-framework.md",
+      "file_extension": ".md",
+      "chunk_index": 13,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Fuzzy Matching and OCR Testing"
+      ],
+      "heading_text": "Fuzzy Matching and OCR Testing",
+      "token_count": 7,
+      "char_count": 33,
+      "start_char": 0,
+      "end_char": 33,
+      "semantic_score": 0.8,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.39,
+      "chunking_strategy": "hierarchical_balanced",
+      "content_type": "hierarchical_section",
+      "embedding_model": "nomic-ai/CodeRankEmbed",
+      "processing_timestamp": "2025-10-19T14:49:27.292973",
+      "document_id": "3bb69fb3ac18",
+      "document_name": "_docling-project_docling_9.1-testing-framework",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling\\_docling-project_docling_9.1-testing-framework.md",
+      "source_filename": "_docling-project_docling_9.1-testing-framework.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling",
+      "relative_path": "Docs\\docling\\_docling-project_docling_9.1-testing-framework.md",
+      "hierarchy_path": "Fuzzy Matching and OCR Testing",
+      "chunk_hash": "0e65ef74f8ee71d8",
+      "content_digest": "0e65ef74f8ee71d8",
+      "chunk_length": 33,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "fuzzy",
+          "matching",
+          "and",
+          "ocr",
+          "testing"
+        ],
+        "term_weights": [
+          {
+            "term": "fuzzy",
+            "tf": 1,
+            "weight": 0.2
+          },
+          {
+            "term": "matching",
+            "tf": 1,
+            "weight": 0.2
+          },
+          {
+            "term": "and",
+            "tf": 1,
+            "weight": 0.2
+          },
+          {
+            "term": "ocr",
+            "tf": 1,
+            "weight": 0.2
+          },
+          {
+            "term": "testing",
+            "tf": 1,
+            "weight": 0.2
+          }
+        ],
+        "unique_terms": 5,
+        "total_terms": 5
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Fuzzy Matching and OCR Testing",
+        "and",
+        "fuzzy",
+        "matching",
+        "ocr",
+        "testing"
+      ],
+      "quality_fallback": true,
+      "quality_notes": "Promoted via relaxed thresholds"
+    },
+    "advanced_scores": {
+      "semantic": 0.8,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.39,
+      "overall": 0.6966666666666667
+    }
+  }
+]

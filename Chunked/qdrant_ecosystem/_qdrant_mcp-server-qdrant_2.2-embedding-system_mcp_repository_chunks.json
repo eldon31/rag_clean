@@ -1,0 +1,898 @@
+[
+  {
+    "text": "## Technical Implementation Details",
+    "metadata": {
+      "chunk_id": "487e334203ce-0006",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_mcp-server-qdrant\\_qdrant_mcp-server-qdrant_2.2-embedding-system.md",
+      "filename": "_qdrant_mcp-server-qdrant_2.2-embedding-system.md",
+      "file_extension": ".md",
+      "chunk_index": 6,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Technical Implementation Details"
+      ],
+      "heading_text": "Technical Implementation Details",
+      "token_count": 4,
+      "char_count": 35,
+      "start_char": 0,
+      "end_char": 35,
+      "semantic_score": 0.8,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.59,
+      "chunking_strategy": "hybrid_adaptive",
+      "content_type": "hierarchical_section",
+      "embedding_model": "nomic-ai/CodeRankEmbed",
+      "processing_timestamp": "2025-10-19T15:36:18.470271",
+      "document_id": "487e334203ce",
+      "document_name": "_qdrant_mcp-server-qdrant_2.2-embedding-system",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_mcp-server-qdrant\\_qdrant_mcp-server-qdrant_2.2-embedding-system.md",
+      "source_filename": "_qdrant_mcp-server-qdrant_2.2-embedding-system.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_mcp-server-qdrant",
+      "relative_path": "Docs\\qdrant_ecosystem\\qdrant_mcp-server-qdrant\\_qdrant_mcp-server-qdrant_2.2-embedding-system.md",
+      "hierarchy_path": "Technical Implementation Details",
+      "chunk_hash": "74cfe803df7ba33a",
+      "content_digest": "74cfe803df7ba33a",
+      "chunk_length": 35,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "technical",
+          "implementation",
+          "details"
+        ],
+        "term_weights": [
+          {
+            "term": "technical",
+            "tf": 1,
+            "weight": 0.333333
+          },
+          {
+            "term": "implementation",
+            "tf": 1,
+            "weight": 0.333333
+          },
+          {
+            "term": "details",
+            "tf": 1,
+            "weight": 0.333333
+          }
+        ],
+        "unique_terms": 3,
+        "total_terms": 3
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Technical Implementation Details",
+        "details",
+        "implementation",
+        "technical"
+      ],
+      "quality_fallback": true,
+      "quality_notes": "Promoted via relaxed thresholds"
+    },
+    "advanced_scores": {
+      "semantic": 0.8,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.59,
+      "overall": 0.7633333333333333
+    }
+  },
+  {
+    "text": "## Provider Factory  The embedding system uses a factory pattern to create embedding providers based on configuration settings: ``` ``` The `create_embedding_provider` factory function:  1. Takes an `EmbeddingProviderSettings` instance as input 2. Checks the `provider_type` field to determine which implementation to create 3. Creates and returns the appropriate `EmbeddingProvider` implementation 4. Raises a `ValueError` for unsupported provider types  Currently, only the `FASTEMBED` provider type is supported, defined in the `EmbeddingProviderType` enum. Sources: [src/mcp\\_server\\_qdrant/embeddings/factory.py6-17](https://github.com/qdrant/mcp-server-qdrant/blob/a3ab0b96/src/mcp_server_qdrant/embeddings/factory.py#L6-L17) [src/mcp\\_server\\_qdrant/embeddings/types.py1-5](https://github.com/qdrant/mcp-server-qdrant/blob/a3ab0b96/src/mcp_server_qdrant/embeddings/types.py#L1-L5)",
+    "metadata": {
+      "chunk_id": "487e334203ce-0004",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_mcp-server-qdrant\\_qdrant_mcp-server-qdrant_2.2-embedding-system.md",
+      "filename": "_qdrant_mcp-server-qdrant_2.2-embedding-system.md",
+      "file_extension": ".md",
+      "chunk_index": 4,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Provider Factory"
+      ],
+      "heading_text": "Provider Factory",
+      "token_count": 229,
+      "char_count": 887,
+      "start_char": 0,
+      "end_char": 887,
+      "semantic_score": 0.5080183148384094,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5251351351351351,
+      "chunking_strategy": "hybrid_adaptive",
+      "content_type": "hierarchical_section",
+      "embedding_model": "nomic-ai/CodeRankEmbed",
+      "processing_timestamp": "2025-10-19T15:36:18.469749",
+      "document_id": "487e334203ce",
+      "document_name": "_qdrant_mcp-server-qdrant_2.2-embedding-system",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_mcp-server-qdrant\\_qdrant_mcp-server-qdrant_2.2-embedding-system.md",
+      "source_filename": "_qdrant_mcp-server-qdrant_2.2-embedding-system.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_mcp-server-qdrant",
+      "relative_path": "Docs\\qdrant_ecosystem\\qdrant_mcp-server-qdrant\\_qdrant_mcp-server-qdrant_2.2-embedding-system.md",
+      "hierarchy_path": "Provider Factory",
+      "chunk_hash": "5202f68239ea57c7",
+      "content_digest": "5202f68239ea57c7",
+      "chunk_length": 887,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "qdrant",
+          "the",
+          "mcp",
+          "server",
+          "provider",
+          "factory",
+          "src",
+          "embeddings",
+          "embedding",
+          "create",
+          "types",
+          "type",
+          "implementation",
+          "https",
+          "github",
+          "com",
+          "blob",
+          "a3ab0b96",
+          "system",
+          "uses"
+        ],
+        "term_weights": [
+          {
+            "term": "qdrant",
+            "tf": 8,
+            "weight": 0.07767
+          },
+          {
+            "term": "the",
+            "tf": 6,
+            "weight": 0.058252
+          },
+          {
+            "term": "mcp",
+            "tf": 6,
+            "weight": 0.058252
+          },
+          {
+            "term": "server",
+            "tf": 6,
+            "weight": 0.058252
+          },
+          {
+            "term": "provider",
+            "tf": 5,
+            "weight": 0.048544
+          },
+          {
+            "term": "factory",
+            "tf": 5,
+            "weight": 0.048544
+          },
+          {
+            "term": "src",
+            "tf": 4,
+            "weight": 0.038835
+          },
+          {
+            "term": "embeddings",
+            "tf": 4,
+            "weight": 0.038835
+          },
+          {
+            "term": "embedding",
+            "tf": 3,
+            "weight": 0.029126
+          },
+          {
+            "term": "create",
+            "tf": 3,
+            "weight": 0.029126
+          },
+          {
+            "term": "types",
+            "tf": 3,
+            "weight": 0.029126
+          },
+          {
+            "term": "type",
+            "tf": 2,
+            "weight": 0.019417
+          },
+          {
+            "term": "implementation",
+            "tf": 2,
+            "weight": 0.019417
+          },
+          {
+            "term": "https",
+            "tf": 2,
+            "weight": 0.019417
+          },
+          {
+            "term": "github",
+            "tf": 2,
+            "weight": 0.019417
+          },
+          {
+            "term": "com",
+            "tf": 2,
+            "weight": 0.019417
+          },
+          {
+            "term": "blob",
+            "tf": 2,
+            "weight": 0.019417
+          },
+          {
+            "term": "a3ab0b96",
+            "tf": 2,
+            "weight": 0.019417
+          },
+          {
+            "term": "system",
+            "tf": 1,
+            "weight": 0.009709
+          },
+          {
+            "term": "uses",
+            "tf": 1,
+            "weight": 0.009709
+          }
+        ],
+        "unique_terms": 54,
+        "total_terms": 103
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Provider Factory",
+        "create",
+        "embedding",
+        "embeddings",
+        "factory",
+        "mcp",
+        "provider",
+        "qdrant",
+        "server",
+        "src",
+        "the"
+      ],
+      "quality_fallback": true,
+      "quality_notes": "Promoted via relaxed thresholds"
+    },
+    "advanced_scores": {
+      "semantic": 0.5080183148384094,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5251351351351351,
+      "overall": 0.6443844833245148
+    }
+  },
+  {
+    "text": "### Vector Characteristics  Each embedding model produces vectors with specific characteristics that need to be communicated to the Qdrant database:  | Method              | Purpose                                          | Example (for FastEmbed)                 | | ------------------- | ------------------------------------------------ | --------------------------------------- | | `get_vector_name()` | Provides a unique identifier for the vector type | `\"fast-baai-bge-small-en\"`              | | `get_vector_size()` | Provides the dimensionality of the vectors       | Typically 384 or 768 depending on model |  The `FastEmbedProvider` implementation:  - Generates vector names in the format `fast-{model_name}` - Retrieves the vector dimensionality from the model's metadata via `model_description.dim`  Sources: [src/mcp\\_server\\_qdrant/embeddings/fastembed.py38-51](https://github.com/qdrant/mcp-server-qdrant/blob/a3ab0b96/src/mcp_server_qdrant/embeddings/fastembed.py#L38-L51)",
+    "metadata": {
+      "chunk_id": "487e334203ce-0008",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_mcp-server-qdrant\\_qdrant_mcp-server-qdrant_2.2-embedding-system.md",
+      "filename": "_qdrant_mcp-server-qdrant_2.2-embedding-system.md",
+      "file_extension": ".md",
+      "chunk_index": 8,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Vector Characteristics"
+      ],
+      "heading_text": "Vector Characteristics",
+      "token_count": 203,
+      "char_count": 988,
+      "start_char": 0,
+      "end_char": 988,
+      "semantic_score": 0.3437857925891876,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.6856521739130436,
+      "chunking_strategy": "hybrid_adaptive",
+      "content_type": "hierarchical_section",
+      "embedding_model": "nomic-ai/CodeRankEmbed",
+      "processing_timestamp": "2025-10-19T15:36:18.470938",
+      "document_id": "487e334203ce",
+      "document_name": "_qdrant_mcp-server-qdrant_2.2-embedding-system",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_mcp-server-qdrant\\_qdrant_mcp-server-qdrant_2.2-embedding-system.md",
+      "source_filename": "_qdrant_mcp-server-qdrant_2.2-embedding-system.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_mcp-server-qdrant",
+      "relative_path": "Docs\\qdrant_ecosystem\\qdrant_mcp-server-qdrant\\_qdrant_mcp-server-qdrant_2.2-embedding-system.md",
+      "hierarchy_path": "Vector Characteristics",
+      "chunk_hash": "2aca3bebf94e30f1",
+      "content_digest": "2aca3bebf94e30f1",
+      "chunk_length": 988,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "the",
+          "vector",
+          "model",
+          "qdrant",
+          "fastembed",
+          "mcp",
+          "server",
+          "characteristics",
+          "vectors",
+          "for",
+          "get",
+          "name",
+          "provides",
+          "fast",
+          "dimensionality",
+          "src",
+          "embeddings",
+          "each",
+          "embedding",
+          "produces"
+        ],
+        "term_weights": [
+          {
+            "term": "the",
+            "tf": 8,
+            "weight": 0.083333
+          },
+          {
+            "term": "vector",
+            "tf": 6,
+            "weight": 0.0625
+          },
+          {
+            "term": "model",
+            "tf": 5,
+            "weight": 0.052083
+          },
+          {
+            "term": "qdrant",
+            "tf": 5,
+            "weight": 0.052083
+          },
+          {
+            "term": "fastembed",
+            "tf": 3,
+            "weight": 0.03125
+          },
+          {
+            "term": "mcp",
+            "tf": 3,
+            "weight": 0.03125
+          },
+          {
+            "term": "server",
+            "tf": 3,
+            "weight": 0.03125
+          },
+          {
+            "term": "characteristics",
+            "tf": 2,
+            "weight": 0.020833
+          },
+          {
+            "term": "vectors",
+            "tf": 2,
+            "weight": 0.020833
+          },
+          {
+            "term": "for",
+            "tf": 2,
+            "weight": 0.020833
+          },
+          {
+            "term": "get",
+            "tf": 2,
+            "weight": 0.020833
+          },
+          {
+            "term": "name",
+            "tf": 2,
+            "weight": 0.020833
+          },
+          {
+            "term": "provides",
+            "tf": 2,
+            "weight": 0.020833
+          },
+          {
+            "term": "fast",
+            "tf": 2,
+            "weight": 0.020833
+          },
+          {
+            "term": "dimensionality",
+            "tf": 2,
+            "weight": 0.020833
+          },
+          {
+            "term": "src",
+            "tf": 2,
+            "weight": 0.020833
+          },
+          {
+            "term": "embeddings",
+            "tf": 2,
+            "weight": 0.020833
+          },
+          {
+            "term": "each",
+            "tf": 1,
+            "weight": 0.010417
+          },
+          {
+            "term": "embedding",
+            "tf": 1,
+            "weight": 0.010417
+          },
+          {
+            "term": "produces",
+            "tf": 1,
+            "weight": 0.010417
+          }
+        ],
+        "unique_terms": 60,
+        "total_terms": 96
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Vector Characteristics",
+        "characteristics",
+        "fastembed",
+        "for",
+        "mcp",
+        "model",
+        "qdrant",
+        "server",
+        "the",
+        "vector",
+        "vectors"
+      ],
+      "quality_fallback": true,
+      "quality_notes": "Promoted via relaxed thresholds"
+    },
+    "advanced_scores": {
+      "semantic": 0.3437857925891876,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.6856521739130436,
+      "overall": 0.643145988834077
+    }
+  },
+  {
+    "text": "## Extending the Embedding System  To add support for new embedding models or libraries:  1. Add a new value to the `EmbeddingProviderType` enum in `types.py` 2. Create a new implementation of the `EmbeddingProvider` interface 3. Update the `create_embedding_provider` factory function to handle the new provider type  This modular design allows the system to evolve with minimal changes to existing code. Sources: [src/mcp\\_server\\_qdrant/embeddings/types.py1-5](https://github.com/qdrant/mcp-server-qdrant/blob/a3ab0b96/src/mcp_server_qdrant/embeddings/types.py#L1-L5) [src/mcp\\_server\\_qdrant/embeddings/factory.py6-17](https://github.com/qdrant/mcp-server-qdrant/blob/a3ab0b96/src/mcp_server_qdrant/embeddings/factory.py#L6-L17)  Dismiss  Refresh this wiki  Enter email to refresh",
+    "metadata": {
+      "chunk_id": "487e334203ce-0009",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_mcp-server-qdrant\\_qdrant_mcp-server-qdrant_2.2-embedding-system.md",
+      "filename": "_qdrant_mcp-server-qdrant_2.2-embedding-system.md",
+      "file_extension": ".md",
+      "chunk_index": 9,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Extending the Embedding System"
+      ],
+      "heading_text": "Extending the Embedding System",
+      "token_count": 215,
+      "char_count": 784,
+      "start_char": 0,
+      "end_char": 784,
+      "semantic_score": 0.45316410064697266,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5097183098591549,
+      "chunking_strategy": "hybrid_adaptive",
+      "content_type": "hierarchical_section",
+      "embedding_model": "nomic-ai/CodeRankEmbed",
+      "processing_timestamp": "2025-10-19T15:36:18.471465",
+      "document_id": "487e334203ce",
+      "document_name": "_qdrant_mcp-server-qdrant_2.2-embedding-system",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_mcp-server-qdrant\\_qdrant_mcp-server-qdrant_2.2-embedding-system.md",
+      "source_filename": "_qdrant_mcp-server-qdrant_2.2-embedding-system.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_mcp-server-qdrant",
+      "relative_path": "Docs\\qdrant_ecosystem\\qdrant_mcp-server-qdrant\\_qdrant_mcp-server-qdrant_2.2-embedding-system.md",
+      "hierarchy_path": "Extending the Embedding System",
+      "chunk_hash": "c97ca9fa3ee80835",
+      "content_digest": "c97ca9fa3ee80835",
+      "chunk_length": 784,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "qdrant",
+          "the",
+          "mcp",
+          "server",
+          "new",
+          "src",
+          "embeddings",
+          "embedding",
+          "types",
+          "factory",
+          "system",
+          "add",
+          "create",
+          "provider",
+          "this",
+          "https",
+          "github",
+          "com",
+          "blob",
+          "a3ab0b96"
+        ],
+        "term_weights": [
+          {
+            "term": "qdrant",
+            "tf": 8,
+            "weight": 0.079208
+          },
+          {
+            "term": "the",
+            "tf": 6,
+            "weight": 0.059406
+          },
+          {
+            "term": "mcp",
+            "tf": 6,
+            "weight": 0.059406
+          },
+          {
+            "term": "server",
+            "tf": 6,
+            "weight": 0.059406
+          },
+          {
+            "term": "new",
+            "tf": 4,
+            "weight": 0.039604
+          },
+          {
+            "term": "src",
+            "tf": 4,
+            "weight": 0.039604
+          },
+          {
+            "term": "embeddings",
+            "tf": 4,
+            "weight": 0.039604
+          },
+          {
+            "term": "embedding",
+            "tf": 3,
+            "weight": 0.029703
+          },
+          {
+            "term": "types",
+            "tf": 3,
+            "weight": 0.029703
+          },
+          {
+            "term": "factory",
+            "tf": 3,
+            "weight": 0.029703
+          },
+          {
+            "term": "system",
+            "tf": 2,
+            "weight": 0.019802
+          },
+          {
+            "term": "add",
+            "tf": 2,
+            "weight": 0.019802
+          },
+          {
+            "term": "create",
+            "tf": 2,
+            "weight": 0.019802
+          },
+          {
+            "term": "provider",
+            "tf": 2,
+            "weight": 0.019802
+          },
+          {
+            "term": "this",
+            "tf": 2,
+            "weight": 0.019802
+          },
+          {
+            "term": "https",
+            "tf": 2,
+            "weight": 0.019802
+          },
+          {
+            "term": "github",
+            "tf": 2,
+            "weight": 0.019802
+          },
+          {
+            "term": "com",
+            "tf": 2,
+            "weight": 0.019802
+          },
+          {
+            "term": "blob",
+            "tf": 2,
+            "weight": 0.019802
+          },
+          {
+            "term": "a3ab0b96",
+            "tf": 2,
+            "weight": 0.019802
+          }
+        ],
+        "unique_terms": 53,
+        "total_terms": 101
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Extending the Embedding System",
+        "embedding",
+        "embeddings",
+        "factory",
+        "mcp",
+        "new",
+        "qdrant",
+        "server",
+        "src",
+        "the",
+        "types"
+      ],
+      "quality_fallback": true,
+      "quality_notes": "Promoted via relaxed thresholds"
+    },
+    "advanced_scores": {
+      "semantic": 0.45316410064697266,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5097183098591549,
+      "overall": 0.6209608035020425
+    }
+  },
+  {
+    "text": "### Asynchronous Operation  The embedding interface is designed to be asynchronous, but the FastEmbed library provides synchronous methods. To bridge this gap, the `FastEmbedProvider` implementation runs the synchronous FastEmbed operations in thread pools: ``` ``` This approach allows the server to handle multiple requests efficiently without being blocked by embedding operations. Sources: [src/mcp\\_server\\_qdrant/embeddings/fastembed.py20-27](https://github.com/qdrant/mcp-server-qdrant/blob/a3ab0b96/src/mcp_server_qdrant/embeddings/fastembed.py#L20-L27)",
+    "metadata": {
+      "chunk_id": "487e334203ce-0007",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_mcp-server-qdrant\\_qdrant_mcp-server-qdrant_2.2-embedding-system.md",
+      "filename": "_qdrant_mcp-server-qdrant_2.2-embedding-system.md",
+      "file_extension": ".md",
+      "chunk_index": 7,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Asynchronous Operation"
+      ],
+      "heading_text": "Asynchronous Operation",
+      "token_count": 123,
+      "char_count": 561,
+      "start_char": 0,
+      "end_char": 561,
+      "semantic_score": 0.4147947430610657,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5277358490566038,
+      "chunking_strategy": "hybrid_adaptive",
+      "content_type": "hierarchical_section",
+      "embedding_model": "nomic-ai/CodeRankEmbed",
+      "processing_timestamp": "2025-10-19T15:36:18.470488",
+      "document_id": "487e334203ce",
+      "document_name": "_qdrant_mcp-server-qdrant_2.2-embedding-system",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_mcp-server-qdrant\\_qdrant_mcp-server-qdrant_2.2-embedding-system.md",
+      "source_filename": "_qdrant_mcp-server-qdrant_2.2-embedding-system.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_mcp-server-qdrant",
+      "relative_path": "Docs\\qdrant_ecosystem\\qdrant_mcp-server-qdrant\\_qdrant_mcp-server-qdrant_2.2-embedding-system.md",
+      "hierarchy_path": "Asynchronous Operation",
+      "chunk_hash": "1ef3110d1f411d25",
+      "content_digest": "1ef3110d1f411d25",
+      "chunk_length": 561,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "the",
+          "fastembed",
+          "server",
+          "qdrant",
+          "mcp",
+          "asynchronous",
+          "embedding",
+          "synchronous",
+          "this",
+          "operations",
+          "src",
+          "embeddings",
+          "operation",
+          "interface",
+          "designed",
+          "but",
+          "library",
+          "provides",
+          "methods",
+          "bridge"
+        ],
+        "term_weights": [
+          {
+            "term": "the",
+            "tf": 5,
+            "weight": 0.075758
+          },
+          {
+            "term": "fastembed",
+            "tf": 4,
+            "weight": 0.060606
+          },
+          {
+            "term": "server",
+            "tf": 4,
+            "weight": 0.060606
+          },
+          {
+            "term": "qdrant",
+            "tf": 4,
+            "weight": 0.060606
+          },
+          {
+            "term": "mcp",
+            "tf": 3,
+            "weight": 0.045455
+          },
+          {
+            "term": "asynchronous",
+            "tf": 2,
+            "weight": 0.030303
+          },
+          {
+            "term": "embedding",
+            "tf": 2,
+            "weight": 0.030303
+          },
+          {
+            "term": "synchronous",
+            "tf": 2,
+            "weight": 0.030303
+          },
+          {
+            "term": "this",
+            "tf": 2,
+            "weight": 0.030303
+          },
+          {
+            "term": "operations",
+            "tf": 2,
+            "weight": 0.030303
+          },
+          {
+            "term": "src",
+            "tf": 2,
+            "weight": 0.030303
+          },
+          {
+            "term": "embeddings",
+            "tf": 2,
+            "weight": 0.030303
+          },
+          {
+            "term": "operation",
+            "tf": 1,
+            "weight": 0.015152
+          },
+          {
+            "term": "interface",
+            "tf": 1,
+            "weight": 0.015152
+          },
+          {
+            "term": "designed",
+            "tf": 1,
+            "weight": 0.015152
+          },
+          {
+            "term": "but",
+            "tf": 1,
+            "weight": 0.015152
+          },
+          {
+            "term": "library",
+            "tf": 1,
+            "weight": 0.015152
+          },
+          {
+            "term": "provides",
+            "tf": 1,
+            "weight": 0.015152
+          },
+          {
+            "term": "methods",
+            "tf": 1,
+            "weight": 0.015152
+          },
+          {
+            "term": "bridge",
+            "tf": 1,
+            "weight": 0.015152
+          }
+        ],
+        "unique_terms": 44,
+        "total_terms": 66
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Asynchronous Operation",
+        "asynchronous",
+        "embedding",
+        "fastembed",
+        "mcp",
+        "operations",
+        "qdrant",
+        "server",
+        "synchronous",
+        "the",
+        "this"
+      ],
+      "quality_fallback": true,
+      "quality_notes": "Promoted via relaxed thresholds"
+    },
+    "advanced_scores": {
+      "semantic": 0.4147947430610657,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5277358490566038,
+      "overall": 0.6141768640392231
+    }
+  }
+]

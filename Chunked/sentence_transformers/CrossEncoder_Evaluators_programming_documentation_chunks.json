@@ -1,0 +1,740 @@
+[
+  {
+    "text": "### InformationRetrievalEvaluator  The `InformationRetrievalEvaluator` class evaluates models on information retrieval tasks using query-document pairs and relevance judgments. **Key Methods:** - `__call__(model, output_path, epoch, steps)` - Main evaluation method - `compute_metrices(model, corpus_model, corpus_embeddings)` - Computes IR metrics - `embed_inputs(model, sentences, encode_fn_name)` - Handles encoding for queries/documents  **Metrics Computed:** - Accuracy@k, Precision@k, Recall@k - Mean Reciprocal Rank (MRR@k) - Normalized Discounted Cumulative Gain (NDCG@k)  - Mean Average Precision (MAP@k)  Sources: [sentence_transformers/evaluation/InformationRetrievalEvaluator.py:23-123](), [sentence_transformers/evaluation/InformationRetrievalEvaluator.py:292-408]()  **Evaluator Class Hierarchy** ```mermaid classDiagram     class SentenceEvaluator {         <<abstract>>         +__call__(model, output_path, epoch, steps) dict         +primary_metric str         +prefix_name_to_metrics(metrics, name) dict         +store_metrics_in_model_card_data(model, metrics, epoch, steps)     }          class BinaryClassificationEvaluator {         +sentences1 list         +sentences2 list           +labels list         +similarity_fn_names list         +compute_metrices(model) dict         +find_best_acc_and_threshold(scores, labels, high_score_more_similar) tuple         +find_best_f1_and_threshold(scores, labels, high_score_more_similar) tuple     }          class RerankingEvaluator {         +samples list         +at_k int         +similarity_fct Callable         +compute_metrices_batched(model) dict         +compute_metrices_individual(model) dict     }          class InformationRetrievalEvaluator {         +queries dict         +corpus dict         +relevant_docs dict         +compute_metrices(model, corpus_model, corpus_embeddings) dict         +embed_inputs(model, sentences, encode_fn_name) ndarray     }          SentenceEvaluator <|-- BinaryClassificationEvaluator     SentenceEvaluator <|-- RerankingEvaluator       SentenceEvaluator <|-- InformationRetrievalEvaluator ``` Sources: [sentence_transformers/evaluation/SentenceEvaluator.py](), [sentence_transformers/evaluation/BinaryClassificationEvaluator.py:27](), [sentence_transformers/evaluation/RerankingEvaluator.py:25](), [sentence_transformers/evaluation/InformationRetrievalEvaluator.py:23]()",
+    "metadata": {
+      "chunk_id": "b652901a2a46-0004",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers\\CrossEncoder_Evaluators.md",
+      "filename": "CrossEncoder_Evaluators.md",
+      "file_extension": ".md",
+      "chunk_index": 4,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "InformationRetrievalEvaluator"
+      ],
+      "heading_text": "InformationRetrievalEvaluator",
+      "token_count": 516,
+      "char_count": 2383,
+      "start_char": 0,
+      "end_char": 2383,
+      "semantic_score": 0.5246918797492981,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.9042944785276075,
+      "chunking_strategy": "hybrid_adaptive",
+      "content_type": "hierarchical_section",
+      "embedding_model": "nomic-ai/CodeRankEmbed",
+      "processing_timestamp": "2025-10-19T15:49:57.045384",
+      "document_id": "b652901a2a46",
+      "document_name": "CrossEncoder_Evaluators",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers\\CrossEncoder_Evaluators.md",
+      "source_filename": "CrossEncoder_Evaluators.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers",
+      "relative_path": "Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers\\CrossEncoder_Evaluators.md",
+      "hierarchy_path": "InformationRetrievalEvaluator",
+      "chunk_hash": "b129e72904049744",
+      "content_digest": "b129e72904049744",
+      "chunk_length": 2383,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "model",
+          "dict",
+          "informationretrievalevaluator",
+          "evaluation",
+          "class",
+          "metrics",
+          "sentence",
+          "transformers",
+          "compute",
+          "metrices",
+          "corpus",
+          "sentenceevaluator",
+          "list",
+          "name",
+          "and",
+          "epoch",
+          "steps",
+          "binaryclassificationevaluator",
+          "labels",
+          "rerankingevaluator"
+        ],
+        "term_weights": [
+          {
+            "term": "model",
+            "tf": 13,
+            "weight": 0.061033
+          },
+          {
+            "term": "dict",
+            "tf": 9,
+            "weight": 0.042254
+          },
+          {
+            "term": "informationretrievalevaluator",
+            "tf": 7,
+            "weight": 0.032864
+          },
+          {
+            "term": "evaluation",
+            "tf": 7,
+            "weight": 0.032864
+          },
+          {
+            "term": "class",
+            "tf": 6,
+            "weight": 0.028169
+          },
+          {
+            "term": "metrics",
+            "tf": 6,
+            "weight": 0.028169
+          },
+          {
+            "term": "sentence",
+            "tf": 6,
+            "weight": 0.028169
+          },
+          {
+            "term": "transformers",
+            "tf": 6,
+            "weight": 0.028169
+          },
+          {
+            "term": "compute",
+            "tf": 5,
+            "weight": 0.023474
+          },
+          {
+            "term": "metrices",
+            "tf": 5,
+            "weight": 0.023474
+          },
+          {
+            "term": "corpus",
+            "tf": 5,
+            "weight": 0.023474
+          },
+          {
+            "term": "sentenceevaluator",
+            "tf": 5,
+            "weight": 0.023474
+          },
+          {
+            "term": "list",
+            "tf": 5,
+            "weight": 0.023474
+          },
+          {
+            "term": "name",
+            "tf": 4,
+            "weight": 0.018779
+          },
+          {
+            "term": "and",
+            "tf": 3,
+            "weight": 0.014085
+          },
+          {
+            "term": "epoch",
+            "tf": 3,
+            "weight": 0.014085
+          },
+          {
+            "term": "steps",
+            "tf": 3,
+            "weight": 0.014085
+          },
+          {
+            "term": "binaryclassificationevaluator",
+            "tf": 3,
+            "weight": 0.014085
+          },
+          {
+            "term": "labels",
+            "tf": 3,
+            "weight": 0.014085
+          },
+          {
+            "term": "rerankingevaluator",
+            "tf": 3,
+            "weight": 0.014085
+          }
+        ],
+        "unique_terms": 104,
+        "total_terms": 213
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "InformationRetrievalEvaluator",
+        "class",
+        "compute",
+        "dict",
+        "evaluation",
+        "informationretrievalevaluator",
+        "metrices",
+        "metrics",
+        "model",
+        "sentence",
+        "transformers"
+      ],
+      "quality_fallback": true,
+      "quality_notes": "Promoted via relaxed thresholds"
+    },
+    "advanced_scores": {
+      "semantic": 0.5246918797492981,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.9042944785276075,
+      "overall": 0.7763287860923018
+    }
+  },
+  {
+    "text": "## Usage Examples",
+    "metadata": {
+      "chunk_id": "b652901a2a46-0008",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers\\CrossEncoder_Evaluators.md",
+      "filename": "CrossEncoder_Evaluators.md",
+      "file_extension": ".md",
+      "chunk_index": 8,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Usage Examples"
+      ],
+      "heading_text": "Usage Examples",
+      "token_count": 3,
+      "char_count": 17,
+      "start_char": 0,
+      "end_char": 17,
+      "semantic_score": 0.8,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.59,
+      "chunking_strategy": "hybrid_adaptive",
+      "content_type": "hierarchical_section",
+      "embedding_model": "nomic-ai/CodeRankEmbed",
+      "processing_timestamp": "2025-10-19T15:49:57.046854",
+      "document_id": "b652901a2a46",
+      "document_name": "CrossEncoder_Evaluators",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers\\CrossEncoder_Evaluators.md",
+      "source_filename": "CrossEncoder_Evaluators.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers",
+      "relative_path": "Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers\\CrossEncoder_Evaluators.md",
+      "hierarchy_path": "Usage Examples",
+      "chunk_hash": "40ba86df7413777b",
+      "content_digest": "40ba86df7413777b",
+      "chunk_length": 17,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "usage",
+          "examples"
+        ],
+        "term_weights": [
+          {
+            "term": "usage",
+            "tf": 1,
+            "weight": 0.5
+          },
+          {
+            "term": "examples",
+            "tf": 1,
+            "weight": 0.5
+          }
+        ],
+        "unique_terms": 2,
+        "total_terms": 2
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Usage Examples",
+        "examples",
+        "usage"
+      ],
+      "quality_fallback": true,
+      "quality_notes": "Promoted via relaxed thresholds"
+    },
+    "advanced_scores": {
+      "semantic": 0.8,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.59,
+      "overall": 0.7633333333333333
+    }
+  },
+  {
+    "text": "# Evaluate model and get metrics results = evaluator(model) print(f\"Accuracy: {results['similarity_test_cosine_accuracy']}\") print(f\"F1 Score: {results['similarity_test_cosine_f1']}\") ```",
+    "metadata": {
+      "chunk_id": "b652901a2a46-0011",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers\\CrossEncoder_Evaluators.md",
+      "filename": "CrossEncoder_Evaluators.md",
+      "file_extension": ".md",
+      "chunk_index": 11,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Evaluate model and get metrics"
+      ],
+      "heading_text": "Evaluate model and get metrics",
+      "token_count": 46,
+      "char_count": 187,
+      "start_char": 0,
+      "end_char": 187,
+      "semantic_score": 0.8,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.59,
+      "chunking_strategy": "hybrid_adaptive",
+      "content_type": "hierarchical_section",
+      "embedding_model": "nomic-ai/CodeRankEmbed",
+      "processing_timestamp": "2025-10-19T15:49:57.047259",
+      "document_id": "b652901a2a46",
+      "document_name": "CrossEncoder_Evaluators",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers\\CrossEncoder_Evaluators.md",
+      "source_filename": "CrossEncoder_Evaluators.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers",
+      "relative_path": "Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers\\CrossEncoder_Evaluators.md",
+      "hierarchy_path": "Evaluate model and get metrics",
+      "chunk_hash": "64364dd20c24cd5b",
+      "content_digest": "64364dd20c24cd5b",
+      "chunk_length": 187,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "results",
+          "model",
+          "print",
+          "accuracy",
+          "similarity",
+          "test",
+          "cosine",
+          "evaluate",
+          "and",
+          "get",
+          "metrics",
+          "evaluator",
+          "score"
+        ],
+        "term_weights": [
+          {
+            "term": "results",
+            "tf": 3,
+            "weight": 0.142857
+          },
+          {
+            "term": "model",
+            "tf": 2,
+            "weight": 0.095238
+          },
+          {
+            "term": "print",
+            "tf": 2,
+            "weight": 0.095238
+          },
+          {
+            "term": "accuracy",
+            "tf": 2,
+            "weight": 0.095238
+          },
+          {
+            "term": "similarity",
+            "tf": 2,
+            "weight": 0.095238
+          },
+          {
+            "term": "test",
+            "tf": 2,
+            "weight": 0.095238
+          },
+          {
+            "term": "cosine",
+            "tf": 2,
+            "weight": 0.095238
+          },
+          {
+            "term": "evaluate",
+            "tf": 1,
+            "weight": 0.047619
+          },
+          {
+            "term": "and",
+            "tf": 1,
+            "weight": 0.047619
+          },
+          {
+            "term": "get",
+            "tf": 1,
+            "weight": 0.047619
+          },
+          {
+            "term": "metrics",
+            "tf": 1,
+            "weight": 0.047619
+          },
+          {
+            "term": "evaluator",
+            "tf": 1,
+            "weight": 0.047619
+          },
+          {
+            "term": "score",
+            "tf": 1,
+            "weight": 0.047619
+          }
+        ],
+        "unique_terms": 13,
+        "total_terms": 21
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Evaluate model and get metrics",
+        "accuracy",
+        "and",
+        "cosine",
+        "evaluate",
+        "get",
+        "model",
+        "print",
+        "results",
+        "similarity",
+        "test"
+      ],
+      "quality_fallback": true,
+      "quality_notes": "Promoted via relaxed thresholds"
+    },
+    "advanced_scores": {
+      "semantic": 0.8,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.59,
+      "overall": 0.7633333333333333
+    }
+  },
+  {
+    "text": "## Core Evaluator Classes",
+    "metadata": {
+      "chunk_id": "b652901a2a46-0001",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers\\CrossEncoder_Evaluators.md",
+      "filename": "CrossEncoder_Evaluators.md",
+      "file_extension": ".md",
+      "chunk_index": 1,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Core Evaluator Classes"
+      ],
+      "heading_text": "Core Evaluator Classes",
+      "token_count": 5,
+      "char_count": 25,
+      "start_char": 0,
+      "end_char": 25,
+      "semantic_score": 0.8,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.39,
+      "chunking_strategy": "hybrid_adaptive",
+      "content_type": "hierarchical_section",
+      "embedding_model": "nomic-ai/CodeRankEmbed",
+      "processing_timestamp": "2025-10-19T15:49:57.043558",
+      "document_id": "b652901a2a46",
+      "document_name": "CrossEncoder_Evaluators",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers\\CrossEncoder_Evaluators.md",
+      "source_filename": "CrossEncoder_Evaluators.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers",
+      "relative_path": "Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers\\CrossEncoder_Evaluators.md",
+      "hierarchy_path": "Core Evaluator Classes",
+      "chunk_hash": "f1a0447a84347625",
+      "content_digest": "f1a0447a84347625",
+      "chunk_length": 25,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "core",
+          "evaluator",
+          "classes"
+        ],
+        "term_weights": [
+          {
+            "term": "core",
+            "tf": 1,
+            "weight": 0.333333
+          },
+          {
+            "term": "evaluator",
+            "tf": 1,
+            "weight": 0.333333
+          },
+          {
+            "term": "classes",
+            "tf": 1,
+            "weight": 0.333333
+          }
+        ],
+        "unique_terms": 3,
+        "total_terms": 3
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Core Evaluator Classes",
+        "classes",
+        "core",
+        "evaluator"
+      ],
+      "quality_fallback": true,
+      "quality_notes": "Promoted via relaxed thresholds"
+    },
+    "advanced_scores": {
+      "semantic": 0.8,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.39,
+      "overall": 0.6966666666666667
+    }
+  },
+  {
+    "text": "# Initialize with sentence pairs and binary labels evaluator = BinaryClassificationEvaluator(     sentences1=[\"The cat sat on the mat\", \"Hello world\"],     sentences2=[\"A cat was sitting on a rug\", \"Goodbye earth\"],      labels=[1, 0],  # 1 for similar, 0 for dissimilar     name=\"similarity_test\" )",
+    "metadata": {
+      "chunk_id": "b652901a2a46-0010",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers\\CrossEncoder_Evaluators.md",
+      "filename": "CrossEncoder_Evaluators.md",
+      "file_extension": ".md",
+      "chunk_index": 10,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Initialize with sentence pairs and binary labels"
+      ],
+      "heading_text": "Initialize with sentence pairs and binary labels",
+      "token_count": 74,
+      "char_count": 299,
+      "start_char": 0,
+      "end_char": 299,
+      "semantic_score": 0.8,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.35923076923076924,
+      "chunking_strategy": "hybrid_adaptive",
+      "content_type": "hierarchical_section",
+      "embedding_model": "nomic-ai/CodeRankEmbed",
+      "processing_timestamp": "2025-10-19T15:49:57.047093",
+      "document_id": "b652901a2a46",
+      "document_name": "CrossEncoder_Evaluators",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers\\CrossEncoder_Evaluators.md",
+      "source_filename": "CrossEncoder_Evaluators.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers",
+      "relative_path": "Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers\\CrossEncoder_Evaluators.md",
+      "hierarchy_path": "Initialize with sentence pairs and binary labels",
+      "chunk_hash": "bd3884f4c645efcc",
+      "content_digest": "bd3884f4c645efcc",
+      "chunk_length": 299,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "labels",
+          "the",
+          "cat",
+          "for",
+          "initialize",
+          "with",
+          "sentence",
+          "pairs",
+          "and",
+          "binary",
+          "evaluator",
+          "binaryclassificationevaluator",
+          "sentences1",
+          "sat",
+          "mat",
+          "hello",
+          "world",
+          "sentences2",
+          "was",
+          "sitting"
+        ],
+        "term_weights": [
+          {
+            "term": "labels",
+            "tf": 2,
+            "weight": 0.0625
+          },
+          {
+            "term": "the",
+            "tf": 2,
+            "weight": 0.0625
+          },
+          {
+            "term": "cat",
+            "tf": 2,
+            "weight": 0.0625
+          },
+          {
+            "term": "for",
+            "tf": 2,
+            "weight": 0.0625
+          },
+          {
+            "term": "initialize",
+            "tf": 1,
+            "weight": 0.03125
+          },
+          {
+            "term": "with",
+            "tf": 1,
+            "weight": 0.03125
+          },
+          {
+            "term": "sentence",
+            "tf": 1,
+            "weight": 0.03125
+          },
+          {
+            "term": "pairs",
+            "tf": 1,
+            "weight": 0.03125
+          },
+          {
+            "term": "and",
+            "tf": 1,
+            "weight": 0.03125
+          },
+          {
+            "term": "binary",
+            "tf": 1,
+            "weight": 0.03125
+          },
+          {
+            "term": "evaluator",
+            "tf": 1,
+            "weight": 0.03125
+          },
+          {
+            "term": "binaryclassificationevaluator",
+            "tf": 1,
+            "weight": 0.03125
+          },
+          {
+            "term": "sentences1",
+            "tf": 1,
+            "weight": 0.03125
+          },
+          {
+            "term": "sat",
+            "tf": 1,
+            "weight": 0.03125
+          },
+          {
+            "term": "mat",
+            "tf": 1,
+            "weight": 0.03125
+          },
+          {
+            "term": "hello",
+            "tf": 1,
+            "weight": 0.03125
+          },
+          {
+            "term": "world",
+            "tf": 1,
+            "weight": 0.03125
+          },
+          {
+            "term": "sentences2",
+            "tf": 1,
+            "weight": 0.03125
+          },
+          {
+            "term": "was",
+            "tf": 1,
+            "weight": 0.03125
+          },
+          {
+            "term": "sitting",
+            "tf": 1,
+            "weight": 0.03125
+          }
+        ],
+        "unique_terms": 28,
+        "total_terms": 32
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Initialize with sentence pairs and binary labels",
+        "and",
+        "binary",
+        "cat",
+        "for",
+        "initialize",
+        "labels",
+        "pairs",
+        "sentence",
+        "the",
+        "with"
+      ],
+      "quality_fallback": true,
+      "quality_notes": "Promoted via relaxed thresholds"
+    },
+    "advanced_scores": {
+      "semantic": 0.8,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.35923076923076924,
+      "overall": 0.6864102564102564
+    }
+  }
+]

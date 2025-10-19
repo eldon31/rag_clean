@@ -1,0 +1,605 @@
+[
+  {
+    "text": "## CrossEncoder Training Architecture  CrossEncoder training follows a similar pattern to other model types in sentence-transformers but with specific adaptations for joint text encoding and ranking/classification tasks. **CrossEncoder Training System Overview** ```mermaid graph TB     subgraph \"Core Components\"         CE[CrossEncoder]         CETrainer[CrossEncoderTrainer]         CEArgs[CrossEncoderTrainingArguments]         CELosses[CrossEncoder Losses]         CEEvals[CrossEncoder Evaluators]     end          subgraph \"Data Processing\"         Dataset[datasets.Dataset]         DataCollator[Data Collator]         HardNegMining[Hard Negatives Mining]     end          subgraph \"Loss Functions\"         BCE[BinaryCrossEntropyLoss]         MNR[MultipleNegativesRankingLoss]         Lambda[LambdaLoss]         ListNet[ListNetLoss]         CrossEntropy[CrossEntropyLoss]     end          subgraph \"Training Infrastructure\"         HFTrainer[Transformers Trainer]         ModelCard[Model Card Generation]         HFHub[Hugging Face Hub]     end          CE --> CETrainer     Dataset --> DataCollator     CEArgs --> CETrainer     CELosses --> CETrainer     CEEvals --> CETrainer          BCE --> CELosses     MNR --> CELosses     Lambda --> CELosses     ListNet --> CELosses     CrossEntropy --> CELosses          CETrainer --> HFTrainer     CETrainer --> ModelCard     ModelCard --> HFHub          HardNegMining --> Dataset ``` Sources: [docs/cross_encoder/training_overview.md:1-500](), [docs/cross_encoder/loss_overview.md:1-100]()",
+    "metadata": {
+      "chunk_id": "5d15f6ed9fa0-0000",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers\\CrossEncoder_Training.md",
+      "filename": "CrossEncoder_Training.md",
+      "file_extension": ".md",
+      "chunk_index": 0,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "CrossEncoder Training Architecture"
+      ],
+      "heading_text": "CrossEncoder Training Architecture",
+      "token_count": 347,
+      "char_count": 1539,
+      "start_char": 0,
+      "end_char": 1539,
+      "semantic_score": 0.35318201780319214,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5204934426229508,
+      "chunking_strategy": "hybrid_adaptive",
+      "content_type": "hierarchical_section",
+      "embedding_model": "nomic-ai/CodeRankEmbed",
+      "processing_timestamp": "2025-10-19T15:50:05.715915",
+      "document_id": "5d15f6ed9fa0",
+      "document_name": "CrossEncoder_Training",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers\\CrossEncoder_Training.md",
+      "source_filename": "CrossEncoder_Training.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers",
+      "relative_path": "Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers\\CrossEncoder_Training.md",
+      "hierarchy_path": "CrossEncoder Training Architecture",
+      "chunk_hash": "1479fcba9e079d5c",
+      "content_digest": "1479fcba9e079d5c",
+      "chunk_length": 1539,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "cetrainer",
+          "celosses",
+          "crossencoder",
+          "training",
+          "subgraph",
+          "end",
+          "dataset",
+          "overview",
+          "modelcard",
+          "model",
+          "transformers",
+          "ceargs",
+          "ceevals",
+          "data",
+          "datacollator",
+          "hardnegmining",
+          "loss",
+          "bce",
+          "mnr",
+          "lambda"
+        ],
+        "term_weights": [
+          {
+            "term": "cetrainer",
+            "tf": 7,
+            "weight": 0.054264
+          },
+          {
+            "term": "celosses",
+            "tf": 7,
+            "weight": 0.054264
+          },
+          {
+            "term": "crossencoder",
+            "tf": 6,
+            "weight": 0.046512
+          },
+          {
+            "term": "training",
+            "tf": 5,
+            "weight": 0.03876
+          },
+          {
+            "term": "subgraph",
+            "tf": 4,
+            "weight": 0.031008
+          },
+          {
+            "term": "end",
+            "tf": 4,
+            "weight": 0.031008
+          },
+          {
+            "term": "dataset",
+            "tf": 4,
+            "weight": 0.031008
+          },
+          {
+            "term": "overview",
+            "tf": 3,
+            "weight": 0.023256
+          },
+          {
+            "term": "modelcard",
+            "tf": 3,
+            "weight": 0.023256
+          },
+          {
+            "term": "model",
+            "tf": 2,
+            "weight": 0.015504
+          },
+          {
+            "term": "transformers",
+            "tf": 2,
+            "weight": 0.015504
+          },
+          {
+            "term": "ceargs",
+            "tf": 2,
+            "weight": 0.015504
+          },
+          {
+            "term": "ceevals",
+            "tf": 2,
+            "weight": 0.015504
+          },
+          {
+            "term": "data",
+            "tf": 2,
+            "weight": 0.015504
+          },
+          {
+            "term": "datacollator",
+            "tf": 2,
+            "weight": 0.015504
+          },
+          {
+            "term": "hardnegmining",
+            "tf": 2,
+            "weight": 0.015504
+          },
+          {
+            "term": "loss",
+            "tf": 2,
+            "weight": 0.015504
+          },
+          {
+            "term": "bce",
+            "tf": 2,
+            "weight": 0.015504
+          },
+          {
+            "term": "mnr",
+            "tf": 2,
+            "weight": 0.015504
+          },
+          {
+            "term": "lambda",
+            "tf": 2,
+            "weight": 0.015504
+          }
+        ],
+        "unique_terms": 77,
+        "total_terms": 129
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "CrossEncoder Training Architecture",
+        "celosses",
+        "cetrainer",
+        "crossencoder",
+        "dataset",
+        "end",
+        "model",
+        "modelcard",
+        "overview",
+        "subgraph",
+        "training"
+      ],
+      "quality_fallback": true,
+      "quality_notes": "Promoted via relaxed thresholds"
+    },
+    "advanced_scores": {
+      "semantic": 0.35318201780319214,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5204934426229508,
+      "overall": 0.591225153475381
+    }
+  },
+  {
+    "text": "## Training Components  CrossEncoder training involves six main components that work together to fine-tune models for ranking and classification tasks. **CrossEncoder Training Data Flow** ```mermaid graph LR     subgraph \"Input Data\"         TextPairs[\"(text_A, text_B) pairs\"]         Triplets[\"(query, positive, negative)\"]         Rankings[\"(query, [doc1, doc2, ...])\"]         Labels[Class Labels / Scores]     end          subgraph \"Data Processing\"         DataCollator[\"Data Collator\"]         Tokenization[Tokenization]         BatchFormat[Batch Formatting]     end          subgraph \"Model & Loss\"         CrossEncoder[CrossEncoder Model]         LossFunction[Loss Function]         ForwardPass[Forward Pass]     end          subgraph \"Training Loop\"         Optimizer[Optimizer]         BackwardPass[Backward Pass]         WeightUpdate[Weight Update]     end          subgraph \"Evaluation\"         Evaluator[CrossEncoder Evaluator]         Metrics[Metrics Calculation]     end          TextPairs --> DataCollator     Triplets --> DataCollator     Rankings --> DataCollator     Labels --> DataCollator          DataCollator --> Tokenization     Tokenization --> BatchFormat          BatchFormat --> CrossEncoder     CrossEncoder --> ForwardPass     ForwardPass --> LossFunction          LossFunction --> BackwardPass     BackwardPass --> Optimizer     Optimizer --> WeightUpdate          CrossEncoder --> Evaluator     Evaluator --> Metrics ``` Sources: [docs/cross_encoder/training_overview.md:170-190](), [sentence_transformers/data_collator.py:35-120]()",
+    "metadata": {
+      "chunk_id": "5d15f6ed9fa0-0001",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers\\CrossEncoder_Training.md",
+      "filename": "CrossEncoder_Training.md",
+      "file_extension": ".md",
+      "chunk_index": 1,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Training Components"
+      ],
+      "heading_text": "Training Components",
+      "token_count": 333,
+      "char_count": 1565,
+      "start_char": 0,
+      "end_char": 1565,
+      "semantic_score": 0.31296828389167786,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5054118110236221,
+      "chunking_strategy": "hybrid_adaptive",
+      "content_type": "hierarchical_section",
+      "embedding_model": "nomic-ai/CodeRankEmbed",
+      "processing_timestamp": "2025-10-19T15:50:05.716832",
+      "document_id": "5d15f6ed9fa0",
+      "document_name": "CrossEncoder_Training",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers\\CrossEncoder_Training.md",
+      "source_filename": "CrossEncoder_Training.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers",
+      "relative_path": "Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers\\CrossEncoder_Training.md",
+      "hierarchy_path": "Training Components",
+      "chunk_hash": "3781d86e5a64531c",
+      "content_digest": "3781d86e5a64531c",
+      "chunk_length": 1565,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "crossencoder",
+          "datacollator",
+          "training",
+          "data",
+          "subgraph",
+          "end",
+          "tokenization",
+          "optimizer",
+          "evaluator",
+          "labels",
+          "batchformat",
+          "lossfunction",
+          "forwardpass",
+          "backwardpass",
+          "metrics",
+          "components",
+          "textpairs",
+          "text",
+          "triplets",
+          "query"
+        ],
+        "term_weights": [
+          {
+            "term": "crossencoder",
+            "tf": 8,
+            "weight": 0.060606
+          },
+          {
+            "term": "datacollator",
+            "tf": 6,
+            "weight": 0.045455
+          },
+          {
+            "term": "training",
+            "tf": 5,
+            "weight": 0.037879
+          },
+          {
+            "term": "data",
+            "tf": 5,
+            "weight": 0.037879
+          },
+          {
+            "term": "subgraph",
+            "tf": 5,
+            "weight": 0.037879
+          },
+          {
+            "term": "end",
+            "tf": 5,
+            "weight": 0.037879
+          },
+          {
+            "term": "tokenization",
+            "tf": 4,
+            "weight": 0.030303
+          },
+          {
+            "term": "optimizer",
+            "tf": 4,
+            "weight": 0.030303
+          },
+          {
+            "term": "evaluator",
+            "tf": 4,
+            "weight": 0.030303
+          },
+          {
+            "term": "labels",
+            "tf": 3,
+            "weight": 0.022727
+          },
+          {
+            "term": "batchformat",
+            "tf": 3,
+            "weight": 0.022727
+          },
+          {
+            "term": "lossfunction",
+            "tf": 3,
+            "weight": 0.022727
+          },
+          {
+            "term": "forwardpass",
+            "tf": 3,
+            "weight": 0.022727
+          },
+          {
+            "term": "backwardpass",
+            "tf": 3,
+            "weight": 0.022727
+          },
+          {
+            "term": "metrics",
+            "tf": 3,
+            "weight": 0.022727
+          },
+          {
+            "term": "components",
+            "tf": 2,
+            "weight": 0.015152
+          },
+          {
+            "term": "textpairs",
+            "tf": 2,
+            "weight": 0.015152
+          },
+          {
+            "term": "text",
+            "tf": 2,
+            "weight": 0.015152
+          },
+          {
+            "term": "triplets",
+            "tf": 2,
+            "weight": 0.015152
+          },
+          {
+            "term": "query",
+            "tf": 2,
+            "weight": 0.015152
+          }
+        ],
+        "unique_terms": 72,
+        "total_terms": 132
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Training Components",
+        "crossencoder",
+        "data",
+        "datacollator",
+        "end",
+        "evaluator",
+        "labels",
+        "optimizer",
+        "subgraph",
+        "tokenization",
+        "training"
+      ],
+      "quality_fallback": true,
+      "quality_notes": "Promoted via relaxed thresholds"
+    },
+    "advanced_scores": {
+      "semantic": 0.31296828389167786,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5054118110236221,
+      "overall": 0.5727933649717666
+    }
+  },
+  {
+    "text": "### Model Initialization  CrossEncoder models are initialized by loading a pretrained transformers model with a sequence classification head. If the model doesn't have such a head, it's added automatically. ```python from sentence_transformers import CrossEncoder",
+    "metadata": {
+      "chunk_id": "5d15f6ed9fa0-0002",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers\\CrossEncoder_Training.md",
+      "filename": "CrossEncoder_Training.md",
+      "file_extension": ".md",
+      "chunk_index": 2,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Model Initialization"
+      ],
+      "heading_text": "Model Initialization",
+      "token_count": 45,
+      "char_count": 263,
+      "start_char": 0,
+      "end_char": 263,
+      "semantic_score": 0.25425830483436584,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5458823529411765,
+      "chunking_strategy": "hybrid_adaptive",
+      "content_type": "hierarchical_section",
+      "embedding_model": "nomic-ai/CodeRankEmbed",
+      "processing_timestamp": "2025-10-19T15:50:05.717213",
+      "document_id": "5d15f6ed9fa0",
+      "document_name": "CrossEncoder_Training",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers\\CrossEncoder_Training.md",
+      "source_filename": "CrossEncoder_Training.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers",
+      "relative_path": "Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers\\CrossEncoder_Training.md",
+      "hierarchy_path": "Model Initialization",
+      "chunk_hash": "f3dd88feb2a32be4",
+      "content_digest": "f3dd88feb2a32be4",
+      "chunk_length": 263,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "model",
+          "crossencoder",
+          "transformers",
+          "head",
+          "initialization",
+          "models",
+          "are",
+          "initialized",
+          "loading",
+          "pretrained",
+          "with",
+          "sequence",
+          "classification",
+          "the",
+          "doesn",
+          "have",
+          "such",
+          "added",
+          "automatically",
+          "python"
+        ],
+        "term_weights": [
+          {
+            "term": "model",
+            "tf": 3,
+            "weight": 0.107143
+          },
+          {
+            "term": "crossencoder",
+            "tf": 2,
+            "weight": 0.071429
+          },
+          {
+            "term": "transformers",
+            "tf": 2,
+            "weight": 0.071429
+          },
+          {
+            "term": "head",
+            "tf": 2,
+            "weight": 0.071429
+          },
+          {
+            "term": "initialization",
+            "tf": 1,
+            "weight": 0.035714
+          },
+          {
+            "term": "models",
+            "tf": 1,
+            "weight": 0.035714
+          },
+          {
+            "term": "are",
+            "tf": 1,
+            "weight": 0.035714
+          },
+          {
+            "term": "initialized",
+            "tf": 1,
+            "weight": 0.035714
+          },
+          {
+            "term": "loading",
+            "tf": 1,
+            "weight": 0.035714
+          },
+          {
+            "term": "pretrained",
+            "tf": 1,
+            "weight": 0.035714
+          },
+          {
+            "term": "with",
+            "tf": 1,
+            "weight": 0.035714
+          },
+          {
+            "term": "sequence",
+            "tf": 1,
+            "weight": 0.035714
+          },
+          {
+            "term": "classification",
+            "tf": 1,
+            "weight": 0.035714
+          },
+          {
+            "term": "the",
+            "tf": 1,
+            "weight": 0.035714
+          },
+          {
+            "term": "doesn",
+            "tf": 1,
+            "weight": 0.035714
+          },
+          {
+            "term": "have",
+            "tf": 1,
+            "weight": 0.035714
+          },
+          {
+            "term": "such",
+            "tf": 1,
+            "weight": 0.035714
+          },
+          {
+            "term": "added",
+            "tf": 1,
+            "weight": 0.035714
+          },
+          {
+            "term": "automatically",
+            "tf": 1,
+            "weight": 0.035714
+          },
+          {
+            "term": "python",
+            "tf": 1,
+            "weight": 0.035714
+          }
+        ],
+        "unique_terms": 23,
+        "total_terms": 28
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Model Initialization",
+        "are",
+        "crossencoder",
+        "head",
+        "initialization",
+        "initialized",
+        "loading",
+        "model",
+        "models",
+        "pretrained",
+        "transformers"
+      ],
+      "quality_fallback": true,
+      "quality_notes": "Promoted via relaxed thresholds"
+    },
+    "advanced_scores": {
+      "semantic": 0.25425830483436584,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5458823529411765,
+      "overall": 0.5667135525918474
+    }
+  }
+]

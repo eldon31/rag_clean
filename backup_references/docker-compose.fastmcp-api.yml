@@ -1,0 +1,104 @@
+version: '3.8'
+
+services:
+  qdrant-fastmcp-api:
+    build:
+      context: ..
+      dockerfile: backup_references/Dockerfile.fastmcp-api
+    ports:
+      - "8080:8080"   # FastAPI server
+      - "9091:9090"   # Prometheus metrics (internal port 9090, external port 9091)
+    environment:
+      - QDRANT_URL=http://qdrant:6333
+      - QDRANT_API_KEY=${QDRANT_API_KEY:-}
+      - EMBEDDING_MODEL=nomic-ai/CodeRankEmbed
+      - EMBEDDING_DEVICE=cpu
+      - EMBEDDING_BATCH_SIZE=32
+      - MAX_CONNECTIONS=100
+      - CONNECTION_POOL_SIZE=20
+      - EMBEDDING_CACHE_TTL=3600
+      - QUERY_CACHE_TTL=300
+      - ENABLE_METRICS=true
+      - SUPPORTED_COLLECTIONS=["sentence_transformers","docling","qdrant_ecosystem","fast_docs","pydantic"]
+    depends_on:
+      - qdrant
+    healthcheck:
+      test: ["CMD", "python", "-c", "import requests; requests.get('http://localhost:8080/health').raise_for_status()"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    read_only: true
+    tmpfs:
+      - /tmp
+    volumes:
+      - ./logs:/app/logs:rw
+      - hf_cache:/home/app/.cache:rw
+
+  qdrant:
+    image: qdrant/qdrant:v1.15.1
+    ports:
+      - "6333:6333"   # REST API
+      - "6334:6334"   # gRPC
+    environment:
+      - QDRANT__SERVICE__GRPC_PORT=6334
+      - QDRANT__SERVICE__HTTP_PORT=6333
+    volumes:
+      - qdrant_data:/qdrant/storage
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:6333/healthz"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+    restart: unless-stopped
+
+  prometheus:
+    image: prom/prometheus:latest
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+      - '--storage.tsdb.retention.time=200h'
+      - '--web.enable-lifecycle'
+    restart: unless-stopped
+
+  grafana:
+    image: grafana/grafana:latest
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_USERS_ALLOW_SIGN_UP=false
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./monitoring/grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./monitoring/grafana/dashboards:/var/lib/grafana/dashboards:ro
+    depends_on:
+      - prometheus
+    restart: unless-stopped
+
+volumes:
+  qdrant_data:
+    driver: local
+  prometheus_data:
+    driver: local
+  grafana_data:
+    driver: local
+  hf_cache:
+    driver: local
+
+networks:
+  default:
+    name: qdrant-fastmcp-network
+    driver: bridge

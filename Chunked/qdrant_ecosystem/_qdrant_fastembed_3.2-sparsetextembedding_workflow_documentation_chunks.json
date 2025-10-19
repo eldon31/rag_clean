@@ -1,0 +1,768 @@
+[
+  {
+    "text": "## Model Details",
+    "metadata": {
+      "chunk_id": "3681b0b8650e-0010",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_fastembed\\_qdrant_fastembed_3.2-sparsetextembedding.md",
+      "filename": "_qdrant_fastembed_3.2-sparsetextembedding.md",
+      "file_extension": ".md",
+      "chunk_index": 10,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Model Details"
+      ],
+      "heading_text": "Model Details",
+      "token_count": 3,
+      "char_count": 16,
+      "start_char": 0,
+      "end_char": 16,
+      "semantic_score": 0.8,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.59,
+      "chunking_strategy": "hierarchical_balanced",
+      "content_type": "hierarchical_section",
+      "embedding_model": "nomic-ai/CodeRankEmbed",
+      "processing_timestamp": "2025-10-19T15:33:34.025955",
+      "document_id": "3681b0b8650e",
+      "document_name": "_qdrant_fastembed_3.2-sparsetextembedding",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_fastembed\\_qdrant_fastembed_3.2-sparsetextembedding.md",
+      "source_filename": "_qdrant_fastembed_3.2-sparsetextembedding.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_fastembed",
+      "relative_path": "Docs\\qdrant_ecosystem\\qdrant_fastembed\\_qdrant_fastembed_3.2-sparsetextembedding.md",
+      "hierarchy_path": "Model Details",
+      "chunk_hash": "c64eb41a05ddb9da",
+      "content_digest": "c64eb41a05ddb9da",
+      "chunk_length": 16,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "model",
+          "details"
+        ],
+        "term_weights": [
+          {
+            "term": "model",
+            "tf": 1,
+            "weight": 0.5
+          },
+          {
+            "term": "details",
+            "tf": 1,
+            "weight": 0.5
+          }
+        ],
+        "unique_terms": 2,
+        "total_terms": 2
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Model Details",
+        "details",
+        "model"
+      ],
+      "quality_fallback": true,
+      "quality_notes": "Promoted via relaxed thresholds"
+    },
+    "advanced_scores": {
+      "semantic": 0.8,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.59,
+      "overall": 0.7633333333333333
+    }
+  },
+  {
+    "text": "## Purpose and Scope  This document covers the `SparseTextEmbedding` class, which provides functionality for generating sparse text embeddings from documents and queries. Sparse embeddings represent text as high-dimensional, sparse vectors where each dimension corresponds to a specific token/term with an associated importance score. Unlike dense embeddings (covered in [TextEmbedding](qdrant/fastembed/3.1-textembedding.md)), sparse embeddings explicitly capture lexical information and enable efficient hybrid search capabilities. This page explains how to use the `SparseTextEmbedding` class and the different sparse embedding models it supports (SpladePP, Bm25, and Bm42). Sources: [fastembed/sparse/sparse\\_text\\_embedding.py16-130](https://github.com/qdrant/fastembed/blob/b785640b/fastembed/sparse/sparse_text_embedding.py#L16-L130)",
+    "metadata": {
+      "chunk_id": "3681b0b8650e-0001",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_fastembed\\_qdrant_fastembed_3.2-sparsetextembedding.md",
+      "filename": "_qdrant_fastembed_3.2-sparsetextembedding.md",
+      "file_extension": ".md",
+      "chunk_index": 1,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Purpose and Scope"
+      ],
+      "heading_text": "Purpose and Scope",
+      "token_count": 176,
+      "char_count": 840,
+      "start_char": 0,
+      "end_char": 840,
+      "semantic_score": 0.4915057122707367,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.7292857142857142,
+      "chunking_strategy": "hierarchical_balanced",
+      "content_type": "hierarchical_section",
+      "embedding_model": "nomic-ai/CodeRankEmbed",
+      "processing_timestamp": "2025-10-19T15:33:34.022959",
+      "document_id": "3681b0b8650e",
+      "document_name": "_qdrant_fastembed_3.2-sparsetextembedding",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_fastembed\\_qdrant_fastembed_3.2-sparsetextembedding.md",
+      "source_filename": "_qdrant_fastembed_3.2-sparsetextembedding.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_fastembed",
+      "relative_path": "Docs\\qdrant_ecosystem\\qdrant_fastembed\\_qdrant_fastembed_3.2-sparsetextembedding.md",
+      "hierarchy_path": "Purpose and Scope",
+      "chunk_hash": "726e0b6d27756577",
+      "content_digest": "726e0b6d27756577",
+      "chunk_length": 840,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "sparse",
+          "and",
+          "text",
+          "embeddings",
+          "fastembed",
+          "the",
+          "embedding",
+          "this",
+          "sparsetextembedding",
+          "class",
+          "textembedding",
+          "qdrant",
+          "purpose",
+          "scope",
+          "document",
+          "covers",
+          "which",
+          "provides",
+          "functionality",
+          "for"
+        ],
+        "term_weights": [
+          {
+            "term": "sparse",
+            "tf": 9,
+            "weight": 0.089109
+          },
+          {
+            "term": "and",
+            "tf": 5,
+            "weight": 0.049505
+          },
+          {
+            "term": "text",
+            "tf": 4,
+            "weight": 0.039604
+          },
+          {
+            "term": "embeddings",
+            "tf": 4,
+            "weight": 0.039604
+          },
+          {
+            "term": "fastembed",
+            "tf": 4,
+            "weight": 0.039604
+          },
+          {
+            "term": "the",
+            "tf": 3,
+            "weight": 0.029703
+          },
+          {
+            "term": "embedding",
+            "tf": 3,
+            "weight": 0.029703
+          },
+          {
+            "term": "this",
+            "tf": 2,
+            "weight": 0.019802
+          },
+          {
+            "term": "sparsetextembedding",
+            "tf": 2,
+            "weight": 0.019802
+          },
+          {
+            "term": "class",
+            "tf": 2,
+            "weight": 0.019802
+          },
+          {
+            "term": "textembedding",
+            "tf": 2,
+            "weight": 0.019802
+          },
+          {
+            "term": "qdrant",
+            "tf": 2,
+            "weight": 0.019802
+          },
+          {
+            "term": "purpose",
+            "tf": 1,
+            "weight": 0.009901
+          },
+          {
+            "term": "scope",
+            "tf": 1,
+            "weight": 0.009901
+          },
+          {
+            "term": "document",
+            "tf": 1,
+            "weight": 0.009901
+          },
+          {
+            "term": "covers",
+            "tf": 1,
+            "weight": 0.009901
+          },
+          {
+            "term": "which",
+            "tf": 1,
+            "weight": 0.009901
+          },
+          {
+            "term": "provides",
+            "tf": 1,
+            "weight": 0.009901
+          },
+          {
+            "term": "functionality",
+            "tf": 1,
+            "weight": 0.009901
+          },
+          {
+            "term": "for",
+            "tf": 1,
+            "weight": 0.009901
+          }
+        ],
+        "unique_terms": 71,
+        "total_terms": 101
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Purpose and Scope",
+        "and",
+        "class",
+        "embedding",
+        "embeddings",
+        "fastembed",
+        "sparse",
+        "sparsetextembedding",
+        "text",
+        "the",
+        "this"
+      ],
+      "quality_fallback": true,
+      "quality_notes": "Promoted via relaxed thresholds"
+    },
+    "advanced_scores": {
+      "semantic": 0.4915057122707367,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.7292857142857142,
+      "overall": 0.7069304755188169
+    }
+  },
+  {
+    "text": "## Usage",
+    "metadata": {
+      "chunk_id": "3681b0b8650e-0006",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_fastembed\\_qdrant_fastembed_3.2-sparsetextembedding.md",
+      "filename": "_qdrant_fastembed_3.2-sparsetextembedding.md",
+      "file_extension": ".md",
+      "chunk_index": 6,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Usage"
+      ],
+      "heading_text": "Usage",
+      "token_count": 2,
+      "char_count": 8,
+      "start_char": 0,
+      "end_char": 8,
+      "semantic_score": 0.8,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.39,
+      "chunking_strategy": "hierarchical_balanced",
+      "content_type": "hierarchical_section",
+      "embedding_model": "nomic-ai/CodeRankEmbed",
+      "processing_timestamp": "2025-10-19T15:33:34.024651",
+      "document_id": "3681b0b8650e",
+      "document_name": "_qdrant_fastembed_3.2-sparsetextembedding",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_fastembed\\_qdrant_fastembed_3.2-sparsetextembedding.md",
+      "source_filename": "_qdrant_fastembed_3.2-sparsetextembedding.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_fastembed",
+      "relative_path": "Docs\\qdrant_ecosystem\\qdrant_fastembed\\_qdrant_fastembed_3.2-sparsetextembedding.md",
+      "hierarchy_path": "Usage",
+      "chunk_hash": "6acd5424dab7b92c",
+      "content_digest": "6acd5424dab7b92c",
+      "chunk_length": 8,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "usage"
+        ],
+        "term_weights": [
+          {
+            "term": "usage",
+            "tf": 1,
+            "weight": 1.0
+          }
+        ],
+        "unique_terms": 1,
+        "total_terms": 1
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Usage",
+        "usage"
+      ],
+      "quality_fallback": true,
+      "quality_notes": "Promoted via relaxed thresholds"
+    },
+    "advanced_scores": {
+      "semantic": 0.8,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.39,
+      "overall": 0.6966666666666667
+    }
+  },
+  {
+    "text": "## Integration with Vector Databases  Sparse embeddings are particularly useful for hybrid search when combined with vector databases. For example, with Qdrant: ``` ``` Note: The Bm25 and Bm42 models are designed to be used with the `idf` modifier in Qdrant to fully implement the BM25/BM42 scoring function. Sources: [fastembed/sparse/bm25.py62-74](https://github.com/qdrant/fastembed/blob/b785640b/fastembed/sparse/bm25.py#L62-L74) [fastembed/sparse/bm42.py52-56](https://github.com/qdrant/fastembed/blob/b785640b/fastembed/sparse/bm42.py#L52-L56)",
+    "metadata": {
+      "chunk_id": "3681b0b8650e-0016",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_fastembed\\_qdrant_fastembed_3.2-sparsetextembedding.md",
+      "filename": "_qdrant_fastembed_3.2-sparsetextembedding.md",
+      "file_extension": ".md",
+      "chunk_index": 16,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Integration with Vector Databases"
+      ],
+      "heading_text": "Integration with Vector Databases",
+      "token_count": 153,
+      "char_count": 549,
+      "start_char": 0,
+      "end_char": 549,
+      "semantic_score": 0.37473347783088684,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.7311764705882352,
+      "chunking_strategy": "hierarchical_balanced",
+      "content_type": "hierarchical_section",
+      "embedding_model": "nomic-ai/CodeRankEmbed",
+      "processing_timestamp": "2025-10-19T15:33:34.027716",
+      "document_id": "3681b0b8650e",
+      "document_name": "_qdrant_fastembed_3.2-sparsetextembedding",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_fastembed\\_qdrant_fastembed_3.2-sparsetextembedding.md",
+      "source_filename": "_qdrant_fastembed_3.2-sparsetextembedding.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_fastembed",
+      "relative_path": "Docs\\qdrant_ecosystem\\qdrant_fastembed\\_qdrant_fastembed_3.2-sparsetextembedding.md",
+      "hierarchy_path": "Integration with Vector Databases",
+      "chunk_hash": "c3db7790e1abcbd8",
+      "content_digest": "c3db7790e1abcbd8",
+      "chunk_length": 549,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "fastembed",
+          "sparse",
+          "with",
+          "qdrant",
+          "bm25",
+          "bm42",
+          "the",
+          "vector",
+          "databases",
+          "are",
+          "for",
+          "https",
+          "github",
+          "com",
+          "blob",
+          "b785640b",
+          "integration",
+          "embeddings",
+          "particularly",
+          "useful"
+        ],
+        "term_weights": [
+          {
+            "term": "fastembed",
+            "tf": 6,
+            "weight": 0.08
+          },
+          {
+            "term": "sparse",
+            "tf": 5,
+            "weight": 0.066667
+          },
+          {
+            "term": "with",
+            "tf": 4,
+            "weight": 0.053333
+          },
+          {
+            "term": "qdrant",
+            "tf": 4,
+            "weight": 0.053333
+          },
+          {
+            "term": "bm25",
+            "tf": 4,
+            "weight": 0.053333
+          },
+          {
+            "term": "bm42",
+            "tf": 4,
+            "weight": 0.053333
+          },
+          {
+            "term": "the",
+            "tf": 3,
+            "weight": 0.04
+          },
+          {
+            "term": "vector",
+            "tf": 2,
+            "weight": 0.026667
+          },
+          {
+            "term": "databases",
+            "tf": 2,
+            "weight": 0.026667
+          },
+          {
+            "term": "are",
+            "tf": 2,
+            "weight": 0.026667
+          },
+          {
+            "term": "for",
+            "tf": 2,
+            "weight": 0.026667
+          },
+          {
+            "term": "https",
+            "tf": 2,
+            "weight": 0.026667
+          },
+          {
+            "term": "github",
+            "tf": 2,
+            "weight": 0.026667
+          },
+          {
+            "term": "com",
+            "tf": 2,
+            "weight": 0.026667
+          },
+          {
+            "term": "blob",
+            "tf": 2,
+            "weight": 0.026667
+          },
+          {
+            "term": "b785640b",
+            "tf": 2,
+            "weight": 0.026667
+          },
+          {
+            "term": "integration",
+            "tf": 1,
+            "weight": 0.013333
+          },
+          {
+            "term": "embeddings",
+            "tf": 1,
+            "weight": 0.013333
+          },
+          {
+            "term": "particularly",
+            "tf": 1,
+            "weight": 0.013333
+          },
+          {
+            "term": "useful",
+            "tf": 1,
+            "weight": 0.013333
+          }
+        ],
+        "unique_terms": 43,
+        "total_terms": 75
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Integration with Vector Databases",
+        "are",
+        "bm25",
+        "bm42",
+        "databases",
+        "fastembed",
+        "qdrant",
+        "sparse",
+        "the",
+        "vector",
+        "with"
+      ],
+      "quality_fallback": true,
+      "quality_notes": "Promoted via relaxed thresholds"
+    },
+    "advanced_scores": {
+      "semantic": 0.37473347783088684,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.7311764705882352,
+      "overall": 0.6686366494730406
+    }
+  },
+  {
+    "text": "## Related Pages  - For dense text embeddings, see [TextEmbedding](qdrant/fastembed/3.1-textembedding.md) - For late interaction embeddings, see [LateInteractionTextEmbedding](qdrant/fastembed/3.3-lateinteractiontextembedding.md) - For more details on implementation, see [Sparse Text Embeddings](qdrant/fastembed/5.2-sparse-text-embeddings.md) - For integration with Qdrant, see [Integration with Qdrant](qdrant/fastembed/9-integration-with-qdrant.md)  Dismiss  Refresh this wiki  Enter email to refresh",
+    "metadata": {
+      "chunk_id": "3681b0b8650e-0018",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_fastembed\\_qdrant_fastembed_3.2-sparsetextembedding.md",
+      "filename": "_qdrant_fastembed_3.2-sparsetextembedding.md",
+      "file_extension": ".md",
+      "chunk_index": 18,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Related Pages"
+      ],
+      "heading_text": "Related Pages",
+      "token_count": 133,
+      "char_count": 504,
+      "start_char": 0,
+      "end_char": 504,
+      "semantic_score": 0.5624390244483948,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5013636363636363,
+      "chunking_strategy": "hierarchical_balanced",
+      "content_type": "hierarchical_section",
+      "embedding_model": "nomic-ai/CodeRankEmbed",
+      "processing_timestamp": "2025-10-19T15:33:34.028395",
+      "document_id": "3681b0b8650e",
+      "document_name": "_qdrant_fastembed_3.2-sparsetextembedding",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_fastembed\\_qdrant_fastembed_3.2-sparsetextembedding.md",
+      "source_filename": "_qdrant_fastembed_3.2-sparsetextembedding.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_fastembed",
+      "relative_path": "Docs\\qdrant_ecosystem\\qdrant_fastembed\\_qdrant_fastembed_3.2-sparsetextembedding.md",
+      "hierarchy_path": "Related Pages",
+      "chunk_hash": "798374186b981a5b",
+      "content_digest": "798374186b981a5b",
+      "chunk_length": 504,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "qdrant",
+          "for",
+          "embeddings",
+          "see",
+          "fastembed",
+          "text",
+          "integration",
+          "with",
+          "textembedding",
+          "lateinteractiontextembedding",
+          "sparse",
+          "refresh",
+          "related",
+          "pages",
+          "dense",
+          "late",
+          "interaction",
+          "more",
+          "details",
+          "implementation"
+        ],
+        "term_weights": [
+          {
+            "term": "qdrant",
+            "tf": 7,
+            "weight": 0.132075
+          },
+          {
+            "term": "for",
+            "tf": 4,
+            "weight": 0.075472
+          },
+          {
+            "term": "embeddings",
+            "tf": 4,
+            "weight": 0.075472
+          },
+          {
+            "term": "see",
+            "tf": 4,
+            "weight": 0.075472
+          },
+          {
+            "term": "fastembed",
+            "tf": 4,
+            "weight": 0.075472
+          },
+          {
+            "term": "text",
+            "tf": 3,
+            "weight": 0.056604
+          },
+          {
+            "term": "integration",
+            "tf": 3,
+            "weight": 0.056604
+          },
+          {
+            "term": "with",
+            "tf": 3,
+            "weight": 0.056604
+          },
+          {
+            "term": "textembedding",
+            "tf": 2,
+            "weight": 0.037736
+          },
+          {
+            "term": "lateinteractiontextembedding",
+            "tf": 2,
+            "weight": 0.037736
+          },
+          {
+            "term": "sparse",
+            "tf": 2,
+            "weight": 0.037736
+          },
+          {
+            "term": "refresh",
+            "tf": 2,
+            "weight": 0.037736
+          },
+          {
+            "term": "related",
+            "tf": 1,
+            "weight": 0.018868
+          },
+          {
+            "term": "pages",
+            "tf": 1,
+            "weight": 0.018868
+          },
+          {
+            "term": "dense",
+            "tf": 1,
+            "weight": 0.018868
+          },
+          {
+            "term": "late",
+            "tf": 1,
+            "weight": 0.018868
+          },
+          {
+            "term": "interaction",
+            "tf": 1,
+            "weight": 0.018868
+          },
+          {
+            "term": "more",
+            "tf": 1,
+            "weight": 0.018868
+          },
+          {
+            "term": "details",
+            "tf": 1,
+            "weight": 0.018868
+          },
+          {
+            "term": "implementation",
+            "tf": 1,
+            "weight": 0.018868
+          }
+        ],
+        "unique_terms": 25,
+        "total_terms": 53
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Related Pages",
+        "embeddings",
+        "fastembed",
+        "for",
+        "integration",
+        "lateinteractiontextembedding",
+        "qdrant",
+        "see",
+        "text",
+        "textembedding",
+        "with"
+      ],
+      "quality_fallback": true,
+      "quality_notes": "Promoted via relaxed thresholds"
+    },
+    "advanced_scores": {
+      "semantic": 0.5624390244483948,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5013636363636363,
+      "overall": 0.6546008869373438
+    }
+  }
+]

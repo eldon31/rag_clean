@@ -1,0 +1,578 @@
+[
+  {
+    "text": "## Proxy Configuration",
+    "metadata": {
+      "chunk_id": "cb42c187127c-0002",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\fastapi_fastapi\\_fastapi_fastapi_4.4-deployment-and-production-considerations.md",
+      "filename": "_fastapi_fastapi_4.4-deployment-and-production-considerations.md",
+      "file_extension": ".md",
+      "chunk_index": 2,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Proxy Configuration"
+      ],
+      "heading_text": "Proxy Configuration",
+      "token_count": 3,
+      "char_count": 22,
+      "start_char": 0,
+      "end_char": 22,
+      "semantic_score": 0.8,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.59,
+      "chunking_strategy": "hierarchical_precise",
+      "content_type": "hierarchical_section",
+      "embedding_model": "nomic-ai/CodeRankEmbed",
+      "processing_timestamp": "2025-10-19T14:52:01.301086",
+      "document_id": "cb42c187127c",
+      "document_name": "_fastapi_fastapi_4.4-deployment-and-production-considerations",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\fastapi_fastapi\\_fastapi_fastapi_4.4-deployment-and-production-considerations.md",
+      "source_filename": "_fastapi_fastapi_4.4-deployment-and-production-considerations.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\fastapi_fastapi",
+      "relative_path": "Docs\\FAST_DOCS\\fastapi_fastapi\\_fastapi_fastapi_4.4-deployment-and-production-considerations.md",
+      "hierarchy_path": "Proxy Configuration",
+      "chunk_hash": "639e43125bc621fb",
+      "content_digest": "639e43125bc621fb",
+      "chunk_length": 22,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "proxy",
+          "configuration"
+        ],
+        "term_weights": [
+          {
+            "term": "proxy",
+            "tf": 1,
+            "weight": 0.5
+          },
+          {
+            "term": "configuration",
+            "tf": 1,
+            "weight": 0.5
+          }
+        ],
+        "unique_terms": 2,
+        "total_terms": 2
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Proxy Configuration",
+        "configuration",
+        "proxy"
+      ],
+      "quality_fallback": true,
+      "quality_notes": "Promoted via relaxed thresholds"
+    },
+    "advanced_scores": {
+      "semantic": 0.8,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.59,
+      "overall": 0.7633333333333333
+    }
+  },
+  {
+    "text": "# Deployment and Production Considerations  Relevant source files  - [docs/en/docs/advanced/additional-responses.md](https://github.com/fastapi/fastapi/blob/3e2dbf91/docs/en/docs/advanced/additional-responses.md) - [docs/en/docs/advanced/behind-a-proxy.md](https://github.com/fastapi/fastapi/blob/3e2dbf91/docs/en/docs/advanced/behind-a-proxy.md) - [docs/en/docs/advanced/custom-response.md](https://github.com/fastapi/fastapi/blob/3e2dbf91/docs/en/docs/advanced/custom-response.md) - [docs/en/docs/advanced/path-operation-advanced-configuration.md](https://github.com/fastapi/fastapi/blob/3e2dbf91/docs/en/docs/advanced/path-operation-advanced-configuration.md) - [docs/en/docs/advanced/response-directly.md](https://github.com/fastapi/fastapi/blob/3e2dbf91/docs/en/docs/advanced/response-directly.md) - [docs/en/docs/advanced/settings.md](https://github.com/fastapi/fastapi/blob/3e2dbf91/docs/en/docs/advanced/settings.md) - [docs/en/docs/deployment/https.md](https://github.com/fastapi/fastapi/blob/3e2dbf91/docs/en/docs/deployment/https.md) - [docs/en/docs/release-notes.md](https://github.com/fastapi/fastapi/blob/3e2dbf91/docs/en/docs/release-notes.md) - [docs\\_src/additional\\_responses/tutorial001.py](https://github.com/fastapi/fastapi/blob/3e2dbf91/docs_src/additional_responses/tutorial001.py) - [docs\\_src/behind\\_a\\_proxy/tutorial001\\_01.py](https://github.com/fastapi/fastapi/blob/3e2dbf91/docs_src/behind_a_proxy/tutorial001_01.py) - [docs\\_src/custom\\_response/tutorial001b.py](https://github.com/fastapi/fastapi/blob/3e2dbf91/docs_src/custom_response/tutorial001b.py) - [docs\\_src/custom\\_response/tutorial009c.py](https://github.com/fastapi/fastapi/blob/3e2dbf91/docs_src/custom_response/tutorial009c.py) - [docs\\_src/custom\\_response/tutorial010.py](https://github.com/fastapi/fastapi/blob/3e2dbf91/docs_src/custom_response/tutorial010.py) - [fastapi/\\_\\_init\\_\\_.py](https://github.com/fastapi/fastapi/blob/3e2dbf91/fastapi/__init__.py) - [tests/test\\_tutorial/test\\_behind\\_a\\_proxy/test\\_tutorial001\\_01.py](https://github.com/fastapi/fastapi/blob/3e2dbf91/tests/test_tutorial/test_behind_a_proxy/test_tutorial001_01.py) - [tests/test\\_tutorial/test\\_custom\\_response/test\\_tutorial009c.py](https://github.com/fastapi/fastapi/blob/3e2dbf91/tests/test_tutorial/test_custom_response/test_tutorial009c.py)",
+    "metadata": {
+      "chunk_id": "cb42c187127c-0000",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\fastapi_fastapi\\_fastapi_fastapi_4.4-deployment-and-production-considerations.md",
+      "filename": "_fastapi_fastapi_4.4-deployment-and-production-considerations.md",
+      "file_extension": ".md",
+      "chunk_index": 0,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Deployment and Production Considerations"
+      ],
+      "heading_text": "Deployment and Production Considerations",
+      "token_count": 649,
+      "char_count": 2324,
+      "start_char": 0,
+      "end_char": 2324,
+      "semantic_score": 0.38336893916130066,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.8875,
+      "chunking_strategy": "hierarchical_precise",
+      "content_type": "hierarchical_section",
+      "embedding_model": "nomic-ai/CodeRankEmbed",
+      "processing_timestamp": "2025-10-19T14:52:01.300276",
+      "document_id": "cb42c187127c",
+      "document_name": "_fastapi_fastapi_4.4-deployment-and-production-considerations",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\fastapi_fastapi\\_fastapi_fastapi_4.4-deployment-and-production-considerations.md",
+      "source_filename": "_fastapi_fastapi_4.4-deployment-and-production-considerations.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\fastapi_fastapi",
+      "relative_path": "Docs\\FAST_DOCS\\fastapi_fastapi\\_fastapi_fastapi_4.4-deployment-and-production-considerations.md",
+      "hierarchy_path": "Deployment and Production Considerations",
+      "chunk_hash": "d03bdfe18a626d6b",
+      "content_digest": "d03bdfe18a626d6b",
+      "chunk_length": 2324,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "docs",
+          "fastapi",
+          "https",
+          "github",
+          "com",
+          "blob",
+          "3e2dbf91",
+          "advanced",
+          "response",
+          "test",
+          "custom",
+          "src",
+          "behind",
+          "proxy",
+          "tutorial001",
+          "additional",
+          "responses",
+          "tutorial009c",
+          "tests",
+          "tutorial"
+        ],
+        "term_weights": [
+          {
+            "term": "docs",
+            "tf": 42,
+            "weight": 0.14841
+          },
+          {
+            "term": "fastapi",
+            "tf": 34,
+            "weight": 0.120141
+          },
+          {
+            "term": "https",
+            "tf": 18,
+            "weight": 0.063604
+          },
+          {
+            "term": "github",
+            "tf": 16,
+            "weight": 0.056537
+          },
+          {
+            "term": "com",
+            "tf": 16,
+            "weight": 0.056537
+          },
+          {
+            "term": "blob",
+            "tf": 16,
+            "weight": 0.056537
+          },
+          {
+            "term": "3e2dbf91",
+            "tf": 16,
+            "weight": 0.056537
+          },
+          {
+            "term": "advanced",
+            "tf": 14,
+            "weight": 0.04947
+          },
+          {
+            "term": "response",
+            "tf": 12,
+            "weight": 0.042403
+          },
+          {
+            "term": "test",
+            "tf": 12,
+            "weight": 0.042403
+          },
+          {
+            "term": "custom",
+            "tf": 10,
+            "weight": 0.035336
+          },
+          {
+            "term": "src",
+            "tf": 10,
+            "weight": 0.035336
+          },
+          {
+            "term": "behind",
+            "tf": 6,
+            "weight": 0.021201
+          },
+          {
+            "term": "proxy",
+            "tf": 6,
+            "weight": 0.021201
+          },
+          {
+            "term": "tutorial001",
+            "tf": 6,
+            "weight": 0.021201
+          },
+          {
+            "term": "additional",
+            "tf": 4,
+            "weight": 0.014134
+          },
+          {
+            "term": "responses",
+            "tf": 4,
+            "weight": 0.014134
+          },
+          {
+            "term": "tutorial009c",
+            "tf": 4,
+            "weight": 0.014134
+          },
+          {
+            "term": "tests",
+            "tf": 4,
+            "weight": 0.014134
+          },
+          {
+            "term": "tutorial",
+            "tf": 4,
+            "weight": 0.014134
+          }
+        ],
+        "unique_terms": 37,
+        "total_terms": 283
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "3e2dbf91",
+        "Deployment and Production Considerations",
+        "advanced",
+        "blob",
+        "com",
+        "docs",
+        "fastapi",
+        "github",
+        "https",
+        "response",
+        "test"
+      ],
+      "quality_fallback": true,
+      "quality_notes": "Promoted via relaxed thresholds"
+    },
+    "advanced_scores": {
+      "semantic": 0.38336893916130066,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.8875,
+      "overall": 0.7236229797204334
+    }
+  },
+  {
+    "text": "## HTTPS and Certificate Management",
+    "metadata": {
+      "chunk_id": "cb42c187127c-0006",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\fastapi_fastapi\\_fastapi_fastapi_4.4-deployment-and-production-considerations.md",
+      "filename": "_fastapi_fastapi_4.4-deployment-and-production-considerations.md",
+      "file_extension": ".md",
+      "chunk_index": 6,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "HTTPS and Certificate Management"
+      ],
+      "heading_text": "HTTPS and Certificate Management",
+      "token_count": 5,
+      "char_count": 35,
+      "start_char": 0,
+      "end_char": 35,
+      "semantic_score": 0.8,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.39,
+      "chunking_strategy": "hierarchical_precise",
+      "content_type": "hierarchical_section",
+      "embedding_model": "nomic-ai/CodeRankEmbed",
+      "processing_timestamp": "2025-10-19T14:52:01.302589",
+      "document_id": "cb42c187127c",
+      "document_name": "_fastapi_fastapi_4.4-deployment-and-production-considerations",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\fastapi_fastapi\\_fastapi_fastapi_4.4-deployment-and-production-considerations.md",
+      "source_filename": "_fastapi_fastapi_4.4-deployment-and-production-considerations.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\fastapi_fastapi",
+      "relative_path": "Docs\\FAST_DOCS\\fastapi_fastapi\\_fastapi_fastapi_4.4-deployment-and-production-considerations.md",
+      "hierarchy_path": "HTTPS and Certificate Management",
+      "chunk_hash": "a2d83e88cdbee153",
+      "content_digest": "a2d83e88cdbee153",
+      "chunk_length": 35,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "https",
+          "and",
+          "certificate",
+          "management"
+        ],
+        "term_weights": [
+          {
+            "term": "https",
+            "tf": 1,
+            "weight": 0.25
+          },
+          {
+            "term": "and",
+            "tf": 1,
+            "weight": 0.25
+          },
+          {
+            "term": "certificate",
+            "tf": 1,
+            "weight": 0.25
+          },
+          {
+            "term": "management",
+            "tf": 1,
+            "weight": 0.25
+          }
+        ],
+        "unique_terms": 4,
+        "total_terms": 4
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "HTTPS and Certificate Management",
+        "and",
+        "certificate",
+        "https",
+        "management"
+      ],
+      "quality_fallback": true,
+      "quality_notes": "Promoted via relaxed thresholds"
+    },
+    "advanced_scores": {
+      "semantic": 0.8,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.39,
+      "overall": 0.6966666666666667
+    }
+  },
+  {
+    "text": "## Environment and Settings Management",
+    "metadata": {
+      "chunk_id": "cb42c187127c-0009",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\fastapi_fastapi\\_fastapi_fastapi_4.4-deployment-and-production-considerations.md",
+      "filename": "_fastapi_fastapi_4.4-deployment-and-production-considerations.md",
+      "file_extension": ".md",
+      "chunk_index": 9,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Environment and Settings Management"
+      ],
+      "heading_text": "Environment and Settings Management",
+      "token_count": 5,
+      "char_count": 38,
+      "start_char": 0,
+      "end_char": 38,
+      "semantic_score": 0.8,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.39,
+      "chunking_strategy": "hierarchical_precise",
+      "content_type": "hierarchical_section",
+      "embedding_model": "nomic-ai/CodeRankEmbed",
+      "processing_timestamp": "2025-10-19T14:52:01.303448",
+      "document_id": "cb42c187127c",
+      "document_name": "_fastapi_fastapi_4.4-deployment-and-production-considerations",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\fastapi_fastapi\\_fastapi_fastapi_4.4-deployment-and-production-considerations.md",
+      "source_filename": "_fastapi_fastapi_4.4-deployment-and-production-considerations.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\fastapi_fastapi",
+      "relative_path": "Docs\\FAST_DOCS\\fastapi_fastapi\\_fastapi_fastapi_4.4-deployment-and-production-considerations.md",
+      "hierarchy_path": "Environment and Settings Management",
+      "chunk_hash": "92acd76442cc5a65",
+      "content_digest": "92acd76442cc5a65",
+      "chunk_length": 38,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "environment",
+          "and",
+          "settings",
+          "management"
+        ],
+        "term_weights": [
+          {
+            "term": "environment",
+            "tf": 1,
+            "weight": 0.25
+          },
+          {
+            "term": "and",
+            "tf": 1,
+            "weight": 0.25
+          },
+          {
+            "term": "settings",
+            "tf": 1,
+            "weight": 0.25
+          },
+          {
+            "term": "management",
+            "tf": 1,
+            "weight": 0.25
+          }
+        ],
+        "unique_terms": 4,
+        "total_terms": 4
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Environment and Settings Management",
+        "and",
+        "environment",
+        "management",
+        "settings"
+      ],
+      "quality_fallback": true,
+      "quality_notes": "Promoted via relaxed thresholds"
+    },
+    "advanced_scores": {
+      "semantic": 0.8,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.39,
+      "overall": 0.6966666666666667
+    }
+  },
+  {
+    "text": "## Production Deployment Patterns",
+    "metadata": {
+      "chunk_id": "cb42c187127c-0012",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\fastapi_fastapi\\_fastapi_fastapi_4.4-deployment-and-production-considerations.md",
+      "filename": "_fastapi_fastapi_4.4-deployment-and-production-considerations.md",
+      "file_extension": ".md",
+      "chunk_index": 12,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Production Deployment Patterns"
+      ],
+      "heading_text": "Production Deployment Patterns",
+      "token_count": 4,
+      "char_count": 33,
+      "start_char": 0,
+      "end_char": 33,
+      "semantic_score": 0.8,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.39,
+      "chunking_strategy": "hierarchical_precise",
+      "content_type": "hierarchical_section",
+      "embedding_model": "nomic-ai/CodeRankEmbed",
+      "processing_timestamp": "2025-10-19T14:52:01.304257",
+      "document_id": "cb42c187127c",
+      "document_name": "_fastapi_fastapi_4.4-deployment-and-production-considerations",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\fastapi_fastapi\\_fastapi_fastapi_4.4-deployment-and-production-considerations.md",
+      "source_filename": "_fastapi_fastapi_4.4-deployment-and-production-considerations.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\fastapi_fastapi",
+      "relative_path": "Docs\\FAST_DOCS\\fastapi_fastapi\\_fastapi_fastapi_4.4-deployment-and-production-considerations.md",
+      "hierarchy_path": "Production Deployment Patterns",
+      "chunk_hash": "fa712da23f6dde58",
+      "content_digest": "fa712da23f6dde58",
+      "chunk_length": 33,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "production",
+          "deployment",
+          "patterns"
+        ],
+        "term_weights": [
+          {
+            "term": "production",
+            "tf": 1,
+            "weight": 0.333333
+          },
+          {
+            "term": "deployment",
+            "tf": 1,
+            "weight": 0.333333
+          },
+          {
+            "term": "patterns",
+            "tf": 1,
+            "weight": 0.333333
+          }
+        ],
+        "unique_terms": 3,
+        "total_terms": 3
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Production Deployment Patterns",
+        "deployment",
+        "patterns",
+        "production"
+      ],
+      "quality_fallback": true,
+      "quality_notes": "Promoted via relaxed thresholds"
+    },
+    "advanced_scores": {
+      "semantic": 0.8,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.39,
+      "overall": 0.6966666666666667
+    }
+  }
+]

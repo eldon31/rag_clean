@@ -1,0 +1,989 @@
+[
+  {
+    "text": "## Current Implementation: FastEmbedProvider  The system currently includes one implementation based on the FastEmbed library, which wraps various sentence transformer models.",
+    "metadata": {
+      "chunk_id": "ffca39fef9fc-0005",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_mcp-server-qdrant\\_qdrant_mcp-server-qdrant_6-embedding-providers.md",
+      "filename": "_qdrant_mcp-server-qdrant_6-embedding-providers.md",
+      "file_extension": ".md",
+      "chunk_index": 5,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Current Implementation: FastEmbedProvider"
+      ],
+      "heading_text": "Current Implementation: FastEmbedProvider",
+      "token_count": 28,
+      "char_count": 175,
+      "start_char": 0,
+      "end_char": 175,
+      "semantic_score": 0.8,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5757142857142857,
+      "chunking_strategy": "hybrid_adaptive",
+      "content_type": "hierarchical_section",
+      "embedding_model": "nomic-ai/CodeRankEmbed",
+      "processing_timestamp": "2025-10-19T15:37:29.536410",
+      "document_id": "ffca39fef9fc",
+      "document_name": "_qdrant_mcp-server-qdrant_6-embedding-providers",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_mcp-server-qdrant\\_qdrant_mcp-server-qdrant_6-embedding-providers.md",
+      "source_filename": "_qdrant_mcp-server-qdrant_6-embedding-providers.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_mcp-server-qdrant",
+      "relative_path": "Docs\\qdrant_ecosystem\\qdrant_mcp-server-qdrant\\_qdrant_mcp-server-qdrant_6-embedding-providers.md",
+      "hierarchy_path": "Current Implementation: FastEmbedProvider",
+      "chunk_hash": "9c4d3b86d087fc7f",
+      "content_digest": "9c4d3b86d087fc7f",
+      "chunk_length": 175,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "implementation",
+          "the",
+          "current",
+          "fastembedprovider",
+          "system",
+          "currently",
+          "includes",
+          "one",
+          "based",
+          "fastembed",
+          "library",
+          "which",
+          "wraps",
+          "various",
+          "sentence",
+          "transformer",
+          "models"
+        ],
+        "term_weights": [
+          {
+            "term": "implementation",
+            "tf": 2,
+            "weight": 0.105263
+          },
+          {
+            "term": "the",
+            "tf": 2,
+            "weight": 0.105263
+          },
+          {
+            "term": "current",
+            "tf": 1,
+            "weight": 0.052632
+          },
+          {
+            "term": "fastembedprovider",
+            "tf": 1,
+            "weight": 0.052632
+          },
+          {
+            "term": "system",
+            "tf": 1,
+            "weight": 0.052632
+          },
+          {
+            "term": "currently",
+            "tf": 1,
+            "weight": 0.052632
+          },
+          {
+            "term": "includes",
+            "tf": 1,
+            "weight": 0.052632
+          },
+          {
+            "term": "one",
+            "tf": 1,
+            "weight": 0.052632
+          },
+          {
+            "term": "based",
+            "tf": 1,
+            "weight": 0.052632
+          },
+          {
+            "term": "fastembed",
+            "tf": 1,
+            "weight": 0.052632
+          },
+          {
+            "term": "library",
+            "tf": 1,
+            "weight": 0.052632
+          },
+          {
+            "term": "which",
+            "tf": 1,
+            "weight": 0.052632
+          },
+          {
+            "term": "wraps",
+            "tf": 1,
+            "weight": 0.052632
+          },
+          {
+            "term": "various",
+            "tf": 1,
+            "weight": 0.052632
+          },
+          {
+            "term": "sentence",
+            "tf": 1,
+            "weight": 0.052632
+          },
+          {
+            "term": "transformer",
+            "tf": 1,
+            "weight": 0.052632
+          },
+          {
+            "term": "models",
+            "tf": 1,
+            "weight": 0.052632
+          }
+        ],
+        "unique_terms": 17,
+        "total_terms": 19
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Current Implementation: FastEmbedProvider",
+        "based",
+        "current",
+        "currently",
+        "fastembed",
+        "fastembedprovider",
+        "implementation",
+        "includes",
+        "one",
+        "system",
+        "the"
+      ],
+      "quality_fallback": true,
+      "quality_notes": "Promoted via relaxed thresholds"
+    },
+    "advanced_scores": {
+      "semantic": 0.8,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5757142857142857,
+      "overall": 0.7585714285714286
+    }
+  },
+  {
+    "text": "## Extending with Custom Providers  To implement a custom embedding provider:  1. Create a new class that inherits from `EmbeddingProvider` 2. Implement all required methods 3. Update the `create_embedding_provider` factory function to support your new provider type 4. Add a new value to the `EmbeddingProviderType` enum ``` ``` Sources: [src/mcp\\_server\\_qdrant/embeddings/factory.py6-17](https://github.com/qdrant/mcp-server-qdrant/blob/a3ab0b96/src/mcp_server_qdrant/embeddings/factory.py#L6-L17) [src/mcp\\_server\\_qdrant/embeddings/base.py5-26](https://github.com/qdrant/mcp-server-qdrant/blob/a3ab0b96/src/mcp_server_qdrant/embeddings/base.py#L5-L26)",
+    "metadata": {
+      "chunk_id": "ffca39fef9fc-0011",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_mcp-server-qdrant\\_qdrant_mcp-server-qdrant_6-embedding-providers.md",
+      "filename": "_qdrant_mcp-server-qdrant_6-embedding-providers.md",
+      "file_extension": ".md",
+      "chunk_index": 11,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Extending with Custom Providers"
+      ],
+      "heading_text": "Extending with Custom Providers",
+      "token_count": 187,
+      "char_count": 656,
+      "start_char": 0,
+      "end_char": 656,
+      "semantic_score": 0.4423018991947174,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5311764705882352,
+      "chunking_strategy": "hybrid_adaptive",
+      "content_type": "hierarchical_section",
+      "embedding_model": "nomic-ai/CodeRankEmbed",
+      "processing_timestamp": "2025-10-19T15:37:29.539921",
+      "document_id": "ffca39fef9fc",
+      "document_name": "_qdrant_mcp-server-qdrant_6-embedding-providers",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_mcp-server-qdrant\\_qdrant_mcp-server-qdrant_6-embedding-providers.md",
+      "source_filename": "_qdrant_mcp-server-qdrant_6-embedding-providers.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_mcp-server-qdrant",
+      "relative_path": "Docs\\qdrant_ecosystem\\qdrant_mcp-server-qdrant\\_qdrant_mcp-server-qdrant_6-embedding-providers.md",
+      "hierarchy_path": "Extending with Custom Providers",
+      "chunk_hash": "f648af468404fd4c",
+      "content_digest": "f648af468404fd4c",
+      "chunk_length": 656,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "qdrant",
+          "mcp",
+          "server",
+          "src",
+          "embeddings",
+          "provider",
+          "new",
+          "factory",
+          "custom",
+          "implement",
+          "embedding",
+          "create",
+          "the",
+          "https",
+          "github",
+          "com",
+          "blob",
+          "a3ab0b96",
+          "base",
+          "extending"
+        ],
+        "term_weights": [
+          {
+            "term": "qdrant",
+            "tf": 8,
+            "weight": 0.095238
+          },
+          {
+            "term": "mcp",
+            "tf": 6,
+            "weight": 0.071429
+          },
+          {
+            "term": "server",
+            "tf": 6,
+            "weight": 0.071429
+          },
+          {
+            "term": "src",
+            "tf": 4,
+            "weight": 0.047619
+          },
+          {
+            "term": "embeddings",
+            "tf": 4,
+            "weight": 0.047619
+          },
+          {
+            "term": "provider",
+            "tf": 3,
+            "weight": 0.035714
+          },
+          {
+            "term": "new",
+            "tf": 3,
+            "weight": 0.035714
+          },
+          {
+            "term": "factory",
+            "tf": 3,
+            "weight": 0.035714
+          },
+          {
+            "term": "custom",
+            "tf": 2,
+            "weight": 0.02381
+          },
+          {
+            "term": "implement",
+            "tf": 2,
+            "weight": 0.02381
+          },
+          {
+            "term": "embedding",
+            "tf": 2,
+            "weight": 0.02381
+          },
+          {
+            "term": "create",
+            "tf": 2,
+            "weight": 0.02381
+          },
+          {
+            "term": "the",
+            "tf": 2,
+            "weight": 0.02381
+          },
+          {
+            "term": "https",
+            "tf": 2,
+            "weight": 0.02381
+          },
+          {
+            "term": "github",
+            "tf": 2,
+            "weight": 0.02381
+          },
+          {
+            "term": "com",
+            "tf": 2,
+            "weight": 0.02381
+          },
+          {
+            "term": "blob",
+            "tf": 2,
+            "weight": 0.02381
+          },
+          {
+            "term": "a3ab0b96",
+            "tf": 2,
+            "weight": 0.02381
+          },
+          {
+            "term": "base",
+            "tf": 2,
+            "weight": 0.02381
+          },
+          {
+            "term": "extending",
+            "tf": 1,
+            "weight": 0.011905
+          }
+        ],
+        "unique_terms": 44,
+        "total_terms": 84
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Extending with Custom Providers",
+        "custom",
+        "embeddings",
+        "factory",
+        "implement",
+        "mcp",
+        "new",
+        "provider",
+        "qdrant",
+        "server",
+        "src"
+      ],
+      "quality_fallback": true,
+      "quality_notes": "Promoted via relaxed thresholds"
+    },
+    "advanced_scores": {
+      "semantic": 0.4423018991947174,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5311764705882352,
+      "overall": 0.6244927899276509
+    }
+  },
+  {
+    "text": "## Configuring Embedding Providers  The embedding provider is configured through environment variables:  | Environment Variable | Description                                                        | Default                                  | | -------------------- | ------------------------------------------------------------------ | ---------------------------------------- | | EMBEDDING\\_PROVIDER  | The type of embedding provider to use (currently only \"fastembed\") | \"fastembed\"                              | | EMBEDDING\\_MODEL     | The model name to use for embedding generation                     | \"sentence-transformers/all-MiniLM-L6-v2\" |  Example configuration: ``` EMBEDDING_PROVIDER=fastembed EMBEDDING_MODEL=sentence-transformers/all-MiniLM-L6-v2 ``` The configuration flow works as follows: ``` ``` Sources: [src/mcp\\_server\\_qdrant/embeddings/factory.py6-17](https://github.com/qdrant/mcp-server-qdrant/blob/a3ab0b96/src/mcp_server_qdrant/embeddings/factory.py#L6-L17)",
+    "metadata": {
+      "chunk_id": "ffca39fef9fc-0008",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_mcp-server-qdrant\\_qdrant_mcp-server-qdrant_6-embedding-providers.md",
+      "filename": "_qdrant_mcp-server-qdrant_6-embedding-providers.md",
+      "file_extension": ".md",
+      "chunk_index": 8,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Configuring Embedding Providers"
+      ],
+      "heading_text": "Configuring Embedding Providers",
+      "token_count": 200,
+      "char_count": 988,
+      "start_char": 0,
+      "end_char": 988,
+      "semantic_score": 0.28047582507133484,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.674931506849315,
+      "chunking_strategy": "hybrid_adaptive",
+      "content_type": "hierarchical_section",
+      "embedding_model": "nomic-ai/CodeRankEmbed",
+      "processing_timestamp": "2025-10-19T15:37:29.537464",
+      "document_id": "ffca39fef9fc",
+      "document_name": "_qdrant_mcp-server-qdrant_6-embedding-providers",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_mcp-server-qdrant\\_qdrant_mcp-server-qdrant_6-embedding-providers.md",
+      "source_filename": "_qdrant_mcp-server-qdrant_6-embedding-providers.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_mcp-server-qdrant",
+      "relative_path": "Docs\\qdrant_ecosystem\\qdrant_mcp-server-qdrant\\_qdrant_mcp-server-qdrant_6-embedding-providers.md",
+      "hierarchy_path": "Configuring Embedding Providers",
+      "chunk_hash": "b69bfe329542f3f9",
+      "content_digest": "b69bfe329542f3f9",
+      "chunk_length": 988,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "embedding",
+          "the",
+          "provider",
+          "qdrant",
+          "fastembed",
+          "model",
+          "mcp",
+          "server",
+          "environment",
+          "use",
+          "sentence",
+          "transformers",
+          "all",
+          "minilm",
+          "configuration",
+          "src",
+          "embeddings",
+          "factory",
+          "configuring",
+          "providers"
+        ],
+        "term_weights": [
+          {
+            "term": "embedding",
+            "tf": 8,
+            "weight": 0.102564
+          },
+          {
+            "term": "the",
+            "tf": 4,
+            "weight": 0.051282
+          },
+          {
+            "term": "provider",
+            "tf": 4,
+            "weight": 0.051282
+          },
+          {
+            "term": "qdrant",
+            "tf": 4,
+            "weight": 0.051282
+          },
+          {
+            "term": "fastembed",
+            "tf": 3,
+            "weight": 0.038462
+          },
+          {
+            "term": "model",
+            "tf": 3,
+            "weight": 0.038462
+          },
+          {
+            "term": "mcp",
+            "tf": 3,
+            "weight": 0.038462
+          },
+          {
+            "term": "server",
+            "tf": 3,
+            "weight": 0.038462
+          },
+          {
+            "term": "environment",
+            "tf": 2,
+            "weight": 0.025641
+          },
+          {
+            "term": "use",
+            "tf": 2,
+            "weight": 0.025641
+          },
+          {
+            "term": "sentence",
+            "tf": 2,
+            "weight": 0.025641
+          },
+          {
+            "term": "transformers",
+            "tf": 2,
+            "weight": 0.025641
+          },
+          {
+            "term": "all",
+            "tf": 2,
+            "weight": 0.025641
+          },
+          {
+            "term": "minilm",
+            "tf": 2,
+            "weight": 0.025641
+          },
+          {
+            "term": "configuration",
+            "tf": 2,
+            "weight": 0.025641
+          },
+          {
+            "term": "src",
+            "tf": 2,
+            "weight": 0.025641
+          },
+          {
+            "term": "embeddings",
+            "tf": 2,
+            "weight": 0.025641
+          },
+          {
+            "term": "factory",
+            "tf": 2,
+            "weight": 0.025641
+          },
+          {
+            "term": "configuring",
+            "tf": 1,
+            "weight": 0.012821
+          },
+          {
+            "term": "providers",
+            "tf": 1,
+            "weight": 0.012821
+          }
+        ],
+        "unique_terms": 44,
+        "total_terms": 78
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Configuring Embedding Providers",
+        "embedding",
+        "environment",
+        "fastembed",
+        "mcp",
+        "model",
+        "provider",
+        "qdrant",
+        "server",
+        "the",
+        "use"
+      ],
+      "quality_fallback": true,
+      "quality_notes": "Promoted via relaxed thresholds"
+    },
+    "advanced_scores": {
+      "semantic": 0.28047582507133484,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.674931506849315,
+      "overall": 0.6184691106402166
+    }
+  },
+  {
+    "text": "## Purpose and Scope  This document details the embedding system within the mcp-server-qdrant repository, which is responsible for converting text into vector representations (embeddings) for semantic search operations. It covers the embedding provider interface, available implementations, configuration options, and extension points. For information about the overall system architecture, see [Architecture](qdrant/mcp-server-qdrant/2-architecture.md).",
+    "metadata": {
+      "chunk_id": "ffca39fef9fc-0001",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_mcp-server-qdrant\\_qdrant_mcp-server-qdrant_6-embedding-providers.md",
+      "filename": "_qdrant_mcp-server-qdrant_6-embedding-providers.md",
+      "file_extension": ".md",
+      "chunk_index": 1,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Purpose and Scope"
+      ],
+      "heading_text": "Purpose and Scope",
+      "token_count": 83,
+      "char_count": 454,
+      "start_char": 0,
+      "end_char": 454,
+      "semantic_score": 0.397676557302475,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.542,
+      "chunking_strategy": "hybrid_adaptive",
+      "content_type": "hierarchical_section",
+      "embedding_model": "nomic-ai/CodeRankEmbed",
+      "processing_timestamp": "2025-10-19T15:37:29.534905",
+      "document_id": "ffca39fef9fc",
+      "document_name": "_qdrant_mcp-server-qdrant_6-embedding-providers",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_mcp-server-qdrant\\_qdrant_mcp-server-qdrant_6-embedding-providers.md",
+      "source_filename": "_qdrant_mcp-server-qdrant_6-embedding-providers.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_mcp-server-qdrant",
+      "relative_path": "Docs\\qdrant_ecosystem\\qdrant_mcp-server-qdrant\\_qdrant_mcp-server-qdrant_6-embedding-providers.md",
+      "hierarchy_path": "Purpose and Scope",
+      "chunk_hash": "b5b5396502df5254",
+      "content_digest": "b5b5396502df5254",
+      "chunk_length": 454,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "the",
+          "qdrant",
+          "for",
+          "architecture",
+          "and",
+          "embedding",
+          "system",
+          "mcp",
+          "server",
+          "purpose",
+          "scope",
+          "this",
+          "document",
+          "details",
+          "within",
+          "repository",
+          "which",
+          "responsible",
+          "converting",
+          "text"
+        ],
+        "term_weights": [
+          {
+            "term": "the",
+            "tf": 4,
+            "weight": 0.074074
+          },
+          {
+            "term": "qdrant",
+            "tf": 3,
+            "weight": 0.055556
+          },
+          {
+            "term": "for",
+            "tf": 3,
+            "weight": 0.055556
+          },
+          {
+            "term": "architecture",
+            "tf": 3,
+            "weight": 0.055556
+          },
+          {
+            "term": "and",
+            "tf": 2,
+            "weight": 0.037037
+          },
+          {
+            "term": "embedding",
+            "tf": 2,
+            "weight": 0.037037
+          },
+          {
+            "term": "system",
+            "tf": 2,
+            "weight": 0.037037
+          },
+          {
+            "term": "mcp",
+            "tf": 2,
+            "weight": 0.037037
+          },
+          {
+            "term": "server",
+            "tf": 2,
+            "weight": 0.037037
+          },
+          {
+            "term": "purpose",
+            "tf": 1,
+            "weight": 0.018519
+          },
+          {
+            "term": "scope",
+            "tf": 1,
+            "weight": 0.018519
+          },
+          {
+            "term": "this",
+            "tf": 1,
+            "weight": 0.018519
+          },
+          {
+            "term": "document",
+            "tf": 1,
+            "weight": 0.018519
+          },
+          {
+            "term": "details",
+            "tf": 1,
+            "weight": 0.018519
+          },
+          {
+            "term": "within",
+            "tf": 1,
+            "weight": 0.018519
+          },
+          {
+            "term": "repository",
+            "tf": 1,
+            "weight": 0.018519
+          },
+          {
+            "term": "which",
+            "tf": 1,
+            "weight": 0.018519
+          },
+          {
+            "term": "responsible",
+            "tf": 1,
+            "weight": 0.018519
+          },
+          {
+            "term": "converting",
+            "tf": 1,
+            "weight": 0.018519
+          },
+          {
+            "term": "text",
+            "tf": 1,
+            "weight": 0.018519
+          }
+        ],
+        "unique_terms": 40,
+        "total_terms": 54
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Purpose and Scope",
+        "and",
+        "architecture",
+        "embedding",
+        "for",
+        "mcp",
+        "purpose",
+        "qdrant",
+        "server",
+        "system",
+        "the"
+      ],
+      "quality_fallback": true,
+      "quality_notes": "Promoted via relaxed thresholds"
+    },
+    "advanced_scores": {
+      "semantic": 0.397676557302475,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.542,
+      "overall": 0.613225519100825
+    }
+  },
+  {
+    "text": "### On this page  - [Embedding Providers](#embedding-providers.md) - [Purpose and Scope](#purpose-and-scope.md) - [Overview](#overview.md) - [Architecture](#architecture.md) - [EmbeddingProvider Interface](#embeddingprovider-interface.md) - [Current Implementation: FastEmbedProvider](#current-implementation-fastembedprovider.md) - [Implementation Details](#implementation-details.md) - [Key Features](#key-features.md) - [Configuring Embedding Providers](#configuring-embedding-providers.md) - [Available Models](#available-models.md) - [Integration Testing](#integration-testing.md) - [Extending with Custom Providers](#extending-with-custom-providers.md) - [System Integration](#system-integration.md)",
+    "metadata": {
+      "chunk_id": "ffca39fef9fc-0013",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_mcp-server-qdrant\\_qdrant_mcp-server-qdrant_6-embedding-providers.md",
+      "filename": "_qdrant_mcp-server-qdrant_6-embedding-providers.md",
+      "file_extension": ".md",
+      "chunk_index": 13,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "On this page"
+      ],
+      "heading_text": "On this page",
+      "token_count": 164,
+      "char_count": 705,
+      "start_char": 0,
+      "end_char": 705,
+      "semantic_score": 0.3821386694908142,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5117391304347826,
+      "chunking_strategy": "hybrid_adaptive",
+      "content_type": "hierarchical_section",
+      "embedding_model": "nomic-ai/CodeRankEmbed",
+      "processing_timestamp": "2025-10-19T15:37:29.540900",
+      "document_id": "ffca39fef9fc",
+      "document_name": "_qdrant_mcp-server-qdrant_6-embedding-providers",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_mcp-server-qdrant\\_qdrant_mcp-server-qdrant_6-embedding-providers.md",
+      "source_filename": "_qdrant_mcp-server-qdrant_6-embedding-providers.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_mcp-server-qdrant",
+      "relative_path": "Docs\\qdrant_ecosystem\\qdrant_mcp-server-qdrant\\_qdrant_mcp-server-qdrant_6-embedding-providers.md",
+      "hierarchy_path": "On this page",
+      "chunk_hash": "e37da2fd4236767f",
+      "content_digest": "e37da2fd4236767f",
+      "chunk_length": 705,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "providers",
+          "embedding",
+          "implementation",
+          "integration",
+          "purpose",
+          "and",
+          "scope",
+          "overview",
+          "architecture",
+          "embeddingprovider",
+          "interface",
+          "current",
+          "fastembedprovider",
+          "details",
+          "key",
+          "features",
+          "configuring",
+          "available",
+          "models",
+          "testing"
+        ],
+        "term_weights": [
+          {
+            "term": "providers",
+            "tf": 6,
+            "weight": 0.1
+          },
+          {
+            "term": "embedding",
+            "tf": 4,
+            "weight": 0.066667
+          },
+          {
+            "term": "implementation",
+            "tf": 4,
+            "weight": 0.066667
+          },
+          {
+            "term": "integration",
+            "tf": 4,
+            "weight": 0.066667
+          },
+          {
+            "term": "purpose",
+            "tf": 2,
+            "weight": 0.033333
+          },
+          {
+            "term": "and",
+            "tf": 2,
+            "weight": 0.033333
+          },
+          {
+            "term": "scope",
+            "tf": 2,
+            "weight": 0.033333
+          },
+          {
+            "term": "overview",
+            "tf": 2,
+            "weight": 0.033333
+          },
+          {
+            "term": "architecture",
+            "tf": 2,
+            "weight": 0.033333
+          },
+          {
+            "term": "embeddingprovider",
+            "tf": 2,
+            "weight": 0.033333
+          },
+          {
+            "term": "interface",
+            "tf": 2,
+            "weight": 0.033333
+          },
+          {
+            "term": "current",
+            "tf": 2,
+            "weight": 0.033333
+          },
+          {
+            "term": "fastembedprovider",
+            "tf": 2,
+            "weight": 0.033333
+          },
+          {
+            "term": "details",
+            "tf": 2,
+            "weight": 0.033333
+          },
+          {
+            "term": "key",
+            "tf": 2,
+            "weight": 0.033333
+          },
+          {
+            "term": "features",
+            "tf": 2,
+            "weight": 0.033333
+          },
+          {
+            "term": "configuring",
+            "tf": 2,
+            "weight": 0.033333
+          },
+          {
+            "term": "available",
+            "tf": 2,
+            "weight": 0.033333
+          },
+          {
+            "term": "models",
+            "tf": 2,
+            "weight": 0.033333
+          },
+          {
+            "term": "testing",
+            "tf": 2,
+            "weight": 0.033333
+          }
+        ],
+        "unique_terms": 26,
+        "total_terms": 60
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "On this page",
+        "and",
+        "architecture",
+        "embedding",
+        "embeddingprovider",
+        "implementation",
+        "integration",
+        "overview",
+        "providers",
+        "purpose",
+        "scope"
+      ],
+      "quality_fallback": true,
+      "quality_notes": "Promoted via relaxed thresholds"
+    },
+    "advanced_scores": {
+      "semantic": 0.3821386694908142,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5117391304347826,
+      "overall": 0.5979592666418655
+    }
+  }
+]

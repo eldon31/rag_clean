@@ -1,0 +1,1007 @@
+[
+  {
+    "text": "## Integration with Transport Layer  The Server integrates with various transport mechanisms through the `ServerSession` and stream-based communication. ``` ``` **Server Run Method**  The `run` method at [src/mcp/server/lowlevel/server.py598-635](https://github.com/modelcontextprotocol/python-sdk/blob/146d7efb/src/mcp/server/lowlevel/server.py#L598-L635) orchestrates the server lifecycle:  1. **Lifespan Management**: Enters the async context manager for startup/shutdown 2. **Session Creation**: Creates `ServerSession` with provided streams and options 3. **Message Processing**: Iterates over incoming messages and spawns handlers 4. **Graceful Shutdown**: Ensures proper cleanup of resources  **Transport Examples**  The example servers demonstrate different transport integrations:  - **stdio**: Direct process communication via stdin/stdout - **SSE**: HTTP Server-Sent Events with Starlette ASGI integration - **HTTP**: Full bidirectional HTTP with session management  Sources: [src/mcp/server/lowlevel/server.py598-635](https://github.com/modelcontextprotocol/python-sdk/blob/146d7efb/src/mcp/server/lowlevel/server.py#L598-L635) [examples/servers/simple-resource/mcp\\_simple\\_resource/server.py60-91](https://github.com/modelcontextprotocol/python-sdk/blob/146d7efb/examples/servers/simple-resource/mcp_simple_resource/server.py#L60-L91) [examples/servers/simple-tool/mcp\\_simple\\_tool/server.py60-91](https://github.com/modelcontextprotocol/python-sdk/blob/146d7efb/examples/servers/simple-tool/mcp_simple_tool/server.py#L60-L91) [examples/servers/simple-prompt/mcp\\_simple\\_prompt/server.py79-110](https://github.com/modelcontextprotocol/python-sdk/blob/146d7efb/examples/servers/simple-prompt/mcp_simple_prompt/server.py#L79-L110)  Dismiss  Refresh this wiki  Enter email to refresh",
+    "metadata": {
+      "chunk_id": "d5cbe1dbb43d-0006",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_6.1-low-level-server-architecture.md",
+      "filename": "_modelcontextprotocol_python-sdk_6.1-low-level-server-architecture.md",
+      "file_extension": ".md",
+      "chunk_index": 6,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Integration with Transport Layer"
+      ],
+      "heading_text": "Integration with Transport Layer",
+      "token_count": 424,
+      "char_count": 1796,
+      "start_char": 0,
+      "end_char": 1796,
+      "semantic_score": 0.2854606509208679,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.7703034482758621,
+      "chunking_strategy": "hybrid_adaptive",
+      "content_type": "hierarchical_section",
+      "embedding_model": "nomic-ai/CodeRankEmbed",
+      "processing_timestamp": "2025-10-19T14:58:29.530700",
+      "document_id": "d5cbe1dbb43d",
+      "document_name": "_modelcontextprotocol_python-sdk_6.1-low-level-server-architecture",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_6.1-low-level-server-architecture.md",
+      "source_filename": "_modelcontextprotocol_python-sdk_6.1-low-level-server-architecture.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk",
+      "relative_path": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_6.1-low-level-server-architecture.md",
+      "hierarchy_path": "Integration with Transport Layer",
+      "chunk_hash": "1b57d1d24c18c87c",
+      "content_digest": "1b57d1d24c18c87c",
+      "chunk_length": 1796,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "server",
+          "simple",
+          "mcp",
+          "examples",
+          "servers",
+          "the",
+          "with",
+          "https",
+          "github",
+          "com",
+          "modelcontextprotocol",
+          "python",
+          "sdk",
+          "blob",
+          "146d7efb",
+          "transport",
+          "src",
+          "lowlevel",
+          "resource",
+          "tool"
+        ],
+        "term_weights": [
+          {
+            "term": "server",
+            "tf": 18,
+            "weight": 0.078947
+          },
+          {
+            "term": "simple",
+            "tf": 12,
+            "weight": 0.052632
+          },
+          {
+            "term": "mcp",
+            "tf": 10,
+            "weight": 0.04386
+          },
+          {
+            "term": "examples",
+            "tf": 7,
+            "weight": 0.030702
+          },
+          {
+            "term": "servers",
+            "tf": 7,
+            "weight": 0.030702
+          },
+          {
+            "term": "the",
+            "tf": 6,
+            "weight": 0.026316
+          },
+          {
+            "term": "with",
+            "tf": 5,
+            "weight": 0.02193
+          },
+          {
+            "term": "https",
+            "tf": 5,
+            "weight": 0.02193
+          },
+          {
+            "term": "github",
+            "tf": 5,
+            "weight": 0.02193
+          },
+          {
+            "term": "com",
+            "tf": 5,
+            "weight": 0.02193
+          },
+          {
+            "term": "modelcontextprotocol",
+            "tf": 5,
+            "weight": 0.02193
+          },
+          {
+            "term": "python",
+            "tf": 5,
+            "weight": 0.02193
+          },
+          {
+            "term": "sdk",
+            "tf": 5,
+            "weight": 0.02193
+          },
+          {
+            "term": "blob",
+            "tf": 5,
+            "weight": 0.02193
+          },
+          {
+            "term": "146d7efb",
+            "tf": 5,
+            "weight": 0.02193
+          },
+          {
+            "term": "transport",
+            "tf": 4,
+            "weight": 0.017544
+          },
+          {
+            "term": "src",
+            "tf": 4,
+            "weight": 0.017544
+          },
+          {
+            "term": "lowlevel",
+            "tf": 4,
+            "weight": 0.017544
+          },
+          {
+            "term": "resource",
+            "tf": 4,
+            "weight": 0.017544
+          },
+          {
+            "term": "tool",
+            "tf": 4,
+            "weight": 0.017544
+          }
+        ],
+        "unique_terms": 100,
+        "total_terms": 228
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Integration with Transport Layer",
+        "com",
+        "examples",
+        "github",
+        "https",
+        "mcp",
+        "server",
+        "servers",
+        "simple",
+        "the",
+        "with"
+      ],
+      "quality_fallback": true,
+      "quality_notes": "Promoted via relaxed thresholds"
+    },
+    "advanced_scores": {
+      "semantic": 0.2854606509208679,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.7703034482758621,
+      "overall": 0.65192136639891
+    }
+  },
+  {
+    "text": "## Handler Registration System  The Server class uses a decorator-based system to register handlers for different MCP request types. Each decorator corresponds to a specific MCP protocol message type. ``` ``` **Handler Registration Process**  Each decorator method follows a consistent pattern:  1. Creates a wrapper function that adapts the user function to the expected signature 2. Stores the wrapper in `request_handlers` with the request type as key 3. Returns the original function unchanged  For example, the `list_tools` decorator at [src/mcp/server/lowlevel/server.py409-437](https://github.com/modelcontextprotocol/python-sdk/blob/146d7efb/src/mcp/server/lowlevel/server.py#L409-L437) registers handlers for `types.ListToolsRequest` and manages the tool cache. Sources: [src/mcp/server/lowlevel/server.py238-596](https://github.com/modelcontextprotocol/python-sdk/blob/146d7efb/src/mcp/server/lowlevel/server.py#L238-L596)",
+    "metadata": {
+      "chunk_id": "d5cbe1dbb43d-0002",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_6.1-low-level-server-architecture.md",
+      "filename": "_modelcontextprotocol_python-sdk_6.1-low-level-server-architecture.md",
+      "file_extension": ".md",
+      "chunk_index": 2,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Handler Registration System"
+      ],
+      "heading_text": "Handler Registration System",
+      "token_count": 210,
+      "char_count": 932,
+      "start_char": 0,
+      "end_char": 932,
+      "semantic_score": 0.3466997444629669,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.7042857142857143,
+      "chunking_strategy": "hybrid_adaptive",
+      "content_type": "hierarchical_section",
+      "embedding_model": "nomic-ai/CodeRankEmbed",
+      "processing_timestamp": "2025-10-19T14:58:29.523469",
+      "document_id": "d5cbe1dbb43d",
+      "document_name": "_modelcontextprotocol_python-sdk_6.1-low-level-server-architecture",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_6.1-low-level-server-architecture.md",
+      "source_filename": "_modelcontextprotocol_python-sdk_6.1-low-level-server-architecture.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk",
+      "relative_path": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_6.1-low-level-server-architecture.md",
+      "hierarchy_path": "Handler Registration System",
+      "chunk_hash": "c22382140dbe4821",
+      "content_digest": "c22382140dbe4821",
+      "chunk_length": 932,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "server",
+          "the",
+          "mcp",
+          "decorator",
+          "src",
+          "lowlevel",
+          "handlers",
+          "for",
+          "request",
+          "function",
+          "handler",
+          "registration",
+          "system",
+          "types",
+          "each",
+          "type",
+          "wrapper",
+          "https",
+          "github",
+          "com"
+        ],
+        "term_weights": [
+          {
+            "term": "server",
+            "tf": 9,
+            "weight": 0.07438
+          },
+          {
+            "term": "the",
+            "tf": 8,
+            "weight": 0.066116
+          },
+          {
+            "term": "mcp",
+            "tf": 6,
+            "weight": 0.049587
+          },
+          {
+            "term": "decorator",
+            "tf": 4,
+            "weight": 0.033058
+          },
+          {
+            "term": "src",
+            "tf": 4,
+            "weight": 0.033058
+          },
+          {
+            "term": "lowlevel",
+            "tf": 4,
+            "weight": 0.033058
+          },
+          {
+            "term": "handlers",
+            "tf": 3,
+            "weight": 0.024793
+          },
+          {
+            "term": "for",
+            "tf": 3,
+            "weight": 0.024793
+          },
+          {
+            "term": "request",
+            "tf": 3,
+            "weight": 0.024793
+          },
+          {
+            "term": "function",
+            "tf": 3,
+            "weight": 0.024793
+          },
+          {
+            "term": "handler",
+            "tf": 2,
+            "weight": 0.016529
+          },
+          {
+            "term": "registration",
+            "tf": 2,
+            "weight": 0.016529
+          },
+          {
+            "term": "system",
+            "tf": 2,
+            "weight": 0.016529
+          },
+          {
+            "term": "types",
+            "tf": 2,
+            "weight": 0.016529
+          },
+          {
+            "term": "each",
+            "tf": 2,
+            "weight": 0.016529
+          },
+          {
+            "term": "type",
+            "tf": 2,
+            "weight": 0.016529
+          },
+          {
+            "term": "wrapper",
+            "tf": 2,
+            "weight": 0.016529
+          },
+          {
+            "term": "https",
+            "tf": 2,
+            "weight": 0.016529
+          },
+          {
+            "term": "github",
+            "tf": 2,
+            "weight": 0.016529
+          },
+          {
+            "term": "com",
+            "tf": 2,
+            "weight": 0.016529
+          }
+        ],
+        "unique_terms": 69,
+        "total_terms": 121
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Handler Registration System",
+        "decorator",
+        "for",
+        "function",
+        "handlers",
+        "lowlevel",
+        "mcp",
+        "request",
+        "server",
+        "src",
+        "the"
+      ],
+      "quality_fallback": true,
+      "quality_notes": "Promoted via relaxed thresholds"
+    },
+    "advanced_scores": {
+      "semantic": 0.3466997444629669,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.7042857142857143,
+      "overall": 0.6503284862495603
+    }
+  },
+  {
+    "text": "# Low-Level Server Architecture  Relevant source files  - [README.md](https://github.com/modelcontextprotocol/python-sdk/blob/146d7efb/README.md) - [examples/servers/simple-prompt/mcp\\_simple\\_prompt/server.py](https://github.com/modelcontextprotocol/python-sdk/blob/146d7efb/examples/servers/simple-prompt/mcp_simple_prompt/server.py) - [examples/servers/simple-resource/mcp\\_simple\\_resource/server.py](https://github.com/modelcontextprotocol/python-sdk/blob/146d7efb/examples/servers/simple-resource/mcp_simple_resource/server.py) - [examples/servers/simple-tool/mcp\\_simple\\_tool/server.py](https://github.com/modelcontextprotocol/python-sdk/blob/146d7efb/examples/servers/simple-tool/mcp_simple_tool/server.py) - [src/mcp/server/lowlevel/server.py](https://github.com/modelcontextprotocol/python-sdk/blob/146d7efb/src/mcp/server/lowlevel/server.py) - [src/mcp/types.py](https://github.com/modelcontextprotocol/python-sdk/blob/146d7efb/src/mcp/types.py)  This document covers the low-level `Server` class implementation in the MCP Python SDK, which provides the foundational layer for building MCP servers. This class handles protocol message dispatching, request validation, and the core server lifecycle without the convenience abstractions provided by FastMCP. For high-level server development using decorators and automatic schema generation, see [FastMCP Server Framework](modelcontextprotocol/python-sdk/2-fastmcp-server-framework.md). For details about session management and client communication, see [ServerSession Implementation](modelcontextprotocol/python-sdk/6.2-serversession-implementation.md).",
+    "metadata": {
+      "chunk_id": "d5cbe1dbb43d-0000",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_6.1-low-level-server-architecture.md",
+      "filename": "_modelcontextprotocol_python-sdk_6.1-low-level-server-architecture.md",
+      "file_extension": ".md",
+      "chunk_index": 0,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Low-Level Server Architecture"
+      ],
+      "heading_text": "Low-Level Server Architecture",
+      "token_count": 357,
+      "char_count": 1614,
+      "start_char": 0,
+      "end_char": 1614,
+      "semantic_score": 0.3032858371734619,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.7338441860465117,
+      "chunking_strategy": "hybrid_adaptive",
+      "content_type": "hierarchical_section",
+      "embedding_model": "nomic-ai/CodeRankEmbed",
+      "processing_timestamp": "2025-10-19T14:58:29.520067",
+      "document_id": "d5cbe1dbb43d",
+      "document_name": "_modelcontextprotocol_python-sdk_6.1-low-level-server-architecture",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_6.1-low-level-server-architecture.md",
+      "source_filename": "_modelcontextprotocol_python-sdk_6.1-low-level-server-architecture.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk",
+      "relative_path": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_6.1-low-level-server-architecture.md",
+      "hierarchy_path": "Low-Level Server Architecture",
+      "chunk_hash": "65b12f5a3d5eaffb",
+      "content_digest": "65b12f5a3d5eaffb",
+      "chunk_length": 1614,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "server",
+          "simple",
+          "mcp",
+          "python",
+          "sdk",
+          "modelcontextprotocol",
+          "servers",
+          "https",
+          "github",
+          "com",
+          "blob",
+          "146d7efb",
+          "examples",
+          "the",
+          "prompt",
+          "resource",
+          "tool",
+          "src",
+          "level",
+          "implementation"
+        ],
+        "term_weights": [
+          {
+            "term": "server",
+            "tf": 16,
+            "weight": 0.080402
+          },
+          {
+            "term": "simple",
+            "tf": 12,
+            "weight": 0.060302
+          },
+          {
+            "term": "mcp",
+            "tf": 12,
+            "weight": 0.060302
+          },
+          {
+            "term": "python",
+            "tf": 9,
+            "weight": 0.045226
+          },
+          {
+            "term": "sdk",
+            "tf": 9,
+            "weight": 0.045226
+          },
+          {
+            "term": "modelcontextprotocol",
+            "tf": 8,
+            "weight": 0.040201
+          },
+          {
+            "term": "servers",
+            "tf": 7,
+            "weight": 0.035176
+          },
+          {
+            "term": "https",
+            "tf": 6,
+            "weight": 0.030151
+          },
+          {
+            "term": "github",
+            "tf": 6,
+            "weight": 0.030151
+          },
+          {
+            "term": "com",
+            "tf": 6,
+            "weight": 0.030151
+          },
+          {
+            "term": "blob",
+            "tf": 6,
+            "weight": 0.030151
+          },
+          {
+            "term": "146d7efb",
+            "tf": 6,
+            "weight": 0.030151
+          },
+          {
+            "term": "examples",
+            "tf": 6,
+            "weight": 0.030151
+          },
+          {
+            "term": "the",
+            "tf": 5,
+            "weight": 0.025126
+          },
+          {
+            "term": "prompt",
+            "tf": 4,
+            "weight": 0.020101
+          },
+          {
+            "term": "resource",
+            "tf": 4,
+            "weight": 0.020101
+          },
+          {
+            "term": "tool",
+            "tf": 4,
+            "weight": 0.020101
+          },
+          {
+            "term": "src",
+            "tf": 4,
+            "weight": 0.020101
+          },
+          {
+            "term": "level",
+            "tf": 3,
+            "weight": 0.015075
+          },
+          {
+            "term": "implementation",
+            "tf": 3,
+            "weight": 0.015075
+          }
+        ],
+        "unique_terms": 68,
+        "total_terms": 199
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Low-Level Server Architecture",
+        "com",
+        "github",
+        "https",
+        "mcp",
+        "modelcontextprotocol",
+        "python",
+        "sdk",
+        "server",
+        "servers",
+        "simple"
+      ],
+      "quality_fallback": true,
+      "quality_notes": "Promoted via relaxed thresholds"
+    },
+    "advanced_scores": {
+      "semantic": 0.3032858371734619,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.7338441860465117,
+      "overall": 0.6457100077399912
+    }
+  },
+  {
+    "text": "### On this page  - [Low-Level Server Architecture](#low-level-server-architecture.md) - [Server Class Overview](#server-class-overview.md) - [Handler Registration System](#handler-registration-system.md) - [Request Processing Architecture](#request-processing-architecture.md) - [Tool System Architecture](#tool-system-architecture.md) - [Context Management](#context-management.md) - [Integration with Transport Layer](#integration-with-transport-layer.md)",
+    "metadata": {
+      "chunk_id": "d5cbe1dbb43d-0007",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_6.1-low-level-server-architecture.md",
+      "filename": "_modelcontextprotocol_python-sdk_6.1-low-level-server-architecture.md",
+      "file_extension": ".md",
+      "chunk_index": 7,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "On this page"
+      ],
+      "heading_text": "On this page",
+      "token_count": 96,
+      "char_count": 458,
+      "start_char": 0,
+      "end_char": 458,
+      "semantic_score": 0.36051517724990845,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.53375,
+      "chunking_strategy": "hybrid_adaptive",
+      "content_type": "hierarchical_section",
+      "embedding_model": "nomic-ai/CodeRankEmbed",
+      "processing_timestamp": "2025-10-19T14:58:29.531780",
+      "document_id": "d5cbe1dbb43d",
+      "document_name": "_modelcontextprotocol_python-sdk_6.1-low-level-server-architecture",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_6.1-low-level-server-architecture.md",
+      "source_filename": "_modelcontextprotocol_python-sdk_6.1-low-level-server-architecture.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk",
+      "relative_path": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_6.1-low-level-server-architecture.md",
+      "hierarchy_path": "On this page",
+      "chunk_hash": "e96af181e21feaef",
+      "content_digest": "e96af181e21feaef",
+      "chunk_length": 458,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "architecture",
+          "server",
+          "system",
+          "low",
+          "level",
+          "class",
+          "overview",
+          "handler",
+          "registration",
+          "request",
+          "processing",
+          "tool",
+          "context",
+          "management",
+          "integration",
+          "with",
+          "transport",
+          "layer",
+          "this",
+          "page"
+        ],
+        "term_weights": [
+          {
+            "term": "architecture",
+            "tf": 6,
+            "weight": 0.130435
+          },
+          {
+            "term": "server",
+            "tf": 4,
+            "weight": 0.086957
+          },
+          {
+            "term": "system",
+            "tf": 4,
+            "weight": 0.086957
+          },
+          {
+            "term": "low",
+            "tf": 2,
+            "weight": 0.043478
+          },
+          {
+            "term": "level",
+            "tf": 2,
+            "weight": 0.043478
+          },
+          {
+            "term": "class",
+            "tf": 2,
+            "weight": 0.043478
+          },
+          {
+            "term": "overview",
+            "tf": 2,
+            "weight": 0.043478
+          },
+          {
+            "term": "handler",
+            "tf": 2,
+            "weight": 0.043478
+          },
+          {
+            "term": "registration",
+            "tf": 2,
+            "weight": 0.043478
+          },
+          {
+            "term": "request",
+            "tf": 2,
+            "weight": 0.043478
+          },
+          {
+            "term": "processing",
+            "tf": 2,
+            "weight": 0.043478
+          },
+          {
+            "term": "tool",
+            "tf": 2,
+            "weight": 0.043478
+          },
+          {
+            "term": "context",
+            "tf": 2,
+            "weight": 0.043478
+          },
+          {
+            "term": "management",
+            "tf": 2,
+            "weight": 0.043478
+          },
+          {
+            "term": "integration",
+            "tf": 2,
+            "weight": 0.043478
+          },
+          {
+            "term": "with",
+            "tf": 2,
+            "weight": 0.043478
+          },
+          {
+            "term": "transport",
+            "tf": 2,
+            "weight": 0.043478
+          },
+          {
+            "term": "layer",
+            "tf": 2,
+            "weight": 0.043478
+          },
+          {
+            "term": "this",
+            "tf": 1,
+            "weight": 0.021739
+          },
+          {
+            "term": "page",
+            "tf": 1,
+            "weight": 0.021739
+          }
+        ],
+        "unique_terms": 20,
+        "total_terms": 46
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "On this page",
+        "architecture",
+        "class",
+        "handler",
+        "level",
+        "low",
+        "overview",
+        "registration",
+        "request",
+        "server",
+        "system"
+      ],
+      "quality_fallback": true,
+      "quality_notes": "Promoted via relaxed thresholds"
+    },
+    "advanced_scores": {
+      "semantic": 0.36051517724990845,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.53375,
+      "overall": 0.5980883924166361
+    }
+  },
+  {
+    "text": "## Context Management  The Server uses Python's `contextvars` module to provide request-scoped context accessible throughout the request processing pipeline. ``` ``` **Request Context Structure**  The `RequestContext` is created in `_handle_request` at [src/mcp/server/lowlevel/server.py677-684](https://github.com/modelcontextprotocol/python-sdk/blob/146d7efb/src/mcp/server/lowlevel/server.py#L677-L684) with:  - Request ID and metadata from the message - `ServerSession` instance for client communication - Lifespan context from the server's lifespan manager - Optional request-specific data  **Context Access**  Handlers can access the current request context via the `request_context` property at [src/mcp/server/lowlevel/server.py232-236](https://github.com/modelcontextprotocol/python-sdk/blob/146d7efb/src/mcp/server/lowlevel/server.py#L232-L236) which retrieves the context variable or raises `LookupError` if called outside a request. Sources: [src/mcp/server/lowlevel/server.py105](https://github.com/modelcontextprotocol/python-sdk/blob/146d7efb/src/mcp/server/lowlevel/server.py#L105-L105) [src/mcp/shared/context.py](https://github.com/modelcontextprotocol/python-sdk/blob/146d7efb/src/mcp/shared/context.py) [src/mcp/server/lowlevel/server.py677-702](https://github.com/modelcontextprotocol/python-sdk/blob/146d7efb/src/mcp/server/lowlevel/server.py#L677-L702)",
+    "metadata": {
+      "chunk_id": "d5cbe1dbb43d-0005",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_6.1-low-level-server-architecture.md",
+      "filename": "_modelcontextprotocol_python-sdk_6.1-low-level-server-architecture.md",
+      "file_extension": ".md",
+      "chunk_index": 5,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Context Management"
+      ],
+      "heading_text": "Context Management",
+      "token_count": 333,
+      "char_count": 1375,
+      "start_char": 0,
+      "end_char": 1375,
+      "semantic_score": 0.3570086658000946,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5306692307692308,
+      "chunking_strategy": "hybrid_adaptive",
+      "content_type": "hierarchical_section",
+      "embedding_model": "nomic-ai/CodeRankEmbed",
+      "processing_timestamp": "2025-10-19T14:58:29.528631",
+      "document_id": "d5cbe1dbb43d",
+      "document_name": "_modelcontextprotocol_python-sdk_6.1-low-level-server-architecture",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_6.1-low-level-server-architecture.md",
+      "source_filename": "_modelcontextprotocol_python-sdk_6.1-low-level-server-architecture.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk",
+      "relative_path": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_6.1-low-level-server-architecture.md",
+      "hierarchy_path": "Context Management",
+      "chunk_hash": "2344069917a6f071",
+      "content_digest": "2344069917a6f071",
+      "chunk_length": 1375,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "server",
+          "context",
+          "src",
+          "mcp",
+          "request",
+          "the",
+          "lowlevel",
+          "python",
+          "https",
+          "github",
+          "com",
+          "modelcontextprotocol",
+          "sdk",
+          "blob",
+          "146d7efb",
+          "py677",
+          "l677",
+          "from",
+          "lifespan",
+          "access"
+        ],
+        "term_weights": [
+          {
+            "term": "server",
+            "tf": 18,
+            "weight": 0.101695
+          },
+          {
+            "term": "context",
+            "tf": 10,
+            "weight": 0.056497
+          },
+          {
+            "term": "src",
+            "tf": 10,
+            "weight": 0.056497
+          },
+          {
+            "term": "mcp",
+            "tf": 10,
+            "weight": 0.056497
+          },
+          {
+            "term": "request",
+            "tf": 9,
+            "weight": 0.050847
+          },
+          {
+            "term": "the",
+            "tf": 8,
+            "weight": 0.045198
+          },
+          {
+            "term": "lowlevel",
+            "tf": 8,
+            "weight": 0.045198
+          },
+          {
+            "term": "python",
+            "tf": 6,
+            "weight": 0.033898
+          },
+          {
+            "term": "https",
+            "tf": 5,
+            "weight": 0.028249
+          },
+          {
+            "term": "github",
+            "tf": 5,
+            "weight": 0.028249
+          },
+          {
+            "term": "com",
+            "tf": 5,
+            "weight": 0.028249
+          },
+          {
+            "term": "modelcontextprotocol",
+            "tf": 5,
+            "weight": 0.028249
+          },
+          {
+            "term": "sdk",
+            "tf": 5,
+            "weight": 0.028249
+          },
+          {
+            "term": "blob",
+            "tf": 5,
+            "weight": 0.028249
+          },
+          {
+            "term": "146d7efb",
+            "tf": 5,
+            "weight": 0.028249
+          },
+          {
+            "term": "py677",
+            "tf": 2,
+            "weight": 0.011299
+          },
+          {
+            "term": "l677",
+            "tf": 2,
+            "weight": 0.011299
+          },
+          {
+            "term": "from",
+            "tf": 2,
+            "weight": 0.011299
+          },
+          {
+            "term": "lifespan",
+            "tf": 2,
+            "weight": 0.011299
+          },
+          {
+            "term": "access",
+            "tf": 2,
+            "weight": 0.011299
+          }
+        ],
+        "unique_terms": 71,
+        "total_terms": 177
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Context Management",
+        "context",
+        "github",
+        "https",
+        "lowlevel",
+        "mcp",
+        "python",
+        "request",
+        "server",
+        "src",
+        "the"
+      ],
+      "quality_fallback": true,
+      "quality_notes": "Promoted via relaxed thresholds"
+    },
+    "advanced_scores": {
+      "semantic": 0.3570086658000946,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5306692307692308,
+      "overall": 0.5958926321897752
+    }
+  }
+]

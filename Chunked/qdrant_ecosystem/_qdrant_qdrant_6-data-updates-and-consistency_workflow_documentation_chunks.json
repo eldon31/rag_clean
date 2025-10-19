@@ -1,0 +1,844 @@
+[
+  {
+    "text": "## Update Handler Architecture  The `UpdateHandler` manages three types of background workers that process updates, optimize segments, and periodically flush data to disk.",
+    "metadata": {
+      "chunk_id": "8baab4f8efd9-0010",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_6-data-updates-and-consistency.md",
+      "filename": "_qdrant_qdrant_6-data-updates-and-consistency.md",
+      "file_extension": ".md",
+      "chunk_index": 10,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Update Handler Architecture"
+      ],
+      "heading_text": "Update Handler Architecture",
+      "token_count": 30,
+      "char_count": 171,
+      "start_char": 0,
+      "end_char": 171,
+      "semantic_score": 0.8,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.59,
+      "chunking_strategy": "hierarchical_balanced",
+      "content_type": "hierarchical_section",
+      "embedding_model": "nomic-ai/CodeRankEmbed",
+      "processing_timestamp": "2025-10-19T15:43:34.447526",
+      "document_id": "8baab4f8efd9",
+      "document_name": "_qdrant_qdrant_6-data-updates-and-consistency",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_6-data-updates-and-consistency.md",
+      "source_filename": "_qdrant_qdrant_6-data-updates-and-consistency.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant",
+      "relative_path": "Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_6-data-updates-and-consistency.md",
+      "hierarchy_path": "Update Handler Architecture",
+      "chunk_hash": "e80cd6d9a12ae097",
+      "content_digest": "e80cd6d9a12ae097",
+      "chunk_length": 171,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "update",
+          "handler",
+          "architecture",
+          "the",
+          "updatehandler",
+          "manages",
+          "three",
+          "types",
+          "background",
+          "workers",
+          "that",
+          "process",
+          "updates",
+          "optimize",
+          "segments",
+          "and",
+          "periodically",
+          "flush",
+          "data",
+          "disk"
+        ],
+        "term_weights": [
+          {
+            "term": "update",
+            "tf": 1,
+            "weight": 0.05
+          },
+          {
+            "term": "handler",
+            "tf": 1,
+            "weight": 0.05
+          },
+          {
+            "term": "architecture",
+            "tf": 1,
+            "weight": 0.05
+          },
+          {
+            "term": "the",
+            "tf": 1,
+            "weight": 0.05
+          },
+          {
+            "term": "updatehandler",
+            "tf": 1,
+            "weight": 0.05
+          },
+          {
+            "term": "manages",
+            "tf": 1,
+            "weight": 0.05
+          },
+          {
+            "term": "three",
+            "tf": 1,
+            "weight": 0.05
+          },
+          {
+            "term": "types",
+            "tf": 1,
+            "weight": 0.05
+          },
+          {
+            "term": "background",
+            "tf": 1,
+            "weight": 0.05
+          },
+          {
+            "term": "workers",
+            "tf": 1,
+            "weight": 0.05
+          },
+          {
+            "term": "that",
+            "tf": 1,
+            "weight": 0.05
+          },
+          {
+            "term": "process",
+            "tf": 1,
+            "weight": 0.05
+          },
+          {
+            "term": "updates",
+            "tf": 1,
+            "weight": 0.05
+          },
+          {
+            "term": "optimize",
+            "tf": 1,
+            "weight": 0.05
+          },
+          {
+            "term": "segments",
+            "tf": 1,
+            "weight": 0.05
+          },
+          {
+            "term": "and",
+            "tf": 1,
+            "weight": 0.05
+          },
+          {
+            "term": "periodically",
+            "tf": 1,
+            "weight": 0.05
+          },
+          {
+            "term": "flush",
+            "tf": 1,
+            "weight": 0.05
+          },
+          {
+            "term": "data",
+            "tf": 1,
+            "weight": 0.05
+          },
+          {
+            "term": "disk",
+            "tf": 1,
+            "weight": 0.05
+          }
+        ],
+        "unique_terms": 20,
+        "total_terms": 20
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Update Handler Architecture",
+        "architecture",
+        "background",
+        "handler",
+        "manages",
+        "the",
+        "three",
+        "types",
+        "update",
+        "updatehandler",
+        "workers"
+      ],
+      "quality_fallback": true,
+      "quality_notes": "Promoted via relaxed thresholds"
+    },
+    "advanced_scores": {
+      "semantic": 0.8,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.59,
+      "overall": 0.7633333333333333
+    }
+  },
+  {
+    "text": "## Update Processing Pipeline  When an update operation arrives at a `LocalShard`, it goes through a multi-stage pipeline:",
+    "metadata": {
+      "chunk_id": "8baab4f8efd9-0013",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_6-data-updates-and-consistency.md",
+      "filename": "_qdrant_qdrant_6-data-updates-and-consistency.md",
+      "file_extension": ".md",
+      "chunk_index": 13,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Update Processing Pipeline"
+      ],
+      "heading_text": "Update Processing Pipeline",
+      "token_count": 25,
+      "char_count": 122,
+      "start_char": 0,
+      "end_char": 122,
+      "semantic_score": 0.8,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5566666666666666,
+      "chunking_strategy": "hierarchical_balanced",
+      "content_type": "hierarchical_section",
+      "embedding_model": "nomic-ai/CodeRankEmbed",
+      "processing_timestamp": "2025-10-19T15:43:34.448296",
+      "document_id": "8baab4f8efd9",
+      "document_name": "_qdrant_qdrant_6-data-updates-and-consistency",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_6-data-updates-and-consistency.md",
+      "source_filename": "_qdrant_qdrant_6-data-updates-and-consistency.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant",
+      "relative_path": "Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_6-data-updates-and-consistency.md",
+      "hierarchy_path": "Update Processing Pipeline",
+      "chunk_hash": "60fe0eb1a64266c2",
+      "content_digest": "60fe0eb1a64266c2",
+      "chunk_length": 122,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "update",
+          "pipeline",
+          "processing",
+          "when",
+          "operation",
+          "arrives",
+          "localshard",
+          "goes",
+          "through",
+          "multi",
+          "stage"
+        ],
+        "term_weights": [
+          {
+            "term": "update",
+            "tf": 2,
+            "weight": 0.153846
+          },
+          {
+            "term": "pipeline",
+            "tf": 2,
+            "weight": 0.153846
+          },
+          {
+            "term": "processing",
+            "tf": 1,
+            "weight": 0.076923
+          },
+          {
+            "term": "when",
+            "tf": 1,
+            "weight": 0.076923
+          },
+          {
+            "term": "operation",
+            "tf": 1,
+            "weight": 0.076923
+          },
+          {
+            "term": "arrives",
+            "tf": 1,
+            "weight": 0.076923
+          },
+          {
+            "term": "localshard",
+            "tf": 1,
+            "weight": 0.076923
+          },
+          {
+            "term": "goes",
+            "tf": 1,
+            "weight": 0.076923
+          },
+          {
+            "term": "through",
+            "tf": 1,
+            "weight": 0.076923
+          },
+          {
+            "term": "multi",
+            "tf": 1,
+            "weight": 0.076923
+          },
+          {
+            "term": "stage",
+            "tf": 1,
+            "weight": 0.076923
+          }
+        ],
+        "unique_terms": 11,
+        "total_terms": 13
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Update Processing Pipeline",
+        "arrives",
+        "goes",
+        "localshard",
+        "multi",
+        "operation",
+        "pipeline",
+        "processing",
+        "through",
+        "update",
+        "when"
+      ],
+      "quality_fallback": true,
+      "quality_notes": "Promoted via relaxed thresholds"
+    },
+    "advanced_scores": {
+      "semantic": 0.8,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5566666666666666,
+      "overall": 0.7522222222222222
+    }
+  },
+  {
+    "text": "## Key Data Structures",
+    "metadata": {
+      "chunk_id": "8baab4f8efd9-0021",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_6-data-updates-and-consistency.md",
+      "filename": "_qdrant_qdrant_6-data-updates-and-consistency.md",
+      "file_extension": ".md",
+      "chunk_index": 21,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Key Data Structures"
+      ],
+      "heading_text": "Key Data Structures",
+      "token_count": 4,
+      "char_count": 22,
+      "start_char": 0,
+      "end_char": 22,
+      "semantic_score": 0.8,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.39,
+      "chunking_strategy": "hierarchical_balanced",
+      "content_type": "hierarchical_section",
+      "embedding_model": "nomic-ai/CodeRankEmbed",
+      "processing_timestamp": "2025-10-19T15:43:34.450304",
+      "document_id": "8baab4f8efd9",
+      "document_name": "_qdrant_qdrant_6-data-updates-and-consistency",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_6-data-updates-and-consistency.md",
+      "source_filename": "_qdrant_qdrant_6-data-updates-and-consistency.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant",
+      "relative_path": "Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_6-data-updates-and-consistency.md",
+      "hierarchy_path": "Key Data Structures",
+      "chunk_hash": "cd839b4a463e98c9",
+      "content_digest": "cd839b4a463e98c9",
+      "chunk_length": 22,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "key",
+          "data",
+          "structures"
+        ],
+        "term_weights": [
+          {
+            "term": "key",
+            "tf": 1,
+            "weight": 0.333333
+          },
+          {
+            "term": "data",
+            "tf": 1,
+            "weight": 0.333333
+          },
+          {
+            "term": "structures",
+            "tf": 1,
+            "weight": 0.333333
+          }
+        ],
+        "unique_terms": 3,
+        "total_terms": 3
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Key Data Structures",
+        "data",
+        "key",
+        "structures"
+      ],
+      "quality_fallback": true,
+      "quality_notes": "Promoted via relaxed thresholds"
+    },
+    "advanced_scores": {
+      "semantic": 0.8,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.39,
+      "overall": 0.6966666666666667
+    }
+  },
+  {
+    "text": "# Data Updates and Consistency  Relevant source files  - [lib/collection/src/collection/collection\\_ops.rs](https://github.com/qdrant/qdrant/blob/48203e41/lib/collection/src/collection/collection_ops.rs) - [lib/collection/src/collection/mod.rs](https://github.com/qdrant/qdrant/blob/48203e41/lib/collection/src/collection/mod.rs) - [lib/collection/src/collection/shard\\_transfer.rs](https://github.com/qdrant/qdrant/blob/48203e41/lib/collection/src/collection/shard_transfer.rs) - [lib/collection/src/collection/sharding\\_keys.rs](https://github.com/qdrant/qdrant/blob/48203e41/lib/collection/src/collection/sharding_keys.rs) - [lib/collection/src/collection\\_manager/collection\\_updater.rs](https://github.com/qdrant/qdrant/blob/48203e41/lib/collection/src/collection_manager/collection_updater.rs) - [lib/collection/src/shards/local\\_shard/mod.rs](https://github.com/qdrant/qdrant/blob/48203e41/lib/collection/src/shards/local_shard/mod.rs) - [lib/collection/src/shards/local\\_shard/scroll.rs](https://github.com/qdrant/qdrant/blob/48203e41/lib/collection/src/shards/local_shard/scroll.rs) - [lib/collection/src/shards/local\\_shard/snapshot.rs](https://github.com/qdrant/qdrant/blob/48203e41/lib/collection/src/shards/local_shard/snapshot.rs) - [lib/collection/src/shards/local\\_shard/snapshot\\_tests.rs](https://github.com/qdrant/qdrant/blob/48203e41/lib/collection/src/shards/local_shard/snapshot_tests.rs) - [lib/collection/src/shards/replica\\_set/mod.rs](https://github.com/qdrant/qdrant/blob/48203e41/lib/collection/src/shards/replica_set/mod.rs) - [lib/collection/src/shards/replica\\_set/update.rs](https://github.com/qdrant/qdrant/blob/48203e41/lib/collection/src/shards/replica_set/update.rs) - [lib/collection/src/update\\_handler.rs](https://github.com/qdrant/qdrant/blob/48203e41/lib/collection/src/update_handler.rs) - [lib/storage/src/content\\_manager/toc/collection\\_meta\\_ops.rs](https://github.com/qdrant/qdrant/blob/48203e41/lib/storage/src/content_manager/toc/collection_meta_ops.rs)  This page describes how Qdrant handles data updates and maintains consistency across replicas. It covers the write path architecture, durability guarantees through Write-Ahead Logs, logical clock-based consistency mechanisms, and the interaction between update handlers, segments, and replicas. For detailed information about the update processing pipeline (WAL persistence, segment updates, optimization triggers), see [Update Processing Pipeline](qdrant/qdrant/6.1-update-processing-pipeline.md). For write consistency levels, replica coordination, and failure handling mechanisms, see [Write Consistency and Replication](qdrant/qdrant/6.2-write-consistency-and-replication.md). For information about the search and query flow, see [Search and Query Processing](qdrant/qdrant/5-search-and-query-processing.md). ---",
+    "metadata": {
+      "chunk_id": "8baab4f8efd9-0000",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_6-data-updates-and-consistency.md",
+      "filename": "_qdrant_qdrant_6-data-updates-and-consistency.md",
+      "file_extension": ".md",
+      "chunk_index": 0,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Data Updates and Consistency"
+      ],
+      "heading_text": "Data Updates and Consistency",
+      "token_count": 732,
+      "char_count": 2820,
+      "start_char": 0,
+      "end_char": 2820,
+      "semantic_score": 0.42274045944213867,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.6983050847457628,
+      "chunking_strategy": "hierarchical_balanced",
+      "content_type": "hierarchical_section",
+      "embedding_model": "nomic-ai/CodeRankEmbed",
+      "processing_timestamp": "2025-10-19T15:43:34.444027",
+      "document_id": "8baab4f8efd9",
+      "document_name": "_qdrant_qdrant_6-data-updates-and-consistency",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_6-data-updates-and-consistency.md",
+      "source_filename": "_qdrant_qdrant_6-data-updates-and-consistency.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant",
+      "relative_path": "Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_6-data-updates-and-consistency.md",
+      "hierarchy_path": "Data Updates and Consistency",
+      "chunk_hash": "618792c82a1f3fc4",
+      "content_digest": "618792c82a1f3fc4",
+      "chunk_length": 2820,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "collection",
+          "qdrant",
+          "lib",
+          "src",
+          "https",
+          "github",
+          "com",
+          "blob",
+          "48203e41",
+          "shards",
+          "and",
+          "shard",
+          "local",
+          "update",
+          "consistency",
+          "mod",
+          "replica",
+          "write",
+          "processing",
+          "ops"
+        ],
+        "term_weights": [
+          {
+            "term": "collection",
+            "tf": 40,
+            "weight": 0.107239
+          },
+          {
+            "term": "qdrant",
+            "tf": 33,
+            "weight": 0.088472
+          },
+          {
+            "term": "lib",
+            "tf": 26,
+            "weight": 0.069705
+          },
+          {
+            "term": "src",
+            "tf": 26,
+            "weight": 0.069705
+          },
+          {
+            "term": "https",
+            "tf": 13,
+            "weight": 0.034853
+          },
+          {
+            "term": "github",
+            "tf": 13,
+            "weight": 0.034853
+          },
+          {
+            "term": "com",
+            "tf": 13,
+            "weight": 0.034853
+          },
+          {
+            "term": "blob",
+            "tf": 13,
+            "weight": 0.034853
+          },
+          {
+            "term": "48203e41",
+            "tf": 13,
+            "weight": 0.034853
+          },
+          {
+            "term": "shards",
+            "tf": 12,
+            "weight": 0.032172
+          },
+          {
+            "term": "and",
+            "tf": 10,
+            "weight": 0.02681
+          },
+          {
+            "term": "shard",
+            "tf": 10,
+            "weight": 0.02681
+          },
+          {
+            "term": "local",
+            "tf": 8,
+            "weight": 0.021448
+          },
+          {
+            "term": "update",
+            "tf": 8,
+            "weight": 0.021448
+          },
+          {
+            "term": "consistency",
+            "tf": 6,
+            "weight": 0.016086
+          },
+          {
+            "term": "mod",
+            "tf": 6,
+            "weight": 0.016086
+          },
+          {
+            "term": "replica",
+            "tf": 5,
+            "weight": 0.013405
+          },
+          {
+            "term": "write",
+            "tf": 5,
+            "weight": 0.013405
+          },
+          {
+            "term": "processing",
+            "tf": 5,
+            "weight": 0.013405
+          },
+          {
+            "term": "ops",
+            "tf": 4,
+            "weight": 0.010724
+          }
+        ],
+        "unique_terms": 83,
+        "total_terms": 373
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "48203e41",
+        "Data Updates and Consistency",
+        "blob",
+        "collection",
+        "com",
+        "github",
+        "https",
+        "lib",
+        "qdrant",
+        "shards",
+        "src"
+      ],
+      "quality_fallback": true,
+      "quality_notes": "Promoted via relaxed thresholds"
+    },
+    "advanced_scores": {
+      "semantic": 0.42274045944213867,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.6983050847457628,
+      "overall": 0.6736818480626338
+    }
+  },
+  {
+    "text": "### LocalShard  The `LocalShard` is the core data-holding component on each peer:  | Field                   | Type                            | Purpose                                     | | ----------------------- | ------------------------------- | ------------------------------------------- | | `segments`              | `LockedSegmentHolder`           | Holds all segment data                      | | `wal`                   | `RecoverableWal`                | Write-ahead log for durability              | | `update_handler`        | `Arc<Mutex<UpdateHandler>>`     | Manages update processing workers           | | `update_sender`         | `ArcSwap<Sender<UpdateSignal>>` | Channel to send updates to workers          | | `update_tracker`        | `UpdateTracker`                 | Tracks ongoing updates                      | | `update_operation_lock` | `Arc<RwLock<()>>`               | Prevents updates during critical operations | | `optimizers`            | `Arc<Vec<Arc<Optimizer>>>`      | Segment optimization strategies             |  **Sources:** [lib/collection/src/shards/local\\_shard/mod.rs84-124](https://github.com/qdrant/qdrant/blob/48203e41/lib/collection/src/shards/local_shard/mod.rs#L84-L124)",
+    "metadata": {
+      "chunk_id": "8baab4f8efd9-0022",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_6-data-updates-and-consistency.md",
+      "filename": "_qdrant_qdrant_6-data-updates-and-consistency.md",
+      "file_extension": ".md",
+      "chunk_index": 22,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "LocalShard"
+      ],
+      "heading_text": "LocalShard",
+      "token_count": 254,
+      "char_count": 1224,
+      "start_char": 0,
+      "end_char": 1224,
+      "semantic_score": 0.38389113545417786,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.4657575757575757,
+      "chunking_strategy": "hierarchical_balanced",
+      "content_type": "hierarchical_section",
+      "embedding_model": "nomic-ai/CodeRankEmbed",
+      "processing_timestamp": "2025-10-19T15:43:34.450845",
+      "document_id": "8baab4f8efd9",
+      "document_name": "_qdrant_qdrant_6-data-updates-and-consistency",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_6-data-updates-and-consistency.md",
+      "source_filename": "_qdrant_qdrant_6-data-updates-and-consistency.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant",
+      "relative_path": "Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_6-data-updates-and-consistency.md",
+      "hierarchy_path": "LocalShard",
+      "chunk_hash": "31d38010a5629125",
+      "content_digest": "31d38010a5629125",
+      "chunk_length": 1224,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "update",
+          "arc",
+          "updates",
+          "localshard",
+          "the",
+          "data",
+          "segment",
+          "workers",
+          "sender",
+          "lib",
+          "collection",
+          "src",
+          "shards",
+          "local",
+          "shard",
+          "mod",
+          "qdrant",
+          "core",
+          "holding",
+          "component"
+        ],
+        "term_weights": [
+          {
+            "term": "update",
+            "tf": 5,
+            "weight": 0.053191
+          },
+          {
+            "term": "arc",
+            "tf": 4,
+            "weight": 0.042553
+          },
+          {
+            "term": "updates",
+            "tf": 3,
+            "weight": 0.031915
+          },
+          {
+            "term": "localshard",
+            "tf": 2,
+            "weight": 0.021277
+          },
+          {
+            "term": "the",
+            "tf": 2,
+            "weight": 0.021277
+          },
+          {
+            "term": "data",
+            "tf": 2,
+            "weight": 0.021277
+          },
+          {
+            "term": "segment",
+            "tf": 2,
+            "weight": 0.021277
+          },
+          {
+            "term": "workers",
+            "tf": 2,
+            "weight": 0.021277
+          },
+          {
+            "term": "sender",
+            "tf": 2,
+            "weight": 0.021277
+          },
+          {
+            "term": "lib",
+            "tf": 2,
+            "weight": 0.021277
+          },
+          {
+            "term": "collection",
+            "tf": 2,
+            "weight": 0.021277
+          },
+          {
+            "term": "src",
+            "tf": 2,
+            "weight": 0.021277
+          },
+          {
+            "term": "shards",
+            "tf": 2,
+            "weight": 0.021277
+          },
+          {
+            "term": "local",
+            "tf": 2,
+            "weight": 0.021277
+          },
+          {
+            "term": "shard",
+            "tf": 2,
+            "weight": 0.021277
+          },
+          {
+            "term": "mod",
+            "tf": 2,
+            "weight": 0.021277
+          },
+          {
+            "term": "qdrant",
+            "tf": 2,
+            "weight": 0.021277
+          },
+          {
+            "term": "core",
+            "tf": 1,
+            "weight": 0.010638
+          },
+          {
+            "term": "holding",
+            "tf": 1,
+            "weight": 0.010638
+          },
+          {
+            "term": "component",
+            "tf": 1,
+            "weight": 0.010638
+          }
+        ],
+        "unique_terms": 71,
+        "total_terms": 94
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "LocalShard",
+        "arc",
+        "data",
+        "lib",
+        "localshard",
+        "segment",
+        "sender",
+        "the",
+        "update",
+        "updates",
+        "workers"
+      ],
+      "quality_fallback": true,
+      "quality_notes": "Promoted via relaxed thresholds"
+    },
+    "advanced_scores": {
+      "semantic": 0.38389113545417786,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.4657575757575757,
+      "overall": 0.5832162370705846
+    }
+  }
+]

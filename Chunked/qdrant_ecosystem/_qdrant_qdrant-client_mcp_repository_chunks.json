@@ -1,0 +1,831 @@
+[
+  {
+    "text": "## Core Architecture  The qdrant-client implements a layered architecture with unified client interfaces that abstract over different backend implementations and communication protocols.",
+    "metadata": {
+      "chunk_id": "5eb47cba9f41-0002",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant-client\\_qdrant_qdrant-client.md",
+      "filename": "_qdrant_qdrant-client.md",
+      "file_extension": ".md",
+      "chunk_index": 2,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Core Architecture"
+      ],
+      "heading_text": "Core Architecture",
+      "token_count": 27,
+      "char_count": 186,
+      "start_char": 0,
+      "end_char": 186,
+      "semantic_score": 0.8,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5763636363636364,
+      "chunking_strategy": "hybrid_adaptive",
+      "content_type": "hierarchical_section",
+      "embedding_model": "nomic-ai/CodeRankEmbed",
+      "processing_timestamp": "2025-10-19T15:46:13.231929",
+      "document_id": "5eb47cba9f41",
+      "document_name": "_qdrant_qdrant-client",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant-client\\_qdrant_qdrant-client.md",
+      "source_filename": "_qdrant_qdrant-client.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant-client",
+      "relative_path": "Docs\\qdrant_ecosystem\\qdrant_qdrant-client\\_qdrant_qdrant-client.md",
+      "hierarchy_path": "Core Architecture",
+      "chunk_hash": "b195dc462a211043",
+      "content_digest": "b195dc462a211043",
+      "chunk_length": 186,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "architecture",
+          "client",
+          "core",
+          "the",
+          "qdrant",
+          "implements",
+          "layered",
+          "with",
+          "unified",
+          "interfaces",
+          "that",
+          "abstract",
+          "over",
+          "different",
+          "backend",
+          "implementations",
+          "and",
+          "communication",
+          "protocols"
+        ],
+        "term_weights": [
+          {
+            "term": "architecture",
+            "tf": 2,
+            "weight": 0.095238
+          },
+          {
+            "term": "client",
+            "tf": 2,
+            "weight": 0.095238
+          },
+          {
+            "term": "core",
+            "tf": 1,
+            "weight": 0.047619
+          },
+          {
+            "term": "the",
+            "tf": 1,
+            "weight": 0.047619
+          },
+          {
+            "term": "qdrant",
+            "tf": 1,
+            "weight": 0.047619
+          },
+          {
+            "term": "implements",
+            "tf": 1,
+            "weight": 0.047619
+          },
+          {
+            "term": "layered",
+            "tf": 1,
+            "weight": 0.047619
+          },
+          {
+            "term": "with",
+            "tf": 1,
+            "weight": 0.047619
+          },
+          {
+            "term": "unified",
+            "tf": 1,
+            "weight": 0.047619
+          },
+          {
+            "term": "interfaces",
+            "tf": 1,
+            "weight": 0.047619
+          },
+          {
+            "term": "that",
+            "tf": 1,
+            "weight": 0.047619
+          },
+          {
+            "term": "abstract",
+            "tf": 1,
+            "weight": 0.047619
+          },
+          {
+            "term": "over",
+            "tf": 1,
+            "weight": 0.047619
+          },
+          {
+            "term": "different",
+            "tf": 1,
+            "weight": 0.047619
+          },
+          {
+            "term": "backend",
+            "tf": 1,
+            "weight": 0.047619
+          },
+          {
+            "term": "implementations",
+            "tf": 1,
+            "weight": 0.047619
+          },
+          {
+            "term": "and",
+            "tf": 1,
+            "weight": 0.047619
+          },
+          {
+            "term": "communication",
+            "tf": 1,
+            "weight": 0.047619
+          },
+          {
+            "term": "protocols",
+            "tf": 1,
+            "weight": 0.047619
+          }
+        ],
+        "unique_terms": 19,
+        "total_terms": 21
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Core Architecture",
+        "architecture",
+        "client",
+        "core",
+        "implements",
+        "interfaces",
+        "layered",
+        "qdrant",
+        "the",
+        "unified",
+        "with"
+      ],
+      "quality_fallback": true,
+      "quality_notes": "Promoted via relaxed thresholds"
+    },
+    "advanced_scores": {
+      "semantic": 0.8,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5763636363636364,
+      "overall": 0.7587878787878788
+    }
+  },
+  {
+    "text": "## Installation and Dependencies  The library is distributed as a Python package with configurable optional dependencies:  | Component     | Installation                               | Purpose                              | | ------------- | ------------------------------------------ | ------------------------------------ | | Core          | `pip install qdrant-client`                | Basic HTTP/gRPC client functionality | | FastEmbed     | `pip install qdrant-client[fastembed]`     | CPU-based embedding generation       | | FastEmbed GPU | `pip install qdrant-client[fastembed-gpu]` | GPU-accelerated embeddings           |",
+    "metadata": {
+      "chunk_id": "5eb47cba9f41-0005",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant-client\\_qdrant_qdrant-client.md",
+      "filename": "_qdrant_qdrant-client.md",
+      "file_extension": ".md",
+      "chunk_index": 5,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Installation and Dependencies"
+      ],
+      "heading_text": "Installation and Dependencies",
+      "token_count": 112,
+      "char_count": 632,
+      "start_char": 0,
+      "end_char": 632,
+      "semantic_score": 0.8,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.47281249999999997,
+      "chunking_strategy": "hybrid_adaptive",
+      "content_type": "hierarchical_section",
+      "embedding_model": "nomic-ai/CodeRankEmbed",
+      "processing_timestamp": "2025-10-19T15:46:13.232736",
+      "document_id": "5eb47cba9f41",
+      "document_name": "_qdrant_qdrant-client",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant-client\\_qdrant_qdrant-client.md",
+      "source_filename": "_qdrant_qdrant-client.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant-client",
+      "relative_path": "Docs\\qdrant_ecosystem\\qdrant_qdrant-client\\_qdrant_qdrant-client.md",
+      "hierarchy_path": "Installation and Dependencies",
+      "chunk_hash": "9fb38979ddf3bbc6",
+      "content_digest": "9fb38979ddf3bbc6",
+      "chunk_length": 632,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "client",
+          "fastembed",
+          "pip",
+          "install",
+          "qdrant",
+          "gpu",
+          "installation",
+          "dependencies",
+          "and",
+          "the",
+          "library",
+          "distributed",
+          "python",
+          "package",
+          "with",
+          "configurable",
+          "optional",
+          "component",
+          "purpose",
+          "core"
+        ],
+        "term_weights": [
+          {
+            "term": "client",
+            "tf": 4,
+            "weight": 0.086957
+          },
+          {
+            "term": "fastembed",
+            "tf": 4,
+            "weight": 0.086957
+          },
+          {
+            "term": "pip",
+            "tf": 3,
+            "weight": 0.065217
+          },
+          {
+            "term": "install",
+            "tf": 3,
+            "weight": 0.065217
+          },
+          {
+            "term": "qdrant",
+            "tf": 3,
+            "weight": 0.065217
+          },
+          {
+            "term": "gpu",
+            "tf": 3,
+            "weight": 0.065217
+          },
+          {
+            "term": "installation",
+            "tf": 2,
+            "weight": 0.043478
+          },
+          {
+            "term": "dependencies",
+            "tf": 2,
+            "weight": 0.043478
+          },
+          {
+            "term": "and",
+            "tf": 1,
+            "weight": 0.021739
+          },
+          {
+            "term": "the",
+            "tf": 1,
+            "weight": 0.021739
+          },
+          {
+            "term": "library",
+            "tf": 1,
+            "weight": 0.021739
+          },
+          {
+            "term": "distributed",
+            "tf": 1,
+            "weight": 0.021739
+          },
+          {
+            "term": "python",
+            "tf": 1,
+            "weight": 0.021739
+          },
+          {
+            "term": "package",
+            "tf": 1,
+            "weight": 0.021739
+          },
+          {
+            "term": "with",
+            "tf": 1,
+            "weight": 0.021739
+          },
+          {
+            "term": "configurable",
+            "tf": 1,
+            "weight": 0.021739
+          },
+          {
+            "term": "optional",
+            "tf": 1,
+            "weight": 0.021739
+          },
+          {
+            "term": "component",
+            "tf": 1,
+            "weight": 0.021739
+          },
+          {
+            "term": "purpose",
+            "tf": 1,
+            "weight": 0.021739
+          },
+          {
+            "term": "core",
+            "tf": 1,
+            "weight": 0.021739
+          }
+        ],
+        "unique_terms": 30,
+        "total_terms": 46
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Installation and Dependencies",
+        "and",
+        "client",
+        "dependencies",
+        "fastembed",
+        "gpu",
+        "install",
+        "installation",
+        "pip",
+        "qdrant",
+        "the"
+      ],
+      "quality_fallback": true,
+      "quality_notes": "Promoted via relaxed thresholds"
+    },
+    "advanced_scores": {
+      "semantic": 0.8,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.47281249999999997,
+      "overall": 0.7242708333333333
+    }
+  },
+  {
+    "text": "### Test Matrix  | Test Type           | Coverage                 | Purpose                              | | ------------------- | ------------------------ | ------------------------------------ | | Integration Tests   | Full API surface         | End-to-end functionality with Docker | | Congruence Tests    | Local vs Remote          | Behavioral consistency validation    | | Unit Tests          | Individual components    | Component-level correctness          | | Async Tests         | Async client methods     | Async/await compatibility            | | Compatibility Tests | Multiple Python versions | Cross-version support                |",
+    "metadata": {
+      "chunk_id": "5eb47cba9f41-0011",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant-client\\_qdrant_qdrant-client.md",
+      "filename": "_qdrant_qdrant-client.md",
+      "file_extension": ".md",
+      "chunk_index": 11,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Test Matrix"
+      ],
+      "heading_text": "Test Matrix",
+      "token_count": 102,
+      "char_count": 646,
+      "start_char": 0,
+      "end_char": 646,
+      "semantic_score": 0.8,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.45399999999999996,
+      "chunking_strategy": "hybrid_adaptive",
+      "content_type": "hierarchical_section",
+      "embedding_model": "nomic-ai/CodeRankEmbed",
+      "processing_timestamp": "2025-10-19T15:46:13.234166",
+      "document_id": "5eb47cba9f41",
+      "document_name": "_qdrant_qdrant-client",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant-client\\_qdrant_qdrant-client.md",
+      "source_filename": "_qdrant_qdrant-client.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant-client",
+      "relative_path": "Docs\\qdrant_ecosystem\\qdrant_qdrant-client\\_qdrant_qdrant-client.md",
+      "hierarchy_path": "Test Matrix",
+      "chunk_hash": "07631f17357601a6",
+      "content_digest": "07631f17357601a6",
+      "chunk_length": 646,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "tests",
+          "async",
+          "test",
+          "end",
+          "compatibility",
+          "matrix",
+          "type",
+          "coverage",
+          "purpose",
+          "integration",
+          "full",
+          "api",
+          "surface",
+          "functionality",
+          "with",
+          "docker",
+          "congruence",
+          "local",
+          "remote",
+          "behavioral"
+        ],
+        "term_weights": [
+          {
+            "term": "tests",
+            "tf": 5,
+            "weight": 0.108696
+          },
+          {
+            "term": "async",
+            "tf": 3,
+            "weight": 0.065217
+          },
+          {
+            "term": "test",
+            "tf": 2,
+            "weight": 0.043478
+          },
+          {
+            "term": "end",
+            "tf": 2,
+            "weight": 0.043478
+          },
+          {
+            "term": "compatibility",
+            "tf": 2,
+            "weight": 0.043478
+          },
+          {
+            "term": "matrix",
+            "tf": 1,
+            "weight": 0.021739
+          },
+          {
+            "term": "type",
+            "tf": 1,
+            "weight": 0.021739
+          },
+          {
+            "term": "coverage",
+            "tf": 1,
+            "weight": 0.021739
+          },
+          {
+            "term": "purpose",
+            "tf": 1,
+            "weight": 0.021739
+          },
+          {
+            "term": "integration",
+            "tf": 1,
+            "weight": 0.021739
+          },
+          {
+            "term": "full",
+            "tf": 1,
+            "weight": 0.021739
+          },
+          {
+            "term": "api",
+            "tf": 1,
+            "weight": 0.021739
+          },
+          {
+            "term": "surface",
+            "tf": 1,
+            "weight": 0.021739
+          },
+          {
+            "term": "functionality",
+            "tf": 1,
+            "weight": 0.021739
+          },
+          {
+            "term": "with",
+            "tf": 1,
+            "weight": 0.021739
+          },
+          {
+            "term": "docker",
+            "tf": 1,
+            "weight": 0.021739
+          },
+          {
+            "term": "congruence",
+            "tf": 1,
+            "weight": 0.021739
+          },
+          {
+            "term": "local",
+            "tf": 1,
+            "weight": 0.021739
+          },
+          {
+            "term": "remote",
+            "tf": 1,
+            "weight": 0.021739
+          },
+          {
+            "term": "behavioral",
+            "tf": 1,
+            "weight": 0.021739
+          }
+        ],
+        "unique_terms": 37,
+        "total_terms": 46
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Test Matrix",
+        "async",
+        "compatibility",
+        "coverage",
+        "end",
+        "integration",
+        "matrix",
+        "purpose",
+        "test",
+        "tests",
+        "type"
+      ],
+      "quality_fallback": true,
+      "quality_notes": "Promoted via relaxed thresholds"
+    },
+    "advanced_scores": {
+      "semantic": 0.8,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.45399999999999996,
+      "overall": 0.718
+    }
+  },
+  {
+    "text": "## Usage Patterns",
+    "metadata": {
+      "chunk_id": "5eb47cba9f41-0007",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant-client\\_qdrant_qdrant-client.md",
+      "filename": "_qdrant_qdrant-client.md",
+      "file_extension": ".md",
+      "chunk_index": 7,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Usage Patterns"
+      ],
+      "heading_text": "Usage Patterns",
+      "token_count": 3,
+      "char_count": 17,
+      "start_char": 0,
+      "end_char": 17,
+      "semantic_score": 0.8,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.39,
+      "chunking_strategy": "hybrid_adaptive",
+      "content_type": "hierarchical_section",
+      "embedding_model": "nomic-ai/CodeRankEmbed",
+      "processing_timestamp": "2025-10-19T15:46:13.233315",
+      "document_id": "5eb47cba9f41",
+      "document_name": "_qdrant_qdrant-client",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant-client\\_qdrant_qdrant-client.md",
+      "source_filename": "_qdrant_qdrant-client.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant-client",
+      "relative_path": "Docs\\qdrant_ecosystem\\qdrant_qdrant-client\\_qdrant_qdrant-client.md",
+      "hierarchy_path": "Usage Patterns",
+      "chunk_hash": "c4a7d93d4f0b79bb",
+      "content_digest": "c4a7d93d4f0b79bb",
+      "chunk_length": 17,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "usage",
+          "patterns"
+        ],
+        "term_weights": [
+          {
+            "term": "usage",
+            "tf": 1,
+            "weight": 0.5
+          },
+          {
+            "term": "patterns",
+            "tf": 1,
+            "weight": 0.5
+          }
+        ],
+        "unique_terms": 2,
+        "total_terms": 2
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Usage Patterns",
+        "patterns",
+        "usage"
+      ],
+      "quality_fallback": true,
+      "quality_notes": "Promoted via relaxed thresholds"
+    },
+    "advanced_scores": {
+      "semantic": 0.8,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.39,
+      "overall": 0.6966666666666667
+    }
+  },
+  {
+    "text": "## Testing and Quality Assurance  The library implements comprehensive testing across multiple dimensions:",
+    "metadata": {
+      "chunk_id": "5eb47cba9f41-0010",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant-client\\_qdrant_qdrant-client.md",
+      "filename": "_qdrant_qdrant-client.md",
+      "file_extension": ".md",
+      "chunk_index": 10,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Testing and Quality Assurance"
+      ],
+      "heading_text": "Testing and Quality Assurance",
+      "token_count": 15,
+      "char_count": 106,
+      "start_char": 0,
+      "end_char": 106,
+      "semantic_score": 0.8,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.3669230769230769,
+      "chunking_strategy": "hybrid_adaptive",
+      "content_type": "hierarchical_section",
+      "embedding_model": "nomic-ai/CodeRankEmbed",
+      "processing_timestamp": "2025-10-19T15:46:13.233784",
+      "document_id": "5eb47cba9f41",
+      "document_name": "_qdrant_qdrant-client",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant-client\\_qdrant_qdrant-client.md",
+      "source_filename": "_qdrant_qdrant-client.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant-client",
+      "relative_path": "Docs\\qdrant_ecosystem\\qdrant_qdrant-client\\_qdrant_qdrant-client.md",
+      "hierarchy_path": "Testing and Quality Assurance",
+      "chunk_hash": "84477ee9511f03b9",
+      "content_digest": "84477ee9511f03b9",
+      "chunk_length": 106,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "testing",
+          "and",
+          "quality",
+          "assurance",
+          "the",
+          "library",
+          "implements",
+          "comprehensive",
+          "across",
+          "multiple",
+          "dimensions"
+        ],
+        "term_weights": [
+          {
+            "term": "testing",
+            "tf": 2,
+            "weight": 0.166667
+          },
+          {
+            "term": "and",
+            "tf": 1,
+            "weight": 0.083333
+          },
+          {
+            "term": "quality",
+            "tf": 1,
+            "weight": 0.083333
+          },
+          {
+            "term": "assurance",
+            "tf": 1,
+            "weight": 0.083333
+          },
+          {
+            "term": "the",
+            "tf": 1,
+            "weight": 0.083333
+          },
+          {
+            "term": "library",
+            "tf": 1,
+            "weight": 0.083333
+          },
+          {
+            "term": "implements",
+            "tf": 1,
+            "weight": 0.083333
+          },
+          {
+            "term": "comprehensive",
+            "tf": 1,
+            "weight": 0.083333
+          },
+          {
+            "term": "across",
+            "tf": 1,
+            "weight": 0.083333
+          },
+          {
+            "term": "multiple",
+            "tf": 1,
+            "weight": 0.083333
+          },
+          {
+            "term": "dimensions",
+            "tf": 1,
+            "weight": 0.083333
+          }
+        ],
+        "unique_terms": 11,
+        "total_terms": 12
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Testing and Quality Assurance",
+        "across",
+        "and",
+        "assurance",
+        "comprehensive",
+        "implements",
+        "library",
+        "multiple",
+        "quality",
+        "testing",
+        "the"
+      ],
+      "quality_fallback": true,
+      "quality_notes": "Promoted via relaxed thresholds"
+    },
+    "advanced_scores": {
+      "semantic": 0.8,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.3669230769230769,
+      "overall": 0.688974358974359
+    }
+  }
+]

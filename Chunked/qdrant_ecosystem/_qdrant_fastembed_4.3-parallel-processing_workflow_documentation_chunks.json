@@ -1,0 +1,891 @@
+[
+  {
+    "text": "## Implementation Details",
+    "metadata": {
+      "chunk_id": "5bf7fe1db9d3-0006",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_fastembed\\_qdrant_fastembed_4.3-parallel-processing.md",
+      "filename": "_qdrant_fastembed_4.3-parallel-processing.md",
+      "file_extension": ".md",
+      "chunk_index": 6,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Implementation Details"
+      ],
+      "heading_text": "Implementation Details",
+      "token_count": 3,
+      "char_count": 25,
+      "start_char": 0,
+      "end_char": 25,
+      "semantic_score": 0.8,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.59,
+      "chunking_strategy": "hierarchical_balanced",
+      "content_type": "hierarchical_section",
+      "embedding_model": "nomic-ai/CodeRankEmbed",
+      "processing_timestamp": "2025-10-19T15:34:30.074032",
+      "document_id": "5bf7fe1db9d3",
+      "document_name": "_qdrant_fastembed_4.3-parallel-processing",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_fastembed\\_qdrant_fastembed_4.3-parallel-processing.md",
+      "source_filename": "_qdrant_fastembed_4.3-parallel-processing.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_fastembed",
+      "relative_path": "Docs\\qdrant_ecosystem\\qdrant_fastembed\\_qdrant_fastembed_4.3-parallel-processing.md",
+      "hierarchy_path": "Implementation Details",
+      "chunk_hash": "812a10c977ea5550",
+      "content_digest": "812a10c977ea5550",
+      "chunk_length": 25,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "implementation",
+          "details"
+        ],
+        "term_weights": [
+          {
+            "term": "implementation",
+            "tf": 1,
+            "weight": 0.5
+          },
+          {
+            "term": "details",
+            "tf": 1,
+            "weight": 0.5
+          }
+        ],
+        "unique_terms": 2,
+        "total_terms": 2
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Implementation Details",
+        "details",
+        "implementation"
+      ],
+      "quality_fallback": true,
+      "quality_notes": "Promoted via relaxed thresholds"
+    },
+    "advanced_scores": {
+      "semantic": 0.8,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.59,
+      "overall": 0.7633333333333333
+    }
+  },
+  {
+    "text": "### On this page  - [Parallel Processing](#parallel-processing.md) - [Parallel Processing Architecture](#parallel-processing-architecture.md) - [Worker Interface and Implementation](#worker-interface-and-implementation.md) - [Parallel Processing Flow](#parallel-processing-flow.md) - [Enabling Parallel Processing](#enabling-parallel-processing.md) - [GPU Support and Device Assignment](#gpu-support-and-device-assignment.md) - [Implementation Details](#implementation-details.md) - [Worker Process Management](#worker-process-management.md) - [Worker Communication](#worker-communication.md) - [Worker Process Creation](#worker-process-creation.md) - [Performance Considerations](#performance-considerations.md) - [Conclusion](#conclusion.md)",
+    "metadata": {
+      "chunk_id": "5bf7fe1db9d3-0012",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_fastembed\\_qdrant_fastembed_4.3-parallel-processing.md",
+      "filename": "_qdrant_fastembed_4.3-parallel-processing.md",
+      "file_extension": ".md",
+      "chunk_index": 12,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "On this page"
+      ],
+      "heading_text": "On this page",
+      "token_count": 155,
+      "char_count": 743,
+      "start_char": 0,
+      "end_char": 743,
+      "semantic_score": 0.5586681962013245,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.4736734693877551,
+      "chunking_strategy": "hierarchical_balanced",
+      "content_type": "hierarchical_section",
+      "embedding_model": "nomic-ai/CodeRankEmbed",
+      "processing_timestamp": "2025-10-19T15:34:30.077179",
+      "document_id": "5bf7fe1db9d3",
+      "document_name": "_qdrant_fastembed_4.3-parallel-processing",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_fastembed\\_qdrant_fastembed_4.3-parallel-processing.md",
+      "source_filename": "_qdrant_fastembed_4.3-parallel-processing.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_fastembed",
+      "relative_path": "Docs\\qdrant_ecosystem\\qdrant_fastembed\\_qdrant_fastembed_4.3-parallel-processing.md",
+      "hierarchy_path": "On this page",
+      "chunk_hash": "c5af978f9aa16c2b",
+      "content_digest": "c5af978f9aa16c2b",
+      "chunk_length": 743,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "parallel",
+          "processing",
+          "worker",
+          "and",
+          "implementation",
+          "process",
+          "architecture",
+          "interface",
+          "flow",
+          "enabling",
+          "gpu",
+          "support",
+          "device",
+          "assignment",
+          "details",
+          "management",
+          "communication",
+          "creation",
+          "performance",
+          "considerations"
+        ],
+        "term_weights": [
+          {
+            "term": "parallel",
+            "tf": 8,
+            "weight": 0.117647
+          },
+          {
+            "term": "processing",
+            "tf": 8,
+            "weight": 0.117647
+          },
+          {
+            "term": "worker",
+            "tf": 8,
+            "weight": 0.117647
+          },
+          {
+            "term": "and",
+            "tf": 4,
+            "weight": 0.058824
+          },
+          {
+            "term": "implementation",
+            "tf": 4,
+            "weight": 0.058824
+          },
+          {
+            "term": "process",
+            "tf": 4,
+            "weight": 0.058824
+          },
+          {
+            "term": "architecture",
+            "tf": 2,
+            "weight": 0.029412
+          },
+          {
+            "term": "interface",
+            "tf": 2,
+            "weight": 0.029412
+          },
+          {
+            "term": "flow",
+            "tf": 2,
+            "weight": 0.029412
+          },
+          {
+            "term": "enabling",
+            "tf": 2,
+            "weight": 0.029412
+          },
+          {
+            "term": "gpu",
+            "tf": 2,
+            "weight": 0.029412
+          },
+          {
+            "term": "support",
+            "tf": 2,
+            "weight": 0.029412
+          },
+          {
+            "term": "device",
+            "tf": 2,
+            "weight": 0.029412
+          },
+          {
+            "term": "assignment",
+            "tf": 2,
+            "weight": 0.029412
+          },
+          {
+            "term": "details",
+            "tf": 2,
+            "weight": 0.029412
+          },
+          {
+            "term": "management",
+            "tf": 2,
+            "weight": 0.029412
+          },
+          {
+            "term": "communication",
+            "tf": 2,
+            "weight": 0.029412
+          },
+          {
+            "term": "creation",
+            "tf": 2,
+            "weight": 0.029412
+          },
+          {
+            "term": "performance",
+            "tf": 2,
+            "weight": 0.029412
+          },
+          {
+            "term": "considerations",
+            "tf": 2,
+            "weight": 0.029412
+          }
+        ],
+        "unique_terms": 23,
+        "total_terms": 68
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "On this page",
+        "and",
+        "architecture",
+        "enabling",
+        "flow",
+        "implementation",
+        "interface",
+        "parallel",
+        "process",
+        "processing",
+        "worker"
+      ],
+      "quality_fallback": true,
+      "quality_notes": "Promoted via relaxed thresholds"
+    },
+    "advanced_scores": {
+      "semantic": 0.5586681962013245,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.4736734693877551,
+      "overall": 0.6441138885296932
+    }
+  },
+  {
+    "text": "## Conclusion  FastEmbed's parallel processing system provides a powerful mechanism for scaling embedding generation across multiple CPU cores or GPU devices. By distributing workloads and managing worker processes effectively, it achieves significant performance improvements for large datasets while maintaining a simple, consistent API. For information on model management and caching, see [Model Management](qdrant/fastembed/4.1-model-management.md), or for details on how to use specific embedding types, refer to [Core Embedding Classes](qdrant/fastembed/3-core-embedding-classes.md). Dismiss  Refresh this wiki  Enter email to refresh",
+    "metadata": {
+      "chunk_id": "5bf7fe1db9d3-0011",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_fastembed\\_qdrant_fastembed_4.3-parallel-processing.md",
+      "filename": "_qdrant_fastembed_4.3-parallel-processing.md",
+      "file_extension": ".md",
+      "chunk_index": 11,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Conclusion"
+      ],
+      "heading_text": "Conclusion",
+      "token_count": 121,
+      "char_count": 641,
+      "start_char": 0,
+      "end_char": 641,
+      "semantic_score": 0.2716239392757416,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.7426315789473684,
+      "chunking_strategy": "hierarchical_balanced",
+      "content_type": "hierarchical_section",
+      "embedding_model": "nomic-ai/CodeRankEmbed",
+      "processing_timestamp": "2025-10-19T15:34:30.076794",
+      "document_id": "5bf7fe1db9d3",
+      "document_name": "_qdrant_fastembed_4.3-parallel-processing",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_fastembed\\_qdrant_fastembed_4.3-parallel-processing.md",
+      "source_filename": "_qdrant_fastembed_4.3-parallel-processing.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_fastembed",
+      "relative_path": "Docs\\qdrant_ecosystem\\qdrant_fastembed\\_qdrant_fastembed_4.3-parallel-processing.md",
+      "hierarchy_path": "Conclusion",
+      "chunk_hash": "1e0d72162d941e72",
+      "content_digest": "1e0d72162d941e72",
+      "chunk_length": 641,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "for",
+          "embedding",
+          "fastembed",
+          "model",
+          "management",
+          "and",
+          "qdrant",
+          "core",
+          "classes",
+          "refresh",
+          "conclusion",
+          "parallel",
+          "processing",
+          "system",
+          "provides",
+          "powerful",
+          "mechanism",
+          "scaling",
+          "generation",
+          "across"
+        ],
+        "term_weights": [
+          {
+            "term": "for",
+            "tf": 4,
+            "weight": 0.054795
+          },
+          {
+            "term": "embedding",
+            "tf": 4,
+            "weight": 0.054795
+          },
+          {
+            "term": "fastembed",
+            "tf": 3,
+            "weight": 0.041096
+          },
+          {
+            "term": "model",
+            "tf": 3,
+            "weight": 0.041096
+          },
+          {
+            "term": "management",
+            "tf": 3,
+            "weight": 0.041096
+          },
+          {
+            "term": "and",
+            "tf": 2,
+            "weight": 0.027397
+          },
+          {
+            "term": "qdrant",
+            "tf": 2,
+            "weight": 0.027397
+          },
+          {
+            "term": "core",
+            "tf": 2,
+            "weight": 0.027397
+          },
+          {
+            "term": "classes",
+            "tf": 2,
+            "weight": 0.027397
+          },
+          {
+            "term": "refresh",
+            "tf": 2,
+            "weight": 0.027397
+          },
+          {
+            "term": "conclusion",
+            "tf": 1,
+            "weight": 0.013699
+          },
+          {
+            "term": "parallel",
+            "tf": 1,
+            "weight": 0.013699
+          },
+          {
+            "term": "processing",
+            "tf": 1,
+            "weight": 0.013699
+          },
+          {
+            "term": "system",
+            "tf": 1,
+            "weight": 0.013699
+          },
+          {
+            "term": "provides",
+            "tf": 1,
+            "weight": 0.013699
+          },
+          {
+            "term": "powerful",
+            "tf": 1,
+            "weight": 0.013699
+          },
+          {
+            "term": "mechanism",
+            "tf": 1,
+            "weight": 0.013699
+          },
+          {
+            "term": "scaling",
+            "tf": 1,
+            "weight": 0.013699
+          },
+          {
+            "term": "generation",
+            "tf": 1,
+            "weight": 0.013699
+          },
+          {
+            "term": "across",
+            "tf": 1,
+            "weight": 0.013699
+          }
+        ],
+        "unique_terms": 56,
+        "total_terms": 73
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Conclusion",
+        "and",
+        "classes",
+        "core",
+        "embedding",
+        "fastembed",
+        "for",
+        "management",
+        "model",
+        "qdrant",
+        "refresh"
+      ],
+      "quality_fallback": true,
+      "quality_notes": "Promoted via relaxed thresholds"
+    },
+    "advanced_scores": {
+      "semantic": 0.2716239392757416,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.7426315789473684,
+      "overall": 0.6380851727410367
+    }
+  },
+  {
+    "text": "# Parallel Processing  Relevant source files  - [fastembed/common/onnx\\_model.py](https://github.com/qdrant/fastembed/blob/b785640b/fastembed/common/onnx_model.py) - [fastembed/parallel\\_processor.py](https://github.com/qdrant/fastembed/blob/b785640b/fastembed/parallel_processor.py) - [fastembed/rerank/cross\\_encoder/onnx\\_text\\_model.py](https://github.com/qdrant/fastembed/blob/b785640b/fastembed/rerank/cross_encoder/onnx_text_model.py) - [fastembed/text/onnx\\_embedding.py](https://github.com/qdrant/fastembed/blob/b785640b/fastembed/text/onnx_embedding.py)  FastEmbed provides a robust parallel processing system that enables efficient generation of embeddings for large datasets by distributing workloads across multiple CPU cores or GPU devices. This system significantly improves throughput when processing large batches of documents or images. For information about the general architecture of FastEmbed, see [Architecture](qdrant/fastembed/4-architecture.md), and for details on ONNX integration, see [ONNX Runtime Integration](qdrant/fastembed/4.2-onnx-runtime-integration.md).",
+    "metadata": {
+      "chunk_id": "5bf7fe1db9d3-0000",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_fastembed\\_qdrant_fastembed_4.3-parallel-processing.md",
+      "filename": "_qdrant_fastembed_4.3-parallel-processing.md",
+      "file_extension": ".md",
+      "chunk_index": 0,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Parallel Processing"
+      ],
+      "heading_text": "Parallel Processing",
+      "token_count": 252,
+      "char_count": 1090,
+      "start_char": 0,
+      "end_char": 1090,
+      "semantic_score": 0.38222917914390564,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5324657534246575,
+      "chunking_strategy": "hierarchical_balanced",
+      "content_type": "hierarchical_section",
+      "embedding_model": "nomic-ai/CodeRankEmbed",
+      "processing_timestamp": "2025-10-19T15:34:30.071066",
+      "document_id": "5bf7fe1db9d3",
+      "document_name": "_qdrant_fastembed_4.3-parallel-processing",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_fastembed\\_qdrant_fastembed_4.3-parallel-processing.md",
+      "source_filename": "_qdrant_fastembed_4.3-parallel-processing.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_fastembed",
+      "relative_path": "Docs\\qdrant_ecosystem\\qdrant_fastembed\\_qdrant_fastembed_4.3-parallel-processing.md",
+      "hierarchy_path": "Parallel Processing",
+      "chunk_hash": "1c323d7b941f26d6",
+      "content_digest": "1c323d7b941f26d6",
+      "chunk_length": 1090,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "fastembed",
+          "onnx",
+          "qdrant",
+          "parallel",
+          "model",
+          "https",
+          "github",
+          "com",
+          "blob",
+          "b785640b",
+          "text",
+          "processing",
+          "for",
+          "architecture",
+          "integration",
+          "common",
+          "processor",
+          "rerank",
+          "cross",
+          "encoder"
+        ],
+        "term_weights": [
+          {
+            "term": "fastembed",
+            "tf": 16,
+            "weight": 0.125
+          },
+          {
+            "term": "onnx",
+            "tf": 9,
+            "weight": 0.070312
+          },
+          {
+            "term": "qdrant",
+            "tf": 6,
+            "weight": 0.046875
+          },
+          {
+            "term": "parallel",
+            "tf": 4,
+            "weight": 0.03125
+          },
+          {
+            "term": "model",
+            "tf": 4,
+            "weight": 0.03125
+          },
+          {
+            "term": "https",
+            "tf": 4,
+            "weight": 0.03125
+          },
+          {
+            "term": "github",
+            "tf": 4,
+            "weight": 0.03125
+          },
+          {
+            "term": "com",
+            "tf": 4,
+            "weight": 0.03125
+          },
+          {
+            "term": "blob",
+            "tf": 4,
+            "weight": 0.03125
+          },
+          {
+            "term": "b785640b",
+            "tf": 4,
+            "weight": 0.03125
+          },
+          {
+            "term": "text",
+            "tf": 4,
+            "weight": 0.03125
+          },
+          {
+            "term": "processing",
+            "tf": 3,
+            "weight": 0.023438
+          },
+          {
+            "term": "for",
+            "tf": 3,
+            "weight": 0.023438
+          },
+          {
+            "term": "architecture",
+            "tf": 3,
+            "weight": 0.023438
+          },
+          {
+            "term": "integration",
+            "tf": 3,
+            "weight": 0.023438
+          },
+          {
+            "term": "common",
+            "tf": 2,
+            "weight": 0.015625
+          },
+          {
+            "term": "processor",
+            "tf": 2,
+            "weight": 0.015625
+          },
+          {
+            "term": "rerank",
+            "tf": 2,
+            "weight": 0.015625
+          },
+          {
+            "term": "cross",
+            "tf": 2,
+            "weight": 0.015625
+          },
+          {
+            "term": "encoder",
+            "tf": 2,
+            "weight": 0.015625
+          }
+        ],
+        "unique_terms": 58,
+        "total_terms": 128
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Parallel Processing",
+        "b785640b",
+        "blob",
+        "com",
+        "fastembed",
+        "github",
+        "https",
+        "model",
+        "onnx",
+        "parallel",
+        "qdrant"
+      ],
+      "quality_fallback": true,
+      "quality_notes": "Promoted via relaxed thresholds"
+    },
+    "advanced_scores": {
+      "semantic": 0.38222917914390564,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5324657534246575,
+      "overall": 0.6048983108561877
+    }
+  },
+  {
+    "text": "## Parallel Processing Architecture  FastEmbed's parallel processing is implemented through a worker pool architecture that manages multiple processes, each running its own instance of an embedding model. The core of this system is the `ParallelWorkerPool` class, which handles process creation, workload distribution, and result collection. ``` ``` Sources: [fastembed/parallel\\_processor.py91-253](https://github.com/qdrant/fastembed/blob/b785640b/fastembed/parallel_processor.py#L91-L253) [fastembed/text/onnx\\_embedding.py260-292](https://github.com/qdrant/fastembed/blob/b785640b/fastembed/text/onnx_embedding.py#L260-L292)",
+    "metadata": {
+      "chunk_id": "5bf7fe1db9d3-0001",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_fastembed\\_qdrant_fastembed_4.3-parallel-processing.md",
+      "filename": "_qdrant_fastembed_4.3-parallel-processing.md",
+      "file_extension": ".md",
+      "chunk_index": 1,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Parallel Processing Architecture"
+      ],
+      "heading_text": "Parallel Processing Architecture",
+      "token_count": 140,
+      "char_count": 628,
+      "start_char": 0,
+      "end_char": 628,
+      "semantic_score": 0.34545373916625977,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.548,
+      "chunking_strategy": "hierarchical_balanced",
+      "content_type": "hierarchical_section",
+      "embedding_model": "nomic-ai/CodeRankEmbed",
+      "processing_timestamp": "2025-10-19T15:34:30.071551",
+      "document_id": "5bf7fe1db9d3",
+      "document_name": "_qdrant_fastembed_4.3-parallel-processing",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_fastembed\\_qdrant_fastembed_4.3-parallel-processing.md",
+      "source_filename": "_qdrant_fastembed_4.3-parallel-processing.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_fastembed",
+      "relative_path": "Docs\\qdrant_ecosystem\\qdrant_fastembed\\_qdrant_fastembed_4.3-parallel-processing.md",
+      "hierarchy_path": "Parallel Processing Architecture",
+      "chunk_hash": "b8ec00e558caefa3",
+      "content_digest": "b8ec00e558caefa3",
+      "chunk_length": 628,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "fastembed",
+          "parallel",
+          "embedding",
+          "processing",
+          "architecture",
+          "the",
+          "processor",
+          "https",
+          "github",
+          "com",
+          "qdrant",
+          "blob",
+          "b785640b",
+          "text",
+          "onnx",
+          "implemented",
+          "through",
+          "worker",
+          "pool",
+          "that"
+        ],
+        "term_weights": [
+          {
+            "term": "fastembed",
+            "tf": 7,
+            "weight": 0.093333
+          },
+          {
+            "term": "parallel",
+            "tf": 4,
+            "weight": 0.053333
+          },
+          {
+            "term": "embedding",
+            "tf": 3,
+            "weight": 0.04
+          },
+          {
+            "term": "processing",
+            "tf": 2,
+            "weight": 0.026667
+          },
+          {
+            "term": "architecture",
+            "tf": 2,
+            "weight": 0.026667
+          },
+          {
+            "term": "the",
+            "tf": 2,
+            "weight": 0.026667
+          },
+          {
+            "term": "processor",
+            "tf": 2,
+            "weight": 0.026667
+          },
+          {
+            "term": "https",
+            "tf": 2,
+            "weight": 0.026667
+          },
+          {
+            "term": "github",
+            "tf": 2,
+            "weight": 0.026667
+          },
+          {
+            "term": "com",
+            "tf": 2,
+            "weight": 0.026667
+          },
+          {
+            "term": "qdrant",
+            "tf": 2,
+            "weight": 0.026667
+          },
+          {
+            "term": "blob",
+            "tf": 2,
+            "weight": 0.026667
+          },
+          {
+            "term": "b785640b",
+            "tf": 2,
+            "weight": 0.026667
+          },
+          {
+            "term": "text",
+            "tf": 2,
+            "weight": 0.026667
+          },
+          {
+            "term": "onnx",
+            "tf": 2,
+            "weight": 0.026667
+          },
+          {
+            "term": "implemented",
+            "tf": 1,
+            "weight": 0.013333
+          },
+          {
+            "term": "through",
+            "tf": 1,
+            "weight": 0.013333
+          },
+          {
+            "term": "worker",
+            "tf": 1,
+            "weight": 0.013333
+          },
+          {
+            "term": "pool",
+            "tf": 1,
+            "weight": 0.013333
+          },
+          {
+            "term": "that",
+            "tf": 1,
+            "weight": 0.013333
+          }
+        ],
+        "unique_terms": 52,
+        "total_terms": 75
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Parallel Processing Architecture",
+        "architecture",
+        "com",
+        "embedding",
+        "fastembed",
+        "github",
+        "https",
+        "parallel",
+        "processing",
+        "processor",
+        "the"
+      ],
+      "quality_fallback": true,
+      "quality_notes": "Promoted via relaxed thresholds"
+    },
+    "advanced_scores": {
+      "semantic": 0.34545373916625977,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.548,
+      "overall": 0.5978179130554199
+    }
+  }
+]

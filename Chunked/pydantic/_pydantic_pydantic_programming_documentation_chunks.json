@@ -1,0 +1,771 @@
+[
+  {
+    "text": "## Field and Configuration System",
+    "metadata": {
+      "chunk_id": "4b1b37699e58-0010",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\pydantic\\_pydantic_pydantic.md",
+      "filename": "_pydantic_pydantic.md",
+      "file_extension": ".md",
+      "chunk_index": 10,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Field and Configuration System"
+      ],
+      "heading_text": "Field and Configuration System",
+      "token_count": 5,
+      "char_count": 33,
+      "start_char": 0,
+      "end_char": 33,
+      "semantic_score": 0.8,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.59,
+      "chunking_strategy": "hybrid_adaptive",
+      "content_type": "hierarchical_section",
+      "embedding_model": "nomic-ai/CodeRankEmbed",
+      "processing_timestamp": "2025-10-19T14:59:47.945627",
+      "document_id": "4b1b37699e58",
+      "document_name": "_pydantic_pydantic",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\pydantic\\_pydantic_pydantic.md",
+      "source_filename": "_pydantic_pydantic.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\pydantic",
+      "relative_path": "Docs\\pydantic\\_pydantic_pydantic.md",
+      "hierarchy_path": "Field and Configuration System",
+      "chunk_hash": "2a2a4883c821a3e6",
+      "content_digest": "2a2a4883c821a3e6",
+      "chunk_length": 33,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "field",
+          "and",
+          "configuration",
+          "system"
+        ],
+        "term_weights": [
+          {
+            "term": "field",
+            "tf": 1,
+            "weight": 0.25
+          },
+          {
+            "term": "and",
+            "tf": 1,
+            "weight": 0.25
+          },
+          {
+            "term": "configuration",
+            "tf": 1,
+            "weight": 0.25
+          },
+          {
+            "term": "system",
+            "tf": 1,
+            "weight": 0.25
+          }
+        ],
+        "unique_terms": 4,
+        "total_terms": 4
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Field and Configuration System",
+        "and",
+        "configuration",
+        "field",
+        "system"
+      ],
+      "quality_fallback": true,
+      "quality_notes": "Promoted via relaxed thresholds"
+    },
+    "advanced_scores": {
+      "semantic": 0.8,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.59,
+      "overall": 0.7633333333333333
+    }
+  },
+  {
+    "text": "## Model Lifecycle  The lifecycle of a Pydantic model class from definition to usage: ``` ``` Key lifecycle steps:  1. **Metaclass invocation:** `ModelMetaclass.__new__()` [pydantic/\\_internal/\\_model\\_construction.py80-276](https://github.com/pydantic/pydantic/blob/76ef0b08/pydantic/_internal/_model_construction.py#L80-L276) 2. **Namespace inspection:** `inspect_namespace()` identifies fields vs class vars [pydantic/\\_internal/\\_model\\_construction.py520-642](https://github.com/pydantic/pydantic/blob/76ef0b08/pydantic/_internal/_model_construction.py#L520-L642) 3. **Field collection:** `set_model_fields()` creates `FieldInfo` instances [pydantic/\\_internal/\\_model\\_construction.py299-331](https://github.com/pydantic/pydantic/blob/76ef0b08/pydantic/_internal/_model_construction.py#L299-L331) 4. **Schema generation:** `complete_model_class()` builds validation/serialization schemas [pydantic/\\_internal/\\_model\\_construction.py387-518](https://github.com/pydantic/pydantic/blob/76ef0b08/pydantic/_internal/_model_construction.py#L387-L518) 5. **Completion:** Model marked as complete in `__pydantic_complete__` [pydantic/main.py167-168](https://github.com/pydantic/pydantic/blob/76ef0b08/pydantic/main.py#L167-L168)  Models can be rebuilt after definition using `model_rebuild()` [pydantic/main.py593-650](https://github.com/pydantic/pydantic/blob/76ef0b08/pydantic/main.py#L593-L650) if forward references need resolution. **Sources:** [pydantic/\\_internal/\\_model\\_construction.py79-277](https://github.com/pydantic/pydantic/blob/76ef0b08/pydantic/_internal/_model_construction.py#L79-L277) [pydantic/\\_internal/\\_model\\_construction.py387-518](https://github.com/pydantic/pydantic/blob/76ef0b08/pydantic/_internal/_model_construction.py#L387-L518) [pydantic/main.py593-650](https://github.com/pydantic/pydantic/blob/76ef0b08/pydantic/main.py#L593-L650)",
+    "metadata": {
+      "chunk_id": "4b1b37699e58-0013",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\pydantic\\_pydantic_pydantic.md",
+      "filename": "_pydantic_pydantic.md",
+      "file_extension": ".md",
+      "chunk_index": 13,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Model Lifecycle"
+      ],
+      "heading_text": "Model Lifecycle",
+      "token_count": 547,
+      "char_count": 1867,
+      "start_char": 0,
+      "end_char": 1867,
+      "semantic_score": 0.33422917127609253,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.964935064935065,
+      "chunking_strategy": "hybrid_adaptive",
+      "content_type": "hierarchical_section",
+      "embedding_model": "nomic-ai/CodeRankEmbed",
+      "processing_timestamp": "2025-10-19T14:59:47.950037",
+      "document_id": "4b1b37699e58",
+      "document_name": "_pydantic_pydantic",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\pydantic\\_pydantic_pydantic.md",
+      "source_filename": "_pydantic_pydantic.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\pydantic",
+      "relative_path": "Docs\\pydantic\\_pydantic_pydantic.md",
+      "hierarchy_path": "Model Lifecycle",
+      "chunk_hash": "c7430783f853ea7f",
+      "content_digest": "c7430783f853ea7f",
+      "chunk_length": 1867,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "pydantic",
+          "model",
+          "internal",
+          "construction",
+          "https",
+          "github",
+          "com",
+          "blob",
+          "76ef0b08",
+          "main",
+          "lifecycle",
+          "class",
+          "complete",
+          "definition",
+          "namespace",
+          "fields",
+          "py387",
+          "518",
+          "l387",
+          "l518"
+        ],
+        "term_weights": [
+          {
+            "term": "pydantic",
+            "tf": 38,
+            "weight": 0.172727
+          },
+          {
+            "term": "model",
+            "tf": 18,
+            "weight": 0.081818
+          },
+          {
+            "term": "internal",
+            "tf": 12,
+            "weight": 0.054545
+          },
+          {
+            "term": "construction",
+            "tf": 12,
+            "weight": 0.054545
+          },
+          {
+            "term": "https",
+            "tf": 9,
+            "weight": 0.040909
+          },
+          {
+            "term": "github",
+            "tf": 9,
+            "weight": 0.040909
+          },
+          {
+            "term": "com",
+            "tf": 9,
+            "weight": 0.040909
+          },
+          {
+            "term": "blob",
+            "tf": 9,
+            "weight": 0.040909
+          },
+          {
+            "term": "76ef0b08",
+            "tf": 9,
+            "weight": 0.040909
+          },
+          {
+            "term": "main",
+            "tf": 6,
+            "weight": 0.027273
+          },
+          {
+            "term": "lifecycle",
+            "tf": 3,
+            "weight": 0.013636
+          },
+          {
+            "term": "class",
+            "tf": 3,
+            "weight": 0.013636
+          },
+          {
+            "term": "complete",
+            "tf": 3,
+            "weight": 0.013636
+          },
+          {
+            "term": "definition",
+            "tf": 2,
+            "weight": 0.009091
+          },
+          {
+            "term": "namespace",
+            "tf": 2,
+            "weight": 0.009091
+          },
+          {
+            "term": "fields",
+            "tf": 2,
+            "weight": 0.009091
+          },
+          {
+            "term": "py387",
+            "tf": 2,
+            "weight": 0.009091
+          },
+          {
+            "term": "518",
+            "tf": 2,
+            "weight": 0.009091
+          },
+          {
+            "term": "l387",
+            "tf": 2,
+            "weight": 0.009091
+          },
+          {
+            "term": "l518",
+            "tf": 2,
+            "weight": 0.009091
+          }
+        ],
+        "unique_terms": 82,
+        "total_terms": 220
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "76ef0b08",
+        "Model Lifecycle",
+        "blob",
+        "com",
+        "construction",
+        "github",
+        "https",
+        "internal",
+        "main",
+        "model",
+        "pydantic"
+      ],
+      "quality_fallback": true,
+      "quality_notes": "Promoted via relaxed thresholds"
+    },
+    "advanced_scores": {
+      "semantic": 0.33422917127609253,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.964935064935065,
+      "overall": 0.7330547454037192
+    }
+  },
+  {
+    "text": "## Main Workflows",
+    "metadata": {
+      "chunk_id": "4b1b37699e58-0006",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\pydantic\\_pydantic_pydantic.md",
+      "filename": "_pydantic_pydantic.md",
+      "file_extension": ".md",
+      "chunk_index": 6,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Main Workflows"
+      ],
+      "heading_text": "Main Workflows",
+      "token_count": 4,
+      "char_count": 17,
+      "start_char": 0,
+      "end_char": 17,
+      "semantic_score": 0.8,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.39,
+      "chunking_strategy": "hybrid_adaptive",
+      "content_type": "hierarchical_section",
+      "embedding_model": "nomic-ai/CodeRankEmbed",
+      "processing_timestamp": "2025-10-19T14:59:47.940963",
+      "document_id": "4b1b37699e58",
+      "document_name": "_pydantic_pydantic",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\pydantic\\_pydantic_pydantic.md",
+      "source_filename": "_pydantic_pydantic.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\pydantic",
+      "relative_path": "Docs\\pydantic\\_pydantic_pydantic.md",
+      "hierarchy_path": "Main Workflows",
+      "chunk_hash": "0c7d61a240f122cb",
+      "content_digest": "0c7d61a240f122cb",
+      "chunk_length": 17,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "main",
+          "workflows"
+        ],
+        "term_weights": [
+          {
+            "term": "main",
+            "tf": 1,
+            "weight": 0.5
+          },
+          {
+            "term": "workflows",
+            "tf": 1,
+            "weight": 0.5
+          }
+        ],
+        "unique_terms": 2,
+        "total_terms": 2
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Main Workflows",
+        "main",
+        "workflows"
+      ],
+      "quality_fallback": true,
+      "quality_notes": "Promoted via relaxed thresholds"
+    },
+    "advanced_scores": {
+      "semantic": 0.8,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.39,
+      "overall": 0.6966666666666667
+    }
+  },
+  {
+    "text": "## Core Architecture  Pydantic's architecture consists of three main layers: user-facing APIs, schema generation, and the validation/serialization engine.",
+    "metadata": {
+      "chunk_id": "4b1b37699e58-0002",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\pydantic\\_pydantic_pydantic.md",
+      "filename": "_pydantic_pydantic.md",
+      "file_extension": ".md",
+      "chunk_index": 2,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Core Architecture"
+      ],
+      "heading_text": "Core Architecture",
+      "token_count": 29,
+      "char_count": 154,
+      "start_char": 0,
+      "end_char": 154,
+      "semantic_score": 0.8,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.3733333333333333,
+      "chunking_strategy": "hybrid_adaptive",
+      "content_type": "hierarchical_section",
+      "embedding_model": "nomic-ai/CodeRankEmbed",
+      "processing_timestamp": "2025-10-19T14:59:47.937055",
+      "document_id": "4b1b37699e58",
+      "document_name": "_pydantic_pydantic",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\pydantic\\_pydantic_pydantic.md",
+      "source_filename": "_pydantic_pydantic.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\pydantic",
+      "relative_path": "Docs\\pydantic\\_pydantic_pydantic.md",
+      "hierarchy_path": "Core Architecture",
+      "chunk_hash": "b49c8650fea04a23",
+      "content_digest": "b49c8650fea04a23",
+      "chunk_length": 154,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "architecture",
+          "core",
+          "pydantic",
+          "consists",
+          "three",
+          "main",
+          "layers",
+          "user",
+          "facing",
+          "apis",
+          "schema",
+          "generation",
+          "and",
+          "the",
+          "validation",
+          "serialization",
+          "engine"
+        ],
+        "term_weights": [
+          {
+            "term": "architecture",
+            "tf": 2,
+            "weight": 0.111111
+          },
+          {
+            "term": "core",
+            "tf": 1,
+            "weight": 0.055556
+          },
+          {
+            "term": "pydantic",
+            "tf": 1,
+            "weight": 0.055556
+          },
+          {
+            "term": "consists",
+            "tf": 1,
+            "weight": 0.055556
+          },
+          {
+            "term": "three",
+            "tf": 1,
+            "weight": 0.055556
+          },
+          {
+            "term": "main",
+            "tf": 1,
+            "weight": 0.055556
+          },
+          {
+            "term": "layers",
+            "tf": 1,
+            "weight": 0.055556
+          },
+          {
+            "term": "user",
+            "tf": 1,
+            "weight": 0.055556
+          },
+          {
+            "term": "facing",
+            "tf": 1,
+            "weight": 0.055556
+          },
+          {
+            "term": "apis",
+            "tf": 1,
+            "weight": 0.055556
+          },
+          {
+            "term": "schema",
+            "tf": 1,
+            "weight": 0.055556
+          },
+          {
+            "term": "generation",
+            "tf": 1,
+            "weight": 0.055556
+          },
+          {
+            "term": "and",
+            "tf": 1,
+            "weight": 0.055556
+          },
+          {
+            "term": "the",
+            "tf": 1,
+            "weight": 0.055556
+          },
+          {
+            "term": "validation",
+            "tf": 1,
+            "weight": 0.055556
+          },
+          {
+            "term": "serialization",
+            "tf": 1,
+            "weight": 0.055556
+          },
+          {
+            "term": "engine",
+            "tf": 1,
+            "weight": 0.055556
+          }
+        ],
+        "unique_terms": 17,
+        "total_terms": 18
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Core Architecture",
+        "apis",
+        "architecture",
+        "consists",
+        "core",
+        "facing",
+        "layers",
+        "main",
+        "pydantic",
+        "three",
+        "user"
+      ],
+      "quality_fallback": true,
+      "quality_notes": "Promoted via relaxed thresholds"
+    },
+    "advanced_scores": {
+      "semantic": 0.8,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.3733333333333333,
+      "overall": 0.6911111111111111
+    }
+  },
+  {
+    "text": "# Overview  Relevant source files  - [.pre-commit-config.yaml](https://github.com/pydantic/pydantic/blob/76ef0b08/.pre-commit-config.yaml) - [CITATION.cff](https://github.com/pydantic/pydantic/blob/76ef0b08/CITATION.cff) - [HISTORY.md](https://github.com/pydantic/pydantic/blob/76ef0b08/HISTORY.md) - [docs/concepts/config.md](https://github.com/pydantic/pydantic/blob/76ef0b08/docs/concepts/config.md) - [docs/concepts/dataclasses.md](https://github.com/pydantic/pydantic/blob/76ef0b08/docs/concepts/dataclasses.md) - [docs/concepts/json.md](https://github.com/pydantic/pydantic/blob/76ef0b08/docs/concepts/json.md) - [docs/concepts/json\\_schema.md](https://github.com/pydantic/pydantic/blob/76ef0b08/docs/concepts/json_schema.md) - [docs/concepts/models.md](https://github.com/pydantic/pydantic/blob/76ef0b08/docs/concepts/models.md) - [docs/concepts/performance.md](https://github.com/pydantic/pydantic/blob/76ef0b08/docs/concepts/performance.md) - [docs/concepts/serialization.md](https://github.com/pydantic/pydantic/blob/76ef0b08/docs/concepts/serialization.md) - [docs/concepts/validators.md](https://github.com/pydantic/pydantic/blob/76ef0b08/docs/concepts/validators.md) - [docs/contributing.md](https://github.com/pydantic/pydantic/blob/76ef0b08/docs/contributing.md) - [docs/examples/custom\\_validators.md](https://github.com/pydantic/pydantic/blob/76ef0b08/docs/examples/custom_validators.md) - [docs/integrations/aws\\_lambda.md](https://github.com/pydantic/pydantic/blob/76ef0b08/docs/integrations/aws_lambda.md) - [docs/integrations/llms.md](https://github.com/pydantic/pydantic/blob/76ef0b08/docs/integrations/llms.md) - [docs/migration.md](https://github.com/pydantic/pydantic/blob/76ef0b08/docs/migration.md) - [pydantic/\\_internal/\\_model\\_construction.py](https://github.com/pydantic/pydantic/blob/76ef0b08/pydantic/_internal/_model_construction.py) - [pydantic/fields.py](https://github.com/pydantic/pydantic/blob/76ef0b08/pydantic/fields.py) - [pydantic/main.py](https://github.com/pydantic/pydantic/blob/76ef0b08/pydantic/main.py) - [pydantic/version.py](https://github.com/pydantic/pydantic/blob/76ef0b08/pydantic/version.py) - [release/README.md](https://github.com/pydantic/pydantic/blob/76ef0b08/release/README.md) - [tests/test\\_create\\_model.py](https://github.com/pydantic/pydantic/blob/76ef0b08/tests/test_create_model.py) - [tests/test\\_edge\\_cases.py](https://github.com/pydantic/pydantic/blob/76ef0b08/tests/test_edge_cases.py) - [tests/test\\_main.py](https://github.com/pydantic/pydantic/blob/76ef0b08/tests/test_main.py) - [tests/test\\_private\\_attributes.py](https://github.com/pydantic/pydantic/blob/76ef0b08/tests/test_private_attributes.py) - [uv.lock](https://github.com/pydantic/pydantic/blob/76ef0b08/uv.lock)  This document provides a high-level introduction to Pydantic's architecture, core concepts, and design philosophy. It explains what Pydantic is, its relationship with pydantic-core, and how the major systems interact. For detailed information about specific subsystems, see:  - Model system details: [Core Model System](pydantic/pydantic/2-core-model-system.md) - Type system details: [Type System](pydantic/pydantic/3-type-system.md) - Validation and serialization: [Validation and Serialization](pydantic/pydantic/4-validation-and-serialization.md) - Schema generation: [Schema Generation](pydantic/pydantic/5-schema-generation.md)",
+    "metadata": {
+      "chunk_id": "4b1b37699e58-0000",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\pydantic\\_pydantic_pydantic.md",
+      "filename": "_pydantic_pydantic.md",
+      "file_extension": ".md",
+      "chunk_index": 0,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Overview"
+      ],
+      "heading_text": "Overview",
+      "token_count": 986,
+      "char_count": 3386,
+      "start_char": 0,
+      "end_char": 3386,
+      "semantic_score": 0.23090699315071106,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.9110169491525424,
+      "chunking_strategy": "hybrid_adaptive",
+      "content_type": "hierarchical_section",
+      "embedding_model": "nomic-ai/CodeRankEmbed",
+      "processing_timestamp": "2025-10-19T14:59:47.933680",
+      "document_id": "4b1b37699e58",
+      "document_name": "_pydantic_pydantic",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\pydantic\\_pydantic_pydantic.md",
+      "source_filename": "_pydantic_pydantic.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\pydantic",
+      "relative_path": "Docs\\pydantic\\_pydantic_pydantic.md",
+      "hierarchy_path": "Overview",
+      "chunk_hash": "9066f13aa40f17c1",
+      "content_digest": "9066f13aa40f17c1",
+      "chunk_length": 3386,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "pydantic",
+          "https",
+          "github",
+          "com",
+          "blob",
+          "76ef0b08",
+          "docs",
+          "concepts",
+          "tests",
+          "test",
+          "model",
+          "system",
+          "schema",
+          "serialization",
+          "and",
+          "config",
+          "json",
+          "validators",
+          "integrations",
+          "main"
+        ],
+        "term_weights": [
+          {
+            "term": "pydantic",
+            "tf": 71,
+            "weight": 0.173594
+          },
+          {
+            "term": "https",
+            "tf": 26,
+            "weight": 0.06357
+          },
+          {
+            "term": "github",
+            "tf": 26,
+            "weight": 0.06357
+          },
+          {
+            "term": "com",
+            "tf": 26,
+            "weight": 0.06357
+          },
+          {
+            "term": "blob",
+            "tf": 26,
+            "weight": 0.06357
+          },
+          {
+            "term": "76ef0b08",
+            "tf": 26,
+            "weight": 0.06357
+          },
+          {
+            "term": "docs",
+            "tf": 26,
+            "weight": 0.06357
+          },
+          {
+            "term": "concepts",
+            "tf": 17,
+            "weight": 0.041565
+          },
+          {
+            "term": "tests",
+            "tf": 8,
+            "weight": 0.01956
+          },
+          {
+            "term": "test",
+            "tf": 8,
+            "weight": 0.01956
+          },
+          {
+            "term": "model",
+            "tf": 7,
+            "weight": 0.017115
+          },
+          {
+            "term": "system",
+            "tf": 6,
+            "weight": 0.01467
+          },
+          {
+            "term": "schema",
+            "tf": 5,
+            "weight": 0.012225
+          },
+          {
+            "term": "serialization",
+            "tf": 5,
+            "weight": 0.012225
+          },
+          {
+            "term": "and",
+            "tf": 5,
+            "weight": 0.012225
+          },
+          {
+            "term": "config",
+            "tf": 4,
+            "weight": 0.00978
+          },
+          {
+            "term": "json",
+            "tf": 4,
+            "weight": 0.00978
+          },
+          {
+            "term": "validators",
+            "tf": 4,
+            "weight": 0.00978
+          },
+          {
+            "term": "integrations",
+            "tf": 4,
+            "weight": 0.00978
+          },
+          {
+            "term": "main",
+            "tf": 4,
+            "weight": 0.00978
+          }
+        ],
+        "unique_terms": 83,
+        "total_terms": 409
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "76ef0b08",
+        "Overview",
+        "blob",
+        "com",
+        "concepts",
+        "docs",
+        "github",
+        "https",
+        "pydantic",
+        "test",
+        "tests"
+      ],
+      "quality_fallback": true,
+      "quality_notes": "Promoted via relaxed thresholds"
+    },
+    "advanced_scores": {
+      "semantic": 0.23090699315071106,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.9110169491525424,
+      "overall": 0.6806413141010844
+    }
+  }
+]

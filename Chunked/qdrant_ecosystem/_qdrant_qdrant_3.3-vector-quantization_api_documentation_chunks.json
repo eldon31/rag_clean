@@ -1,0 +1,1007 @@
+[
+  {
+    "text": "# Vector Quantization  Relevant source files  - [Cargo.lock](https://github.com/qdrant/qdrant/blob/48203e41/Cargo.lock) - [Cargo.toml](https://github.com/qdrant/qdrant/blob/48203e41/Cargo.toml) - [docs/redoc/default\\_version.js](https://github.com/qdrant/qdrant/blob/48203e41/docs/redoc/default_version.js) - [docs/redoc/index.html](https://github.com/qdrant/qdrant/blob/48203e41/docs/redoc/index.html) - [docs/redoc/v0.10.3/openapi.json](https://github.com/qdrant/qdrant/blob/48203e41/docs/redoc/v0.10.3/openapi.json) - [docs/redoc/v0.10.4/openapi.json](https://github.com/qdrant/qdrant/blob/48203e41/docs/redoc/v0.10.4/openapi.json) - [docs/redoc/v0.10.5/openapi.json](https://github.com/qdrant/qdrant/blob/48203e41/docs/redoc/v0.10.5/openapi.json) - [docs/redoc/v1.10.x/openapi.json](https://github.com/qdrant/qdrant/blob/48203e41/docs/redoc/v1.10.x/openapi.json) - [docs/redoc/v1.11.x/openapi.json](https://github.com/qdrant/qdrant/blob/48203e41/docs/redoc/v1.11.x/openapi.json) - [docs/redoc/v1.13.x/openapi.json](https://github.com/qdrant/qdrant/blob/48203e41/docs/redoc/v1.13.x/openapi.json) - [docs/redoc/v1.15.x/openapi.json](https://github.com/qdrant/qdrant/blob/48203e41/docs/redoc/v1.15.x/openapi.json) - [lib/api/Cargo.toml](https://github.com/qdrant/qdrant/blob/48203e41/lib/api/Cargo.toml) - [lib/collection/Cargo.toml](https://github.com/qdrant/qdrant/blob/48203e41/lib/collection/Cargo.toml) - [lib/common/common/src/defaults.rs](https://github.com/qdrant/qdrant/blob/48203e41/lib/common/common/src/defaults.rs) - [lib/common/dataset/Cargo.toml](https://github.com/qdrant/qdrant/blob/48203e41/lib/common/dataset/Cargo.toml) - [lib/common/io/src/file\\_operations.rs](https://github.com/qdrant/qdrant/blob/48203e41/lib/common/io/src/file_operations.rs) - [lib/common/issues/Cargo.toml](https://github.com/qdrant/qdrant/blob/48203e41/lib/common/issues/Cargo.toml) - [lib/segment/Cargo.toml](https://github.com/qdrant/qdrant/blob/48203e41/lib/segment/Cargo.toml) - [lib/segment/benches/hnsw\\_build\\_asymptotic.rs](https://github.com/qdrant/qdrant/blob/48203e41/lib/segment/benches/hnsw_build_asymptotic.rs) - [lib/segment/benches/hnsw\\_build\\_graph.rs](https://github.com/qdrant/qdrant/blob/48203e41/lib/segment/benches/hnsw_build_graph.rs) - [lib/segment/benches/hnsw\\_search\\_graph.rs](https://github.com/qdrant/qdrant/blob/48203e41/lib/segment/benches/hnsw_search_graph.rs) - [lib/segment/src/index/hnsw\\_index/graph\\_layers.rs](https://github.com/qdrant/qdrant/blob/48203e41/lib/segment/src/index/hnsw_index/graph_layers.rs) - [lib/segment/src/index/hnsw\\_index/graph\\_layers\\_builder.rs](https://github.com/qdrant/qdrant/blob/48203e41/lib/segment/src/index/hnsw_index/graph_layers_builder.rs) - [lib/segment/src/index/hnsw\\_index/graph\\_links.rs](https://github.com/qdrant/qdrant/blob/48203e41/lib/segment/src/index/hnsw_index/graph_links.rs) - [lib/segment/src/index/hnsw\\_index/graph\\_links/header.rs](https://github.com/qdrant/qdrant/blob/48203e41/lib/segment/src/index/hnsw_index/graph_links/header.rs) - [lib/segment/src/index/hnsw\\_index/graph\\_links/serializer.rs](https://github.com/qdrant/qdrant/blob/48203e41/lib/segment/src/index/hnsw_index/graph_links/serializer.rs) - [lib/segment/src/index/hnsw\\_index/graph\\_links/view.rs](https://github.com/qdrant/qdrant/blob/48203e41/lib/segment/src/index/hnsw_index/graph_links/view.rs) - [lib/segment/src/index/hnsw\\_index/hnsw.rs](https://github.com/qdrant/qdrant/blob/48203e41/lib/segment/src/index/hnsw_index/hnsw.rs) - [lib/segment/src/index/hnsw\\_index/tests/mod.rs](https://github.com/qdrant/qdrant/blob/48203e41/lib/segment/src/index/hnsw_index/tests/mod.rs) - [lib/segment/src/index/hnsw\\_index/tests/test\\_compact\\_graph\\_layer.rs](https://github.com/qdrant/qdrant/blob/48203e41/lib/segment/src/index/hnsw_index/tests/test_compact_graph_layer.rs) - [lib/sparse/Cargo.toml](https://github.com/qdrant/qdrant/blob/48203e41/lib/sparse/Cargo.toml) - [lib/storage/Cargo.toml](https://github.com/qdrant/qdrant/blob/48203e41/lib/storage/Cargo.toml) - [tools/missed\\_cherry\\_picks.sh](https://github.com/qdrant/qdrant/blob/48203e41/tools/missed_cherry_picks.sh)  Vector quantization in Qdrant provides memory optimization techniques that reduce the storage footprint of high-dimensional vectors while maintaining search accuracy. This system supports multiple quantization methods including scalar quantization, product quantization, and binary quantization, with both in-memory and memory-mapped storage options.",
+    "metadata": {
+      "chunk_id": "e2b5b8fe5475-0000",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_3.3-vector-quantization.md",
+      "filename": "_qdrant_qdrant_3.3-vector-quantization.md",
+      "file_extension": ".md",
+      "chunk_index": 0,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Vector Quantization"
+      ],
+      "heading_text": "Vector Quantization",
+      "token_count": 1405,
+      "char_count": 4484,
+      "start_char": 0,
+      "end_char": 4484,
+      "semantic_score": 0.2921142578125,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.6964601769911505,
+      "chunking_strategy": "hierarchical_precise",
+      "content_type": "hierarchical_section",
+      "embedding_model": "nomic-ai/CodeRankEmbed",
+      "processing_timestamp": "2025-10-19T15:41:56.111851",
+      "document_id": "e2b5b8fe5475",
+      "document_name": "_qdrant_qdrant_3.3-vector-quantization",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_3.3-vector-quantization.md",
+      "source_filename": "_qdrant_qdrant_3.3-vector-quantization.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant",
+      "relative_path": "Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_3.3-vector-quantization.md",
+      "hierarchy_path": "Vector Quantization",
+      "chunk_hash": "60f57a644c2f2343",
+      "content_digest": "60f57a644c2f2343",
+      "chunk_length": 4484,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "qdrant",
+          "lib",
+          "index",
+          "https",
+          "github",
+          "com",
+          "blob",
+          "48203e41",
+          "segment",
+          "hnsw",
+          "src",
+          "cargo",
+          "docs",
+          "redoc",
+          "graph",
+          "toml",
+          "openapi",
+          "json",
+          "common",
+          "links"
+        ],
+        "term_weights": [
+          {
+            "term": "qdrant",
+            "tf": 67,
+            "weight": 0.105181
+          },
+          {
+            "term": "lib",
+            "tf": 42,
+            "weight": 0.065934
+          },
+          {
+            "term": "index",
+            "tf": 38,
+            "weight": 0.059655
+          },
+          {
+            "term": "https",
+            "tf": 33,
+            "weight": 0.051805
+          },
+          {
+            "term": "github",
+            "tf": 33,
+            "weight": 0.051805
+          },
+          {
+            "term": "com",
+            "tf": 33,
+            "weight": 0.051805
+          },
+          {
+            "term": "blob",
+            "tf": 33,
+            "weight": 0.051805
+          },
+          {
+            "term": "48203e41",
+            "tf": 33,
+            "weight": 0.051805
+          },
+          {
+            "term": "segment",
+            "tf": 26,
+            "weight": 0.040816
+          },
+          {
+            "term": "hnsw",
+            "tf": 26,
+            "weight": 0.040816
+          },
+          {
+            "term": "src",
+            "tf": 22,
+            "weight": 0.034537
+          },
+          {
+            "term": "cargo",
+            "tf": 18,
+            "weight": 0.028257
+          },
+          {
+            "term": "docs",
+            "tf": 18,
+            "weight": 0.028257
+          },
+          {
+            "term": "redoc",
+            "tf": 18,
+            "weight": 0.028257
+          },
+          {
+            "term": "graph",
+            "tf": 18,
+            "weight": 0.028257
+          },
+          {
+            "term": "toml",
+            "tf": 16,
+            "weight": 0.025118
+          },
+          {
+            "term": "openapi",
+            "tf": 14,
+            "weight": 0.021978
+          },
+          {
+            "term": "json",
+            "tf": 14,
+            "weight": 0.021978
+          },
+          {
+            "term": "common",
+            "tf": 10,
+            "weight": 0.015699
+          },
+          {
+            "term": "links",
+            "tf": 8,
+            "weight": 0.012559
+          }
+        ],
+        "unique_terms": 84,
+        "total_terms": 637
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "48203e41",
+        "Vector Quantization",
+        "blob",
+        "com",
+        "github",
+        "hnsw",
+        "https",
+        "index",
+        "lib",
+        "qdrant",
+        "segment"
+      ],
+      "quality_fallback": true,
+      "quality_notes": "Promoted via relaxed thresholds"
+    },
+    "advanced_scores": {
+      "semantic": 0.2921142578125,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.6964601769911505,
+      "overall": 0.6295248116012168
+    }
+  },
+  {
+    "text": "## Query Processing and Scoring  The quantization system provides optimized query processing through the `raw_scorer()` and `raw_internal_scorer()` methods that create specialized scorers operating on quantized data: ``` ``` **QuantizedVectors RawScorer Interface**  Sources: [lib/segment/src/vector\\_storage/quantized/quantized\\_vectors.rs161-175](https://github.com/qdrant/qdrant/blob/48203e41/lib/segment/src/vector_storage/quantized/quantized_vectors.rs#L161-L175) [lib/segment/src/vector\\_storage/quantized/quantized\\_vectors.rs177-228](https://github.com/qdrant/qdrant/blob/48203e41/lib/segment/src/vector_storage/quantized/quantized_vectors.rs#L177-L228) [lib/segment/src/vector\\_storage/raw\\_scorer.rs31-43](https://github.com/qdrant/qdrant/blob/48203e41/lib/segment/src/vector_storage/raw_scorer.rs#L31-L43)",
+    "metadata": {
+      "chunk_id": "e2b5b8fe5475-0007",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_3.3-vector-quantization.md",
+      "filename": "_qdrant_qdrant_3.3-vector-quantization.md",
+      "file_extension": ".md",
+      "chunk_index": 7,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Query Processing and Scoring"
+      ],
+      "heading_text": "Query Processing and Scoring",
+      "token_count": 223,
+      "char_count": 816,
+      "start_char": 0,
+      "end_char": 816,
+      "semantic_score": 0.39815324544906616,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5471428571428572,
+      "chunking_strategy": "hierarchical_precise",
+      "content_type": "hierarchical_section",
+      "embedding_model": "nomic-ai/CodeRankEmbed",
+      "processing_timestamp": "2025-10-19T15:41:56.117426",
+      "document_id": "e2b5b8fe5475",
+      "document_name": "_qdrant_qdrant_3.3-vector-quantization",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_3.3-vector-quantization.md",
+      "source_filename": "_qdrant_qdrant_3.3-vector-quantization.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant",
+      "relative_path": "Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_3.3-vector-quantization.md",
+      "hierarchy_path": "Query Processing and Scoring",
+      "chunk_hash": "da2c290999b633ce",
+      "content_digest": "da2c290999b633ce",
+      "chunk_length": 816,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "quantized",
+          "lib",
+          "segment",
+          "src",
+          "vector",
+          "storage",
+          "qdrant",
+          "raw",
+          "scorer",
+          "vectors",
+          "https",
+          "github",
+          "com",
+          "blob",
+          "48203e41",
+          "query",
+          "processing",
+          "and",
+          "the",
+          "scoring"
+        ],
+        "term_weights": [
+          {
+            "term": "quantized",
+            "tf": 9,
+            "weight": 0.082569
+          },
+          {
+            "term": "lib",
+            "tf": 6,
+            "weight": 0.055046
+          },
+          {
+            "term": "segment",
+            "tf": 6,
+            "weight": 0.055046
+          },
+          {
+            "term": "src",
+            "tf": 6,
+            "weight": 0.055046
+          },
+          {
+            "term": "vector",
+            "tf": 6,
+            "weight": 0.055046
+          },
+          {
+            "term": "storage",
+            "tf": 6,
+            "weight": 0.055046
+          },
+          {
+            "term": "qdrant",
+            "tf": 6,
+            "weight": 0.055046
+          },
+          {
+            "term": "raw",
+            "tf": 4,
+            "weight": 0.036697
+          },
+          {
+            "term": "scorer",
+            "tf": 4,
+            "weight": 0.036697
+          },
+          {
+            "term": "vectors",
+            "tf": 4,
+            "weight": 0.036697
+          },
+          {
+            "term": "https",
+            "tf": 3,
+            "weight": 0.027523
+          },
+          {
+            "term": "github",
+            "tf": 3,
+            "weight": 0.027523
+          },
+          {
+            "term": "com",
+            "tf": 3,
+            "weight": 0.027523
+          },
+          {
+            "term": "blob",
+            "tf": 3,
+            "weight": 0.027523
+          },
+          {
+            "term": "48203e41",
+            "tf": 3,
+            "weight": 0.027523
+          },
+          {
+            "term": "query",
+            "tf": 2,
+            "weight": 0.018349
+          },
+          {
+            "term": "processing",
+            "tf": 2,
+            "weight": 0.018349
+          },
+          {
+            "term": "and",
+            "tf": 2,
+            "weight": 0.018349
+          },
+          {
+            "term": "the",
+            "tf": 2,
+            "weight": 0.018349
+          },
+          {
+            "term": "scoring",
+            "tf": 1,
+            "weight": 0.009174
+          }
+        ],
+        "unique_terms": 48,
+        "total_terms": 109
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Query Processing and Scoring",
+        "lib",
+        "qdrant",
+        "quantized",
+        "raw",
+        "scorer",
+        "segment",
+        "src",
+        "storage",
+        "vector",
+        "vectors"
+      ],
+      "quality_fallback": true,
+      "quality_notes": "Promoted via relaxed thresholds"
+    },
+    "advanced_scores": {
+      "semantic": 0.39815324544906616,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5471428571428572,
+      "overall": 0.6150987008639744
+    }
+  },
+  {
+    "text": "## Quantization Types and Storage Architecture  Qdrant implements three primary quantization methods through the `QuantizedVectorStorage` enum, each with distinct memory and accuracy trade-offs:  | Quantization Type     | Configuration               | Encoding            | Use Case                                   | | --------------------- | --------------------------- | ------------------- | ------------------------------------------ | | `ScalarQuantization`  | `ScalarQuantizationConfig`  | `EncodedVectorsU8`  | Uniform quantization to 8-bit integers     | | `ProductQuantization` | `ProductQuantizationConfig` | `EncodedVectorsPQ`  | Subspace quantization with codebooks       | | `BinaryQuantization`  | `BinaryQuantizationConfig`  | `EncodedVectorsBin` | Bit-level encoding for maximum compression | ``` ``` **QuantizedVectorStorage Architecture with Configuration Details**  Sources: [lib/segment/src/vector\\_storage/quantized/quantized\\_vectors.rs83-96](https://github.com/qdrant/qdrant/blob/48203e41/lib/segment/src/vector_storage/quantized/quantized_vectors.rs#L83-L96) [lib/segment/src/vector\\_storage/quantized/quantized\\_vectors.rs59-81](https://github.com/qdrant/qdrant/blob/48203e41/lib/segment/src/vector_storage/quantized/quantized_vectors.rs#L59-L81) [lib/segment/src/vector\\_storage/quantized/quantized\\_vectors.rs22-27](https://github.com/qdrant/qdrant/blob/48203e41/lib/segment/src/vector_storage/quantized/quantized_vectors.rs#L22-L27)",
+    "metadata": {
+      "chunk_id": "e2b5b8fe5475-0002",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_3.3-vector-quantization.md",
+      "filename": "_qdrant_qdrant_3.3-vector-quantization.md",
+      "file_extension": ".md",
+      "chunk_index": 2,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Quantization Types and Storage Architecture"
+      ],
+      "heading_text": "Quantization Types and Storage Architecture",
+      "token_count": 349,
+      "char_count": 1462,
+      "start_char": 0,
+      "end_char": 1462,
+      "semantic_score": 0.44939011335372925,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.49056956521739126,
+      "chunking_strategy": "hierarchical_precise",
+      "content_type": "hierarchical_section",
+      "embedding_model": "nomic-ai/CodeRankEmbed",
+      "processing_timestamp": "2025-10-19T15:41:56.113393",
+      "document_id": "e2b5b8fe5475",
+      "document_name": "_qdrant_qdrant_3.3-vector-quantization",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_3.3-vector-quantization.md",
+      "source_filename": "_qdrant_qdrant_3.3-vector-quantization.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant",
+      "relative_path": "Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_3.3-vector-quantization.md",
+      "hierarchy_path": "Quantization Types and Storage Architecture",
+      "chunk_hash": "c8c4881e4292699e",
+      "content_digest": "c8c4881e4292699e",
+      "chunk_length": 1462,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "quantized",
+          "storage",
+          "qdrant",
+          "lib",
+          "segment",
+          "src",
+          "vector",
+          "vectors",
+          "quantization",
+          "with",
+          "https",
+          "github",
+          "com",
+          "blob",
+          "48203e41",
+          "and",
+          "architecture",
+          "quantizedvectorstorage",
+          "configuration",
+          "encoding"
+        ],
+        "term_weights": [
+          {
+            "term": "quantized",
+            "tf": 12,
+            "weight": 0.088235
+          },
+          {
+            "term": "storage",
+            "tf": 7,
+            "weight": 0.051471
+          },
+          {
+            "term": "qdrant",
+            "tf": 7,
+            "weight": 0.051471
+          },
+          {
+            "term": "lib",
+            "tf": 6,
+            "weight": 0.044118
+          },
+          {
+            "term": "segment",
+            "tf": 6,
+            "weight": 0.044118
+          },
+          {
+            "term": "src",
+            "tf": 6,
+            "weight": 0.044118
+          },
+          {
+            "term": "vector",
+            "tf": 6,
+            "weight": 0.044118
+          },
+          {
+            "term": "vectors",
+            "tf": 6,
+            "weight": 0.044118
+          },
+          {
+            "term": "quantization",
+            "tf": 5,
+            "weight": 0.036765
+          },
+          {
+            "term": "with",
+            "tf": 3,
+            "weight": 0.022059
+          },
+          {
+            "term": "https",
+            "tf": 3,
+            "weight": 0.022059
+          },
+          {
+            "term": "github",
+            "tf": 3,
+            "weight": 0.022059
+          },
+          {
+            "term": "com",
+            "tf": 3,
+            "weight": 0.022059
+          },
+          {
+            "term": "blob",
+            "tf": 3,
+            "weight": 0.022059
+          },
+          {
+            "term": "48203e41",
+            "tf": 3,
+            "weight": 0.022059
+          },
+          {
+            "term": "and",
+            "tf": 2,
+            "weight": 0.014706
+          },
+          {
+            "term": "architecture",
+            "tf": 2,
+            "weight": 0.014706
+          },
+          {
+            "term": "quantizedvectorstorage",
+            "tf": 2,
+            "weight": 0.014706
+          },
+          {
+            "term": "configuration",
+            "tf": 2,
+            "weight": 0.014706
+          },
+          {
+            "term": "encoding",
+            "tf": 2,
+            "weight": 0.014706
+          }
+        ],
+        "unique_terms": 66,
+        "total_terms": 136
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Quantization Types and Storage Architecture",
+        "lib",
+        "qdrant",
+        "quantization",
+        "quantized",
+        "segment",
+        "src",
+        "storage",
+        "vector",
+        "vectors",
+        "with"
+      ],
+      "quality_fallback": true,
+      "quality_notes": "Promoted via relaxed thresholds"
+    },
+    "advanced_scores": {
+      "semantic": 0.44939011335372925,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.49056956521739126,
+      "overall": 0.6133198928570401
+    }
+  },
+  {
+    "text": "## Memory Management Strategies  Quantization supports both in-memory and memory-mapped storage determined by the `is_ram()` function and `VectorStorage::is_on_disk()` method:  | Storage Variant                | Condition                     | Backend Implementation               | | ------------------------------ | ----------------------------- | ------------------------------------ | | ScalarRam, PQRam, BinaryRam    | `is_ram() == true`            | `ChunkedVectors<T>`                  | | ScalarMmap, PQMmap, BinaryMmap | `is_ram() == false`           | `QuantizedMmapStorage`               | | Multi variants                 | Same logic as single variants | Includes `MultivectorOffsetsStorage` |  The `is_ram()` function determines storage type based on quantization configuration and source vector storage: ``` ``` Each quantization configuration includes an `always_ram` field that explicitly controls storage type, overriding the default behavior based on the source vector storage's `is_on_disk()` property. ``` ``` **Quantization Storage Selection Logic**  Sources: [lib/segment/src/vector\\_storage/quantized/quantized\\_vectors.rs732-734](https://github.com/qdrant/qdrant/blob/48203e41/lib/segment/src/vector_storage/quantized/quantized_vectors.rs#L732-L734) [lib/segment/src/vector\\_storage/quantized/quantized\\_vectors.rs580-622](https://github.com/qdrant/qdrant/blob/48203e41/lib/segment/src/vector_storage/quantized/quantized_vectors.rs#L580-L622) [lib/segment/src/vector\\_storage/vector\\_storage\\_base.rs48](https://github.com/qdrant/qdrant/blob/48203e41/lib/segment/src/vector_storage/vector_storage_base.rs#L48-L48)",
+    "metadata": {
+      "chunk_id": "e2b5b8fe5475-0008",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_3.3-vector-quantization.md",
+      "filename": "_qdrant_qdrant_3.3-vector-quantization.md",
+      "file_extension": ".md",
+      "chunk_index": 8,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Memory Management Strategies"
+      ],
+      "heading_text": "Memory Management Strategies",
+      "token_count": 371,
+      "char_count": 1638,
+      "start_char": 0,
+      "end_char": 1638,
+      "semantic_score": 0.4143725037574768,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5013,
+      "chunking_strategy": "hierarchical_precise",
+      "content_type": "hierarchical_section",
+      "embedding_model": "nomic-ai/CodeRankEmbed",
+      "processing_timestamp": "2025-10-19T15:41:56.118100",
+      "document_id": "e2b5b8fe5475",
+      "document_name": "_qdrant_qdrant_3.3-vector-quantization",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_3.3-vector-quantization.md",
+      "source_filename": "_qdrant_qdrant_3.3-vector-quantization.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant",
+      "relative_path": "Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_3.3-vector-quantization.md",
+      "hierarchy_path": "Memory Management Strategies",
+      "chunk_hash": "51c682900de35e2f",
+      "content_digest": "51c682900de35e2f",
+      "chunk_length": 1638,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "storage",
+          "vector",
+          "quantized",
+          "lib",
+          "segment",
+          "src",
+          "qdrant",
+          "ram",
+          "quantization",
+          "the",
+          "vectors",
+          "memory",
+          "and",
+          "https",
+          "github",
+          "com",
+          "blob",
+          "48203e41",
+          "function",
+          "disk"
+        ],
+        "term_weights": [
+          {
+            "term": "storage",
+            "tf": 15,
+            "weight": 0.090909
+          },
+          {
+            "term": "vector",
+            "tf": 10,
+            "weight": 0.060606
+          },
+          {
+            "term": "quantized",
+            "tf": 8,
+            "weight": 0.048485
+          },
+          {
+            "term": "lib",
+            "tf": 6,
+            "weight": 0.036364
+          },
+          {
+            "term": "segment",
+            "tf": 6,
+            "weight": 0.036364
+          },
+          {
+            "term": "src",
+            "tf": 6,
+            "weight": 0.036364
+          },
+          {
+            "term": "qdrant",
+            "tf": 6,
+            "weight": 0.036364
+          },
+          {
+            "term": "ram",
+            "tf": 5,
+            "weight": 0.030303
+          },
+          {
+            "term": "quantization",
+            "tf": 4,
+            "weight": 0.024242
+          },
+          {
+            "term": "the",
+            "tf": 4,
+            "weight": 0.024242
+          },
+          {
+            "term": "vectors",
+            "tf": 4,
+            "weight": 0.024242
+          },
+          {
+            "term": "memory",
+            "tf": 3,
+            "weight": 0.018182
+          },
+          {
+            "term": "and",
+            "tf": 3,
+            "weight": 0.018182
+          },
+          {
+            "term": "https",
+            "tf": 3,
+            "weight": 0.018182
+          },
+          {
+            "term": "github",
+            "tf": 3,
+            "weight": 0.018182
+          },
+          {
+            "term": "com",
+            "tf": 3,
+            "weight": 0.018182
+          },
+          {
+            "term": "blob",
+            "tf": 3,
+            "weight": 0.018182
+          },
+          {
+            "term": "48203e41",
+            "tf": 3,
+            "weight": 0.018182
+          },
+          {
+            "term": "function",
+            "tf": 2,
+            "weight": 0.012121
+          },
+          {
+            "term": "disk",
+            "tf": 2,
+            "weight": 0.012121
+          }
+        ],
+        "unique_terms": 77,
+        "total_terms": 165
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Memory Management Strategies",
+        "lib",
+        "qdrant",
+        "quantization",
+        "quantized",
+        "ram",
+        "segment",
+        "src",
+        "storage",
+        "the",
+        "vector"
+      ],
+      "quality_fallback": true,
+      "quality_notes": "Promoted via relaxed thresholds"
+    },
+    "advanced_scores": {
+      "semantic": 0.4143725037574768,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5013,
+      "overall": 0.6052241679191589
+    }
+  },
+  {
+    "text": "## Vector Storage Integration  The quantization system integrates with Qdrant's vector storage layer through the `VectorStorage` trait and `VectorStorageEnum`. The `QuantizedVectors` struct wraps `QuantizedVectorStorage` and implements the `RawScorer` interface. The system supports three vector element types with corresponding storage variants:  | Element Type            | Rust Type | Storage Variants                                          | Use Case                   | | ----------------------- | --------- | --------------------------------------------------------- | -------------------------- | | `VectorElementType`     | `f32`     | `DenseSimple`, `DenseMemmap`, `DenseVolatile`             | Standard precision vectors | | `VectorElementTypeHalf` | `f16`     | `DenseSimpleHalf`, `DenseMemmapHalf`, `DenseVolatileHalf` | Memory-optimized vectors   | | `VectorElementTypeByte` | `u8`      | `DenseSimpleByte`, `DenseMemmapByte`, `DenseVolatileByte` | Compact integer vectors    | ``` ``` **QuantizedVectors Integration Architecture**  Sources: [lib/segment/src/vector\\_storage/quantized/quantized\\_vectors.rs124-130](https://github.com/qdrant/qdrant/blob/48203e41/lib/segment/src/vector_storage/quantized/quantized_vectors.rs#L124-L130) [lib/segment/src/vector\\_storage/quantized/quantized\\_vectors.rs45-49](https://github.com/qdrant/qdrant/blob/48203e41/lib/segment/src/vector_storage/quantized/quantized_vectors.rs#L45-L49) [lib/segment/src/vector\\_storage/quantized/quantized\\_vectors.rs161-175](https://github.com/qdrant/qdrant/blob/48203e41/lib/segment/src/vector_storage/quantized/quantized_vectors.rs#L161-L175) [lib/segment/src/data\\_types/vectors.rs212-216](https://github.com/qdrant/qdrant/blob/48203e41/lib/segment/src/data_types/vectors.rs#L212-L216) [lib/segment/src/vector\\_storage/vector\\_storage\\_base.rs189-321](https://github.com/qdrant/qdrant/blob/48203e41/lib/segment/src/vector_storage/vector_storage_base.rs#L189-L321)",
+    "metadata": {
+      "chunk_id": "e2b5b8fe5475-0003",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_3.3-vector-quantization.md",
+      "filename": "_qdrant_qdrant_3.3-vector-quantization.md",
+      "file_extension": ".md",
+      "chunk_index": 3,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Vector Storage Integration"
+      ],
+      "heading_text": "Vector Storage Integration",
+      "token_count": 494,
+      "char_count": 1953,
+      "start_char": 0,
+      "end_char": 1953,
+      "semantic_score": 0.3780684769153595,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5346864864864864,
+      "chunking_strategy": "hierarchical_precise",
+      "content_type": "hierarchical_section",
+      "embedding_model": "nomic-ai/CodeRankEmbed",
+      "processing_timestamp": "2025-10-19T15:41:56.114362",
+      "document_id": "e2b5b8fe5475",
+      "document_name": "_qdrant_qdrant_3.3-vector-quantization",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_3.3-vector-quantization.md",
+      "source_filename": "_qdrant_qdrant_3.3-vector-quantization.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant",
+      "relative_path": "Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_3.3-vector-quantization.md",
+      "hierarchy_path": "Vector Storage Integration",
+      "chunk_hash": "4dfa37e4111e84a7",
+      "content_digest": "4dfa37e4111e84a7",
+      "chunk_length": 1953,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "storage",
+          "vector",
+          "quantized",
+          "qdrant",
+          "vectors",
+          "lib",
+          "segment",
+          "src",
+          "the",
+          "https",
+          "github",
+          "com",
+          "blob",
+          "48203e41",
+          "types",
+          "integration",
+          "system",
+          "with",
+          "and",
+          "quantizedvectors"
+        ],
+        "term_weights": [
+          {
+            "term": "storage",
+            "tf": 14,
+            "weight": 0.068627
+          },
+          {
+            "term": "vector",
+            "tf": 13,
+            "weight": 0.063725
+          },
+          {
+            "term": "quantized",
+            "tf": 12,
+            "weight": 0.058824
+          },
+          {
+            "term": "qdrant",
+            "tf": 11,
+            "weight": 0.053922
+          },
+          {
+            "term": "vectors",
+            "tf": 11,
+            "weight": 0.053922
+          },
+          {
+            "term": "lib",
+            "tf": 10,
+            "weight": 0.04902
+          },
+          {
+            "term": "segment",
+            "tf": 10,
+            "weight": 0.04902
+          },
+          {
+            "term": "src",
+            "tf": 10,
+            "weight": 0.04902
+          },
+          {
+            "term": "the",
+            "tf": 5,
+            "weight": 0.02451
+          },
+          {
+            "term": "https",
+            "tf": 5,
+            "weight": 0.02451
+          },
+          {
+            "term": "github",
+            "tf": 5,
+            "weight": 0.02451
+          },
+          {
+            "term": "com",
+            "tf": 5,
+            "weight": 0.02451
+          },
+          {
+            "term": "blob",
+            "tf": 5,
+            "weight": 0.02451
+          },
+          {
+            "term": "48203e41",
+            "tf": 5,
+            "weight": 0.02451
+          },
+          {
+            "term": "types",
+            "tf": 3,
+            "weight": 0.014706
+          },
+          {
+            "term": "integration",
+            "tf": 2,
+            "weight": 0.009804
+          },
+          {
+            "term": "system",
+            "tf": 2,
+            "weight": 0.009804
+          },
+          {
+            "term": "with",
+            "tf": 2,
+            "weight": 0.009804
+          },
+          {
+            "term": "and",
+            "tf": 2,
+            "weight": 0.009804
+          },
+          {
+            "term": "quantizedvectors",
+            "tf": 2,
+            "weight": 0.009804
+          }
+        ],
+        "unique_terms": 85,
+        "total_terms": 204
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Vector Storage Integration",
+        "https",
+        "lib",
+        "qdrant",
+        "quantized",
+        "segment",
+        "src",
+        "storage",
+        "the",
+        "vector",
+        "vectors"
+      ],
+      "quality_fallback": true,
+      "quality_notes": "Promoted via relaxed thresholds"
+    },
+    "advanced_scores": {
+      "semantic": 0.3780684769153595,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5346864864864864,
+      "overall": 0.6042516544672819
+    }
+  }
+]

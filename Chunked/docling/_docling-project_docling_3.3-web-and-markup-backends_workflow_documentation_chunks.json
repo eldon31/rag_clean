@@ -1,0 +1,879 @@
+[
+  {
+    "text": "## Backend Configuration",
+    "metadata": {
+      "chunk_id": "a4f3fa49b57e-0003",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling\\_docling-project_docling_3.3-web-and-markup-backends.md",
+      "filename": "_docling-project_docling_3.3-web-and-markup-backends.md",
+      "file_extension": ".md",
+      "chunk_index": 3,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Backend Configuration"
+      ],
+      "heading_text": "Backend Configuration",
+      "token_count": 3,
+      "char_count": 24,
+      "start_char": 0,
+      "end_char": 24,
+      "semantic_score": 0.8,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.59,
+      "chunking_strategy": "hierarchical_balanced",
+      "content_type": "hierarchical_section",
+      "embedding_model": "nomic-ai/CodeRankEmbed",
+      "processing_timestamp": "2025-10-19T14:44:10.841687",
+      "document_id": "a4f3fa49b57e",
+      "document_name": "_docling-project_docling_3.3-web-and-markup-backends",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling\\_docling-project_docling_3.3-web-and-markup-backends.md",
+      "source_filename": "_docling-project_docling_3.3-web-and-markup-backends.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling",
+      "relative_path": "Docs\\docling\\_docling-project_docling_3.3-web-and-markup-backends.md",
+      "hierarchy_path": "Backend Configuration",
+      "chunk_hash": "0c6cf7256b919c56",
+      "content_digest": "0c6cf7256b919c56",
+      "chunk_length": 24,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "backend",
+          "configuration"
+        ],
+        "term_weights": [
+          {
+            "term": "backend",
+            "tf": 1,
+            "weight": 0.5
+          },
+          {
+            "term": "configuration",
+            "tf": 1,
+            "weight": 0.5
+          }
+        ],
+        "unique_terms": 2,
+        "total_terms": 2
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Backend Configuration",
+        "backend",
+        "configuration"
+      ],
+      "quality_fallback": true,
+      "quality_notes": "Promoted via relaxed thresholds"
+    },
+    "advanced_scores": {
+      "semantic": 0.8,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.59,
+      "overall": 0.7633333333333333
+    }
+  },
+  {
+    "text": "# Web and Markup Backends  Relevant source files  - [docling/backend/html\\_backend.py](https://github.com/docling-project/docling/blob/f7244a43/docling/backend/html_backend.py) - [docling/cli/main.py](https://github.com/docling-project/docling/blob/f7244a43/docling/cli/main.py) - [docling/datamodel/base\\_models.py](https://github.com/docling-project/docling/blob/f7244a43/docling/datamodel/base_models.py) - [docling/datamodel/document.py](https://github.com/docling-project/docling/blob/f7244a43/docling/datamodel/document.py) - [docling/datamodel/pipeline\\_options.py](https://github.com/docling-project/docling/blob/f7244a43/docling/datamodel/pipeline_options.py) - [docling/document\\_converter.py](https://github.com/docling-project/docling/blob/f7244a43/docling/document_converter.py) - [tests/data/groundtruth/docling\\_v2/example\\_06.html.itxt](https://github.com/docling-project/docling/blob/f7244a43/tests/data/groundtruth/docling_v2/example_06.html.itxt) - [tests/data/groundtruth/docling\\_v2/example\\_06.html.json](https://github.com/docling-project/docling/blob/f7244a43/tests/data/groundtruth/docling_v2/example_06.html.json) - [tests/data/groundtruth/docling\\_v2/example\\_06.html.md](https://github.com/docling-project/docling/blob/f7244a43/tests/data/groundtruth/docling_v2/example_06.html.md) - [tests/data/groundtruth/docling\\_v2/example\\_09.html.itxt](https://github.com/docling-project/docling/blob/f7244a43/tests/data/groundtruth/docling_v2/example_09.html.itxt) - [tests/data/groundtruth/docling\\_v2/example\\_09.html.json](https://github.com/docling-project/docling/blob/f7244a43/tests/data/groundtruth/docling_v2/example_09.html.json) - [tests/data/groundtruth/docling\\_v2/example\\_09.html.md](https://github.com/docling-project/docling/blob/f7244a43/tests/data/groundtruth/docling_v2/example_09.html.md) - [tests/data/groundtruth/docling\\_v2/wiki\\_duck.html.itxt](https://github.com/docling-project/docling/blob/f7244a43/tests/data/groundtruth/docling_v2/wiki_duck.html.itxt) - [tests/data/groundtruth/docling\\_v2/wiki\\_duck.html.json](https://github.com/docling-project/docling/blob/f7244a43/tests/data/groundtruth/docling_v2/wiki_duck.html.json) - [tests/data/groundtruth/docling\\_v2/wiki\\_duck.html.md](https://github.com/docling-project/docling/blob/f7244a43/tests/data/groundtruth/docling_v2/wiki_duck.html.md) - [tests/test\\_backend\\_html.py](https://github.com/docling-project/docling/blob/f7244a43/tests/test_backend_html.py)",
+    "metadata": {
+      "chunk_id": "a4f3fa49b57e-0000",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling\\_docling-project_docling_3.3-web-and-markup-backends.md",
+      "filename": "_docling-project_docling_3.3-web-and-markup-backends.md",
+      "file_extension": ".md",
+      "chunk_index": 0,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Web and Markup Backends"
+      ],
+      "heading_text": "Web and Markup Backends",
+      "token_count": 672,
+      "char_count": 2457,
+      "start_char": 0,
+      "end_char": 2457,
+      "semantic_score": 0.3895106315612793,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.8875,
+      "chunking_strategy": "hierarchical_balanced",
+      "content_type": "hierarchical_section",
+      "embedding_model": "nomic-ai/CodeRankEmbed",
+      "processing_timestamp": "2025-10-19T14:44:10.837509",
+      "document_id": "a4f3fa49b57e",
+      "document_name": "_docling-project_docling_3.3-web-and-markup-backends",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling\\_docling-project_docling_3.3-web-and-markup-backends.md",
+      "source_filename": "_docling-project_docling_3.3-web-and-markup-backends.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling",
+      "relative_path": "Docs\\docling\\_docling-project_docling_3.3-web-and-markup-backends.md",
+      "hierarchy_path": "Web and Markup Backends",
+      "chunk_hash": "c5261ec2508798a5",
+      "content_digest": "c5261ec2508798a5",
+      "chunk_length": 2457,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "docling",
+          "html",
+          "tests",
+          "data",
+          "groundtruth",
+          "https",
+          "github",
+          "com",
+          "project",
+          "blob",
+          "f7244a43",
+          "example",
+          "backend",
+          "datamodel",
+          "itxt",
+          "json",
+          "wiki",
+          "duck",
+          "document",
+          "cli"
+        ],
+        "term_weights": [
+          {
+            "term": "docling",
+            "tf": 62,
+            "weight": 0.199357
+          },
+          {
+            "term": "html",
+            "tf": 22,
+            "weight": 0.07074
+          },
+          {
+            "term": "tests",
+            "tf": 20,
+            "weight": 0.064309
+          },
+          {
+            "term": "data",
+            "tf": 18,
+            "weight": 0.057878
+          },
+          {
+            "term": "groundtruth",
+            "tf": 18,
+            "weight": 0.057878
+          },
+          {
+            "term": "https",
+            "tf": 16,
+            "weight": 0.051447
+          },
+          {
+            "term": "github",
+            "tf": 16,
+            "weight": 0.051447
+          },
+          {
+            "term": "com",
+            "tf": 16,
+            "weight": 0.051447
+          },
+          {
+            "term": "project",
+            "tf": 16,
+            "weight": 0.051447
+          },
+          {
+            "term": "blob",
+            "tf": 16,
+            "weight": 0.051447
+          },
+          {
+            "term": "f7244a43",
+            "tf": 16,
+            "weight": 0.051447
+          },
+          {
+            "term": "example",
+            "tf": 12,
+            "weight": 0.038585
+          },
+          {
+            "term": "backend",
+            "tf": 6,
+            "weight": 0.019293
+          },
+          {
+            "term": "datamodel",
+            "tf": 6,
+            "weight": 0.019293
+          },
+          {
+            "term": "itxt",
+            "tf": 6,
+            "weight": 0.019293
+          },
+          {
+            "term": "json",
+            "tf": 6,
+            "weight": 0.019293
+          },
+          {
+            "term": "wiki",
+            "tf": 6,
+            "weight": 0.019293
+          },
+          {
+            "term": "duck",
+            "tf": 6,
+            "weight": 0.019293
+          },
+          {
+            "term": "document",
+            "tf": 4,
+            "weight": 0.012862
+          },
+          {
+            "term": "cli",
+            "tf": 2,
+            "weight": 0.006431
+          }
+        ],
+        "unique_terms": 34,
+        "total_terms": 311
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Web and Markup Backends",
+        "blob",
+        "com",
+        "data",
+        "docling",
+        "github",
+        "groundtruth",
+        "html",
+        "https",
+        "project",
+        "tests"
+      ],
+      "quality_fallback": true,
+      "quality_notes": "Promoted via relaxed thresholds"
+    },
+    "advanced_scores": {
+      "semantic": 0.3895106315612793,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.8875,
+      "overall": 0.7256702105204264
+    }
+  },
+  {
+    "text": "## HTML Backend  The `HTMLDocumentBackend` is the most sophisticated web/markup backend, handling complex HTML structures including tables, lists, formatting, hyperlinks, and images.",
+    "metadata": {
+      "chunk_id": "a4f3fa49b57e-0006",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling\\_docling-project_docling_3.3-web-and-markup-backends.md",
+      "filename": "_docling-project_docling_3.3-web-and-markup-backends.md",
+      "file_extension": ".md",
+      "chunk_index": 6,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "HTML Backend"
+      ],
+      "heading_text": "HTML Backend",
+      "token_count": 36,
+      "char_count": 182,
+      "start_char": 0,
+      "end_char": 182,
+      "semantic_score": 0.8,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.3627272727272727,
+      "chunking_strategy": "hierarchical_balanced",
+      "content_type": "hierarchical_section",
+      "embedding_model": "nomic-ai/CodeRankEmbed",
+      "processing_timestamp": "2025-10-19T14:44:10.845401",
+      "document_id": "a4f3fa49b57e",
+      "document_name": "_docling-project_docling_3.3-web-and-markup-backends",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling\\_docling-project_docling_3.3-web-and-markup-backends.md",
+      "source_filename": "_docling-project_docling_3.3-web-and-markup-backends.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling",
+      "relative_path": "Docs\\docling\\_docling-project_docling_3.3-web-and-markup-backends.md",
+      "hierarchy_path": "HTML Backend",
+      "chunk_hash": "7991c1ff6e22060d",
+      "content_digest": "7991c1ff6e22060d",
+      "chunk_length": 182,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "html",
+          "backend",
+          "the",
+          "htmldocumentbackend",
+          "most",
+          "sophisticated",
+          "web",
+          "markup",
+          "handling",
+          "complex",
+          "structures",
+          "including",
+          "tables",
+          "lists",
+          "formatting",
+          "hyperlinks",
+          "and",
+          "images"
+        ],
+        "term_weights": [
+          {
+            "term": "html",
+            "tf": 2,
+            "weight": 0.095238
+          },
+          {
+            "term": "backend",
+            "tf": 2,
+            "weight": 0.095238
+          },
+          {
+            "term": "the",
+            "tf": 2,
+            "weight": 0.095238
+          },
+          {
+            "term": "htmldocumentbackend",
+            "tf": 1,
+            "weight": 0.047619
+          },
+          {
+            "term": "most",
+            "tf": 1,
+            "weight": 0.047619
+          },
+          {
+            "term": "sophisticated",
+            "tf": 1,
+            "weight": 0.047619
+          },
+          {
+            "term": "web",
+            "tf": 1,
+            "weight": 0.047619
+          },
+          {
+            "term": "markup",
+            "tf": 1,
+            "weight": 0.047619
+          },
+          {
+            "term": "handling",
+            "tf": 1,
+            "weight": 0.047619
+          },
+          {
+            "term": "complex",
+            "tf": 1,
+            "weight": 0.047619
+          },
+          {
+            "term": "structures",
+            "tf": 1,
+            "weight": 0.047619
+          },
+          {
+            "term": "including",
+            "tf": 1,
+            "weight": 0.047619
+          },
+          {
+            "term": "tables",
+            "tf": 1,
+            "weight": 0.047619
+          },
+          {
+            "term": "lists",
+            "tf": 1,
+            "weight": 0.047619
+          },
+          {
+            "term": "formatting",
+            "tf": 1,
+            "weight": 0.047619
+          },
+          {
+            "term": "hyperlinks",
+            "tf": 1,
+            "weight": 0.047619
+          },
+          {
+            "term": "and",
+            "tf": 1,
+            "weight": 0.047619
+          },
+          {
+            "term": "images",
+            "tf": 1,
+            "weight": 0.047619
+          }
+        ],
+        "unique_terms": 18,
+        "total_terms": 21
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "HTML Backend",
+        "backend",
+        "complex",
+        "handling",
+        "html",
+        "htmldocumentbackend",
+        "markup",
+        "most",
+        "sophisticated",
+        "the",
+        "web"
+      ],
+      "quality_fallback": true,
+      "quality_notes": "Promoted via relaxed thresholds"
+    },
+    "advanced_scores": {
+      "semantic": 0.8,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.3627272727272727,
+      "overall": 0.6875757575757575
+    }
+  },
+  {
+    "text": "### Core Implementation ``` ``` **Sources:** [docling/backend/html\\_backend.py183-237](https://github.com/docling-project/docling/blob/f7244a43/docling/backend/html_backend.py#L183-L237) [docling/backend/html\\_backend.py239-292](https://github.com/docling-project/docling/blob/f7244a43/docling/backend/html_backend.py#L239-L292)",
+    "metadata": {
+      "chunk_id": "a4f3fa49b57e-0007",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling\\_docling-project_docling_3.3-web-and-markup-backends.md",
+      "filename": "_docling-project_docling_3.3-web-and-markup-backends.md",
+      "file_extension": ".md",
+      "chunk_index": 7,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Core Implementation"
+      ],
+      "heading_text": "Core Implementation",
+      "token_count": 86,
+      "char_count": 328,
+      "start_char": 0,
+      "end_char": 328,
+      "semantic_score": 0.4922775626182556,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5525,
+      "chunking_strategy": "hierarchical_balanced",
+      "content_type": "hierarchical_section",
+      "embedding_model": "nomic-ai/CodeRankEmbed",
+      "processing_timestamp": "2025-10-19T14:44:10.846133",
+      "document_id": "a4f3fa49b57e",
+      "document_name": "_docling-project_docling_3.3-web-and-markup-backends",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling\\_docling-project_docling_3.3-web-and-markup-backends.md",
+      "source_filename": "_docling-project_docling_3.3-web-and-markup-backends.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling",
+      "relative_path": "Docs\\docling\\_docling-project_docling_3.3-web-and-markup-backends.md",
+      "hierarchy_path": "Core Implementation",
+      "chunk_hash": "b52d70da24903d19",
+      "content_digest": "b52d70da24903d19",
+      "chunk_length": 328,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "docling",
+          "backend",
+          "html",
+          "https",
+          "github",
+          "com",
+          "project",
+          "blob",
+          "f7244a43",
+          "core",
+          "implementation",
+          "sources",
+          "py183",
+          "237",
+          "l183",
+          "l237",
+          "py239",
+          "292",
+          "l239",
+          "l292"
+        ],
+        "term_weights": [
+          {
+            "term": "docling",
+            "tf": 8,
+            "weight": 0.186047
+          },
+          {
+            "term": "backend",
+            "tf": 8,
+            "weight": 0.186047
+          },
+          {
+            "term": "html",
+            "tf": 4,
+            "weight": 0.093023
+          },
+          {
+            "term": "https",
+            "tf": 2,
+            "weight": 0.046512
+          },
+          {
+            "term": "github",
+            "tf": 2,
+            "weight": 0.046512
+          },
+          {
+            "term": "com",
+            "tf": 2,
+            "weight": 0.046512
+          },
+          {
+            "term": "project",
+            "tf": 2,
+            "weight": 0.046512
+          },
+          {
+            "term": "blob",
+            "tf": 2,
+            "weight": 0.046512
+          },
+          {
+            "term": "f7244a43",
+            "tf": 2,
+            "weight": 0.046512
+          },
+          {
+            "term": "core",
+            "tf": 1,
+            "weight": 0.023256
+          },
+          {
+            "term": "implementation",
+            "tf": 1,
+            "weight": 0.023256
+          },
+          {
+            "term": "sources",
+            "tf": 1,
+            "weight": 0.023256
+          },
+          {
+            "term": "py183",
+            "tf": 1,
+            "weight": 0.023256
+          },
+          {
+            "term": "237",
+            "tf": 1,
+            "weight": 0.023256
+          },
+          {
+            "term": "l183",
+            "tf": 1,
+            "weight": 0.023256
+          },
+          {
+            "term": "l237",
+            "tf": 1,
+            "weight": 0.023256
+          },
+          {
+            "term": "py239",
+            "tf": 1,
+            "weight": 0.023256
+          },
+          {
+            "term": "292",
+            "tf": 1,
+            "weight": 0.023256
+          },
+          {
+            "term": "l239",
+            "tf": 1,
+            "weight": 0.023256
+          },
+          {
+            "term": "l292",
+            "tf": 1,
+            "weight": 0.023256
+          }
+        ],
+        "unique_terms": 20,
+        "total_terms": 43
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Core Implementation",
+        "backend",
+        "blob",
+        "com",
+        "core",
+        "docling",
+        "f7244a43",
+        "github",
+        "html",
+        "https",
+        "project"
+      ],
+      "quality_fallback": true,
+      "quality_notes": "Promoted via relaxed thresholds"
+    },
+    "advanced_scores": {
+      "semantic": 0.4922775626182556,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5525,
+      "overall": 0.6482591875394185
+    }
+  },
+  {
+    "text": "## Purpose and Scope  This document covers the document backends for web and markup formats: HTML, Markdown, and AsciiDoc. These backends parse structured text documents and convert them into the unified `DoclingDocument` representation. All three formats share the `SimplePipeline` processing path and produce documents with hierarchical structure, content layers, and rich formatting. For PDF document backends, see [PDF Processing Backends](docling-project/docling/3.1-pdf-processing-backends.md). For Office document formats, see [Office Document Backends](docling-project/docling/3.2-office-document-backends.md).",
+    "metadata": {
+      "chunk_id": "a4f3fa49b57e-0001",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling\\_docling-project_docling_3.3-web-and-markup-backends.md",
+      "filename": "_docling-project_docling_3.3-web-and-markup-backends.md",
+      "file_extension": ".md",
+      "chunk_index": 1,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Purpose and Scope"
+      ],
+      "heading_text": "Purpose and Scope",
+      "token_count": 127,
+      "char_count": 618,
+      "start_char": 0,
+      "end_char": 618,
+      "semantic_score": 0.4909776747226715,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.515,
+      "chunking_strategy": "hierarchical_balanced",
+      "content_type": "hierarchical_section",
+      "embedding_model": "nomic-ai/CodeRankEmbed",
+      "processing_timestamp": "2025-10-19T14:44:10.839901",
+      "document_id": "a4f3fa49b57e",
+      "document_name": "_docling-project_docling_3.3-web-and-markup-backends",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling\\_docling-project_docling_3.3-web-and-markup-backends.md",
+      "source_filename": "_docling-project_docling_3.3-web-and-markup-backends.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling",
+      "relative_path": "Docs\\docling\\_docling-project_docling_3.3-web-and-markup-backends.md",
+      "hierarchy_path": "Purpose and Scope",
+      "chunk_hash": "f512eb6f64dc8e0e",
+      "content_digest": "f512eb6f64dc8e0e",
+      "chunk_length": 618,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "backends",
+          "and",
+          "document",
+          "docling",
+          "the",
+          "for",
+          "formats",
+          "processing",
+          "pdf",
+          "office",
+          "documents",
+          "see",
+          "project",
+          "purpose",
+          "scope",
+          "this",
+          "covers",
+          "web",
+          "markup",
+          "html"
+        ],
+        "term_weights": [
+          {
+            "term": "backends",
+            "tf": 7,
+            "weight": 0.088608
+          },
+          {
+            "term": "and",
+            "tf": 6,
+            "weight": 0.075949
+          },
+          {
+            "term": "document",
+            "tf": 6,
+            "weight": 0.075949
+          },
+          {
+            "term": "docling",
+            "tf": 4,
+            "weight": 0.050633
+          },
+          {
+            "term": "the",
+            "tf": 3,
+            "weight": 0.037975
+          },
+          {
+            "term": "for",
+            "tf": 3,
+            "weight": 0.037975
+          },
+          {
+            "term": "formats",
+            "tf": 3,
+            "weight": 0.037975
+          },
+          {
+            "term": "processing",
+            "tf": 3,
+            "weight": 0.037975
+          },
+          {
+            "term": "pdf",
+            "tf": 3,
+            "weight": 0.037975
+          },
+          {
+            "term": "office",
+            "tf": 3,
+            "weight": 0.037975
+          },
+          {
+            "term": "documents",
+            "tf": 2,
+            "weight": 0.025316
+          },
+          {
+            "term": "see",
+            "tf": 2,
+            "weight": 0.025316
+          },
+          {
+            "term": "project",
+            "tf": 2,
+            "weight": 0.025316
+          },
+          {
+            "term": "purpose",
+            "tf": 1,
+            "weight": 0.012658
+          },
+          {
+            "term": "scope",
+            "tf": 1,
+            "weight": 0.012658
+          },
+          {
+            "term": "this",
+            "tf": 1,
+            "weight": 0.012658
+          },
+          {
+            "term": "covers",
+            "tf": 1,
+            "weight": 0.012658
+          },
+          {
+            "term": "web",
+            "tf": 1,
+            "weight": 0.012658
+          },
+          {
+            "term": "markup",
+            "tf": 1,
+            "weight": 0.012658
+          },
+          {
+            "term": "html",
+            "tf": 1,
+            "weight": 0.012658
+          }
+        ],
+        "unique_terms": 45,
+        "total_terms": 79
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Purpose and Scope",
+        "and",
+        "backends",
+        "docling",
+        "document",
+        "for",
+        "formats",
+        "office",
+        "pdf",
+        "processing",
+        "the"
+      ],
+      "quality_fallback": true,
+      "quality_notes": "Promoted via relaxed thresholds"
+    },
+    "advanced_scores": {
+      "semantic": 0.4909776747226715,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.515,
+      "overall": 0.6353258915742238
+    }
+  }
+]
