@@ -55,7 +55,7 @@ def _parse_args(argv: List[str]) -> argparse.Namespace:
         str(KAGGLE_DEFAULTS["chunks_root"]) if IS_KAGGLE else str(Path.cwd() / "Chunked")
     )
     default_output_root = (
-        str(KAGGLE_DEFAULTS["output_root"]) if IS_KAGGLE else str(Path("ultimate_embeddings_v4"))
+        str(KAGGLE_DEFAULTS["output_root"]) if IS_KAGGLE else str(Path.cwd() / "Embed")
     )
 
     parser.add_argument(
@@ -98,7 +98,7 @@ def _parse_args(argv: List[str]) -> argparse.Namespace:
     parser.add_argument(
         "--zip-output",
         action="store_true",
-        default=KAGGLE_DEFAULTS.get("zip_output", False) if IS_KAGGLE else False,
+        default=KAGGLE_DEFAULTS.get("zip_output", False) if IS_KAGGLE else True,
         help="Compress the output directory into a .zip archive for easier download.",
     )
     return parser.parse_args(argv)
