@@ -452,7 +452,12 @@ class UltimateKaggleEmbedderV4:
         if self.is_kaggle:
             logger.info("Kaggle environment detected - optimizing for T4 x2")
             self.gpu_config.kaggle_environment = True
-            self.export_config.working_dir = "/kaggle/working"
+            if not export_config or not self.export_config.working_dir:
+                self.export_config.working_dir = "/kaggle/working"
+            else:
+                working_path = Path(self.export_config.working_dir)
+                if not working_path.is_absolute():
+                    self.export_config.working_dir = str(Path("/kaggle/working") / working_path)
         
         # GPU setup
         self.device_count = torch.cuda.device_count()
