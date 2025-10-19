@@ -152,17 +152,23 @@ def _build_export_config(output_dir: Path, collection_name: str, model_name: str
     )
 
 
-def _zip_output_directory(output_root: Path) -> Path:
-    archive_base = output_root
+def _zip_directory(source_dir: Path) -> Path:
+    if not source_dir.exists():
+        raise FileNotFoundError(f"Cannot zip missing directory: {source_dir}")
+
+    archive_path = source_dir.with_suffix(".zip")
+    if archive_path.exists():
+        archive_path.unlink()
+
     archive_path = Path(
         shutil.make_archive(
-            str(archive_base),
+            str(source_dir),
             "zip",
-            root_dir=str(output_root.parent),
-            base_dir=output_root.name,
+            root_dir=str(source_dir.parent),
+            base_dir=source_dir.name,
         )
     )
-    LOGGER.info("Created zip archive at %s", archive_path)
+    LOGGER.info("Created zip archive for %s at %s", source_dir.name, archive_path)
     return archive_path
 
 
@@ -171,6 +177,7 @@ def _run_for_collection(
     export_dir: Path,
     model_name: str,
     enable_ensemble: bool,
+    zip_output: bool,
 ) -> Dict[str, object]:
     export_config = _build_export_config(export_dir, collection_dir.name, model_name)
     gpu_config = KaggleGPUConfig()
@@ -195,6 +202,13 @@ def _run_for_collection(
     perf = embedder.generate_embeddings_kaggle_optimized()
     exports = embedder.export_for_local_qdrant()
 
+    archive_path: Path | None = None
+    if zip_output:
+        try:
+            archive_path = _zip_directory(export_dir)
+        except Exception:  # pragma: no cover - defensive logging
+            LOGGER.exception("Failed to zip output for %s", collection_dir.name)
+
     summary = {
         "collection": collection_dir.name,
         "status": "completed",
@@ -202,6 +216,8 @@ def _run_for_collection(
         "performance": perf,
         "exports": exports,
     }
+    if archive_path is not None:
+        summary["archive"] = str(archive_path)
 
     del embedder
     torch.cuda.empty_cache()
@@ -246,6 +262,7 @@ def main(argv: List[str]) -> int:
                 export_dir=export_dir,
                 model_name=args.model,
                 enable_ensemble=args.enable_ensemble,
+                zip_output=args.zip_output,
             )
             run_summaries.append(summary)
         except Exception as exc:  # pragma: no cover - defensive logging
@@ -261,19 +278,16 @@ def main(argv: List[str]) -> int:
         json.dump(run_summaries, handle, indent=2)
     LOGGER.info("Wrote summary to %s", summary_path)
 
-    archive_path: Path | None = None
     if args.zip_output:
         try:
-            archive_path = _zip_output_directory(output_root)
+            overall_archive = _zip_directory(output_root)
+            LOGGER.info("Created aggregate zip archive at %s", overall_archive)
         except Exception:  # pragma: no cover - defensive logging
-            LOGGER.exception("Failed to create zip archive for %s", output_root)
+            LOGGER.exception("Failed to zip overall output directory %s", output_root)
 
     failures = [item for item in run_summaries if item.get("status") == "failed"]
     if failures:
         return 1
-
-    if archive_path is not None:
-        LOGGER.info("Output archive ready at %s", archive_path)
 
     return 0
 

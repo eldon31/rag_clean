@@ -47,6 +47,7 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 import threading
 import hashlib
 from functools import lru_cache
+import textwrap
 
 # Core ML libraries
 from sentence_transformers import SentenceTransformer, CrossEncoder
@@ -1808,8 +1809,8 @@ class UltimateKaggleEmbedderV4:
     
     def _generate_upload_script(self, file_path: str, exported_files: Dict[str, str]):
         """Generate Python script for local Qdrant upload"""
-        
-        script_content = f'''#!/usr/bin/env python3
+
+        script_content = textwrap.dedent(f'''#!/usr/bin/env python3
 """
 Auto-generated Qdrant upload script for Ultimate Kaggle Embedder V4
 Generated on: {datetime.now().isoformat()}
@@ -1822,87 +1823,82 @@ USAGE:
 """
 
 import json
+import logging
+from datetime import datetime
+
 import numpy as np
 from qdrant_client import QdrantClient
 from qdrant_client.models import Distance, VectorParams, PointStruct
-from pathlib import Path
-from datetime import datetime
-import logging
 
-# Setup logging
+
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+
 def upload_to_qdrant():
-    """Upload embeddings to local Qdrant instance"""
-    
+    """Upload embeddings to local Qdrant instance."""
+
     # Configuration
-    QDRANT_HOST = "localhost"
-    QDRANT_PORT = 6333
-    COLLECTION_NAME = "ultimate_embeddings_v4_{self.model_name}"
-    
+    qdrant_host = "localhost"
+    qdrant_port = 6333
+    collection_name = "ultimate_embeddings_v4_{self.model_name}"
+
     # File paths (adjust if needed)
-    FILES = {{
-        "embeddings": "{os.path.basename(exported_files.get('numpy', ''))}", 
+    files = {{
+        "embeddings": "{os.path.basename(exported_files.get('numpy', ''))}",
         "metadata": "{os.path.basename(exported_files.get('metadata', ''))}",
         "texts": "{os.path.basename(exported_files.get('texts', ''))}",
         "stats": "{os.path.basename(exported_files.get('stats', ''))}",
         "jsonl": "{os.path.basename(exported_files.get('jsonl', ''))}",
         "sparse": "{os.path.basename(exported_files.get('sparse_jsonl', ''))}"
     }}
-    
-    try:
-        # Connect to Qdrant
-        client = QdrantClient(host=QDRANT_HOST, port=QDRANT_PORT)
-    logger.info(f"Connected to Qdrant at {{QDRANT_HOST}}:{{QDRANT_PORT}}")
-        
-        # Load data
-    logger.info("Loading exported data...")
-        embeddings = np.load(FILES["embeddings"])
-        
-        with open(FILES["metadata"], 'r', encoding='utf-8') as f:
-            metadata_list = json.load(f)
-            
-        with open(FILES["texts"], 'r', encoding='utf-8') as f:
-            texts_list = json.load(f)
-        
-    logger.info(f"Loaded {{len(embeddings)}} embeddings ({{embeddings.shape[1]}}D)")
 
-        if FILES.get("sparse"):
-            logger.info(f"Sparse sidecar detected: {{FILES['sparse']}}")
-        
-        # Create collection
+    try:
+        client = QdrantClient(host=qdrant_host, port=qdrant_port)
+        logger.info(f"Connected to Qdrant at {{qdrant_host}}:{{qdrant_port}}")
+
+        logger.info("Loading exported data...")
+        embeddings = np.load(files["embeddings"])
+
+        with open(files["metadata"], "r", encoding="utf-8") as handle:
+            metadata_list = json.load(handle)
+
+        with open(files["texts"], "r", encoding="utf-8") as handle:
+            texts_list = json.load(handle)
+
+        logger.info(f"Loaded {{len(embeddings)}} embeddings ({{embeddings.shape[1]}}D)")
+
+        if files.get("sparse"):
+            logger.info(f"Sparse sidecar detected: {{files['sparse']}}")
+
         try:
-            client.get_collection(COLLECTION_NAME)
-            logger.info(f"Collection '{{COLLECTION_NAME}}' already exists")
-        except:
-            logger.info(f"Creating collection: {{COLLECTION_NAME}}")
+            client.get_collection(collection_name)
+            logger.info(f"Collection '{{collection_name}}' already exists")
+        except Exception:
+            logger.info(f"Creating collection: {{collection_name}}")
             client.create_collection(
-                collection_name=COLLECTION_NAME,
+                collection_name=collection_name,
                 vectors_config=VectorParams(
                     size=embeddings.shape[1],
-                    distance=Distance.COSINE
+                    distance=Distance.COSINE,
                 ),
-                # Optimized for large collections
                 hnsw_config={{
                     "m": 48,
                     "ef_construct": 512,
-                    "full_scan_threshold": 50000
+                    "full_scan_threshold": 50000,
                 }},
-                # Enable quantization for speed
                 quantization_config={{
                     "scalar": {{
                         "type": "int8",
                         "quantile": 0.99,
-                        "always_ram": True
+                        "always_ram": True,
                     }}
-                }}
+                }},
             )
-        
-        # Prepare points
-    logger.info("Preparing points for upload...")
+
+        logger.info("Preparing points for upload...")
         points = []
-        
+
         for i, (embedding, metadata, text) in enumerate(zip(embeddings, metadata_list, texts_list)):
             point = PointStruct(
                 id=i,
@@ -1911,52 +1907,44 @@ def upload_to_qdrant():
                     **metadata,
                     "text_preview": text[:500],
                     "full_text_length": len(text),
-                    "local_upload_timestamp": datetime.now().isoformat()
-                }}
+                    "local_upload_timestamp": datetime.now().isoformat(),
+                }},
             )
             points.append(point)
-        
-        # Batch upload
+
         batch_size = 1000
         total_batches = (len(points) + batch_size - 1) // batch_size
-        
-    logger.info(f"Uploading {{len(points)}} points in {{total_batches}} batches...")
-        
-        for i in range(0, len(points), batch_size):
-            batch = points[i:i + batch_size]
-            batch_num = (i // batch_size) + 1
-            
-            client.upsert(
-                collection_name=COLLECTION_NAME,
-                points=batch,
-                wait=True
-            )
-            
+        logger.info(f"Uploading {{len(points)}} points in {{total_batches}} batches...")
+
+        for start in range(0, len(points), batch_size):
+            batch = points[start:start + batch_size]
+            batch_num = (start // batch_size) + 1
+
+            client.upsert(collection_name=collection_name, points=batch, wait=True)
             logger.info(f"Uploaded batch {{batch_num}}/{{total_batches}} ({{len(batch)}} points)")
-        
-        # Verify upload
-        collection_info = client.get_collection(COLLECTION_NAME)
-    logger.info(f"Upload complete; collection has {{collection_info.points_count}} points")
-        
-        # Test search
-    logger.info("Testing search...")
+
+        collection_info = client.get_collection(collection_name)
+        logger.info(f"Upload complete; collection has {{collection_info.points_count}} points")
+
+        logger.info("Testing search...")
         test_results = client.search(
-            collection_name=COLLECTION_NAME,
+            collection_name=collection_name,
             query_vector=embeddings[0].tolist(),
-            limit=5
+            limit=5,
         )
-        
-    logger.info(f"Search test successful; found {{len(test_results)}} results")
-    logger.info(f"Embeddings are ready for use in collection: {{COLLECTION_NAME}}")
-        
-    except Exception as e:
-    logger.error(f"Upload failed: {{e}}")
+
+        logger.info(f"Search test successful; found {{len(test_results)}} results")
+        logger.info(f"Embeddings are ready for use in collection: {{collection_name}}")
+
+    except Exception as exc:
+        logger.error(f"Upload failed: {{exc}}")
         raise
+
 
 if __name__ == "__main__":
     upload_to_qdrant()
-'''
-        
+''')
+
         with open(file_path, 'w', encoding='utf-8') as f:
             f.write(script_content)
     
