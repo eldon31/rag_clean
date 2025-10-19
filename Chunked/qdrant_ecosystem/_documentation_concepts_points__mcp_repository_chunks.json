@@ -24,7 +24,8 @@
       "chunking_strategy": "hybrid_adaptive_structural",
       "content_type": "list_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:38.758868",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:21.748685",
       "document_id": "67c7eb4b661b",
       "document_name": "_documentation_concepts_points_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_points\\_documentation_concepts_points_.md",
@@ -223,7 +224,8 @@
       "chunking_strategy": "hybrid_adaptive_structural",
       "content_type": "list_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:38.760122",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:21.749977",
       "document_id": "67c7eb4b661b",
       "document_name": "_documentation_concepts_points_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_points\\_documentation_concepts_points_.md",
@@ -422,7 +424,8 @@
       "chunking_strategy": "hybrid_adaptive_structural",
       "content_type": "list_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:38.760122",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:21.750368",
       "document_id": "67c7eb4b661b",
       "document_name": "_documentation_concepts_points_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_points\\_documentation_concepts_points_.md",
@@ -585,7 +588,8 @@
       "chunking_strategy": "hybrid_adaptive_structural",
       "content_type": "list_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:38.761304",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:21.751308",
       "document_id": "67c7eb4b661b",
       "document_name": "_documentation_concepts_points_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_points\\_documentation_concepts_points_.md",
@@ -784,7 +788,8 @@
       "chunking_strategy": "hybrid_adaptive_structural",
       "content_type": "list_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:38.762391",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:21.752542",
       "document_id": "67c7eb4b661b",
       "document_name": "_documentation_concepts_points_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_points\\_documentation_concepts_points_.md",
@@ -983,7 +988,8 @@
       "chunking_strategy": "hybrid_adaptive_semchunk",
       "content_type": "prose_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:38.763390",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:21.753444",
       "document_id": "67c7eb4b661b",
       "document_name": "_documentation_concepts_points_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_points\\_documentation_concepts_points_.md",
@@ -1158,7 +1164,7 @@
     }
   },
   {
-    "text": "## Point IDs\n\nQdrant supports using both `64-bit unsigned integers` and `UUID` as identifiers for points.\n\nExamples of UUID string representations:\n\n- simple: `936DA01F9ABD4d9d80C702AF85C822A8`\n- hyphenated: `550e8400-e29b-41d4-a716-446655440000`\n- urn: `urn:uuid:F9168C5E-CEB2-4faa-B6BF-329BF39FA1E4`\n\nThat means that in every request UUID string could be used instead of numerical id. Example:\n\n```http\nPUT /collections/{collection_name}/points\n{\n    \"points\": [\n        {\n            \"id\": \"5c56c793-69f3-4fbf-87e6-c4bf54c28c26\",\n            \"payload\": {\"color\": \"red\"},\n            \"vector\": [0.9, 0.1, 0.1]\n        }\n    ]\n}\n```\n\n```python\nfrom qdrant_client import QdrantClient, models\n\nclient = QdrantClient(url=\"http://localhost:6333\")\n\nclient.upsert(\n    collection_name=\"{collection_name}\",\n    points=[\n        models.PointStruct(\n            id=\"5c56c793-69f3-4fbf-87e6-c4bf54c28c26\",\n            payload={\n                \"color\": \"red\",\n            },\n            vector=[0.9, 0.1, 0.1],\n        ),\n    ],\n)\n```\n\n```typescript\nimport { QdrantClient } from \"@qdrant/js-client-rest\";\n\nconst client = new QdrantClient({ host: \"localhost\", port: 6333 });\n\nclient.upsert(\"{collection_name}\", {\n  points: [\n    {\n      id: \"5c56c793-69f3-4fbf-87e6-c4bf54c28c26\",\n      payload: {\n        color: \"red\",\n      },\n      vector: [0.9, 0.1, 0.1],\n    },\n  ],\n});\n```\n\n```rust\nuse qdrant_client::qdrant::{PointStruct, UpsertPointsBuilder};\nuse qdrant_client::Qdrant;\n\nlet client = Qdrant::from_url(\"http://localhost:6334\").build()?;\n\nclient\n    .upsert_points(\n        UpsertPointsBuilder::new(\n            \"{collection_name}\",\n            vec![PointStruct::new(\n                \"5c56c793-69f3-4fbf-87e6-c4bf54c28c26\",\n                vec![0.9, 0.1, 0.1],\n                [(\"color\", \"Red\".into())],\n            )],\n        )\n        .wait(true),\n    )\n    .await?;\n```\n\n```java\nimport java.util.List;\nimport java.util.Map;\nimport java.util.UUID;\n\nimport static io.qdrant.client.PointIdFactory.id;\nimport static io.qdrant.client.ValueFactory.value;\nimport static io.qdrant.client.VectorsFactory.vectors;\n\nimport io.qdrant.client.QdrantClient;\nimport io.qdrant.client.QdrantGrpcClient;\nimport io.qdrant.client.grpc.Points.PointStruct;\n\nQdrantClient client =\n    new QdrantClient(QdrantGrpcClient.newBuilder(\"localhost\", 6334, false).build());\n\nclient\n    .upsertAsync(\n        \"{collection_name}\",\n        List.of(\n            PointStruct.newBuilder()\n                .setId(id(UUID.fromString(\"5c56c793-69f3-4fbf-87e6-c4bf54c28c26\")))\n                .setVectors(vectors(0.05f, 0.61f, 0.76f, 0.74f))\n                .putAllPayload(Map.of(\"color\", value(\"Red\")))\n                .build()))\n    .get();\n```",
+    "text": "## Point IDs\n\nQdrant supports using both `64-bit unsigned integers` and `UUID` as identifiers for points.\n\nExamples of UUID string representations:\n\n- simple: `936DA01F9ABD4d9d80C702AF85C822A8`\n- hyphenated: `550e8400-e29b-41d4-a716-446655440000`\n- urn: `urn:uuid:F9168C5E-CEB2-4faa-B6BF-329BF39FA1E4`\n\nThat means that in every request UUID string could be used instead of numerical id. Example:\n\n```http\nPUT /collections/{collection_name}/points\n{\n    \"points\": [\n        {\n            \"id\": \"5c56c793-69f3-4fbf-87e6-c4bf54c28c26\",\n            \"payload\": {\"color\": \"red\"},\n            \"vector\": [0.9, 0.1, 0.1]\n        }\n    ]\n}\n```\n\n```python\nfrom qdrant_client import QdrantClient, models\n\nclient = QdrantClient(url=\"http://localhost:6333\")\n\nclient.upsert(\n    collection_name=\"{collection_name}\",\n    points=[\n        models.PointStruct(\n            id=\"5c56c793-69f3-4fbf-87e6-c4bf54c28c26\",\n            payload={\n                \"color\": \"red\",\n            },\n            vector=[0.9, 0.1, 0.1],\n        ),\n    ],\n)\n```\n\n```typescript\nimport { QdrantClient } from \"@qdrant/js-client-rest\";\n\nconst client = new QdrantClient({ host: \"localhost\", port: 6333 });\n\nclient.upsert(\"{collection_name}\", {\n  points: [\n    {\n      id: \"5c56c793-69f3-4fbf-87e6-c4bf54c28c26\",\n      payload: {\n        color: \"red\",\n      },\n      vector: [0.9, 0.1, 0.1],\n    },\n  ],\n});\n```\n\n```rust\nuse qdrant_client::qdrant::{PointStruct, UpsertPointsBuilder};\nuse qdrant_client::Qdrant;\n\nlet client = Qdrant::from_url(\"http://localhost:6334\").build()?;\n\nclient\n    .upsert_points(\n        UpsertPointsBuilder::new(\n            \"{collection_name}\",\n            vec![PointStruct::new(\n                \"5c56c793-69f3-4fbf-87e6-c4bf54c28c26\",\n                vec![0.9, 0.1, 0.1],\n                [(\"color\", \"Red\".into())],\n            )],\n        )\n        .wait(true),\n    )\n    .await?;\n```\n\n```java\nimport java.util.List;\nimport java.util.Map;\nimport java.util.UUID;\n\nimport static io.qdrant.client.PointIdFactory.id;\nimport static io.qdrant.client.ValueFactory.value;\nimport static io.qdrant.client.VectorsFactory.vectors;\n\nimport io.qdrant.client.QdrantClient;\nimport io.qdrant.client.QdrantGrpcClient;\nimport io.qdrant.client.grpc.Points.PointStruct;\n\nQdrantClient client =\n    new QdrantClient(QdrantGrpcClient.newBuilder(\"localhost\", 6334, false).build());\n\nclient\n    .upsertAsync(\n        \"{collection_name}\",\n        List.of(\n            PointStruct.newBuilder()\n                .setId(id(UUID.fromString(\"5c56c793-69f3-4fbf-87e6-c4bf54c28c26\")))\n                .setVectors(vectors(0.05f, 0.61f, 0.76f, 0.74f))\n                .putAllPayload(Map.of(\"color\", value(\"Red\")))\n                .build()))\n    .get();\n```\n\n```csharp\nusing Qdrant.Client;\nusing Qdrant.Client.Grpc;\n\nvar client = new QdrantClient(\"localhost\", 6334);\n\nawait client.UpsertAsync(\n\tcollectionName: \"{collection_name}\",\n\tpoints: new List<PointStruct>\n\t{\n\t\tnew()\n\t\t{\n\t\t\tId = Guid.Parse(\"5c56c793-69f3-4fbf-87e6-c4bf54c28c26\"),\n\t\t\tVectors = new[] { 0.05f, 0.61f, 0.76f, 0.74f },\n\t\t\tPayload = { [\"color\"] = \"Red\" }\n\t\t}\n\t}\n);\n```\n\n```go\nimport (\n\t\"context\"\n\n\t\"github.com/qdrant/go-client/qdrant\"\n)",
     "metadata": {
       "chunk_id": "67c7eb4b661b-0011",
       "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_points\\_documentation_concepts_points_.md",
@@ -1172,17 +1178,18 @@
         "Point IDs"
       ],
       "heading_text": "Point IDs",
-      "token_count": 834,
-      "char_count": 2705,
+      "token_count": 1003,
+      "char_count": 3153,
       "start_char": 12475,
-      "end_char": 15180,
+      "end_char": 15628,
       "semantic_score": 0.7,
       "structural_score": 0.7999999999999998,
-      "retrieval_quality": 0.9125628140703519,
+      "retrieval_quality": 0.9000000000000001,
       "chunking_strategy": "hybrid_adaptive_semchunk",
       "content_type": "prose_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:38.768767",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:21.758113",
       "document_id": "67c7eb4b661b",
       "document_name": "_documentation_concepts_points_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_points\\_documentation_concepts_points_.md",
@@ -1190,9 +1197,9 @@
       "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_points",
       "relative_path": "Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_points\\_documentation_concepts_points_.md",
       "hierarchy_path": "Point IDs",
-      "chunk_hash": "1307891a241b6779",
-      "content_digest": "1307891a241b6779",
-      "chunk_length": 2705,
+      "chunk_hash": "1f4c80e4cf66dd18",
+      "content_digest": "1f4c80e4cf66dd18",
+      "chunk_length": 3153,
       "payload_version": "1.3",
       "collection_hints": [
         "qdrant_ecosystem"
@@ -1206,9 +1213,10 @@
           "import",
           "points",
           "qdrantclient",
-          "uuid",
+          "new",
           "collection",
           "name",
+          "uuid",
           "5c56c793",
           "69f3",
           "4fbf",
@@ -1218,114 +1226,113 @@
           "red",
           "pointstruct",
           "localhost",
-          "new",
-          "java",
-          "http"
+          "payload",
+          "java"
         ],
         "term_weights": [
           {
             "term": "client",
-            "tf": 18,
-            "weight": 0.073171
+            "tf": 23,
+            "weight": 0.078231
           },
           {
             "term": "qdrant",
-            "tf": 14,
-            "weight": 0.056911
+            "tf": 18,
+            "weight": 0.061224
           },
           {
             "term": "import",
-            "tf": 11,
-            "weight": 0.044715
+            "tf": 12,
+            "weight": 0.040816
           },
           {
             "term": "points",
-            "tf": 7,
-            "weight": 0.028455
+            "tf": 8,
+            "weight": 0.027211
           },
           {
             "term": "qdrantclient",
+            "tf": 8,
+            "weight": 0.027211
+          },
+          {
+            "term": "new",
+            "tf": 8,
+            "weight": 0.027211
+          },
+          {
+            "term": "collection",
             "tf": 7,
-            "weight": 0.028455
+            "weight": 0.02381
+          },
+          {
+            "term": "name",
+            "tf": 7,
+            "weight": 0.02381
           },
           {
             "term": "uuid",
             "tf": 6,
-            "weight": 0.02439
-          },
-          {
-            "term": "collection",
-            "tf": 6,
-            "weight": 0.02439
-          },
-          {
-            "term": "name",
-            "tf": 6,
-            "weight": 0.02439
+            "weight": 0.020408
           },
           {
             "term": "5c56c793",
-            "tf": 5,
-            "weight": 0.020325
+            "tf": 6,
+            "weight": 0.020408
           },
           {
             "term": "69f3",
-            "tf": 5,
-            "weight": 0.020325
+            "tf": 6,
+            "weight": 0.020408
           },
           {
             "term": "4fbf",
-            "tf": 5,
-            "weight": 0.020325
+            "tf": 6,
+            "weight": 0.020408
           },
           {
             "term": "87e6",
-            "tf": 5,
-            "weight": 0.020325
+            "tf": 6,
+            "weight": 0.020408
           },
           {
             "term": "c4bf54c28c26",
-            "tf": 5,
-            "weight": 0.020325
+            "tf": 6,
+            "weight": 0.020408
           },
           {
             "term": "color",
-            "tf": 5,
-            "weight": 0.020325
+            "tf": 6,
+            "weight": 0.020408
           },
           {
             "term": "red",
-            "tf": 5,
-            "weight": 0.020325
+            "tf": 6,
+            "weight": 0.020408
           },
           {
             "term": "pointstruct",
-            "tf": 5,
-            "weight": 0.020325
+            "tf": 6,
+            "weight": 0.020408
           },
           {
             "term": "localhost",
-            "tf": 4,
-            "weight": 0.01626
+            "tf": 5,
+            "weight": 0.017007
           },
           {
-            "term": "new",
+            "term": "payload",
             "tf": 4,
-            "weight": 0.01626
+            "weight": 0.013605
           },
           {
             "term": "java",
             "tf": 4,
-            "weight": 0.01626
-          },
-          {
-            "term": "http",
-            "tf": 3,
-            "weight": 0.012195
+            "weight": 0.013605
           }
         ],
-        "unique_terms": 106,
-        "total_terms": 246
+        "unique_terms": 114,
+        "total_terms": 294
       },
       "modal_hint": "code",
       "content_flags": {
@@ -1337,12 +1344,12 @@
       },
       "search_keywords": [
         "5c56c793",
-        "69f3",
         "Point IDs",
         "client",
         "collection",
         "import",
         "name",
+        "new",
         "points",
         "qdrant",
         "qdrantclient",
@@ -1352,18 +1359,18 @@
     "advanced_scores": {
       "semantic": 0.7,
       "structural": 0.7999999999999998,
-      "retrieval_quality": 0.9125628140703519,
-      "overall": 0.8041876046901173
+      "retrieval_quality": 0.9000000000000001,
+      "overall": 0.7999999999999999
     }
   },
   {
-    "text": "## Upload points\n\nTo optimize performance, Qdrant supports batch loading of points. I.e., you can load several points into the service in one API call. Batching allows you to minimize the overhead of creating a network connection.\n\nThe Qdrant API supports two ways of creating batches - record-oriented and column-oriented. Internally, these options do not differ and are made only for the convenience of interaction.\n\nCreate points with batch:\n\n```http\nPUT /collections/{collection_name}/points\n{\n    \"batch\": {\n        \"ids\": [1, 2, 3],\n        \"payloads\": [\n            {\"color\": \"red\"},\n            {\"color\": \"green\"},\n            {\"color\": \"blue\"}\n        ],\n        \"vectors\": [\n            [0.9, 0.1, 0.1],\n            [0.1, 0.9, 0.1],\n            [0.1, 0.1, 0.9]\n        ]\n    }\n}\n```\n\n```python\nclient.upsert(\n    collection_name=\"{collection_name}\",\n    points=models.Batch(\n        ids=[1, 2, 3],\n        payloads=[\n            {\"color\": \"red\"},\n            {\"color\": \"green\"},\n            {\"color\": \"blue\"},\n        ],\n        vectors=[\n            [0.9, 0.1, 0.1],\n            [0.1, 0.9, 0.1],\n            [0.1, 0.1, 0.9],\n        ],\n    ),\n)\n```\n\n```typescript\nclient.upsert(\"{collection_name}\", {\n  batch: {\n    ids: [1, 2, 3],\n    payloads: [{ color: \"red\" }, { color: \"green\" }, { color: \"blue\" }],\n    vectors: [\n      [0.9, 0.1, 0.1],\n      [0.1, 0.9, 0.1],\n      [0.1, 0.1, 0.9],\n    ],\n  },\n});\n```\n\nor record-oriented equivalent:\n\n```http\nPUT /collections/{collection_name}/points\n{\n    \"points\": [\n        {\n            \"id\": 1,\n            \"payload\": {\"color\": \"red\"},\n            \"vector\": [0.9, 0.1, 0.1]\n        },\n        {\n            \"id\": 2,\n            \"payload\": {\"color\": \"green\"},\n            \"vector\": [0.1, 0.9, 0.1]\n        },\n        {\n            \"id\": 3,\n            \"payload\": {\"color\": \"blue\"},\n            \"vector\": [0.1, 0.1, 0.9]\n        }\n    ]\n}\n```\n\n```python\nclient.upsert(\n    collection_name=\"{collection_name}\",\n    points=[\n        models.PointStruct(\n            id=1,\n            payload={\n                \"color\": \"red\",\n            },\n            vector=[0.9, 0.1, 0.1],\n        ),\n        models.PointStruct(\n            id=2,\n            payload={\n                \"color\": \"green\",\n            },\n            vector=[0.1, 0.9, 0.1],\n        ),\n        models.PointStruct(\n            id=3,\n            payload={\n                \"color\": \"blue\",\n            },\n            vector=[0.1, 0.1, 0.9],\n        ),\n    ],\n)\n```",
+    "text": "## Upload points\n\nTo optimize performance, Qdrant supports batch loading of points. I.e., you can load several points into the service in one API call. Batching allows you to minimize the overhead of creating a network connection.\n\nThe Qdrant API supports two ways of creating batches - record-oriented and column-oriented. Internally, these options do not differ and are made only for the convenience of interaction.\n\nCreate points with batch:\n\n```http\nPUT /collections/{collection_name}/points\n{\n    \"batch\": {\n        \"ids\": [1, 2, 3],\n        \"payloads\": [\n            {\"color\": \"red\"},\n            {\"color\": \"green\"},\n            {\"color\": \"blue\"}\n        ],\n        \"vectors\": [\n            [0.9, 0.1, 0.1],\n            [0.1, 0.9, 0.1],\n            [0.1, 0.1, 0.9]\n        ]\n    }\n}\n```\n\n```python\nclient.upsert(\n    collection_name=\"{collection_name}\",\n    points=models.Batch(\n        ids=[1, 2, 3],\n        payloads=[\n            {\"color\": \"red\"},\n            {\"color\": \"green\"},\n            {\"color\": \"blue\"},\n        ],\n        vectors=[\n            [0.9, 0.1, 0.1],\n            [0.1, 0.9, 0.1],\n            [0.1, 0.1, 0.9],\n        ],\n    ),\n)\n```\n\n```typescript\nclient.upsert(\"{collection_name}\", {\n  batch: {\n    ids: [1, 2, 3],\n    payloads: [{ color: \"red\" }, { color: \"green\" }, { color: \"blue\" }],\n    vectors: [\n      [0.9, 0.1, 0.1],\n      [0.1, 0.9, 0.1],\n      [0.1, 0.1, 0.9],\n    ],\n  },\n});\n```\n\nor record-oriented equivalent:\n\n```http\nPUT /collections/{collection_name}/points\n{\n    \"points\": [\n        {\n            \"id\": 1,\n            \"payload\": {\"color\": \"red\"},\n            \"vector\": [0.9, 0.1, 0.1]\n        },\n        {\n            \"id\": 2,\n            \"payload\": {\"color\": \"green\"},\n            \"vector\": [0.1, 0.9, 0.1]\n        },\n        {\n            \"id\": 3,\n            \"payload\": {\"color\": \"blue\"},\n            \"vector\": [0.1, 0.1, 0.9]\n        }\n    ]\n}\n```\n\n```python\nclient.upsert(\n    collection_name=\"{collection_name}\",\n    points=[\n        models.PointStruct(\n            id=1,\n            payload={\n                \"color\": \"red\",\n            },\n            vector=[0.9, 0.1, 0.1],\n        ),\n        models.PointStruct(\n            id=2,\n            payload={\n                \"color\": \"green\",\n            },\n            vector=[0.1, 0.9, 0.1],\n        ),\n        models.PointStruct(\n            id=3,\n            payload={\n                \"color\": \"blue\",\n            },\n            vector=[0.1, 0.1, 0.9],\n        ),\n    ],\n)\n```\n\n```typescript\nclient.upsert(\"{collection_name}\", {\n  points: [\n    {\n      id: 1,\n      payload: { color: \"red\" },\n      vector: [0.9, 0.1, 0.1],\n    },\n    {\n      id: 2,\n      payload: { color: \"green\" },\n      vector: [0.1, 0.9, 0.1],\n    },\n    {\n      id: 3,\n      payload: { color: \"blue\" },\n      vector: [0.1, 0.1, 0.9],\n    },\n  ],\n});\n```\n\n```rust\nuse qdrant_client::qdrant::{PointStruct, UpsertPointsBuilder};\n\nclient\n    .upsert_points(\n        UpsertPointsBuilder::new(\n            \"{collection_name}\",\n            vec![\n                PointStruct::new(1, vec![0.9, 0.1, 0.1], [(\"city\", \"red\".into())]),\n                PointStruct::new(2, vec![0.1, 0.9, 0.1], [(\"city\", \"green\".into())]),\n                PointStruct::new(3, vec![0.1, 0.1, 0.9], [(\"city\", \"blue\".into())]),\n            ],\n        )\n        .wait(true),\n    )\n    .await?;\n```",
     "metadata": {
-      "chunk_id": "67c7eb4b661b-0015",
+      "chunk_id": "67c7eb4b661b-0014",
       "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_points\\_documentation_concepts_points_.md",
       "filename": "_documentation_concepts_points_.md",
       "file_extension": ".md",
-      "chunk_index": 15,
+      "chunk_index": 14,
       "document_level": 1,
       "parent_chunk_id": null,
       "child_chunk_ids": [],
@@ -1371,17 +1378,18 @@
         "Upload points"
       ],
       "heading_text": "Upload points",
-      "token_count": 725,
-      "char_count": 2479,
+      "token_count": 1020,
+      "char_count": 3338,
       "start_char": 20043,
-      "end_char": 22522,
+      "end_char": 23381,
       "semantic_score": 0.7,
       "structural_score": 0.7,
-      "retrieval_quality": 0.6494023904382471,
+      "retrieval_quality": 0.6350453172205438,
       "chunking_strategy": "hybrid_adaptive_semchunk",
       "content_type": "prose_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:38.786713",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:21.781627",
       "document_id": "67c7eb4b661b",
       "document_name": "_documentation_concepts_points_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_points\\_documentation_concepts_points_.md",
@@ -1389,9 +1397,9 @@
       "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_points",
       "relative_path": "Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_points\\_documentation_concepts_points_.md",
       "hierarchy_path": "Upload points",
-      "chunk_hash": "ebe475d0012f3fcf",
-      "content_digest": "ebe475d0012f3fcf",
-      "chunk_length": 2479,
+      "chunk_hash": "29f2baab47dd5aaa",
+      "content_digest": "29f2baab47dd5aaa",
+      "chunk_length": 3338,
       "payload_version": "1.3",
       "collection_hints": [
         "qdrant_ecosystem"
@@ -1406,125 +1414,125 @@
           "name",
           "payload",
           "vector",
-          "batch",
           "red",
           "green",
           "blue",
+          "pointstruct",
+          "client",
+          "batch",
+          "upsert",
+          "qdrant",
+          "into",
           "the",
           "models",
-          "oriented",
-          "ids",
-          "payloads",
-          "vectors",
-          "client",
-          "upsert",
-          "pointstruct",
-          "qdrant"
+          "new",
+          "vec",
+          "oriented"
         ],
         "term_weights": [
           {
             "term": "color",
-            "tf": 15,
-            "weight": 0.095541
+            "tf": 18,
+            "weight": 0.085308
           },
           {
             "term": "points",
-            "tf": 9,
-            "weight": 0.057325
+            "tf": 11,
+            "weight": 0.052133
           },
           {
             "term": "collection",
-            "tf": 7,
-            "weight": 0.044586
+            "tf": 9,
+            "weight": 0.042654
           },
           {
             "term": "name",
-            "tf": 7,
-            "weight": 0.044586
+            "tf": 9,
+            "weight": 0.042654
           },
           {
             "term": "payload",
-            "tf": 6,
-            "weight": 0.038217
+            "tf": 9,
+            "weight": 0.042654
           },
           {
             "term": "vector",
+            "tf": 9,
+            "weight": 0.042654
+          },
+          {
+            "term": "red",
+            "tf": 7,
+            "weight": 0.033175
+          },
+          {
+            "term": "green",
+            "tf": 7,
+            "weight": 0.033175
+          },
+          {
+            "term": "blue",
+            "tf": 7,
+            "weight": 0.033175
+          },
+          {
+            "term": "pointstruct",
+            "tf": 7,
+            "weight": 0.033175
+          },
+          {
+            "term": "client",
             "tf": 6,
-            "weight": 0.038217
+            "weight": 0.028436
           },
           {
             "term": "batch",
             "tf": 5,
-            "weight": 0.031847
+            "weight": 0.023697
           },
           {
-            "term": "red",
+            "term": "upsert",
             "tf": 5,
-            "weight": 0.031847
+            "weight": 0.023697
           },
           {
-            "term": "green",
-            "tf": 5,
-            "weight": 0.031847
+            "term": "qdrant",
+            "tf": 4,
+            "weight": 0.018957
           },
           {
-            "term": "blue",
-            "tf": 5,
-            "weight": 0.031847
+            "term": "into",
+            "tf": 4,
+            "weight": 0.018957
           },
           {
             "term": "the",
             "tf": 4,
-            "weight": 0.025478
+            "weight": 0.018957
           },
           {
             "term": "models",
             "tf": 4,
-            "weight": 0.025478
+            "weight": 0.018957
+          },
+          {
+            "term": "new",
+            "tf": 4,
+            "weight": 0.018957
+          },
+          {
+            "term": "vec",
+            "tf": 4,
+            "weight": 0.018957
           },
           {
             "term": "oriented",
             "tf": 3,
-            "weight": 0.019108
-          },
-          {
-            "term": "ids",
-            "tf": 3,
-            "weight": 0.019108
-          },
-          {
-            "term": "payloads",
-            "tf": 3,
-            "weight": 0.019108
-          },
-          {
-            "term": "vectors",
-            "tf": 3,
-            "weight": 0.019108
-          },
-          {
-            "term": "client",
-            "tf": 3,
-            "weight": 0.019108
-          },
-          {
-            "term": "upsert",
-            "tf": 3,
-            "weight": 0.019108
-          },
-          {
-            "term": "pointstruct",
-            "tf": 3,
-            "weight": 0.019108
-          },
-          {
-            "term": "qdrant",
-            "tf": 2,
-            "weight": 0.012739
+            "weight": 0.014218
           }
         ],
-        "unique_terms": 66,
-        "total_terms": 157
+        "unique_terms": 75,
+        "total_terms": 211
       },
       "modal_hint": "code",
       "content_flags": {
@@ -1536,7 +1544,6 @@
       },
       "search_keywords": [
         "Upload points",
-        "batch",
         "blue",
         "collection",
         "color",
@@ -1544,6 +1551,7 @@
         "name",
         "payload",
         "points",
+        "pointstruct",
         "red",
         "vector"
       ]
@@ -1551,18 +1559,18 @@
     "advanced_scores": {
       "semantic": 0.7,
       "structural": 0.7,
-      "retrieval_quality": 0.6494023904382471,
-      "overall": 0.6831341301460823
+      "retrieval_quality": 0.6350453172205438,
+      "overall": 0.6783484390735146
     }
   },
   {
-    "text": "### Update vectors\n\n*Available as of v1.2.0*\n\nThis method updates the specified vectors on the given points. Unspecified vectors are kept unchanged. All given points must exist.\n\nREST API ([Schema](https://api.qdrant.tech/api-reference/points/update-vectors)):\n\n```http\nPUT /collections/{collection_name}/points/vectors\n{\n    \"points\": [\n        {\n            \"id\": 1,\n            \"vector\": {\n                \"image\": [0.1, 0.2, 0.3, 0.4]\n            }\n        },\n        {\n            \"id\": 2,\n            \"vector\": {\n                \"text\": [0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2]\n            }\n        }\n    ]\n}\n```\n\n```python\nclient.update_vectors(\n    collection_name=\"{collection_name}\",\n    points=[\n        models.PointVectors(\n            id=1,\n            vector={\n                \"image\": [0.1, 0.2, 0.3, 0.4],\n            },\n        ),\n        models.PointVectors(\n            id=2,\n            vector={\n                \"text\": [0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2],\n            },\n        ),\n    ],\n)\n```\n\n```typescript\nclient.updateVectors(\"{collection_name}\", {\n  points: [\n    {\n      id: 1,\n      vector: {\n        image: [0.1, 0.2, 0.3, 0.4],\n      },\n    },\n    {\n      id: 2,\n      vector: {\n        text: [0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2],\n      },\n    },\n  ],\n});\n```\n\n```rust\nuse std::collections::HashMap;\n\nuse qdrant_client::qdrant::{\n    PointVectors, UpdatePointVectorsBuilder,\n};\n\nclient\n    .update_vectors(\n        UpdatePointVectorsBuilder::new(\n            \"{collection_name}\",\n            vec![\n                PointVectors {\n                    id: Some(1.into()),\n                    vectors: Some(\n                        HashMap::from([(\"image\".to_string(), vec![0.1, 0.2, 0.3, 0.4])]).into(),\n                    ),\n                },\n                PointVectors {\n                    id: Some(2.into()),\n                    vectors: Some(\n                        HashMap::from([(\n                            \"text\".to_string(),",
+    "text": "### Update vectors\n\n*Available as of v1.2.0*\n\nThis method updates the specified vectors on the given points. Unspecified vectors are kept unchanged. All given points must exist.\n\nREST API ([Schema](https://api.qdrant.tech/api-reference/points/update-vectors)):\n\n```http\nPUT /collections/{collection_name}/points/vectors\n{\n    \"points\": [\n        {\n            \"id\": 1,\n            \"vector\": {\n                \"image\": [0.1, 0.2, 0.3, 0.4]\n            }\n        },\n        {\n            \"id\": 2,\n            \"vector\": {\n                \"text\": [0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2]\n            }\n        }\n    ]\n}\n```\n\n```python\nclient.update_vectors(\n    collection_name=\"{collection_name}\",\n    points=[\n        models.PointVectors(\n            id=1,\n            vector={\n                \"image\": [0.1, 0.2, 0.3, 0.4],\n            },\n        ),\n        models.PointVectors(\n            id=2,\n            vector={\n                \"text\": [0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2],\n            },\n        ),\n    ],\n)\n```\n\n```typescript\nclient.updateVectors(\"{collection_name}\", {\n  points: [\n    {\n      id: 1,\n      vector: {\n        image: [0.1, 0.2, 0.3, 0.4],\n      },\n    },\n    {\n      id: 2,\n      vector: {\n        text: [0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2],\n      },\n    },\n  ],\n});\n```\n\n```rust\nuse std::collections::HashMap;\n\nuse qdrant_client::qdrant::{\n    PointVectors, UpdatePointVectorsBuilder,\n};\n\nclient\n    .update_vectors(\n        UpdatePointVectorsBuilder::new(\n            \"{collection_name}\",\n            vec![\n                PointVectors {\n                    id: Some(1.into()),\n                    vectors: Some(\n                        HashMap::from([(\"image\".to_string(), vec![0.1, 0.2, 0.3, 0.4])]).into(),\n                    ),\n                },\n                PointVectors {\n                    id: Some(2.into()),\n                    vectors: Some(\n                        HashMap::from([(\n                            \"text\".to_string(),\n                            vec![0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2],\n                        )])\n                        .into(),\n                    ),\n                },\n            ],\n        )\n        .wait(true),\n    )\n    .await?;\n```\n\n```java\nimport java.util.List;\nimport java.util.Map;\n\nimport static io.qdrant.client.PointIdFactory.id;\nimport static io.qdrant.client.VectorFactory.vector;\nimport static io.qdrant.client.VectorsFactory.namedVectors;\n\nclient\n    .updateVectorsAsync(\n        \"{collection_name}\",\n        List.of(\n            PointVectors.newBuilder()\n                .setId(id(1))\n                .setVectors(namedVectors(Map.of(\"image\", vector(List.of(0.1f, 0.2f, 0.3f, 0.4f)))))\n                .build(),\n            PointVectors.newBuilder()\n                .setId(id(2))\n                .setVectors(\n                    namedVectors(\n                        Map.of(\n                            \"text\", vector(List.of(0.9f, 0.8f, 0.7f, 0.6f, 0.5f, 0.4f, 0.3f, 0.2f)))))\n                .build()))\n    .get();\n```\n\n```csharp\nusing Qdrant.Client;\nusing Qdrant.Client.Grpc;\n\nvar client = new QdrantClient(\"localhost\", 6334);",
     "metadata": {
-      "chunk_id": "67c7eb4b661b-0027",
+      "chunk_id": "67c7eb4b661b-0022",
       "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_points\\_documentation_concepts_points_.md",
       "filename": "_documentation_concepts_points_.md",
       "file_extension": ".md",
-      "chunk_index": 27,
+      "chunk_index": 22,
       "document_level": 1,
       "parent_chunk_id": null,
       "child_chunk_ids": [],
@@ -1570,17 +1578,18 @@
         "Update vectors"
       ],
       "heading_text": "Update vectors",
-      "token_count": 570,
-      "char_count": 1978,
+      "token_count": 883,
+      "char_count": 3133,
       "start_char": 39722,
-      "end_char": 41700,
-      "semantic_score": 0.7,
+      "end_char": 42855,
+      "semantic_score": 0.6,
       "structural_score": 0.7999999999999998,
-      "retrieval_quality": 0.6714285714285715,
+      "retrieval_quality": 0.6775,
       "chunking_strategy": "hybrid_adaptive_semchunk",
       "content_type": "prose_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:38.797119",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:21.795830",
       "document_id": "67c7eb4b661b",
       "document_name": "_documentation_concepts_points_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_points\\_documentation_concepts_points_.md",
@@ -1588,9 +1597,9 @@
       "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_points",
       "relative_path": "Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_points\\_documentation_concepts_points_.md",
       "hierarchy_path": "Update vectors",
-      "chunk_hash": "16391b461840bf56",
-      "content_digest": "16391b461840bf56",
-      "chunk_length": 1978,
+      "chunk_hash": "ac9104449dbe046a",
+      "content_digest": "ac9104449dbe046a",
+      "chunk_length": 3133,
       "payload_version": "1.3",
       "collection_hints": [
         "qdrant_ecosystem"
@@ -1599,131 +1608,131 @@
         "version": "1.0",
         "weighting": "tf-normalized",
         "top_terms": [
+          "client",
           "vectors",
-          "points",
           "vector",
+          "qdrant",
+          "points",
+          "pointvectors",
           "collection",
           "name",
-          "pointvectors",
-          "update",
           "image",
           "text",
-          "client",
+          "import",
+          "update",
           "some",
-          "api",
-          "qdrant",
-          "hashmap",
           "into",
-          "the",
-          "given",
-          "collections",
-          "models",
-          "use"
+          "list",
+          "api",
+          "hashmap",
+          "vec",
+          "java",
+          "map"
         ],
         "term_weights": [
           {
+            "term": "client",
+            "tf": 11,
+            "weight": 0.060109
+          },
+          {
             "term": "vectors",
             "tf": 9,
-            "weight": 0.080357
+            "weight": 0.04918
+          },
+          {
+            "term": "vector",
+            "tf": 9,
+            "weight": 0.04918
+          },
+          {
+            "term": "qdrant",
+            "tf": 8,
+            "weight": 0.043716
           },
           {
             "term": "points",
             "tf": 7,
-            "weight": 0.0625
-          },
-          {
-            "term": "vector",
-            "tf": 6,
-            "weight": 0.053571
-          },
-          {
-            "term": "collection",
-            "tf": 5,
-            "weight": 0.044643
-          },
-          {
-            "term": "name",
-            "tf": 5,
-            "weight": 0.044643
+            "weight": 0.038251
           },
           {
             "term": "pointvectors",
+            "tf": 7,
+            "weight": 0.038251
+          },
+          {
+            "term": "collection",
+            "tf": 6,
+            "weight": 0.032787
+          },
+          {
+            "term": "name",
+            "tf": 6,
+            "weight": 0.032787
+          },
+          {
+            "term": "image",
             "tf": 5,
-            "weight": 0.044643
+            "weight": 0.027322
+          },
+          {
+            "term": "text",
+            "tf": 5,
+            "weight": 0.027322
+          },
+          {
+            "term": "import",
+            "tf": 5,
+            "weight": 0.027322
           },
           {
             "term": "update",
             "tf": 4,
-            "weight": 0.035714
-          },
-          {
-            "term": "image",
-            "tf": 4,
-            "weight": 0.035714
-          },
-          {
-            "term": "text",
-            "tf": 4,
-            "weight": 0.035714
-          },
-          {
-            "term": "client",
-            "tf": 4,
-            "weight": 0.035714
+            "weight": 0.021858
           },
           {
             "term": "some",
             "tf": 4,
-            "weight": 0.035714
+            "weight": 0.021858
+          },
+          {
+            "term": "into",
+            "tf": 4,
+            "weight": 0.021858
+          },
+          {
+            "term": "list",
+            "tf": 4,
+            "weight": 0.021858
           },
           {
             "term": "api",
             "tf": 3,
-            "weight": 0.026786
-          },
-          {
-            "term": "qdrant",
-            "tf": 3,
-            "weight": 0.026786
+            "weight": 0.016393
           },
           {
             "term": "hashmap",
             "tf": 3,
-            "weight": 0.026786
+            "weight": 0.016393
           },
           {
-            "term": "into",
+            "term": "vec",
             "tf": 3,
-            "weight": 0.026786
+            "weight": 0.016393
           },
           {
-            "term": "the",
-            "tf": 2,
-            "weight": 0.017857
+            "term": "java",
+            "tf": 3,
+            "weight": 0.016393
           },
           {
-            "term": "given",
-            "tf": 2,
-            "weight": 0.017857
-          },
-          {
-            "term": "collections",
-            "tf": 2,
-            "weight": 0.017857
-          },
-          {
-            "term": "models",
-            "tf": 2,
-            "weight": 0.017857
-          },
-          {
-            "term": "use",
-            "tf": 2,
-            "weight": 0.017857
+            "term": "map",
+            "tf": 3,
+            "weight": 0.016393
           }
         ],
-        "unique_terms": 49,
-        "total_terms": 112
+        "unique_terms": 75,
+        "total_terms": 183
       },
       "modal_hint": "code",
       "content_flags": {
@@ -1741,27 +1750,27 @@
         "name",
         "points",
         "pointvectors",
+        "qdrant",
         "text",
-        "update",
         "vector",
         "vectors"
       ]
     },
     "advanced_scores": {
-      "semantic": 0.7,
+      "semantic": 0.6,
       "structural": 0.7999999999999998,
-      "retrieval_quality": 0.6714285714285715,
-      "overall": 0.7238095238095238
+      "retrieval_quality": 0.6775,
+      "overall": 0.6924999999999999
     }
   },
   {
     "text": "### Delete vectors\n\n*Available as of v1.2.0*\n\nThis method deletes just the specified vectors from the given points. Other vectors are kept unchanged. Points are never deleted.\n\nREST API ([Schema](https://api.qdrant.tech/api-reference/points/delete-vectors)):\n\n```http\nPOST /collections/{collection_name}/points/vectors/delete\n{\n    \"points\": [0, 3, 100],\n    \"vectors\": [\"text\", \"image\"]\n}\n```\n\n```python\nclient.delete_vectors(\n    collection_name=\"{collection_name}\",\n    points=[0, 3, 100],\n    vectors=[\"text\", \"image\"],\n)\n```\n\n```typescript\nclient.deleteVectors(\"{collection_name}\", {\n  points: [0, 3, 10],\n  vector: [\"text\", \"image\"],\n});\n```\n\n```rust\nuse qdrant_client::qdrant::{\n    DeletePointVectorsBuilder, PointsIdsList,\n};\n\nclient\n    .delete_vectors(\n        DeletePointVectorsBuilder::new(\"{collection_name}\")\n            .points_selector(PointsIdsList {\n                ids: vec![0.into(), 3.into(), 10.into()],\n            })\n            .vectors(vec![\"text\".into(), \"image\".into()])\n            .wait(true),\n    )\n    .await?;\n```\n\n```java\nimport java.util.List;\n\nimport static io.qdrant.client.PointIdFactory.id;\n\nclient\n    .deleteVectorsAsync(\n        \"{collection_name}\", List.of(\"text\", \"image\"), List.of(id(0), id(3), id(10)))\n    .get();\n```\n\n```csharp\nawait client.DeleteVectorsAsync(\"{collection_name}\", [\"text\", \"image\"], [0, 3, 10]);\n```\n\n```go\nimport (\n\t\"context\"\n\n\t\"github.com/qdrant/go-client/qdrant\"\n)\n\nclient.DeleteVectors(context.Background(), &qdrant.DeletePointVectors{\n\tCollectionName: \"{collection_name}\",\n\tPointsSelector: qdrant.NewPointsSelector(\n\t\tqdrant.NewIDNum(0), qdrant.NewIDNum(3), qdrant.NewIDNum(10)),\n\tVectors: &qdrant.VectorsSelector{\n\t\tNames: []string{\"text\", \"image\"},\n\t},\n})\n```\n\nTo delete entire points, see [deleting points](#delete-points.md).",
     "metadata": {
-      "chunk_id": "67c7eb4b661b-0030",
+      "chunk_id": "67c7eb4b661b-0024",
       "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_points\\_documentation_concepts_points_.md",
       "filename": "_documentation_concepts_points_.md",
       "file_extension": ".md",
-      "chunk_index": 30,
+      "chunk_index": 24,
       "document_level": 1,
       "parent_chunk_id": null,
       "child_chunk_ids": [],
@@ -1779,7 +1788,8 @@
       "chunking_strategy": "hybrid_adaptive_semchunk",
       "content_type": "prose_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:38.797119",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:21.797935",
       "document_id": "67c7eb4b661b",
       "document_name": "_documentation_concepts_points_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_points\\_documentation_concepts_points_.md",
@@ -1956,11 +1966,11 @@
   {
     "text": "### Update payload\n\nLearn how to modify the payload of a point in the [Payload](https://qdrant.tech/documentation/concepts/payload/#update-payload) section.",
     "metadata": {
-      "chunk_id": "67c7eb4b661b-0031",
+      "chunk_id": "67c7eb4b661b-0025",
       "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_points\\_documentation_concepts_points_.md",
       "filename": "_documentation_concepts_points_.md",
       "file_extension": ".md",
-      "chunk_index": 31,
+      "chunk_index": 25,
       "document_level": 1,
       "parent_chunk_id": null,
       "child_chunk_ids": [],
@@ -1978,7 +1988,8 @@
       "chunking_strategy": "hybrid_adaptive_semchunk",
       "content_type": "prose_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:38.797119",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:21.798150",
       "document_id": "67c7eb4b661b",
       "document_name": "_documentation_concepts_points_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_points\\_documentation_concepts_points_.md",
@@ -2111,13 +2122,13 @@
     }
   },
   {
-    "text": "## Delete points\n\nREST API ([Schema](https://api.qdrant.tech/api-reference/points/delete-points)):\n\n```http\nPOST /collections/{collection_name}/points/delete\n{\n    \"points\": [0, 3, 100]\n}\n```\n\n```python\nclient.delete(\n    collection_name=\"{collection_name}\",\n    points_selector=models.PointIdsList(\n        points=[0, 3, 100],\n    ),\n)\n```\n\n```typescript\nclient.delete(\"{collection_name}\", {\n  points: [0, 3, 100],\n});\n```\n\n```rust\nuse qdrant_client::qdrant::{DeletePointsBuilder, PointsIdsList};\n\nclient\n    .delete_points(\n        DeletePointsBuilder::new(\"{collection_name}\")\n            .points(PointsIdsList {\n                ids: vec![0.into(), 3.into(), 100.into()],\n            })\n            .wait(true),\n    )\n    .await?;\n```\n\n```java\nimport java.util.List;\n\nimport static io.qdrant.client.PointIdFactory.id;\n\nclient.deleteAsync(\"{collection_name}\", List.of(id(0), id(3), id(100)));\n```\n\n```csharp\nusing Qdrant.Client;\n\nvar client = new QdrantClient(\"localhost\", 6334);\n\nawait client.DeleteAsync(collectionName: \"{collection_name}\", ids: [0, 3, 100]);\n```\n\n```go\nimport (\n\t\"context\"\n\n\t\"github.com/qdrant/go-client/qdrant\"\n)\n\nclient, err := qdrant.NewClient(&qdrant.Config{\n\tHost: \"localhost\",\n\tPort: 6334,\n})\n\nclient.Delete(context.Background(), &qdrant.DeletePoints{\n\tCollectionName: \"{collection_name}\",\n\tPoints: qdrant.NewPointsSelector(\n\t\tqdrant.NewIDNum(0), qdrant.NewIDNum(3), qdrant.NewIDNum(100),\n\t),\n})\n```\n\nAlternative way to specify which points to remove is to use filter.\n\n```http\nPOST /collections/{collection_name}/points/delete\n{\n    \"filter\": {\n        \"must\": [\n            {\n                \"key\": \"color\",\n                \"match\": {\n                    \"value\": \"red\"\n                }\n            }\n        ]\n    }\n}\n```\n\n```python\nclient.delete(\n    collection_name=\"{collection_name}\",\n    points_selector=models.FilterSelector(\n        filter=models.Filter(\n            must=[\n                models.FieldCondition(\n                    key=\"color\",\n                    match=models.MatchValue(value=\"red\"),\n                ),\n            ],\n        )\n    ),\n)\n```\n\n```typescript\nclient.delete(\"{collection_name}\", {\n  filter: {\n    must: [\n      {\n        key: \"color\",\n        match: {\n          value: \"red\",\n        },\n      },\n    ],\n  },\n});\n```\n\n```rust\nuse qdrant_client::qdrant::{Condition, DeletePointsBuilder, Filter};\n\nclient\n    .delete_points(\n        DeletePointsBuilder::new(\"{collection_name}\")\n            .points(Filter::must([Condition::matches(\n                \"color\",\n                \"red\".to_string(),\n            )]))\n            .wait(true),\n    )\n    .await?;\n```\n\n```java\nimport static io.qdrant.client.ConditionFactory.matchKeyword;\n\nimport io.qdrant.client.grpc.Points.Filter;\n\nclient\n    .deleteAsync(\n        \"{collection_name}\",\n        Filter.newBuilder().addMust(matchKeyword(\"color\", \"red\")).build())\n    .get();\n```\n\n```csharp\nusing Qdrant.Client;\nusing static Qdrant.Client.Grpc.Conditions;\n\nvar client = new QdrantClient(\"localhost\", 6334);\n\nawait client.DeleteAsync(collectionName: \"{collection_name}\", filter: MatchKeyword(\"color\", \"red\"));\n```\n\n```go\nimport (\n\t\"context\"\n\n\t\"github.com/qdrant/go-client/qdrant\"\n)\n\nclient, err := qdrant.NewClient(&qdrant.Config{\n\tHost: \"localhost\",\n\tPort: 6334,\n})",
+    "text": "## Delete points\n\nREST API ([Schema](https://api.qdrant.tech/api-reference/points/delete-points)):\n\n```http\nPOST /collections/{collection_name}/points/delete\n{\n    \"points\": [0, 3, 100]\n}\n```\n\n```python\nclient.delete(\n    collection_name=\"{collection_name}\",\n    points_selector=models.PointIdsList(\n        points=[0, 3, 100],\n    ),\n)\n```\n\n```typescript\nclient.delete(\"{collection_name}\", {\n  points: [0, 3, 100],\n});\n```\n\n```rust\nuse qdrant_client::qdrant::{DeletePointsBuilder, PointsIdsList};\n\nclient\n    .delete_points(\n        DeletePointsBuilder::new(\"{collection_name}\")\n            .points(PointsIdsList {\n                ids: vec![0.into(), 3.into(), 100.into()],\n            })\n            .wait(true),\n    )\n    .await?;\n```\n\n```java\nimport java.util.List;\n\nimport static io.qdrant.client.PointIdFactory.id;\n\nclient.deleteAsync(\"{collection_name}\", List.of(id(0), id(3), id(100)));\n```\n\n```csharp\nusing Qdrant.Client;\n\nvar client = new QdrantClient(\"localhost\", 6334);\n\nawait client.DeleteAsync(collectionName: \"{collection_name}\", ids: [0, 3, 100]);\n```\n\n```go\nimport (\n\t\"context\"\n\n\t\"github.com/qdrant/go-client/qdrant\"\n)\n\nclient, err := qdrant.NewClient(&qdrant.Config{\n\tHost: \"localhost\",\n\tPort: 6334,\n})\n\nclient.Delete(context.Background(), &qdrant.DeletePoints{\n\tCollectionName: \"{collection_name}\",\n\tPoints: qdrant.NewPointsSelector(\n\t\tqdrant.NewIDNum(0), qdrant.NewIDNum(3), qdrant.NewIDNum(100),\n\t),\n})\n```\n\nAlternative way to specify which points to remove is to use filter.\n\n```http\nPOST /collections/{collection_name}/points/delete\n{\n    \"filter\": {\n        \"must\": [\n            {\n                \"key\": \"color\",\n                \"match\": {\n                    \"value\": \"red\"\n                }\n            }\n        ]\n    }\n}\n```\n\n```python\nclient.delete(\n    collection_name=\"{collection_name}\",\n    points_selector=models.FilterSelector(\n        filter=models.Filter(\n            must=[\n                models.FieldCondition(\n                    key=\"color\",\n                    match=models.MatchValue(value=\"red\"),\n                ),\n            ],\n        )\n    ),\n)\n```\n\n```typescript\nclient.delete(\"{collection_name}\", {\n  filter: {\n    must: [\n      {\n        key: \"color\",\n        match: {\n          value: \"red\",\n        },\n      },\n    ],\n  },\n});\n```\n\n```rust\nuse qdrant_client::qdrant::{Condition, DeletePointsBuilder, Filter};\n\nclient\n    .delete_points(\n        DeletePointsBuilder::new(\"{collection_name}\")\n            .points(Filter::must([Condition::matches(\n                \"color\",\n                \"red\".to_string(),\n            )]))\n            .wait(true),\n    )\n    .await?;\n```\n\n```java\nimport static io.qdrant.client.ConditionFactory.matchKeyword;\n\nimport io.qdrant.client.grpc.Points.Filter;\n\nclient\n    .deleteAsync(\n        \"{collection_name}\",\n        Filter.newBuilder().addMust(matchKeyword(\"color\", \"red\")).build())\n    .get();\n```\n\n```csharp\nusing Qdrant.Client;\nusing static Qdrant.Client.Grpc.Conditions;\n\nvar client = new QdrantClient(\"localhost\", 6334);\n\nawait client.DeleteAsync(collectionName: \"{collection_name}\", filter: MatchKeyword(\"color\", \"red\"));\n```\n\n```go\nimport (\n\t\"context\"\n\n\t\"github.com/qdrant/go-client/qdrant\"\n)\n\nclient, err := qdrant.NewClient(&qdrant.Config{\n\tHost: \"localhost\",\n\tPort: 6334,\n})\n\nclient.Delete(context.Background(), &qdrant.DeletePoints{\n\tCollectionName: \"{collection_name}\",\n\tPoints: qdrant.NewPointsSelectorFilter(\n\t\t&qdrant.Filter{\n\t\t\tMust: []*qdrant.Condition{\n\t\t\t\tqdrant.NewMatch(\"color\", \"red\"),\n\t\t\t},\n\t\t},\n\t),\n})\n```\n\nThis example removes all points with `{ \"color\": \"red\" }` from the collection.",
     "metadata": {
-      "chunk_id": "67c7eb4b661b-0032",
+      "chunk_id": "67c7eb4b661b-0026",
       "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_points\\_documentation_concepts_points_.md",
       "filename": "_documentation_concepts_points_.md",
       "file_extension": ".md",
-      "chunk_index": 32,
+      "chunk_index": 26,
       "document_level": 1,
       "parent_chunk_id": null,
       "child_chunk_ids": [],
@@ -2125,17 +2136,18 @@
         "Delete points"
       ],
       "heading_text": "Delete points",
-      "token_count": 813,
-      "char_count": 3273,
+      "token_count": 902,
+      "char_count": 3598,
       "start_char": 45855,
-      "end_char": 49128,
+      "end_char": 49453,
       "semantic_score": 0.6,
-      "structural_score": 0.7,
-      "retrieval_quality": 0.6619246861924686,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.8623134328358208,
       "chunking_strategy": "hybrid_adaptive_semchunk",
       "content_type": "prose_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:38.797119",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:21.801042",
       "document_id": "67c7eb4b661b",
       "document_name": "_documentation_concepts_points_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_points\\_documentation_concepts_points_.md",
@@ -2143,9 +2155,9 @@
       "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_points",
       "relative_path": "Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_points\\_documentation_concepts_points_.md",
       "hierarchy_path": "Delete points",
-      "chunk_hash": "e60bcfa037106a21",
-      "content_digest": "e60bcfa037106a21",
-      "chunk_length": 3273,
+      "chunk_hash": "04a07b267b313d79",
+      "content_digest": "04a07b267b313d79",
+      "chunk_length": 3598,
       "payload_version": "1.3",
       "collection_hints": [
         "qdrant_ecosystem"
@@ -2154,131 +2166,131 @@
         "version": "1.0",
         "weighting": "tf-normalized",
         "top_terms": [
-          "client",
           "qdrant",
+          "client",
           "points",
           "collection",
           "name",
           "delete",
           "filter",
-          "100",
-          "import",
           "color",
           "red",
+          "100",
+          "import",
           "models",
+          "must",
           "deletepointsbuilder",
           "new",
           "await",
           "deleteasync",
           "localhost",
           "6334",
-          "must",
-          "api"
+          "collectionname"
         ],
         "term_weights": [
           {
-            "term": "client",
-            "tf": 25,
-            "weight": 0.086207
+            "term": "qdrant",
+            "tf": 29,
+            "weight": 0.090062
           },
           {
-            "term": "qdrant",
-            "tf": 24,
-            "weight": 0.082759
+            "term": "client",
+            "tf": 26,
+            "weight": 0.080745
           },
           {
             "term": "points",
-            "tf": 17,
-            "weight": 0.058621
+            "tf": 19,
+            "weight": 0.059006
           },
           {
             "term": "collection",
-            "tf": 15,
-            "weight": 0.051724
+            "tf": 17,
+            "weight": 0.052795
           },
           {
             "term": "name",
-            "tf": 15,
-            "weight": 0.051724
+            "tf": 16,
+            "weight": 0.049689
           },
           {
             "term": "delete",
-            "tf": 11,
-            "weight": 0.037931
+            "tf": 12,
+            "weight": 0.037267
           },
           {
             "term": "filter",
-            "tf": 10,
-            "weight": 0.034483
+            "tf": 11,
+            "weight": 0.034161
+          },
+          {
+            "term": "color",
+            "tf": 8,
+            "weight": 0.024845
+          },
+          {
+            "term": "red",
+            "tf": 8,
+            "weight": 0.024845
           },
           {
             "term": "100",
             "tf": 7,
-            "weight": 0.024138
+            "weight": 0.021739
           },
           {
             "term": "import",
             "tf": 6,
-            "weight": 0.02069
-          },
-          {
-            "term": "color",
-            "tf": 6,
-            "weight": 0.02069
-          },
-          {
-            "term": "red",
-            "tf": 6,
-            "weight": 0.02069
+            "weight": 0.018634
           },
           {
             "term": "models",
             "tf": 5,
-            "weight": 0.017241
+            "weight": 0.015528
+          },
+          {
+            "term": "must",
+            "tf": 5,
+            "weight": 0.015528
           },
           {
             "term": "deletepointsbuilder",
             "tf": 4,
-            "weight": 0.013793
+            "weight": 0.012422
           },
           {
             "term": "new",
             "tf": 4,
-            "weight": 0.013793
+            "weight": 0.012422
           },
           {
             "term": "await",
             "tf": 4,
-            "weight": 0.013793
+            "weight": 0.012422
           },
           {
             "term": "deleteasync",
             "tf": 4,
-            "weight": 0.013793
+            "weight": 0.012422
           },
           {
             "term": "localhost",
             "tf": 4,
-            "weight": 0.013793
+            "weight": 0.012422
           },
           {
             "term": "6334",
             "tf": 4,
-            "weight": 0.013793
+            "weight": 0.012422
           },
           {
-            "term": "must",
+            "term": "collectionname",
             "tf": 4,
-            "weight": 0.013793
-          },
-          {
-            "term": "api",
-            "tf": 3,
-            "weight": 0.010345
+            "weight": 0.012422
           }
         ],
-        "unique_terms": 84,
-        "total_terms": 290
+        "unique_terms": 93,
+        "total_terms": 322
       },
       "modal_hint": "code",
       "content_flags": {
@@ -2296,27 +2308,27 @@
         "color",
         "delete",
         "filter",
-        "import",
         "name",
         "points",
-        "qdrant"
+        "qdrant",
+        "red"
       ]
     },
     "advanced_scores": {
       "semantic": 0.6,
-      "structural": 0.7,
-      "retrieval_quality": 0.6619246861924686,
-      "overall": 0.6539748953974894
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.8623134328358208,
+      "overall": 0.7874378109452737
     }
   },
   {
     "text": "## Retrieve points\n\nThere is a method for retrieving points by their ids.\n\nREST API ([Schema](https://api.qdrant.tech/api-reference/points/get-points)):\n\n```http\nPOST /collections/{collection_name}/points\n{\n    \"ids\": [0, 3, 100]\n}\n```\n\n```python\nclient.retrieve(\n    collection_name=\"{collection_name}\",\n    ids=[0, 3, 100],\n)\n```\n\n```typescript\nclient.retrieve(\"{collection_name}\", {\n  ids: [0, 3, 100],\n});\n```\n\n```rust\nuse qdrant_client::qdrant::GetPointsBuilder;\n\nclient\n    .get_points(GetPointsBuilder::new(\n        \"{collection_name}\",\n        vec![0.into(), 30.into(), 100.into()],\n    ))\n    .await?;\n```\n\n```java\nimport java.util.List;\n\nimport static io.qdrant.client.PointIdFactory.id;\n\nclient\n    .retrieveAsync(\"{collection_name}\", List.of(id(0), id(30), id(100)), false, false, null)\n    .get();\n```\n\n```csharp\nusing Qdrant.Client;\n\nvar client = new QdrantClient(\"localhost\", 6334);\n\nawait client.RetrieveAsync(\n\tcollectionName: \"{collection_name}\",\n\tids: [0, 30, 100],\n\twithPayload: false,\n\twithVectors: false\n);\n```\n\n```go\nimport (\n\t\"context\"\n\n\t\"github.com/qdrant/go-client/qdrant\"\n)\n\nclient, err := qdrant.NewClient(&qdrant.Config{\n\tHost: \"localhost\",\n\tPort: 6334,\n})\n\nclient.Get(context.Background(), &qdrant.GetPoints{\n\tCollectionName: \"{collection_name}\",\n\tIds: []*qdrant.PointId{\n\t\tqdrant.NewIDNum(0), qdrant.NewIDNum(3), qdrant.NewIDNum(100),\n\t},\n})\n```\n\nThis method has additional parameters `with_vectors` and `with_payload`. Using these parameters, you can select parts of the point you want as a result. Excluding helps you not to waste traffic transmitting useless data.\n\nThe single point can also be retrieved via the API:\n\nREST API ([Schema](https://api.qdrant.tech/api-reference/points/get-point)):\n\n```http\nGET /collections/{collection_name}/points/{point_id}\n```",
     "metadata": {
-      "chunk_id": "67c7eb4b661b-0034",
+      "chunk_id": "67c7eb4b661b-0027",
       "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_points\\_documentation_concepts_points_.md",
       "filename": "_documentation_concepts_points_.md",
       "file_extension": ".md",
-      "chunk_index": 34,
+      "chunk_index": 27,
       "document_level": 1,
       "parent_chunk_id": null,
       "child_chunk_ids": [],
@@ -2334,7 +2346,8 @@
       "chunking_strategy": "hybrid_adaptive_semchunk",
       "content_type": "prose_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:38.805167",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:21.802541",
       "document_id": "67c7eb4b661b",
       "document_name": "_documentation_concepts_points_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_points\\_documentation_concepts_points_.md",
@@ -2509,13 +2522,13 @@
     }
   },
   {
-    "text": "## Scroll points\n\nSometimes it might be necessary to get all stored points without knowing ids, or iterate over points that correspond to a filter.\n\nREST API ([Schema](https://api.qdrant.tech/master/api-reference/points/scroll-points)):\n\n```http\nPOST /collections/{collection_name}/points/scroll\n{\n    \"filter\": {\n        \"must\": [\n            {\n                \"key\": \"color\",\n                \"match\": {\n                    \"value\": \"red\"\n                }\n            }\n        ]\n    },\n    \"limit\": 1,\n    \"with_payload\": true,\n    \"with_vector\": false\n}\n```\n\n```python\nclient.scroll(\n    collection_name=\"{collection_name}\",\n    scroll_filter=models.Filter(\n        must=[\n            models.FieldCondition(key=\"color\", match=models.MatchValue(value=\"red\")),\n        ]\n    ),\n    limit=1,\n    with_payload=True,\n    with_vectors=False,\n)\n```\n\n```typescript\nclient.scroll(\"{collection_name}\", {\n  filter: {\n    must: [\n      {\n        key: \"color\",\n        match: {\n          value: \"red\",\n        },\n      },\n    ],\n  },\n  limit: 1,\n  with_payload: true,\n  with_vector: false,\n});\n```\n\n```rust\nuse qdrant_client::qdrant::{Condition, Filter, ScrollPointsBuilder};\n\nclient\n    .scroll(\n        ScrollPointsBuilder::new(\"{collection_name}\")\n            .filter(Filter::must([Condition::matches(\n                \"color\",\n                \"red\".to_string(),\n            )]))\n            .limit(1)\n            .with_payload(true)\n            .with_vectors(false),\n    )\n    .await?;\n```\n\n```java\nimport static io.qdrant.client.ConditionFactory.matchKeyword;\nimport static io.qdrant.client.WithPayloadSelectorFactory.enable;\n\nimport io.qdrant.client.grpc.Points.Filter;\nimport io.qdrant.client.grpc.Points.ScrollPoints;\n\nclient\n    .scrollAsync(\n        ScrollPoints.newBuilder()\n            .setCollectionName(\"{collection_name}\")\n            .setFilter(Filter.newBuilder().addMust(matchKeyword(\"color\", \"red\")).build())\n            .setLimit(1)\n            .setWithPayload(enable(true))\n            .build())\n    .get();\n```\n\n```csharp\nusing Qdrant.Client;\nusing static Qdrant.Client.Grpc.Conditions;\n\nvar client = new QdrantClient(\"localhost\", 6334);\n\nawait client.ScrollAsync(\n\tcollectionName: \"{collection_name}\",\n\tfilter: MatchKeyword(\"color\", \"red\"),\n\tlimit: 1,\n\tpayloadSelector: true\n);\n```\n\n```go\nimport (\n\t\"context\"\n\n\t\"github.com/qdrant/go-client/qdrant\"\n)\n\nclient, err := qdrant.NewClient(&qdrant.Config{\n\tHost: \"localhost\",\n\tPort: 6334,\n})\n\nclient.Scroll(context.Background(), &qdrant.ScrollPoints{\n\tCollectionName: \"{collection_name}\",\n\tFilter: &qdrant.Filter{\n\t\tMust: []*qdrant.Condition{\n\t\t\tqdrant.NewMatch(\"color\", \"red\"),\n\t\t},\n\t},\n\tLimit:       qdrant.PtrOf(uint32(1)),\n\tWithPayload: qdrant.NewWithPayload(true),\n})\n```\n\nReturns all point with `color` = `red`.",
+    "text": "## Scroll points\n\nSometimes it might be necessary to get all stored points without knowing ids, or iterate over points that correspond to a filter.\n\nREST API ([Schema](https://api.qdrant.tech/master/api-reference/points/scroll-points)):\n\n```http\nPOST /collections/{collection_name}/points/scroll\n{\n    \"filter\": {\n        \"must\": [\n            {\n                \"key\": \"color\",\n                \"match\": {\n                    \"value\": \"red\"\n                }\n            }\n        ]\n    },\n    \"limit\": 1,\n    \"with_payload\": true,\n    \"with_vector\": false\n}\n```\n\n```python\nclient.scroll(\n    collection_name=\"{collection_name}\",\n    scroll_filter=models.Filter(\n        must=[\n            models.FieldCondition(key=\"color\", match=models.MatchValue(value=\"red\")),\n        ]\n    ),\n    limit=1,\n    with_payload=True,\n    with_vectors=False,\n)\n```\n\n```typescript\nclient.scroll(\"{collection_name}\", {\n  filter: {\n    must: [\n      {\n        key: \"color\",\n        match: {\n          value: \"red\",\n        },\n      },\n    ],\n  },\n  limit: 1,\n  with_payload: true,\n  with_vector: false,\n});\n```\n\n```rust\nuse qdrant_client::qdrant::{Condition, Filter, ScrollPointsBuilder};\n\nclient\n    .scroll(\n        ScrollPointsBuilder::new(\"{collection_name}\")\n            .filter(Filter::must([Condition::matches(\n                \"color\",\n                \"red\".to_string(),\n            )]))\n            .limit(1)\n            .with_payload(true)\n            .with_vectors(false),\n    )\n    .await?;\n```\n\n```java\nimport static io.qdrant.client.ConditionFactory.matchKeyword;\nimport static io.qdrant.client.WithPayloadSelectorFactory.enable;\n\nimport io.qdrant.client.grpc.Points.Filter;\nimport io.qdrant.client.grpc.Points.ScrollPoints;\n\nclient\n    .scrollAsync(\n        ScrollPoints.newBuilder()\n            .setCollectionName(\"{collection_name}\")\n            .setFilter(Filter.newBuilder().addMust(matchKeyword(\"color\", \"red\")).build())\n            .setLimit(1)\n            .setWithPayload(enable(true))\n            .build())\n    .get();\n```\n\n```csharp\nusing Qdrant.Client;\nusing static Qdrant.Client.Grpc.Conditions;\n\nvar client = new QdrantClient(\"localhost\", 6334);\n\nawait client.ScrollAsync(\n\tcollectionName: \"{collection_name}\",\n\tfilter: MatchKeyword(\"color\", \"red\"),\n\tlimit: 1,\n\tpayloadSelector: true\n);\n```\n\n```go\nimport (\n\t\"context\"\n\n\t\"github.com/qdrant/go-client/qdrant\"\n)\n\nclient, err := qdrant.NewClient(&qdrant.Config{\n\tHost: \"localhost\",\n\tPort: 6334,\n})\n\nclient.Scroll(context.Background(), &qdrant.ScrollPoints{\n\tCollectionName: \"{collection_name}\",\n\tFilter: &qdrant.Filter{\n\t\tMust: []*qdrant.Condition{\n\t\t\tqdrant.NewMatch(\"color\", \"red\"),\n\t\t},\n\t},\n\tLimit:       qdrant.PtrOf(uint32(1)),\n\tWithPayload: qdrant.NewWithPayload(true),\n})\n```\n\nReturns all point with `color` = `red`.\n\n```json\n{\n  \"result\": {\n    \"next_page_offset\": 1,\n    \"points\": [\n      {\n        \"id\": 0,\n        \"payload\": {\n          \"color\": \"red\"\n        }\n      }\n    ]\n  },\n  \"status\": \"ok\",\n  \"time\": 0.0001\n}\n```\n\nThe Scroll API will return all points that match the filter in a page-by-page manner.\n\nAll resulting points are sorted by ID. To query the next page it is necessary to specify the largest seen ID in the `offset` field. For convenience, this ID is also returned in the field `next_page_offset`. If the value of the `next_page_offset` field is `null` - the last page is reached.",
     "metadata": {
-      "chunk_id": "67c7eb4b661b-0035",
+      "chunk_id": "67c7eb4b661b-0028",
       "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_points\\_documentation_concepts_points_.md",
       "filename": "_documentation_concepts_points_.md",
       "file_extension": ".md",
-      "chunk_index": 35,
+      "chunk_index": 28,
       "document_level": 1,
       "parent_chunk_id": null,
       "child_chunk_ids": [],
@@ -2523,17 +2536,18 @@
         "Scroll points"
       ],
       "heading_text": "Scroll points",
-      "token_count": 672,
-      "char_count": 2773,
+      "token_count": 829,
+      "char_count": 3360,
       "start_char": 51252,
-      "end_char": 54025,
-      "semantic_score": 0.6,
+      "end_char": 54612,
+      "semantic_score": 0.7,
       "structural_score": 0.8999999999999999,
-      "retrieval_quality": 0.722,
+      "retrieval_quality": 0.7041237113402061,
       "chunking_strategy": "hybrid_adaptive_semchunk",
       "content_type": "prose_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:38.807987",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:21.805178",
       "document_id": "67c7eb4b661b",
       "document_name": "_documentation_concepts_points_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_points\\_documentation_concepts_points_.md",
@@ -2541,9 +2555,9 @@
       "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_points",
       "relative_path": "Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_points\\_documentation_concepts_points_.md",
       "hierarchy_path": "Scroll points",
-      "chunk_hash": "564e79a7c8c85e06",
-      "content_digest": "564e79a7c8c85e06",
-      "chunk_length": 2773,
+      "chunk_hash": "db44021c20e3c900",
+      "content_digest": "db44021c20e3c900",
+      "chunk_length": 3360,
       "payload_version": "1.3",
       "collection_hints": [
         "qdrant_ecosystem"
@@ -2555,128 +2569,128 @@
           "qdrant",
           "client",
           "filter",
-          "with",
-          "scroll",
           "points",
-          "collection",
-          "name",
+          "scroll",
           "color",
           "red",
+          "with",
+          "the",
+          "collection",
+          "name",
           "true",
+          "page",
           "limit",
           "must",
-          "import",
           "payload",
-          "false",
+          "import",
+          "all",
           "api",
-          "key",
-          "match",
-          "value"
+          "match"
         ],
         "term_weights": [
           {
             "term": "qdrant",
             "tf": 19,
-            "weight": 0.074803
+            "weight": 0.059561
           },
           {
             "term": "client",
             "tf": 16,
-            "weight": 0.062992
+            "weight": 0.050157
           },
           {
             "term": "filter",
-            "tf": 13,
-            "weight": 0.051181
+            "tf": 14,
+            "weight": 0.043887
+          },
+          {
+            "term": "points",
+            "tf": 11,
+            "weight": 0.034483
+          },
+          {
+            "term": "scroll",
+            "tf": 9,
+            "weight": 0.028213
+          },
+          {
+            "term": "color",
+            "tf": 9,
+            "weight": 0.028213
+          },
+          {
+            "term": "red",
+            "tf": 9,
+            "weight": 0.028213
           },
           {
             "term": "with",
             "tf": 9,
-            "weight": 0.035433
+            "weight": 0.028213
           },
           {
-            "term": "scroll",
-            "tf": 8,
-            "weight": 0.031496
-          },
-          {
-            "term": "points",
-            "tf": 8,
-            "weight": 0.031496
+            "term": "the",
+            "tf": 9,
+            "weight": 0.028213
           },
           {
             "term": "collection",
             "tf": 8,
-            "weight": 0.031496
+            "weight": 0.025078
           },
           {
             "term": "name",
             "tf": 8,
-            "weight": 0.031496
-          },
-          {
-            "term": "color",
-            "tf": 8,
-            "weight": 0.031496
-          },
-          {
-            "term": "red",
-            "tf": 8,
-            "weight": 0.031496
+            "weight": 0.025078
           },
           {
             "term": "true",
             "tf": 7,
-            "weight": 0.027559
+            "weight": 0.021944
+          },
+          {
+            "term": "page",
+            "tf": 7,
+            "weight": 0.021944
           },
           {
             "term": "limit",
             "tf": 6,
-            "weight": 0.023622
+            "weight": 0.018809
           },
           {
             "term": "must",
             "tf": 5,
-            "weight": 0.019685
+            "weight": 0.015674
+          },
+          {
+            "term": "payload",
+            "tf": 5,
+            "weight": 0.015674
           },
           {
             "term": "import",
             "tf": 5,
-            "weight": 0.019685
+            "weight": 0.015674
           },
           {
-            "term": "payload",
+            "term": "all",
             "tf": 4,
-            "weight": 0.015748
-          },
-          {
-            "term": "false",
-            "tf": 4,
-            "weight": 0.015748
+            "weight": 0.012539
           },
           {
             "term": "api",
-            "tf": 3,
-            "weight": 0.011811
-          },
-          {
-            "term": "key",
-            "tf": 3,
-            "weight": 0.011811
+            "tf": 4,
+            "weight": 0.012539
           },
           {
             "term": "match",
-            "tf": 3,
-            "weight": 0.011811
-          },
-          {
-            "term": "value",
-            "tf": 3,
-            "weight": 0.011811
+            "tf": 4,
+            "weight": 0.012539
           }
         ],
-        "unique_terms": 98,
-        "total_terms": 254
+        "unique_terms": 126,
+        "total_terms": 319
       },
       "modal_hint": "code",
       "content_flags": {
@@ -2692,29 +2706,29 @@
         "collection",
         "color",
         "filter",
-        "name",
         "points",
         "qdrant",
         "red",
         "scroll",
+        "the",
         "with"
       ]
     },
     "advanced_scores": {
-      "semantic": 0.6,
+      "semantic": 0.7,
       "structural": 0.8999999999999999,
-      "retrieval_quality": 0.722,
-      "overall": 0.7406666666666667
+      "retrieval_quality": 0.7041237113402061,
+      "overall": 0.768041237113402
     }
   },
   {
-    "text": "### Order points by payload key\n\n*Available as of v1.8.0*\n\nWhen using the [`scroll`](#scroll-points.md) API, you can sort the results by payload key. For example, you can retrieve points in chronological order if your payloads have a `\"timestamp\"` field, as is shown from the example below:\n\nWithout an appropriate index, payload-based ordering would create too much load on the system for each request. Qdrant therefore requires a payload index which supports [Range filtering conditions](https://qdrant.tech/documentation/concepts/indexing/#payload-index) on the field used for `order_by`\n\n```http\nPOST /collections/{collection_name}/points/scroll\n{\n    \"limit\": 15,\n    \"order_by\": \"timestamp\", // <-- this!\n}\n```\n\n```python\nclient.scroll(\n    collection_name=\"{collection_name}\",\n    limit=15,\n    order_by=\"timestamp\", # <-- this!\n)\n```\n\n```typescript\nclient.scroll(\"{collection_name}\", {\n  limit: 15,\n  order_by: \"timestamp\", // <-- this!\n});\n```\n\n```rust\nuse qdrant_client::qdrant::{OrderByBuilder, ScrollPointsBuilder};\n\nclient\n    .scroll(\n        ScrollPointsBuilder::new(\"{collection_name}\")\n            .limit(15)\n            .order_by(OrderByBuilder::new(\"timestamp\")),\n    )\n    .await?;\n```\n\n```java\nimport io.qdrant.client.grpc.Points.OrderBy;\nimport io.qdrant.client.grpc.Points.ScrollPoints;\n\nclient.scrollAsync(ScrollPoints.newBuilder()\n  .setCollectionName(\"{collection_name}\")\n  .setLimit(15)\n  .setOrderBy(OrderBy.newBuilder().setKey(\"timestamp\").build())\n  .build()).get();\n```\n\n```csharp\nawait client.ScrollAsync(\"{collection_name}\", limit: 15, orderBy: \"timestamp\");\n```\n\n```go\nimport (\n\t\"context\"\n\n\t\"github.com/qdrant/go-client/qdrant\"\n)\n\nclient, err := qdrant.NewClient(&qdrant.Config{\n\tHost: \"localhost\",\n\tPort: 6334,\n})\n\nclient.Scroll(context.Background(), &qdrant.ScrollPoints{\n\tCollectionName: \"{collection_name}\",\n\tLimit:          qdrant.PtrOf(uint32(15)),\n\tOrderBy: &qdrant.OrderBy{\n\t\tKey: \"timestamp\",\n\t},\n})\n```\n\nYou need to use the `order_by` `key` parameter to specify the payload key. Then you can add other fields to control the ordering, such as `direction` and `start_from`:\n\n```http\n\"order_by\": {\n    \"key\": \"timestamp\",\n    \"direction\": \"desc\" // default is \"asc\"\n    \"start_from\": 123, // start from this value\n}\n```\n\n```python\norder_by=models.OrderBy(\n    key=\"timestamp\",\n    direction=\"desc\",  # default is \"asc\"\n    start_from=123,  # start from this value\n)\n```\n\n```typescript\norder_by: {\n    key: \"timestamp\",\n    direction: \"desc\", // default is \"asc\"\n    start_from: 123, // start from this value\n}\n```\n\n```rust\nuse qdrant_client::qdrant::{start_from::Value, Direction, OrderByBuilder};\n\nOrderByBuilder::new(\"timestamp\")\n    .direction(Direction::Desc.into())\n    .start_from(Value::Integer(123))\n    .build();\n```",
+    "text": "### Order points by payload key\n\n*Available as of v1.8.0*\n\nWhen using the [`scroll`](#scroll-points.md) API, you can sort the results by payload key. For example, you can retrieve points in chronological order if your payloads have a `\"timestamp\"` field, as is shown from the example below:\n\nWithout an appropriate index, payload-based ordering would create too much load on the system for each request. Qdrant therefore requires a payload index which supports [Range filtering conditions](https://qdrant.tech/documentation/concepts/indexing/#payload-index) on the field used for `order_by`\n\n```http\nPOST /collections/{collection_name}/points/scroll\n{\n    \"limit\": 15,\n    \"order_by\": \"timestamp\", // <-- this!\n}\n```\n\n```python\nclient.scroll(\n    collection_name=\"{collection_name}\",\n    limit=15,\n    order_by=\"timestamp\", # <-- this!\n)\n```\n\n```typescript\nclient.scroll(\"{collection_name}\", {\n  limit: 15,\n  order_by: \"timestamp\", // <-- this!\n});\n```\n\n```rust\nuse qdrant_client::qdrant::{OrderByBuilder, ScrollPointsBuilder};\n\nclient\n    .scroll(\n        ScrollPointsBuilder::new(\"{collection_name}\")\n            .limit(15)\n            .order_by(OrderByBuilder::new(\"timestamp\")),\n    )\n    .await?;\n```\n\n```java\nimport io.qdrant.client.grpc.Points.OrderBy;\nimport io.qdrant.client.grpc.Points.ScrollPoints;\n\nclient.scrollAsync(ScrollPoints.newBuilder()\n  .setCollectionName(\"{collection_name}\")\n  .setLimit(15)\n  .setOrderBy(OrderBy.newBuilder().setKey(\"timestamp\").build())\n  .build()).get();\n```\n\n```csharp\nawait client.ScrollAsync(\"{collection_name}\", limit: 15, orderBy: \"timestamp\");\n```\n\n```go\nimport (\n\t\"context\"\n\n\t\"github.com/qdrant/go-client/qdrant\"\n)\n\nclient, err := qdrant.NewClient(&qdrant.Config{\n\tHost: \"localhost\",\n\tPort: 6334,\n})\n\nclient.Scroll(context.Background(), &qdrant.ScrollPoints{\n\tCollectionName: \"{collection_name}\",\n\tLimit:          qdrant.PtrOf(uint32(15)),\n\tOrderBy: &qdrant.OrderBy{\n\t\tKey: \"timestamp\",\n\t},\n})\n```\n\nYou need to use the `order_by` `key` parameter to specify the payload key. Then you can add other fields to control the ordering, such as `direction` and `start_from`:\n\n```http\n\"order_by\": {\n    \"key\": \"timestamp\",\n    \"direction\": \"desc\" // default is \"asc\"\n    \"start_from\": 123, // start from this value\n}\n```\n\n```python\norder_by=models.OrderBy(\n    key=\"timestamp\",\n    direction=\"desc\",  # default is \"asc\"\n    start_from=123,  # start from this value\n)\n```\n\n```typescript\norder_by: {\n    key: \"timestamp\",\n    direction: \"desc\", // default is \"asc\"\n    start_from: 123, // start from this value\n}\n```\n\n```rust\nuse qdrant_client::qdrant::{start_from::Value, Direction, OrderByBuilder};\n\nOrderByBuilder::new(\"timestamp\")\n    .direction(Direction::Desc.into())\n    .start_from(Value::Integer(123))\n    .build();\n```\n\n```java\nimport io.qdrant.client.grpc.Points.Direction;\nimport io.qdrant.client.grpc.Points.OrderBy;\nimport io.qdrant.client.grpc.Points.StartFrom;\n\nOrderBy.newBuilder()\n  .setKey(\"timestamp\")\n  .setDirection(Direction.Desc)\n  .setStartFrom(StartFrom.newBuilder()\n    .setInteger(123)\n    .build())\n  .build();\n```\n\n```csharp\nusing Qdrant.Client.Grpc;\n\nnew OrderBy\n{\n Key = \"timestamp\",\n Direction = Direction.Desc,\n StartFrom = 123\n};\n```\n\n```go\nimport \"github.com/qdrant/go-client/qdrant\"\n\nqdrant.OrderBy{\n\tKey:       \"timestamp\",\n\tDirection: qdrant.Direction_Desc.Enum(),\n\tStartFrom: qdrant.NewStartFromInt(123),\n}\n```\n\nWhen you use the `order_by` parameter, pagination is disabled.\n\nWhen sorting is based on a non-unique value, it is not possible to rely on an ID offset. Thus, next\\_page\\_offset is not returned within the response. However, you can still do pagination by combining `\"order_by\": { \"start_from\": ... }` with a `{ \"must_not\": [{ \"has_id\": [...] }] }` filter.",
     "metadata": {
-      "chunk_id": "67c7eb4b661b-0037",
+      "chunk_id": "67c7eb4b661b-0029",
       "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_points\\_documentation_concepts_points_.md",
       "filename": "_documentation_concepts_points_.md",
       "file_extension": ".md",
-      "chunk_index": 37,
+      "chunk_index": 29,
       "document_level": 1,
       "parent_chunk_id": null,
       "child_chunk_ids": [],
@@ -2722,17 +2736,18 @@
         "Order points by payload key"
       ],
       "heading_text": "Order points by payload key",
-      "token_count": 706,
-      "char_count": 2766,
+      "token_count": 963,
+      "char_count": 3745,
       "start_char": 54614,
-      "end_char": 57380,
-      "semantic_score": 0.7,
-      "structural_score": 0.7999999999999998,
-      "retrieval_quality": 0.8936567164179106,
+      "end_char": 58359,
+      "semantic_score": 0.6,
+      "structural_score": 0.9999999999999999,
+      "retrieval_quality": 0.884054054054054,
       "chunking_strategy": "hybrid_adaptive_semchunk",
       "content_type": "prose_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:38.807987",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:21.807443",
       "document_id": "67c7eb4b661b",
       "document_name": "_documentation_concepts_points_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_points\\_documentation_concepts_points_.md",
@@ -2740,9 +2755,9 @@
       "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_points",
       "relative_path": "Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_points\\_documentation_concepts_points_.md",
       "hierarchy_path": "Order points by payload key",
-      "chunk_hash": "f6aa8f7e585881f9",
-      "content_digest": "f6aa8f7e585881f9",
-      "chunk_length": 2766,
+      "chunk_hash": "bb7e4506fb741ee7",
+      "content_digest": "bb7e4506fb741ee7",
+      "chunk_length": 3745,
       "payload_version": "1.3",
       "collection_hints": [
         "qdrant_ecosystem"
@@ -2752,130 +2767,130 @@
         "weighting": "tf-normalized",
         "top_terms": [
           "qdrant",
-          "timestamp",
           "client",
+          "timestamp",
           "order",
+          "direction",
           "from",
-          "start",
           "key",
           "the",
+          "orderby",
+          "start",
+          "points",
           "collection",
           "name",
           "scroll",
-          "direction",
-          "points",
+          "import",
+          "desc",
+          "123",
           "payload",
-          "limit",
-          "this",
-          "orderby",
-          "value",
           "you",
-          "orderbybuilder"
+          "limit"
         ],
         "term_weights": [
           {
             "term": "qdrant",
-            "tf": 15,
-            "weight": 0.05102
-          },
-          {
-            "term": "timestamp",
-            "tf": 12,
-            "weight": 0.040816
+            "tf": 24,
+            "weight": 0.05985
           },
           {
             "term": "client",
-            "tf": 12,
-            "weight": 0.040816
+            "tf": 17,
+            "weight": 0.042394
+          },
+          {
+            "term": "timestamp",
+            "tf": 15,
+            "weight": 0.037406
           },
           {
             "term": "order",
-            "tf": 11,
-            "weight": 0.037415
+            "tf": 13,
+            "weight": 0.032419
+          },
+          {
+            "term": "direction",
+            "tf": 13,
+            "weight": 0.032419
           },
           {
             "term": "from",
-            "tf": 10,
-            "weight": 0.034014
-          },
-          {
-            "term": "start",
-            "tf": 9,
-            "weight": 0.030612
+            "tf": 11,
+            "weight": 0.027431
           },
           {
             "term": "key",
-            "tf": 8,
-            "weight": 0.027211
+            "tf": 10,
+            "weight": 0.024938
           },
           {
             "term": "the",
-            "tf": 8,
-            "weight": 0.027211
+            "tf": 10,
+            "weight": 0.024938
+          },
+          {
+            "term": "orderby",
+            "tf": 10,
+            "weight": 0.024938
+          },
+          {
+            "term": "start",
+            "tf": 10,
+            "weight": 0.024938
+          },
+          {
+            "term": "points",
+            "tf": 9,
+            "weight": 0.022444
           },
           {
             "term": "collection",
             "tf": 8,
-            "weight": 0.027211
+            "weight": 0.01995
           },
           {
             "term": "name",
             "tf": 8,
-            "weight": 0.027211
+            "weight": 0.01995
           },
           {
             "term": "scroll",
             "tf": 7,
-            "weight": 0.02381
+            "weight": 0.017456
           },
           {
-            "term": "direction",
+            "term": "import",
             "tf": 7,
-            "weight": 0.02381
+            "weight": 0.017456
           },
           {
-            "term": "points",
-            "tf": 6,
-            "weight": 0.020408
+            "term": "desc",
+            "tf": 7,
+            "weight": 0.017456
+          },
+          {
+            "term": "123",
+            "tf": 7,
+            "weight": 0.017456
           },
           {
             "term": "payload",
             "tf": 6,
-            "weight": 0.020408
+            "weight": 0.014963
+          },
+          {
+            "term": "you",
+            "tf": 6,
+            "weight": 0.014963
           },
           {
             "term": "limit",
             "tf": 6,
-            "weight": 0.020408
-          },
-          {
-            "term": "this",
-            "tf": 6,
-            "weight": 0.020408
-          },
-          {
-            "term": "orderby",
-            "tf": 6,
-            "weight": 0.020408
-          },
-          {
-            "term": "value",
-            "tf": 5,
-            "weight": 0.017007
-          },
-          {
-            "term": "you",
-            "tf": 4,
-            "weight": 0.013605
-          },
-          {
-            "term": "orderbybuilder",
-            "tf": 4,
-            "weight": 0.013605
+            "weight": 0.014963
           }
         ],
-        "unique_terms": 117,
-        "total_terms": 294
+        "unique_terms": 145,
+        "total_terms": 401
       },
       "modal_hint": "code",
       "content_flags": {
@@ -2888,11 +2903,11 @@
       "search_keywords": [
         "Order points by payload key",
         "client",
-        "collection",
+        "direction",
         "from",
         "key",
-        "name",
         "order",
+        "orderby",
         "qdrant",
         "start",
         "the",
@@ -2900,20 +2915,20 @@
       ]
     },
     "advanced_scores": {
-      "semantic": 0.7,
-      "structural": 0.7999999999999998,
-      "retrieval_quality": 0.8936567164179106,
-      "overall": 0.7978855721393034
+      "semantic": 0.6,
+      "structural": 0.9999999999999999,
+      "retrieval_quality": 0.884054054054054,
+      "overall": 0.828018018018018
     }
   },
   {
     "text": "## Counting points\n\n*Available as of v0.8.4*\n\nSometimes it can be useful to know how many points fit the filter conditions without doing a real search.\n\nAmong others, for example, we can highlight the following scenarios:\n\n- Evaluation of results size for faceted search\n- Determining the number of pages for pagination\n- Debugging the query execution speed\n\nREST API ([Schema](https://api.qdrant.tech/master/api-reference/points/count-points)):\n\n```http\nPOST /collections/{collection_name}/points/count\n{\n    \"filter\": {\n        \"must\": [\n            {\n                \"key\": \"color\",\n                \"match\": {\n                    \"value\": \"red\"\n                }\n            }\n        ]\n    },\n    \"exact\": true\n}\n```\n\n```python\nclient.count(\n    collection_name=\"{collection_name}\",\n    count_filter=models.Filter(\n        must=[\n            models.FieldCondition(key=\"color\", match=models.MatchValue(value=\"red\")),\n        ]\n    ),\n    exact=True,\n)\n```\n\n```typescript\nclient.count(\"{collection_name}\", {\n  filter: {\n    must: [\n      {\n        key: \"color\",\n        match: {\n          value: \"red\",\n        },\n      },\n    ],\n  },\n  exact: true,\n});\n```\n\n```rust\nuse qdrant_client::qdrant::{Condition, CountPointsBuilder, Filter};\n\nclient\n    .count(\n        CountPointsBuilder::new(\"{collection_name}\")\n            .filter(Filter::must([Condition::matches(\n                \"color\",\n                \"red\".to_string(),\n            )]))\n            .exact(true),\n    )\n    .await?;\n```\n\n```java\nimport static io.qdrant.client.ConditionFactory.matchKeyword;\n\nimport io.qdrant.client.grpc.Points.Filter;\n\nclient\n    .countAsync(\n        \"{collection_name}\",\n        Filter.newBuilder().addMust(matchKeyword(\"color\", \"red\")).build(),\n        true)\n    .get();\n```\n\n```csharp\nusing Qdrant.Client;\nusing static Qdrant.Client.Grpc.Conditions;\n\nvar client = new QdrantClient(\"localhost\", 6334);\n\nawait client.CountAsync(\n\tcollectionName: \"{collection_name}\",\n\tfilter: MatchKeyword(\"color\", \"red\"),\n\texact: true\n);\n```\n\n```go\nimport (\n\t\"context\"\n\n\t\"github.com/qdrant/go-client/qdrant\"\n)\n\nclient, err := qdrant.NewClient(&qdrant.Config{\n\tHost: \"localhost\",\n\tPort: 6334,\n})\n\nclient.Count(context.Background(), &qdrant.CountPoints{\n\tCollectionName: \"midlib\",\n\tFilter: &qdrant.Filter{\n\t\tMust: []*qdrant.Condition{\n\t\t\tqdrant.NewMatch(\"color\", \"red\"),\n\t\t},\n\t},\n})\n```\n\nReturns number of counts matching given filtering conditions:\n\n```json\n{\n  \"count\": 3811\n}\n```",
     "metadata": {
-      "chunk_id": "67c7eb4b661b-0039",
+      "chunk_id": "67c7eb4b661b-0030",
       "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_points\\_documentation_concepts_points_.md",
       "filename": "_documentation_concepts_points_.md",
       "file_extension": ".md",
-      "chunk_index": 39,
+      "chunk_index": 30,
       "document_level": 1,
       "parent_chunk_id": null,
       "child_chunk_ids": [],
@@ -2931,7 +2946,8 @@
       "chunking_strategy": "hybrid_adaptive_semchunk",
       "content_type": "prose_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:38.812109",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:21.808528",
       "document_id": "67c7eb4b661b",
       "document_name": "_documentation_concepts_points_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_points\\_documentation_concepts_points_.md",
@@ -3106,13 +3122,13 @@
     }
   },
   {
-    "text": "## Batch update\n\n*Available as of v1.5.0*\n\nYou can batch multiple point update operations. This includes inserting, updating and deleting points, vectors and payload.\n\nA batch update request consists of a list of operations. These are executed in order. These operations can be batched:\n\n- [Upsert points](#upload-points.md): `upsert` or `UpsertOperation`\n- [Delete points](#delete-points.md): `delete_points` or `DeleteOperation`\n- [Update vectors](#update-vectors.md): `update_vectors` or `UpdateVectorsOperation`\n- [Delete vectors](#delete-vectors.md): `delete_vectors` or `DeleteVectorsOperation`\n- [Set payload](https://qdrant.tech/documentation/concepts/payload/#set-payload): `set_payload` or `SetPayloadOperation`\n- [Overwrite payload](https://qdrant.tech/documentation/concepts/payload/#overwrite-payload): `overwrite_payload` or `OverwritePayload`\n- [Delete payload](https://qdrant.tech/documentation/concepts/payload/#delete-payload-keys): `delete_payload` or `DeletePayloadOperation`\n- [Clear payload](https://qdrant.tech/documentation/concepts/payload/#clear-payload): `clear_payload` or `ClearPayloadOperation`\n\nThe following example snippet makes use of all operations.\n\nREST API ([Schema](https://api.qdrant.tech/master/api-reference/points/batch-update)):\n\n```http\nPOST /collections/{collection_name}/points/batch\n{\n    \"operations\": [\n        {\n            \"upsert\": {\n                \"points\": [\n                    {\n                        \"id\": 1,\n                        \"vector\": [1.0, 2.0, 3.0, 4.0],\n                        \"payload\": {}\n                    }\n                ]\n            }\n        },\n        {\n            \"update_vectors\": {\n                \"points\": [\n                    {\n                        \"id\": 1,\n                        \"vector\": [1.0, 2.0, 3.0, 4.0]\n                    }\n                ]\n            }\n        },\n        {\n            \"delete_vectors\": {\n                \"points\": [1],\n                \"vector\": [\"\"]\n            }\n        },\n        {\n            \"overwrite_payload\": {\n                \"payload\": {\n                    \"test_payload\": \"1\"\n                },\n                \"points\": [1]\n            }\n        },\n        {\n            \"set_payload\": {\n                \"payload\": {\n                    \"test_payload_2\": \"2\",\n                    \"test_payload_3\": \"3\"\n                },\n                \"points\": [1]\n            }\n        },\n        {\n            \"delete_payload\": {\n                \"keys\": [\"test_payload_2\"],\n                \"points\": [1]\n            }\n        },\n        {\n            \"clear_payload\": {\n                \"points\": [1]\n            }\n        },\n        {\"delete\": {\"points\": [1]}}\n    ]\n}\n```\n\n```python\nclient.batch_update_points(\n    collection_name=\"{collection_name}\",\n    update_operations=[\n        models.UpsertOperation(\n            upsert=models.PointsList(\n                points=[\n                    models.PointStruct(\n                        id=1,\n                        vector=[1.0, 2.0, 3.0, 4.0],\n                        payload={},\n                    ),\n                ]\n            )\n        ),\n        models.UpdateVectorsOperation(\n            update_vectors=models.UpdateVectors(\n                points=[\n                    models.PointVectors(\n                        id=1,",
+    "text": "## Batch update\n\n*Available as of v1.5.0*\n\nYou can batch multiple point update operations. This includes inserting, updating and deleting points, vectors and payload.\n\nA batch update request consists of a list of operations. These are executed in order. These operations can be batched:\n\n- [Upsert points](#upload-points.md): `upsert` or `UpsertOperation`\n- [Delete points](#delete-points.md): `delete_points` or `DeleteOperation`\n- [Update vectors](#update-vectors.md): `update_vectors` or `UpdateVectorsOperation`\n- [Delete vectors](#delete-vectors.md): `delete_vectors` or `DeleteVectorsOperation`\n- [Set payload](https://qdrant.tech/documentation/concepts/payload/#set-payload): `set_payload` or `SetPayloadOperation`\n- [Overwrite payload](https://qdrant.tech/documentation/concepts/payload/#overwrite-payload): `overwrite_payload` or `OverwritePayload`\n- [Delete payload](https://qdrant.tech/documentation/concepts/payload/#delete-payload-keys): `delete_payload` or `DeletePayloadOperation`\n- [Clear payload](https://qdrant.tech/documentation/concepts/payload/#clear-payload): `clear_payload` or `ClearPayloadOperation`\n\nThe following example snippet makes use of all operations.\n\nREST API ([Schema](https://api.qdrant.tech/master/api-reference/points/batch-update)):\n\n```http\nPOST /collections/{collection_name}/points/batch\n{\n    \"operations\": [\n        {\n            \"upsert\": {\n                \"points\": [\n                    {\n                        \"id\": 1,\n                        \"vector\": [1.0, 2.0, 3.0, 4.0],\n                        \"payload\": {}\n                    }\n                ]\n            }\n        },\n        {\n            \"update_vectors\": {\n                \"points\": [\n                    {\n                        \"id\": 1,\n                        \"vector\": [1.0, 2.0, 3.0, 4.0]\n                    }\n                ]\n            }\n        },\n        {\n            \"delete_vectors\": {\n                \"points\": [1],\n                \"vector\": [\"\"]\n            }\n        },\n        {\n            \"overwrite_payload\": {\n                \"payload\": {\n                    \"test_payload\": \"1\"\n                },\n                \"points\": [1]\n            }\n        },\n        {\n            \"set_payload\": {\n                \"payload\": {\n                    \"test_payload_2\": \"2\",\n                    \"test_payload_3\": \"3\"\n                },\n                \"points\": [1]\n            }\n        },\n        {\n            \"delete_payload\": {\n                \"keys\": [\"test_payload_2\"],\n                \"points\": [1]\n            }\n        },\n        {\n            \"clear_payload\": {\n                \"points\": [1]\n            }\n        },\n        {\"delete\": {\"points\": [1]}}\n    ]\n}\n```\n\n```python\nclient.batch_update_points(\n    collection_name=\"{collection_name}\",\n    update_operations=[\n        models.UpsertOperation(\n            upsert=models.PointsList(\n                points=[\n                    models.PointStruct(\n                        id=1,\n                        vector=[1.0, 2.0, 3.0, 4.0],\n                        payload={},\n                    ),\n                ]\n            )\n        ),\n        models.UpdateVectorsOperation(\n            update_vectors=models.UpdateVectors(\n                points=[\n                    models.PointVectors(\n                        id=1,\n                        vector=[1.0, 2.0, 3.0, 4.0],\n                    )\n                ]\n            )\n        ),\n        models.DeleteVectorsOperation(\n            delete_vectors=models.DeleteVectors(points=[1], vector=[\"\"])\n        ),\n        models.OverwritePayloadOperation(\n            overwrite_payload=models.SetPayload(\n                payload={\"test_payload\": 1},\n                points=[1],\n            )\n        ),\n        models.SetPayloadOperation(\n            set_payload=models.SetPayload(\n                payload={\n                    \"test_payload_2\": 2,\n                    \"test_payload_3\": 3,\n                },\n                points=[1],\n            )\n        ),\n        models.DeletePayloadOperation(\n            delete_payload=models.DeletePayload(keys=[\"test_payload_2\"], points=[1])\n        ),\n        models.ClearPayloadOperation(clear_payload=models.PointIdsList(points=[1])),\n        models.DeleteOperation(delete=models.PointIdsList(points=[1])),\n    ],\n)\n```",
     "metadata": {
-      "chunk_id": "67c7eb4b661b-0040",
+      "chunk_id": "67c7eb4b661b-0031",
       "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_points\\_documentation_concepts_points_.md",
       "filename": "_documentation_concepts_points_.md",
       "file_extension": ".md",
-      "chunk_index": 40,
+      "chunk_index": 31,
       "document_level": 1,
       "parent_chunk_id": null,
       "child_chunk_ids": [],
@@ -3120,17 +3136,18 @@
         "Batch update"
       ],
       "heading_text": "Batch update",
-      "token_count": 709,
-      "char_count": 3310,
+      "token_count": 898,
+      "char_count": 4304,
       "start_char": 60816,
-      "end_char": 64126,
-      "semantic_score": 0.7999999999999999,
+      "end_char": 65120,
+      "semantic_score": 0.7,
       "structural_score": 0.7999999999999998,
-      "retrieval_quality": 0.8765486725663718,
+      "retrieval_quality": 0.8720754716981132,
       "chunking_strategy": "hybrid_adaptive_semchunk",
       "content_type": "prose_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:38.822753",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:21.815165",
       "document_id": "67c7eb4b661b",
       "document_name": "_documentation_concepts_points_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_points\\_documentation_concepts_points_.md",
@@ -3138,9 +3155,9 @@
       "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_points",
       "relative_path": "Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_points\\_documentation_concepts_points_.md",
       "hierarchy_path": "Batch update",
-      "chunk_hash": "3ec51f47ad2497f1",
-      "content_digest": "3ec51f47ad2497f1",
-      "chunk_length": 3310,
+      "chunk_hash": "df6a9b7fe3734a61",
+      "content_digest": "df6a9b7fe3734a61",
+      "chunk_length": 4304,
       "payload_version": "1.3",
       "collection_hints": [
         "qdrant_ecosystem"
@@ -3151,129 +3168,129 @@
         "top_terms": [
           "payload",
           "points",
+          "models",
           "delete",
           "update",
           "vectors",
+          "test",
           "batch",
           "operations",
-          "models",
+          "vector",
+          "set",
           "https",
           "qdrant",
           "tech",
-          "upsert",
-          "set",
-          "documentation",
-          "concepts",
           "overwrite",
           "clear",
-          "vector",
-          "test",
-          "api"
+          "upsert",
+          "documentation",
+          "concepts",
+          "keys"
         ],
         "term_weights": [
           {
             "term": "payload",
-            "tf": 29,
-            "weight": 0.138095
+            "tf": 39,
+            "weight": 0.147727
           },
           {
             "term": "points",
-            "tf": 19,
-            "weight": 0.090476
+            "tf": 25,
+            "weight": 0.094697
+          },
+          {
+            "term": "models",
+            "tf": 18,
+            "weight": 0.068182
           },
           {
             "term": "delete",
-            "tf": 12,
-            "weight": 0.057143
+            "tf": 15,
+            "weight": 0.056818
           },
           {
             "term": "update",
             "tf": 11,
-            "weight": 0.052381
+            "weight": 0.041667
           },
           {
             "term": "vectors",
-            "tf": 10,
-            "weight": 0.047619
+            "tf": 11,
+            "weight": 0.041667
+          },
+          {
+            "term": "test",
+            "tf": 8,
+            "weight": 0.030303
           },
           {
             "term": "batch",
             "tf": 6,
-            "weight": 0.028571
+            "weight": 0.022727
           },
           {
             "term": "operations",
             "tf": 6,
-            "weight": 0.028571
+            "weight": 0.022727
           },
           {
-            "term": "models",
+            "term": "vector",
             "tf": 6,
-            "weight": 0.028571
+            "weight": 0.022727
+          },
+          {
+            "term": "set",
+            "tf": 5,
+            "weight": 0.018939
           },
           {
             "term": "https",
             "tf": 5,
-            "weight": 0.02381
+            "weight": 0.018939
           },
           {
             "term": "qdrant",
             "tf": 5,
-            "weight": 0.02381
+            "weight": 0.018939
           },
           {
             "term": "tech",
             "tf": 5,
-            "weight": 0.02381
+            "weight": 0.018939
+          },
+          {
+            "term": "overwrite",
+            "tf": 5,
+            "weight": 0.018939
+          },
+          {
+            "term": "clear",
+            "tf": 5,
+            "weight": 0.018939
           },
           {
             "term": "upsert",
             "tf": 4,
-            "weight": 0.019048
-          },
-          {
-            "term": "set",
-            "tf": 4,
-            "weight": 0.019048
+            "weight": 0.015152
           },
           {
             "term": "documentation",
             "tf": 4,
-            "weight": 0.019048
+            "weight": 0.015152
           },
           {
             "term": "concepts",
             "tf": 4,
-            "weight": 0.019048
+            "weight": 0.015152
           },
           {
-            "term": "overwrite",
-            "tf": 4,
-            "weight": 0.019048
-          },
-          {
-            "term": "clear",
-            "tf": 4,
-            "weight": 0.019048
-          },
-          {
-            "term": "vector",
-            "tf": 4,
-            "weight": 0.019048
-          },
-          {
-            "term": "test",
-            "tf": 4,
-            "weight": 0.019048
-          },
-          {
-            "term": "api",
+            "term": "keys",
             "tf": 3,
-            "weight": 0.014286
+            "weight": 0.011364
           }
         ],
-        "unique_terms": 71,
-        "total_terms": 210
+        "unique_terms": 76,
+        "total_terms": 264
       },
       "modal_hint": "code",
       "content_flags": {
@@ -3287,21 +3304,21 @@
         "Batch update",
         "batch",
         "delete",
-        "https",
         "models",
         "operations",
         "payload",
         "points",
-        "qdrant",
+        "test",
         "update",
+        "vector",
         "vectors"
       ]
     },
     "advanced_scores": {
-      "semantic": 0.7999999999999999,
+      "semantic": 0.7,
       "structural": 0.7999999999999998,
-      "retrieval_quality": 0.8765486725663718,
-      "overall": 0.8255162241887906
+      "retrieval_quality": 0.8720754716981132,
+      "overall": 0.7906918238993711
     }
   }
 ]

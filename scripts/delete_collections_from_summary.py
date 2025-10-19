@@ -63,12 +63,19 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--host", default="localhost", help="Qdrant host")
     parser.add_argument("--port", type=int, default=6333, help="Qdrant port")
     parser.add_argument("--dry-run", action="store_true", help="List collections without deleting them.")
+    parser.add_argument(
+        "--collections",
+        nargs="*",
+        help="Explicit collection names to delete (overrides summary parsing).",
+    )
     args = parser.parse_args(argv)
 
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
 
     summary_path = Path(args.summary).resolve()
-    targets = _collect_targets(summary_path)
+    targets = set(args.collections or [])
+    if not targets:
+        targets = _collect_targets(summary_path)
 
     if not targets:
         LOGGER.warning("No collections found in summary %s", summary_path)

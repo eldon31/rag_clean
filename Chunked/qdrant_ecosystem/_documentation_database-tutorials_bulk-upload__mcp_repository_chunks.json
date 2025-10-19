@@ -24,7 +24,8 @@
       "chunking_strategy": "hybrid_adaptive_structural",
       "content_type": "list_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:39.546333",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:22.470966",
       "document_id": "74332d6135f6",
       "document_name": "_documentation_database-tutorials_bulk-upload_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_database-tutorials_bulk-upload\\_documentation_database-tutorials_bulk-upload_.md",
@@ -223,7 +224,8 @@
       "chunking_strategy": "hybrid_adaptive_structural",
       "content_type": "list_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:39.548317",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:22.472174",
       "document_id": "74332d6135f6",
       "document_name": "_documentation_database-tutorials_bulk-upload_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_database-tutorials_bulk-upload\\_documentation_database-tutorials_bulk-upload_.md",
@@ -422,7 +424,8 @@
       "chunking_strategy": "hybrid_adaptive_structural",
       "content_type": "list_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:39.548317",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:22.472560",
       "document_id": "74332d6135f6",
       "document_name": "_documentation_database-tutorials_bulk-upload_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_database-tutorials_bulk-upload\\_documentation_database-tutorials_bulk-upload_.md",
@@ -585,7 +588,8 @@
       "chunking_strategy": "hybrid_adaptive_structural",
       "content_type": "list_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:39.549300",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:22.473567",
       "document_id": "74332d6135f6",
       "document_name": "_documentation_database-tutorials_bulk-upload_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_database-tutorials_bulk-upload\\_documentation_database-tutorials_bulk-upload_.md",
@@ -784,7 +788,8 @@
       "chunking_strategy": "hybrid_adaptive_structural",
       "content_type": "list_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:39.550403",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:22.474773",
       "document_id": "74332d6135f6",
       "document_name": "_documentation_database-tutorials_bulk-upload_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_database-tutorials_bulk-upload\\_documentation_database-tutorials_bulk-upload_.md",
@@ -983,7 +988,8 @@
       "chunking_strategy": "hybrid_adaptive_structural",
       "content_type": "list_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:39.550403",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:22.475198",
       "document_id": "74332d6135f6",
       "document_name": "_documentation_database-tutorials_bulk-upload_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_database-tutorials_bulk-upload\\_documentation_database-tutorials_bulk-upload_.md",
@@ -1146,7 +1152,7 @@
     }
   },
   {
-    "text": "### Defer HNSW graph construction (`m: 0`)\n\nFor dense vectors, setting the HNSW `m` parameter to `0` disables index building entirely. Vectors will still be stored, but not indexed until you enable indexing later.\n\n```http\nPUT /collections/{collection_name}\n{\n    \"vectors\": {\n      \"size\": 768,\n      \"distance\": \"Cosine\"\n    },\n    \"hnsw_config\": {\n        \"m\": 0\n    }\n}\n```\n\n```python\nfrom qdrant_client import QdrantClient, models\n\nclient = QdrantClient(url=\"http://localhost:6333\")\n\nclient.create_collection(\n    collection_name=\"{collection_name}\",\n    vectors_config=models.VectorParams(size=768, distance=models.Distance.COSINE),\n    hnsw_config=models.HnswConfigDiff(\n        m=0,\n    ),\n)\n```\n\n```typescript\nimport { QdrantClient } from \"@qdrant/js-client-rest\";\n\nconst client = new QdrantClient({ host: \"localhost\", port: 6333 });\n\nclient.createCollection(\"{collection_name}\", {\n  vectors: {\n    size: 768,\n    distance: \"Cosine\",\n  },\n  hnsw_config: {\n    m: 0,\n  },\n});\n```\n\n```rust\nuse qdrant_client::qdrant::{\n    CreateCollectionBuilder, Distance, HnswConfigDiffBuilder, VectorParamsBuilder,\n};\nuse qdrant_client::Qdrant;\n\nlet client = Qdrant::from_url(\"http://localhost:6334\").build()?;\n\nclient\n    .create_collection(\n        CreateCollectionBuilder::new(\"{collection_name}\")\n            .vectors_config(VectorParamsBuilder::new(768, Distance::Cosine))\n            .hnsw_config(HnswConfigDiffBuilder::default().m(0)),\n    )\n    .await?;\n```\n\n```java\nimport io.qdrant.client.QdrantClient;\nimport io.qdrant.client.QdrantGrpcClient;\nimport io.qdrant.client.grpc.Collections.CreateCollection;\nimport io.qdrant.client.grpc.Collections.Distance;\nimport io.qdrant.client.grpc.Collections.HnswConfigDiff;\nimport io.qdrant.client.grpc.Collections.VectorParams;\nimport io.qdrant.client.grpc.Collections.VectorsConfig;\n\nQdrantClient client =\n    new QdrantClient(QdrantGrpcClient.newBuilder(\"localhost\", 6334, false).build());\n\nclient\n    .createCollectionAsync(\n        CreateCollection.newBuilder()\n            .setCollectionName(\"{collection_name}\")\n            .setVectorsConfig(\n                VectorsConfig.newBuilder()\n                    .setParams(\n                        VectorParams.newBuilder()\n                            .setSize(768)\n                            .setDistance(Distance.Cosine)\n                            .build())\n                    .build())\n            .setHnswConfig(HnswConfigDiff.newBuilder().setM(0).build())\n            .build())\n    .get();\n```\n\n```csharp\nusing Qdrant.Client;\nusing Qdrant.Client.Grpc;\n\nvar client = new QdrantClient(\"localhost\", 6334);\n\nawait client.CreateCollectionAsync(\n\tcollectionName: \"{collection_name}\",\n\tvectorsConfig: new VectorParams { Size = 768, Distance = Distance.Cosine },\n\thnswConfig: new HnswConfigDiff { M = 0 }\n);\n```\n\n```go\nimport (\n\t\"context\"\n\n\t\"github.com/qdrant/go-client/qdrant\"\n)\n\nclient, err := qdrant.NewClient(&qdrant.Config{\n\tHost: \"localhost\",\n\tPort: 6334,\n})\n\nclient.CreateCollection(context.Background(), &qdrant.CreateCollection{\n\tCollectionName: \"{collection_name}\",\n\tVectorsConfig: qdrant.NewVectorsConfig(&qdrant.VectorParams{\n\t\tSize:     768,\n\t\tDistance: qdrant.Distance_Cosine,\n\t}),\n\tHnswConfig: &qdrant.HnswConfigDiff{\n\t\tM:        qdrant.PtrOf(uint64(0)),\n\t},\n})\n```\n\nOnce ingestion is complete, re-enable HNSW by setting `m` to your production value (usually 16 or 32).",
+    "text": "### Defer HNSW graph construction (`m: 0`)\n\nFor dense vectors, setting the HNSW `m` parameter to `0` disables index building entirely. Vectors will still be stored, but not indexed until you enable indexing later.\n\n```http\nPUT /collections/{collection_name}\n{\n    \"vectors\": {\n      \"size\": 768,\n      \"distance\": \"Cosine\"\n    },\n    \"hnsw_config\": {\n        \"m\": 0\n    }\n}\n```\n\n```python\nfrom qdrant_client import QdrantClient, models\n\nclient = QdrantClient(url=\"http://localhost:6333\")\n\nclient.create_collection(\n    collection_name=\"{collection_name}\",\n    vectors_config=models.VectorParams(size=768, distance=models.Distance.COSINE),\n    hnsw_config=models.HnswConfigDiff(\n        m=0,\n    ),\n)\n```\n\n```typescript\nimport { QdrantClient } from \"@qdrant/js-client-rest\";\n\nconst client = new QdrantClient({ host: \"localhost\", port: 6333 });\n\nclient.createCollection(\"{collection_name}\", {\n  vectors: {\n    size: 768,\n    distance: \"Cosine\",\n  },\n  hnsw_config: {\n    m: 0,\n  },\n});\n```\n\n```rust\nuse qdrant_client::qdrant::{\n    CreateCollectionBuilder, Distance, HnswConfigDiffBuilder, VectorParamsBuilder,\n};\nuse qdrant_client::Qdrant;\n\nlet client = Qdrant::from_url(\"http://localhost:6334\").build()?;\n\nclient\n    .create_collection(\n        CreateCollectionBuilder::new(\"{collection_name}\")\n            .vectors_config(VectorParamsBuilder::new(768, Distance::Cosine))\n            .hnsw_config(HnswConfigDiffBuilder::default().m(0)),\n    )\n    .await?;\n```\n\n```java\nimport io.qdrant.client.QdrantClient;\nimport io.qdrant.client.QdrantGrpcClient;\nimport io.qdrant.client.grpc.Collections.CreateCollection;\nimport io.qdrant.client.grpc.Collections.Distance;\nimport io.qdrant.client.grpc.Collections.HnswConfigDiff;\nimport io.qdrant.client.grpc.Collections.VectorParams;\nimport io.qdrant.client.grpc.Collections.VectorsConfig;\n\nQdrantClient client =\n    new QdrantClient(QdrantGrpcClient.newBuilder(\"localhost\", 6334, false).build());\n\nclient\n    .createCollectionAsync(\n        CreateCollection.newBuilder()\n            .setCollectionName(\"{collection_name}\")\n            .setVectorsConfig(\n                VectorsConfig.newBuilder()\n                    .setParams(\n                        VectorParams.newBuilder()\n                            .setSize(768)\n                            .setDistance(Distance.Cosine)\n                            .build())\n                    .build())\n            .setHnswConfig(HnswConfigDiff.newBuilder().setM(0).build())\n            .build())\n    .get();\n```\n\n```csharp\nusing Qdrant.Client;\nusing Qdrant.Client.Grpc;\n\nvar client = new QdrantClient(\"localhost\", 6334);\n\nawait client.CreateCollectionAsync(\n\tcollectionName: \"{collection_name}\",\n\tvectorsConfig: new VectorParams { Size = 768, Distance = Distance.Cosine },\n\thnswConfig: new HnswConfigDiff { M = 0 }\n);\n```\n\n```go\nimport (\n\t\"context\"\n\n\t\"github.com/qdrant/go-client/qdrant\"\n)\n\nclient, err := qdrant.NewClient(&qdrant.Config{\n\tHost: \"localhost\",\n\tPort: 6334,\n})\n\nclient.CreateCollection(context.Background(), &qdrant.CreateCollection{\n\tCollectionName: \"{collection_name}\",\n\tVectorsConfig: qdrant.NewVectorsConfig(&qdrant.VectorParams{\n\t\tSize:     768,\n\t\tDistance: qdrant.Distance_Cosine,\n\t}),\n\tHnswConfig: &qdrant.HnswConfigDiff{\n\t\tM:        qdrant.PtrOf(uint64(0)),\n\t},\n})\n```\n\nOnce ingestion is complete, re-enable HNSW by setting `m` to your production value (usually 16 or 32).\n\n```http\nPATCH /collections/{collection_name}\n{\n    \"vectors\": {\n      \"size\": 768,\n      \"distance\": \"Cosine\"\n    },\n    \"hnsw_config\": {\n        \"m\": 16\n    }\n}\n```\n\n```python\nfrom qdrant_client import QdrantClient, models\n\nclient = QdrantClient(url=\"http://localhost:6333\")\n\nclient.update_collection(\n    collection_name=\"{collection_name}\",\n    vectors_config=models.VectorParams(size=768, distance=models.Distance.COSINE),\n    hnsw_config=models.HnswConfigDiff(\n        m=16,\n    ),\n)\n```\n\n```typescript\nimport { QdrantClient } from \"@qdrant/js-client-rest\";",
     "metadata": {
       "chunk_id": "74332d6135f6-0012",
       "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_database-tutorials_bulk-upload\\_documentation_database-tutorials_bulk-upload_.md",
@@ -1160,17 +1166,18 @@
         "Defer HNSW graph construction (`m: 0`)"
       ],
       "heading_text": "Defer HNSW graph construction (`m: 0`)",
-      "token_count": 859,
-      "char_count": 3377,
+      "token_count": 1011,
+      "char_count": 3941,
       "start_char": 13327,
-      "end_char": 16704,
+      "end_char": 17268,
       "semantic_score": 0.6,
-      "structural_score": 0.8999999999999999,
-      "retrieval_quality": 0.7076,
+      "structural_score": 0.7,
+      "retrieval_quality": 0.6802047781569966,
       "chunking_strategy": "hybrid_adaptive_semchunk",
       "content_type": "prose_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:39.555772",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:22.479450",
       "document_id": "74332d6135f6",
       "document_name": "_documentation_database-tutorials_bulk-upload_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_database-tutorials_bulk-upload\\_documentation_database-tutorials_bulk-upload_.md",
@@ -1178,9 +1185,9 @@
       "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_database-tutorials_bulk-upload",
       "relative_path": "Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_database-tutorials_bulk-upload\\_documentation_database-tutorials_bulk-upload_.md",
       "hierarchy_path": "Defer HNSW graph construction (`m: 0`)",
-      "chunk_hash": "ca99d59c78b671ad",
-      "content_digest": "ca99d59c78b671ad",
-      "chunk_length": 3377,
+      "chunk_hash": "94c7ad664a64d470",
+      "content_digest": "94c7ad664a64d470",
+      "chunk_length": 3941,
       "payload_version": "1.3",
       "collection_hints": [
         "qdrant_ecosystem"
@@ -1189,131 +1196,131 @@
         "version": "1.0",
         "weighting": "tf-normalized",
         "top_terms": [
-          "qdrant",
           "client",
+          "qdrant",
           "distance",
           "collection",
           "import",
           "name",
           "qdrantclient",
+          "config",
           "hnsw",
           "768",
           "cosine",
-          "config",
-          "new",
           "vectors",
+          "models",
           "collections",
-          "localhost",
-          "build",
-          "grpc",
           "size",
+          "localhost",
+          "new",
           "vectorparams",
-          "hnswconfigdiff"
+          "hnswconfigdiff",
+          "build"
         ],
         "term_weights": [
           {
-            "term": "qdrant",
-            "tf": 26,
-            "weight": 0.086667
+            "term": "client",
+            "tf": 30,
+            "weight": 0.084986
           },
           {
-            "term": "client",
-            "tf": 26,
-            "weight": 0.086667
+            "term": "qdrant",
+            "tf": 28,
+            "weight": 0.07932
           },
           {
             "term": "distance",
-            "tf": 12,
-            "weight": 0.04
+            "tf": 15,
+            "weight": 0.042493
           },
           {
             "term": "collection",
-            "tf": 10,
-            "weight": 0.033333
+            "tf": 14,
+            "weight": 0.03966
           },
           {
             "term": "import",
-            "tf": 10,
-            "weight": 0.033333
+            "tf": 12,
+            "weight": 0.033994
           },
           {
             "term": "name",
-            "tf": 8,
-            "weight": 0.026667
+            "tf": 11,
+            "weight": 0.031161
           },
           {
             "term": "qdrantclient",
-            "tf": 8,
-            "weight": 0.026667
-          },
-          {
-            "term": "hnsw",
-            "tf": 7,
-            "weight": 0.023333
-          },
-          {
-            "term": "768",
-            "tf": 7,
-            "weight": 0.023333
-          },
-          {
-            "term": "cosine",
-            "tf": 7,
-            "weight": 0.023333
+            "tf": 11,
+            "weight": 0.031161
           },
           {
             "term": "config",
+            "tf": 10,
+            "weight": 0.028329
+          },
+          {
+            "term": "hnsw",
+            "tf": 9,
+            "weight": 0.025496
+          },
+          {
+            "term": "768",
+            "tf": 9,
+            "weight": 0.025496
+          },
+          {
+            "term": "cosine",
+            "tf": 9,
+            "weight": 0.025496
+          },
+          {
+            "term": "vectors",
+            "tf": 8,
+            "weight": 0.022663
+          },
+          {
+            "term": "models",
+            "tf": 8,
+            "weight": 0.022663
+          },
+          {
+            "term": "collections",
             "tf": 7,
-            "weight": 0.023333
+            "weight": 0.01983
+          },
+          {
+            "term": "size",
+            "tf": 7,
+            "weight": 0.01983
+          },
+          {
+            "term": "localhost",
+            "tf": 7,
+            "weight": 0.01983
           },
           {
             "term": "new",
             "tf": 7,
-            "weight": 0.023333
+            "weight": 0.01983
           },
           {
-            "term": "vectors",
+            "term": "vectorparams",
             "tf": 6,
-            "weight": 0.02
+            "weight": 0.016997
           },
           {
-            "term": "collections",
+            "term": "hnswconfigdiff",
             "tf": 6,
-            "weight": 0.02
-          },
-          {
-            "term": "localhost",
-            "tf": 6,
-            "weight": 0.02
+            "weight": 0.016997
           },
           {
             "term": "build",
             "tf": 6,
-            "weight": 0.02
-          },
-          {
-            "term": "grpc",
-            "tf": 6,
-            "weight": 0.02
-          },
-          {
-            "term": "size",
-            "tf": 5,
-            "weight": 0.016667
-          },
-          {
-            "term": "vectorparams",
-            "tf": 5,
-            "weight": 0.016667
-          },
-          {
-            "term": "hnswconfigdiff",
-            "tf": 5,
-            "weight": 0.016667
+            "weight": 0.016997
           }
         ],
-        "unique_terms": 101,
-        "total_terms": 300
+        "unique_terms": 103,
+        "total_terms": 353
       },
       "modal_hint": "code",
       "content_flags": {
@@ -1328,7 +1335,7 @@
         "Defer HNSW graph construction (`m: 0`)",
         "client",
         "collection",
-        "cosine",
+        "config",
         "distance",
         "hnsw",
         "import",
@@ -1339,13 +1346,13 @@
     },
     "advanced_scores": {
       "semantic": 0.6,
-      "structural": 0.8999999999999999,
-      "retrieval_quality": 0.7076,
-      "overall": 0.7358666666666668
+      "structural": 0.7,
+      "retrieval_quality": 0.6802047781569966,
+      "overall": 0.6600682593856655
     }
   },
   {
-    "text": "### Disable indexing completely (`indexing_threshold: 0`)\n\nIn case you are doing an initial upload of a large dataset, you might want to disable indexing during upload. It will enable to avoid unnecessary indexing of vectors, which will be overwritten by the next batch.\n\nSetting `indexing_threshold` to `0` disables indexing altogether:\n\n```http\nPUT /collections/{collection_name}\n{\n    \"vectors\": {\n      \"size\": 768,\n      \"distance\": \"Cosine\"\n    },\n    \"optimizers_config\": {\n        \"indexing_threshold\": 0\n    }\n}\n```\n\n```python\nfrom qdrant_client import QdrantClient, models\n\nclient = QdrantClient(url=\"http://localhost:6333\")\n\nclient.create_collection(\n    collection_name=\"{collection_name}\",\n    vectors_config=models.VectorParams(size=768, distance=models.Distance.COSINE),\n    optimizers_config=models.OptimizersConfigDiff(\n        indexing_threshold=0,\n    ),\n)\n```\n\n```typescript\nimport { QdrantClient } from \"@qdrant/js-client-rest\";\n\nconst client = new QdrantClient({ host: \"localhost\", port: 6333 });\n\nclient.createCollection(\"{collection_name}\", {\n  vectors: {\n    size: 768,\n    distance: \"Cosine\",\n  },\n  optimizers_config: {\n    indexing_threshold: 0,\n  },\n});\n```\n\n```rust\nuse qdrant_client::qdrant::{\n    OptimizersConfigDiffBuilder, UpdateCollectionBuilder,\n};\nuse qdrant_client::Qdrant;\n\nlet client = Qdrant::from_url(\"http://localhost:6334\").build()?;\n\nclient\n    .create_collection(\n        CreateCollectionBuilder::new(\"{collection_name}\")\n            .optimizers_config(OptimizersConfigDiffBuilder::default().indexing_threshold(0)),\n    )\n    .await?;\n```\n\n```java\nimport io.qdrant.client.grpc.Collections.CreateCollection;\nimport io.qdrant.client.grpc.Collections.Distance;\nimport io.qdrant.client.grpc.Collections.VectorParams;\nimport io.qdrant.client.grpc.Collections.VectorsConfig;\nimport io.qdrant.client.grpc.Collections.OptimizersConfigDiff;\n\nQdrantClient client =\n    new QdrantClient(QdrantGrpcClient.newBuilder(\"localhost\", 6334, false).build());\n\nclient.createCollectionAsync(\n    CreateCollection.newBuilder()\n        .setCollectionName(\"{collection_name}\")\n        .setVectorsConfig(\n            VectorsConfig.newBuilder()\n                .setParams(\n                    VectorParams.newBuilder()\n                        .setSize(768)\n                        .setDistance(Distance.Cosine)\n                        .build())\n                .build())\n        .setOptimizersConfig(\n            OptimizersConfigDiff.newBuilder()\n                .setIndexingThreshold(0)\n                .build())\n        .build()\n).get();\n```\n\n```csharp\nusing Qdrant.Client;\nusing Qdrant.Client.Grpc;\n\nvar client = new QdrantClient(\"localhost\", 6334);\n\nawait client.CreateCollectionAsync(\n    collectionName: \"{collection_name}\",\n    vectorsConfig: new VectorParams { Size = 768, Distance = Distance.Cosine },\n    optimizersConfig: new OptimizersConfigDiff { IndexingThreshold = 0 }\n);\n```\n\n```go\nimport (\n\t\"context\"\n\n\t\"github.com/qdrant/go-client/qdrant\"\n)\n\nclient, err := qdrant.NewClient(&qdrant.Config{\n\tHost: \"localhost\",\n\tPort: 6334,\n})",
+    "text": "### Disable indexing completely (`indexing_threshold: 0`)\n\nIn case you are doing an initial upload of a large dataset, you might want to disable indexing during upload. It will enable to avoid unnecessary indexing of vectors, which will be overwritten by the next batch.\n\nSetting `indexing_threshold` to `0` disables indexing altogether:\n\n```http\nPUT /collections/{collection_name}\n{\n    \"vectors\": {\n      \"size\": 768,\n      \"distance\": \"Cosine\"\n    },\n    \"optimizers_config\": {\n        \"indexing_threshold\": 0\n    }\n}\n```\n\n```python\nfrom qdrant_client import QdrantClient, models\n\nclient = QdrantClient(url=\"http://localhost:6333\")\n\nclient.create_collection(\n    collection_name=\"{collection_name}\",\n    vectors_config=models.VectorParams(size=768, distance=models.Distance.COSINE),\n    optimizers_config=models.OptimizersConfigDiff(\n        indexing_threshold=0,\n    ),\n)\n```\n\n```typescript\nimport { QdrantClient } from \"@qdrant/js-client-rest\";\n\nconst client = new QdrantClient({ host: \"localhost\", port: 6333 });\n\nclient.createCollection(\"{collection_name}\", {\n  vectors: {\n    size: 768,\n    distance: \"Cosine\",\n  },\n  optimizers_config: {\n    indexing_threshold: 0,\n  },\n});\n```\n\n```rust\nuse qdrant_client::qdrant::{\n    OptimizersConfigDiffBuilder, UpdateCollectionBuilder,\n};\nuse qdrant_client::Qdrant;\n\nlet client = Qdrant::from_url(\"http://localhost:6334\").build()?;\n\nclient\n    .create_collection(\n        CreateCollectionBuilder::new(\"{collection_name}\")\n            .optimizers_config(OptimizersConfigDiffBuilder::default().indexing_threshold(0)),\n    )\n    .await?;\n```\n\n```java\nimport io.qdrant.client.grpc.Collections.CreateCollection;\nimport io.qdrant.client.grpc.Collections.Distance;\nimport io.qdrant.client.grpc.Collections.VectorParams;\nimport io.qdrant.client.grpc.Collections.VectorsConfig;\nimport io.qdrant.client.grpc.Collections.OptimizersConfigDiff;\n\nQdrantClient client =\n    new QdrantClient(QdrantGrpcClient.newBuilder(\"localhost\", 6334, false).build());\n\nclient.createCollectionAsync(\n    CreateCollection.newBuilder()\n        .setCollectionName(\"{collection_name}\")\n        .setVectorsConfig(\n            VectorsConfig.newBuilder()\n                .setParams(\n                    VectorParams.newBuilder()\n                        .setSize(768)\n                        .setDistance(Distance.Cosine)\n                        .build())\n                .build())\n        .setOptimizersConfig(\n            OptimizersConfigDiff.newBuilder()\n                .setIndexingThreshold(0)\n                .build())\n        .build()\n).get();\n```\n\n```csharp\nusing Qdrant.Client;\nusing Qdrant.Client.Grpc;\n\nvar client = new QdrantClient(\"localhost\", 6334);\n\nawait client.CreateCollectionAsync(\n    collectionName: \"{collection_name}\",\n    vectorsConfig: new VectorParams { Size = 768, Distance = Distance.Cosine },\n    optimizersConfig: new OptimizersConfigDiff { IndexingThreshold = 0 }\n);\n```\n\n```go\nimport (\n\t\"context\"\n\n\t\"github.com/qdrant/go-client/qdrant\"\n)\n\nclient, err := qdrant.NewClient(&qdrant.Config{\n\tHost: \"localhost\",\n\tPort: 6334,\n})\n\nclient.CreateCollection(context.Background(), &qdrant.CreateCollection{\n\tCollectionName: \"{collection_name}\",\n\tVectorsConfig: qdrant.NewVectorsConfig(&qdrant.VectorParams{\n\t\tSize:     768,\n\t\tDistance: qdrant.Distance_Cosine,\n\t}),\n\tOptimizersConfig: &qdrant.OptimizersConfigDiff{\n\t\tIndexingThreshold: qdrant.PtrOf(uint64(0)),\n\t},\n})\n```\n\nWith indexing\\_threshold set to 0, storage won't be optimized properly, which can lead to high RAM usage as segments accumulate in memory.\n\nAfter upload is done, you can enable indexing by setting `indexing_threshold` to a desired value (default is 20000):\n\n```http\nPATCH /collections/{collection_name}\n{\n    \"optimizers_config\": {\n        \"indexing_threshold\": 20000\n    }\n}\n```\n\n```python\nfrom qdrant_client import QdrantClient, models\n\nclient = QdrantClient(url=\"http://localhost:6333\")\n\nclient.update_collection(\n    collection_name=\"{collection_name}\",\n    optimizer_config=models.OptimizersConfigDiff(indexing_threshold=20000),\n)\n```\n\n```typescript\nimport { QdrantClient } from \"@qdrant/js-client-rest\";\n\nconst client = new QdrantClient({ host: \"localhost\", port: 6333 });",
     "metadata": {
       "chunk_id": "74332d6135f6-0014",
       "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_database-tutorials_bulk-upload\\_documentation_database-tutorials_bulk-upload_.md",
@@ -1359,17 +1366,18 @@
         "Disable indexing completely (`indexing_threshold: 0`)"
       ],
       "heading_text": "Disable indexing completely (`indexing_threshold: 0`)",
-      "token_count": 719,
-      "char_count": 3064,
+      "token_count": 1005,
+      "char_count": 4181,
       "start_char": 18883,
-      "end_char": 21947,
-      "semantic_score": 0.6,
+      "end_char": 23064,
+      "semantic_score": 0.7,
       "structural_score": 0.7,
-      "retrieval_quality": 0.7093333333333334,
+      "retrieval_quality": 0.6772307692307693,
       "chunking_strategy": "hybrid_adaptive_semchunk",
       "content_type": "prose_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:39.556906",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:22.483335",
       "document_id": "74332d6135f6",
       "document_name": "_documentation_database-tutorials_bulk-upload_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_database-tutorials_bulk-upload\\_documentation_database-tutorials_bulk-upload_.md",
@@ -1377,9 +1385,9 @@
       "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_database-tutorials_bulk-upload",
       "relative_path": "Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_database-tutorials_bulk-upload\\_documentation_database-tutorials_bulk-upload_.md",
       "hierarchy_path": "Disable indexing completely (`indexing_threshold: 0`)",
-      "chunk_hash": "3b59004e911bfe0d",
-      "content_digest": "3b59004e911bfe0d",
-      "chunk_length": 3064,
+      "chunk_hash": "22e9540da7e71a4f",
+      "content_digest": "22e9540da7e71a4f",
+      "chunk_length": 4181,
       "payload_version": "1.3",
       "collection_hints": [
         "qdrant_ecosystem"
@@ -1392,127 +1400,127 @@
           "qdrant",
           "indexing",
           "collection",
-          "distance",
-          "import",
           "name",
           "qdrantclient",
           "threshold",
-          "collections",
+          "distance",
+          "import",
           "config",
           "localhost",
+          "collections",
           "new",
-          "build",
-          "grpc",
           "768",
           "cosine",
-          "newbuilder",
-          "vectors",
-          "size"
+          "models",
+          "optimizersconfigdiff",
+          "build",
+          "grpc",
+          "http"
         ],
         "term_weights": [
           {
             "term": "client",
-            "tf": 23,
-            "weight": 0.086142
+            "tf": 29,
+            "weight": 0.076923
           },
           {
             "term": "qdrant",
-            "tf": 18,
-            "weight": 0.067416
+            "tf": 26,
+            "weight": 0.068966
           },
           {
             "term": "indexing",
-            "tf": 10,
-            "weight": 0.037453
+            "tf": 15,
+            "weight": 0.039788
           },
           {
             "term": "collection",
-            "tf": 9,
-            "weight": 0.033708
-          },
-          {
-            "term": "distance",
-            "tf": 8,
-            "weight": 0.029963
-          },
-          {
-            "term": "import",
-            "tf": 8,
-            "weight": 0.029963
+            "tf": 14,
+            "weight": 0.037135
           },
           {
             "term": "name",
-            "tf": 7,
-            "weight": 0.026217
+            "tf": 11,
+            "weight": 0.029178
           },
           {
             "term": "qdrantclient",
-            "tf": 7,
-            "weight": 0.026217
+            "tf": 11,
+            "weight": 0.029178
           },
           {
             "term": "threshold",
-            "tf": 6,
-            "weight": 0.022472
+            "tf": 10,
+            "weight": 0.026525
           },
           {
-            "term": "collections",
-            "tf": 6,
-            "weight": 0.022472
+            "term": "distance",
+            "tf": 10,
+            "weight": 0.026525
+          },
+          {
+            "term": "import",
+            "tf": 10,
+            "weight": 0.026525
           },
           {
             "term": "config",
-            "tf": 6,
-            "weight": 0.022472
+            "tf": 8,
+            "weight": 0.02122
           },
           {
             "term": "localhost",
-            "tf": 6,
-            "weight": 0.022472
+            "tf": 8,
+            "weight": 0.02122
+          },
+          {
+            "term": "collections",
+            "tf": 7,
+            "weight": 0.018568
           },
           {
             "term": "new",
+            "tf": 7,
+            "weight": 0.018568
+          },
+          {
+            "term": "768",
             "tf": 6,
-            "weight": 0.022472
+            "weight": 0.015915
+          },
+          {
+            "term": "cosine",
+            "tf": 6,
+            "weight": 0.015915
+          },
+          {
+            "term": "models",
+            "tf": 6,
+            "weight": 0.015915
+          },
+          {
+            "term": "optimizersconfigdiff",
+            "tf": 6,
+            "weight": 0.015915
           },
           {
             "term": "build",
             "tf": 6,
-            "weight": 0.022472
+            "weight": 0.015915
           },
           {
             "term": "grpc",
             "tf": 6,
-            "weight": 0.022472
+            "weight": 0.015915
           },
           {
-            "term": "768",
+            "term": "http",
             "tf": 5,
-            "weight": 0.018727
-          },
-          {
-            "term": "cosine",
-            "tf": 5,
-            "weight": 0.018727
-          },
-          {
-            "term": "newbuilder",
-            "tf": 5,
-            "weight": 0.018727
-          },
-          {
-            "term": "vectors",
-            "tf": 4,
-            "weight": 0.014981
-          },
-          {
-            "term": "size",
-            "tf": 4,
-            "weight": 0.014981
+            "weight": 0.013263
           }
         ],
-        "unique_terms": 95,
-        "total_terms": 267
+        "unique_terms": 121,
+        "total_terms": 377
       },
       "modal_hint": "code",
       "content_flags": {
@@ -1526,7 +1534,7 @@
         "Disable indexing completely (`indexing_threshold: 0`)",
         "client",
         "collection",
-        "collections",
+        "config",
         "distance",
         "import",
         "indexing",
@@ -1537,10 +1545,10 @@
       ]
     },
     "advanced_scores": {
-      "semantic": 0.6,
+      "semantic": 0.7,
       "structural": 0.7,
-      "retrieval_quality": 0.7093333333333334,
-      "overall": 0.6697777777777777
+      "retrieval_quality": 0.6772307692307693,
+      "overall": 0.6924102564102563
     }
   },
   {
@@ -1568,7 +1576,8 @@
       "chunking_strategy": "hybrid_adaptive_semchunk",
       "content_type": "prose_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:39.556906",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:22.485316",
       "document_id": "74332d6135f6",
       "document_name": "_documentation_database-tutorials_bulk-upload_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_database-tutorials_bulk-upload\\_documentation_database-tutorials_bulk-upload_.md",
@@ -1767,7 +1776,8 @@
       "chunking_strategy": "hybrid_adaptive_structural",
       "content_type": "list_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:39.556906",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:22.485832",
       "document_id": "74332d6135f6",
       "document_name": "_documentation_database-tutorials_bulk-upload_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_database-tutorials_bulk-upload\\_documentation_database-tutorials_bulk-upload_.md",

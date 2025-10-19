@@ -24,7 +24,8 @@
       "chunking_strategy": "hybrid_adaptive_structural",
       "content_type": "list_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:42.515860",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:25.179717",
       "document_id": "75ce671ba755",
       "document_name": "_documentation_guides_multiple-partitions_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_guides_multiple-partitions\\_documentation_guides_multiple-partitions_.md",
@@ -223,7 +224,8 @@
       "chunking_strategy": "hybrid_adaptive_structural",
       "content_type": "list_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:42.517458",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:25.181087",
       "document_id": "75ce671ba755",
       "document_name": "_documentation_guides_multiple-partitions_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_guides_multiple-partitions\\_documentation_guides_multiple-partitions_.md",
@@ -422,7 +424,8 @@
       "chunking_strategy": "hybrid_adaptive_structural",
       "content_type": "list_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:42.517458",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:25.181517",
       "document_id": "75ce671ba755",
       "document_name": "_documentation_guides_multiple-partitions_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_guides_multiple-partitions\\_documentation_guides_multiple-partitions_.md",
@@ -585,7 +588,8 @@
       "chunking_strategy": "hybrid_adaptive_structural",
       "content_type": "list_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:42.518524",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:25.182500",
       "document_id": "75ce671ba755",
       "document_name": "_documentation_guides_multiple-partitions_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_guides_multiple-partitions\\_documentation_guides_multiple-partitions_.md",
@@ -784,7 +788,8 @@
       "chunking_strategy": "hybrid_adaptive_structural",
       "content_type": "list_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:42.519456",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:25.183772",
       "document_id": "75ce671ba755",
       "document_name": "_documentation_guides_multiple-partitions_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_guides_multiple-partitions\\_documentation_guides_multiple-partitions_.md",
@@ -983,7 +988,8 @@
       "chunking_strategy": "hybrid_adaptive_structural",
       "content_type": "list_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:42.519969",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:25.184229",
       "document_id": "75ce671ba755",
       "document_name": "_documentation_guides_multiple-partitions_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_guides_multiple-partitions\\_documentation_guides_multiple-partitions_.md",
@@ -1158,7 +1164,8 @@
       "chunking_strategy": "hybrid_adaptive_semchunk",
       "content_type": "prose_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:42.519969",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:25.184736",
       "document_id": "75ce671ba755",
       "document_name": "_documentation_guides_multiple-partitions_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_guides_multiple-partitions\\_documentation_guides_multiple-partitions_.md",
@@ -1333,7 +1340,7 @@
     }
   },
   {
-    "text": "## Partition by payload\n\nWhen an instance is shared between multiple users, you may need to partition vectors by user. This is done so that each user can only access their own vectors and can’t see the vectors of other users.\n\nNote: The key doesn't necessarily need to be named `group_id`. You can choose a name that best suits your data structure and naming conventions.\n\n```http\nPUT /collections/{collection_name}/points\n{\n    \"points\": [\n        {\n            \"id\": 1,\n            \"payload\": {\"group_id\": \"user_1\"},\n            \"vector\": [0.9, 0.1, 0.1]\n        },\n        {\n            \"id\": 2,\n            \"payload\": {\"group_id\": \"user_1\"},\n            \"vector\": [0.1, 0.9, 0.1]\n        },\n        {\n            \"id\": 3,\n            \"payload\": {\"group_id\": \"user_2\"},\n            \"vector\": [0.1, 0.1, 0.9]\n        },\n    ]\n}\n```\n\n```python\nclient.upsert(\n    collection_name=\"{collection_name}\",\n    points=[\n        models.PointStruct(\n            id=1,\n            payload={\"group_id\": \"user_1\"},\n            vector=[0.9, 0.1, 0.1],\n        ),\n        models.PointStruct(\n            id=2,\n            payload={\"group_id\": \"user_1\"},\n            vector=[0.1, 0.9, 0.1],\n        ),\n        models.PointStruct(\n            id=3,\n            payload={\"group_id\": \"user_2\"},\n            vector=[0.1, 0.1, 0.9],\n        ),\n    ],\n)\n```\n\n```typescript\nimport { QdrantClient } from \"@qdrant/js-client-rest\";\n\nconst client = new QdrantClient({ host: \"localhost\", port: 6333 });\n\nclient.upsert(\"{collection_name}\", {\n  points: [\n    {\n      id: 1,\n      payload: { group_id: \"user_1\" },\n      vector: [0.9, 0.1, 0.1],\n    },\n    {\n      id: 2,\n      payload: { group_id: \"user_1\" },\n      vector: [0.1, 0.9, 0.1],\n    },\n    {\n      id: 3,\n      payload: { group_id: \"user_2\" },\n      vector: [0.1, 0.1, 0.9],\n    },\n  ],\n});\n```",
+    "text": "## Partition by payload\n\nWhen an instance is shared between multiple users, you may need to partition vectors by user. This is done so that each user can only access their own vectors and can’t see the vectors of other users.\n\nNote: The key doesn't necessarily need to be named `group_id`. You can choose a name that best suits your data structure and naming conventions.\n\n```http\nPUT /collections/{collection_name}/points\n{\n    \"points\": [\n        {\n            \"id\": 1,\n            \"payload\": {\"group_id\": \"user_1\"},\n            \"vector\": [0.9, 0.1, 0.1]\n        },\n        {\n            \"id\": 2,\n            \"payload\": {\"group_id\": \"user_1\"},\n            \"vector\": [0.1, 0.9, 0.1]\n        },\n        {\n            \"id\": 3,\n            \"payload\": {\"group_id\": \"user_2\"},\n            \"vector\": [0.1, 0.1, 0.9]\n        },\n    ]\n}\n```\n\n```python\nclient.upsert(\n    collection_name=\"{collection_name}\",\n    points=[\n        models.PointStruct(\n            id=1,\n            payload={\"group_id\": \"user_1\"},\n            vector=[0.9, 0.1, 0.1],\n        ),\n        models.PointStruct(\n            id=2,\n            payload={\"group_id\": \"user_1\"},\n            vector=[0.1, 0.9, 0.1],\n        ),\n        models.PointStruct(\n            id=3,\n            payload={\"group_id\": \"user_2\"},\n            vector=[0.1, 0.1, 0.9],\n        ),\n    ],\n)\n```\n\n```typescript\nimport { QdrantClient } from \"@qdrant/js-client-rest\";\n\nconst client = new QdrantClient({ host: \"localhost\", port: 6333 });\n\nclient.upsert(\"{collection_name}\", {\n  points: [\n    {\n      id: 1,\n      payload: { group_id: \"user_1\" },\n      vector: [0.9, 0.1, 0.1],\n    },\n    {\n      id: 2,\n      payload: { group_id: \"user_1\" },\n      vector: [0.1, 0.9, 0.1],\n    },\n    {\n      id: 3,\n      payload: { group_id: \"user_2\" },\n      vector: [0.1, 0.1, 0.9],\n    },\n  ],\n});\n```\n\n```rust\nuse qdrant_client::qdrant::{PointStruct, UpsertPointsBuilder};\nuse qdrant_client::Qdrant;\n\nlet client = Qdrant::from_url(\"http://localhost:6334\").build()?;\n\nclient\n    .upsert_points(UpsertPointsBuilder::new(\n        \"{collection_name}\",\n        vec![\n            PointStruct::new(1, vec![0.9, 0.1, 0.1], [(\"group_id\", \"user_1\".into())]),\n            PointStruct::new(2, vec![0.1, 0.9, 0.1], [(\"group_id\", \"user_1\".into())]),\n            PointStruct::new(3, vec![0.1, 0.1, 0.9], [(\"group_id\", \"user_2\".into())]),\n        ],\n    ))\n    .await?;\n```\n\n```java\nimport java.util.List;\nimport java.util.Map;\n\nimport io.qdrant.client.QdrantClient;\nimport io.qdrant.client.QdrantGrpcClient;\nimport io.qdrant.client.grpc.Points.PointStruct;\n\nQdrantClient client =\n    new QdrantClient(QdrantGrpcClient.newBuilder(\"localhost\", 6334, false).build());\n\nclient\n    .upsertAsync(\n        \"{collection_name}\",\n        List.of(\n            PointStruct.newBuilder()\n                .setId(id(1))\n                .setVectors(vectors(0.9f, 0.1f, 0.1f))\n                .putAllPayload(Map.of(\"group_id\", value(\"user_1\")))\n                .build(),\n            PointStruct.newBuilder()\n                .setId(id(2))\n                .setVectors(vectors(0.1f, 0.9f, 0.1f))\n                .putAllPayload(Map.of(\"group_id\", value(\"user_1\")))\n                .build(),\n            PointStruct.newBuilder()\n                .setId(id(3))\n                .setVectors(vectors(0.1f, 0.1f, 0.9f))\n                .putAllPayload(Map.of(\"group_id\", value(\"user_2\")))\n                .build()))\n    .get();\n```",
     "metadata": {
       "chunk_id": "75ce671ba755-0011",
       "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_guides_multiple-partitions\\_documentation_guides_multiple-partitions_.md",
@@ -1347,17 +1354,18 @@
         "Partition by payload"
       ],
       "heading_text": "Partition by payload",
-      "token_count": 548,
-      "char_count": 1827,
+      "token_count": 1012,
+      "char_count": 3413,
       "start_char": 12451,
-      "end_char": 14278,
-      "semantic_score": 0.7,
+      "end_char": 15864,
+      "semantic_score": 0.6,
       "structural_score": 0.7,
-      "retrieval_quality": 0.6746268656716419,
+      "retrieval_quality": 0.6726315789473685,
       "chunking_strategy": "hybrid_adaptive_semchunk",
       "content_type": "prose_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:42.519969",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:25.191100",
       "document_id": "75ce671ba755",
       "document_name": "_documentation_guides_multiple-partitions_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_guides_multiple-partitions\\_documentation_guides_multiple-partitions_.md",
@@ -1365,9 +1373,9 @@
       "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_guides_multiple-partitions",
       "relative_path": "Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_guides_multiple-partitions\\_documentation_guides_multiple-partitions_.md",
       "hierarchy_path": "Partition by payload",
-      "chunk_hash": "0d1325304fa20338",
-      "content_digest": "0d1325304fa20338",
-      "chunk_length": 1827,
+      "chunk_hash": "b2e334c46c208dbb",
+      "content_digest": "b2e334c46c208dbb",
+      "chunk_length": 3413,
       "payload_version": "1.3",
       "collection_hints": [
         "qdrant_ecosystem"
@@ -1377,130 +1385,130 @@
         "weighting": "tf-normalized",
         "top_terms": [
           "user",
-          "payload",
           "group",
+          "client",
+          "pointstruct",
+          "payload",
           "vector",
+          "qdrant",
           "name",
+          "vectors",
           "collection",
           "points",
-          "client",
-          "vectors",
+          "import",
+          "new",
+          "qdrantclient",
+          "build",
+          "vec",
+          "map",
+          "newbuilder",
           "can",
-          "models",
-          "pointstruct",
-          "partition",
-          "users",
-          "you",
-          "need",
-          "that",
-          "and",
-          "the",
           "upsert"
         ],
         "term_weights": [
           {
             "term": "user",
+            "tf": 17,
+            "weight": 0.068273
+          },
+          {
+            "term": "group",
+            "tf": 16,
+            "weight": 0.064257
+          },
+          {
+            "term": "client",
+            "tf": 13,
+            "weight": 0.052209
+          },
+          {
+            "term": "pointstruct",
             "tf": 11,
-            "weight": 0.084615
+            "weight": 0.044177
           },
           {
             "term": "payload",
             "tf": 10,
-            "weight": 0.076923
-          },
-          {
-            "term": "group",
-            "tf": 10,
-            "weight": 0.076923
+            "weight": 0.040161
           },
           {
             "term": "vector",
             "tf": 9,
-            "weight": 0.069231
+            "weight": 0.036145
+          },
+          {
+            "term": "qdrant",
+            "tf": 9,
+            "weight": 0.036145
           },
           {
             "term": "name",
-            "tf": 5,
-            "weight": 0.038462
-          },
-          {
-            "term": "collection",
-            "tf": 4,
-            "weight": 0.030769
-          },
-          {
-            "term": "points",
-            "tf": 4,
-            "weight": 0.030769
-          },
-          {
-            "term": "client",
-            "tf": 4,
-            "weight": 0.030769
+            "tf": 7,
+            "weight": 0.028112
           },
           {
             "term": "vectors",
-            "tf": 3,
-            "weight": 0.023077
+            "tf": 6,
+            "weight": 0.024096
+          },
+          {
+            "term": "collection",
+            "tf": 6,
+            "weight": 0.024096
+          },
+          {
+            "term": "points",
+            "tf": 6,
+            "weight": 0.024096
+          },
+          {
+            "term": "import",
+            "tf": 6,
+            "weight": 0.024096
+          },
+          {
+            "term": "new",
+            "tf": 6,
+            "weight": 0.024096
+          },
+          {
+            "term": "qdrantclient",
+            "tf": 5,
+            "weight": 0.02008
+          },
+          {
+            "term": "build",
+            "tf": 5,
+            "weight": 0.02008
+          },
+          {
+            "term": "vec",
+            "tf": 4,
+            "weight": 0.016064
+          },
+          {
+            "term": "map",
+            "tf": 4,
+            "weight": 0.016064
+          },
+          {
+            "term": "newbuilder",
+            "tf": 4,
+            "weight": 0.016064
           },
           {
             "term": "can",
             "tf": 3,
-            "weight": 0.023077
-          },
-          {
-            "term": "models",
-            "tf": 3,
-            "weight": 0.023077
-          },
-          {
-            "term": "pointstruct",
-            "tf": 3,
-            "weight": 0.023077
-          },
-          {
-            "term": "partition",
-            "tf": 2,
-            "weight": 0.015385
-          },
-          {
-            "term": "users",
-            "tf": 2,
-            "weight": 0.015385
-          },
-          {
-            "term": "you",
-            "tf": 2,
-            "weight": 0.015385
-          },
-          {
-            "term": "need",
-            "tf": 2,
-            "weight": 0.015385
-          },
-          {
-            "term": "that",
-            "tf": 2,
-            "weight": 0.015385
-          },
-          {
-            "term": "and",
-            "tf": 2,
-            "weight": 0.015385
-          },
-          {
-            "term": "the",
-            "tf": 2,
-            "weight": 0.015385
+            "weight": 0.012048
           },
           {
             "term": "upsert",
-            "tf": 2,
-            "weight": 0.015385
+            "tf": 3,
+            "weight": 0.012048
           }
         ],
-        "unique_terms": 64,
-        "total_terms": 130
+        "unique_terms": 88,
+        "total_terms": 249
       },
       "modal_hint": "code",
       "content_flags": {
@@ -1512,33 +1520,33 @@
       },
       "search_keywords": [
         "Partition by payload",
-        "can",
         "client",
         "collection",
         "group",
         "name",
         "payload",
-        "points",
+        "pointstruct",
+        "qdrant",
         "user",
         "vector",
         "vectors"
       ]
     },
     "advanced_scores": {
-      "semantic": 0.7,
+      "semantic": 0.6,
       "structural": 0.7,
-      "retrieval_quality": 0.6746268656716419,
-      "overall": 0.6915422885572139
+      "retrieval_quality": 0.6726315789473685,
+      "overall": 0.6575438596491228
     }
   },
   {
-    "text": "## Calibrate performance\n\nThe speed of indexation may become a bottleneck in this case, as each user’s vector will be indexed into the same collection. To avoid this bottleneck, consider *bypassing the construction of a global vector index* for the entire collection and building it only for individual groups instead.\n\nBy adopting this strategy, Qdrant will index vectors for each user independently, significantly accelerating the process.\n\nTo implement this approach, you should:\n\n1. Set `payload_m` in the HNSW configuration to a non-zero value, such as 16.\n2. Set `m` in hnsw config to 0. This will disable building global index for the whole collection.\n\n```http\nPUT /collections/{collection_name}\n{\n    \"vectors\": {\n      \"size\": 768,\n      \"distance\": \"Cosine\"\n    },\n    \"hnsw_config\": {\n        \"payload_m\": 16,\n        \"m\": 0\n    }\n}\n```\n\n```python\nfrom qdrant_client import QdrantClient, models\n\nclient = QdrantClient(url=\"http://localhost:6333\")\n\nclient.create_collection(\n    collection_name=\"{collection_name}\",\n    vectors_config=models.VectorParams(size=768, distance=models.Distance.COSINE),\n    hnsw_config=models.HnswConfigDiff(\n        payload_m=16,\n        m=0,\n    ),\n)\n```\n\n```typescript\nimport { QdrantClient } from \"@qdrant/js-client-rest\";\n\nconst client = new QdrantClient({ host: \"localhost\", port: 6333 });\n\nclient.createCollection(\"{collection_name}\", {\n  vectors: {\n    size: 768,\n    distance: \"Cosine\",\n  },\n  hnsw_config: {\n    payload_m: 16,\n    m: 0,\n  },\n});\n```\n\n```rust\nuse qdrant_client::qdrant::{\n    CreateCollectionBuilder, Distance, HnswConfigDiffBuilder, VectorParamsBuilder,\n};\nuse qdrant_client::Qdrant;\n\nlet client = Qdrant::from_url(\"http://localhost:6334\").build()?;\n\nclient\n    .create_collection(\n        CreateCollectionBuilder::new(\"{collection_name}\")\n            .vectors_config(VectorParamsBuilder::new(768, Distance::Cosine))\n            .hnsw_config(HnswConfigDiffBuilder::default().payload_m(16).m(0)),\n    )\n    .await?;\n```\n\n```java\nimport io.qdrant.client.QdrantClient;\nimport io.qdrant.client.QdrantGrpcClient;\nimport io.qdrant.client.grpc.Collections.CreateCollection;\nimport io.qdrant.client.grpc.Collections.Distance;\nimport io.qdrant.client.grpc.Collections.HnswConfigDiff;\nimport io.qdrant.client.grpc.Collections.VectorParams;\nimport io.qdrant.client.grpc.Collections.VectorsConfig;\n\nQdrantClient client =\n    new QdrantClient(QdrantGrpcClient.newBuilder(\"localhost\", 6334, false).build());\n\nclient\n    .createCollectionAsync(\n        CreateCollection.newBuilder()\n            .setCollectionName(\"{collection_name}\")\n            .setVectorsConfig(\n                VectorsConfig.newBuilder()\n                    .setParams(\n                        VectorParams.newBuilder()\n                            .setSize(768)\n                            .setDistance(Distance.Cosine)\n                            .build())\n                    .build())\n            .setHnswConfig(HnswConfigDiff.newBuilder().setPayloadM(16).setM(0).build())\n            .build())\n    .get();\n```\n\n```csharp\nusing Qdrant.Client;\nusing Qdrant.Client.Grpc;\n\nvar client = new QdrantClient(\"localhost\", 6334);\n\nawait client.CreateCollectionAsync(\n\tcollectionName: \"{collection_name}\",\n\tvectorsConfig: new VectorParams { Size = 768, Distance = Distance.Cosine },\n\thnswConfig: new HnswConfigDiff { PayloadM = 16, M = 0 }\n);\n```\n\n```go\nimport (\n\t\"context\"\n\n\t\"github.com/qdrant/go-client/qdrant\"\n)",
+    "text": "## Calibrate performance\n\nThe speed of indexation may become a bottleneck in this case, as each user’s vector will be indexed into the same collection. To avoid this bottleneck, consider *bypassing the construction of a global vector index* for the entire collection and building it only for individual groups instead.\n\nBy adopting this strategy, Qdrant will index vectors for each user independently, significantly accelerating the process.\n\nTo implement this approach, you should:\n\n1. Set `payload_m` in the HNSW configuration to a non-zero value, such as 16.\n2. Set `m` in hnsw config to 0. This will disable building global index for the whole collection.\n\n```http\nPUT /collections/{collection_name}\n{\n    \"vectors\": {\n      \"size\": 768,\n      \"distance\": \"Cosine\"\n    },\n    \"hnsw_config\": {\n        \"payload_m\": 16,\n        \"m\": 0\n    }\n}\n```\n\n```python\nfrom qdrant_client import QdrantClient, models\n\nclient = QdrantClient(url=\"http://localhost:6333\")\n\nclient.create_collection(\n    collection_name=\"{collection_name}\",\n    vectors_config=models.VectorParams(size=768, distance=models.Distance.COSINE),\n    hnsw_config=models.HnswConfigDiff(\n        payload_m=16,\n        m=0,\n    ),\n)\n```\n\n```typescript\nimport { QdrantClient } from \"@qdrant/js-client-rest\";\n\nconst client = new QdrantClient({ host: \"localhost\", port: 6333 });\n\nclient.createCollection(\"{collection_name}\", {\n  vectors: {\n    size: 768,\n    distance: \"Cosine\",\n  },\n  hnsw_config: {\n    payload_m: 16,\n    m: 0,\n  },\n});\n```\n\n```rust\nuse qdrant_client::qdrant::{\n    CreateCollectionBuilder, Distance, HnswConfigDiffBuilder, VectorParamsBuilder,\n};\nuse qdrant_client::Qdrant;\n\nlet client = Qdrant::from_url(\"http://localhost:6334\").build()?;\n\nclient\n    .create_collection(\n        CreateCollectionBuilder::new(\"{collection_name}\")\n            .vectors_config(VectorParamsBuilder::new(768, Distance::Cosine))\n            .hnsw_config(HnswConfigDiffBuilder::default().payload_m(16).m(0)),\n    )\n    .await?;\n```\n\n```java\nimport io.qdrant.client.QdrantClient;\nimport io.qdrant.client.QdrantGrpcClient;\nimport io.qdrant.client.grpc.Collections.CreateCollection;\nimport io.qdrant.client.grpc.Collections.Distance;\nimport io.qdrant.client.grpc.Collections.HnswConfigDiff;\nimport io.qdrant.client.grpc.Collections.VectorParams;\nimport io.qdrant.client.grpc.Collections.VectorsConfig;\n\nQdrantClient client =\n    new QdrantClient(QdrantGrpcClient.newBuilder(\"localhost\", 6334, false).build());\n\nclient\n    .createCollectionAsync(\n        CreateCollection.newBuilder()\n            .setCollectionName(\"{collection_name}\")\n            .setVectorsConfig(\n                VectorsConfig.newBuilder()\n                    .setParams(\n                        VectorParams.newBuilder()\n                            .setSize(768)\n                            .setDistance(Distance.Cosine)\n                            .build())\n                    .build())\n            .setHnswConfig(HnswConfigDiff.newBuilder().setPayloadM(16).setM(0).build())\n            .build())\n    .get();\n```\n\n```csharp\nusing Qdrant.Client;\nusing Qdrant.Client.Grpc;\n\nvar client = new QdrantClient(\"localhost\", 6334);\n\nawait client.CreateCollectionAsync(\n\tcollectionName: \"{collection_name}\",\n\tvectorsConfig: new VectorParams { Size = 768, Distance = Distance.Cosine },\n\thnswConfig: new HnswConfigDiff { PayloadM = 16, M = 0 }\n);\n```\n\n```go\nimport (\n\t\"context\"\n\n\t\"github.com/qdrant/go-client/qdrant\"\n)\n\nclient, err := qdrant.NewClient(&qdrant.Config{\n\tHost: \"localhost\",\n\tPort: 6334,\n})\n\nclient.CreateCollection(context.Background(), &qdrant.CreateCollection{\n\tCollectionName: \"{collection_name}\",\n\tVectorsConfig: qdrant.NewVectorsConfig(&qdrant.VectorParams{\n\t\tSize:     768,\n\t\tDistance: qdrant.Distance_Cosine,\n\t}),\n\tHnswConfig: &qdrant.HnswConfigDiff{\n\t\tPayloadM: qdrant.PtrOf(uint64(16)),\n\t\tM:        qdrant.PtrOf(uint64(0)),\n\t},\n})\n```\n\n3. Create keyword payload index for `group_id` field.\n\n`is_tenant` parameter is available as of v1.11.0. Previous versions should use default options for keyword index creation.",
     "metadata": {
-      "chunk_id": "75ce671ba755-0015",
+      "chunk_id": "75ce671ba755-0014",
       "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_guides_multiple-partitions\\_documentation_guides_multiple-partitions_.md",
       "filename": "_documentation_guides_multiple-partitions_.md",
       "file_extension": ".md",
-      "chunk_index": 15,
+      "chunk_index": 14,
       "document_level": 1,
       "parent_chunk_id": null,
       "child_chunk_ids": [],
@@ -1546,17 +1554,18 @@
         "Calibrate performance"
       ],
       "heading_text": "Calibrate performance",
-      "token_count": 837,
-      "char_count": 3429,
+      "token_count": 1013,
+      "char_count": 4047,
       "start_char": 20323,
-      "end_char": 23752,
+      "end_char": 24370,
       "semantic_score": 0.6,
-      "structural_score": 0.7,
-      "retrieval_quality": 0.7028169014084507,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.6979289940828401,
       "chunking_strategy": "hybrid_adaptive_semchunk",
       "content_type": "prose_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:42.531138",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:25.195907",
       "document_id": "75ce671ba755",
       "document_name": "_documentation_guides_multiple-partitions_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_guides_multiple-partitions\\_documentation_guides_multiple-partitions_.md",
@@ -1564,9 +1573,9 @@
       "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_guides_multiple-partitions",
       "relative_path": "Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_guides_multiple-partitions\\_documentation_guides_multiple-partitions_.md",
       "hierarchy_path": "Calibrate performance",
-      "chunk_hash": "a9eb5da33fc0384e",
-      "content_digest": "a9eb5da33fc0384e",
-      "chunk_length": 3429,
+      "chunk_hash": "b0e2b05c3b11e313",
+      "content_digest": "b0e2b05c3b11e313",
+      "chunk_length": 4047,
       "payload_version": "1.3",
       "collection_hints": [
         "qdrant_ecosystem"
@@ -1575,131 +1584,131 @@
         "version": "1.0",
         "weighting": "tf-normalized",
         "top_terms": [
-          "client",
           "qdrant",
+          "client",
           "collection",
           "distance",
           "import",
-          "qdrantclient",
-          "the",
           "config",
           "name",
-          "new",
-          "hnsw",
-          "collections",
+          "qdrantclient",
+          "the",
           "768",
           "cosine",
+          "new",
+          "for",
+          "payload",
+          "hnsw",
+          "collections",
+          "localhost",
           "build",
           "grpc",
-          "this",
-          "vectors",
-          "payload",
-          "localhost"
+          "this"
         ],
         "term_weights": [
           {
-            "term": "client",
-            "tf": 24,
-            "weight": 0.07619
+            "term": "qdrant",
+            "tf": 28,
+            "weight": 0.074667
           },
           {
-            "term": "qdrant",
-            "tf": 19,
-            "weight": 0.060317
+            "term": "client",
+            "tf": 26,
+            "weight": 0.069333
           },
           {
             "term": "collection",
-            "tf": 12,
-            "weight": 0.038095
+            "tf": 13,
+            "weight": 0.034667
           },
           {
             "term": "distance",
-            "tf": 10,
-            "weight": 0.031746
+            "tf": 12,
+            "weight": 0.032
           },
           {
             "term": "import",
             "tf": 10,
-            "weight": 0.031746
+            "weight": 0.026667
+          },
+          {
+            "term": "config",
+            "tf": 8,
+            "weight": 0.021333
+          },
+          {
+            "term": "name",
+            "tf": 8,
+            "weight": 0.021333
           },
           {
             "term": "qdrantclient",
             "tf": 8,
-            "weight": 0.025397
+            "weight": 0.021333
           },
           {
             "term": "the",
             "tf": 7,
-            "weight": 0.022222
+            "weight": 0.018667
           },
           {
-            "term": "config",
+            "term": "768",
             "tf": 7,
-            "weight": 0.022222
+            "weight": 0.018667
           },
           {
-            "term": "name",
+            "term": "cosine",
             "tf": 7,
-            "weight": 0.022222
+            "weight": 0.018667
           },
           {
             "term": "new",
             "tf": 7,
-            "weight": 0.022222
+            "weight": 0.018667
+          },
+          {
+            "term": "for",
+            "tf": 6,
+            "weight": 0.016
+          },
+          {
+            "term": "payload",
+            "tf": 6,
+            "weight": 0.016
           },
           {
             "term": "hnsw",
             "tf": 6,
-            "weight": 0.019048
+            "weight": 0.016
           },
           {
             "term": "collections",
             "tf": 6,
-            "weight": 0.019048
+            "weight": 0.016
           },
           {
-            "term": "768",
+            "term": "localhost",
             "tf": 6,
-            "weight": 0.019048
-          },
-          {
-            "term": "cosine",
-            "tf": 6,
-            "weight": 0.019048
+            "weight": 0.016
           },
           {
             "term": "build",
             "tf": 6,
-            "weight": 0.019048
+            "weight": 0.016
           },
           {
             "term": "grpc",
             "tf": 6,
-            "weight": 0.019048
+            "weight": 0.016
           },
           {
             "term": "this",
             "tf": 5,
-            "weight": 0.015873
-          },
-          {
-            "term": "vectors",
-            "tf": 5,
-            "weight": 0.015873
-          },
-          {
-            "term": "payload",
-            "tf": 5,
-            "weight": 0.015873
-          },
-          {
-            "term": "localhost",
-            "tf": 5,
-            "weight": 0.015873
+            "weight": 0.013333
           }
         ],
-        "unique_terms": 117,
-        "total_terms": 315
+        "unique_terms": 133,
+        "total_terms": 375
       },
       "modal_hint": "code",
       "content_flags": {
@@ -1710,6 +1719,7 @@
         "has_formula": false
       },
       "search_keywords": [
+        "768",
         "Calibrate performance",
         "client",
         "collection",
@@ -1717,7 +1727,6 @@
         "distance",
         "import",
         "name",
-        "new",
         "qdrant",
         "qdrantclient",
         "the"
@@ -1725,19 +1734,19 @@
     },
     "advanced_scores": {
       "semantic": 0.6,
-      "structural": 0.7,
-      "retrieval_quality": 0.7028169014084507,
-      "overall": 0.6676056338028168
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.6979289940828401,
+      "overall": 0.7326429980276133
     }
   },
   {
     "text": "##### Was this page useful? Yes No  Thank you for your feedback! 🙏  We are sorry to hear that. 😔 You can [edit](https:/github.com/qdrant/landing_page/tree/master/qdrant-landing/content/documentation/guides/multiple-partitions.md) this page on GitHub, or [create](https://github.com/qdrant/landing_page/issues/new/choose) a GitHub issue. On this page:  - [Configure Multitenancy](#configure-multitenancy.md)    - [Partition by payload](#partition-by-payload.md)   - [Calibrate performance](#calibrate-performance.md)   - [Limitations](#limitations.md)  * [Edit on Github](https://github.com/qdrant/landing_page/tree/master/qdrant-landing/content/documentation/guides/multiple-partitions.md) * [Create an issue](https://github.com/qdrant/landing_page/issues/new/choose)",
     "metadata": {
-      "chunk_id": "75ce671ba755-0019",
+      "chunk_id": "75ce671ba755-0017",
       "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_guides_multiple-partitions\\_documentation_guides_multiple-partitions_.md",
       "filename": "_documentation_guides_multiple-partitions_.md",
       "file_extension": ".md",
-      "chunk_index": 19,
+      "chunk_index": 17,
       "document_level": 1,
       "parent_chunk_id": null,
       "child_chunk_ids": [],
@@ -1755,7 +1764,8 @@
       "chunking_strategy": "hybrid_adaptive_structural",
       "content_type": "list_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:42.533224",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:25.196929",
       "document_id": "75ce671ba755",
       "document_name": "_documentation_guides_multiple-partitions_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_guides_multiple-partitions\\_documentation_guides_multiple-partitions_.md",

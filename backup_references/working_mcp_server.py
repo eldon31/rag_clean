@@ -32,6 +32,49 @@ from qdrant_client import AsyncQdrantClient
 from sentence_transformers import SentenceTransformer
 import numpy as np
 
+# Collection naming helpers
+CANONICAL_COLLECTIONS = {
+    "docling": "docling_v4_nomic_coderank",
+    "docling_v4": "docling_v4_nomic_coderank",
+    "docling_v4_nomic_coderank": "docling_v4_nomic_coderank",
+    "fast_docs": "fast_docs_v4_nomic_coderank",
+    "fast_docs_v4": "fast_docs_v4_nomic_coderank",
+    "fast_docs_v4_nomic_coderank": "fast_docs_v4_nomic_coderank",
+    "pydantic": "pydantic_v4_nomic_coderank",
+    "pydantic_v4": "pydantic_v4_nomic_coderank",
+    "pydantic_v4_nomic_coderank": "pydantic_v4_nomic_coderank",
+    "qdrant_ecosystem": "qdrant_ecosystem_v4_nomic_coderank",
+    "qdrant_ecosystem_v4": "qdrant_ecosystem_v4_nomic_coderank",
+    "qdrant_ecosystem_v4_nomic_coderank": "qdrant_ecosystem_v4_nomic_coderank",
+    "sentence_transformers": "sentence_transformers_v4_nomic_coderank",
+    "sentence_transformers_v4": "sentence_transformers_v4_nomic_coderank",
+    "sentence_transformers_v4_nomic_coderank": "sentence_transformers_v4_nomic_coderank",
+}
+
+COLLECTION_DISPLAY_NAMES = {
+    "docling_v4_nomic_coderank": "docling",
+    "fast_docs_v4_nomic_coderank": "fast_docs",
+    "pydantic_v4_nomic_coderank": "pydantic",
+    "qdrant_ecosystem_v4_nomic_coderank": "qdrant_ecosystem",
+    "sentence_transformers_v4_nomic_coderank": "sentence_transformers",
+}
+
+DEFAULT_COLLECTIONS = list(COLLECTION_DISPLAY_NAMES.keys())
+
+
+def resolve_collection(name: str) -> str:
+    if not isinstance(name, str):
+        raise ValueError("Collection name must be a string")
+    normalized = name.strip().lower()
+    if normalized not in CANONICAL_COLLECTIONS:
+        raise ValueError(f"Unknown collection '{name}'")
+    return CANONICAL_COLLECTIONS[normalized]
+
+
+def collection_display(name: str) -> str:
+    return COLLECTION_DISPLAY_NAMES.get(name, name)
+
+
 # Create MCP server
 mcp_server = Server("qdrant-knowledge-server")
 
@@ -72,7 +115,7 @@ async def handle_list_tools() -> List[Tool]:
                     "collection": {
                         "type": "string",
                         "description": "Collection name",
-                        "enum": ["sentence_transformers", "docling", "qdrant_ecosystem", "fast_docs", "pydantic"]
+                        "enum": sorted(set(CANONICAL_COLLECTIONS.keys())),
                     },
                     "query": {
                         "type": "string",
@@ -135,7 +178,7 @@ async def handle_list_tools() -> List[Tool]:
                     "focus_collection": {
                         "type": "string",
                         "description": "Specific collection to focus on (optional)",
-                        "enum": ["sentence_transformers", "docling", "qdrant_ecosystem", "fast_docs", "pydantic"]
+                        "enum": sorted(set(CANONICAL_COLLECTIONS.keys())),
                     }
                 },
                 "required": ["topic"]
@@ -179,12 +222,17 @@ async def handle_call_tool(name: str, arguments: Dict[str, Any]) -> List[TextCon
             if not collection or not query:
                 return [TextContent(type="text", text="Error: collection and query parameters are required")]
 
+            try:
+                canonical_collection = resolve_collection(collection)
+            except ValueError as err:
+                return [TextContent(type="text", text=str(err))]
+
             embedder = await get_embedder()
             qdrant_client = await get_qdrant_client()
 
             query_embedding = embedder.encode([query], batch_size=32)[0]
             search_result = await qdrant_client.search(
-                collection_name=collection,
+                collection_name=canonical_collection,
                 query_vector=query_embedding.tolist(),
                 limit=limit,
                 score_threshold=score_threshold
@@ -199,7 +247,7 @@ async def handle_call_tool(name: str, arguments: Dict[str, Any]) -> List[TextCon
                 text = payload.get('text', 'No content')
                 results.append(f"Score: {hit.score:.3f} - {text[:200]}...")
 
-            response = f"Search results for '{query}' in {collection}:\n" + "\n".join(results)
+            response = f"Search results for '{query}' in {collection_display(canonical_collection)}:\n" + "\n".join(results)
             return [TextContent(type="text", text=response)]
 
         elif name == "smart_search":
@@ -215,18 +263,28 @@ async def handle_call_tool(name: str, arguments: Dict[str, Any]) -> List[TextCon
             relevant_collections = []
 
             if any(word in query_lower for word in ['embedding', 'transformer', 'model', 'fine-tune', 'training', 'sentence', 'semantic', 'similarity']):
-                relevant_collections.append('sentence_transformers')
+                relevant_collections.append('sentence_transformers_v4_nomic_coderank')
             if any(word in query_lower for word in ['vector', 'search', 'qdrant', 'similarity', 'index', 'query', 'sparse', 'dense', 'hybrid']):
-                relevant_collections.append('qdrant_ecosystem')
+                relevant_collections.append('qdrant_ecosystem_v4_nomic_coderank')
             if any(word in query_lower for word in ['document', 'pdf', 'text', 'chunk', 'parse', 'extract', 'structure', 'docling']):
-                relevant_collections.append('docling')
+                relevant_collections.append('docling_v4_nomic_coderank')
             if any(word in query_lower for word in ['fast', 'api', 'documentation', 'docs']):
-                relevant_collections.append('fast_docs')
+                relevant_collections.append('fast_docs_v4_nomic_coderank')
             if any(word in query_lower for word in ['pydantic', 'validation', 'model', 'schema']):
-                relevant_collections.append('pydantic')
+                relevant_collections.append('pydantic_v4_nomic_coderank')
 
+            if relevant_collections:
+                seen_canonicals = set()
+                relevant_collections = [
+                    name for name in relevant_collections
+                    if not (name in seen_canonicals or seen_canonicals.add(name))
+                ]
             if not relevant_collections:
-                relevant_collections = ['qdrant_ecosystem', 'sentence_transformers', 'docling']
+                relevant_collections = [
+                    'qdrant_ecosystem_v4_nomic_coderank',
+                    'sentence_transformers_v4_nomic_coderank',
+                    'docling_v4_nomic_coderank'
+                ]
 
             embedder = await get_embedder()
             qdrant_client = await get_qdrant_client()
@@ -245,7 +303,7 @@ async def handle_call_tool(name: str, arguments: Dict[str, Any]) -> List[TextCon
                     for hit in search_result:
                         payload = hit.payload or {}
                         text = payload.get('text', 'No content')
-                        all_results.append((hit.score, collection, text[:200]))
+                        all_results.append((hit.score, collection_display(collection), text[:200]))
                 except Exception as e:
                     logger.warning(f"Error searching {collection}: {e}")
 
@@ -256,7 +314,8 @@ async def handle_call_tool(name: str, arguments: Dict[str, Any]) -> List[TextCon
                 return [TextContent(type="text", text=f"No results found for query: {query}")]
 
             results = [f"Score: {score:.3f} [{collection}] - {text}..." for score, collection, text in top_results]
-            response = f"Smart search results for '{query}' (searched: {', '.join(relevant_collections)}):\n" + "\n".join(results)
+            searched = ", ".join(collection_display(name) for name in relevant_collections)
+            response = f"Smart search results for '{query}' (searched: {searched}):\n" + "\n".join(results)
             return [TextContent(type="text", text=response)]
 
         elif name == "learn_about_topic":
@@ -267,7 +326,13 @@ async def handle_call_tool(name: str, arguments: Dict[str, Any]) -> List[TextCon
             if not topic:
                 return [TextContent(type="text", text="Error: topic parameter is required")]
 
-            collections_to_search = [focus_collection] if focus_collection else ['qdrant_ecosystem', 'sentence_transformers', 'docling', 'fast_docs', 'pydantic']
+            if focus_collection:
+                try:
+                    collections_to_search = [resolve_collection(focus_collection)]
+                except ValueError as err:
+                    return [TextContent(type="text", text=str(err))]
+            else:
+                collections_to_search = DEFAULT_COLLECTIONS
 
             embedder = await get_embedder()
             qdrant_client = await get_qdrant_client()
@@ -286,7 +351,7 @@ async def handle_call_tool(name: str, arguments: Dict[str, Any]) -> List[TextCon
                     for hit in search_result:
                         payload = hit.payload or {}
                         text = payload.get('text', 'No content')
-                        all_results.append((hit.score, collection, text))
+                        all_results.append((hit.score, collection_display(collection), text))
                 except Exception as e:
                     logger.warning(f"Error searching {collection}: {e}")
 
@@ -308,36 +373,36 @@ async def handle_call_tool(name: str, arguments: Dict[str, Any]) -> List[TextCon
 
         elif name == "get_collections_info":
             collections_info = {
-                "sentence_transformers": {
+                "sentence_transformers_v4_nomic_coderank": {
                     "description": "Advanced embedding techniques and model optimization",
                     "specialties": ["fine-tuning", "training", "model selection", "performance optimization"],
-                    "vector_count": "~457"
+                    "vector_count": "71"
                 },
-                "docling": {
+                "docling_v4_nomic_coderank": {
                     "description": "Document processing and text extraction",
                     "specialties": ["PDF parsing", "document structure", "text extraction", "chunking"],
-                    "vector_count": "~1,089"
+                    "vector_count": "60"
                 },
-                "qdrant_ecosystem": {
+                "qdrant_ecosystem_v4_nomic_coderank": {
                     "description": "Qdrant vector database and search technologies",
                     "specialties": ["vector search", "similarity search", "indexing", "performance"],
-                    "vector_count": "~8,108"
+                    "vector_count": "950"
                 },
-                "fast_docs": {
+                "fast_docs_v4_nomic_coderank": {
                     "description": "FastAPI documentation and web framework",
                     "specialties": ["API development", "async programming", "web frameworks"],
-                    "vector_count": "~2,500"
+                    "vector_count": "103"
                 },
-                "pydantic": {
+                "pydantic_v4_nomic_coderank": {
                     "description": "Pydantic data validation and parsing",
                     "specialties": ["data validation", "type hints", "model parsing"],
-                    "vector_count": "~1,200"
+                    "vector_count": "40"
                 }
             }
 
             response_parts = ["📊 Available Collections:", ""]
             for name, info in collections_info.items():
-                response_parts.append(f"🔸 {name}")
+                response_parts.append(f"🔸 {collection_display(name)} ({name})")
                 response_parts.append(f"   Description: {info['description']}")
                 response_parts.append(f"   Specialties: {', '.join(info['specialties'])}")
                 response_parts.append(f"   Vectors: {info['vector_count']}")

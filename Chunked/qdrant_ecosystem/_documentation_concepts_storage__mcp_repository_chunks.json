@@ -24,7 +24,8 @@
       "chunking_strategy": "hybrid_adaptive_structural",
       "content_type": "list_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:39.003572",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:21.985445",
       "document_id": "ec614909b4f0",
       "document_name": "_documentation_concepts_storage_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_storage\\_documentation_concepts_storage_.md",
@@ -223,7 +224,8 @@
       "chunking_strategy": "hybrid_adaptive_structural",
       "content_type": "list_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:39.005197",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:21.986788",
       "document_id": "ec614909b4f0",
       "document_name": "_documentation_concepts_storage_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_storage\\_documentation_concepts_storage_.md",
@@ -422,7 +424,8 @@
       "chunking_strategy": "hybrid_adaptive_structural",
       "content_type": "list_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:39.005197",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:21.987203",
       "document_id": "ec614909b4f0",
       "document_name": "_documentation_concepts_storage_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_storage\\_documentation_concepts_storage_.md",
@@ -585,7 +588,8 @@
       "chunking_strategy": "hybrid_adaptive_structural",
       "content_type": "list_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:39.006158",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:21.988122",
       "document_id": "ec614909b4f0",
       "document_name": "_documentation_concepts_storage_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_storage\\_documentation_concepts_storage_.md",
@@ -784,7 +788,8 @@
       "chunking_strategy": "hybrid_adaptive_structural",
       "content_type": "list_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:39.007157",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:21.989361",
       "document_id": "ec614909b4f0",
       "document_name": "_documentation_concepts_storage_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_storage\\_documentation_concepts_storage_.md",
@@ -959,7 +964,7 @@
     }
   },
   {
-    "text": "### Configuring Memmap storage\n\nThere are two ways to configure the usage of memmap(also known as on-disk) storage:\n\n- Set up `on_disk` option for the vectors in the collection create API:\n\n*Available as of v1.2.0*\n\n```http\nPUT /collections/{collection_name}\n{\n    \"vectors\": {\n      \"size\": 768,\n      \"distance\": \"Cosine\",\n      \"on_disk\": true\n    }\n}\n```\n\n```python\nfrom qdrant_client import QdrantClient, models\n\nclient = QdrantClient(url=\"http://localhost:6333\")\n\nclient.create_collection(\n    collection_name=\"{collection_name}\",\n    vectors_config=models.VectorParams(\n        size=768, distance=models.Distance.COSINE, on_disk=True\n    ),\n)\n```\n\n```typescript\nimport { QdrantClient } from \"@qdrant/js-client-rest\";\n\nconst client = new QdrantClient({ host: \"localhost\", port: 6333 });\n\nclient.createCollection(\"{collection_name}\", {\n  vectors: {\n    size: 768,\n    distance: \"Cosine\",\n    on_disk: true,\n  },\n});\n```\n\n```rust\nuse qdrant_client::qdrant::{CreateCollectionBuilder, Distance, VectorParamsBuilder};\nuse qdrant_client::Qdrant;\n\nlet client = Qdrant::from_url(\"http://localhost:6334\").build()?;\n\nclient\n    .create_collection(\n        CreateCollectionBuilder::new(\"{collection_name}\")\n            .vectors_config(VectorParamsBuilder::new(768, Distance::Cosine).on_disk(true)),\n    )\n    .await?;\n```\n\n```java\nimport io.qdrant.client.QdrantClient;\nimport io.qdrant.client.QdrantGrpcClient;\nimport io.qdrant.client.grpc.Collections.Distance;\nimport io.qdrant.client.grpc.Collections.VectorParams;\n\nQdrantClient client =\n    new QdrantClient(QdrantGrpcClient.newBuilder(\"localhost\", 6334, false).build());\n\nclient\n    .createCollectionAsync(\n        \"{collection_name}\",\n        VectorParams.newBuilder()\n            .setSize(768)\n            .setDistance(Distance.Cosine)\n            .setOnDisk(true)\n            .build())\n    .get();\n```\n\n```csharp\nusing Qdrant.Client;\nusing Qdrant.Client.Grpc;\n\nvar client = new QdrantClient(\"localhost\", 6334);\n\nawait client.CreateCollectionAsync(\n\t\"{collection_name}\",\n\tnew VectorParams\n\t{\n\t\tSize = 768,\n\t\tDistance = Distance.Cosine,\n\t\tOnDisk = true\n\t}\n);\n```\n\n```go\nimport (\n\t\"context\"\n\n\t\"github.com/qdrant/go-client/qdrant\"\n)\n\nclient, err := qdrant.NewClient(&qdrant.Config{\n\tHost: \"localhost\",\n\tPort: 6334,\n})\n\nclient.CreateCollection(context.Background(), &qdrant.CreateCollection{\n\tCollectionName: \"{collection_name}\",\n\tVectorsConfig: qdrant.NewVectorsConfig(&qdrant.VectorParams{\n\t\tSize:     768,\n\t\tDistance: qdrant.Distance_Cosine,\n\t\tOnDisk:   qdrant.PtrOf(true),\n\t}),\n})\n```\n\nThis will create a collection with all vectors immediately stored in memmap storage. This is the recommended way, in case your Qdrant instance operates with fast disks and you are working with large collections.\n\n- Set up `memmap_threshold` option. This option will set the threshold after which the segment will be converted to memmap storage.\n\nThere are two ways to do this:",
+    "text": "### Configuring Memmap storage\n\nThere are two ways to configure the usage of memmap(also known as on-disk) storage:\n\n- Set up `on_disk` option for the vectors in the collection create API:\n\n*Available as of v1.2.0*\n\n```http\nPUT /collections/{collection_name}\n{\n    \"vectors\": {\n      \"size\": 768,\n      \"distance\": \"Cosine\",\n      \"on_disk\": true\n    }\n}\n```\n\n```python\nfrom qdrant_client import QdrantClient, models\n\nclient = QdrantClient(url=\"http://localhost:6333\")\n\nclient.create_collection(\n    collection_name=\"{collection_name}\",\n    vectors_config=models.VectorParams(\n        size=768, distance=models.Distance.COSINE, on_disk=True\n    ),\n)\n```\n\n```typescript\nimport { QdrantClient } from \"@qdrant/js-client-rest\";\n\nconst client = new QdrantClient({ host: \"localhost\", port: 6333 });\n\nclient.createCollection(\"{collection_name}\", {\n  vectors: {\n    size: 768,\n    distance: \"Cosine\",\n    on_disk: true,\n  },\n});\n```\n\n```rust\nuse qdrant_client::qdrant::{CreateCollectionBuilder, Distance, VectorParamsBuilder};\nuse qdrant_client::Qdrant;\n\nlet client = Qdrant::from_url(\"http://localhost:6334\").build()?;\n\nclient\n    .create_collection(\n        CreateCollectionBuilder::new(\"{collection_name}\")\n            .vectors_config(VectorParamsBuilder::new(768, Distance::Cosine).on_disk(true)),\n    )\n    .await?;\n```\n\n```java\nimport io.qdrant.client.QdrantClient;\nimport io.qdrant.client.QdrantGrpcClient;\nimport io.qdrant.client.grpc.Collections.Distance;\nimport io.qdrant.client.grpc.Collections.VectorParams;\n\nQdrantClient client =\n    new QdrantClient(QdrantGrpcClient.newBuilder(\"localhost\", 6334, false).build());\n\nclient\n    .createCollectionAsync(\n        \"{collection_name}\",\n        VectorParams.newBuilder()\n            .setSize(768)\n            .setDistance(Distance.Cosine)\n            .setOnDisk(true)\n            .build())\n    .get();\n```\n\n```csharp\nusing Qdrant.Client;\nusing Qdrant.Client.Grpc;\n\nvar client = new QdrantClient(\"localhost\", 6334);\n\nawait client.CreateCollectionAsync(\n\t\"{collection_name}\",\n\tnew VectorParams\n\t{\n\t\tSize = 768,\n\t\tDistance = Distance.Cosine,\n\t\tOnDisk = true\n\t}\n);\n```\n\n```go\nimport (\n\t\"context\"\n\n\t\"github.com/qdrant/go-client/qdrant\"\n)\n\nclient, err := qdrant.NewClient(&qdrant.Config{\n\tHost: \"localhost\",\n\tPort: 6334,\n})\n\nclient.CreateCollection(context.Background(), &qdrant.CreateCollection{\n\tCollectionName: \"{collection_name}\",\n\tVectorsConfig: qdrant.NewVectorsConfig(&qdrant.VectorParams{\n\t\tSize:     768,\n\t\tDistance: qdrant.Distance_Cosine,\n\t\tOnDisk:   qdrant.PtrOf(true),\n\t}),\n})\n```\n\nThis will create a collection with all vectors immediately stored in memmap storage. This is the recommended way, in case your Qdrant instance operates with fast disks and you are working with large collections.\n\n- Set up `memmap_threshold` option. This option will set the threshold after which the segment will be converted to memmap storage.\n\nThere are two ways to do this:\n\n1. You can set the threshold globally in the [configuration file](https://qdrant.tech/documentation/guides/configuration/). The parameter is called `memmap_threshold` (previously `memmap_threshold_kb`).\n2. You can set the threshold for each collection separately during [creation](https://qdrant.tech/documentation/concepts/collections/#create-collection) or [update](https://qdrant.tech/documentation/concepts/collections/#update-collection-parameters).\n\n```http\nPUT /collections/{collection_name}\n{\n    \"vectors\": {\n      \"size\": 768,\n      \"distance\": \"Cosine\"\n    },\n    \"optimizers_config\": {\n        \"memmap_threshold\": 20000\n    }\n}\n```\n\n```python\nfrom qdrant_client import QdrantClient, models\n\nclient = QdrantClient(url=\"http://localhost:6333\")\n\nclient.create_collection(\n    collection_name=\"{collection_name}\",\n    vectors_config=models.VectorParams(size=768, distance=models.Distance.COSINE),\n    optimizers_config=models.OptimizersConfigDiff(memmap_threshold=20000),\n)\n```\n\n```typescript\nimport { QdrantClient } from \"@qdrant/js-client-rest\";\n\nconst client = new QdrantClient({ host: \"localhost\", port: 6333 });",
     "metadata": {
       "chunk_id": "ec614909b4f0-0012",
       "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_storage\\_documentation_concepts_storage_.md",
@@ -973,17 +978,18 @@
         "Configuring Memmap storage"
       ],
       "heading_text": "Configuring Memmap storage",
-      "token_count": 746,
-      "char_count": 2913,
+      "token_count": 1018,
+      "char_count": 4039,
       "start_char": 13095,
-      "end_char": 16008,
+      "end_char": 17134,
       "semantic_score": 0.7,
       "structural_score": 0.7999999999999998,
-      "retrieval_quality": 0.6977272727272728,
+      "retrieval_quality": 0.8703170028818443,
       "chunking_strategy": "hybrid_adaptive_semchunk",
       "content_type": "prose_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:39.014159",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:21.996400",
       "document_id": "ec614909b4f0",
       "document_name": "_documentation_concepts_storage_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_storage\\_documentation_concepts_storage_.md",
@@ -991,9 +997,9 @@
       "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_storage",
       "relative_path": "Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_storage\\_documentation_concepts_storage_.md",
       "hierarchy_path": "Configuring Memmap storage",
-      "chunk_hash": "d72e0ac0dc1a8110",
-      "content_digest": "d72e0ac0dc1a8110",
-      "chunk_length": 2913,
+      "chunk_hash": "a37afcb3f3ddcb21",
+      "content_digest": "a37afcb3f3ddcb21",
+      "chunk_length": 4039,
       "payload_version": "1.3",
       "collection_hints": [
         "qdrant_ecosystem"
@@ -1006,127 +1012,127 @@
           "client",
           "collection",
           "distance",
-          "name",
           "qdrantclient",
+          "name",
+          "the",
+          "memmap",
           "768",
           "cosine",
-          "true",
           "import",
-          "the",
-          "disk",
           "vectors",
           "localhost",
-          "new",
-          "memmap",
+          "threshold",
+          "collections",
           "size",
-          "vectorparams",
-          "storage",
-          "create"
+          "true",
+          "models",
+          "new",
+          "disk"
         ],
         "term_weights": [
           {
             "term": "qdrant",
-            "tf": 23,
-            "weight": 0.076159
+            "tf": 28,
+            "weight": 0.066508
           },
           {
             "term": "client",
-            "tf": 23,
-            "weight": 0.076159
+            "tf": 28,
+            "weight": 0.066508
           },
           {
             "term": "collection",
-            "tf": 12,
-            "weight": 0.039735
+            "tf": 19,
+            "weight": 0.045131
           },
           {
             "term": "distance",
-            "tf": 12,
-            "weight": 0.039735
-          },
-          {
-            "term": "name",
-            "tf": 8,
-            "weight": 0.02649
+            "tf": 15,
+            "weight": 0.035629
           },
           {
             "term": "qdrantclient",
-            "tf": 8,
-            "weight": 0.02649
+            "tf": 12,
+            "weight": 0.028504
+          },
+          {
+            "term": "name",
+            "tf": 11,
+            "weight": 0.026128
+          },
+          {
+            "term": "the",
+            "tf": 10,
+            "weight": 0.023753
+          },
+          {
+            "term": "memmap",
+            "tf": 9,
+            "weight": 0.021378
           },
           {
             "term": "768",
-            "tf": 7,
-            "weight": 0.023179
+            "tf": 9,
+            "weight": 0.021378
           },
           {
             "term": "cosine",
+            "tf": 9,
+            "weight": 0.021378
+          },
+          {
+            "term": "import",
+            "tf": 9,
+            "weight": 0.021378
+          },
+          {
+            "term": "vectors",
+            "tf": 8,
+            "weight": 0.019002
+          },
+          {
+            "term": "localhost",
+            "tf": 8,
+            "weight": 0.019002
+          },
+          {
+            "term": "threshold",
+            "tf": 8,
+            "weight": 0.019002
+          },
+          {
+            "term": "collections",
             "tf": 7,
-            "weight": 0.023179
+            "weight": 0.016627
+          },
+          {
+            "term": "size",
+            "tf": 7,
+            "weight": 0.016627
           },
           {
             "term": "true",
             "tf": 7,
-            "weight": 0.023179
+            "weight": 0.016627
           },
           {
-            "term": "import",
+            "term": "models",
             "tf": 7,
-            "weight": 0.023179
+            "weight": 0.016627
           },
           {
-            "term": "the",
-            "tf": 6,
-            "weight": 0.019868
+            "term": "new",
+            "tf": 7,
+            "weight": 0.016627
           },
           {
             "term": "disk",
             "tf": 6,
-            "weight": 0.019868
-          },
-          {
-            "term": "vectors",
-            "tf": 6,
-            "weight": 0.019868
-          },
-          {
-            "term": "localhost",
-            "tf": 6,
-            "weight": 0.019868
-          },
-          {
-            "term": "new",
-            "tf": 6,
-            "weight": 0.019868
-          },
-          {
-            "term": "memmap",
-            "tf": 5,
-            "weight": 0.016556
-          },
-          {
-            "term": "size",
-            "tf": 5,
-            "weight": 0.016556
-          },
-          {
-            "term": "vectorparams",
-            "tf": 5,
-            "weight": 0.016556
-          },
-          {
-            "term": "storage",
-            "tf": 4,
-            "weight": 0.013245
-          },
-          {
-            "term": "create",
-            "tf": 4,
-            "weight": 0.013245
+            "weight": 0.014252
           }
         ],
-        "unique_terms": 104,
-        "total_terms": 302
+        "unique_terms": 125,
+        "total_terms": 421
       },
       "modal_hint": "code",
       "content_flags": {
@@ -1143,28 +1149,28 @@
         "collection",
         "cosine",
         "distance",
-        "import",
+        "memmap",
         "name",
         "qdrant",
         "qdrantclient",
-        "true"
+        "the"
       ]
     },
     "advanced_scores": {
       "semantic": 0.7,
       "structural": 0.7999999999999998,
-      "retrieval_quality": 0.6977272727272728,
-      "overall": 0.7325757575757574
+      "retrieval_quality": 0.8703170028818443,
+      "overall": 0.7901056676272814
     }
   },
   {
     "text": "## Payload storage\n\nQdrant supports two types of payload storages: InMemory and OnDisk.\n\nInMemory payload storage is organized in the same way as in-memory vectors. The payload data is loaded into RAM at service startup while disk and [Gridstore](https://qdrant.tech/articles/gridstore-key-value-storage/) are used for persistence only. This type of storage works quite fast, but it may require a lot of space to keep all the data in RAM, especially if the payload has large values attached - abstracts of text or even images.\n\nIn the case of large payload values, it might be better to use OnDisk payload storage. This type of storage will read and write payload directly to RocksDB, so it won’t require any significant amount of RAM to store. The downside, however, is the access latency. If you need to query vectors with some payload-based conditions - checking values stored on disk might take too much time. In this scenario, we recommend creating a payload index for each field used in filtering conditions to avoid disk access. Once you create the field index, Qdrant will preserve all values of the indexed field in RAM regardless of the payload storage type.\n\nYou can specify the desired type of payload storage with [configuration file](https://qdrant.tech/documentation/guides/configuration/) or with collection parameter `on_disk_payload` during [creation](https://qdrant.tech/documentation/concepts/collections/#create-collection) of the collection.",
     "metadata": {
-      "chunk_id": "ec614909b4f0-0016",
+      "chunk_id": "ec614909b4f0-0015",
       "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_storage\\_documentation_concepts_storage_.md",
       "filename": "_documentation_concepts_storage_.md",
       "file_extension": ".md",
-      "chunk_index": 16,
+      "chunk_index": 15,
       "document_level": 1,
       "parent_chunk_id": null,
       "child_chunk_ids": [],
@@ -1182,7 +1188,8 @@
       "chunking_strategy": "hybrid_adaptive_semchunk",
       "content_type": "prose_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:39.016718",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:21.997997",
       "document_id": "ec614909b4f0",
       "document_name": "_documentation_concepts_storage_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_storage\\_documentation_concepts_storage_.md",

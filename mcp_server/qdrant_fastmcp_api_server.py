@@ -27,9 +27,11 @@ Features:
 - Proxy capabilities for load balancing and failover
 
 Collections Supported:
-- sentence_transformers_768: 457 vectors
-- docling_768: 1,089 vectors
-- qdrant_ecosystem_768: 8,108 vectors
+- sentence_transformers_v4_nomic_coderank: 113 vectors
+- docling_v4_nomic_coderank: 306 vectors
+- qdrant_ecosystem_v4_nomic_coderank: 1,952 vectors
+- fast_docs_v4_nomic_coderank: 329 vectors
+- pydantic_v4_nomic_coderank: 164 vectors
 
 Performance Targets:
 - Latency: <10ms cached, <100ms new queries
@@ -48,7 +50,7 @@ import sys
 import time
 import traceback
 from contextlib import asynccontextmanager
-from typing import Dict, List, Optional, Any, AsyncGenerator, Tuple
+from typing import Dict, List, Optional, Any, AsyncGenerator, Tuple, Iterable
 from datetime import datetime, timedelta
 from functools import wraps, lru_cache
 import json
@@ -57,6 +59,116 @@ import platform
 import secrets
 from pathlib import Path
 import re
+
+# Canonical collection configuration for the knowledge base
+CANONICAL_COLLECTIONS: List[str] = [
+    "sentence_transformers_v4_nomic_coderank",
+    "docling_v4_nomic_coderank",
+    "qdrant_ecosystem_v4_nomic_coderank",
+    "fast_docs_v4_nomic_coderank",
+    "pydantic_v4_nomic_coderank",
+]
+
+COLLECTION_DISPLAY_NAMES: Dict[str, str] = {
+    "sentence_transformers_v4_nomic_coderank": "sentence_transformers",
+    "docling_v4_nomic_coderank": "docling",
+    "qdrant_ecosystem_v4_nomic_coderank": "qdrant_ecosystem",
+    "fast_docs_v4_nomic_coderank": "fast_docs",
+    "pydantic_v4_nomic_coderank": "pydantic",
+}
+
+COLLECTION_ALIAS_MAP: Dict[str, str] = {}
+for canonical, display in COLLECTION_DISPLAY_NAMES.items():
+    variants = {
+        display,
+        display.replace("_", "-"),
+        f"{display}_v4",
+        f"{display}-v4",
+        canonical,
+    }
+    for variant in variants:
+        normalized = variant.strip().lower()
+        normalized = re.sub(r"[\s\-]+", "_", normalized)
+        COLLECTION_ALIAS_MAP[normalized] = canonical
+
+
+def _normalize_collection_name(name: str) -> str:
+    normalized = name.strip().lower()
+    normalized = re.sub(r"[\s\-]+", "_", normalized)
+    normalized = re.sub(r"__+", "_", normalized)
+    return normalized
+
+
+def resolve_collection_name(name: str) -> Optional[str]:
+    if not name:
+        return None
+
+    normalized = _normalize_collection_name(name)
+    canonical = COLLECTION_ALIAS_MAP.get(normalized)
+
+    raw_supported: Iterable[str]
+    if "settings" in globals():
+        raw_supported = globals()["settings"].supported_collections
+    else:
+        raw_supported = CANONICAL_COLLECTIONS
+
+    supported_canonical: set[str] = set()
+    for value in raw_supported:
+        normalized_value = _normalize_collection_name(str(value))
+        alias = COLLECTION_ALIAS_MAP.get(normalized_value)
+        if alias:
+            supported_canonical.add(alias)
+        else:
+            supported_canonical.add(normalized_value)
+
+    if canonical and canonical in supported_canonical:
+        return canonical
+    if normalized in supported_canonical:
+        return normalized
+    if not supported_canonical and canonical in CANONICAL_COLLECTIONS:
+        # Allow canonical resolution when configuration yielded no matches.
+        return canonical
+    return None
+
+
+def resolve_collections(names: Iterable[str]) -> List[str]:
+    resolved: List[str] = []
+    for name in names:
+        canonical = resolve_collection_name(name)
+        if canonical and canonical not in resolved:
+            resolved.append(canonical)
+    return resolved
+
+
+def get_supported_collections() -> List[str]:
+    if "settings" in globals():
+        supported = resolve_collections(globals()["settings"].supported_collections)
+        if supported:
+            return supported
+    return CANONICAL_COLLECTIONS.copy()
+
+
+def describe_available_collections() -> str:
+    if "settings" in globals():
+        supported = get_supported_collections()
+    else:
+        supported = CANONICAL_COLLECTIONS.copy()
+    descriptions = [
+        f"{display} ({canonical})"
+        for canonical, display in COLLECTION_DISPLAY_NAMES.items()
+        if canonical in supported
+    ]
+    if descriptions:
+        return ", ".join(descriptions)
+    return ", ".join(supported)
+
+
+def ensure_supported_collection(name: str) -> str:
+    canonical = resolve_collection_name(name)
+    if not canonical:
+        available = describe_available_collections()
+        raise ValueError(f"Invalid collection '{name}'. Available: {available}")
+    return canonical
 
 # FastAPI and FastMCP imports
 from fastapi import FastAPI, HTTPException, Request, Response, status
@@ -201,18 +313,12 @@ class Settings(BaseSettings):
     hybrid_vector_weight: float = Field(default=0.7)
 
     # Embedding Configuration
-    embedding_model: str = Field(default="nomic-ai/CodeRankEmbed")
+    embedding_model: str = Field(default="jina-code-embeddings-1.5b")
     embedding_device: str = Field(default="cpu")
     embedding_batch_size: int = Field(default=32)
 
     # Collections Configuration
-    supported_collections: List[str] = Field(default=[
-        "sentence_transformers",
-        "docling",
-        "qdrant_ecosystem",
-        "fast_docs",
-        "pydantic"
-    ])
+    supported_collections: List[str] = Field(default_factory=lambda: CANONICAL_COLLECTIONS.copy())
 
     # Basic Enterprise Features
     enable_metrics: bool = Field(default=True)
@@ -226,39 +332,53 @@ class Settings(BaseSettings):
         "case_sensitive": False
     }
 
+def _normalize_supported_collections(names: Iterable[str]) -> List[str]:
+    normalized: List[str] = []
+    for name in names:
+        canonical = COLLECTION_ALIAS_MAP.get(_normalize_collection_name(str(name)), None)
+        if canonical and canonical not in normalized:
+            normalized.append(canonical)
+
+    if not normalized:
+        normalized = CANONICAL_COLLECTIONS.copy()
+
+    return normalized
+
+
 settings = Settings()
+settings.supported_collections = _normalize_supported_collections(settings.supported_collections)
 
 # Collection metadata for API responses
 COLLECTION_METADATA = {
-    "sentence_transformers": {
+    "sentence_transformers_v4_nomic_coderank": {
         "vectors": 113,
         "description": "Sentence Transformers embedding expertise and implementation patterns",
         "knowledge_areas": ["embeddings", "sentence-transformers", "nlp"],
-        "vector_size": 768
+    "vector_size": 1536
     },
-    "docling": {
+    "docling_v4_nomic_coderank": {
         "vectors": 306,
         "description": "Document processing and parsing with Docling framework",
         "knowledge_areas": ["document-processing", "docling", "pdf-parsing"],
-        "vector_size": 768
+    "vector_size": 1536
     },
-    "qdrant_ecosystem": {
+    "qdrant_ecosystem_v4_nomic_coderank": {
         "vectors": 1952,
         "description": "Comprehensive Qdrant vector database ecosystem and optimization",
         "knowledge_areas": ["vector-database", "qdrant", "search", "optimization"],
-        "vector_size": 768
+    "vector_size": 1536
     },
-    "fast_docs": {
+    "fast_docs_v4_nomic_coderank": {
         "vectors": 329,
         "description": "FAST Documentation & Framework Knowledge",
         "knowledge_areas": ["documentation", "frameworks", "API design", "technical writing"],
-        "vector_size": 768
+    "vector_size": 1536
     },
-    "pydantic": {
+    "pydantic_v4_nomic_coderank": {
         "vectors": 164,
         "description": "Pydantic Data Validation & Modeling",
         "knowledge_areas": ["data validation", "type hints", "modeling", "Python best practices"],
-        "vector_size": 768
+    "vector_size": 1536
     }
 }
 
@@ -883,6 +1003,7 @@ class HealthResponse(BaseModel):
 
 class CollectionInfo(BaseModel):
     name: str
+    display_name: str
     vector_count: int
     description: str
     knowledge_areas: List[str]
@@ -912,11 +1033,14 @@ async def _semantic_search_internal(
 
     try:
         # Validate collection
-        if collection not in settings.supported_collections:
-            available = ", ".join(settings.supported_collections)
-            return f"ERROR Invalid collection '{collection}'. Available: {available}"
+        try:
+            canonical_collection = ensure_supported_collection(collection)
+        except ValueError as exc:
+            return f"ERROR {exc}"
 
-        cache_key = f"tool-search:{collection}:{limit}:{score_threshold}:{query}"
+        display_collection = COLLECTION_DISPLAY_NAMES.get(canonical_collection, canonical_collection)
+
+        cache_key = f"tool-search:{canonical_collection}:{limit}:{score_threshold}:{query}"
         if server_state.query_cache:
             cached_payload = await server_state.query_cache.get(cache_key)
             if cached_payload:
@@ -929,7 +1053,7 @@ async def _semantic_search_internal(
         # Perform search
         qdrant_client = await server_state.get_qdrant_client()
         search_kwargs = {
-            "collection_name": collection,
+            "collection_name": canonical_collection,
             "query_vector": query_embedding,
             "limit": limit,
             "score_threshold": score_threshold,
@@ -950,7 +1074,7 @@ async def _semantic_search_internal(
         search_time = time.time() - start_time
         response_text = f"""ENTERPRISE SEARCH RESULTS
 Query: "{query}"
-Collection: {collection}
+Collection: {display_collection}
 Results: {len(results)} found
 Search Time: {search_time:.3f}s
 
@@ -1021,7 +1145,7 @@ async def get_server_stats() -> str:
             f"Device: {settings.embedding_device}\n"
             f"Batch Size: {settings.embedding_batch_size}\n"
             f"Max Connections: {settings.max_connections}\n"
-            f"Collections: {', '.join(settings.supported_collections)}\n"
+            f"Collections: {', '.join(COLLECTION_DISPLAY_NAMES.get(name, name) for name in get_supported_collections())}\n"
         )
         return result
 
@@ -1033,13 +1157,17 @@ async def get_server_stats() -> str:
 async def optimize_collection_performance(collection: str) -> str:
     """Analyze and provide optimization recommendations for a collection."""
     try:
-        if collection not in settings.supported_collections:
-            return f"ERROR Invalid collection: {collection}"
+        try:
+            canonical_collection = ensure_supported_collection(collection)
+        except ValueError as exc:
+            return f"ERROR {exc}"
+
+        display_collection = COLLECTION_DISPLAY_NAMES.get(canonical_collection, canonical_collection)
 
         qdrant_client = await server_state.get_qdrant_client()
 
         # Get collection info
-        collection_info = await qdrant_client.get_collection(collection_name=collection)
+        collection_info = await qdrant_client.get_collection(collection_name=canonical_collection)
 
         # Analyze current configuration
         recommendations = []
@@ -1047,10 +1175,10 @@ async def optimize_collection_performance(collection: str) -> str:
         # Vector configuration analysis
         vector_config = collection_info.config.params.vectors
         if hasattr(vector_config, 'size'):
-            if vector_config.size == 768:
-                recommendations.append("OK Vector size (768) matches CodeRankEmbed")
+            if vector_config.size == 1536:
+                recommendations.append("OK Vector size (1536) matches jina-code-embeddings-1.5b")
             else:
-                recommendations.append(f"WARNING Vector size mismatch: {vector_config.size} vs 768")
+                recommendations.append(f"WARNING Vector size mismatch: {vector_config.size} vs 1536")
 
         # Quantization analysis
         if hasattr(collection_info.config.params, 'quantization_config'):
@@ -1077,7 +1205,7 @@ async def optimize_collection_performance(collection: str) -> str:
         ])
 
         result = (
-            f"COLLECTION OPTIMIZATION: {collection}\n"
+            f"COLLECTION OPTIMIZATION: {display_collection}\n"
             f"{'='*50}\n"
             f"Vector Size: {vector_config.size if hasattr(vector_config, 'size') else 'Unknown'}\n"
             f"Points Count: {collection_info.points_count:,}\n"
@@ -1103,10 +1231,10 @@ async def semantic_search_ultimate(
     Primary semantic search across all managed Qdrant collections.
 
     Automatically classifies queries and searches the most relevant collections:
-    - sentence_transformers: Embedding techniques and transformer usage
-    - docling: Document processing and parsing workflows
-    - qdrant_ecosystem: Qdrant operations, optimization, and best practices
-    - fast_docs / pydantic when query context matches those domains
+    - sentence_transformers_v4_nomic_coderank: Embedding techniques and transformer usage
+    - docling_v4_nomic_coderank: Document processing and parsing workflows
+    - qdrant_ecosystem_v4_nomic_coderank: Qdrant operations, optimization, and best practices
+    - fast_docs_v4_nomic_coderank / pydantic_v4_nomic_coderank when query context matches those domains
 
     Args:
         query: Natural-language search string
@@ -1120,26 +1248,38 @@ async def semantic_search_ultimate(
     try:
         logger.info(f"Ultimate search query: {query}")
 
+        user_provided = collections is not None and len(collections) > 0
+
         # Auto-classify query if no collections specified
         if not collections:
-            collections = []
+            auto_collections: List[str] = []
             query_lower = query.lower()
 
-            # Classify based on query content
+            # Classify based on query content using legacy aliases for convenience
             if any(word in query_lower for word in ['embed', 'sentence', 'transform', 'vector', 'nlp', 'text']):
-                collections.append("sentence_transformers")
+                auto_collections.append("sentence_transformers")
             if any(word in query_lower for word in ['document', 'pdf', 'parse', 'extract', 'docling', 'processing']):
-                collections.append("docling")
+                auto_collections.append("docling")
             if any(word in query_lower for word in ['qdrant', 'database', 'search', 'index', 'vector', 'performance', 'optimize']):
-                collections.append("qdrant_ecosystem")
+                auto_collections.append("qdrant_ecosystem")
             if any(word in query_lower for word in ['fast', 'docs', 'framework', 'api']):
-                collections.append("fast_docs")
+                auto_collections.append("fast_docs")
             if any(word in query_lower for word in ['pydantic', 'validation', 'model', 'schema']):
-                collections.append("pydantic")
+                auto_collections.append("pydantic")
 
-            # Default to entire supported set if we could not classify
-            if not collections:
-                collections = settings.supported_collections
+            if auto_collections:
+                collections = auto_collections
+            else:
+                collections = get_supported_collections()
+
+        resolved_collections = resolve_collections(collections)
+        if not resolved_collections:
+            if user_provided:
+                available = describe_available_collections()
+                return f"No valid collections specified. Available: {available}"
+            resolved_collections = get_supported_collections()
+
+        collections = resolved_collections
 
         cache_key = f"ultimate-search:{','.join(sorted(collections))}:{limit}:{score_threshold}:{hybrid_search}:{query}"
         if server_state.query_cache:
@@ -1157,8 +1297,6 @@ async def semantic_search_ultimate(
         vector_limit = limit * 2 if hybrid_search else limit
 
         for collection in collections:
-            if collection not in settings.supported_collections:
-                continue
 
             try:
                 search_kwargs = {
@@ -1190,6 +1328,7 @@ async def semantic_search_ultimate(
 
                     all_results.append({
                         'collection': collection,
+                        'display_name': COLLECTION_DISPLAY_NAMES.get(collection, collection),
                         'score': combined_score,
                         'vector_score': float(hit.score),
                         'lexical_score': lexical_score,
@@ -1211,7 +1350,8 @@ async def semantic_search_ultimate(
 
         lines = [f"Ultimate Search Results for: '{query}'", ""]
         for i, result in enumerate(top_results, 1):
-            score_line = f"{i}. [{result['collection']}] Score: {result['score']:.3f}"
+            collection_display = result.get('display_name', COLLECTION_DISPLAY_NAMES.get(result['collection'], result['collection']))
+            score_line = f"{i}. [{collection_display}] Score: {result['score']:.3f}"
             if hybrid_search:
                 score_line += f" (vector {result['vector_score']:.3f}, lexical {result['lexical_score']:.3f})"
             lines.append(score_line)
@@ -1244,13 +1384,14 @@ async def get_collection_stats() -> str:
         stats = []
         total_vectors = 0
 
-        for collection in settings.supported_collections:
+        for collection in get_supported_collections():
             try:
                 collection_info = await qdrant_client.get_collection(collection)
                 vector_count = collection_info.points_count or 0
                 total_vectors += vector_count
 
-                stats.append(f"{collection}: {vector_count:,} vectors")
+                display_name = COLLECTION_DISPLAY_NAMES.get(collection, collection)
+                stats.append(f"{display_name} ({collection}): {vector_count:,} vectors")
 
             except Exception as e:
                 stats.append(f"ERROR {collection}: Error - {str(e)}")
@@ -1313,16 +1454,18 @@ async def health_check():
 @app.get("/collections", response_model=List[CollectionInfo])
 async def list_collections():
     """Get information about available collections."""
+    supported = set(get_supported_collections())
     return [
         CollectionInfo(
             name=name,
+            display_name=COLLECTION_DISPLAY_NAMES.get(name, name),
             vector_count=metadata["vectors"],
             description=metadata["description"],
             knowledge_areas=metadata["knowledge_areas"],
             vector_size=metadata["vector_size"]
         )
         for name, metadata in COLLECTION_METADATA.items()
-        if name in settings.supported_collections
+        if name in supported
     ]
 
 @app.post("/search", response_model=SearchResponse)
@@ -1332,11 +1475,12 @@ async def search_endpoint(request: SearchRequest):
 
     try:
         # Validate collection
-        if request.collection not in settings.supported_collections:
-            available = ", ".join(settings.supported_collections)
-            raise HTTPException(status_code=400, detail=f"Invalid collection '{request.collection}'. Available: {available}")
+        try:
+            canonical_collection = ensure_supported_collection(request.collection)
+        except ValueError as exc:
+            raise HTTPException(status_code=400, detail=str(exc))
 
-        result_cache_key = f"rest-search:{request.collection}:{request.limit}:{request.score_threshold}:{request.hybrid_search}:{request.query}"
+        result_cache_key = f"rest-search:{canonical_collection}:{request.limit}:{request.score_threshold}:{request.hybrid_search}:{request.query}"
         if request.use_cache and server_state.query_cache:
             cached_response = await server_state.query_cache.get(result_cache_key)
             if cached_response:
@@ -1360,7 +1504,7 @@ async def search_endpoint(request: SearchRequest):
         vector_limit = request.limit * 2 if request.hybrid_search else request.limit
 
         search_kwargs = {
-            "collection_name": request.collection,
+            "collection_name": canonical_collection,
             "query_vector": query_embedding,
             "limit": vector_limit,
             "score_threshold": request.score_threshold,
@@ -1409,7 +1553,7 @@ async def search_endpoint(request: SearchRequest):
 
         response_payload = {
             "query": request.query,
-            "collection": request.collection,
+            "collection": canonical_collection,
             "results": trimmed_results,
             "total_results": len(trimmed_results),
             "search_time_ms": search_time,
@@ -1472,27 +1616,34 @@ async def ultimate_search_endpoint(request: UltimateSearchRequest):
     start_time = time.time()
 
     try:
-        # Auto-classify query if no collections specified
         collections = request.collections
+        user_provided = collections is not None and len(collections or []) > 0
+
         if not collections:
-            collections = []
+            auto_collections: List[str] = []
             query_lower = request.query.lower()
 
-            # Classify based on query content
             if any(word in query_lower for word in ['embed', 'sentence', 'transform', 'vector', 'nlp', 'text']):
-                collections.append("sentence_transformers")
+                auto_collections.append("sentence_transformers")
             if any(word in query_lower for word in ['document', 'pdf', 'parse', 'extract', 'docling', 'processing']):
-                collections.append("docling")
+                auto_collections.append("docling")
             if any(word in query_lower for word in ['qdrant', 'database', 'search', 'index', 'vector', 'performance', 'optimize']):
-                collections.append("qdrant_ecosystem")
+                auto_collections.append("qdrant_ecosystem")
             if any(word in query_lower for word in ['fast', 'docs', 'framework', 'api']):
-                collections.append("fast_docs")
+                auto_collections.append("fast_docs")
             if any(word in query_lower for word in ['pydantic', 'validation', 'model', 'schema']):
-                collections.append("pydantic")
+                auto_collections.append("pydantic")
 
-            # Default to all if no classification
-            if not collections:
-                collections = settings.supported_collections
+            collections = auto_collections if auto_collections else get_supported_collections()
+
+        resolved_collections = resolve_collections(collections)
+        if not resolved_collections:
+            if user_provided:
+                available = describe_available_collections()
+                raise HTTPException(status_code=400, detail=f"No valid collections specified. Available: {available}")
+            resolved_collections = get_supported_collections()
+
+        collections = resolved_collections
 
         result_cache_key = f"rest-ultimate:{','.join(sorted(collections))}:{request.limit}:{request.score_threshold}:{request.hybrid_search}:{request.query}"
         if request.use_cache and server_state.query_cache:
@@ -1520,8 +1671,6 @@ async def ultimate_search_endpoint(request: UltimateSearchRequest):
         all_results = []
 
         for collection in collections:
-            if collection not in settings.supported_collections:
-                continue
 
             try:
                 search_kwargs = {
@@ -1552,6 +1701,7 @@ async def ultimate_search_endpoint(request: UltimateSearchRequest):
 
                     all_results.append({
                         'collection': collection,
+                        'display_name': COLLECTION_DISPLAY_NAMES.get(collection, collection),
                         'score': combined_score,
                         'vector_score': float(hit.score),
                         'lexical_score': lexical_score,
@@ -1595,25 +1745,27 @@ async def collection_stats_endpoint():
         qdrant_client = await server_state.get_qdrant_client()
 
         stats = {
-            "total_collections": len(settings.supported_collections),
+            "total_collections": len(get_supported_collections()),
             "total_vectors": 0,
             "collections": {}
         }
 
-        for collection in settings.supported_collections:
+        for collection in get_supported_collections():
             try:
                 collection_info = await qdrant_client.get_collection(collection)
                 vector_count = collection_info.points_count or 0
                 stats["total_vectors"] += vector_count
 
                 stats["collections"][collection] = {
+                    "display_name": COLLECTION_DISPLAY_NAMES.get(collection, collection),
                     "vectors": vector_count,
                     "status": "active" if collection_info.status == "green" else "issues",
-                    "vector_size": COLLECTION_METADATA.get(collection, {}).get("vector_size", 768)
+                    "vector_size": COLLECTION_METADATA.get(collection, {}).get("vector_size", 1536)
                 }
 
             except Exception as e:
                 stats["collections"][collection] = {
+                    "display_name": COLLECTION_DISPLAY_NAMES.get(collection, collection),
                     "vectors": 0,
                     "status": "error",
                     "error": str(e)
@@ -1682,11 +1834,12 @@ async def performance_analysis_endpoint():
             "collections": {}
         }
 
-        for collection in settings.supported_collections:
+        for collection in get_supported_collections():
             try:
                 collection_info = await qdrant_client.get_collection(collection)
 
                 analysis["collections"][collection] = {
+                    "display_name": COLLECTION_DISPLAY_NAMES.get(collection, collection),
                     "vectors": collection_info.points_count or 0,
                     "status": "active" if collection_info.status == "green" else "issues",
                     "configuration": "optimized" if hasattr(collection_info, 'config') else "unknown"
@@ -1694,6 +1847,7 @@ async def performance_analysis_endpoint():
 
             except Exception as e:
                 analysis["collections"][collection] = {
+                    "display_name": COLLECTION_DISPLAY_NAMES.get(collection, collection),
                     "status": "error",
                     "error": str(e)
                 }
@@ -1750,41 +1904,42 @@ async def server_stats_endpoint():
 async def optimize_collection_endpoint(collection_name: str):
     """Get optimization recommendations for a specific collection."""
     try:
-        if collection_name not in settings.supported_collections:
-            raise HTTPException(status_code=400, detail=f"Collection '{collection_name}' not supported")
+        canonical_collection = ensure_supported_collection(collection_name)
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc))
 
+    try:
         qdrant_client = await server_state.get_qdrant_client()
-        collection_info = await qdrant_client.get_collection(collection_name)
-
-        recommendations = []
-
-        # Vector count analysis
-        vector_count = collection_info.points_count or 0
-        if vector_count < 1000:
-            recommendations.append("Small collection: Consider using exact search for better precision")
-        elif vector_count < 10000:
-            recommendations.append("Medium collection: HNSW with M=16, ef=128 recommended")
-        else:
-            recommendations.append("Large collection: HNSW with M=32, ef=256 recommended for optimal performance")
-
-        # Vector size analysis
-        expected_size = COLLECTION_METADATA.get(collection_name, {}).get("vector_size", 768)
-        recommendations.append(f"Vector size: {expected_size} dimensions - optimized for semantic search")
-
-        # Performance recommendations
-        recommendations.append("Enable quantization for 2-4x performance improvement")
-        recommendations.append("Use product quantization for high-dimensional vectors")
-        recommendations.append("Consider IVF indexing for very large collections")
-
-        return {
-            "collection": collection_name,
-            "vector_count": vector_count,
-            "recommendations": recommendations
-        }
-
+        collection_info = await qdrant_client.get_collection(canonical_collection)
     except Exception as e:
         logger.error(f"Collection optimization error: {e}")
         raise HTTPException(status_code=500, detail=str(e))
+
+    recommendations = []
+
+    # Vector count analysis
+    vector_count = collection_info.points_count or 0
+    if vector_count < 1000:
+        recommendations.append("Small collection: Consider using exact search for better precision")
+    elif vector_count < 10000:
+        recommendations.append("Medium collection: HNSW with M=16, ef=128 recommended")
+    else:
+        recommendations.append("Large collection: HNSW with M=32, ef=256 recommended for optimal performance")
+
+    # Vector size analysis
+    expected_size = COLLECTION_METADATA.get(canonical_collection, {}).get("vector_size", 1536)
+    recommendations.append(f"Vector size: {expected_size} dimensions - optimized for semantic search")
+
+    # Performance recommendations
+    recommendations.append("Enable quantization for 2-4x performance improvement")
+    recommendations.append("Use product quantization for high-dimensional vectors")
+    recommendations.append("Consider IVF indexing for very large collections")
+
+    return {
+        "collection": canonical_collection,
+        "vector_count": vector_count,
+        "recommendations": recommendations
+    }
 
 # MCP server with HTTP transport for Docker/REST API mode
 # Use app.mount() approach per FastMCP integration docs
@@ -1815,7 +1970,7 @@ app.router.lifespan_context = combined_lifespan
 if __name__ == "__main__":
     logger.info("Starting Enterprise FastMCP API Server")
     logger.info(f"Host: {settings.host}:{settings.port}")
-    logger.info(f"Collections: {', '.join(settings.supported_collections)}")
+    logger.info(f"Collections: {', '.join(COLLECTION_DISPLAY_NAMES.get(name, name) for name in get_supported_collections())}")
     logger.info(f"Model: {settings.embedding_model}")
     logger.info(f"Device: {settings.embedding_device}")
     logger.info("FastMCP tools available via /mcp (HTTP transport)")

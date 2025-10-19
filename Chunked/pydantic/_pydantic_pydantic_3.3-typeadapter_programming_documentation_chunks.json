@@ -1,6 +1,6 @@
 [
   {
-    "text": "## Core Concepts\n\nTypeAdapter wraps a Python type with Pydantic's validation and serialization functionality. It creates a core schema for the type, and uses this schema to validate input data and serialize output data.\n\n```\n```\n\nSources: [pydantic/type\\_adapter.py69-107](https://github.com/pydantic/pydantic/blob/76ef0b08/pydantic/type_adapter.py#L69-L107)\n\n- Container types (list, dict, tuple, etc.)\n- Pydantic models\n- dataclasses\n- TypedDict\n- Generic types\n- Custom types\n\n```\n```\n\nSources: [pydantic/type\\_adapter.py195-234](https://github.com/pydantic/pydantic/blob/76ef0b08/pydantic/type_adapter.py#L195-L234)\"] ValidateMethod --> |\"Input is invalid\"| ValidationError\\[\"ValidationError\"]\n\n```\n    subgraph \"Validation Parameters\"\n        Params[\"Parameters:\n        - strict\n        - context\n        - from_attributes\n        - by_alias\n        - by_name\n        - experimental_allow_partial\"]\n    end\n    \n    Params --> ValidateMethod\nend\n```\n\n```\n\nSources: <FileRef file-url=\"https://github.com/pydantic/pydantic/blob/76ef0b08/pydantic/type_adapter.py#L381-L430\" min=381 max=430 file-path=\"pydantic/type_adapter.py\">Hii</FileRef>\"]\n        end\n        \n        Params --> SerializeMethod\n    end\n```\n\nSources: [pydantic/type\\_adapter.py532-586](https://github.com/pydantic/pydantic/blob/76ef0b08/pydantic/type_adapter.py#L532-L586) schema = adapter.json\\_schema()\n\n```\n\nThe `json_schema` method has parameters to control schema generation:\n\n- `by_alias`: Whether to use alias names for field names\n- `ref_template`: The format string for generating $ref strings\n- `schema_generator`: The generator class for creating the schema\n- `mode`: The mode to use for schema generation (validation or serialization)\n\nSources: <FileRef file-url=\"https://github.com/pydantic/pydantic/blob/76ef0b08/pydantic/type_adapter.py#L647-L678\" min=647 max=678 file-path=\"pydantic/type_adapter.py\">Hii</FileRef>\"] --> |\"1. Initial creation\"| CS[\"Mock CoreSchema\"]\n        CS --> |\"2. Type needs resolution\"| RebuildMethod[\"rebuild()\"]\n        RebuildMethod --> |\"3. Resolves forward references\"| FinalCS[\"Final CoreSchema\"]\n        FinalCS --> VS[\"SchemaValidator\"]\n        FinalCS --> SS[\"SchemaSerializer\"]\n    end\n```",
+    "text": "## Core Concepts\n\nTypeAdapter wraps a Python type with Pydantic's validation and serialization functionality. It creates a core schema for the type, and uses this schema to validate input data and serialize output data.\n\n```\n```\n\nSources: [pydantic/type\\_adapter.py69-107](https://github.com/pydantic/pydantic/blob/76ef0b08/pydantic/type_adapter.py#L69-L107)\n\n- Container types (list, dict, tuple, etc.)\n- Pydantic models\n- dataclasses\n- TypedDict\n- Generic types\n- Custom types\n\n```\n```\n\nSources: [pydantic/type\\_adapter.py195-234](https://github.com/pydantic/pydantic/blob/76ef0b08/pydantic/type_adapter.py#L195-L234)\"] ValidateMethod --> |\"Input is invalid\"| ValidationError\\[\"ValidationError\"]\n\n```\n    subgraph \"Validation Parameters\"\n        Params[\"Parameters:\n        - strict\n        - context\n        - from_attributes\n        - by_alias\n        - by_name\n        - experimental_allow_partial\"]\n    end\n    \n    Params --> ValidateMethod\nend\n```\n\n```\n\nSources: <FileRef file-url=\"https://github.com/pydantic/pydantic/blob/76ef0b08/pydantic/type_adapter.py#L381-L430\" min=381 max=430 file-path=\"pydantic/type_adapter.py\">Hii</FileRef>\"]\n        end\n        \n        Params --> SerializeMethod\n    end\n```\n\nSources: [pydantic/type\\_adapter.py532-586](https://github.com/pydantic/pydantic/blob/76ef0b08/pydantic/type_adapter.py#L532-L586) schema = adapter.json\\_schema()\n\n```\n\nThe `json_schema` method has parameters to control schema generation:\n\n- `by_alias`: Whether to use alias names for field names\n- `ref_template`: The format string for generating $ref strings\n- `schema_generator`: The generator class for creating the schema\n- `mode`: The mode to use for schema generation (validation or serialization)\n\nSources: <FileRef file-url=\"https://github.com/pydantic/pydantic/blob/76ef0b08/pydantic/type_adapter.py#L647-L678\" min=647 max=678 file-path=\"pydantic/type_adapter.py\">Hii</FileRef>\"] --> |\"1. Initial creation\"| CS[\"Mock CoreSchema\"]\n        CS --> |\"2. Type needs resolution\"| RebuildMethod[\"rebuild()\"]\n        RebuildMethod --> |\"3. Resolves forward references\"| FinalCS[\"Final CoreSchema\"]\n        FinalCS --> VS[\"SchemaValidator\"]\n        FinalCS --> SS[\"SchemaSerializer\"]\n    end\n```\n\nWhen using forward references, you may need to call `rebuild` explicitly to resolve them:\n\n```\n```\n\nSources: [pydantic/type\\_adapter.py335-379](https://github.com/pydantic/pydantic/blob/76ef0b08/pydantic/type_adapter.py#L335-L379))",
     "metadata": {
       "chunk_id": "2ed5888f146e-0001",
       "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\pydantic\\_pydantic_pydantic_3.3-typeadapter.md",
@@ -14,17 +14,18 @@
         "Core Concepts"
       ],
       "heading_text": "Core Concepts",
-      "token_count": 575,
-      "char_count": 2211,
+      "token_count": 642,
+      "char_count": 2444,
       "start_char": 4353,
-      "end_char": 6564,
+      "end_char": 6797,
       "semantic_score": 0.7,
       "structural_score": 0.7999999999999998,
-      "retrieval_quality": 0.6902061855670103,
+      "retrieval_quality": 0.6910377358490567,
       "chunking_strategy": "hybrid_adaptive_semchunk",
       "content_type": "prose_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:35.555606",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:19.571918",
       "document_id": "2ed5888f146e",
       "document_name": "_pydantic_pydantic_3.3-typeadapter",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\pydantic\\_pydantic_pydantic_3.3-typeadapter.md",
@@ -32,9 +33,9 @@
       "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\pydantic",
       "relative_path": "Docs\\pydantic\\_pydantic_pydantic_3.3-typeadapter.md",
       "hierarchy_path": "Core Concepts",
-      "chunk_hash": "7384e622178dbf8c",
-      "content_digest": "7384e622178dbf8c",
-      "chunk_length": 2211,
+      "chunk_hash": "863eeba3477fd6e7",
+      "content_digest": "863eeba3477fd6e7",
+      "chunk_length": 2444,
       "payload_version": "1.3",
       "collection_hints": [
         "qdrant_ecosystem"
@@ -48,13 +49,13 @@
           "adapter",
           "schema",
           "the",
-          "for",
           "sources",
           "https",
           "github",
           "com",
           "blob",
           "76ef0b08",
+          "for",
           "end",
           "fileref",
           "file",
@@ -67,107 +68,107 @@
         "term_weights": [
           {
             "term": "pydantic",
-            "tf": 22,
-            "weight": 0.089069
+            "tf": 26,
+            "weight": 0.093863
           },
           {
             "term": "type",
-            "tf": 13,
-            "weight": 0.052632
+            "tf": 15,
+            "weight": 0.054152
           },
           {
             "term": "adapter",
-            "tf": 11,
-            "weight": 0.044534
+            "tf": 13,
+            "weight": 0.046931
           },
           {
             "term": "schema",
             "tf": 9,
-            "weight": 0.036437
+            "weight": 0.032491
           },
           {
             "term": "the",
             "tf": 6,
-            "weight": 0.024291
+            "weight": 0.021661
+          },
+          {
+            "term": "sources",
+            "tf": 6,
+            "weight": 0.021661
+          },
+          {
+            "term": "https",
+            "tf": 6,
+            "weight": 0.021661
+          },
+          {
+            "term": "github",
+            "tf": 6,
+            "weight": 0.021661
+          },
+          {
+            "term": "com",
+            "tf": 6,
+            "weight": 0.021661
+          },
+          {
+            "term": "blob",
+            "tf": 6,
+            "weight": 0.021661
+          },
+          {
+            "term": "76ef0b08",
+            "tf": 6,
+            "weight": 0.021661
           },
           {
             "term": "for",
             "tf": 5,
-            "weight": 0.020243
-          },
-          {
-            "term": "sources",
-            "tf": 5,
-            "weight": 0.020243
-          },
-          {
-            "term": "https",
-            "tf": 5,
-            "weight": 0.020243
-          },
-          {
-            "term": "github",
-            "tf": 5,
-            "weight": 0.020243
-          },
-          {
-            "term": "com",
-            "tf": 5,
-            "weight": 0.020243
-          },
-          {
-            "term": "blob",
-            "tf": 5,
-            "weight": 0.020243
-          },
-          {
-            "term": "76ef0b08",
-            "tf": 5,
-            "weight": 0.020243
+            "weight": 0.018051
           },
           {
             "term": "end",
             "tf": 5,
-            "weight": 0.020243
+            "weight": 0.018051
           },
           {
             "term": "fileref",
             "tf": 4,
-            "weight": 0.016194
+            "weight": 0.01444
           },
           {
             "term": "file",
             "tf": 4,
-            "weight": 0.016194
+            "weight": 0.01444
           },
           {
             "term": "validation",
             "tf": 3,
-            "weight": 0.012146
+            "weight": 0.01083
           },
           {
             "term": "and",
             "tf": 3,
-            "weight": 0.012146
+            "weight": 0.01083
           },
           {
             "term": "types",
             "tf": 3,
-            "weight": 0.012146
+            "weight": 0.01083
           },
           {
             "term": "parameters",
             "tf": 3,
-            "weight": 0.012146
+            "weight": 0.01083
           },
           {
             "term": "params",
             "tf": 3,
-            "weight": 0.012146
+            "weight": 0.01083
           }
         ],
-        "unique_terms": 119,
-        "total_terms": 247
+        "unique_terms": 132,
+        "total_terms": 277
       },
       "modal_hint": "code",
       "content_flags": {
@@ -180,8 +181,8 @@
       "search_keywords": [
         "Core Concepts",
         "adapter",
+        "blob",
         "com",
-        "for",
         "github",
         "https",
         "pydantic",
@@ -194,18 +195,18 @@
     "advanced_scores": {
       "semantic": 0.7,
       "structural": 0.7999999999999998,
-      "retrieval_quality": 0.6902061855670103,
-      "overall": 0.7300687285223367
+      "retrieval_quality": 0.6910377358490567,
+      "overall": 0.7303459119496855
     }
   },
   {
     "text": "# This will fail due to strict validation\n\ntry: int\\_list\\_adapter.validate\\_python(\\[\"1\", \"2\"]) except Exception as e: print(f\"Validation failed: {e}\")\n\n```\n\nHowever, you cannot provide a configuration when the type you're using has its own config that cannot be overridden (e.g., `BaseModel`, `TypedDict`, and `dataclass`).\n\nSources: <FileRef file-url=\"https://github.com/pydantic/pydantic/blob/76ef0b08/pydantic/type_adapter.py#L198-L210\" min=198 max=210 file-path=\"pydantic/type_adapter.py\">Hii</FileRef>)",
     "metadata": {
-      "chunk_id": "2ed5888f146e-0003",
+      "chunk_id": "2ed5888f146e-0002",
       "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\pydantic\\_pydantic_pydantic_3.3-typeadapter.md",
       "filename": "_pydantic_pydantic_3.3-typeadapter.md",
       "file_extension": ".md",
-      "chunk_index": 3,
+      "chunk_index": 2,
       "document_level": 1,
       "parent_chunk_id": null,
       "child_chunk_ids": [],
@@ -223,7 +224,8 @@
       "chunking_strategy": "hybrid_adaptive_semchunk",
       "content_type": "prose_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:35.556594",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:19.572200",
       "document_id": "2ed5888f146e",
       "document_name": "_pydantic_pydantic_3.3-typeadapter",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\pydantic\\_pydantic_pydantic_3.3-typeadapter.md",
@@ -400,11 +402,11 @@
   {
     "text": "### Pydantic Models\n\n```\n```",
     "metadata": {
-      "chunk_id": "2ed5888f146e-0006",
+      "chunk_id": "2ed5888f146e-0005",
       "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\pydantic\\_pydantic_pydantic_3.3-typeadapter.md",
       "filename": "_pydantic_pydantic_3.3-typeadapter.md",
       "file_extension": ".md",
-      "chunk_index": 6,
+      "chunk_index": 5,
       "document_level": 1,
       "parent_chunk_id": null,
       "child_chunk_ids": [],
@@ -422,7 +424,8 @@
       "chunking_strategy": "hybrid_adaptive_semchunk",
       "content_type": "prose_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:35.557592",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:19.572632",
       "document_id": "2ed5888f146e",
       "document_name": "_pydantic_pydantic_3.3-typeadapter",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\pydantic\\_pydantic_pydantic_3.3-typeadapter.md",
@@ -483,11 +486,11 @@
   {
     "text": "### Generic Types\n\n```\n```\n\nSources: [tests/test\\_type\\_adapter.py42-65](https://github.com/pydantic/pydantic/blob/76ef0b08/tests/test_type_adapter.py#L42-L65)\n\ntry: int\\_list\\_adapter.validate\\_python(\\[\"1\", \"not\\_an\\_int\"]) except ValidationError as e: print(f\"Validation errors: {e.errors()}\")\n\n```\n\nValidationError provides detailed information about what failed, where the error occurred, and why.\n\nSources: <FileRef file-url=\"https://github.com/pydantic/pydantic/blob/76ef0b08/tests/test_type_adapter.py#L194-L254\" min=194 max=254 file-path=\"tests/test_type_adapter.py\">Hii</FileRef> -> bool:\n    \"\"\"Returns whether the type has config.\"\"\"\n    type_ = _typing_extra.annotated_type(type_) or type_\n    try:\n        return issubclass(type_, BaseModel) or is_dataclass(type_) or is_typeddict(type_)\n    except TypeError:\n        # type is not a class\n        return False\n```\n\nSources: \\[pydantic/type\\_adapter.py:58-66]\\(",
     "metadata": {
-      "chunk_id": "2ed5888f146e-0010",
+      "chunk_id": "2ed5888f146e-0009",
       "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\pydantic\\_pydantic_pydantic_3.3-typeadapter.md",
       "filename": "_pydantic_pydantic_3.3-typeadapter.md",
       "file_extension": ".md",
-      "chunk_index": 10,
+      "chunk_index": 9,
       "document_level": 1,
       "parent_chunk_id": null,
       "child_chunk_ids": [],
@@ -505,7 +508,8 @@
       "chunking_strategy": "hybrid_adaptive_semchunk",
       "content_type": "prose_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:35.559591",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:19.573233",
       "document_id": "2ed5888f146e",
       "document_name": "_pydantic_pydantic_3.3-typeadapter",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\pydantic\\_pydantic_pydantic_3.3-typeadapter.md",
@@ -682,11 +686,11 @@
   {
     "text": "## Technical Implementation Details\n\nTypeAdapter uses a combination of:\n\n1. Core schema generation via `GenerateSchema`\n2. Validation via `SchemaValidator` or `PluggableSchemaValidator`\n3. Serialization via `SchemaSerializer`\n4. Namespace resolution for type resolution\n5. Mock objects for deferred building\n\nIt also has special handling for generic types, forward references, and namespace management to ensure types are correctly resolved.\n\nSources: \\[pydantic/type\\_adapter.py:246-316]\\(, \\[pydantic/\\_internal/\\_namespace\\_utils.py:143-293]\\(, \\[pydantic/\\_internal/\\_mock\\_val\\_ser.py:21-149]\\(",
     "metadata": {
-      "chunk_id": "2ed5888f146e-0011",
+      "chunk_id": "2ed5888f146e-0010",
       "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\pydantic\\_pydantic_pydantic_3.3-typeadapter.md",
       "filename": "_pydantic_pydantic_3.3-typeadapter.md",
       "file_extension": ".md",
-      "chunk_index": 11,
+      "chunk_index": 10,
       "document_level": 1,
       "parent_chunk_id": null,
       "child_chunk_ids": [],
@@ -704,7 +708,8 @@
       "chunking_strategy": "hybrid_adaptive_semchunk",
       "content_type": "prose_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:35.560695",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:19.573579",
       "document_id": "2ed5888f146e",
       "document_name": "_pydantic_pydantic_3.3-typeadapter",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\pydantic\\_pydantic_pydantic_3.3-typeadapter.md",
@@ -881,11 +886,11 @@
   {
     "text": "## Summary\n\nTypeAdapter is a powerful component that brings Pydantic's validation and serialization capabilities to any Python type. It's particularly useful for:\n\n1. Validating simple types like integers and strings with Pydantic's conversion logic\n2. Validating complex types like lists and dictionaries with nested validation\n3. Working with non-model types like dataclasses and TypedDict\n4. Applying validation to arbitrary types in a consistent way\n5. Generating JSON schemas for arbitrary types\n6. Serializing instances of arbitrary types consistently\n\nBy wrapping a type in a TypeAdapter, you can leverage Pydantic's robust validation and serialization features without having to create a full model class.\n\n```\n```\n\nDismiss\n\nRefresh this wiki\n\nThis wiki was recently refreshed. Please wait 4 days to refresh again.",
     "metadata": {
-      "chunk_id": "2ed5888f146e-0012",
+      "chunk_id": "2ed5888f146e-0011",
       "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\pydantic\\_pydantic_pydantic_3.3-typeadapter.md",
       "filename": "_pydantic_pydantic_3.3-typeadapter.md",
       "file_extension": ".md",
-      "chunk_index": 12,
+      "chunk_index": 11,
       "document_level": 1,
       "parent_chunk_id": null,
       "child_chunk_ids": [],
@@ -903,7 +908,8 @@
       "chunking_strategy": "hybrid_adaptive_semchunk",
       "content_type": "prose_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:35.560695",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:19.573928",
       "document_id": "2ed5888f146e",
       "document_name": "_pydantic_pydantic_3.3-typeadapter",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\pydantic\\_pydantic_pydantic_3.3-typeadapter.md",

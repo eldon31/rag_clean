@@ -24,7 +24,8 @@
       "chunking_strategy": "hybrid_adaptive_structural",
       "content_type": "list_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:39.040030",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:22.020031",
       "document_id": "8298efe4f9cb",
       "document_name": "_documentation_concepts_vectors_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_vectors\\_documentation_concepts_vectors_.md",
@@ -223,7 +224,8 @@
       "chunking_strategy": "hybrid_adaptive_structural",
       "content_type": "list_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:39.040030",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:22.021312",
       "document_id": "8298efe4f9cb",
       "document_name": "_documentation_concepts_vectors_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_vectors\\_documentation_concepts_vectors_.md",
@@ -422,7 +424,8 @@
       "chunking_strategy": "hybrid_adaptive_structural",
       "content_type": "list_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:39.040030",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:22.021779",
       "document_id": "8298efe4f9cb",
       "document_name": "_documentation_concepts_vectors_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_vectors\\_documentation_concepts_vectors_.md",
@@ -585,7 +588,8 @@
       "chunking_strategy": "hybrid_adaptive_structural",
       "content_type": "list_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:39.040030",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:22.022649",
       "document_id": "8298efe4f9cb",
       "document_name": "_documentation_concepts_vectors_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_vectors\\_documentation_concepts_vectors_.md",
@@ -784,7 +788,8 @@
       "chunking_strategy": "hybrid_adaptive_structural",
       "content_type": "list_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:39.043634",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:22.024010",
       "document_id": "8298efe4f9cb",
       "document_name": "_documentation_concepts_vectors_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_vectors\\_documentation_concepts_vectors_.md",
@@ -983,7 +988,8 @@
       "chunking_strategy": "hybrid_adaptive_semchunk",
       "content_type": "prose_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:39.043634",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:22.024983",
       "document_id": "8298efe4f9cb",
       "document_name": "_documentation_concepts_vectors_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_vectors\\_documentation_concepts_vectors_.md",
@@ -1182,7 +1188,8 @@
       "chunking_strategy": "hybrid_adaptive_semchunk",
       "content_type": "prose_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:39.046462",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:22.025594",
       "document_id": "8298efe4f9cb",
       "document_name": "_documentation_concepts_vectors_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_vectors\\_documentation_concepts_vectors_.md",
@@ -1357,7 +1364,7 @@
     }
   },
   {
-    "text": "### Sparse Vectors\n\nSparse vectors are a special type of vectors. Mathematically, they are the same as dense vectors, but they contain many zeros so they are stored in a special format.\n\nSparse vectors in Qdrant don’t have a fixed length, as it is dynamically allocated during vector insertion. The amount of non-zero values in sparse vectors is currently limited to u32 datatype range (4294967295).\n\nIn order to define a sparse vector, you need to provide a list of non-zero elements and their indexes.\n\n```json\n// A sparse vector with 4 non-zero elements\n{\n    \"indexes\": [1, 3, 5, 7],\n    \"values\": [0.1, 0.2, 0.3, 0.4]\n}\n```\n\nSparse vectors in Qdrant are kept in special storage and indexed in a separate index, so their configuration is different from dense vectors.\n\nTo create a collection with sparse vectors:\n\n```http\nPUT /collections/{collection_name}\n{\n    \"sparse_vectors\": {\n        \"text\": { }\n    }\n}\n```\n\n```bash\ncurl -X PUT http://localhost:6333/collections/{collection_name} \\\n  -H 'Content-Type: application/json' \\\n  --data-raw '{\n    \"sparse_vectors\": {\n        \"text\": { }\n    }\n  }'\n```\n\n```python\nfrom qdrant_client import QdrantClient, models\n\nclient = QdrantClient(url=\"http://localhost:6333\")\n\nclient.create_collection(\n    collection_name=\"{collection_name}\",\n    vectors_config={},\n    sparse_vectors_config={\n        \"text\": models.SparseVectorParams(),\n    },\n)\n```\n\n```typescript\nimport { QdrantClient } from \"@qdrant/js-client-rest\";\n\nconst client = new QdrantClient({ host: \"localhost\", port: 6333 });\n\nclient.createCollection(\"{collection_name}\", {\n  sparse_vectors: {\n    text: { },\n  },\n});\n```\n\n```rust\nuse qdrant_client::Qdrant;\nuse qdrant_client::qdrant::{\n    CreateCollectionBuilder, SparseVectorParamsBuilder, SparseVectorsConfigBuilder,\n};\n\nlet client = Qdrant::from_url(\"http://localhost:6334\").build()?;\n\nlet mut sparse_vector_config = SparseVectorsConfigBuilder::default();\n\nsparse_vector_config.add_named_vector_params(\"text\", SparseVectorParamsBuilder::default());\n\nclient\n    .create_collection(\n        CreateCollectionBuilder::new(\"{collection_name}\")\n            .sparse_vectors_config(sparse_vector_config),\n    )\n    .await?;\n```\n\n```java\nimport io.qdrant.client.QdrantClient;\nimport io.qdrant.client.QdrantGrpcClient;\nimport io.qdrant.client.grpc.Collections.CreateCollection;\nimport io.qdrant.client.grpc.Collections.SparseVectorConfig;\nimport io.qdrant.client.grpc.Collections.SparseVectorParams;\n\nQdrantClient client =\n    new QdrantClient(QdrantGrpcClient.newBuilder(\"localhost\", 6334, false).build());\n\nclient\n    .createCollectionAsync(\n        CreateCollection.newBuilder()\n            .setCollectionName(\"{collection_name}\")\n            .setSparseVectorsConfig(\n                SparseVectorConfig.newBuilder()\n                    .putMap(\"text\", SparseVectorParams.getDefaultInstance()))\n            .build())\n    .get();\n```\n\n```csharp\nusing Qdrant.Client;\nusing Qdrant.Client.Grpc;\n\nvar client = new QdrantClient(\"localhost\", 6334);\n\nawait client.CreateCollectionAsync(\n\tcollectionName: \"{collection_name}\",\n\tsparseVectorsConfig: (\"text\", new SparseVectorParams())\n);\n```\n\n```go\nimport (\n\t\"context\"\n\n\t\"github.com/qdrant/go-client/qdrant\"\n)\n\nclient, err := qdrant.NewClient(&qdrant.Config{\n\tHost: \"localhost\",\n\tPort: 6334,\n})",
+    "text": "### Sparse Vectors\n\nSparse vectors are a special type of vectors. Mathematically, they are the same as dense vectors, but they contain many zeros so they are stored in a special format.\n\nSparse vectors in Qdrant don’t have a fixed length, as it is dynamically allocated during vector insertion. The amount of non-zero values in sparse vectors is currently limited to u32 datatype range (4294967295).\n\nIn order to define a sparse vector, you need to provide a list of non-zero elements and their indexes.\n\n```json\n// A sparse vector with 4 non-zero elements\n{\n    \"indexes\": [1, 3, 5, 7],\n    \"values\": [0.1, 0.2, 0.3, 0.4]\n}\n```\n\nSparse vectors in Qdrant are kept in special storage and indexed in a separate index, so their configuration is different from dense vectors.\n\nTo create a collection with sparse vectors:\n\n```http\nPUT /collections/{collection_name}\n{\n    \"sparse_vectors\": {\n        \"text\": { }\n    }\n}\n```\n\n```bash\ncurl -X PUT http://localhost:6333/collections/{collection_name} \\\n  -H 'Content-Type: application/json' \\\n  --data-raw '{\n    \"sparse_vectors\": {\n        \"text\": { }\n    }\n  }'\n```\n\n```python\nfrom qdrant_client import QdrantClient, models\n\nclient = QdrantClient(url=\"http://localhost:6333\")\n\nclient.create_collection(\n    collection_name=\"{collection_name}\",\n    vectors_config={},\n    sparse_vectors_config={\n        \"text\": models.SparseVectorParams(),\n    },\n)\n```\n\n```typescript\nimport { QdrantClient } from \"@qdrant/js-client-rest\";\n\nconst client = new QdrantClient({ host: \"localhost\", port: 6333 });\n\nclient.createCollection(\"{collection_name}\", {\n  sparse_vectors: {\n    text: { },\n  },\n});\n```\n\n```rust\nuse qdrant_client::Qdrant;\nuse qdrant_client::qdrant::{\n    CreateCollectionBuilder, SparseVectorParamsBuilder, SparseVectorsConfigBuilder,\n};\n\nlet client = Qdrant::from_url(\"http://localhost:6334\").build()?;\n\nlet mut sparse_vector_config = SparseVectorsConfigBuilder::default();\n\nsparse_vector_config.add_named_vector_params(\"text\", SparseVectorParamsBuilder::default());\n\nclient\n    .create_collection(\n        CreateCollectionBuilder::new(\"{collection_name}\")\n            .sparse_vectors_config(sparse_vector_config),\n    )\n    .await?;\n```\n\n```java\nimport io.qdrant.client.QdrantClient;\nimport io.qdrant.client.QdrantGrpcClient;\nimport io.qdrant.client.grpc.Collections.CreateCollection;\nimport io.qdrant.client.grpc.Collections.SparseVectorConfig;\nimport io.qdrant.client.grpc.Collections.SparseVectorParams;\n\nQdrantClient client =\n    new QdrantClient(QdrantGrpcClient.newBuilder(\"localhost\", 6334, false).build());\n\nclient\n    .createCollectionAsync(\n        CreateCollection.newBuilder()\n            .setCollectionName(\"{collection_name}\")\n            .setSparseVectorsConfig(\n                SparseVectorConfig.newBuilder()\n                    .putMap(\"text\", SparseVectorParams.getDefaultInstance()))\n            .build())\n    .get();\n```\n\n```csharp\nusing Qdrant.Client;\nusing Qdrant.Client.Grpc;\n\nvar client = new QdrantClient(\"localhost\", 6334);\n\nawait client.CreateCollectionAsync(\n\tcollectionName: \"{collection_name}\",\n\tsparseVectorsConfig: (\"text\", new SparseVectorParams())\n);\n```\n\n```go\nimport (\n\t\"context\"\n\n\t\"github.com/qdrant/go-client/qdrant\"\n)\n\nclient, err := qdrant.NewClient(&qdrant.Config{\n\tHost: \"localhost\",\n\tPort: 6334,\n})\n\nclient.CreateCollection(context.Background(), &qdrant.CreateCollection{\n\tCollectionName: \"{collection_name}\",\n\tSparseVectorsConfig: qdrant.NewSparseVectorsConfig(\n\t\tmap[string]*qdrant.SparseVectorParams{\n\t\t\t\"text\": {},\n\t\t}),\n})\n```\n\nInsert a point with a sparse vector into the created collection:\n\n```http\nPUT /collections/{collection_name}/points\n{\n    \"points\": [\n        {\n            \"id\": 1,\n            \"vector\": {\n                \"text\": {\n                    \"indices\": [1, 3, 5, 7],\n                    \"values\": [0.1, 0.2, 0.3, 0.4]\n                }\n            }\n        }\n    ]\n}\n```\n\n```python\nfrom qdrant_client import QdrantClient, models\n\nclient = QdrantClient(url=\"http://localhost:6333\")",
     "metadata": {
       "chunk_id": "8298efe4f9cb-0013",
       "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_vectors\\_documentation_concepts_vectors_.md",
@@ -1371,17 +1378,18 @@
         "Sparse Vectors"
       ],
       "heading_text": "Sparse Vectors",
-      "token_count": 802,
-      "char_count": 3289,
+      "token_count": 989,
+      "char_count": 3998,
       "start_char": 13505,
-      "end_char": 16794,
+      "end_char": 17503,
       "semantic_score": 0.7,
       "structural_score": 0.7999999999999998,
-      "retrieval_quality": 0.6878688524590164,
+      "retrieval_quality": 0.6721311475409837,
       "chunking_strategy": "hybrid_adaptive_semchunk",
       "content_type": "prose_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:39.053459",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:22.031169",
       "document_id": "8298efe4f9cb",
       "document_name": "_documentation_concepts_vectors_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_vectors\\_documentation_concepts_vectors_.md",
@@ -1389,9 +1397,9 @@
       "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_vectors",
       "relative_path": "Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_vectors\\_documentation_concepts_vectors_.md",
       "hierarchy_path": "Sparse Vectors",
-      "chunk_hash": "0e06d6e3352948a0",
-      "content_digest": "0e06d6e3352948a0",
-      "chunk_length": 3289,
+      "chunk_hash": "0c8413020b6483a1",
+      "content_digest": "0c8413020b6483a1",
+      "chunk_length": 3998,
       "payload_version": "1.3",
       "collection_hints": [
         "qdrant_ecosystem"
@@ -1406,125 +1414,125 @@
           "vectors",
           "collection",
           "name",
-          "import",
           "qdrantclient",
           "vector",
           "text",
+          "import",
           "localhost",
           "config",
-          "collections",
-          "new",
-          "are",
-          "from",
           "http",
+          "collections",
+          "from",
           "sparsevectorparams",
-          "6334",
-          "grpc"
+          "new",
+          "createcollection",
+          "are",
+          "6333"
         ],
         "term_weights": [
           {
             "term": "client",
-            "tf": 23,
-            "weight": 0.072555
+            "tf": 26,
+            "weight": 0.070845
           },
           {
             "term": "qdrant",
-            "tf": 20,
-            "weight": 0.063091
+            "tf": 24,
+            "weight": 0.065395
           },
           {
             "term": "sparse",
-            "tf": 16,
-            "weight": 0.050473
+            "tf": 17,
+            "weight": 0.046322
           },
           {
             "term": "vectors",
             "tf": 15,
-            "weight": 0.047319
+            "weight": 0.040872
           },
           {
             "term": "collection",
-            "tf": 11,
-            "weight": 0.0347
+            "tf": 14,
+            "weight": 0.038147
           },
           {
             "term": "name",
-            "tf": 8,
-            "weight": 0.025237
-          },
-          {
-            "term": "import",
-            "tf": 8,
-            "weight": 0.025237
+            "tf": 10,
+            "weight": 0.027248
           },
           {
             "term": "qdrantclient",
-            "tf": 8,
-            "weight": 0.025237
+            "tf": 10,
+            "weight": 0.027248
           },
           {
             "term": "vector",
-            "tf": 7,
-            "weight": 0.022082
+            "tf": 9,
+            "weight": 0.024523
           },
           {
             "term": "text",
-            "tf": 7,
-            "weight": 0.022082
+            "tf": 9,
+            "weight": 0.024523
+          },
+          {
+            "term": "import",
+            "tf": 9,
+            "weight": 0.024523
           },
           {
             "term": "localhost",
-            "tf": 7,
-            "weight": 0.022082
+            "tf": 8,
+            "weight": 0.021798
           },
           {
             "term": "config",
             "tf": 7,
-            "weight": 0.022082
+            "weight": 0.019074
+          },
+          {
+            "term": "http",
+            "tf": 6,
+            "weight": 0.016349
           },
           {
             "term": "collections",
+            "tf": 6,
+            "weight": 0.016349
+          },
+          {
+            "term": "from",
             "tf": 5,
-            "weight": 0.015773
+            "weight": 0.013624
+          },
+          {
+            "term": "sparsevectorparams",
+            "tf": 5,
+            "weight": 0.013624
           },
           {
             "term": "new",
             "tf": 5,
-            "weight": 0.015773
+            "weight": 0.013624
+          },
+          {
+            "term": "createcollection",
+            "tf": 5,
+            "weight": 0.013624
           },
           {
             "term": "are",
             "tf": 4,
-            "weight": 0.012618
+            "weight": 0.010899
           },
           {
-            "term": "from",
+            "term": "6333",
             "tf": 4,
-            "weight": 0.012618
-          },
-          {
-            "term": "http",
-            "tf": 4,
-            "weight": 0.012618
-          },
-          {
-            "term": "sparsevectorparams",
-            "tf": 4,
-            "weight": 0.012618
-          },
-          {
-            "term": "6334",
-            "tf": 4,
-            "weight": 0.012618
-          },
-          {
-            "term": "grpc",
-            "tf": 4,
-            "weight": 0.012618
+            "weight": 0.010899
           }
         ],
-        "unique_terms": 122,
-        "total_terms": 317
+        "unique_terms": 132,
+        "total_terms": 367
       },
       "modal_hint": "code",
       "content_flags": {
@@ -1551,18 +1559,18 @@
     "advanced_scores": {
       "semantic": 0.7,
       "structural": 0.7999999999999998,
-      "retrieval_quality": 0.6878688524590164,
-      "overall": 0.7292896174863387
+      "retrieval_quality": 0.6721311475409837,
+      "overall": 0.7240437158469945
     }
   },
   {
-    "text": "### Multivectors\n\n**Available as of v1.10.0**\n\nQdrant supports the storing of a variable amount of same-shaped dense vectors in a single point. This means that instead of a single dense vector, you can upload a matrix of dense vectors.\n\nThe length of the matrix is fixed, but the number of vectors in the matrix can be different for each point.\n\nMultivectors look like this:\n\n```json\n// A multivector of size 4\n\"vector\": [\n    [-0.013,  0.020, -0.007, -0.111],\n    [-0.030, -0.055,  0.001,  0.072],\n    [-0.041,  0.014, -0.032, -0.062],\n    ....\n]\n```\n\nThere are two scenarios where multivectors are useful:\n\n- **Multiple representation of the same object** - For example, you can store multiple embeddings for pictures of the same object, taken from different angles. This approach assumes that the payload is same for all vectors.\n- **Late interaction embeddings** - Some text embedding models can output multiple vectors for a single text. For example, a family of models such as ColBERT output a relatively small vector for each token in the text.\n\nIn order to use multivectors, we need to specify a function that will be used to compare between matrices of vectors\n\nCurrently, Qdrant supports `max_sim` function, which is defined as a sum of maximum similarities between each pair of vectors in the matrices.\n\n$$ score = \\sum\\_{i=1}^{N} \\max\\_{j=1}^{M} \\text{Sim}(\\text{vectorA}\\_i, \\text{vectorB}\\_j) $$\n\nWhere $N$ is the number of vectors in the first matrix, $M$ is the number of vectors in the second matrix, and $\\text{Sim}$ is a similarity function, for example, cosine similarity.\n\nTo use multivectors, create a collection with the following configuration:\n\n```http\nPUT collections/{collection_name}\n{\n  \"vectors\": {\n    \"size\": 128,\n    \"distance\": \"Cosine\",\n    \"multivector_config\": {\n      \"comparator\": \"max_sim\"\n    }\n  }\n}\n```\n\n```python\n\nfrom qdrant_client import QdrantClient, models\n\nclient = QdrantClient(url=\"http://localhost:6333\")\n\nclient.create_collection(\n    collection_name=\"{collection_name}\",\n    vectors_config=models.VectorParams(\n        size=128,\n        distance=models.Distance.COSINE,\n        multivector_config=models.MultiVectorConfig(\n            comparator=models.MultiVectorComparator.MAX_SIM\n        ),\n    ),\n)\n```\n\n```typescript\nimport { QdrantClient } from \"@qdrant/js-client-rest\";\n\nconst client = new QdrantClient({ host: \"localhost\", port: 6333 });\n\nclient.createCollection(\"{collection_name}\", {\n  vectors: {\n    size: 128,\n    distance: \"Cosine\",\n    multivector_config: {\n      comparator: \"max_sim\"\n    }\n  },\n});\n```\n\n```rust\nuse qdrant_client::qdrant::{\n    CreateCollectionBuilder, Distance, VectorParamsBuilder,\n    MultiVectorComparator, MultiVectorConfigBuilder,\n};\nuse qdrant_client::Qdrant;\n\nlet client = Qdrant::from_url(\"http://localhost:6334\").build()?;\n\nclient\n    .create_collection(\n        CreateCollectionBuilder::new(\"{collection_name}\")\n            .vectors_config(\n                VectorParamsBuilder::new(100, Distance::Cosine)\n                    .multivector_config(\n                        MultiVectorConfigBuilder::new(MultiVectorComparator::MaxSim)\n                    ),\n            ),\n    )\n    .await?;\n```",
+    "text": "### Multivectors\n\n**Available as of v1.10.0**\n\nQdrant supports the storing of a variable amount of same-shaped dense vectors in a single point. This means that instead of a single dense vector, you can upload a matrix of dense vectors.\n\nThe length of the matrix is fixed, but the number of vectors in the matrix can be different for each point.\n\nMultivectors look like this:\n\n```json\n// A multivector of size 4\n\"vector\": [\n    [-0.013,  0.020, -0.007, -0.111],\n    [-0.030, -0.055,  0.001,  0.072],\n    [-0.041,  0.014, -0.032, -0.062],\n    ....\n]\n```\n\nThere are two scenarios where multivectors are useful:\n\n- **Multiple representation of the same object** - For example, you can store multiple embeddings for pictures of the same object, taken from different angles. This approach assumes that the payload is same for all vectors.\n- **Late interaction embeddings** - Some text embedding models can output multiple vectors for a single text. For example, a family of models such as ColBERT output a relatively small vector for each token in the text.\n\nIn order to use multivectors, we need to specify a function that will be used to compare between matrices of vectors\n\nCurrently, Qdrant supports `max_sim` function, which is defined as a sum of maximum similarities between each pair of vectors in the matrices.\n\n$$ score = \\sum\\_{i=1}^{N} \\max\\_{j=1}^{M} \\text{Sim}(\\text{vectorA}\\_i, \\text{vectorB}\\_j) $$\n\nWhere $N$ is the number of vectors in the first matrix, $M$ is the number of vectors in the second matrix, and $\\text{Sim}$ is a similarity function, for example, cosine similarity.\n\nTo use multivectors, create a collection with the following configuration:\n\n```http\nPUT collections/{collection_name}\n{\n  \"vectors\": {\n    \"size\": 128,\n    \"distance\": \"Cosine\",\n    \"multivector_config\": {\n      \"comparator\": \"max_sim\"\n    }\n  }\n}\n```\n\n```python\n\nfrom qdrant_client import QdrantClient, models\n\nclient = QdrantClient(url=\"http://localhost:6333\")\n\nclient.create_collection(\n    collection_name=\"{collection_name}\",\n    vectors_config=models.VectorParams(\n        size=128,\n        distance=models.Distance.COSINE,\n        multivector_config=models.MultiVectorConfig(\n            comparator=models.MultiVectorComparator.MAX_SIM\n        ),\n    ),\n)\n```\n\n```typescript\nimport { QdrantClient } from \"@qdrant/js-client-rest\";\n\nconst client = new QdrantClient({ host: \"localhost\", port: 6333 });\n\nclient.createCollection(\"{collection_name}\", {\n  vectors: {\n    size: 128,\n    distance: \"Cosine\",\n    multivector_config: {\n      comparator: \"max_sim\"\n    }\n  },\n});\n```\n\n```rust\nuse qdrant_client::qdrant::{\n    CreateCollectionBuilder, Distance, VectorParamsBuilder,\n    MultiVectorComparator, MultiVectorConfigBuilder,\n};\nuse qdrant_client::Qdrant;\n\nlet client = Qdrant::from_url(\"http://localhost:6334\").build()?;\n\nclient\n    .create_collection(\n        CreateCollectionBuilder::new(\"{collection_name}\")\n            .vectors_config(\n                VectorParamsBuilder::new(100, Distance::Cosine)\n                    .multivector_config(\n                        MultiVectorConfigBuilder::new(MultiVectorComparator::MaxSim)\n                    ),\n            ),\n    )\n    .await?;\n```\n\n```java\nimport io.qdrant.client.QdrantClient;\nimport io.qdrant.client.QdrantGrpcClient;\nimport io.qdrant.client.grpc.Collections.Distance;\nimport io.qdrant.client.grpc.Collections.MultiVectorComparator;\nimport io.qdrant.client.grpc.Collections.MultiVectorConfig;\nimport io.qdrant.client.grpc.Collections.VectorParams;\n\nQdrantClient client =\n  new QdrantClient(QdrantGrpcClient.newBuilder(\"localhost\", 6334, false).build());\n\nclient.createCollectionAsync(\"{collection_name}\",\n  VectorParams.newBuilder().setSize(128)\n  .setDistance(Distance.Cosine)\n  .setMultivectorConfig(MultiVectorConfig.newBuilder()\n    .setComparator(MultiVectorComparator.MaxSim)\n    .build())\n  .build()).get();\n```\n\n```csharp\nusing Qdrant.Client;\nusing Qdrant.Client.Grpc;\n\nvar client = new QdrantClient(\"localhost\", 6334);",
     "metadata": {
-      "chunk_id": "8298efe4f9cb-0017",
+      "chunk_id": "8298efe4f9cb-0016",
       "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_vectors\\_documentation_concepts_vectors_.md",
       "filename": "_documentation_concepts_vectors_.md",
       "file_extension": ".md",
-      "chunk_index": 17,
+      "chunk_index": 16,
       "document_level": 1,
       "parent_chunk_id": null,
       "child_chunk_ids": [],
@@ -1570,17 +1578,18 @@
         "Multivectors"
       ],
       "heading_text": "Multivectors",
-      "token_count": 797,
-      "char_count": 3189,
+      "token_count": 995,
+      "char_count": 3988,
       "start_char": 22808,
-      "end_char": 25997,
+      "end_char": 26796,
       "semantic_score": 0.7,
       "structural_score": 0.7999999999999998,
-      "retrieval_quality": 0.8775,
+      "retrieval_quality": 0.8781954887218046,
       "chunking_strategy": "hybrid_adaptive_semchunk",
       "content_type": "prose_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:39.064961",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:22.039098",
       "document_id": "8298efe4f9cb",
       "document_name": "_documentation_concepts_vectors_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_vectors\\_documentation_concepts_vectors_.md",
@@ -1588,9 +1597,9 @@
       "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_vectors",
       "relative_path": "Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_vectors\\_documentation_concepts_vectors_.md",
       "hierarchy_path": "Multivectors",
-      "chunk_hash": "eb56a5325ade18a7",
-      "content_digest": "eb56a5325ade18a7",
-      "chunk_length": 3189,
+      "chunk_hash": "e2c056d89304f90e",
+      "content_digest": "e2c056d89304f90e",
+      "chunk_length": 3988,
       "payload_version": "1.3",
       "collection_hints": [
         "qdrant_ecosystem"
@@ -1599,131 +1608,131 @@
         "version": "1.0",
         "weighting": "tf-normalized",
         "top_terms": [
-          "the",
-          "vectors",
           "client",
           "qdrant",
-          "for",
+          "the",
+          "vectors",
           "collection",
+          "for",
+          "distance",
+          "import",
+          "qdrantclient",
           "text",
           "models",
           "sim",
-          "distance",
+          "cosine",
+          "name",
           "config",
+          "new",
           "multivectors",
           "matrix",
           "multivector",
-          "max",
-          "cosine",
-          "name",
-          "same",
-          "can",
-          "size"
+          "max"
         ],
         "term_weights": [
           {
+            "term": "client",
+            "tf": 21,
+            "weight": 0.05198
+          },
+          {
+            "term": "qdrant",
+            "tf": 17,
+            "weight": 0.042079
+          },
+          {
             "term": "the",
             "tf": 15,
-            "weight": 0.045872
+            "weight": 0.037129
           },
           {
             "term": "vectors",
             "tf": 13,
-            "weight": 0.039755
+            "weight": 0.032178
           },
           {
-            "term": "client",
-            "tf": 10,
-            "weight": 0.030581
-          },
-          {
-            "term": "qdrant",
+            "term": "collection",
             "tf": 9,
-            "weight": 0.027523
+            "weight": 0.022277
           },
           {
             "term": "for",
             "tf": 8,
-            "weight": 0.024465
+            "weight": 0.019802
           },
           {
-            "term": "collection",
+            "term": "distance",
             "tf": 8,
-            "weight": 0.024465
+            "weight": 0.019802
+          },
+          {
+            "term": "import",
+            "tf": 8,
+            "weight": 0.019802
+          },
+          {
+            "term": "qdrantclient",
+            "tf": 8,
+            "weight": 0.019802
           },
           {
             "term": "text",
             "tf": 7,
-            "weight": 0.021407
+            "weight": 0.017327
           },
           {
             "term": "models",
             "tf": 7,
-            "weight": 0.021407
+            "weight": 0.017327
           },
           {
             "term": "sim",
             "tf": 6,
-            "weight": 0.018349
+            "weight": 0.014851
           },
           {
-            "term": "distance",
+            "term": "cosine",
             "tf": 6,
-            "weight": 0.018349
+            "weight": 0.014851
+          },
+          {
+            "term": "name",
+            "tf": 6,
+            "weight": 0.014851
           },
           {
             "term": "config",
             "tf": 6,
-            "weight": 0.018349
+            "weight": 0.014851
+          },
+          {
+            "term": "new",
+            "tf": 6,
+            "weight": 0.014851
           },
           {
             "term": "multivectors",
             "tf": 5,
-            "weight": 0.015291
+            "weight": 0.012376
           },
           {
             "term": "matrix",
             "tf": 5,
-            "weight": 0.015291
+            "weight": 0.012376
           },
           {
             "term": "multivector",
             "tf": 5,
-            "weight": 0.015291
+            "weight": 0.012376
           },
           {
             "term": "max",
             "tf": 5,
-            "weight": 0.015291
-          },
-          {
-            "term": "cosine",
-            "tf": 5,
-            "weight": 0.015291
-          },
-          {
-            "term": "name",
-            "tf": 5,
-            "weight": 0.015291
-          },
-          {
-            "term": "same",
-            "tf": 4,
-            "weight": 0.012232
-          },
-          {
-            "term": "can",
-            "tf": 4,
-            "weight": 0.012232
-          },
-          {
-            "term": "size",
-            "tf": 4,
-            "weight": 0.012232
+            "weight": 0.012376
           }
         ],
-        "unique_terms": 147,
-        "total_terms": 327
+        "unique_terms": 161,
+        "total_terms": 404
       },
       "modal_hint": "code",
       "content_flags": {
@@ -1739,9 +1748,9 @@
         "collection",
         "distance",
         "for",
-        "models",
+        "import",
         "qdrant",
-        "sim",
+        "qdrantclient",
         "text",
         "the",
         "vectors"
@@ -1750,18 +1759,18 @@
     "advanced_scores": {
       "semantic": 0.7,
       "structural": 0.7999999999999998,
-      "retrieval_quality": 0.8775,
-      "overall": 0.7924999999999999
+      "retrieval_quality": 0.8781954887218046,
+      "overall": 0.7927318295739347
     }
   },
   {
-    "text": "## Named Vectors\n\nIn Qdrant, you can store multiple vectors of different sizes and [types](#vector-types.md) in the same data [point](https://qdrant.tech/documentation/concepts/points/). This is useful when you need to define your data with multiple embeddings to represent different features or modalities (e.g., image, text or video).\n\nTo store different vectors for each point, you need to create separate named vector spaces in the [collection](https://qdrant.tech/documentation/concepts/collections/). You can define these vector spaces during collection creation and manage them independently.\n\nEach vector should have a unique name. Vectors can represent different modalities and you can use different embedding models to generate them.\n\nTo create a collection with named vectors, you need to specify a configuration for each vector:\n\n```http\nPUT /collections/{collection_name}\n{\n  \"vectors\": {\n    \"image\": {\n      \"size\": 4,\n      \"distance\": \"Dot\"\n    },\n    \"text\": {\n      \"size\": 5,\n      \"distance\": \"Cosine\"\n    }\n  },\n  \"sparse_vectors\": {\n    \"text-sparse\": {}\n  }\n}\n```\n\n```python\nfrom qdrant_client import QdrantClient, models\n\nclient = QdrantClient(url=\"http://localhost:6333\")\n\nclient.create_collection(\n    collection_name=\"{collection_name}\",\n    vectors_config={\n        \"image\": models.VectorParams(size=4, distance=models.Distance.DOT),\n        \"text\": models.VectorParams(size=5, distance=models.Distance.COSINE),\n    },\n    sparse_vectors_config={\"text-sparse\": models.SparseVectorParams()},\n)\n```\n\n```typescript\nimport { QdrantClient } from \"@qdrant/js-client-rest\";\n\nconst client = new QdrantClient({ host: \"localhost\", port: 6333 });\n\nclient.createCollection(\"{collection_name}\", {\n    vectors: {\n        image: { size: 4, distance: \"Dot\" },\n        text: { size: 5, distance: \"Cosine\" },\n    },\n    sparse_vectors: {\n        text_sparse: {}\n    }\n});\n```\n\n```rust\nuse qdrant_client::qdrant::{\n    CreateCollectionBuilder, Distance, SparseVectorParamsBuilder, SparseVectorsConfigBuilder,\n    VectorParamsBuilder, VectorsConfigBuilder,\n};\nuse qdrant_client::Qdrant;\n\nlet client = Qdrant::from_url(\"http://localhost:6334\").build()?;\n\nlet mut vector_config = VectorsConfigBuilder::default();\nvector_config.add_named_vector_params(\"text\", VectorParamsBuilder::new(5, Distance::Dot));\nvector_config.add_named_vector_params(\"image\", VectorParamsBuilder::new(4, Distance::Cosine));\n\nlet mut sparse_vectors_config = SparseVectorsConfigBuilder::default();\nsparse_vectors_config\n    .add_named_vector_params(\"text-sparse\", SparseVectorParamsBuilder::default());\n\nclient\n    .create_collection(\n        CreateCollectionBuilder::new(\"{collection_name}\")\n            .vectors_config(vector_config)\n            .sparse_vectors_config(sparse_vectors_config),\n    )\n    .await?;\n```\n\n```java\nimport java.util.Map;\n\nimport io.qdrant.client.QdrantClient;\nimport io.qdrant.client.QdrantGrpcClient;\nimport io.qdrant.client.grpc.Collections.CreateCollection;\nimport io.qdrant.client.grpc.Collections.Distance;\nimport io.qdrant.client.grpc.Collections.SparseVectorConfig;\nimport io.qdrant.client.grpc.Collections.SparseVectorParams;\nimport io.qdrant.client.grpc.Collections.VectorParams;\nimport io.qdrant.client.grpc.Collections.VectorParamsMap;\nimport io.qdrant.client.grpc.Collections.VectorsConfig;",
+    "text": "## Named Vectors\n\nIn Qdrant, you can store multiple vectors of different sizes and [types](#vector-types.md) in the same data [point](https://qdrant.tech/documentation/concepts/points/). This is useful when you need to define your data with multiple embeddings to represent different features or modalities (e.g., image, text or video).\n\nTo store different vectors for each point, you need to create separate named vector spaces in the [collection](https://qdrant.tech/documentation/concepts/collections/). You can define these vector spaces during collection creation and manage them independently.\n\nEach vector should have a unique name. Vectors can represent different modalities and you can use different embedding models to generate them.\n\nTo create a collection with named vectors, you need to specify a configuration for each vector:\n\n```http\nPUT /collections/{collection_name}\n{\n  \"vectors\": {\n    \"image\": {\n      \"size\": 4,\n      \"distance\": \"Dot\"\n    },\n    \"text\": {\n      \"size\": 5,\n      \"distance\": \"Cosine\"\n    }\n  },\n  \"sparse_vectors\": {\n    \"text-sparse\": {}\n  }\n}\n```\n\n```python\nfrom qdrant_client import QdrantClient, models\n\nclient = QdrantClient(url=\"http://localhost:6333\")\n\nclient.create_collection(\n    collection_name=\"{collection_name}\",\n    vectors_config={\n        \"image\": models.VectorParams(size=4, distance=models.Distance.DOT),\n        \"text\": models.VectorParams(size=5, distance=models.Distance.COSINE),\n    },\n    sparse_vectors_config={\"text-sparse\": models.SparseVectorParams()},\n)\n```\n\n```typescript\nimport { QdrantClient } from \"@qdrant/js-client-rest\";\n\nconst client = new QdrantClient({ host: \"localhost\", port: 6333 });\n\nclient.createCollection(\"{collection_name}\", {\n    vectors: {\n        image: { size: 4, distance: \"Dot\" },\n        text: { size: 5, distance: \"Cosine\" },\n    },\n    sparse_vectors: {\n        text_sparse: {}\n    }\n});\n```\n\n```rust\nuse qdrant_client::qdrant::{\n    CreateCollectionBuilder, Distance, SparseVectorParamsBuilder, SparseVectorsConfigBuilder,\n    VectorParamsBuilder, VectorsConfigBuilder,\n};\nuse qdrant_client::Qdrant;\n\nlet client = Qdrant::from_url(\"http://localhost:6334\").build()?;\n\nlet mut vector_config = VectorsConfigBuilder::default();\nvector_config.add_named_vector_params(\"text\", VectorParamsBuilder::new(5, Distance::Dot));\nvector_config.add_named_vector_params(\"image\", VectorParamsBuilder::new(4, Distance::Cosine));\n\nlet mut sparse_vectors_config = SparseVectorsConfigBuilder::default();\nsparse_vectors_config\n    .add_named_vector_params(\"text-sparse\", SparseVectorParamsBuilder::default());\n\nclient\n    .create_collection(\n        CreateCollectionBuilder::new(\"{collection_name}\")\n            .vectors_config(vector_config)\n            .sparse_vectors_config(sparse_vectors_config),\n    )\n    .await?;\n```\n\n```java\nimport java.util.Map;\n\nimport io.qdrant.client.QdrantClient;\nimport io.qdrant.client.QdrantGrpcClient;\nimport io.qdrant.client.grpc.Collections.CreateCollection;\nimport io.qdrant.client.grpc.Collections.Distance;\nimport io.qdrant.client.grpc.Collections.SparseVectorConfig;\nimport io.qdrant.client.grpc.Collections.SparseVectorParams;\nimport io.qdrant.client.grpc.Collections.VectorParams;\nimport io.qdrant.client.grpc.Collections.VectorParamsMap;\nimport io.qdrant.client.grpc.Collections.VectorsConfig;\n\nQdrantClient client =\n    new QdrantClient(QdrantGrpcClient.newBuilder(\"localhost\", 6334, false).build());\n\nclient\n    .createCollectionAsync(\n        CreateCollection.newBuilder()\n            .setCollectionName(\"{collection_name}\")\n            .setVectorsConfig(VectorsConfig.newBuilder().setParamsMap(\n                VectorParamsMap.newBuilder().putAllMap(Map.of(\"image\",\n                    VectorParams.newBuilder()\n                        .setSize(4)\n                        .setDistance(Distance.Dot)\n                        .build(),\n                    \"text\",\n                    VectorParams.newBuilder()\n                        .setSize(5)\n                        .setDistance(Distance.Cosine)\n                        .build()))))\n            .setSparseVectorsConfig(SparseVectorConfig.newBuilder().putMap(\n                \"text-sparse\", SparseVectorParams.getDefaultInstance()))\n            .build())\n    .get();\n```\n\n```csharp\nusing Qdrant.Client;\nusing Qdrant.Client.Grpc;\n\nvar client = new QdrantClient(\"localhost\", 6334);",
     "metadata": {
-      "chunk_id": "8298efe4f9cb-0023",
+      "chunk_id": "8298efe4f9cb-0020",
       "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_vectors\\_documentation_concepts_vectors_.md",
       "filename": "_documentation_concepts_vectors_.md",
       "file_extension": ".md",
-      "chunk_index": 23,
+      "chunk_index": 20,
       "document_level": 1,
       "parent_chunk_id": null,
       "child_chunk_ids": [],
@@ -1769,17 +1778,18 @@
         "Named Vectors"
       ],
       "heading_text": "Named Vectors",
-      "token_count": 767,
-      "char_count": 3310,
+      "token_count": 969,
+      "char_count": 4350,
       "start_char": 33723,
-      "end_char": 37033,
-      "semantic_score": 0.7,
+      "end_char": 38073,
+      "semantic_score": 0.6,
       "structural_score": 0.7,
-      "retrieval_quality": 0.6793357933579336,
+      "retrieval_quality": 0.6838709677419355,
       "chunking_strategy": "hybrid_adaptive_semchunk",
       "content_type": "prose_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:39.076918",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:22.047879",
       "document_id": "8298efe4f9cb",
       "document_name": "_documentation_concepts_vectors_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_vectors\\_documentation_concepts_vectors_.md",
@@ -1787,9 +1797,9 @@
       "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_vectors",
       "relative_path": "Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_vectors\\_documentation_concepts_vectors_.md",
       "hierarchy_path": "Named Vectors",
-      "chunk_hash": "6f109a564e6a1569",
-      "content_digest": "6f109a564e6a1569",
-      "chunk_length": 3310,
+      "chunk_hash": "aba2fa0efbe3d97d",
+      "content_digest": "aba2fa0efbe3d97d",
+      "chunk_length": 4350,
       "payload_version": "1.3",
       "collection_hints": [
         "qdrant_ecosystem"
@@ -1798,131 +1808,131 @@
         "version": "1.0",
         "weighting": "tf-normalized",
         "top_terms": [
-          "qdrant",
           "client",
+          "qdrant",
           "vectors",
-          "vector",
           "distance",
-          "import",
+          "vector",
           "sparse",
-          "config",
-          "collection",
+          "import",
           "text",
+          "collection",
+          "config",
           "collections",
-          "models",
+          "qdrantclient",
           "grpc",
+          "name",
+          "models",
+          "newbuilder",
           "named",
           "you",
-          "name",
-          "size",
-          "different",
           "image",
-          "qdrantclient"
+          "size"
         ],
         "term_weights": [
           {
-            "term": "qdrant",
-            "tf": 19,
-            "weight": 0.054913
+            "term": "client",
+            "tf": 24,
+            "weight": 0.058394
           },
           {
-            "term": "client",
-            "tf": 19,
-            "weight": 0.054913
+            "term": "qdrant",
+            "tf": 21,
+            "weight": 0.051095
           },
           {
             "term": "vectors",
             "tf": 16,
-            "weight": 0.046243
+            "weight": 0.038929
+          },
+          {
+            "term": "distance",
+            "tf": 14,
+            "weight": 0.034063
           },
           {
             "term": "vector",
             "tf": 12,
-            "weight": 0.034682
+            "weight": 0.029197
           },
           {
-            "term": "distance",
+            "term": "sparse",
             "tf": 12,
-            "weight": 0.034682
+            "weight": 0.029197
           },
           {
             "term": "import",
             "tf": 12,
-            "weight": 0.034682
+            "weight": 0.029197
           },
           {
-            "term": "sparse",
+            "term": "text",
             "tf": 11,
-            "weight": 0.031792
+            "weight": 0.026764
+          },
+          {
+            "term": "collection",
+            "tf": 11,
+            "weight": 0.026764
           },
           {
             "term": "config",
             "tf": 11,
-            "weight": 0.031792
-          },
-          {
-            "term": "collection",
-            "tf": 10,
-            "weight": 0.028902
-          },
-          {
-            "term": "text",
-            "tf": 9,
-            "weight": 0.026012
+            "weight": 0.026764
           },
           {
             "term": "collections",
             "tf": 9,
-            "weight": 0.026012
+            "weight": 0.021898
+          },
+          {
+            "term": "qdrantclient",
+            "tf": 8,
+            "weight": 0.019465
+          },
+          {
+            "term": "grpc",
+            "tf": 8,
+            "weight": 0.019465
+          },
+          {
+            "term": "name",
+            "tf": 7,
+            "weight": 0.017032
           },
           {
             "term": "models",
             "tf": 7,
-            "weight": 0.020231
+            "weight": 0.017032
           },
           {
-            "term": "grpc",
+            "term": "newbuilder",
             "tf": 7,
-            "weight": 0.020231
+            "weight": 0.017032
           },
           {
             "term": "named",
             "tf": 6,
-            "weight": 0.017341
+            "weight": 0.014599
           },
           {
             "term": "you",
             "tf": 6,
-            "weight": 0.017341
+            "weight": 0.014599
           },
           {
-            "term": "name",
+            "term": "image",
             "tf": 6,
-            "weight": 0.017341
+            "weight": 0.014599
           },
           {
             "term": "size",
             "tf": 6,
-            "weight": 0.017341
-          },
-          {
-            "term": "different",
-            "tf": 5,
-            "weight": 0.014451
-          },
-          {
-            "term": "image",
-            "tf": 5,
-            "weight": 0.014451
-          },
-          {
-            "term": "qdrantclient",
-            "tf": 5,
-            "weight": 0.014451
+            "weight": 0.014599
           }
         ],
-        "unique_terms": 105,
-        "total_terms": 346
+        "unique_terms": 121,
+        "total_terms": 411
       },
       "modal_hint": "code",
       "content_flags": {
@@ -1947,20 +1957,20 @@
       ]
     },
     "advanced_scores": {
-      "semantic": 0.7,
+      "semantic": 0.6,
       "structural": 0.7,
-      "retrieval_quality": 0.6793357933579336,
-      "overall": 0.6931119311193111
+      "retrieval_quality": 0.6838709677419355,
+      "overall": 0.6612903225806451
     }
   },
   {
-    "text": "## Datatypes\n\nNewest versions of embeddings models generate vectors with very large dimentionalities. With OpenAI’s `text-embedding-3-large` embedding model, the dimensionality can go up to 3072.\n\nThe amount of memory required to store such vectors grows linearly with the dimensionality, so it is important to choose the right datatype for the vectors.\n\nThe choice between datatypes is a trade-off between memory consumption and precision of vectors.\n\nQdrant supports a number of datatypes for both dense and sparse vectors:\n\n**Float32**\n\nThis is the default datatype for vectors in Qdrant. It is a 32-bit (4 bytes) floating-point number. The standard OpenAI embedding of 1536 dimensionality will require 6KB of memory to store in Float32.\n\nYou don’t need to specify the datatype for vectors in Qdrant, as it is set to Float32 by default.\n\n**Float16**\n\nThis is a 16-bit (2 bytes) floating-point number. It is also known as half-precision float. Intuitively, it looks like this:\n\n```text\nfloat32 -> float16 delta (float32 - float16).abs\n\n0.79701585 -> 0.796875   delta 0.00014084578\n0.7850789  -> 0.78515625 delta 0.00007736683\n0.7775044  -> 0.77734375 delta 0.00016063452\n0.85776305 -> 0.85791016 delta 0.00014710426\n0.6616839  -> 0.6616211  delta 0.000062823296\n```\n\nThe main advantage of Float16 is that it requires half the memory of Float32, while having virtually no impact on the quality of vector search.\n\nTo use Float16, you need to specify the datatype for vectors in the collection configuration:\n\n```http\nPUT /collections/{collection_name}\n{\n  \"vectors\": {\n    \"size\": 128,\n    \"distance\": \"Cosine\",\n    \"datatype\": \"float16\" // <-- For dense vectors\n  },\n  \"sparse_vectors\": {\n    \"text\": {\n      \"index\": {\n        \"datatype\": \"float16\" // <-- And for sparse vectors \n      }\n    }\n  }\n}\n```\n\n```python\nfrom qdrant_client import QdrantClient, models\n\nclient = QdrantClient(url=\"http://localhost:6333\")\n\nclient.create_collection(\n    collection_name=\"{collection_name}\",\n    vectors_config=models.VectorParams(\n        size=128,\n        distance=models.Distance.COSINE,\n        datatype=models.Datatype.FLOAT16\n    ),\n    sparse_vectors_config={\n        \"text\": models.SparseVectorParams(\n            index=models.SparseIndexParams(datatype=models.Datatype.FLOAT16)\n        ),\n    },\n)\n```\n\n```typescript\nimport { QdrantClient } from \"@qdrant/js-client-rest\";\n\nconst client = new QdrantClient({ host: \"localhost\", port: 6333 });\n\nclient.createCollection(\"{collection_name}\", {\n  vectors: {\n    size: 128,\n    distance: \"Cosine\",\n    datatype: \"float16\"\n  },\n  sparse_vectors: {\n    text: {\n      index: {\n        datatype: \"float16\"\n      }\n    }\n  }\n});\n```\n\n```rust\nuse qdrant_client::qdrant::{\n    CreateCollectionBuilder, Datatype, Distance, SparseIndexConfigBuilder, SparseVectorParamsBuilder, SparseVectorsConfigBuilder, VectorParamsBuilder\n};\nuse qdrant_client::Qdrant;",
+    "text": "## Datatypes\n\nNewest versions of embeddings models generate vectors with very large dimentionalities. With OpenAI’s `text-embedding-3-large` embedding model, the dimensionality can go up to 3072.\n\nThe amount of memory required to store such vectors grows linearly with the dimensionality, so it is important to choose the right datatype for the vectors.\n\nThe choice between datatypes is a trade-off between memory consumption and precision of vectors.\n\nQdrant supports a number of datatypes for both dense and sparse vectors:\n\n**Float32**\n\nThis is the default datatype for vectors in Qdrant. It is a 32-bit (4 bytes) floating-point number. The standard OpenAI embedding of 1536 dimensionality will require 6KB of memory to store in Float32.\n\nYou don’t need to specify the datatype for vectors in Qdrant, as it is set to Float32 by default.\n\n**Float16**\n\nThis is a 16-bit (2 bytes) floating-point number. It is also known as half-precision float. Intuitively, it looks like this:\n\n```text\nfloat32 -> float16 delta (float32 - float16).abs\n\n0.79701585 -> 0.796875   delta 0.00014084578\n0.7850789  -> 0.78515625 delta 0.00007736683\n0.7775044  -> 0.77734375 delta 0.00016063452\n0.85776305 -> 0.85791016 delta 0.00014710426\n0.6616839  -> 0.6616211  delta 0.000062823296\n```\n\nThe main advantage of Float16 is that it requires half the memory of Float32, while having virtually no impact on the quality of vector search.\n\nTo use Float16, you need to specify the datatype for vectors in the collection configuration:\n\n```http\nPUT /collections/{collection_name}\n{\n  \"vectors\": {\n    \"size\": 128,\n    \"distance\": \"Cosine\",\n    \"datatype\": \"float16\" // <-- For dense vectors\n  },\n  \"sparse_vectors\": {\n    \"text\": {\n      \"index\": {\n        \"datatype\": \"float16\" // <-- And for sparse vectors \n      }\n    }\n  }\n}\n```\n\n```python\nfrom qdrant_client import QdrantClient, models\n\nclient = QdrantClient(url=\"http://localhost:6333\")\n\nclient.create_collection(\n    collection_name=\"{collection_name}\",\n    vectors_config=models.VectorParams(\n        size=128,\n        distance=models.Distance.COSINE,\n        datatype=models.Datatype.FLOAT16\n    ),\n    sparse_vectors_config={\n        \"text\": models.SparseVectorParams(\n            index=models.SparseIndexParams(datatype=models.Datatype.FLOAT16)\n        ),\n    },\n)\n```\n\n```typescript\nimport { QdrantClient } from \"@qdrant/js-client-rest\";\n\nconst client = new QdrantClient({ host: \"localhost\", port: 6333 });\n\nclient.createCollection(\"{collection_name}\", {\n  vectors: {\n    size: 128,\n    distance: \"Cosine\",\n    datatype: \"float16\"\n  },\n  sparse_vectors: {\n    text: {\n      index: {\n        datatype: \"float16\"\n      }\n    }\n  }\n});\n```\n\n```rust\nuse qdrant_client::qdrant::{\n    CreateCollectionBuilder, Datatype, Distance, SparseIndexConfigBuilder, SparseVectorParamsBuilder, SparseVectorsConfigBuilder, VectorParamsBuilder\n};\nuse qdrant_client::Qdrant;\n\nlet client = Qdrant::from_url(\"http://localhost:6334\").build()?;\n\nlet mut sparse_vector_config = SparseVectorsConfigBuilder::default();\nsparse_vector_config.add_named_vector_params(\n    \"text\",\n    SparseVectorParamsBuilder::default()\n        .index(SparseIndexConfigBuilder::default().datatype(Datatype::Float32)),\n);\n\nlet create_collection = CreateCollectionBuilder::new(\"{collection_name}\")\n    .sparse_vectors_config(sparse_vector_config)\n    .vectors_config(\n        VectorParamsBuilder::new(128, Distance::Cosine).datatype(Datatype::Float16),\n    );\n\nclient.create_collection(create_collection).await?;\n```\n\n```java\nimport io.qdrant.client.QdrantClient;\nimport io.qdrant.client.QdrantGrpcClient;\nimport io.qdrant.client.grpc.Collections.CreateCollection;\nimport io.qdrant.client.grpc.Collections.Datatype;\nimport io.qdrant.client.grpc.Collections.Distance;\nimport io.qdrant.client.grpc.Collections.SparseIndexConfig;\nimport io.qdrant.client.grpc.Collections.SparseVectorConfig;\nimport io.qdrant.client.grpc.Collections.SparseVectorParams;\nimport io.qdrant.client.grpc.Collections.VectorParams;\nimport io.qdrant.client.grpc.Collections.VectorsConfig;",
     "metadata": {
-      "chunk_id": "8298efe4f9cb-0029",
+      "chunk_id": "8298efe4f9cb-0024",
       "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_vectors\\_documentation_concepts_vectors_.md",
       "filename": "_documentation_concepts_vectors_.md",
       "file_extension": ".md",
-      "chunk_index": 29,
+      "chunk_index": 24,
       "document_level": 1,
       "parent_chunk_id": null,
       "child_chunk_ids": [],
@@ -1968,17 +1978,18 @@
         "Datatypes"
       ],
       "heading_text": "Datatypes",
-      "token_count": 753,
-      "char_count": 2889,
+      "token_count": 1008,
+      "char_count": 4046,
       "start_char": 45371,
-      "end_char": 48260,
+      "end_char": 49417,
       "semantic_score": 0.7,
       "structural_score": 0.7999999999999998,
-      "retrieval_quality": 0.6773529411764705,
+      "retrieval_quality": 0.677979274611399,
       "chunking_strategy": "hybrid_adaptive_semchunk",
       "content_type": "prose_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:39.078114",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:22.056101",
       "document_id": "8298efe4f9cb",
       "document_name": "_documentation_concepts_vectors_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_vectors\\_documentation_concepts_vectors_.md",
@@ -1986,9 +1997,9 @@
       "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_vectors",
       "relative_path": "Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_vectors\\_documentation_concepts_vectors_.md",
       "hierarchy_path": "Datatypes",
-      "chunk_hash": "ced32664c4f39b56",
-      "content_digest": "ced32664c4f39b56",
-      "chunk_length": 2889,
+      "chunk_hash": "54ac96a9aab1cc6e",
+      "content_digest": "54ac96a9aab1cc6e",
+      "chunk_length": 4046,
       "payload_version": "1.3",
       "collection_hints": [
         "qdrant_ecosystem"
@@ -1997,131 +2008,131 @@
         "version": "1.0",
         "weighting": "tf-normalized",
         "top_terms": [
-          "vectors",
-          "the",
-          "datatype",
-          "float16",
           "qdrant",
-          "models",
           "client",
+          "vectors",
+          "datatype",
+          "the",
+          "float16",
+          "import",
+          "collection",
+          "sparse",
+          "collections",
+          "models",
+          "grpc",
           "for",
           "float32",
-          "delta",
-          "collection",
-          "text",
-          "sparse",
           "distance",
-          "memory",
-          "name",
-          "qdrantclient",
-          "datatypes",
-          "with",
-          "embedding"
+          "config",
+          "text",
+          "delta",
+          "default",
+          "vector"
         ],
         "term_weights": [
           {
+            "term": "qdrant",
+            "tf": 20,
+            "weight": 0.048544
+          },
+          {
+            "term": "client",
+            "tf": 20,
+            "weight": 0.048544
+          },
+          {
             "term": "vectors",
-            "tf": 16,
-            "weight": 0.054422
+            "tf": 18,
+            "weight": 0.043689
+          },
+          {
+            "term": "datatype",
+            "tf": 18,
+            "weight": 0.043689
           },
           {
             "term": "the",
             "tf": 14,
-            "weight": 0.047619
-          },
-          {
-            "term": "datatype",
-            "tf": 13,
-            "weight": 0.044218
+            "weight": 0.033981
           },
           {
             "term": "float16",
-            "tf": 11,
-            "weight": 0.037415
+            "tf": 12,
+            "weight": 0.029126
           },
           {
-            "term": "qdrant",
+            "term": "import",
+            "tf": 12,
+            "weight": 0.029126
+          },
+          {
+            "term": "collection",
+            "tf": 10,
+            "weight": 0.024272
+          },
+          {
+            "term": "sparse",
             "tf": 9,
-            "weight": 0.030612
+            "weight": 0.021845
+          },
+          {
+            "term": "collections",
+            "tf": 9,
+            "weight": 0.021845
           },
           {
             "term": "models",
             "tf": 8,
-            "weight": 0.027211
+            "weight": 0.019417
           },
           {
-            "term": "client",
+            "term": "grpc",
             "tf": 8,
-            "weight": 0.027211
+            "weight": 0.019417
           },
           {
             "term": "for",
             "tf": 7,
-            "weight": 0.02381
+            "weight": 0.01699
           },
           {
             "term": "float32",
+            "tf": 7,
+            "weight": 0.01699
+          },
+          {
+            "term": "distance",
+            "tf": 7,
+            "weight": 0.01699
+          },
+          {
+            "term": "config",
+            "tf": 7,
+            "weight": 0.01699
+          },
+          {
+            "term": "text",
             "tf": 6,
-            "weight": 0.020408
+            "weight": 0.014563
           },
           {
             "term": "delta",
             "tf": 6,
-            "weight": 0.020408
+            "weight": 0.014563
           },
           {
-            "term": "collection",
-            "tf": 6,
-            "weight": 0.020408
-          },
-          {
-            "term": "text",
+            "term": "default",
             "tf": 5,
-            "weight": 0.017007
+            "weight": 0.012136
           },
           {
-            "term": "sparse",
+            "term": "vector",
             "tf": 5,
-            "weight": 0.017007
-          },
-          {
-            "term": "distance",
-            "tf": 5,
-            "weight": 0.017007
-          },
-          {
-            "term": "memory",
-            "tf": 4,
-            "weight": 0.013605
-          },
-          {
-            "term": "name",
-            "tf": 4,
-            "weight": 0.013605
-          },
-          {
-            "term": "qdrantclient",
-            "tf": 4,
-            "weight": 0.013605
-          },
-          {
-            "term": "datatypes",
-            "tf": 3,
-            "weight": 0.010204
-          },
-          {
-            "term": "with",
-            "tf": 3,
-            "weight": 0.010204
-          },
-          {
-            "term": "embedding",
-            "tf": 3,
-            "weight": 0.010204
+            "weight": 0.012136
           }
         ],
-        "unique_terms": 135,
-        "total_terms": 294
+        "unique_terms": 149,
+        "total_terms": 412
       },
       "modal_hint": "code",
       "content_flags": {
@@ -2134,13 +2145,13 @@
       "search_keywords": [
         "Datatypes",
         "client",
+        "collection",
+        "collections",
         "datatype",
-        "delta",
         "float16",
-        "float32",
-        "for",
-        "models",
+        "import",
         "qdrant",
+        "sparse",
         "the",
         "vectors"
       ]
@@ -2148,18 +2159,18 @@
     "advanced_scores": {
       "semantic": 0.7,
       "structural": 0.7999999999999998,
-      "retrieval_quality": 0.6773529411764705,
-      "overall": 0.72578431372549
+      "retrieval_quality": 0.677979274611399,
+      "overall": 0.7259930915371329
     }
   },
   {
     "text": "## Quantization\n\nApart from changing the datatype of the original vectors, Qdrant can create quantized representations of vectors alongside the original ones. This quantized representation can be used to quickly select candidates for rescoring with the original vectors or even used directly for search.\n\nQuantization is applied in the background, during the optimization process.\n\nMore information about the quantization process can be found in the [Quantization](https://qdrant.tech/documentation/guides/quantization/) section.",
     "metadata": {
-      "chunk_id": "8298efe4f9cb-0034",
+      "chunk_id": "8298efe4f9cb-0027",
       "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_vectors\\_documentation_concepts_vectors_.md",
       "filename": "_documentation_concepts_vectors_.md",
       "file_extension": ".md",
-      "chunk_index": 34,
+      "chunk_index": 27,
       "document_level": 1,
       "parent_chunk_id": null,
       "child_chunk_ids": [],
@@ -2177,7 +2188,8 @@
       "chunking_strategy": "hybrid_adaptive_semchunk",
       "content_type": "prose_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:39.089217",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:22.057605",
       "document_id": "8298efe4f9cb",
       "document_name": "_documentation_concepts_vectors_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_vectors\\_documentation_concepts_vectors_.md",

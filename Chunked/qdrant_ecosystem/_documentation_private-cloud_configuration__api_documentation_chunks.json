@@ -24,7 +24,8 @@
       "chunking_strategy": "hierarchical_precise_structural",
       "content_type": "list_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:43.777273",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:26.340993",
       "document_id": "c7d48413e42b",
       "document_name": "_documentation_private-cloud_configuration_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_private-cloud_configuration\\_documentation_private-cloud_configuration_.md",
@@ -223,7 +224,8 @@
       "chunking_strategy": "hierarchical_precise_structural",
       "content_type": "list_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:43.781834",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:26.341650",
       "document_id": "c7d48413e42b",
       "document_name": "_documentation_private-cloud_configuration_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_private-cloud_configuration\\_documentation_private-cloud_configuration_.md",
@@ -422,7 +424,8 @@
       "chunking_strategy": "hierarchical_precise_structural",
       "content_type": "list_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:43.782791",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:26.342788",
       "document_id": "c7d48413e42b",
       "document_name": "_documentation_private-cloud_configuration_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_private-cloud_configuration\\_documentation_private-cloud_configuration_.md",
@@ -621,7 +624,8 @@
       "chunking_strategy": "hierarchical_precise_structural",
       "content_type": "list_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:43.782791",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:26.343436",
       "document_id": "c7d48413e42b",
       "document_name": "_documentation_private-cloud_configuration_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_private-cloud_configuration\\_documentation_private-cloud_configuration_.md",
@@ -796,13 +800,13 @@
     }
   },
   {
-    "text": "# Docker image pull secret name\n            # This secret should be available in the namespace where the cluster is running\n            # Default not set\n            pullSecretName: qdrant-registry-creds\n          # storage contains the settings for the storage of the Qdrant cluster\n          storage:\n            performance:\n              # CPU budget, how many CPUs (threads) to allocate for an optimization job.\n              # If 0 - auto selection, keep 1 or more CPUs unallocated depending on CPU size\n              # If negative - subtract this number of CPUs from the available CPUs.\n              # If positive - use this exact number of CPUs.\n              optimizerCpuBudget: 0\n              # Enable async scorer which uses io_uring when rescoring.\n              # Only supported on Linux, must be enabled in your kernel.\n              # See: <https://qdrant.tech/articles/io_uring/#and-what-about-qdrant>\n              asyncScorer: false\n          # Qdrant DB log level\n          # Available options: DEBUG | INFO | WARN | ERROR\n          # Default is \"INFO\"\n          logLevel: INFO\n          # Default Qdrant security context configuration\n          securityContext:\n            # Enable default security context\n            # Default is false\n            enabled: false\n            # Default user for qdrant container\n            # Default not set\n            #user: 1000\n            # Default fsGroup for qdrant container\n            # Default not set\n            #fsUser: 2000\n            # Default group for qdrant container\n            # Default not set\n            #group: 3000\n          # Network policies configuration for the Qdrant databases\n          networkPolicies:\n            # Whether or not NetworkPolicy management is enabled.\n            # If set to false, no NetworkPolicies will be created.\n            # Default is true.\n            enable: true\n            ingress:\n              - ports:\n                  - protocol: TCP\n                    port: 6333\n                  - protocol: TCP\n                    port: 6334\n            # Allow DNS resolution from qdrant pods at Kubernetes internal DNS server\n            egress:",
+    "text": "# Private Cloud Configuration\n\nThe Qdrant Private Cloud helm chart has several configuration options. The following YAML shows all configuration options with their default values:\n\n```yaml\noperator:\n  # Amount of replicas for the Qdrant operator (v2)\n  replicaCount: 1\n\n  image:\n    # Image repository for the qdrant operator\n    repository: registry.cloud.qdrant.io/qdrant/operator\n    # Image pullPolicy\n    pullPolicy: IfNotPresent\n    # Overrides the image tag whose default is the chart appVersion.\n    tag: \"\"\n\n  # Optional image pull secrets\n  imagePullSecrets:\n    - name: qdrant-registry-creds\n\n  nameOverride: \"\"\n  fullnameOverride: \"operator\"\n\n  # Service account configuration\n  serviceAccount:\n    create: true\n    annotations: {}\n\n  # Additional pod annotations\n  podAnnotations: {}\n\n  # pod security context\n  podSecurityContext:\n    runAsNonRoot: true\n    runAsUser: 10001\n    runAsGroup: 20001\n    fsGroup: 30001\n\n  # container security context\n  securityContext:\n    capabilities:\n      drop:\n      - ALL\n    readOnlyRootFilesystem: true\n    runAsNonRoot: true\n    runAsUser: 10001\n    runAsGroup: 20001\n    allowPrivilegeEscalation: false\n    seccompProfile:\n      type: RuntimeDefault\n\n  # Configuration for the Qdrant operator service to expose metrics\n  service:\n    enabled: true\n    type: ClusterIP\n    metricsPort: 9290\n\n  # Configuration for the Qdrant operator service monitor to scrape metrics\n  serviceMonitor:\n    enabled: false\n\n  # Resource requests and limits for the Qdrant operator\n  resources: {}\n\n  # Node selector for the Qdrant operator\n  nodeSelector: {}\n\n  # Tolerations for the Qdrant operator\n  tolerations: []\n\n  # Affinity configuration for the Qdrant operator\n  affinity: {}\n\n  watch:\n    # If true, watches only the namespace where the Qdrant operator is deployed, otherwise watches the namespaces in watch.namespaces\n    onlyReleaseNamespace: true\n    # an empty list watches all namespaces.\n    namespaces: []\n\n  limitRBAC: true",
     "metadata": {
-      "chunk_id": "c7d48413e42b-0011",
+      "chunk_id": "c7d48413e42b-0008",
       "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_private-cloud_configuration\\_documentation_private-cloud_configuration_.md",
       "filename": "_documentation_private-cloud_configuration_.md",
       "file_extension": ".md",
-      "chunk_index": 11,
+      "chunk_index": 8,
       "document_level": 1,
       "parent_chunk_id": null,
       "child_chunk_ids": [],
@@ -810,17 +814,18 @@
         "Private Cloud Configuration"
       ],
       "heading_text": "Private Cloud Configuration",
-      "token_count": 447,
-      "char_count": 2164,
-      "start_char": 12420,
-      "end_char": 14596,
+      "token_count": 487,
+      "char_count": 1977,
+      "start_char": 8083,
+      "end_char": 10060,
       "semantic_score": 0.7999999999999999,
       "structural_score": 0.7999999999999998,
-      "retrieval_quality": 0.5001079051383399,
+      "retrieval_quality": 0.5143608695652174,
       "chunking_strategy": "hierarchical_precise_semchunk",
       "content_type": "prose_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:43.798182",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:26.354332",
       "document_id": "c7d48413e42b",
       "document_name": "_documentation_private-cloud_configuration_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_private-cloud_configuration\\_documentation_private-cloud_configuration_.md",
@@ -828,9 +833,409 @@
       "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_private-cloud_configuration",
       "relative_path": "Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_private-cloud_configuration\\_documentation_private-cloud_configuration_.md",
       "hierarchy_path": "Private Cloud Configuration",
-      "chunk_hash": "c03c265ac2e427b6",
-      "content_digest": "c03c265ac2e427b6",
-      "chunk_length": 2164,
+      "chunk_hash": "d5b9782e375b596d",
+      "content_digest": "d5b9782e375b596d",
+      "chunk_length": 1977,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "the",
+          "qdrant",
+          "operator",
+          "for",
+          "true",
+          "configuration",
+          "image",
+          "service",
+          "namespaces",
+          "cloud",
+          "all",
+          "watches",
+          "private",
+          "chart",
+          "options",
+          "yaml",
+          "default",
+          "repository",
+          "registry",
+          "pullpolicy"
+        ],
+        "term_weights": [
+          {
+            "term": "the",
+            "tf": 15,
+            "weight": 0.075758
+          },
+          {
+            "term": "qdrant",
+            "tf": 13,
+            "weight": 0.065657
+          },
+          {
+            "term": "operator",
+            "tf": 12,
+            "weight": 0.060606
+          },
+          {
+            "term": "for",
+            "tf": 8,
+            "weight": 0.040404
+          },
+          {
+            "term": "true",
+            "tf": 8,
+            "weight": 0.040404
+          },
+          {
+            "term": "configuration",
+            "tf": 7,
+            "weight": 0.035354
+          },
+          {
+            "term": "image",
+            "tf": 5,
+            "weight": 0.025253
+          },
+          {
+            "term": "service",
+            "tf": 4,
+            "weight": 0.020202
+          },
+          {
+            "term": "namespaces",
+            "tf": 4,
+            "weight": 0.020202
+          },
+          {
+            "term": "cloud",
+            "tf": 3,
+            "weight": 0.015152
+          },
+          {
+            "term": "all",
+            "tf": 3,
+            "weight": 0.015152
+          },
+          {
+            "term": "watches",
+            "tf": 3,
+            "weight": 0.015152
+          },
+          {
+            "term": "private",
+            "tf": 2,
+            "weight": 0.010101
+          },
+          {
+            "term": "chart",
+            "tf": 2,
+            "weight": 0.010101
+          },
+          {
+            "term": "options",
+            "tf": 2,
+            "weight": 0.010101
+          },
+          {
+            "term": "yaml",
+            "tf": 2,
+            "weight": 0.010101
+          },
+          {
+            "term": "default",
+            "tf": 2,
+            "weight": 0.010101
+          },
+          {
+            "term": "repository",
+            "tf": 2,
+            "weight": 0.010101
+          },
+          {
+            "term": "registry",
+            "tf": 2,
+            "weight": 0.010101
+          },
+          {
+            "term": "pullpolicy",
+            "tf": 2,
+            "weight": 0.010101
+          }
+        ],
+        "unique_terms": 100,
+        "total_terms": 198
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": true,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Private Cloud Configuration",
+        "cloud",
+        "configuration",
+        "for",
+        "image",
+        "namespaces",
+        "operator",
+        "qdrant",
+        "service",
+        "the",
+        "true"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.7999999999999999,
+      "structural": 0.7999999999999998,
+      "retrieval_quality": 0.5143608695652174,
+      "overall": 0.7047869565217391
+    }
+  },
+  {
+    "text": "# Configuration for the Qdrant operator (v2)\n  settings:\n    # Does the operator run inside of a Kubernetes cluster (kubernetes) or outside (local)\n    appEnvironment: kubernetes\n    # The log level for the operator\n    # Available options: DEBUG | INFO | WARN | ERROR\n    logLevel: INFO\n    # Metrics contains the operator config related the metrics\n    metrics:\n      # The port used for metrics\n      port: 9290\n    # Health contains the operator config related the health probe\n    healthz:\n      # The port used for the health probe\n      port: 8285\n    # Controller related settings\n    controller:\n      # The period a forced recync is done by the controller (if watches are missed / nothing happened)\n      forceResyncPeriod: 10h\n      # QPS indicates the maximum QPS to the master from this client.\n      # Default is 200\n      qps: 200\n      # Maximum burst for throttle.\n      # Default is 500.\n      burst: 500\n    # Features contains the settings for enabling / disabling the individual features of the operator\n    features:\n      # ClusterManagement contains the settings for qdrant (database) cluster management\n      clusterManagement:\n        # Whether or not the Qdrant cluster features are enabled.\n        # If disabled, all other properties in this struct are disregarded. Otherwise, the individual features will be inspected.\n        # Default is true.\n        enable: true\n        # The StorageClass used to make database and snapshot PVCs.\n        # Default is nil, meaning the default storage class of Kubernetes.\n        storageClass:\n          # The StorageClass used to make database PVCs.\n          # Default is nil, meaning the default storage class of Kubernetes.\n          #database:\n          # The StorageClass used to make snapshot PVCs.\n          # Default is nil, meaning the default storage class of Kubernetes.\n          #snapshot:\n        # Qdrant config contains settings specific for the database\n        qdrant:\n          # The config where to find the image for qdrant\n          image:\n            # The repository where to find the image for qdrant\n            # Default is \"qdrant/qdrant\"\n            repository: registry.cloud.qdrant.io/qdrant/qdrant\n            # Docker image pull policy\n            # Default \"IfNotPresent\", unless the tag is dev, master or latest. Then \"Always\"",
+    "metadata": {
+      "chunk_id": "c7d48413e42b-0009",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_private-cloud_configuration\\_documentation_private-cloud_configuration_.md",
+      "filename": "_documentation_private-cloud_configuration_.md",
+      "file_extension": ".md",
+      "chunk_index": 9,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Private Cloud Configuration"
+      ],
+      "heading_text": "Private Cloud Configuration",
+      "token_count": 511,
+      "char_count": 2330,
+      "start_char": 10060,
+      "end_char": 12390,
+      "semantic_score": 0.7999999999999999,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.6318471337579619,
+      "chunking_strategy": "hierarchical_precise_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:26.354720",
+      "document_id": "c7d48413e42b",
+      "document_name": "_documentation_private-cloud_configuration_",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_private-cloud_configuration\\_documentation_private-cloud_configuration_.md",
+      "source_filename": "_documentation_private-cloud_configuration_.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_private-cloud_configuration",
+      "relative_path": "Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_private-cloud_configuration\\_documentation_private-cloud_configuration_.md",
+      "hierarchy_path": "Private Cloud Configuration",
+      "chunk_hash": "1cb484fb5e7d6c57",
+      "content_digest": "1cb484fb5e7d6c57",
+      "chunk_length": 2330,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "the",
+          "qdrant",
+          "default",
+          "for",
+          "operator",
+          "kubernetes",
+          "settings",
+          "contains",
+          "used",
+          "features",
+          "database",
+          "metrics",
+          "config",
+          "port",
+          "storageclass",
+          "image",
+          "cluster",
+          "related",
+          "health",
+          "controller"
+        ],
+        "term_weights": [
+          {
+            "term": "the",
+            "tf": 33,
+            "weight": 0.130952
+          },
+          {
+            "term": "qdrant",
+            "tf": 12,
+            "weight": 0.047619
+          },
+          {
+            "term": "default",
+            "tf": 11,
+            "weight": 0.043651
+          },
+          {
+            "term": "for",
+            "tf": 10,
+            "weight": 0.039683
+          },
+          {
+            "term": "operator",
+            "tf": 6,
+            "weight": 0.02381
+          },
+          {
+            "term": "kubernetes",
+            "tf": 6,
+            "weight": 0.02381
+          },
+          {
+            "term": "settings",
+            "tf": 5,
+            "weight": 0.019841
+          },
+          {
+            "term": "contains",
+            "tf": 5,
+            "weight": 0.019841
+          },
+          {
+            "term": "used",
+            "tf": 5,
+            "weight": 0.019841
+          },
+          {
+            "term": "features",
+            "tf": 5,
+            "weight": 0.019841
+          },
+          {
+            "term": "database",
+            "tf": 5,
+            "weight": 0.019841
+          },
+          {
+            "term": "metrics",
+            "tf": 4,
+            "weight": 0.015873
+          },
+          {
+            "term": "config",
+            "tf": 4,
+            "weight": 0.015873
+          },
+          {
+            "term": "port",
+            "tf": 4,
+            "weight": 0.015873
+          },
+          {
+            "term": "storageclass",
+            "tf": 4,
+            "weight": 0.015873
+          },
+          {
+            "term": "image",
+            "tf": 4,
+            "weight": 0.015873
+          },
+          {
+            "term": "cluster",
+            "tf": 3,
+            "weight": 0.011905
+          },
+          {
+            "term": "related",
+            "tf": 3,
+            "weight": 0.011905
+          },
+          {
+            "term": "health",
+            "tf": 3,
+            "weight": 0.011905
+          },
+          {
+            "term": "controller",
+            "tf": 3,
+            "weight": 0.011905
+          }
+        ],
+        "unique_terms": 105,
+        "total_terms": 252
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Private Cloud Configuration",
+        "contains",
+        "default",
+        "features",
+        "for",
+        "kubernetes",
+        "operator",
+        "qdrant",
+        "settings",
+        "the",
+        "used"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.7999999999999999,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.6318471337579619,
+      "overall": 0.7772823779193206
+    }
+  },
+  {
+    "text": "#pullPolicy:\n            # Docker image pull secret name\n            # This secret should be available in the namespace where the cluster is running\n            # Default not set\n            pullSecretName: qdrant-registry-creds\n          # storage contains the settings for the storage of the Qdrant cluster\n          storage:\n            performance:\n              # CPU budget, how many CPUs (threads) to allocate for an optimization job.\n              # If 0 - auto selection, keep 1 or more CPUs unallocated depending on CPU size\n              # If negative - subtract this number of CPUs from the available CPUs.\n              # If positive - use this exact number of CPUs.\n              optimizerCpuBudget: 0\n              # Enable async scorer which uses io_uring when rescoring.\n              # Only supported on Linux, must be enabled in your kernel.\n              # See: <https://qdrant.tech/articles/io_uring/#and-what-about-qdrant>\n              asyncScorer: false\n          # Qdrant DB log level\n          # Available options: DEBUG | INFO | WARN | ERROR\n          # Default is \"INFO\"\n          logLevel: INFO\n          # Default Qdrant security context configuration\n          securityContext:\n            # Enable default security context\n            # Default is false\n            enabled: false\n            # Default user for qdrant container\n            # Default not set\n            #user: 1000\n            # Default fsGroup for qdrant container\n            # Default not set\n            #fsUser: 2000\n            # Default group for qdrant container\n            # Default not set\n            #group: 3000\n          # Network policies configuration for the Qdrant databases\n          networkPolicies:\n            # Whether or not NetworkPolicy management is enabled.\n            # If set to false, no NetworkPolicies will be created.\n            # Default is true.\n            enable: true\n            ingress:\n              - ports:\n                  - protocol: TCP\n                    port: 6333\n                  - protocol: TCP\n                    port: 6334\n            # Allow DNS resolution from qdrant pods at Kubernetes internal DNS server\n            egress:\n              - ports:\n                  - protocol: UDP\n                    port: 53\n        # Scheduling config contains the settings specific for scheduling\n        scheduling:\n          # Default topology spread constraints (list from type corev1.TopologySpreadConstraint)\n          # Default is an empty list",
+    "metadata": {
+      "chunk_id": "c7d48413e42b-0010",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_private-cloud_configuration\\_documentation_private-cloud_configuration_.md",
+      "filename": "_documentation_private-cloud_configuration_.md",
+      "file_extension": ".md",
+      "chunk_index": 10,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Private Cloud Configuration"
+      ],
+      "heading_text": "Private Cloud Configuration",
+      "token_count": 508,
+      "char_count": 2503,
+      "start_char": 12390,
+      "end_char": 14893,
+      "semantic_score": 0.7999999999999999,
+      "structural_score": 0.9999999999999999,
+      "retrieval_quality": 0.6625874125874125,
+      "chunking_strategy": "hierarchical_precise_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:26.355139",
+      "document_id": "c7d48413e42b",
+      "document_name": "_documentation_private-cloud_configuration_",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_private-cloud_configuration\\_documentation_private-cloud_configuration_.md",
+      "source_filename": "_documentation_private-cloud_configuration_.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_private-cloud_configuration",
+      "relative_path": "Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_private-cloud_configuration\\_documentation_private-cloud_configuration_.md",
+      "hierarchy_path": "Private Cloud Configuration",
+      "chunk_hash": "719ede775f128839",
+      "content_digest": "719ede775f128839",
+      "chunk_length": 2503,
       "payload_version": "1.3",
       "collection_hints": [
         "qdrant_ecosystem"
@@ -850,120 +1255,120 @@
           "this",
           "available",
           "storage",
+          "from",
           "enable",
           "enabled",
           "info",
           "container",
-          "secret",
-          "cluster",
-          "cpu",
-          "number",
-          "from"
+          "protocol",
+          "port",
+          "scheduling",
+          "secret"
         ],
         "term_weights": [
           {
             "term": "default",
-            "tf": 12,
-            "weight": 0.061224
+            "tf": 14,
+            "weight": 0.063063
           },
           {
             "term": "qdrant",
             "tf": 11,
-            "weight": 0.056122
+            "weight": 0.04955
           },
           {
             "term": "the",
-            "tf": 7,
-            "weight": 0.035714
+            "tf": 8,
+            "weight": 0.036036
           },
           {
             "term": "for",
-            "tf": 6,
-            "weight": 0.030612
+            "tf": 7,
+            "weight": 0.031532
           },
           {
             "term": "not",
             "tf": 5,
-            "weight": 0.02551
+            "weight": 0.022523
           },
           {
             "term": "set",
             "tf": 5,
-            "weight": 0.02551
+            "weight": 0.022523
           },
           {
             "term": "cpus",
             "tf": 5,
-            "weight": 0.02551
+            "weight": 0.022523
           },
           {
             "term": "false",
             "tf": 4,
-            "weight": 0.020408
+            "weight": 0.018018
           },
           {
             "term": "this",
             "tf": 3,
-            "weight": 0.015306
+            "weight": 0.013514
           },
           {
             "term": "available",
             "tf": 3,
-            "weight": 0.015306
+            "weight": 0.013514
           },
           {
             "term": "storage",
             "tf": 3,
-            "weight": 0.015306
+            "weight": 0.013514
+          },
+          {
+            "term": "from",
+            "tf": 3,
+            "weight": 0.013514
           },
           {
             "term": "enable",
             "tf": 3,
-            "weight": 0.015306
+            "weight": 0.013514
           },
           {
             "term": "enabled",
             "tf": 3,
-            "weight": 0.015306
+            "weight": 0.013514
           },
           {
             "term": "info",
             "tf": 3,
-            "weight": 0.015306
+            "weight": 0.013514
           },
           {
             "term": "container",
             "tf": 3,
-            "weight": 0.015306
+            "weight": 0.013514
+          },
+          {
+            "term": "protocol",
+            "tf": 3,
+            "weight": 0.013514
+          },
+          {
+            "term": "port",
+            "tf": 3,
+            "weight": 0.013514
+          },
+          {
+            "term": "scheduling",
+            "tf": 3,
+            "weight": 0.013514
           },
           {
             "term": "secret",
             "tf": 2,
-            "weight": 0.010204
-          },
-          {
-            "term": "cluster",
-            "tf": 2,
-            "weight": 0.010204
-          },
-          {
-            "term": "cpu",
-            "tf": 2,
-            "weight": 0.010204
-          },
-          {
-            "term": "number",
-            "tf": 2,
-            "weight": 0.010204
-          },
-          {
-            "term": "from",
-            "tf": 2,
-            "weight": 0.010204
+            "weight": 0.009009
           }
         ],
-        "unique_terms": 118,
-        "total_terms": 196
+        "unique_terms": 131,
+        "total_terms": 222
       },
       "modal_hint": "list",
       "content_flags": {
@@ -989,19 +1394,19 @@
     },
     "advanced_scores": {
       "semantic": 0.7999999999999999,
-      "structural": 0.7999999999999998,
-      "retrieval_quality": 0.5001079051383399,
-      "overall": 0.7000359683794466
+      "structural": 0.9999999999999999,
+      "retrieval_quality": 0.6625874125874125,
+      "overall": 0.8208624708624708
     }
   },
   {
     "text": "##### Was this page useful? Yes No  Thank you for your feedback! 🙏  We are sorry to hear that. 😔 You can [edit](https:/github.com/qdrant/landing_page/tree/master/qdrant-landing/content/documentation/private-cloud/configuration.md) this page on GitHub, or [create](https://github.com/qdrant/landing_page/issues/new/choose) a GitHub issue. On this page:  - [Private Cloud Configuration](#private-cloud-configuration.md)  * [Edit on Github](https://github.com/qdrant/landing_page/tree/master/qdrant-landing/content/documentation/private-cloud/configuration.md) * [Create an issue](https://github.com/qdrant/landing_page/issues/new/choose)",
     "metadata": {
-      "chunk_id": "c7d48413e42b-0020",
+      "chunk_id": "c7d48413e42b-0016",
       "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_private-cloud_configuration\\_documentation_private-cloud_configuration_.md",
       "filename": "_documentation_private-cloud_configuration_.md",
       "file_extension": ".md",
-      "chunk_index": 20,
+      "chunk_index": 16,
       "document_level": 1,
       "parent_chunk_id": null,
       "child_chunk_ids": [],
@@ -1019,7 +1424,8 @@
       "chunking_strategy": "hierarchical_precise_structural",
       "content_type": "list_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:43.800183",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:26.357280",
       "document_id": "c7d48413e42b",
       "document_name": "_documentation_private-cloud_configuration_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_private-cloud_configuration\\_documentation_private-cloud_configuration_.md",

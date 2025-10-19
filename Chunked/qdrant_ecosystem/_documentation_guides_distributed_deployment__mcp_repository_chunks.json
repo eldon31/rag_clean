@@ -24,7 +24,8 @@
       "chunking_strategy": "hybrid_adaptive_structural",
       "content_type": "list_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:42.347542",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:25.050350",
       "document_id": "25122e454c1e",
       "document_name": "_documentation_guides_distributed_deployment_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_guides_distributed_deployment\\_documentation_guides_distributed_deployment_.md",
@@ -223,7 +224,8 @@
       "chunking_strategy": "hybrid_adaptive_structural",
       "content_type": "list_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:42.348656",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:25.051583",
       "document_id": "25122e454c1e",
       "document_name": "_documentation_guides_distributed_deployment_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_guides_distributed_deployment\\_documentation_guides_distributed_deployment_.md",
@@ -422,7 +424,8 @@
       "chunking_strategy": "hybrid_adaptive_structural",
       "content_type": "list_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:42.348656",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:25.051977",
       "document_id": "25122e454c1e",
       "document_name": "_documentation_guides_distributed_deployment_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_guides_distributed_deployment\\_documentation_guides_distributed_deployment_.md",
@@ -585,7 +588,8 @@
       "chunking_strategy": "hybrid_adaptive_structural",
       "content_type": "list_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:42.348656",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:25.052833",
       "document_id": "25122e454c1e",
       "document_name": "_documentation_guides_distributed_deployment_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_guides_distributed_deployment\\_documentation_guides_distributed_deployment_.md",
@@ -784,7 +788,8 @@
       "chunking_strategy": "hybrid_adaptive_structural",
       "content_type": "list_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:42.353939",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:25.054062",
       "document_id": "25122e454c1e",
       "document_name": "_documentation_guides_distributed_deployment_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_guides_distributed_deployment\\_documentation_guides_distributed_deployment_.md",
@@ -983,7 +988,8 @@
       "chunking_strategy": "hybrid_adaptive_structural",
       "content_type": "list_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:42.354683",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:25.054485",
       "document_id": "25122e454c1e",
       "document_name": "_documentation_guides_distributed_deployment_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_guides_distributed_deployment\\_documentation_guides_distributed_deployment_.md",
@@ -1164,7 +1170,8 @@
       "chunking_strategy": "hybrid_adaptive_structural",
       "content_type": "list_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:42.355186",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:25.055443",
       "document_id": "25122e454c1e",
       "document_name": "_documentation_guides_distributed_deployment_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_guides_distributed_deployment\\_documentation_guides_distributed_deployment_.md",
@@ -1339,7 +1346,7 @@
     }
   },
   {
-    "text": "## Enabling distributed mode in self-hosted Qdrant\n\nTo enable distributed deployment - enable the cluster mode in the [configuration](https://qdrant.tech/documentation/guides/configuration/) or using the ENV variable: `QDRANT__CLUSTER__ENABLED=true`.\n\n```yaml\ncluster:\n  # Use `enabled: true` to run Qdrant in distributed deployment mode\n  enabled: true\n  # Configuration of the inter-cluster communication\n  p2p:\n    # Port for internal communication between peers\n    port: 6335\n\n  # Configuration related to distributed consensus algorithm\n  consensus:\n    # How frequently peers should ping each other.\n    # Setting this parameter to lower value will allow consensus\n    # to detect disconnected node earlier, but too frequent\n    # tick period may create significant network and CPU overhead.\n    # We encourage you NOT to change this parameter unless you know what you are doing.\n    tick_period_ms: 100\n```\n\nBy default, Qdrant will use port `6335` for its internal communication. All peers should be accessible on this port from within the cluster, but make sure to isolate this port from outside access, as it might be used to perform write operations.\n\nAdditionally, you must provide the `--uri` flag to the first peer so it can tell other nodes how it should be reached:\n\n```bash\n./qdrant --uri 'http://qdrant_node_1:6335'\n```\n\nSubsequent peers in a cluster must know at least one node of the existing cluster to synchronize through it with the rest of the cluster.\n\nTo do this, they need to be provided with a bootstrap URL:\n\n```bash\n./qdrant --bootstrap 'http://qdrant_node_1:6335'\n```\n\nThe URL of the new peers themselves will be calculated automatically from the IP address of their request. But it is also possible to provide them individually using the `--uri` argument.\n\n```text\nUSAGE:\n    qdrant [OPTIONS]\n\nOPTIONS:\n        --bootstrap <URI>\n            Uri of the peer to bootstrap from in case of multi-peer deployment. If not specified -\n            this peer will be considered as a first in a new deployment\n\n        --uri <URI>\n            Uri of this peer. Other peers should be able to reach it by this uri.\n\n            This value has to be supplied if this is the first peer in a new deployment.\n\n            In case this is not the first peer and it bootstraps the value is optional. If not\n            supplied then qdrant will take internal grpc port from config and derive the IP address\n            of this peer on bootstrap peer (receiving side)\n```\n\nAfter a successful synchronization you can observe the state of the cluster through the [REST API](https://api.qdrant.tech/master/api-reference/distributed/cluster-status):\n\n```http\nGET /cluster\n```\n\nExample result:\n\n```json\n{\n  \"result\": {\n    \"status\": \"enabled\",\n    \"peer_id\": 11532566549086892000,\n    \"peers\": {\n      \"9834046559507417430\": {\n        \"uri\": \"http://172.18.0.3:6335/\"\n      },\n      \"11532566549086892528\": {\n        \"uri\": \"http://qdrant_node_1:6335/\"\n      }\n    },\n    \"raft_info\": {\n      \"term\": 1,\n      \"commit\": 4,\n      \"pending_operations\": 1,\n      \"leader\": 11532566549086892000,\n      \"role\": \"Leader\"\n    }\n  },\n  \"status\": \"ok\",\n  \"time\": 5.731e-06\n}\n```",
+    "text": "## Enabling distributed mode in self-hosted Qdrant\n\nTo enable distributed deployment - enable the cluster mode in the [configuration](https://qdrant.tech/documentation/guides/configuration/) or using the ENV variable: `QDRANT__CLUSTER__ENABLED=true`.\n\n```yaml\ncluster:\n  # Use `enabled: true` to run Qdrant in distributed deployment mode\n  enabled: true\n  # Configuration of the inter-cluster communication\n  p2p:\n    # Port for internal communication between peers\n    port: 6335\n\n  # Configuration related to distributed consensus algorithm\n  consensus:\n    # How frequently peers should ping each other.\n    # Setting this parameter to lower value will allow consensus\n    # to detect disconnected node earlier, but too frequent\n    # tick period may create significant network and CPU overhead.\n    # We encourage you NOT to change this parameter unless you know what you are doing.\n    tick_period_ms: 100\n```\n\nBy default, Qdrant will use port `6335` for its internal communication. All peers should be accessible on this port from within the cluster, but make sure to isolate this port from outside access, as it might be used to perform write operations.\n\nAdditionally, you must provide the `--uri` flag to the first peer so it can tell other nodes how it should be reached:\n\n```bash\n./qdrant --uri 'http://qdrant_node_1:6335'\n```\n\nSubsequent peers in a cluster must know at least one node of the existing cluster to synchronize through it with the rest of the cluster.\n\nTo do this, they need to be provided with a bootstrap URL:\n\n```bash\n./qdrant --bootstrap 'http://qdrant_node_1:6335'\n```\n\nThe URL of the new peers themselves will be calculated automatically from the IP address of their request. But it is also possible to provide them individually using the `--uri` argument.\n\n```text\nUSAGE:\n    qdrant [OPTIONS]\n\nOPTIONS:\n        --bootstrap <URI>\n            Uri of the peer to bootstrap from in case of multi-peer deployment. If not specified -\n            this peer will be considered as a first in a new deployment\n\n        --uri <URI>\n            Uri of this peer. Other peers should be able to reach it by this uri.\n\n            This value has to be supplied if this is the first peer in a new deployment.\n\n            In case this is not the first peer and it bootstraps the value is optional. If not\n            supplied then qdrant will take internal grpc port from config and derive the IP address\n            of this peer on bootstrap peer (receiving side)\n```\n\nAfter a successful synchronization you can observe the state of the cluster through the [REST API](https://api.qdrant.tech/master/api-reference/distributed/cluster-status):\n\n```http\nGET /cluster\n```\n\nExample result:\n\n```json\n{\n  \"result\": {\n    \"status\": \"enabled\",\n    \"peer_id\": 11532566549086892000,\n    \"peers\": {\n      \"9834046559507417430\": {\n        \"uri\": \"http://172.18.0.3:6335/\"\n      },\n      \"11532566549086892528\": {\n        \"uri\": \"http://qdrant_node_1:6335/\"\n      }\n    },\n    \"raft_info\": {\n      \"term\": 1,\n      \"commit\": 4,\n      \"pending_operations\": 1,\n      \"leader\": 11532566549086892000,\n      \"role\": \"Leader\"\n    }\n  },\n  \"status\": \"ok\",\n  \"time\": 5.731e-06\n}\n```\n\nNote that enabling distributed mode does not automatically replicate your data. See the section on [making use of a new distributed Qdrant cluster](#making-use-of-a-new-distributed-qdrant-cluster.md) for the next steps.",
     "metadata": {
       "chunk_id": "25122e454c1e-0012",
       "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_guides_distributed_deployment\\_documentation_guides_distributed_deployment_.md",
@@ -1353,17 +1360,18 @@
         "Enabling distributed mode in self-hosted Qdrant"
       ],
       "heading_text": "Enabling distributed mode in self-hosted Qdrant",
-      "token_count": 773,
-      "char_count": 3177,
+      "token_count": 821,
+      "char_count": 3398,
       "start_char": 14265,
-      "end_char": 17442,
+      "end_char": 17663,
       "semantic_score": 0.7999999999999999,
-      "structural_score": 0.7999999999999998,
-      "retrieval_quality": 0.8569124423963135,
+      "structural_score": 0.9999999999999999,
+      "retrieval_quality": 0.855531453362256,
       "chunking_strategy": "hybrid_adaptive_semchunk",
       "content_type": "prose_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:42.358257",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:25.056950",
       "document_id": "25122e454c1e",
       "document_name": "_documentation_guides_distributed_deployment_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_guides_distributed_deployment\\_documentation_guides_distributed_deployment_.md",
@@ -1371,9 +1379,9 @@
       "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_guides_distributed_deployment",
       "relative_path": "Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_guides_distributed_deployment\\_documentation_guides_distributed_deployment_.md",
       "hierarchy_path": "Enabling distributed mode in self-hosted Qdrant",
-      "chunk_hash": "fe2e46e7e1cdec52",
-      "content_digest": "fe2e46e7e1cdec52",
-      "chunk_length": 3177,
+      "chunk_hash": "e1d7a91446dc6ac0",
+      "content_digest": "e1d7a91446dc6ac0",
+      "chunk_length": 3398,
       "payload_version": "1.3",
       "collection_hints": [
         "qdrant_ecosystem"
@@ -1384,129 +1392,129 @@
         "top_terms": [
           "the",
           "qdrant",
-          "this",
           "cluster",
+          "this",
           "uri",
           "peer",
+          "distributed",
           "peers",
           "port",
           "6335",
-          "distributed",
           "deployment",
           "will",
           "node",
           "you",
+          "not",
           "from",
           "http",
           "bootstrap",
-          "configuration",
-          "enabled",
-          "should"
+          "new",
+          "mode"
         ],
         "term_weights": [
           {
             "term": "the",
-            "tf": 22,
-            "weight": 0.060942
+            "tf": 24,
+            "weight": 0.061381
           },
           {
             "term": "qdrant",
+            "tf": 15,
+            "weight": 0.038363
+          },
+          {
+            "term": "cluster",
             "tf": 13,
-            "weight": 0.036011
+            "weight": 0.033248
           },
           {
             "term": "this",
             "tf": 12,
-            "weight": 0.033241
-          },
-          {
-            "term": "cluster",
-            "tf": 11,
-            "weight": 0.030471
+            "weight": 0.030691
           },
           {
             "term": "uri",
             "tf": 11,
-            "weight": 0.030471
+            "weight": 0.028133
           },
           {
             "term": "peer",
             "tf": 10,
-            "weight": 0.027701
+            "weight": 0.025575
+          },
+          {
+            "term": "distributed",
+            "tf": 8,
+            "weight": 0.02046
           },
           {
             "term": "peers",
             "tf": 7,
-            "weight": 0.019391
+            "weight": 0.017903
           },
           {
             "term": "port",
             "tf": 6,
-            "weight": 0.01662
+            "weight": 0.015345
           },
           {
             "term": "6335",
             "tf": 6,
-            "weight": 0.01662
-          },
-          {
-            "term": "distributed",
-            "tf": 5,
-            "weight": 0.01385
+            "weight": 0.015345
           },
           {
             "term": "deployment",
             "tf": 5,
-            "weight": 0.01385
+            "weight": 0.012788
           },
           {
             "term": "will",
             "tf": 5,
-            "weight": 0.01385
+            "weight": 0.012788
           },
           {
             "term": "node",
             "tf": 5,
-            "weight": 0.01385
+            "weight": 0.012788
           },
           {
             "term": "you",
             "tf": 5,
-            "weight": 0.01385
+            "weight": 0.012788
+          },
+          {
+            "term": "not",
+            "tf": 5,
+            "weight": 0.012788
           },
           {
             "term": "from",
             "tf": 5,
-            "weight": 0.01385
+            "weight": 0.012788
           },
           {
             "term": "http",
             "tf": 5,
-            "weight": 0.01385
+            "weight": 0.012788
           },
           {
             "term": "bootstrap",
             "tf": 5,
-            "weight": 0.01385
+            "weight": 0.012788
           },
           {
-            "term": "configuration",
-            "tf": 4,
-            "weight": 0.01108
+            "term": "new",
+            "tf": 5,
+            "weight": 0.012788
           },
           {
-            "term": "enabled",
+            "term": "mode",
             "tf": 4,
-            "weight": 0.01108
-          },
-          {
-            "term": "should",
-            "tf": 4,
-            "weight": 0.01108
+            "weight": 0.01023
           }
         ],
-        "unique_terms": 174,
-        "total_terms": 361
+        "unique_terms": 185,
+        "total_terms": 391
       },
       "modal_hint": "code",
       "content_flags": {
@@ -1532,19 +1540,19 @@
     },
     "advanced_scores": {
       "semantic": 0.7999999999999999,
-      "structural": 0.7999999999999998,
-      "retrieval_quality": 0.8569124423963135,
-      "overall": 0.8189708141321045
+      "structural": 0.9999999999999999,
+      "retrieval_quality": 0.855531453362256,
+      "overall": 0.885177151120752
     }
   },
   {
     "text": "## Enabling distributed mode in Qdrant Cloud\n\nFor best results, first ensure your cluster is running Qdrant v1.7.4 or higher. Older versions of Qdrant do support distributed mode, but improvements in v1.7.4 make distributed clusters more resilient during outages.\n\nIn the [Qdrant Cloud console](https://cloud.qdrant.io/), click “Scale Up” to increase your cluster size to >1. Qdrant Cloud configures the distributed mode settings automatically.\n\nAdditionally, Qdrant Cloud also offers the ability to automatically rebalance and to reshard your collections, which is not available in self-hosted Qdrant. See the [Resharding](https://qdrant.tech/documentation/cloud/cluster-scaling/#resharding) and [Shard Rebalancing](https://qdrant.tech/documentation/cloud/configure-cluster/#shard-rebalancing) sections in for more details.\n\nAfter the scale-up process completes, you will have a new empty node running alongside your existing node(s). To replicate data into this new empty node, see the next section.",
     "metadata": {
-      "chunk_id": "25122e454c1e-0014",
+      "chunk_id": "25122e454c1e-0013",
       "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_guides_distributed_deployment\\_documentation_guides_distributed_deployment_.md",
       "filename": "_documentation_guides_distributed_deployment_.md",
       "file_extension": ".md",
-      "chunk_index": 14,
+      "chunk_index": 13,
       "document_level": 1,
       "parent_chunk_id": null,
       "child_chunk_ids": [],
@@ -1562,7 +1570,8 @@
       "chunking_strategy": "hybrid_adaptive_semchunk",
       "content_type": "prose_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:42.359261",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:25.057411",
       "document_id": "25122e454c1e",
       "document_name": "_documentation_guides_distributed_deployment_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_guides_distributed_deployment\\_documentation_guides_distributed_deployment_.md",
@@ -1737,13 +1746,13 @@
     }
   },
   {
-    "text": "### Choosing the right number of shards\n\nWhen you create a collection, Qdrant splits the collection into `shard_number` shards. If left unset, `shard_number` is set to the number of nodes in your cluster when the collection was created. The `shard_number` cannot be changed without recreating the collection.\n\n```http\nPUT /collections/{collection_name}\n{\n    \"vectors\": {\n      \"size\": 300,\n      \"distance\": \"Cosine\"\n    },\n    \"shard_number\": 6\n}\n```\n\n```python\nfrom qdrant_client import QdrantClient, models\n\nclient = QdrantClient(url=\"http://localhost:6333\")\n\nclient.create_collection(\n    collection_name=\"{collection_name}\",\n    vectors_config=models.VectorParams(size=300, distance=models.Distance.COSINE),\n    shard_number=6,\n)\n```\n\n```typescript\nimport { QdrantClient } from \"@qdrant/js-client-rest\";\n\nconst client = new QdrantClient({ host: \"localhost\", port: 6333 });\n\nclient.createCollection(\"{collection_name}\", {\n    vectors: {\n        size: 300,\n        distance: \"Cosine\",\n    },\n    shard_number: 6,\n});\n```\n\n```rust\nuse qdrant_client::qdrant::{CreateCollectionBuilder, Distance, VectorParamsBuilder};\nuse qdrant_client::Qdrant;\n\nlet client = Qdrant::from_url(\"http://localhost:6334\").build()?;\n\nclient\n    .create_collection(\n        CreateCollectionBuilder::new(\"{collection_name}\")\n            .vectors_config(VectorParamsBuilder::new(300, Distance::Cosine))\n            .shard_number(6),\n    )\n    .await?;\n```\n\n```java\nimport io.qdrant.client.QdrantClient;\nimport io.qdrant.client.QdrantGrpcClient;\nimport io.qdrant.client.grpc.Collections.CreateCollection;\nimport io.qdrant.client.grpc.Collections.Distance;\nimport io.qdrant.client.grpc.Collections.VectorParams;\nimport io.qdrant.client.grpc.Collections.VectorsConfig;\n\nQdrantClient client =\n    new QdrantClient(QdrantGrpcClient.newBuilder(\"localhost\", 6334, false).build());\n\nclient\n    .createCollectionAsync(\n        CreateCollection.newBuilder()\n            .setCollectionName(\"{collection_name}\")\n            .setVectorsConfig(\n                VectorsConfig.newBuilder()\n                    .setParams(\n                        VectorParams.newBuilder()\n                            .setSize(300)\n                            .setDistance(Distance.Cosine)\n                            .build())\n                    .build())\n            .setShardNumber(6)\n            .build())\n    .get();\n```\n\n```csharp\nusing Qdrant.Client;\nusing Qdrant.Client.Grpc;\n\nvar client = new QdrantClient(\"localhost\", 6334);\n\nawait client.CreateCollectionAsync(\n\tcollectionName: \"{collection_name}\",\n\tvectorsConfig: new VectorParams { Size = 300, Distance = Distance.Cosine },\n\tshardNumber: 6\n);\n```\n\n```go\nimport (\n\t\"context\"\n\n\t\"github.com/qdrant/go-client/qdrant\"\n)\n\nclient, err := qdrant.NewClient(&qdrant.Config{\n\tHost: \"localhost\",\n\tPort: 6334,\n})\n\nclient.CreateCollection(context.Background(), &qdrant.CreateCollection{\n\tCollectionName: \"{collection_name}\",\n\tVectorsConfig: qdrant.NewVectorsConfig(&qdrant.VectorParams{\n\t\tSize:     300,\n\t\tDistance: qdrant.Distance_Cosine,\n\t}),\n\tShardNumber: qdrant.PtrOf(uint32(6)),\n})\n```\n\nTo ensure all nodes in your cluster are evenly utilized, the number of shards must be a multiple of the number of nodes you are currently running in your cluster.",
+    "text": "### Choosing the right number of shards\n\nWhen you create a collection, Qdrant splits the collection into `shard_number` shards. If left unset, `shard_number` is set to the number of nodes in your cluster when the collection was created. The `shard_number` cannot be changed without recreating the collection.\n\n```http\nPUT /collections/{collection_name}\n{\n    \"vectors\": {\n      \"size\": 300,\n      \"distance\": \"Cosine\"\n    },\n    \"shard_number\": 6\n}\n```\n\n```python\nfrom qdrant_client import QdrantClient, models\n\nclient = QdrantClient(url=\"http://localhost:6333\")\n\nclient.create_collection(\n    collection_name=\"{collection_name}\",\n    vectors_config=models.VectorParams(size=300, distance=models.Distance.COSINE),\n    shard_number=6,\n)\n```\n\n```typescript\nimport { QdrantClient } from \"@qdrant/js-client-rest\";\n\nconst client = new QdrantClient({ host: \"localhost\", port: 6333 });\n\nclient.createCollection(\"{collection_name}\", {\n    vectors: {\n        size: 300,\n        distance: \"Cosine\",\n    },\n    shard_number: 6,\n});\n```\n\n```rust\nuse qdrant_client::qdrant::{CreateCollectionBuilder, Distance, VectorParamsBuilder};\nuse qdrant_client::Qdrant;\n\nlet client = Qdrant::from_url(\"http://localhost:6334\").build()?;\n\nclient\n    .create_collection(\n        CreateCollectionBuilder::new(\"{collection_name}\")\n            .vectors_config(VectorParamsBuilder::new(300, Distance::Cosine))\n            .shard_number(6),\n    )\n    .await?;\n```\n\n```java\nimport io.qdrant.client.QdrantClient;\nimport io.qdrant.client.QdrantGrpcClient;\nimport io.qdrant.client.grpc.Collections.CreateCollection;\nimport io.qdrant.client.grpc.Collections.Distance;\nimport io.qdrant.client.grpc.Collections.VectorParams;\nimport io.qdrant.client.grpc.Collections.VectorsConfig;\n\nQdrantClient client =\n    new QdrantClient(QdrantGrpcClient.newBuilder(\"localhost\", 6334, false).build());\n\nclient\n    .createCollectionAsync(\n        CreateCollection.newBuilder()\n            .setCollectionName(\"{collection_name}\")\n            .setVectorsConfig(\n                VectorsConfig.newBuilder()\n                    .setParams(\n                        VectorParams.newBuilder()\n                            .setSize(300)\n                            .setDistance(Distance.Cosine)\n                            .build())\n                    .build())\n            .setShardNumber(6)\n            .build())\n    .get();\n```\n\n```csharp\nusing Qdrant.Client;\nusing Qdrant.Client.Grpc;\n\nvar client = new QdrantClient(\"localhost\", 6334);\n\nawait client.CreateCollectionAsync(\n\tcollectionName: \"{collection_name}\",\n\tvectorsConfig: new VectorParams { Size = 300, Distance = Distance.Cosine },\n\tshardNumber: 6\n);\n```\n\n```go\nimport (\n\t\"context\"\n\n\t\"github.com/qdrant/go-client/qdrant\"\n)\n\nclient, err := qdrant.NewClient(&qdrant.Config{\n\tHost: \"localhost\",\n\tPort: 6334,\n})\n\nclient.CreateCollection(context.Background(), &qdrant.CreateCollection{\n\tCollectionName: \"{collection_name}\",\n\tVectorsConfig: qdrant.NewVectorsConfig(&qdrant.VectorParams{\n\t\tSize:     300,\n\t\tDistance: qdrant.Distance_Cosine,\n\t}),\n\tShardNumber: qdrant.PtrOf(uint32(6)),\n})\n```\n\nTo ensure all nodes in your cluster are evenly utilized, the number of shards must be a multiple of the number of nodes you are currently running in your cluster.\n\n> Aside: Advanced use cases such as multitenancy may require an uneven distribution of shards. See [Multitenancy](https://qdrant.tech/articles/multitenancy/).\n\nWe recommend creating at least 2 shards per node to allow future expansion without having to re-shard. [Resharding](#resharding.md) is possible when using our cloud offering, but should be avoided if hosting elsewhere as it would require creating a new collection.\n\nIf you anticipate a lot of growth, we recommend 12 shards since you can expand from 1 node up to 2, 3, 6, and 12 nodes without having to re-shard. Having more than 12 shards in a small cluster may not be worth the performance overhead.\n\nShards are evenly distributed across all existing nodes when a collection is first created, but Qdrant does not automatically rebalance shards if your cluster size or replication factor changes (since this is an expensive operation on large clusters). See the next section for how to move shards after scaling operations.",
     "metadata": {
-      "chunk_id": "25122e454c1e-0018",
+      "chunk_id": "25122e454c1e-0017",
       "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_guides_distributed_deployment\\_documentation_guides_distributed_deployment_.md",
       "filename": "_documentation_guides_distributed_deployment_.md",
       "file_extension": ".md",
-      "chunk_index": 18,
+      "chunk_index": 17,
       "document_level": 1,
       "parent_chunk_id": null,
       "child_chunk_ids": [],
@@ -1751,17 +1760,18 @@
         "Choosing the right number of shards"
       ],
       "heading_text": "Choosing the right number of shards",
-      "token_count": 782,
-      "char_count": 3246,
+      "token_count": 994,
+      "char_count": 4232,
       "start_char": 21937,
-      "end_char": 25183,
-      "semantic_score": 0.6,
+      "end_char": 26169,
+      "semantic_score": 0.7,
       "structural_score": 0.8999999999999999,
-      "retrieval_quality": 0.6913385826771654,
+      "retrieval_quality": 0.8820638820638822,
       "chunking_strategy": "hybrid_adaptive_semchunk",
       "content_type": "prose_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:42.362443",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:25.060276",
       "document_id": "25122e454c1e",
       "document_name": "_documentation_guides_distributed_deployment_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_guides_distributed_deployment\\_documentation_guides_distributed_deployment_.md",
@@ -1769,9 +1779,9 @@
       "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_guides_distributed_deployment",
       "relative_path": "Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_guides_distributed_deployment\\_documentation_guides_distributed_deployment_.md",
       "hierarchy_path": "Choosing the right number of shards",
-      "chunk_hash": "19d1d351f7da9526",
-      "content_digest": "19d1d351f7da9526",
-      "chunk_length": 3246,
+      "chunk_hash": "63934b180e96826d",
+      "content_digest": "63934b180e96826d",
+      "chunk_length": 4232,
       "payload_version": "1.3",
       "collection_hints": [
         "qdrant_ecosystem"
@@ -1785,126 +1795,126 @@
           "collection",
           "distance",
           "number",
-          "import",
           "the",
+          "shards",
+          "shard",
+          "import",
           "name",
           "qdrantclient",
-          "shard",
           "300",
           "cosine",
-          "localhost",
           "new",
-          "collections",
           "size",
-          "vectorparams",
-          "createcollection",
-          "build",
-          "grpc"
+          "localhost",
+          "nodes",
+          "cluster",
+          "collections",
+          "vectorparams"
         ],
         "term_weights": [
           {
             "term": "qdrant",
-            "tf": 25,
-            "weight": 0.081433
+            "tf": 27,
+            "weight": 0.06338
           },
           {
             "term": "client",
             "tf": 25,
-            "weight": 0.081433
+            "weight": 0.058685
           },
           {
             "term": "collection",
-            "tf": 14,
-            "weight": 0.045603
+            "tf": 16,
+            "weight": 0.037559
           },
           {
             "term": "distance",
             "tf": 12,
-            "weight": 0.039088
+            "weight": 0.028169
           },
           {
             "term": "number",
             "tf": 11,
-            "weight": 0.035831
+            "weight": 0.025822
+          },
+          {
+            "term": "the",
+            "tf": 10,
+            "weight": 0.023474
+          },
+          {
+            "term": "shards",
+            "tf": 10,
+            "weight": 0.023474
+          },
+          {
+            "term": "shard",
+            "tf": 9,
+            "weight": 0.021127
           },
           {
             "term": "import",
             "tf": 9,
-            "weight": 0.029316
-          },
-          {
-            "term": "the",
-            "tf": 8,
-            "weight": 0.026059
+            "weight": 0.021127
           },
           {
             "term": "name",
             "tf": 8,
-            "weight": 0.026059
+            "weight": 0.018779
           },
           {
             "term": "qdrantclient",
             "tf": 8,
-            "weight": 0.026059
-          },
-          {
-            "term": "shard",
-            "tf": 7,
-            "weight": 0.022801
+            "weight": 0.018779
           },
           {
             "term": "300",
             "tf": 7,
-            "weight": 0.022801
+            "weight": 0.016432
           },
           {
             "term": "cosine",
             "tf": 7,
-            "weight": 0.022801
+            "weight": 0.016432
+          },
+          {
+            "term": "new",
+            "tf": 7,
+            "weight": 0.016432
+          },
+          {
+            "term": "size",
+            "tf": 6,
+            "weight": 0.014085
           },
           {
             "term": "localhost",
             "tf": 6,
-            "weight": 0.019544
+            "weight": 0.014085
           },
           {
-            "term": "new",
-            "tf": 6,
-            "weight": 0.019544
+            "term": "nodes",
+            "tf": 5,
+            "weight": 0.011737
+          },
+          {
+            "term": "cluster",
+            "tf": 5,
+            "weight": 0.011737
           },
           {
             "term": "collections",
             "tf": 5,
-            "weight": 0.016287
-          },
-          {
-            "term": "size",
-            "tf": 5,
-            "weight": 0.016287
+            "weight": 0.011737
           },
           {
             "term": "vectorparams",
             "tf": 5,
-            "weight": 0.016287
-          },
-          {
-            "term": "createcollection",
-            "tf": 5,
-            "weight": 0.016287
-          },
-          {
-            "term": "build",
-            "tf": 5,
-            "weight": 0.016287
-          },
-          {
-            "term": "grpc",
-            "tf": 5,
-            "weight": 0.016287
+            "weight": 0.011737
           }
         ],
-        "unique_terms": 97,
-        "total_terms": 307
+        "unique_terms": 167,
+        "total_terms": 426
       },
       "modal_hint": "code",
       "content_flags": {
@@ -1923,26 +1933,26 @@
         "name",
         "number",
         "qdrant",
-        "qdrantclient",
         "shard",
+        "shards",
         "the"
       ]
     },
     "advanced_scores": {
-      "semantic": 0.6,
+      "semantic": 0.7,
       "structural": 0.8999999999999999,
-      "retrieval_quality": 0.6913385826771654,
-      "overall": 0.7304461942257218
+      "retrieval_quality": 0.8820638820638822,
+      "overall": 0.8273546273546274
     }
   },
   {
     "text": "### Moving shards\n\n*Available as of v0.9.0*\n\nQdrant allows moving shards between nodes in the cluster and removing nodes from the cluster. This functionality unlocks the ability to dynamically scale the cluster size without downtime. It also allows you to upgrade or migrate nodes without downtime.\n\nIf your cluster is running in Qdrant Cloud, shards are balanced across the cluster nodes automatically. For more information see the [Configuring Cloud Clusters](https://qdrant.tech/documentation/cloud/configure-cluster/#shard-rebalancing) and [Cloud Cluster Scaling](https://qdrant.tech/documentation/cloud/cluster-scaling/) documentation.\n\nQdrant provides the information regarding the current shard distribution in the cluster with the [Collection Cluster info API](https://api.qdrant.tech/master/api-reference/distributed/collection-cluster-info).\n\nUse the [Update collection cluster setup API](https://api.qdrant.tech/master/api-reference/distributed/update-collection-cluster) to initiate the shard transfer:\n\n```http\nPOST /collections/{collection_name}/cluster\n{\n    \"move_shard\": {\n        \"shard_id\": 0,\n        \"from_peer_id\": 381894127,\n        \"to_peer_id\": 467122995\n    }\n}\n```\n\nYou likely want to select a specific [shard transfer method](#shard-transfer-method.md) to get desired performance and guarantees.\n\nAfter the transfer is initiated, the service will process it based on the used [transfer method](#shard-transfer-method.md) keeping both shards in sync. Once the transfer is completed, the old shard is deleted from the source node.\n\nIn case you want to downscale the cluster, you can move all shards away from a peer and then remove the peer using the [remove peer API](https://api.qdrant.tech/master/api-reference/distributed/remove-peer).\n\n```http\nDELETE /cluster/peer/{peer_id}\n```\n\nAfter that, Qdrant will exclude the node from the consensus, and the instance will be ready for shutdown.",
     "metadata": {
-      "chunk_id": "25122e454c1e-0021",
+      "chunk_id": "25122e454c1e-0019",
       "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_guides_distributed_deployment\\_documentation_guides_distributed_deployment_.md",
       "filename": "_documentation_guides_distributed_deployment_.md",
       "file_extension": ".md",
-      "chunk_index": 21,
+      "chunk_index": 19,
       "document_level": 1,
       "parent_chunk_id": null,
       "child_chunk_ids": [],
@@ -1960,7 +1970,8 @@
       "chunking_strategy": "hybrid_adaptive_semchunk",
       "content_type": "prose_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:42.364177",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:25.061098",
       "document_id": "25122e454c1e",
       "document_name": "_documentation_guides_distributed_deployment_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_guides_distributed_deployment\\_documentation_guides_distributed_deployment_.md",
@@ -2135,13 +2146,13 @@
     }
   },
   {
-    "text": "### User-defined sharding\n\n*Available as of v1.7.0*\n\nQdrant allows you to specify the shard for each point individually. This feature is useful if you want to control the shard placement of your data, so that operations can hit only the subset of shards they actually need. In big clusters, this can significantly improve the performance of operations that do not require the whole collection to be scanned.\n\nA clear use-case for this feature is managing a multi-tenant collection, where each tenant (let it be a user or organization) is assumed to be segregated, so they can have their data stored in separate shards.\n\nTo enable user-defined sharding, set `sharding_method` to `custom` during collection creation:\n\n```http\nPUT /collections/{collection_name}\n{\n    \"shard_number\": 1,\n    \"sharding_method\": \"custom\"\n    // ... other collection parameters\n}\n```\n\n```python\nfrom qdrant_client import QdrantClient, models\n\nclient = QdrantClient(url=\"http://localhost:6333\")\n\nclient.create_collection(\n    collection_name=\"{collection_name}\",\n    shard_number=1,\n    sharding_method=models.ShardingMethod.CUSTOM,\n    # ... other collection parameters\n)\n```\n\n```typescript\nimport { QdrantClient } from \"@qdrant/js-client-rest\";\n\nconst client = new QdrantClient({ host: \"localhost\", port: 6333 });\n\nclient.createCollection(\"{collection_name}\", {\n    shard_number: 1,\n    sharding_method: \"custom\",\n    // ... other collection parameters\n});\n```\n\n```rust\nuse qdrant_client::qdrant::{\n    CreateCollectionBuilder, Distance, ShardingMethod, VectorParamsBuilder,\n};\nuse qdrant_client::Qdrant;\n\nlet client = Qdrant::from_url(\"http://localhost:6334\").build()?;\n\nclient\n    .create_collection(\n        CreateCollectionBuilder::new(\"{collection_name}\")\n            .vectors_config(VectorParamsBuilder::new(300, Distance::Cosine))\n            .shard_number(1)\n            .sharding_method(ShardingMethod::Custom.into()),\n    )\n    .await?;\n```\n\n```java\nimport static io.qdrant.client.ShardKeyFactory.shardKey;\n\nimport io.qdrant.client.QdrantClient;\nimport io.qdrant.client.QdrantGrpcClient;\nimport io.qdrant.client.grpc.Collections.CreateCollection;\nimport io.qdrant.client.grpc.Collections.ShardingMethod;\n\nQdrantClient client =\n    new QdrantClient(QdrantGrpcClient.newBuilder(\"localhost\", 6334, false).build());\n\nclient\n    .createCollectionAsync(\n        CreateCollection.newBuilder()\n            .setCollectionName(\"{collection_name}\")\n            // ... other collection parameters\n            .setShardNumber(1)\n            .setShardingMethod(ShardingMethod.Custom)\n            .build())\n    .get();\n```\n\n```csharp\nusing Qdrant.Client;\nusing Qdrant.Client.Grpc;\n\nvar client = new QdrantClient(\"localhost\", 6334);\n\nawait client.CreateCollectionAsync(\n\tcollectionName: \"{collection_name}\",\n\t// ... other collection parameters\n\tshardNumber: 1,\n\tshardingMethod: ShardingMethod.Custom\n);\n```\n\n```go\nimport (\n\t\"context\"\n\n\t\"github.com/qdrant/go-client/qdrant\"\n)\n\nclient, err := qdrant.NewClient(&qdrant.Config{\n\tHost: \"localhost\",\n\tPort: 6334,\n})",
+    "text": "### User-defined sharding\n\n*Available as of v1.7.0*\n\nQdrant allows you to specify the shard for each point individually. This feature is useful if you want to control the shard placement of your data, so that operations can hit only the subset of shards they actually need. In big clusters, this can significantly improve the performance of operations that do not require the whole collection to be scanned.\n\nA clear use-case for this feature is managing a multi-tenant collection, where each tenant (let it be a user or organization) is assumed to be segregated, so they can have their data stored in separate shards.\n\nTo enable user-defined sharding, set `sharding_method` to `custom` during collection creation:\n\n```http\nPUT /collections/{collection_name}\n{\n    \"shard_number\": 1,\n    \"sharding_method\": \"custom\"\n    // ... other collection parameters\n}\n```\n\n```python\nfrom qdrant_client import QdrantClient, models\n\nclient = QdrantClient(url=\"http://localhost:6333\")\n\nclient.create_collection(\n    collection_name=\"{collection_name}\",\n    shard_number=1,\n    sharding_method=models.ShardingMethod.CUSTOM,\n    # ... other collection parameters\n)\n```\n\n```typescript\nimport { QdrantClient } from \"@qdrant/js-client-rest\";\n\nconst client = new QdrantClient({ host: \"localhost\", port: 6333 });\n\nclient.createCollection(\"{collection_name}\", {\n    shard_number: 1,\n    sharding_method: \"custom\",\n    // ... other collection parameters\n});\n```\n\n```rust\nuse qdrant_client::qdrant::{\n    CreateCollectionBuilder, Distance, ShardingMethod, VectorParamsBuilder,\n};\nuse qdrant_client::Qdrant;\n\nlet client = Qdrant::from_url(\"http://localhost:6334\").build()?;\n\nclient\n    .create_collection(\n        CreateCollectionBuilder::new(\"{collection_name}\")\n            .vectors_config(VectorParamsBuilder::new(300, Distance::Cosine))\n            .shard_number(1)\n            .sharding_method(ShardingMethod::Custom.into()),\n    )\n    .await?;\n```\n\n```java\nimport static io.qdrant.client.ShardKeyFactory.shardKey;\n\nimport io.qdrant.client.QdrantClient;\nimport io.qdrant.client.QdrantGrpcClient;\nimport io.qdrant.client.grpc.Collections.CreateCollection;\nimport io.qdrant.client.grpc.Collections.ShardingMethod;\n\nQdrantClient client =\n    new QdrantClient(QdrantGrpcClient.newBuilder(\"localhost\", 6334, false).build());\n\nclient\n    .createCollectionAsync(\n        CreateCollection.newBuilder()\n            .setCollectionName(\"{collection_name}\")\n            // ... other collection parameters\n            .setShardNumber(1)\n            .setShardingMethod(ShardingMethod.Custom)\n            .build())\n    .get();\n```\n\n```csharp\nusing Qdrant.Client;\nusing Qdrant.Client.Grpc;\n\nvar client = new QdrantClient(\"localhost\", 6334);\n\nawait client.CreateCollectionAsync(\n\tcollectionName: \"{collection_name}\",\n\t// ... other collection parameters\n\tshardNumber: 1,\n\tshardingMethod: ShardingMethod.Custom\n);\n```\n\n```go\nimport (\n\t\"context\"\n\n\t\"github.com/qdrant/go-client/qdrant\"\n)\n\nclient, err := qdrant.NewClient(&qdrant.Config{\n\tHost: \"localhost\",\n\tPort: 6334,\n})\n\nclient.CreateCollection(context.Background(), &qdrant.CreateCollection{\n\tCollectionName: \"{collection_name}\",\n\t// ... other collection parameters\n\tShardNumber:    qdrant.PtrOf(uint32(1)),\n\tShardingMethod: qdrant.ShardingMethod_Custom.Enum(),\n})\n```\n\nIn this mode, the `shard_number` means the number of shards per shard key, where points will be distributed evenly. For example, if you have 10 shard keys and a collection config with these settings:\n\n```json\n{\n    \"shard_number\": 1,\n    \"sharding_method\": \"custom\",\n    \"replication_factor\": 2\n}\n```\n\nThen you will have `1 * 10 * 2 = 20` total physical shards in the collection.\n\nPhysical shards require a large amount of resources, so make sure your custom sharding key has a low cardinality.\n\nFor large cardinality keys, it is recommended to use [partition by payload](https://qdrant.tech/documentation/guides/multiple-partitions/#partition-by-payload) instead.\n\nNow you need to create custom shards ([API reference](https://api.qdrant.tech/api-reference/distributed/create-shard-key#request)):\n\n```http\nPUT /collections/{collection_name}/shards\n{\n  \"shard_key\": \"{shard_key}\"\n}\n```\n\n```python\nfrom qdrant_client import QdrantClient, models",
     "metadata": {
-      "chunk_id": "25122e454c1e-0022",
+      "chunk_id": "25122e454c1e-0020",
       "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_guides_distributed_deployment\\_documentation_guides_distributed_deployment_.md",
       "filename": "_documentation_guides_distributed_deployment_.md",
       "file_extension": ".md",
-      "chunk_index": 22,
+      "chunk_index": 20,
       "document_level": 1,
       "parent_chunk_id": null,
       "child_chunk_ids": [],
@@ -2149,17 +2160,18 @@
         "User-defined sharding"
       ],
       "heading_text": "User-defined sharding",
-      "token_count": 729,
-      "char_count": 3031,
+      "token_count": 1024,
+      "char_count": 4226,
       "start_char": 28591,
-      "end_char": 31622,
+      "end_char": 32817,
       "semantic_score": 0.7,
       "structural_score": 0.7999999999999998,
-      "retrieval_quality": 0.6981949458483754,
+      "retrieval_quality": 0.8764705882352941,
       "chunking_strategy": "hybrid_adaptive_semchunk",
       "content_type": "prose_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:42.369614",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:25.066175",
       "document_id": "25122e454c1e",
       "document_name": "_documentation_guides_distributed_deployment_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_guides_distributed_deployment\\_documentation_guides_distributed_deployment_.md",
@@ -2167,9 +2179,9 @@
       "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_guides_distributed_deployment",
       "relative_path": "Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_guides_distributed_deployment\\_documentation_guides_distributed_deployment_.md",
       "hierarchy_path": "User-defined sharding",
-      "chunk_hash": "74be4114bdd12ec0",
-      "content_digest": "74be4114bdd12ec0",
-      "chunk_length": 3031,
+      "chunk_hash": "d79f362bcb32f568",
+      "content_digest": "d79f362bcb32f568",
+      "chunk_length": 4226,
       "payload_version": "1.3",
       "collection_hints": [
         "qdrant_ecosystem"
@@ -2178,131 +2190,131 @@
         "version": "1.0",
         "weighting": "tf-normalized",
         "top_terms": [
-          "client",
           "qdrant",
+          "client",
           "collection",
+          "shard",
+          "custom",
+          "sharding",
+          "name",
           "import",
           "qdrantclient",
-          "sharding",
-          "custom",
-          "name",
           "shardingmethod",
-          "shard",
-          "localhost",
           "the",
+          "shards",
+          "number",
           "method",
           "other",
           "parameters",
+          "localhost",
+          "you",
           "new",
-          "number",
-          "6334",
-          "user",
-          "this"
+          "createcollection"
         ],
         "term_weights": [
           {
-            "term": "client",
-            "tf": 23,
-            "weight": 0.076667
+            "term": "qdrant",
+            "tf": 25,
+            "weight": 0.057339
           },
           {
-            "term": "qdrant",
-            "tf": 19,
-            "weight": 0.063333
+            "term": "client",
+            "tf": 25,
+            "weight": 0.057339
           },
           {
             "term": "collection",
-            "tf": 17,
-            "weight": 0.056667
-          },
-          {
-            "term": "import",
-            "tf": 8,
-            "weight": 0.026667
-          },
-          {
-            "term": "qdrantclient",
-            "tf": 8,
-            "weight": 0.026667
-          },
-          {
-            "term": "sharding",
-            "tf": 7,
-            "weight": 0.023333
-          },
-          {
-            "term": "custom",
-            "tf": 7,
-            "weight": 0.023333
-          },
-          {
-            "term": "name",
-            "tf": 7,
-            "weight": 0.023333
-          },
-          {
-            "term": "shardingmethod",
-            "tf": 7,
-            "weight": 0.023333
+            "tf": 22,
+            "weight": 0.050459
           },
           {
             "term": "shard",
+            "tf": 13,
+            "weight": 0.029817
+          },
+          {
+            "term": "custom",
+            "tf": 11,
+            "weight": 0.025229
+          },
+          {
+            "term": "sharding",
+            "tf": 9,
+            "weight": 0.020642
+          },
+          {
+            "term": "name",
+            "tf": 9,
+            "weight": 0.020642
+          },
+          {
+            "term": "import",
+            "tf": 9,
+            "weight": 0.020642
+          },
+          {
+            "term": "qdrantclient",
+            "tf": 9,
+            "weight": 0.020642
+          },
+          {
+            "term": "shardingmethod",
+            "tf": 9,
+            "weight": 0.020642
+          },
+          {
+            "term": "the",
+            "tf": 8,
+            "weight": 0.018349
+          },
+          {
+            "term": "shards",
+            "tf": 7,
+            "weight": 0.016055
+          },
+          {
+            "term": "number",
+            "tf": 7,
+            "weight": 0.016055
+          },
+          {
+            "term": "method",
             "tf": 6,
-            "weight": 0.02
+            "weight": 0.013761
+          },
+          {
+            "term": "other",
+            "tf": 6,
+            "weight": 0.013761
+          },
+          {
+            "term": "parameters",
+            "tf": 6,
+            "weight": 0.013761
           },
           {
             "term": "localhost",
             "tf": 6,
-            "weight": 0.02
+            "weight": 0.013761
           },
           {
-            "term": "the",
+            "term": "you",
             "tf": 5,
-            "weight": 0.016667
-          },
-          {
-            "term": "method",
-            "tf": 5,
-            "weight": 0.016667
-          },
-          {
-            "term": "other",
-            "tf": 5,
-            "weight": 0.016667
-          },
-          {
-            "term": "parameters",
-            "tf": 5,
-            "weight": 0.016667
+            "weight": 0.011468
           },
           {
             "term": "new",
             "tf": 5,
-            "weight": 0.016667
+            "weight": 0.011468
           },
           {
-            "term": "number",
-            "tf": 4,
-            "weight": 0.013333
-          },
-          {
-            "term": "6334",
-            "tf": 4,
-            "weight": 0.013333
-          },
-          {
-            "term": "user",
-            "tf": 3,
-            "weight": 0.01
-          },
-          {
-            "term": "this",
-            "tf": 3,
-            "weight": 0.01
+            "term": "createcollection",
+            "tf": 5,
+            "weight": 0.011468
           }
         ],
-        "unique_terms": 123,
-        "total_terms": 300
+        "unique_terms": 169,
+        "total_terms": 436
       },
       "modal_hint": "code",
       "content_flags": {
@@ -2329,18 +2341,18 @@
     "advanced_scores": {
       "semantic": 0.7,
       "structural": 0.7999999999999998,
-      "retrieval_quality": 0.6981949458483754,
-      "overall": 0.732731648616125
+      "retrieval_quality": 0.8764705882352941,
+      "overall": 0.7921568627450979
     }
   },
   {
     "text": "### Shard transfer method  *Available as of v1.7.0*  There are different methods for transferring a shard, such as moving or replicating, to another node. Depending on what performance and guarantees you’d like to have and how you’d like to manage your cluster, you likely want to choose a specific method. Each method has its own pros and cons. Which is fastest depends on the size and state of a shard. Available shard transfer methods are:  - `stream_records`: *(default)* transfer by streaming just its records to the target node in batches. - `snapshot`: transfer including its index and quantized data by utilizing a [snapshot](https://qdrant.tech/documentation/concepts/snapshots/) automatically. - `wal_delta`: *(auto recovery default)* transfer by resolving [WAL](https://qdrant.tech/documentation/concepts/storage/#versioning) difference; the operations that were missed. Each has pros, cons and specific requirements, some of which are:  | Method:          | Stream records                               | Snapshot                                    | WAL delta                                 | | ---------------- | -------------------------------------------- | ------------------------------------------- | ----------------------------------------- | | **Version**      | v0.8.0+                                      | v1.7.0+                                     | v1.8.0+                                   | | **Target**       | New/existing shard                           | New/existing shard                          | Existing shard                            | | **Connectivity** | Internal gRPC API (6335)                     | REST API (6333) Internal gRPC API (6335)    | Internal gRPC API (6335)                  | | **HNSW index**   | Doesn’t transfer, will reindex on target.    | Does transfer, immediately ready on target. | Doesn’t transfer, may index on target.    | | **Quantization** | Doesn’t transfer, will requantize on target. | Does transfer, immediately ready on target. | Doesn’t transfer, may quantize on target. | | **Ordering**     | Unordered updates on target[1](#fn:1.md)     | Ordered updates on target[2](#fn:2.md)      | Ordered updates on target[2](#fn:2.md)    | | **Disk space**   | No extra required                            | Extra required for snapshot on both nodes   | No extra required                         |  To select a shard transfer method, specify the `method` like: ```http POST /collections/{collection_name}/cluster {     \"move_shard\": {         \"shard_id\": 0,         \"from_peer_id\": 381894127,         \"to_peer_id\": 467122995,         \"method\": \"snapshot\"     } } ``` The `stream_records` transfer method is the simplest available. It simply transfers all shard records in batches to the target node until it has transferred all of them, keeping both shards in sync. It will also make sure the transferred shard indexing process is keeping up before performing a final switch. The method has two common disadvantages: 1. It does not transfer index or quantization data, meaning that the shard has to be optimized again on the new node, which can be very expensive. 2. The ordering guarantees are `weak`[1](#fn:1.md), which is not suitable for some applications. Because it is so simple, it’s also very robust, making it a reliable choice if the above cons are acceptable in your use case. If your cluster is unstable and out of resources, it’s probably best to use the `stream_records` transfer method, because it is unlikely to fail. The `snapshot` transfer method utilizes [snapshots](https://qdrant.tech/documentation/concepts/snapshots/) to transfer a shard. A snapshot is created automatically. It is then transferred and restored on the target node. After this is done, the snapshot is removed from both nodes. While the snapshot/transfer/restore operation is happening, the source node queues up all new operations. All queued updates are then sent in order to the target shard to bring it into the same state as the source. There are two important benefits: 1. It transfers index and quantization data, so that the shard does not have to be optimized again on the target node, making them immediately available. This way, Qdrant ensures that there will be no degradation in performance at the end of the transfer. Especially on large shards, this can give a huge performance improvement. 2. The ordering guarantees can be `strong`[2](#fn:2.md), required for some applications.",
     "metadata": {
-      "chunk_id": "25122e454c1e-0026",
+      "chunk_id": "25122e454c1e-0023",
       "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_guides_distributed_deployment\\_documentation_guides_distributed_deployment_.md",
       "filename": "_documentation_guides_distributed_deployment_.md",
       "file_extension": ".md",
-      "chunk_index": 26,
+      "chunk_index": 23,
       "document_level": 1,
       "parent_chunk_id": null,
       "child_chunk_ids": [],
@@ -2358,7 +2370,8 @@
       "chunking_strategy": "hybrid_adaptive_structural",
       "content_type": "table_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:42.374816",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:25.068513",
       "document_id": "25122e454c1e",
       "document_name": "_documentation_guides_distributed_deployment_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_guides_distributed_deployment\\_documentation_guides_distributed_deployment_.md",
@@ -2533,13 +2546,13 @@
     }
   },
   {
-    "text": "### Replication factor\n\nWhen you create a collection, you can control how many shard replicas you’d like to store by changing the `replication_factor`. By default, `replication_factor` is set to “1”, meaning no additional copy is maintained automatically. The default can be changed in the [Qdrant configuration](https://qdrant.tech/documentation/guides/configuration/#configuration-options). You can change that by setting the `replication_factor` when you create a collection.\n\nThe `replication_factor` can be updated for an existing collection, but the effect of this depends on how you’re running Qdrant. If you’re hosting the open source version of Qdrant yourself, changing the replication factor after collection creation doesn’t do anything. You can manually [create](#creating-new-shard-replicas.md) or drop shard replicas to achieve your desired replication factor. In Qdrant Cloud (including Hybrid Cloud, Private Cloud) your shards will automatically be replicated or dropped to match your configured replication factor.\n\n```http\nPUT /collections/{collection_name}\n{\n    \"vectors\": {\n        \"size\": 300,\n        \"distance\": \"Cosine\"\n    },\n    \"shard_number\": 6,\n    \"replication_factor\": 2\n}\n```\n\n```python\nfrom qdrant_client import QdrantClient, models\n\nclient = QdrantClient(url=\"http://localhost:6333\")\n\nclient.create_collection(\n    collection_name=\"{collection_name}\",\n    vectors_config=models.VectorParams(size=300, distance=models.Distance.COSINE),\n    shard_number=6,\n    replication_factor=2,\n)\n```\n\n```typescript\nimport { QdrantClient } from \"@qdrant/js-client-rest\";\n\nconst client = new QdrantClient({ host: \"localhost\", port: 6333 });\n\nclient.createCollection(\"{collection_name}\", {\n  vectors: {\n    size: 300,\n    distance: \"Cosine\",\n  },\n  shard_number: 6,\n  replication_factor: 2,\n});\n```\n\n```rust\nuse qdrant_client::qdrant::{CreateCollectionBuilder, Distance, VectorParamsBuilder};\nuse qdrant_client::Qdrant;\n\nlet client = Qdrant::from_url(\"http://localhost:6334\").build()?;\n\nclient\n    .create_collection(\n        CreateCollectionBuilder::new(\"{collection_name}\")\n            .vectors_config(VectorParamsBuilder::new(300, Distance::Cosine))\n            .shard_number(6)\n            .replication_factor(2),\n    )\n    .await?;\n```\n\n```java\nimport io.qdrant.client.QdrantClient;\nimport io.qdrant.client.QdrantGrpcClient;\nimport io.qdrant.client.grpc.Collections.CreateCollection;\nimport io.qdrant.client.grpc.Collections.Distance;\nimport io.qdrant.client.grpc.Collections.VectorParams;\nimport io.qdrant.client.grpc.Collections.VectorsConfig;\n\nQdrantClient client =\n    new QdrantClient(QdrantGrpcClient.newBuilder(\"localhost\", 6334, false).build());\n\nclient\n    .createCollectionAsync(\n        CreateCollection.newBuilder()\n            .setCollectionName(\"{collection_name}\")\n            .setVectorsConfig(\n                VectorsConfig.newBuilder()\n                    .setParams(\n                        VectorParams.newBuilder()\n                            .setSize(300)\n                            .setDistance(Distance.Cosine)\n                            .build())\n                    .build())\n            .setShardNumber(6)\n            .setReplicationFactor(2)\n            .build())\n    .get();\n```\n\n```csharp\nusing Qdrant.Client;\nusing Qdrant.Client.Grpc;",
+    "text": "### Replication factor\n\nWhen you create a collection, you can control how many shard replicas you’d like to store by changing the `replication_factor`. By default, `replication_factor` is set to “1”, meaning no additional copy is maintained automatically. The default can be changed in the [Qdrant configuration](https://qdrant.tech/documentation/guides/configuration/#configuration-options). You can change that by setting the `replication_factor` when you create a collection.\n\nThe `replication_factor` can be updated for an existing collection, but the effect of this depends on how you’re running Qdrant. If you’re hosting the open source version of Qdrant yourself, changing the replication factor after collection creation doesn’t do anything. You can manually [create](#creating-new-shard-replicas.md) or drop shard replicas to achieve your desired replication factor. In Qdrant Cloud (including Hybrid Cloud, Private Cloud) your shards will automatically be replicated or dropped to match your configured replication factor.\n\n```http\nPUT /collections/{collection_name}\n{\n    \"vectors\": {\n        \"size\": 300,\n        \"distance\": \"Cosine\"\n    },\n    \"shard_number\": 6,\n    \"replication_factor\": 2\n}\n```\n\n```python\nfrom qdrant_client import QdrantClient, models\n\nclient = QdrantClient(url=\"http://localhost:6333\")\n\nclient.create_collection(\n    collection_name=\"{collection_name}\",\n    vectors_config=models.VectorParams(size=300, distance=models.Distance.COSINE),\n    shard_number=6,\n    replication_factor=2,\n)\n```\n\n```typescript\nimport { QdrantClient } from \"@qdrant/js-client-rest\";\n\nconst client = new QdrantClient({ host: \"localhost\", port: 6333 });\n\nclient.createCollection(\"{collection_name}\", {\n  vectors: {\n    size: 300,\n    distance: \"Cosine\",\n  },\n  shard_number: 6,\n  replication_factor: 2,\n});\n```\n\n```rust\nuse qdrant_client::qdrant::{CreateCollectionBuilder, Distance, VectorParamsBuilder};\nuse qdrant_client::Qdrant;\n\nlet client = Qdrant::from_url(\"http://localhost:6334\").build()?;\n\nclient\n    .create_collection(\n        CreateCollectionBuilder::new(\"{collection_name}\")\n            .vectors_config(VectorParamsBuilder::new(300, Distance::Cosine))\n            .shard_number(6)\n            .replication_factor(2),\n    )\n    .await?;\n```\n\n```java\nimport io.qdrant.client.QdrantClient;\nimport io.qdrant.client.QdrantGrpcClient;\nimport io.qdrant.client.grpc.Collections.CreateCollection;\nimport io.qdrant.client.grpc.Collections.Distance;\nimport io.qdrant.client.grpc.Collections.VectorParams;\nimport io.qdrant.client.grpc.Collections.VectorsConfig;\n\nQdrantClient client =\n    new QdrantClient(QdrantGrpcClient.newBuilder(\"localhost\", 6334, false).build());\n\nclient\n    .createCollectionAsync(\n        CreateCollection.newBuilder()\n            .setCollectionName(\"{collection_name}\")\n            .setVectorsConfig(\n                VectorsConfig.newBuilder()\n                    .setParams(\n                        VectorParams.newBuilder()\n                            .setSize(300)\n                            .setDistance(Distance.Cosine)\n                            .build())\n                    .build())\n            .setShardNumber(6)\n            .setReplicationFactor(2)\n            .build())\n    .get();\n```\n\n```csharp\nusing Qdrant.Client;\nusing Qdrant.Client.Grpc;\n\nvar client = new QdrantClient(\"localhost\", 6334);\n\nawait client.CreateCollectionAsync(\n\tcollectionName: \"{collection_name}\",\n\tvectorsConfig: new VectorParams { Size = 300, Distance = Distance.Cosine },\n\tshardNumber: 6,\n\treplicationFactor: 2\n);\n```\n\n```go\nimport (\n\t\"context\"\n\n\t\"github.com/qdrant/go-client/qdrant\"\n)\n\nclient, err := qdrant.NewClient(&qdrant.Config{\n\tHost: \"localhost\",\n\tPort: 6334,\n})\n\nclient.CreateCollection(context.Background(), &qdrant.CreateCollection{\n\tCollectionName: \"{collection_name}\",\n\tVectorsConfig: qdrant.NewVectorsConfig(&qdrant.VectorParams{\n\t\tSize:     300,\n\t\tDistance: qdrant.Distance_Cosine,\n\t}),\n\tShardNumber:       qdrant.PtrOf(uint32(6)),\n\tReplicationFactor: qdrant.PtrOf(uint32(2)),\n})\n```\n\nThis code sample creates a collection with a total of 6 logical shards backed by a total of 12 physical shards.\n\nSince a replication factor of “2” would require twice as much storage space, it is advised to make sure the hardware can host the additional shard replicas beforehand.",
     "metadata": {
-      "chunk_id": "25122e454c1e-0029",
+      "chunk_id": "25122e454c1e-0026",
       "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_guides_distributed_deployment\\_documentation_guides_distributed_deployment_.md",
       "filename": "_documentation_guides_distributed_deployment_.md",
       "file_extension": ".md",
-      "chunk_index": 29,
+      "chunk_index": 26,
       "document_level": 1,
       "parent_chunk_id": null,
       "child_chunk_ids": [],
@@ -2547,17 +2560,18 @@
         "Replication factor"
       ],
       "heading_text": "Replication factor",
-      "token_count": 747,
-      "char_count": 3292,
+      "token_count": 1009,
+      "char_count": 4304,
       "start_char": 44776,
-      "end_char": 48068,
+      "end_char": 49080,
       "semantic_score": 0.7,
-      "structural_score": 0.7,
-      "retrieval_quality": 0.9079545454545455,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.8943548387096774,
       "chunking_strategy": "hybrid_adaptive_semchunk",
       "content_type": "prose_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:42.375443",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:25.071366",
       "document_id": "25122e454c1e",
       "document_name": "_documentation_guides_distributed_deployment_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_guides_distributed_deployment\\_documentation_guides_distributed_deployment_.md",
@@ -2565,9 +2579,9 @@
       "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_guides_distributed_deployment",
       "relative_path": "Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_guides_distributed_deployment\\_documentation_guides_distributed_deployment_.md",
       "hierarchy_path": "Replication factor",
-      "chunk_hash": "3d4493070f70b5f3",
-      "content_digest": "3d4493070f70b5f3",
-      "chunk_length": 3292,
+      "chunk_hash": "28c8159c0634f8ca",
+      "content_digest": "28c8159c0634f8ca",
+      "chunk_length": 4304,
       "payload_version": "1.3",
       "collection_hints": [
         "qdrant_ecosystem"
@@ -2578,129 +2592,129 @@
         "top_terms": [
           "qdrant",
           "client",
+          "collection",
           "replication",
           "factor",
-          "collection",
-          "you",
-          "the",
           "distance",
+          "the",
           "import",
+          "you",
           "shard",
-          "qdrantclient",
           "name",
-          "create",
-          "can",
+          "qdrantclient",
           "new",
-          "collections",
           "300",
           "cosine",
-          "build",
-          "grpc"
+          "can",
+          "localhost",
+          "create",
+          "collections",
+          "size"
         ],
         "term_weights": [
           {
             "term": "qdrant",
-            "tf": 20,
-            "weight": 0.063492
+            "tf": 30,
+            "weight": 0.072115
           },
           {
             "term": "client",
-            "tf": 20,
-            "weight": 0.063492
-          },
-          {
-            "term": "replication",
-            "tf": 12,
-            "weight": 0.038095
-          },
-          {
-            "term": "factor",
-            "tf": 12,
-            "weight": 0.038095
+            "tf": 25,
+            "weight": 0.060096
           },
           {
             "term": "collection",
+            "tf": 15,
+            "weight": 0.036058
+          },
+          {
+            "term": "replication",
+            "tf": 13,
+            "weight": 0.03125
+          },
+          {
+            "term": "factor",
+            "tf": 13,
+            "weight": 0.03125
+          },
+          {
+            "term": "distance",
             "tf": 12,
-            "weight": 0.038095
+            "weight": 0.028846
+          },
+          {
+            "term": "the",
+            "tf": 10,
+            "weight": 0.024038
+          },
+          {
+            "term": "import",
+            "tf": 9,
+            "weight": 0.021635
           },
           {
             "term": "you",
             "tf": 8,
-            "weight": 0.025397
-          },
-          {
-            "term": "the",
-            "tf": 8,
-            "weight": 0.025397
-          },
-          {
-            "term": "distance",
-            "tf": 8,
-            "weight": 0.025397
-          },
-          {
-            "term": "import",
-            "tf": 8,
-            "weight": 0.025397
+            "weight": 0.019231
           },
           {
             "term": "shard",
-            "tf": 7,
-            "weight": 0.022222
-          },
-          {
-            "term": "qdrantclient",
-            "tf": 7,
-            "weight": 0.022222
+            "tf": 8,
+            "weight": 0.019231
           },
           {
             "term": "name",
+            "tf": 8,
+            "weight": 0.019231
+          },
+          {
+            "term": "qdrantclient",
+            "tf": 8,
+            "weight": 0.019231
+          },
+          {
+            "term": "new",
+            "tf": 7,
+            "weight": 0.016827
+          },
+          {
+            "term": "300",
+            "tf": 7,
+            "weight": 0.016827
+          },
+          {
+            "term": "cosine",
+            "tf": 7,
+            "weight": 0.016827
+          },
+          {
+            "term": "can",
             "tf": 6,
-            "weight": 0.019048
+            "weight": 0.014423
+          },
+          {
+            "term": "localhost",
+            "tf": 6,
+            "weight": 0.014423
           },
           {
             "term": "create",
             "tf": 5,
-            "weight": 0.015873
-          },
-          {
-            "term": "can",
-            "tf": 5,
-            "weight": 0.015873
-          },
-          {
-            "term": "new",
-            "tf": 5,
-            "weight": 0.015873
+            "weight": 0.012019
           },
           {
             "term": "collections",
             "tf": 5,
-            "weight": 0.015873
+            "weight": 0.012019
           },
           {
-            "term": "300",
+            "term": "size",
             "tf": 5,
-            "weight": 0.015873
-          },
-          {
-            "term": "cosine",
-            "tf": 5,
-            "weight": 0.015873
-          },
-          {
-            "term": "build",
-            "tf": 5,
-            "weight": 0.015873
-          },
-          {
-            "term": "grpc",
-            "tf": 5,
-            "weight": 0.015873
+            "weight": 0.012019
           }
         ],
-        "unique_terms": 120,
-        "total_terms": 315
+        "unique_terms": 153,
+        "total_terms": 416
       },
       "modal_hint": "code",
       "content_flags": {
@@ -2726,19 +2740,19 @@
     },
     "advanced_scores": {
       "semantic": 0.7,
-      "structural": 0.7,
-      "retrieval_quality": 0.9079545454545455,
-      "overall": 0.7693181818181817
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.8943548387096774,
+      "overall": 0.8314516129032258
     }
   },
   {
     "text": "### Node Failure Recovery  Sometimes hardware malfunctions might render some nodes of the Qdrant cluster unrecoverable. No system is immune to this. But several recovery scenarios allow qdrant to stay available for requests and even avoid performance degradation. Let’s walk through them from best to worst. **Recover with replicated collection**  If the number of failed nodes is less than the replication factor of the collection, then your cluster should still be able to perform read, search and update queries. Now, if the failed node restarts, consensus will trigger the replication process to update the recovering node with the newest updates it has missed. If the failed node never restarts, you can recover the lost shards if you have a 3+ node cluster. You cannot recover lost shards in smaller clusters because recovery operations go through [raft](#raft.md) which requires >50% of the nodes to be healthy. **Recreate node with replicated collections**  If a node fails and it is impossible to recover it, you should exclude the dead node from the consensus and create an empty node. To exclude failed nodes from the consensus, use [remove peer](https://api.qdrant.tech/master/api-reference/distributed/remove-peer) API. Apply the `force` flag if necessary. When you create a new node, make sure to attach it to the existing cluster by specifying `--bootstrap` CLI parameter with the URL of any of the running cluster nodes. Once the new node is ready and synchronized with the cluster, you might want to ensure that the collection shards are replicated enough. Remember that Qdrant will not automatically balance shards since this is an expensive operation. Use the [Replicate Shard Operation](https://api.qdrant.tech/master/api-reference/distributed/update-collection-cluster) to create another copy of the shard on the newly connected node. It’s worth mentioning that Qdrant only provides the necessary building blocks to create an automated failure recovery. Building a completely automatic process of collection scaling would require control over the cluster machines themself. Check out our [cloud solution](https://qdrant.to/cloud), where we made exactly that. **Recover from snapshot**  If there are no copies of data in the cluster, it is still possible to recover from a snapshot. Follow the same steps to detach failed node and create a new one in the cluster:  - To exclude failed nodes from the consensus, use [remove peer](https://api.qdrant.tech/master/api-reference/distributed/remove-peer) API. Apply the `force` flag if necessary. - Create a new node, making sure to attach it to the existing cluster by specifying the `--bootstrap` CLI parameter with the URL of any of the running cluster nodes. Snapshot recovery, used in single-node deployment, is different from cluster one. Consensus manages all metadata about all collections and does not require snapshots to recover it. But you can use snapshots to recover missing shards of the collections. Use the [Collection Snapshot Recovery API](https://qdrant.tech/documentation/concepts/snapshots/#recover-in-cluster-deployment) to do it. The service will download the specified snapshot of the collection and recover shards with data from it. Once all shards of the collection are recovered, the collection will become operational again.",
     "metadata": {
-      "chunk_id": "25122e454c1e-0033",
+      "chunk_id": "25122e454c1e-0029",
       "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_guides_distributed_deployment\\_documentation_guides_distributed_deployment_.md",
       "filename": "_documentation_guides_distributed_deployment_.md",
       "file_extension": ".md",
-      "chunk_index": 33,
+      "chunk_index": 29,
       "document_level": 1,
       "parent_chunk_id": null,
       "child_chunk_ids": [],
@@ -2756,7 +2770,8 @@
       "chunking_strategy": "hybrid_adaptive_structural",
       "content_type": "list_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:42.381600",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:25.073212",
       "document_id": "25122e454c1e",
       "document_name": "_documentation_guides_distributed_deployment_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_guides_distributed_deployment\\_documentation_guides_distributed_deployment_.md",
@@ -2931,13 +2946,13 @@
     }
   },
   {
-    "text": "### Write consistency factor\n\nThe `write_consistency_factor` represents the number of replicas that must acknowledge a write operation before responding to the client. It is set to 1 by default. It can be configured at the collection’s creation or when updating the collection parameters.\n\nThis value can range from 1 to the number of replicas you have for each shard.\n\n```http\nPUT /collections/{collection_name}\n{\n    \"vectors\": {\n        \"size\": 300,\n        \"distance\": \"Cosine\"\n    },\n    \"shard_number\": 6,\n    \"replication_factor\": 2,\n    \"write_consistency_factor\": 2\n}\n```\n\n```python\nfrom qdrant_client import QdrantClient, models\n\nclient = QdrantClient(url=\"http://localhost:6333\")\n\nclient.create_collection(\n    collection_name=\"{collection_name}\",\n    vectors_config=models.VectorParams(size=300, distance=models.Distance.COSINE),\n    shard_number=6,\n    replication_factor=2,\n    write_consistency_factor=2,\n)\n```\n\n```typescript\nimport { QdrantClient } from \"@qdrant/js-client-rest\";\n\nconst client = new QdrantClient({ host: \"localhost\", port: 6333 });\n\nclient.createCollection(\"{collection_name}\", {\n  vectors: {\n    size: 300,\n    distance: \"Cosine\",\n  },\n  shard_number: 6,\n  replication_factor: 2,\n  write_consistency_factor: 2,\n});\n```\n\n```rust\nuse qdrant_client::qdrant::{CreateCollectionBuilder, Distance, VectorParamsBuilder};\nuse qdrant_client::Qdrant;\n\nlet client = Qdrant::from_url(\"http://localhost:6334\").build()?;\n\nclient\n    .create_collection(\n        CreateCollectionBuilder::new(\"{collection_name}\")\n            .vectors_config(VectorParamsBuilder::new(300, Distance::Cosine))\n            .shard_number(6)\n            .replication_factor(2)\n            .write_consistency_factor(2),\n    )\n    .await?;\n```\n\n```java\nimport io.qdrant.client.QdrantClient;\nimport io.qdrant.client.QdrantGrpcClient;\nimport io.qdrant.client.grpc.Collections.CreateCollection;\nimport io.qdrant.client.grpc.Collections.Distance;\nimport io.qdrant.client.grpc.Collections.VectorParams;\nimport io.qdrant.client.grpc.Collections.VectorsConfig;\n\nQdrantClient client =\n    new QdrantClient(QdrantGrpcClient.newBuilder(\"localhost\", 6334, false).build());\n\nclient\n    .createCollectionAsync(\n        CreateCollection.newBuilder()\n            .setCollectionName(\"{collection_name}\")\n            .setVectorsConfig(\n                VectorsConfig.newBuilder()\n                    .setParams(\n                        VectorParams.newBuilder()\n                            .setSize(300)\n                            .setDistance(Distance.Cosine)\n                            .build())\n                    .build())\n            .setShardNumber(6)\n            .setReplicationFactor(2)\n            .setWriteConsistencyFactor(2)\n            .build())\n    .get();\n```\n\n```csharp\nusing Qdrant.Client;\nusing Qdrant.Client.Grpc;\n\nvar client = new QdrantClient(\"localhost\", 6334);\n\nawait client.CreateCollectionAsync(\n\tcollectionName: \"{collection_name}\",\n\tvectorsConfig: new VectorParams { Size = 300, Distance = Distance.Cosine },\n\tshardNumber: 6,\n\treplicationFactor: 2,\n\twriteConsistencyFactor: 2\n);\n```\n\n```go\nimport (\n\t\"context\"\n\n\t\"github.com/qdrant/go-client/qdrant\"\n)",
+    "text": "### Write consistency factor\n\nThe `write_consistency_factor` represents the number of replicas that must acknowledge a write operation before responding to the client. It is set to 1 by default. It can be configured at the collection’s creation or when updating the collection parameters.\n\nThis value can range from 1 to the number of replicas you have for each shard.\n\n```http\nPUT /collections/{collection_name}\n{\n    \"vectors\": {\n        \"size\": 300,\n        \"distance\": \"Cosine\"\n    },\n    \"shard_number\": 6,\n    \"replication_factor\": 2,\n    \"write_consistency_factor\": 2\n}\n```\n\n```python\nfrom qdrant_client import QdrantClient, models\n\nclient = QdrantClient(url=\"http://localhost:6333\")\n\nclient.create_collection(\n    collection_name=\"{collection_name}\",\n    vectors_config=models.VectorParams(size=300, distance=models.Distance.COSINE),\n    shard_number=6,\n    replication_factor=2,\n    write_consistency_factor=2,\n)\n```\n\n```typescript\nimport { QdrantClient } from \"@qdrant/js-client-rest\";\n\nconst client = new QdrantClient({ host: \"localhost\", port: 6333 });\n\nclient.createCollection(\"{collection_name}\", {\n  vectors: {\n    size: 300,\n    distance: \"Cosine\",\n  },\n  shard_number: 6,\n  replication_factor: 2,\n  write_consistency_factor: 2,\n});\n```\n\n```rust\nuse qdrant_client::qdrant::{CreateCollectionBuilder, Distance, VectorParamsBuilder};\nuse qdrant_client::Qdrant;\n\nlet client = Qdrant::from_url(\"http://localhost:6334\").build()?;\n\nclient\n    .create_collection(\n        CreateCollectionBuilder::new(\"{collection_name}\")\n            .vectors_config(VectorParamsBuilder::new(300, Distance::Cosine))\n            .shard_number(6)\n            .replication_factor(2)\n            .write_consistency_factor(2),\n    )\n    .await?;\n```\n\n```java\nimport io.qdrant.client.QdrantClient;\nimport io.qdrant.client.QdrantGrpcClient;\nimport io.qdrant.client.grpc.Collections.CreateCollection;\nimport io.qdrant.client.grpc.Collections.Distance;\nimport io.qdrant.client.grpc.Collections.VectorParams;\nimport io.qdrant.client.grpc.Collections.VectorsConfig;\n\nQdrantClient client =\n    new QdrantClient(QdrantGrpcClient.newBuilder(\"localhost\", 6334, false).build());\n\nclient\n    .createCollectionAsync(\n        CreateCollection.newBuilder()\n            .setCollectionName(\"{collection_name}\")\n            .setVectorsConfig(\n                VectorsConfig.newBuilder()\n                    .setParams(\n                        VectorParams.newBuilder()\n                            .setSize(300)\n                            .setDistance(Distance.Cosine)\n                            .build())\n                    .build())\n            .setShardNumber(6)\n            .setReplicationFactor(2)\n            .setWriteConsistencyFactor(2)\n            .build())\n    .get();\n```\n\n```csharp\nusing Qdrant.Client;\nusing Qdrant.Client.Grpc;\n\nvar client = new QdrantClient(\"localhost\", 6334);\n\nawait client.CreateCollectionAsync(\n\tcollectionName: \"{collection_name}\",\n\tvectorsConfig: new VectorParams { Size = 300, Distance = Distance.Cosine },\n\tshardNumber: 6,\n\treplicationFactor: 2,\n\twriteConsistencyFactor: 2\n);\n```\n\n```go\nimport (\n\t\"context\"\n\n\t\"github.com/qdrant/go-client/qdrant\"\n)\n\nclient, err := qdrant.NewClient(&qdrant.Config{\n\tHost: \"localhost\",\n\tPort: 6334,\n})\n\nclient.CreateCollection(context.Background(), &qdrant.CreateCollection{\n\tCollectionName: \"{collection_name}\",\n\tVectorsConfig: qdrant.NewVectorsConfig(&qdrant.VectorParams{\n\t\tSize:     300,\n\t\tDistance: qdrant.Distance_Cosine,\n\t}),\n\tShardNumber:            qdrant.PtrOf(uint32(6)),\n\tReplicationFactor:      qdrant.PtrOf(uint32(2)),\n\tWriteConsistencyFactor: qdrant.PtrOf(uint32(2)),\n})\n```\n\nWrite operations will fail if the number of active replicas is less than the `write_consistency_factor`. In this case, the client is expected to send the operation again to ensure a consistent state is reached.\n\nSetting the `write_consistency_factor` to a lower value may allow accepting writes even if there are unresponsive nodes. Unresponsive nodes are marked as dead and will automatically be recovered once available to ensure data consistency.\n\nThe configuration of the `write_consistency_factor` is important for adjusting the cluster’s behavior when some nodes go offline due to restarts, upgrades, or failures.",
     "metadata": {
-      "chunk_id": "25122e454c1e-0036",
+      "chunk_id": "25122e454c1e-0032",
       "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_guides_distributed_deployment\\_documentation_guides_distributed_deployment_.md",
       "filename": "_documentation_guides_distributed_deployment_.md",
       "file_extension": ".md",
-      "chunk_index": 36,
+      "chunk_index": 32,
       "document_level": 1,
       "parent_chunk_id": null,
       "child_chunk_ids": [],
@@ -2945,17 +2960,18 @@
         "Write consistency factor"
       ],
       "heading_text": "Write consistency factor",
-      "token_count": 750,
-      "char_count": 3154,
+      "token_count": 1003,
+      "char_count": 4248,
       "start_char": 57099,
-      "end_char": 60253,
-      "semantic_score": 0.6,
-      "structural_score": 0.7,
-      "retrieval_quality": 0.711304347826087,
+      "end_char": 61347,
+      "semantic_score": 0.7,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.6934097421203438,
       "chunking_strategy": "hybrid_adaptive_semchunk",
       "content_type": "prose_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:42.385497",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:25.077777",
       "document_id": "25122e454c1e",
       "document_name": "_documentation_guides_distributed_deployment_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_guides_distributed_deployment\\_documentation_guides_distributed_deployment_.md",
@@ -2963,9 +2979,9 @@
       "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_guides_distributed_deployment",
       "relative_path": "Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_guides_distributed_deployment\\_documentation_guides_distributed_deployment_.md",
       "hierarchy_path": "Write consistency factor",
-      "chunk_hash": "e1cdff96355f6e4c",
-      "content_digest": "e1cdff96355f6e4c",
-      "chunk_length": 3154,
+      "chunk_hash": "3d087e90ffbd82fb",
+      "content_digest": "3d087e90ffbd82fb",
+      "chunk_length": 4248,
       "payload_version": "1.3",
       "collection_hints": [
         "qdrant_ecosystem"
@@ -2976,129 +2992,129 @@
         "top_terms": [
           "client",
           "qdrant",
-          "collection",
-          "factor",
-          "distance",
-          "import",
-          "qdrantclient",
-          "write",
-          "name",
-          "consistency",
           "the",
+          "factor",
+          "collection",
+          "distance",
+          "write",
+          "consistency",
+          "import",
+          "name",
+          "qdrantclient",
           "number",
           "300",
           "cosine",
+          "localhost",
           "new",
           "shard",
           "collections",
-          "localhost",
-          "build",
-          "grpc"
+          "size",
+          "vectorparams"
         ],
         "term_weights": [
           {
             "term": "client",
-            "tf": 24,
-            "weight": 0.086022
+            "tf": 27,
+            "weight": 0.067839
           },
           {
             "term": "qdrant",
-            "tf": 17,
-            "weight": 0.060932
+            "tf": 26,
+            "weight": 0.065327
           },
           {
-            "term": "collection",
-            "tf": 11,
-            "weight": 0.039427
+            "term": "the",
+            "tf": 14,
+            "weight": 0.035176
           },
           {
             "term": "factor",
-            "tf": 10,
-            "weight": 0.035842
+            "tf": 13,
+            "weight": 0.032663
+          },
+          {
+            "term": "collection",
+            "tf": 12,
+            "weight": 0.030151
           },
           {
             "term": "distance",
+            "tf": 12,
+            "weight": 0.030151
+          },
+          {
+            "term": "write",
+            "tf": 11,
+            "weight": 0.027638
+          },
+          {
+            "term": "consistency",
             "tf": 10,
-            "weight": 0.035842
+            "weight": 0.025126
           },
           {
             "term": "import",
             "tf": 9,
-            "weight": 0.032258
+            "weight": 0.022613
+          },
+          {
+            "term": "name",
+            "tf": 8,
+            "weight": 0.020101
           },
           {
             "term": "qdrantclient",
             "tf": 8,
-            "weight": 0.028674
-          },
-          {
-            "term": "write",
-            "tf": 7,
-            "weight": 0.02509
-          },
-          {
-            "term": "name",
-            "tf": 7,
-            "weight": 0.02509
-          },
-          {
-            "term": "consistency",
-            "tf": 6,
-            "weight": 0.021505
-          },
-          {
-            "term": "the",
-            "tf": 6,
-            "weight": 0.021505
+            "weight": 0.020101
           },
           {
             "term": "number",
-            "tf": 6,
-            "weight": 0.021505
+            "tf": 7,
+            "weight": 0.017588
           },
           {
             "term": "300",
-            "tf": 6,
-            "weight": 0.021505
+            "tf": 7,
+            "weight": 0.017588
           },
           {
             "term": "cosine",
+            "tf": 7,
+            "weight": 0.017588
+          },
+          {
+            "term": "localhost",
             "tf": 6,
-            "weight": 0.021505
+            "weight": 0.015075
           },
           {
             "term": "new",
             "tf": 6,
-            "weight": 0.021505
+            "weight": 0.015075
           },
           {
             "term": "shard",
             "tf": 5,
-            "weight": 0.017921
+            "weight": 0.012563
           },
           {
             "term": "collections",
             "tf": 5,
-            "weight": 0.017921
+            "weight": 0.012563
           },
           {
-            "term": "localhost",
+            "term": "size",
             "tf": 5,
-            "weight": 0.017921
+            "weight": 0.012563
           },
           {
-            "term": "build",
+            "term": "vectorparams",
             "tf": 5,
-            "weight": 0.017921
-          },
-          {
-            "term": "grpc",
-            "tf": 5,
-            "weight": 0.017921
+            "weight": 0.012563
           }
         ],
-        "unique_terms": 94,
-        "total_terms": 279
+        "unique_terms": 144,
+        "total_terms": 398
       },
       "modal_hint": "code",
       "content_flags": {
@@ -3118,25 +3134,25 @@
         "import",
         "name",
         "qdrant",
-        "qdrantclient",
+        "the",
         "write"
       ]
     },
     "advanced_scores": {
-      "semantic": 0.6,
-      "structural": 0.7,
-      "retrieval_quality": 0.711304347826087,
-      "overall": 0.6704347826086957
+      "semantic": 0.7,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.6934097421203438,
+      "overall": 0.7644699140401144
     }
   },
   {
-    "text": "### Read consistency\n\nRead `consistency` can be specified for most read requests and will ensure that the returned result is consistent across cluster nodes.\n\n- `all` will query all nodes and return points, which present on all of them\n- `majority` will query all nodes and return points, which present on the majority of them\n- `quorum` will query randomly selected majority of nodes and return points, which present on all of them\n- `1`/`2`/`3`/etc - will query specified number of randomly selected nodes and return points which present on all of them\n- default `consistency` is `1`\n\n```http\nPOST /collections/{collection_name}/points/query?consistency=majority\n{\n    \"query\": [0.2, 0.1, 0.9, 0.7],\n    \"filter\": {\n        \"must\": [\n            {\n                \"key\": \"city\",\n                \"match\": {\n                    \"value\": \"London\"\n                }\n            }\n        ]\n    },\n    \"params\": {\n        \"hnsw_ef\": 128,\n        \"exact\": false\n    },\n    \"limit\": 3\n}\n```\n\n```python\nclient.query_points(\n    collection_name=\"{collection_name}\",\n    query=[0.2, 0.1, 0.9, 0.7],\n    query_filter=models.Filter(\n        must=[\n            models.FieldCondition(\n                key=\"city\",\n                match=models.MatchValue(\n                    value=\"London\",\n                ),\n            )\n        ]\n    ),\n    search_params=models.SearchParams(hnsw_ef=128, exact=False),\n    limit=3,\n    consistency=\"majority\",\n)\n```\n\n```typescript\nclient.query(\"{collection_name}\", {\n    query: [0.2, 0.1, 0.9, 0.7],\n    filter: {\n        must: [{ key: \"city\", match: { value: \"London\" } }],\n    },\n    params: {\n        hnsw_ef: 128,\n        exact: false,\n    },\n    limit: 3,\n    consistency: \"majority\",\n});\n```\n\n```rust\nuse qdrant_client::qdrant::{\n    read_consistency::Value, Condition, Filter, QueryPointsBuilder, ReadConsistencyType,\n    SearchParamsBuilder,\n};\nuse qdrant_client::{Qdrant, QdrantError};\n\nlet client = Qdrant::from_url(\"http://localhost:6334\").build()?;\n\nclient\n    .query(\n        QueryPointsBuilder::new(\"{collection_name}\")\n            .query(vec![0.2, 0.1, 0.9, 0.7])\n            .limit(3)\n            .filter(Filter::must([Condition::matches(\n                \"city\",\n                \"London\".to_string(),\n            )]))\n            .params(SearchParamsBuilder::default().hnsw_ef(128).exact(false))\n            .read_consistency(Value::Type(ReadConsistencyType::Majority.into())),\n    )\n    .await?;\n```\n\n```java\nimport io.qdrant.client.QdrantClient;\nimport io.qdrant.client.QdrantGrpcClient;\nimport io.qdrant.client.grpc.Points.Filter;\nimport io.qdrant.client.grpc.Points.QueryPoints;\nimport io.qdrant.client.grpc.Points.ReadConsistency;\nimport io.qdrant.client.grpc.Points.ReadConsistencyType;\nimport io.qdrant.client.grpc.Points.SearchParams;\n\nimport static io.qdrant.client.QueryFactory.nearest;\nimport static io.qdrant.client.ConditionFactory.matchKeyword;",
+    "text": "### Read consistency\n\nRead `consistency` can be specified for most read requests and will ensure that the returned result is consistent across cluster nodes.\n\n- `all` will query all nodes and return points, which present on all of them\n- `majority` will query all nodes and return points, which present on the majority of them\n- `quorum` will query randomly selected majority of nodes and return points, which present on all of them\n- `1`/`2`/`3`/etc - will query specified number of randomly selected nodes and return points which present on all of them\n- default `consistency` is `1`\n\n```http\nPOST /collections/{collection_name}/points/query?consistency=majority\n{\n    \"query\": [0.2, 0.1, 0.9, 0.7],\n    \"filter\": {\n        \"must\": [\n            {\n                \"key\": \"city\",\n                \"match\": {\n                    \"value\": \"London\"\n                }\n            }\n        ]\n    },\n    \"params\": {\n        \"hnsw_ef\": 128,\n        \"exact\": false\n    },\n    \"limit\": 3\n}\n```\n\n```python\nclient.query_points(\n    collection_name=\"{collection_name}\",\n    query=[0.2, 0.1, 0.9, 0.7],\n    query_filter=models.Filter(\n        must=[\n            models.FieldCondition(\n                key=\"city\",\n                match=models.MatchValue(\n                    value=\"London\",\n                ),\n            )\n        ]\n    ),\n    search_params=models.SearchParams(hnsw_ef=128, exact=False),\n    limit=3,\n    consistency=\"majority\",\n)\n```\n\n```typescript\nclient.query(\"{collection_name}\", {\n    query: [0.2, 0.1, 0.9, 0.7],\n    filter: {\n        must: [{ key: \"city\", match: { value: \"London\" } }],\n    },\n    params: {\n        hnsw_ef: 128,\n        exact: false,\n    },\n    limit: 3,\n    consistency: \"majority\",\n});\n```\n\n```rust\nuse qdrant_client::qdrant::{\n    read_consistency::Value, Condition, Filter, QueryPointsBuilder, ReadConsistencyType,\n    SearchParamsBuilder,\n};\nuse qdrant_client::{Qdrant, QdrantError};\n\nlet client = Qdrant::from_url(\"http://localhost:6334\").build()?;\n\nclient\n    .query(\n        QueryPointsBuilder::new(\"{collection_name}\")\n            .query(vec![0.2, 0.1, 0.9, 0.7])\n            .limit(3)\n            .filter(Filter::must([Condition::matches(\n                \"city\",\n                \"London\".to_string(),\n            )]))\n            .params(SearchParamsBuilder::default().hnsw_ef(128).exact(false))\n            .read_consistency(Value::Type(ReadConsistencyType::Majority.into())),\n    )\n    .await?;\n```\n\n```java\nimport io.qdrant.client.QdrantClient;\nimport io.qdrant.client.QdrantGrpcClient;\nimport io.qdrant.client.grpc.Points.Filter;\nimport io.qdrant.client.grpc.Points.QueryPoints;\nimport io.qdrant.client.grpc.Points.ReadConsistency;\nimport io.qdrant.client.grpc.Points.ReadConsistencyType;\nimport io.qdrant.client.grpc.Points.SearchParams;\n\nimport static io.qdrant.client.QueryFactory.nearest;\nimport static io.qdrant.client.ConditionFactory.matchKeyword;\n\nQdrantClient client =\n    new QdrantClient(QdrantGrpcClient.newBuilder(\"localhost\", 6334, false).build());\n\nclient.queryAsync(\n        QueryPoints.newBuilder()\n                .setCollectionName(\"{collection_name}\")\n                .setFilter(Filter.newBuilder().addMust(matchKeyword(\"city\", \"London\")).build())\n                .setQuery(nearest(.2f, 0.1f, 0.9f, 0.7f))\n                .setParams(SearchParams.newBuilder().setHnswEf(128).setExact(false).build())\n                .setLimit(3)\n                .setReadConsistency(\n                        ReadConsistency.newBuilder().setType(ReadConsistencyType.Majority).build())\n                .build())\n        .get();\n```\n\n```csharp\nusing Qdrant.Client;\nusing Qdrant.Client.Grpc;\nusing static Qdrant.Client.Grpc.Conditions;\n\nvar client = new QdrantClient(\"localhost\", 6334);",
     "metadata": {
-      "chunk_id": "25122e454c1e-0038",
+      "chunk_id": "25122e454c1e-0034",
       "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_guides_distributed_deployment\\_documentation_guides_distributed_deployment_.md",
       "filename": "_documentation_guides_distributed_deployment_.md",
       "file_extension": ".md",
-      "chunk_index": 38,
+      "chunk_index": 34,
       "document_level": 1,
       "parent_chunk_id": null,
       "child_chunk_ids": [],
@@ -3144,17 +3160,18 @@
         "Read consistency"
       ],
       "heading_text": "Read consistency",
-      "token_count": 744,
-      "char_count": 2898,
+      "token_count": 946,
+      "char_count": 3727,
       "start_char": 62446,
-      "end_char": 65344,
-      "semantic_score": 0.7,
+      "end_char": 66173,
+      "semantic_score": 0.6,
       "structural_score": 0.7999999999999998,
-      "retrieval_quality": 0.6787755102040816,
+      "retrieval_quality": 0.6851063829787234,
       "chunking_strategy": "hybrid_adaptive_semchunk",
       "content_type": "prose_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:42.385497",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:25.081230",
       "document_id": "25122e454c1e",
       "document_name": "_documentation_guides_distributed_deployment_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_guides_distributed_deployment\\_documentation_guides_distributed_deployment_.md",
@@ -3162,9 +3179,9 @@
       "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_guides_distributed_deployment",
       "relative_path": "Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_guides_distributed_deployment\\_documentation_guides_distributed_deployment_.md",
       "hierarchy_path": "Read consistency",
-      "chunk_hash": "1246583df217de3c",
-      "content_digest": "1246583df217de3c",
-      "chunk_length": 2898,
+      "chunk_hash": "4831adbcc78e4852",
+      "content_digest": "4831adbcc78e4852",
+      "chunk_length": 3727,
       "payload_version": "1.3",
       "collection_hints": [
         "qdrant_ecosystem"
@@ -3177,127 +3194,127 @@
           "qdrant",
           "query",
           "points",
+          "filter",
           "import",
           "consistency",
-          "filter",
           "majority",
+          "grpc",
           "all",
+          "collection",
+          "name",
+          "false",
+          "build",
           "read",
           "and",
           "will",
           "nodes",
-          "collection",
-          "name",
-          "value",
-          "grpc",
-          "return",
-          "which",
-          "present"
+          "city",
+          "value"
         ],
         "term_weights": [
           {
             "term": "client",
-            "tf": 15,
-            "weight": 0.056604
+            "tf": 21,
+            "weight": 0.063636
           },
           {
             "term": "qdrant",
-            "tf": 14,
-            "weight": 0.05283
+            "tf": 17,
+            "weight": 0.051515
           },
           {
             "term": "query",
             "tf": 13,
-            "weight": 0.049057
+            "weight": 0.039394
           },
           {
             "term": "points",
             "tf": 11,
-            "weight": 0.041509
+            "weight": 0.033333
+          },
+          {
+            "term": "filter",
+            "tf": 9,
+            "weight": 0.027273
           },
           {
             "term": "import",
             "tf": 9,
-            "weight": 0.033962
+            "weight": 0.027273
           },
           {
             "term": "consistency",
             "tf": 8,
-            "weight": 0.030189
-          },
-          {
-            "term": "filter",
-            "tf": 8,
-            "weight": 0.030189
+            "weight": 0.024242
           },
           {
             "term": "majority",
+            "tf": 8,
+            "weight": 0.024242
+          },
+          {
+            "term": "grpc",
             "tf": 7,
-            "weight": 0.026415
+            "weight": 0.021212
           },
           {
             "term": "all",
             "tf": 6,
-            "weight": 0.022642
+            "weight": 0.018182
+          },
+          {
+            "term": "collection",
+            "tf": 6,
+            "weight": 0.018182
+          },
+          {
+            "term": "name",
+            "tf": 6,
+            "weight": 0.018182
+          },
+          {
+            "term": "false",
+            "tf": 6,
+            "weight": 0.018182
+          },
+          {
+            "term": "build",
+            "tf": 6,
+            "weight": 0.018182
           },
           {
             "term": "read",
             "tf": 5,
-            "weight": 0.018868
+            "weight": 0.015152
           },
           {
             "term": "and",
             "tf": 5,
-            "weight": 0.018868
+            "weight": 0.015152
           },
           {
             "term": "will",
             "tf": 5,
-            "weight": 0.018868
+            "weight": 0.015152
           },
           {
             "term": "nodes",
             "tf": 5,
-            "weight": 0.018868
+            "weight": 0.015152
           },
           {
-            "term": "collection",
+            "term": "city",
             "tf": 5,
-            "weight": 0.018868
-          },
-          {
-            "term": "name",
-            "tf": 5,
-            "weight": 0.018868
+            "weight": 0.015152
           },
           {
             "term": "value",
             "tf": 5,
-            "weight": 0.018868
-          },
-          {
-            "term": "grpc",
-            "tf": 5,
-            "weight": 0.018868
-          },
-          {
-            "term": "return",
-            "tf": 4,
-            "weight": 0.015094
-          },
-          {
-            "term": "which",
-            "tf": 4,
-            "weight": 0.015094
-          },
-          {
-            "term": "present",
-            "tf": 4,
-            "weight": 0.015094
+            "weight": 0.015152
           }
         ],
-        "unique_terms": 91,
-        "total_terms": 265
+        "unique_terms": 108,
+        "total_terms": 330
       },
       "modal_hint": "code",
       "content_flags": {
@@ -3313,29 +3330,29 @@
         "client",
         "consistency",
         "filter",
+        "grpc",
         "import",
         "majority",
         "points",
         "qdrant",
-        "query",
-        "read"
+        "query"
       ]
     },
     "advanced_scores": {
-      "semantic": 0.7,
+      "semantic": 0.6,
       "structural": 0.7999999999999998,
-      "retrieval_quality": 0.6787755102040816,
-      "overall": 0.7262585034013606
+      "retrieval_quality": 0.6851063829787234,
+      "overall": 0.6950354609929077
     }
   },
   {
-    "text": "### Write ordering\n\nWrite `ordering` can be specified for any write request to serialize it through a single “leader” node, which ensures that all write operations (issued with the same `ordering`) are performed and observed sequentially.\n\n- `weak` *(default)* ordering does not provide any additional guarantees, so write operations can be freely reordered.\n- `medium` ordering serializes all write operations through a dynamically elected leader, which might cause minor inconsistencies in case of leader change.\n- `strong` ordering serializes all write operations through the permanent leader, which provides strong consistency, but write operations may be unavailable if the leader is down.\n\nSome [shard transfer methods](#shard-transfer-method.md) may affect ordering guarantees.\n\n```http\nPUT /collections/{collection_name}/points?ordering=strong\n{\n    \"batch\": {\n        \"ids\": [1, 2, 3],\n        \"payloads\": [\n            {\"color\": \"red\"},\n            {\"color\": \"green\"},\n            {\"color\": \"blue\"}\n        ],\n        \"vectors\": [\n            [0.9, 0.1, 0.1],\n            [0.1, 0.9, 0.1],\n            [0.1, 0.1, 0.9]\n        ]\n    }\n}\n```\n\n```python\nclient.upsert(\n    collection_name=\"{collection_name}\",\n    points=models.Batch(\n        ids=[1, 2, 3],\n        payloads=[\n            {\"color\": \"red\"},\n            {\"color\": \"green\"},\n            {\"color\": \"blue\"},\n        ],\n        vectors=[\n            [0.9, 0.1, 0.1],\n            [0.1, 0.9, 0.1],\n            [0.1, 0.1, 0.9],\n        ],\n    ),\n    ordering=models.WriteOrdering.STRONG,\n)\n```\n\n```typescript\nclient.upsert(\"{collection_name}\", {\n  batch: {\n    ids: [1, 2, 3],\n    payloads: [{ color: \"red\" }, { color: \"green\" }, { color: \"blue\" }],\n    vectors: [\n      [0.9, 0.1, 0.1],\n      [0.1, 0.9, 0.1],\n      [0.1, 0.1, 0.9],\n    ],\n  },\n  ordering: \"strong\",\n});\n```\n\n```rust\nuse qdrant_client::qdrant::{\n    PointStruct, UpsertPointsBuilder, WriteOrdering, WriteOrderingType\n};\nuse qdrant_client::Qdrant;\n\nlet client = Qdrant::from_url(\"http://localhost:6334\").build()?;",
+    "text": "### Write ordering\n\nWrite `ordering` can be specified for any write request to serialize it through a single “leader” node, which ensures that all write operations (issued with the same `ordering`) are performed and observed sequentially.\n\n- `weak` *(default)* ordering does not provide any additional guarantees, so write operations can be freely reordered.\n- `medium` ordering serializes all write operations through a dynamically elected leader, which might cause minor inconsistencies in case of leader change.\n- `strong` ordering serializes all write operations through the permanent leader, which provides strong consistency, but write operations may be unavailable if the leader is down.\n\nSome [shard transfer methods](#shard-transfer-method.md) may affect ordering guarantees.\n\n```http\nPUT /collections/{collection_name}/points?ordering=strong\n{\n    \"batch\": {\n        \"ids\": [1, 2, 3],\n        \"payloads\": [\n            {\"color\": \"red\"},\n            {\"color\": \"green\"},\n            {\"color\": \"blue\"}\n        ],\n        \"vectors\": [\n            [0.9, 0.1, 0.1],\n            [0.1, 0.9, 0.1],\n            [0.1, 0.1, 0.9]\n        ]\n    }\n}\n```\n\n```python\nclient.upsert(\n    collection_name=\"{collection_name}\",\n    points=models.Batch(\n        ids=[1, 2, 3],\n        payloads=[\n            {\"color\": \"red\"},\n            {\"color\": \"green\"},\n            {\"color\": \"blue\"},\n        ],\n        vectors=[\n            [0.9, 0.1, 0.1],\n            [0.1, 0.9, 0.1],\n            [0.1, 0.1, 0.9],\n        ],\n    ),\n    ordering=models.WriteOrdering.STRONG,\n)\n```\n\n```typescript\nclient.upsert(\"{collection_name}\", {\n  batch: {\n    ids: [1, 2, 3],\n    payloads: [{ color: \"red\" }, { color: \"green\" }, { color: \"blue\" }],\n    vectors: [\n      [0.9, 0.1, 0.1],\n      [0.1, 0.9, 0.1],\n      [0.1, 0.1, 0.9],\n    ],\n  },\n  ordering: \"strong\",\n});\n```\n\n```rust\nuse qdrant_client::qdrant::{\n    PointStruct, UpsertPointsBuilder, WriteOrdering, WriteOrderingType\n};\nuse qdrant_client::Qdrant;\n\nlet client = Qdrant::from_url(\"http://localhost:6334\").build()?;\n\nclient\n    .upsert_points(\n        UpsertPointsBuilder::new(\n            \"{collection_name}\",\n            vec![\n                PointStruct::new(1, vec![0.9, 0.1, 0.1], [(\"color\", \"red\".into())]),\n                PointStruct::new(2, vec![0.1, 0.9, 0.1], [(\"color\", \"green\".into())]),\n                PointStruct::new(3, vec![0.1, 0.1, 0.9], [(\"color\", \"blue\".into())]),\n            ],\n        )\n        .ordering(WriteOrdering {\n            r#type: WriteOrderingType::Strong.into(),\n        }),\n    )\n    .await?;\n```\n\n```java\nimport java.util.List;\nimport java.util.Map;\n\nimport static io.qdrant.client.PointIdFactory.id;\nimport static io.qdrant.client.ValueFactory.value;\nimport static io.qdrant.client.VectorsFactory.vectors;\n\nimport io.qdrant.client.grpc.Points.PointStruct;\nimport io.qdrant.client.grpc.Points.UpsertPoints;\nimport io.qdrant.client.grpc.Points.WriteOrdering;\nimport io.qdrant.client.grpc.Points.WriteOrderingType;",
     "metadata": {
-      "chunk_id": "25122e454c1e-0041",
+      "chunk_id": "25122e454c1e-0036",
       "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_guides_distributed_deployment\\_documentation_guides_distributed_deployment_.md",
       "filename": "_documentation_guides_distributed_deployment_.md",
       "file_extension": ".md",
-      "chunk_index": 41,
+      "chunk_index": 36,
       "document_level": 1,
       "parent_chunk_id": null,
       "child_chunk_ids": [],
@@ -3343,17 +3360,18 @@
         "Write ordering"
       ],
       "heading_text": "Write ordering",
-      "token_count": 574,
-      "char_count": 2044,
+      "token_count": 830,
+      "char_count": 2980,
       "start_char": 67100,
-      "end_char": 69144,
-      "semantic_score": 0.7,
+      "end_char": 70080,
+      "semantic_score": 0.6,
       "structural_score": 0.7999999999999998,
-      "retrieval_quality": 0.6884955752212389,
+      "retrieval_quality": 0.6836298932384341,
       "chunking_strategy": "hybrid_adaptive_semchunk",
       "content_type": "prose_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:42.395712",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:25.085378",
       "document_id": "25122e454c1e",
       "document_name": "_documentation_guides_distributed_deployment_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_guides_distributed_deployment\\_documentation_guides_distributed_deployment_.md",
@@ -3361,9 +3379,9 @@
       "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_guides_distributed_deployment",
       "relative_path": "Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_guides_distributed_deployment\\_documentation_guides_distributed_deployment_.md",
       "hierarchy_path": "Write ordering",
-      "chunk_hash": "e7a5ba52ae07fb24",
-      "content_digest": "e7a5ba52ae07fb24",
-      "chunk_length": 2044,
+      "chunk_hash": "4a2ec79b15e65e12",
+      "content_digest": "4a2ec79b15e65e12",
+      "chunk_length": 2980,
       "payload_version": "1.3",
       "collection_hints": [
         "qdrant_ecosystem"
@@ -3372,131 +3390,131 @@
         "version": "1.0",
         "weighting": "tf-normalized",
         "top_terms": [
-          "ordering",
+          "client",
           "color",
+          "qdrant",
+          "ordering",
+          "import",
           "write",
+          "points",
+          "strong",
           "leader",
           "operations",
-          "strong",
-          "client",
-          "qdrant",
           "collection",
           "name",
-          "through",
-          "which",
-          "all",
-          "the",
-          "batch",
-          "ids",
-          "payloads",
+          "pointstruct",
           "red",
           "green",
-          "blue"
+          "blue",
+          "vectors",
+          "writeordering",
+          "new",
+          "vec"
         ],
         "term_weights": [
           {
-            "term": "ordering",
-            "tf": 10,
-            "weight": 0.056818
+            "term": "client",
+            "tf": 13,
+            "weight": 0.050193
           },
           {
             "term": "color",
+            "tf": 12,
+            "weight": 0.046332
+          },
+          {
+            "term": "qdrant",
+            "tf": 12,
+            "weight": 0.046332
+          },
+          {
+            "term": "ordering",
+            "tf": 11,
+            "weight": 0.042471
+          },
+          {
+            "term": "import",
             "tf": 9,
-            "weight": 0.051136
+            "weight": 0.034749
           },
           {
             "term": "write",
             "tf": 8,
-            "weight": 0.045455
+            "weight": 0.030888
+          },
+          {
+            "term": "points",
+            "tf": 7,
+            "weight": 0.027027
+          },
+          {
+            "term": "strong",
+            "tf": 6,
+            "weight": 0.023166
           },
           {
             "term": "leader",
             "tf": 5,
-            "weight": 0.028409
+            "weight": 0.019305
           },
           {
             "term": "operations",
             "tf": 5,
-            "weight": 0.028409
-          },
-          {
-            "term": "strong",
-            "tf": 5,
-            "weight": 0.028409
-          },
-          {
-            "term": "client",
-            "tf": 5,
-            "weight": 0.028409
-          },
-          {
-            "term": "qdrant",
-            "tf": 5,
-            "weight": 0.028409
+            "weight": 0.019305
           },
           {
             "term": "collection",
-            "tf": 4,
-            "weight": 0.022727
+            "tf": 5,
+            "weight": 0.019305
           },
           {
             "term": "name",
-            "tf": 4,
-            "weight": 0.022727
+            "tf": 5,
+            "weight": 0.019305
           },
           {
-            "term": "through",
-            "tf": 3,
-            "weight": 0.017045
-          },
-          {
-            "term": "which",
-            "tf": 3,
-            "weight": 0.017045
-          },
-          {
-            "term": "all",
-            "tf": 3,
-            "weight": 0.017045
-          },
-          {
-            "term": "the",
-            "tf": 3,
-            "weight": 0.017045
-          },
-          {
-            "term": "batch",
-            "tf": 3,
-            "weight": 0.017045
-          },
-          {
-            "term": "ids",
-            "tf": 3,
-            "weight": 0.017045
-          },
-          {
-            "term": "payloads",
-            "tf": 3,
-            "weight": 0.017045
+            "term": "pointstruct",
+            "tf": 5,
+            "weight": 0.019305
           },
           {
             "term": "red",
-            "tf": 3,
-            "weight": 0.017045
+            "tf": 4,
+            "weight": 0.015444
           },
           {
             "term": "green",
-            "tf": 3,
-            "weight": 0.017045
+            "tf": 4,
+            "weight": 0.015444
           },
           {
             "term": "blue",
-            "tf": 3,
-            "weight": 0.017045
+            "tf": 4,
+            "weight": 0.015444
+          },
+          {
+            "term": "vectors",
+            "tf": 4,
+            "weight": 0.015444
+          },
+          {
+            "term": "writeordering",
+            "tf": 4,
+            "weight": 0.015444
+          },
+          {
+            "term": "new",
+            "tf": 4,
+            "weight": 0.015444
+          },
+          {
+            "term": "vec",
+            "tf": 4,
+            "weight": 0.015444
           }
         ],
-        "unique_terms": 91,
-        "total_terms": 176
+        "unique_terms": 108,
+        "total_terms": 259
       },
       "modal_hint": "code",
       "content_flags": {
@@ -3509,32 +3527,32 @@
       "search_keywords": [
         "Write ordering",
         "client",
-        "collection",
         "color",
+        "import",
         "leader",
-        "name",
         "operations",
         "ordering",
+        "points",
         "qdrant",
         "strong",
         "write"
       ]
     },
     "advanced_scores": {
-      "semantic": 0.7,
+      "semantic": 0.6,
       "structural": 0.7999999999999998,
-      "retrieval_quality": 0.6884955752212389,
-      "overall": 0.7294985250737462
+      "retrieval_quality": 0.6836298932384341,
+      "overall": 0.6945432977461446
     }
   },
   {
     "text": "## Consensus Checkpointing\n\nConsensus checkpointing is a technique used in Raft to improve performance and simplify log management by periodically creating a consistent snapshot of the system state. This snapshot represents a point in time where all nodes in the cluster have reached agreement on the state, and it can be used to truncate the log, reducing the amount of data that needs to be stored and transferred between nodes.\n\nFor example, if you attach a new node to the cluster, it should replay all the log entries to catch up with the current state. In long-running clusters, this can take a long time, and the log can grow very large.\n\nTo prevent this, one can use a special checkpointing mechanism, that will truncate the log and create a snapshot of the current state.\n\nTo use this feature, simply call the `/cluster/recover` API on required node:\n\n```http\nPOST /cluster/recover\n```\n\nThis API can be triggered on any non-leader node, it will send a request to the current consensus leader to create a snapshot. The leader will in turn send the snapshot back to the requesting node for application.\n\nIn some cases, this API can be used to recover from an inconsistent cluster state by forcing a snapshot creation.\n\n---\n\n1. Weak ordering for updates: All records are streamed to the target node in order. New updates are received on the target node in parallel, while the transfer of records is still happening. We therefore have `weak` ordering, regardless of what [ordering](#write-ordering.md) is used for updates. [↩︎](#fnref:1.md) [↩︎](#fnref1:1.md)\n\n2. Strong ordering for updates: A snapshot of the shard is created, it is transferred and recovered on the target node. That ensures the state of the shard is kept consistent. New updates are queued on the source node, and transferred in order to the target node. Updates therefore have the same [ordering](#write-ordering.md) as the user selects, making `strong` ordering possible. [↩︎](#fnref:2.md) [↩︎](#fnref1:2.md) [↩︎](#fnref2:2.md) [↩︎](#fnref3:2.md)",
     "metadata": {
-      "chunk_id": "25122e454c1e-0045",
+      "chunk_id": "25122e454c1e-0039",
       "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_guides_distributed_deployment\\_documentation_guides_distributed_deployment_.md",
       "filename": "_documentation_guides_distributed_deployment_.md",
       "file_extension": ".md",
-      "chunk_index": 45,
+      "chunk_index": 39,
       "document_level": 1,
       "parent_chunk_id": null,
       "child_chunk_ids": [],
@@ -3552,7 +3570,8 @@
       "chunking_strategy": "hybrid_adaptive_semchunk",
       "content_type": "prose_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:42.398960",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:25.087037",
       "document_id": "25122e454c1e",
       "document_name": "_documentation_guides_distributed_deployment_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_guides_distributed_deployment\\_documentation_guides_distributed_deployment_.md",
@@ -3729,11 +3748,11 @@
   {
     "text": "##### Was this page useful? Yes No  Thank you for your feedback! 🙏  We are sorry to hear that. 😔 You can [edit](https:/github.com/qdrant/landing_page/tree/master/qdrant-landing/content/documentation/guides/distributed_deployment.md) this page on GitHub, or [create](https://github.com/qdrant/landing_page/issues/new/choose) a GitHub issue. On this page:  - [Distributed deployment](#distributed-deployment.md)    - [How many Qdrant nodes should I run?](#how-many-qdrant-nodes-should-i-run.md)    - [Enabling distributed mode in self-hosted Qdrant](#enabling-distributed-mode-in-self-hosted-qdrant.md)    - [Enabling distributed mode in Qdrant Cloud](#enabling-distributed-mode-in-qdrant-cloud.md)    - [Making use of a new distributed Qdrant cluster](#making-use-of-a-new-distributed-qdrant-cluster.md)    - [Raft](#raft.md)    - [Sharding](#sharding.md)      - [Choosing the right number of shards](#choosing-the-right-number-of-shards.md)     - [Resharding](#resharding.md)     - [Moving shards](#moving-shards.md)     - [User-defined sharding](#user-defined-sharding.md)     - [Shard transfer method](#shard-transfer-method.md)    - [Replication](#replication.md)      - [Replication factor](#replication-factor.md)     - [Creating new shard replicas](#creating-new-shard-replicas.md)     - [Error handling](#error-handling.md)     - [Node Failure Recovery](#node-failure-recovery.md)     - [Temporary node failure](#temporary-node-failure.md)    - [Consistency guarantees](#consistency-guarantees.md)      - [Write consistency factor](#write-consistency-factor.md)     - [Read consistency](#read-consistency.md)     - [Write ordering](#write-ordering.md)    - [Listener mode](#listener-mode.md)    - [Consensus Checkpointing](#consensus-checkpointing.md)  * [Edit on Github](https://github.com/qdrant/landing_page/tree/master/qdrant-landing/content/documentation/guides/distributed_deployment.md) * [Create an issue](https://github.com/qdrant/landing_page/issues/new/choose)",
     "metadata": {
-      "chunk_id": "25122e454c1e-0046",
+      "chunk_id": "25122e454c1e-0040",
       "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_guides_distributed_deployment\\_documentation_guides_distributed_deployment_.md",
       "filename": "_documentation_guides_distributed_deployment_.md",
       "file_extension": ".md",
-      "chunk_index": 46,
+      "chunk_index": 40,
       "document_level": 1,
       "parent_chunk_id": null,
       "child_chunk_ids": [],
@@ -3751,7 +3770,8 @@
       "chunking_strategy": "hybrid_adaptive_structural",
       "content_type": "list_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:42.400478",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:25.087893",
       "document_id": "25122e454c1e",
       "document_name": "_documentation_guides_distributed_deployment_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_guides_distributed_deployment\\_documentation_guides_distributed_deployment_.md",

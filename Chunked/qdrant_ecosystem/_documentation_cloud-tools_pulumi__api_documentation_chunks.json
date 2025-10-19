@@ -24,7 +24,8 @@
       "chunking_strategy": "hierarchical_precise_structural",
       "content_type": "list_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:37.651046",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:20.884664",
       "document_id": "3231f4b45794",
       "document_name": "_documentation_cloud-tools_pulumi_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_cloud-tools_pulumi\\_documentation_cloud-tools_pulumi_.md",
@@ -223,7 +224,8 @@
       "chunking_strategy": "hierarchical_precise_structural",
       "content_type": "list_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:37.652049",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:20.885377",
       "document_id": "3231f4b45794",
       "document_name": "_documentation_cloud-tools_pulumi_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_cloud-tools_pulumi\\_documentation_cloud-tools_pulumi_.md",
@@ -422,7 +424,8 @@
       "chunking_strategy": "hierarchical_precise_structural",
       "content_type": "list_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:37.653866",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:20.886615",
       "document_id": "3231f4b45794",
       "document_name": "_documentation_cloud-tools_pulumi_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_cloud-tools_pulumi\\_documentation_cloud-tools_pulumi_.md",
@@ -621,7 +624,8 @@
       "chunking_strategy": "hierarchical_precise_structural",
       "content_type": "list_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:37.655500",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:20.887445",
       "document_id": "3231f4b45794",
       "document_name": "_documentation_cloud-tools_pulumi_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_cloud-tools_pulumi\\_documentation_cloud-tools_pulumi_.md",
@@ -796,7 +800,7 @@
     }
   },
   {
-    "text": "## Example Usage\n\nThe following example creates a new Qdrant cluster in Google Cloud Platform (GCP) and returns the URL of the cluster.\n\n```python\nimport pulumi\nimport pulumi_qdrant_cloud as qdrant_cloud\n\nall_packages = qdrant_cloud.index.getBookingPackages.get_booking_packages(cloud_provider=\"gcp\",\n    cloud_region=\"us-east4\")\ndesired_package = [pkg for pkg in all_packages[\"packages\"] if pkg[\"resourceConfiguration\"][0][\"cpu\"] == \"16000m\" and pkg[\"resourceConfiguration\"][0][\"ram\"] == \"64Gi\"]\nexample = qdrant_cloud.AccountsCluster(\"example\",\n    name=\"tf-example-cluster\",\n    cloud_provider=all_packages[\"cloudProvider\"],\n    cloud_region=all_packages[\"cloudRegion\"],\n    configuration={\n        \"number_of_nodes\": 1,\n        \"database_configuration\": {\n            \"service\": {\n                \"jwt_rbac\": True,\n            },\n        },\n        \"node_configuration\": {\n            \"package_id\": desired_package[0][\"id\"],\n        },\n    })\nexample_accounts_database_api_key_v2 = qdrant_cloud.AccountsDatabaseApiKeyV2(\"example\",\n    cluster_id=example.id,\n    name=\"example-key\")\npulumi.export(\"url\", example.url)\npulumi.export(\"key\", example_accounts_database_api_key_v2.key)\n```\n\n```typescript\nimport * as pulumi from \"@pulumi/pulumi\";\nimport * as qdrant_cloud from \"@pulumi/qdrant-cloud\";\n\nconst allPackages = qdrant_cloud.index.getBookingPackages.getBookingPackages({\n    cloudProvider: \"gcp\",\n    cloudRegion: \"us-east4\",\n});\nconst desiredPackage = allPackages.packages.filter(pkg => pkg.resourceConfiguration[0].cpu == \"16000m\" && pkg.resourceConfiguration[0].ram == \"64Gi\");",
+    "text": "## Example Usage\n\nThe following example creates a new Qdrant cluster in Google Cloud Platform (GCP) and returns the URL of the cluster.\n\n```python\nimport pulumi\nimport pulumi_qdrant_cloud as qdrant_cloud\n\nall_packages = qdrant_cloud.index.getBookingPackages.get_booking_packages(cloud_provider=\"gcp\",\n    cloud_region=\"us-east4\")\ndesired_package = [pkg for pkg in all_packages[\"packages\"] if pkg[\"resourceConfiguration\"][0][\"cpu\"] == \"16000m\" and pkg[\"resourceConfiguration\"][0][\"ram\"] == \"64Gi\"]\nexample = qdrant_cloud.AccountsCluster(\"example\",\n    name=\"tf-example-cluster\",\n    cloud_provider=all_packages[\"cloudProvider\"],\n    cloud_region=all_packages[\"cloudRegion\"],\n    configuration={\n        \"number_of_nodes\": 1,\n        \"database_configuration\": {\n            \"service\": {\n                \"jwt_rbac\": True,\n            },\n        },\n        \"node_configuration\": {\n            \"package_id\": desired_package[0][\"id\"],\n        },\n    })\nexample_accounts_database_api_key_v2 = qdrant_cloud.AccountsDatabaseApiKeyV2(\"example\",\n    cluster_id=example.id,\n    name=\"example-key\")\npulumi.export(\"url\", example.url)\npulumi.export(\"key\", example_accounts_database_api_key_v2.key)\n```\n\n```typescript\nimport * as pulumi from \"@pulumi/pulumi\";\nimport * as qdrant_cloud from \"@pulumi/qdrant-cloud\";",
     "metadata": {
       "chunk_id": "3231f4b45794-0010",
       "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_cloud-tools_pulumi\\_documentation_cloud-tools_pulumi_.md",
@@ -810,17 +814,18 @@
         "Example Usage"
       ],
       "heading_text": "Example Usage",
-      "token_count": 376,
-      "char_count": 1587,
+      "token_count": 305,
+      "char_count": 1297,
       "start_char": 9114,
-      "end_char": 10701,
+      "end_char": 10411,
       "semantic_score": 0.7,
       "structural_score": 0.7,
-      "retrieval_quality": 0.7378,
+      "retrieval_quality": 0.7188684210526316,
       "chunking_strategy": "hierarchical_precise_semchunk",
       "content_type": "prose_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:37.660967",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:20.888980",
       "document_id": "3231f4b45794",
       "document_name": "_documentation_cloud-tools_pulumi_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_cloud-tools_pulumi\\_documentation_cloud-tools_pulumi_.md",
@@ -828,9 +833,9 @@
       "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_cloud-tools_pulumi",
       "relative_path": "Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_cloud-tools_pulumi\\_documentation_cloud-tools_pulumi_.md",
       "hierarchy_path": "Example Usage",
-      "chunk_hash": "caaa7f7a8a328751",
-      "content_digest": "caaa7f7a8a328751",
-      "chunk_length": 1587,
+      "chunk_hash": "ed72a63b2c5c4b31",
+      "content_digest": "ed72a63b2c5c4b31",
+      "chunk_length": 1297,
       "payload_version": "1.3",
       "collection_hints": [
         "qdrant_ecosystem"
@@ -844,126 +849,126 @@
           "qdrant",
           "pulumi",
           "packages",
-          "pkg",
           "key",
           "cluster",
           "import",
           "all",
-          "resourceconfiguration",
+          "pkg",
           "the",
-          "gcp",
           "url",
-          "getbookingpackages",
           "package",
           "configuration",
           "database",
+          "gcp",
           "and",
-          "index"
+          "provider",
+          "region",
+          "desired"
         ],
         "term_weights": [
           {
             "term": "cloud",
-            "tf": 13,
-            "weight": 0.082278
+            "tf": 12,
+            "weight": 0.090226
           },
           {
             "term": "example",
             "tf": 11,
-            "weight": 0.06962
+            "weight": 0.082707
           },
           {
             "term": "qdrant",
-            "tf": 9,
-            "weight": 0.056962
+            "tf": 8,
+            "weight": 0.06015
           },
           {
             "term": "pulumi",
             "tf": 8,
-            "weight": 0.050633
+            "weight": 0.06015
           },
           {
             "term": "packages",
-            "tf": 7,
-            "weight": 0.044304
-          },
-          {
-            "term": "pkg",
-            "tf": 7,
-            "weight": 0.044304
+            "tf": 6,
+            "weight": 0.045113
           },
           {
             "term": "key",
             "tf": 5,
-            "weight": 0.031646
+            "weight": 0.037594
           },
           {
             "term": "cluster",
             "tf": 4,
-            "weight": 0.025316
+            "weight": 0.030075
           },
           {
             "term": "import",
             "tf": 4,
-            "weight": 0.025316
+            "weight": 0.030075
           },
           {
             "term": "all",
             "tf": 4,
-            "weight": 0.025316
+            "weight": 0.030075
           },
           {
-            "term": "resourceconfiguration",
+            "term": "pkg",
             "tf": 4,
-            "weight": 0.025316
+            "weight": 0.030075
           },
           {
             "term": "the",
             "tf": 3,
-            "weight": 0.018987
-          },
-          {
-            "term": "gcp",
-            "tf": 3,
-            "weight": 0.018987
+            "weight": 0.022556
           },
           {
             "term": "url",
             "tf": 3,
-            "weight": 0.018987
-          },
-          {
-            "term": "getbookingpackages",
-            "tf": 3,
-            "weight": 0.018987
+            "weight": 0.022556
           },
           {
             "term": "package",
             "tf": 3,
-            "weight": 0.018987
+            "weight": 0.022556
           },
           {
             "term": "configuration",
             "tf": 3,
-            "weight": 0.018987
+            "weight": 0.022556
           },
           {
             "term": "database",
             "tf": 3,
-            "weight": 0.018987
+            "weight": 0.022556
+          },
+          {
+            "term": "gcp",
+            "tf": 2,
+            "weight": 0.015038
           },
           {
             "term": "and",
             "tf": 2,
-            "weight": 0.012658
+            "weight": 0.015038
           },
           {
-            "term": "index",
+            "term": "provider",
             "tf": 2,
-            "weight": 0.012658
+            "weight": 0.015038
+          },
+          {
+            "term": "region",
+            "tf": 2,
+            "weight": 0.015038
+          },
+          {
+            "term": "desired",
+            "tf": 2,
+            "weight": 0.015038
           }
         ],
-        "unique_terms": 60,
-        "total_terms": 158
+        "unique_terms": 56,
+        "total_terms": 133
       },
       "modal_hint": "code",
       "content_flags": {
@@ -990,8 +995,8 @@
     "advanced_scores": {
       "semantic": 0.7,
       "structural": 0.7,
-      "retrieval_quality": 0.7378,
-      "overall": 0.7126
+      "retrieval_quality": 0.7188684210526316,
+      "overall": 0.7062894736842105
     }
   },
   {
@@ -1019,7 +1024,8 @@
       "chunking_strategy": "hierarchical_precise_structural",
       "content_type": "list_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:37.661436",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:20.889278",
       "document_id": "3231f4b45794",
       "document_name": "_documentation_cloud-tools_pulumi_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_cloud-tools_pulumi\\_documentation_cloud-tools_pulumi_.md",
@@ -1218,7 +1224,8 @@
       "chunking_strategy": "hierarchical_precise_structural",
       "content_type": "list_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:37.661960",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:20.889632",
       "document_id": "3231f4b45794",
       "document_name": "_documentation_cloud-tools_pulumi_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_cloud-tools_pulumi\\_documentation_cloud-tools_pulumi_.md",

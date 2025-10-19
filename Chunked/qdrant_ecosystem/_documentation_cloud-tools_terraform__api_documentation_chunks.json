@@ -24,7 +24,8 @@
       "chunking_strategy": "hierarchical_precise_structural",
       "content_type": "list_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:37.680331",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:20.902712",
       "document_id": "2c2944dfa277",
       "document_name": "_documentation_cloud-tools_terraform_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_cloud-tools_terraform\\_documentation_cloud-tools_terraform_.md",
@@ -223,7 +224,8 @@
       "chunking_strategy": "hierarchical_precise_structural",
       "content_type": "list_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:37.681846",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:20.903394",
       "document_id": "2c2944dfa277",
       "document_name": "_documentation_cloud-tools_terraform_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_cloud-tools_terraform\\_documentation_cloud-tools_terraform_.md",
@@ -422,7 +424,8 @@
       "chunking_strategy": "hierarchical_precise_structural",
       "content_type": "list_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:37.681846",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:20.904552",
       "document_id": "2c2944dfa277",
       "document_name": "_documentation_cloud-tools_terraform_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_cloud-tools_terraform\\_documentation_cloud-tools_terraform_.md",
@@ -621,7 +624,8 @@
       "chunking_strategy": "hierarchical_precise_structural",
       "content_type": "list_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:37.681846",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:20.905361",
       "document_id": "2c2944dfa277",
       "document_name": "_documentation_cloud-tools_terraform_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_cloud-tools_terraform\\_documentation_cloud-tools_terraform_.md",
@@ -796,13 +800,213 @@
     }
   },
   {
-    "text": "## Further Reading  The provider documentation contains more details on the available resources and data sources, including additional examples:  - [Provider Documentation](https://registry.terraform.io/providers/qdrant/qdrant-cloud/latest/docs) - [Terraform Quickstart](https://developer.hashicorp.com/terraform/tutorials)",
+    "text": "## Example Usage\n\nThe following example creates a new Qdrant cluster in Amazon Web Services (AWS) and returns the URL of the cluster.\n\n```terraform\n// see: https://registry.terraform.io/providers/qdrant/qdrant-cloud/latest/docs/guides/getting-started\n// Setup Terraform, including the qdrant-cloud providers\nterraform {\n  required_version = \">= 1.7.0\"\n  required_providers {\n    qdrant-cloud = {\n      source  = \"qdrant/qdrant-cloud\"\n      version = \">=1.1.0\"\n    }\n  }\n}\n\n// Add the provider to specify some provider wide settings\nprovider \"qdrant-cloud\" {\n  api_key    = \"<QDRANT_CLOUD_MANAGEMENT_KEY>\"  // API Key generated in Qdrant Cloud (required)\n  account_id = \"<QDRANT_CLOUD_ACCOUNT_ID>\"      // The default account ID you want to use in Qdrant Cloud (can be overriden on resource level)\n}\n\n// Get the cluster package\n// see https://registry.terraform.io/providers/qdrant/qdrant-cloud/latest/docs/guides/getting-started#available-cloud-providers-and-regions\ndata \"qdrant-cloud_booking_packages\" \"all_packages\" {\n  cloud_provider = \"aws\"\n  cloud_region   = \"us-west-2\"\n}\n\nlocals {\n  desired_package = [\n    for pkg in data.qdrant-cloud_booking_packages.all_packages.packages : pkg\n    if pkg.resource_configuration[0].cpu == \"500m\" && pkg.resource_configuration[0].ram == \"2Gi\"\n  ]\n}\n\n// Create a cluster (for the sake of having an ID, see below)\nresource \"qdrant-cloud_accounts_cluster\" \"example\" {\n  name           = \"tf-example-cluster\"\n  cloud_provider = data.qdrant-cloud_booking_packages.all_packages.cloud_provider\n  cloud_region   = data.qdrant-cloud_booking_packages.all_packages.cloud_region\n  configuration {\n    number_of_nodes = 1\n    database_configuration {\n      service {\n        jwt_rbac = true\n      }\n    }\n    node_configuration {\n      package_id = local.desired_package[0].id\n    }\n  }\n}",
     "metadata": {
-      "chunk_id": "2c2944dfa277-0012",
+      "chunk_id": "2c2944dfa277-0009",
       "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_cloud-tools_terraform\\_documentation_cloud-tools_terraform_.md",
       "filename": "_documentation_cloud-tools_terraform_.md",
       "file_extension": ".md",
-      "chunk_index": 12,
+      "chunk_index": 9,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Example Usage"
+      ],
+      "heading_text": "Example Usage",
+      "token_count": 464,
+      "char_count": 1818,
+      "start_char": 8859,
+      "end_char": 10677,
+      "semantic_score": 0.7,
+      "structural_score": 0.7,
+      "retrieval_quality": 0.7290936170212765,
+      "chunking_strategy": "hierarchical_precise_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:20.907459",
+      "document_id": "2c2944dfa277",
+      "document_name": "_documentation_cloud-tools_terraform_",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_cloud-tools_terraform\\_documentation_cloud-tools_terraform_.md",
+      "source_filename": "_documentation_cloud-tools_terraform_.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_cloud-tools_terraform",
+      "relative_path": "Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_cloud-tools_terraform\\_documentation_cloud-tools_terraform_.md",
+      "hierarchy_path": "Example Usage",
+      "chunk_hash": "ee7313f6be6343c7",
+      "content_digest": "ee7313f6be6343c7",
+      "chunk_length": 1818,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "cloud",
+          "qdrant",
+          "packages",
+          "the",
+          "cluster",
+          "provider",
+          "terraform",
+          "providers",
+          "configuration",
+          "example",
+          "resource",
+          "package",
+          "data",
+          "booking",
+          "all",
+          "pkg",
+          "see",
+          "required",
+          "key",
+          "account"
+        ],
+        "term_weights": [
+          {
+            "term": "cloud",
+            "tf": 22,
+            "weight": 0.107843
+          },
+          {
+            "term": "qdrant",
+            "tf": 19,
+            "weight": 0.093137
+          },
+          {
+            "term": "packages",
+            "tf": 9,
+            "weight": 0.044118
+          },
+          {
+            "term": "the",
+            "tf": 8,
+            "weight": 0.039216
+          },
+          {
+            "term": "cluster",
+            "tf": 6,
+            "weight": 0.029412
+          },
+          {
+            "term": "provider",
+            "tf": 6,
+            "weight": 0.029412
+          },
+          {
+            "term": "terraform",
+            "tf": 5,
+            "weight": 0.02451
+          },
+          {
+            "term": "providers",
+            "tf": 5,
+            "weight": 0.02451
+          },
+          {
+            "term": "configuration",
+            "tf": 5,
+            "weight": 0.02451
+          },
+          {
+            "term": "example",
+            "tf": 4,
+            "weight": 0.019608
+          },
+          {
+            "term": "resource",
+            "tf": 4,
+            "weight": 0.019608
+          },
+          {
+            "term": "package",
+            "tf": 4,
+            "weight": 0.019608
+          },
+          {
+            "term": "data",
+            "tf": 4,
+            "weight": 0.019608
+          },
+          {
+            "term": "booking",
+            "tf": 4,
+            "weight": 0.019608
+          },
+          {
+            "term": "all",
+            "tf": 4,
+            "weight": 0.019608
+          },
+          {
+            "term": "pkg",
+            "tf": 4,
+            "weight": 0.019608
+          },
+          {
+            "term": "see",
+            "tf": 3,
+            "weight": 0.014706
+          },
+          {
+            "term": "required",
+            "tf": 3,
+            "weight": 0.014706
+          },
+          {
+            "term": "key",
+            "tf": 3,
+            "weight": 0.014706
+          },
+          {
+            "term": "account",
+            "tf": 3,
+            "weight": 0.014706
+          }
+        ],
+        "unique_terms": 84,
+        "total_terms": 204
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Example Usage",
+        "cloud",
+        "cluster",
+        "configuration",
+        "example",
+        "packages",
+        "provider",
+        "providers",
+        "qdrant",
+        "terraform",
+        "the"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.7,
+      "retrieval_quality": 0.7290936170212765,
+      "overall": 0.7096978723404255
+    }
+  },
+  {
+    "text": "## Further Reading  The provider documentation contains more details on the available resources and data sources, including additional examples:  - [Provider Documentation](https://registry.terraform.io/providers/qdrant/qdrant-cloud/latest/docs) - [Terraform Quickstart](https://developer.hashicorp.com/terraform/tutorials)",
+    "metadata": {
+      "chunk_id": "2c2944dfa277-0011",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_cloud-tools_terraform\\_documentation_cloud-tools_terraform_.md",
+      "filename": "_documentation_cloud-tools_terraform_.md",
+      "file_extension": ".md",
+      "chunk_index": 11,
       "document_level": 1,
       "parent_chunk_id": null,
       "child_chunk_ids": [],
@@ -820,7 +1024,8 @@
       "chunking_strategy": "hierarchical_precise_structural",
       "content_type": "list_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:37.690551",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:20.907742",
       "document_id": "2c2944dfa277",
       "document_name": "_documentation_cloud-tools_terraform_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_cloud-tools_terraform\\_documentation_cloud-tools_terraform_.md",
@@ -997,11 +1202,11 @@
   {
     "text": "##### Was this page useful? Yes No  Thank you for your feedback! 🙏  We are sorry to hear that. 😔 You can [edit](https:/github.com/qdrant/landing_page/tree/master/qdrant-landing/content/documentation/cloud-tools/terraform.md) this page on GitHub, or [create](https://github.com/qdrant/landing_page/issues/new/choose) a GitHub issue. On this page:  - - [Pre-requisites](#pre-requisites.md)   - [Example Usage](#example-usage.md)   - [Further Reading](#further-reading.md)  * [Edit on Github](https://github.com/qdrant/landing_page/tree/master/qdrant-landing/content/documentation/cloud-tools/terraform.md) * [Create an issue](https://github.com/qdrant/landing_page/issues/new/choose)",
     "metadata": {
-      "chunk_id": "2c2944dfa277-0013",
+      "chunk_id": "2c2944dfa277-0012",
       "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_cloud-tools_terraform\\_documentation_cloud-tools_terraform_.md",
       "filename": "_documentation_cloud-tools_terraform_.md",
       "file_extension": ".md",
-      "chunk_index": 13,
+      "chunk_index": 12,
       "document_level": 1,
       "parent_chunk_id": null,
       "child_chunk_ids": [],
@@ -1019,7 +1224,8 @@
       "chunking_strategy": "hierarchical_precise_structural",
       "content_type": "list_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:37.691564",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:20.908197",
       "document_id": "2c2944dfa277",
       "document_name": "_documentation_cloud-tools_terraform_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_cloud-tools_terraform\\_documentation_cloud-tools_terraform_.md",

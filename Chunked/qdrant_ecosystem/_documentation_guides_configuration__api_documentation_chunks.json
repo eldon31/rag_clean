@@ -24,7 +24,8 @@
       "chunking_strategy": "hierarchical_precise_structural",
       "content_type": "list_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:42.298262",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:24.995042",
       "document_id": "951a782b39b8",
       "document_name": "_documentation_guides_configuration_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_guides_configuration\\_documentation_guides_configuration_.md",
@@ -223,7 +224,8 @@
       "chunking_strategy": "hierarchical_precise_structural",
       "content_type": "list_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:42.299255",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:24.997125",
       "document_id": "951a782b39b8",
       "document_name": "_documentation_guides_configuration_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_guides_configuration\\_documentation_guides_configuration_.md",
@@ -422,7 +424,8 @@
       "chunking_strategy": "hierarchical_precise_structural",
       "content_type": "list_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:42.299255",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:24.997777",
       "document_id": "951a782b39b8",
       "document_name": "_documentation_guides_configuration_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_guides_configuration\\_documentation_guides_configuration_.md",
@@ -585,7 +588,8 @@
       "chunking_strategy": "hierarchical_precise_structural",
       "content_type": "list_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:42.300255",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:24.999233",
       "document_id": "951a782b39b8",
       "document_name": "_documentation_guides_configuration_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_guides_configuration\\_documentation_guides_configuration_.md",
@@ -784,7 +788,8 @@
       "chunking_strategy": "hierarchical_precise_structural",
       "content_type": "list_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:42.301347",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:25.001379",
       "document_id": "951a782b39b8",
       "document_name": "_documentation_guides_configuration_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_guides_configuration\\_documentation_guides_configuration_.md",
@@ -983,7 +988,8 @@
       "chunking_strategy": "hierarchical_precise_structural",
       "content_type": "list_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:42.302209",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:25.002167",
       "document_id": "951a782b39b8",
       "document_name": "_documentation_guides_configuration_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_guides_configuration\\_documentation_guides_configuration_.md",
@@ -1158,7 +1164,8 @@
       "chunking_strategy": "hierarchical_precise_semchunk",
       "content_type": "prose_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:42.302209",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:25.002749",
       "document_id": "951a782b39b8",
       "document_name": "_documentation_guides_configuration_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_guides_configuration\\_documentation_guides_configuration_.md",
@@ -1333,7 +1340,7 @@
     }
   },
   {
-    "text": "## Configuration Files\n\nTo customize Qdrant, you can mount your configuration file in any of the following locations. This guide uses `.yaml` files, but Qdrant also supports other formats such as `.toml`, `.json`, and `.ini`.\n\n1. **Main Configuration: `qdrant/config/config.yaml`**\n\n   Mount your custom `config.yaml` file to override default settings:\n\n   ```bash\n   docker run -p 6333:6333 \\\n       -v $(pwd)/config.yaml:/qdrant/config/config.yaml \\\n       qdrant/qdrant\n   ```\n\n2. **Environment-Specific Configuration: `config/{RUN_MODE}.yaml`**\n\n   Qdrant looks for an environment-specific configuration file based on the `RUN_MODE` variable. By default, the [official Docker image](https://hub.docker.com/r/qdrant/qdrant) uses `RUN_MODE=production`, meaning it will look for `config/production.yaml`.\n\n   You can override this by setting `RUN_MODE` to another value (e.g., `dev`), and providing the corresponding file:\n\n   ```bash\n   docker run -p 6333:6333 \\\n       -v $(pwd)/dev.yaml:/qdrant/config/dev.yaml \\\n       -e RUN_MODE=dev \\\n       qdrant/qdrant\n   ```\n\n3. **Local Configuration: `config/local.yaml`**\n\n   The `local.yaml` file is typically used for machine-specific settings that are not tracked in version control:\n\n   ```bash\n   docker run -p 6333:6333 \\\n       -v $(pwd)/local.yaml:/qdrant/config/local.yaml \\\n       qdrant/qdrant\n   ```\n\n4. **Custom Configuration via `--config-path`**\n\n   You can specify a custom configuration file path using the `--config-path` argument. This will override other configuration files:",
+    "text": "## Configuration Files\n\nTo customize Qdrant, you can mount your configuration file in any of the following locations. This guide uses `.yaml` files, but Qdrant also supports other formats such as `.toml`, `.json`, and `.ini`.\n\n1. **Main Configuration: `qdrant/config/config.yaml`**\n\n   Mount your custom `config.yaml` file to override default settings:\n\n   ```bash\n   docker run -p 6333:6333 \\\n       -v $(pwd)/config.yaml:/qdrant/config/config.yaml \\\n       qdrant/qdrant\n   ```\n\n2. **Environment-Specific Configuration: `config/{RUN_MODE}.yaml`**\n\n   Qdrant looks for an environment-specific configuration file based on the `RUN_MODE` variable. By default, the [official Docker image](https://hub.docker.com/r/qdrant/qdrant) uses `RUN_MODE=production`, meaning it will look for `config/production.yaml`.\n\n   You can override this by setting `RUN_MODE` to another value (e.g., `dev`), and providing the corresponding file:\n\n   ```bash\n   docker run -p 6333:6333 \\\n       -v $(pwd)/dev.yaml:/qdrant/config/dev.yaml \\\n       -e RUN_MODE=dev \\\n       qdrant/qdrant\n   ```\n\n3. **Local Configuration: `config/local.yaml`**\n\n   The `local.yaml` file is typically used for machine-specific settings that are not tracked in version control:\n\n   ```bash\n   docker run -p 6333:6333 \\\n       -v $(pwd)/local.yaml:/qdrant/config/local.yaml \\\n       qdrant/qdrant\n   ```\n\n4. **Custom Configuration via `--config-path`**\n\n   You can specify a custom configuration file path using the `--config-path` argument. This will override other configuration files:\n\n   ```bash\n   docker run -p 6333:6333 \\\n       -v $(pwd)/config.yaml:/path/to/config.yaml \\\n       qdrant/qdrant \\\n       ./qdrant --config-path /path/to/config.yaml\n   ```\n\nFor details on how these configurations are loaded and merged, see the [loading order and priority](#loading-order-and-priority.md). The full list of available configuration options can be found [below](#configuration-options.md).",
     "metadata": {
       "chunk_id": "951a782b39b8-0011",
       "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_guides_configuration\\_documentation_guides_configuration_.md",
@@ -1347,17 +1354,18 @@
         "Configuration Files"
       ],
       "heading_text": "Configuration Files",
-      "token_count": 394,
-      "char_count": 1542,
+      "token_count": 494,
+      "char_count": 1948,
       "start_char": 11865,
-      "end_char": 13407,
+      "end_char": 13813,
       "semantic_score": 0.7,
-      "structural_score": 0.7999999999999998,
-      "retrieval_quality": 0.7113034482758621,
+      "structural_score": 0.9999999999999999,
+      "retrieval_quality": 0.7329222222222221,
       "chunking_strategy": "hierarchical_precise_semchunk",
       "content_type": "prose_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:42.302209",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:25.004119",
       "document_id": "951a782b39b8",
       "document_name": "_documentation_guides_configuration_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_guides_configuration\\_documentation_guides_configuration_.md",
@@ -1365,9 +1373,9 @@
       "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_guides_configuration",
       "relative_path": "Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_guides_configuration\\_documentation_guides_configuration_.md",
       "hierarchy_path": "Configuration Files",
-      "chunk_hash": "d2f302925737fbe8",
-      "content_digest": "d2f302925737fbe8",
-      "chunk_length": 1542,
+      "chunk_hash": "0fb3aa01ecd20f98",
+      "content_digest": "0fb3aa01ecd20f98",
+      "chunk_length": 1948,
       "payload_version": "1.3",
       "collection_hints": [
         "qdrant_ecosystem"
@@ -1377,130 +1385,130 @@
         "weighting": "tf-normalized",
         "top_terms": [
           "qdrant",
-          "yaml",
           "config",
+          "yaml",
           "configuration",
           "run",
-          "file",
           "the",
           "6333",
+          "file",
           "docker",
+          "path",
+          "and",
           "mode",
           "local",
+          "can",
+          "bash",
+          "pwd",
+          "for",
           "dev",
           "files",
-          "you",
-          "can",
-          "this",
-          "custom",
-          "override",
-          "bash",
-          "pwd"
+          "you"
         ],
         "term_weights": [
           {
             "term": "qdrant",
-            "tf": 15,
-            "weight": 0.078947
-          },
-          {
-            "term": "yaml",
-            "tf": 13,
-            "weight": 0.068421
+            "tf": 18,
+            "weight": 0.075314
           },
           {
             "term": "config",
-            "tf": 13,
-            "weight": 0.068421
+            "tf": 17,
+            "weight": 0.07113
+          },
+          {
+            "term": "yaml",
+            "tf": 16,
+            "weight": 0.066946
           },
           {
             "term": "configuration",
-            "tf": 9,
-            "weight": 0.047368
+            "tf": 11,
+            "weight": 0.046025
           },
           {
             "term": "run",
+            "tf": 9,
+            "weight": 0.037657
+          },
+          {
+            "term": "the",
             "tf": 8,
-            "weight": 0.042105
+            "weight": 0.033473
+          },
+          {
+            "term": "6333",
+            "tf": 8,
+            "weight": 0.033473
           },
           {
             "term": "file",
             "tf": 6,
-            "weight": 0.031579
-          },
-          {
-            "term": "the",
-            "tf": 6,
-            "weight": 0.031579
-          },
-          {
-            "term": "6333",
-            "tf": 6,
-            "weight": 0.031579
+            "weight": 0.025105
           },
           {
             "term": "docker",
+            "tf": 6,
+            "weight": 0.025105
+          },
+          {
+            "term": "path",
+            "tf": 6,
+            "weight": 0.025105
+          },
+          {
+            "term": "and",
             "tf": 5,
-            "weight": 0.026316
+            "weight": 0.020921
           },
           {
             "term": "mode",
             "tf": 5,
-            "weight": 0.026316
+            "weight": 0.020921
           },
           {
             "term": "local",
             "tf": 5,
-            "weight": 0.026316
+            "weight": 0.020921
+          },
+          {
+            "term": "can",
+            "tf": 4,
+            "weight": 0.016736
+          },
+          {
+            "term": "bash",
+            "tf": 4,
+            "weight": 0.016736
+          },
+          {
+            "term": "pwd",
+            "tf": 4,
+            "weight": 0.016736
+          },
+          {
+            "term": "for",
+            "tf": 4,
+            "weight": 0.016736
           },
           {
             "term": "dev",
             "tf": 4,
-            "weight": 0.021053
+            "weight": 0.016736
           },
           {
             "term": "files",
             "tf": 3,
-            "weight": 0.015789
+            "weight": 0.012552
           },
           {
             "term": "you",
             "tf": 3,
-            "weight": 0.015789
-          },
-          {
-            "term": "can",
-            "tf": 3,
-            "weight": 0.015789
-          },
-          {
-            "term": "this",
-            "tf": 3,
-            "weight": 0.015789
-          },
-          {
-            "term": "custom",
-            "tf": 3,
-            "weight": 0.015789
-          },
-          {
-            "term": "override",
-            "tf": 3,
-            "weight": 0.015789
-          },
-          {
-            "term": "bash",
-            "tf": 3,
-            "weight": 0.015789
-          },
-          {
-            "term": "pwd",
-            "tf": 3,
-            "weight": 0.015789
+            "weight": 0.012552
           }
         ],
-        "unique_terms": 75,
-        "total_terms": 190
+        "unique_terms": 91,
+        "total_terms": 239
       },
       "modal_hint": "code",
       "content_flags": {
@@ -1517,7 +1525,7 @@
         "configuration",
         "docker",
         "file",
-        "mode",
+        "path",
         "qdrant",
         "run",
         "the",
@@ -1526,19 +1534,19 @@
     },
     "advanced_scores": {
       "semantic": 0.7,
-      "structural": 0.7999999999999998,
-      "retrieval_quality": 0.7113034482758621,
-      "overall": 0.7371011494252873
+      "structural": 0.9999999999999999,
+      "retrieval_quality": 0.7329222222222221,
+      "overall": 0.810974074074074
     }
   },
   {
     "text": "## Environment Variables\n\nYou can also configure Qdrant using environment variables, which always take the highest priority and override any file-based settings.\n\nEnvironment variables follow this format: they should be prefixed with `QDRANT__`, and nested properties should be separated by double underscores (`__`). For example:\n\n```bash\ndocker run -p 6333:6333 \\\n    -e QDRANT__LOG_LEVEL=INFO \\\n    -e QDRANT__SERVICE__API_KEY=<MY_SECRET_KEY> \\\n    -e QDRANT__SERVICE__ENABLE_TLS=1 \\\n    -e QDRANT__TLS__CERT=./tls/cert.pem \\\n    qdrant/qdrant\n```\n\nThis results in the following configuration:\n\n```yaml\nlog_level: INFO\nservice:\n  enable_tls: true\n  api_key: <MY_SECRET_KEY>\ntls:\n  cert: ./tls/cert.pem\n```",
     "metadata": {
-      "chunk_id": "951a782b39b8-0013",
+      "chunk_id": "951a782b39b8-0012",
       "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_guides_configuration\\_documentation_guides_configuration_.md",
       "filename": "_documentation_guides_configuration_.md",
       "file_extension": ".md",
-      "chunk_index": 13,
+      "chunk_index": 12,
       "document_level": 1,
       "parent_chunk_id": null,
       "child_chunk_ids": [],
@@ -1556,7 +1564,8 @@
       "chunking_strategy": "hierarchical_precise_semchunk",
       "content_type": "prose_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:42.302209",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:25.004685",
       "document_id": "951a782b39b8",
       "document_name": "_documentation_guides_configuration_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_guides_configuration\\_documentation_guides_configuration_.md",
@@ -1733,11 +1742,11 @@
   {
     "text": "## Loading Order and Priority\n\nDuring startup, Qdrant merges multiple configuration sources into a single effective configuration. The loading order is as follows (from least to most significant):\n\n1. Embedded default configuration\n2. `config/config.yaml`\n3. `config/{RUN_MODE}.yaml`\n4. `config/local.yaml`\n5. Custom configuration file\n6. Environment variables",
     "metadata": {
-      "chunk_id": "951a782b39b8-0014",
+      "chunk_id": "951a782b39b8-0013",
       "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_guides_configuration\\_documentation_guides_configuration_.md",
       "filename": "_documentation_guides_configuration_.md",
       "file_extension": ".md",
-      "chunk_index": 14,
+      "chunk_index": 13,
       "document_level": 1,
       "parent_chunk_id": null,
       "child_chunk_ids": [],
@@ -1755,7 +1764,8 @@
       "chunking_strategy": "hierarchical_precise_semchunk",
       "content_type": "prose_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:42.302209",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:25.005028",
       "document_id": "951a782b39b8",
       "document_name": "_documentation_guides_configuration_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_guides_configuration\\_documentation_guides_configuration_.md",
@@ -1932,11 +1942,11 @@
   {
     "text": "### Overriding Behavior  Settings from later sources in the list override those from earlier sources:  - Settings in `config/{RUN_MODE}.yaml` (3) will override those in `config/config.yaml` (2). - A custom configuration file provided via `--config-path` (5) will override all other file-based settings. - Environment variables (6) have the highest priority and will override any settings from files.",
     "metadata": {
-      "chunk_id": "951a782b39b8-0015",
+      "chunk_id": "951a782b39b8-0014",
       "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_guides_configuration\\_documentation_guides_configuration_.md",
       "filename": "_documentation_guides_configuration_.md",
       "file_extension": ".md",
-      "chunk_index": 15,
+      "chunk_index": 14,
       "document_level": 1,
       "parent_chunk_id": null,
       "child_chunk_ids": [],
@@ -1954,7 +1964,8 @@
       "chunking_strategy": "hierarchical_precise_structural",
       "content_type": "list_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:42.302209",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:25.005329",
       "document_id": "951a782b39b8",
       "document_name": "_documentation_guides_configuration_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_guides_configuration\\_documentation_guides_configuration_.md",
@@ -2131,11 +2142,11 @@
   {
     "text": "## Configuration Validation\n\nQdrant validates the configuration during startup. If any issues are found, the server will terminate immediately, providing information about the error. For example:\n\n```console\nError: invalid type: 64-bit integer `-1`, expected an unsigned 64-bit or smaller integer for key `storage.hnsw_index.max_indexing_threads` in config/production.yaml\n```\n\nThis ensures that misconfigurations are caught early, preventing Qdrant from running with invalid settings.",
     "metadata": {
-      "chunk_id": "951a782b39b8-0016",
+      "chunk_id": "951a782b39b8-0015",
       "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_guides_configuration\\_documentation_guides_configuration_.md",
       "filename": "_documentation_guides_configuration_.md",
       "file_extension": ".md",
-      "chunk_index": 16,
+      "chunk_index": 15,
       "document_level": 1,
       "parent_chunk_id": null,
       "child_chunk_ids": [],
@@ -2153,7 +2164,8 @@
       "chunking_strategy": "hierarchical_precise_semchunk",
       "content_type": "prose_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:42.302209",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:25.005813",
       "document_id": "951a782b39b8",
       "document_name": "_documentation_guides_configuration_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_guides_configuration\\_documentation_guides_configuration_.md",
@@ -2330,11 +2342,11 @@
   {
     "text": "## Configuration Options\n\nThe following YAML example describes the available configuration options.\n\n```yaml\nlog_level: INFO",
     "metadata": {
-      "chunk_id": "951a782b39b8-0017",
+      "chunk_id": "951a782b39b8-0016",
       "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_guides_configuration\\_documentation_guides_configuration_.md",
       "filename": "_documentation_guides_configuration_.md",
       "file_extension": ".md",
-      "chunk_index": 17,
+      "chunk_index": 16,
       "document_level": 1,
       "parent_chunk_id": null,
       "child_chunk_ids": [],
@@ -2352,7 +2364,8 @@
       "chunking_strategy": "hierarchical_precise_semchunk",
       "content_type": "prose_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:42.302209",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:25.005950",
       "document_id": "951a782b39b8",
       "document_name": "_documentation_guides_configuration_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_guides_configuration\\_documentation_guides_configuration_.md",
@@ -2475,11 +2488,11 @@
   {
     "text": "# Logging configuration",
     "metadata": {
-      "chunk_id": "951a782b39b8-0018",
+      "chunk_id": "951a782b39b8-0017",
       "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_guides_configuration\\_documentation_guides_configuration_.md",
       "filename": "_documentation_guides_configuration_.md",
       "file_extension": ".md",
-      "chunk_index": 18,
+      "chunk_index": 17,
       "document_level": 1,
       "parent_chunk_id": null,
       "child_chunk_ids": [],
@@ -2497,7 +2510,8 @@
       "chunking_strategy": "hierarchical_precise_semchunk",
       "content_type": "prose_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:42.302209",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:25.006045",
       "document_id": "951a782b39b8",
       "document_name": "_documentation_guides_configuration_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_guides_configuration\\_documentation_guides_configuration_.md",
@@ -2556,7 +2570,207 @@
     }
   },
   {
-    "text": "# Normal node - receives all updates and answers all queries\n  node_type: \"Normal\"\n\n  # Listener node - receives all updates, but does not answer search/read queries\n  # Useful for setting up a dedicated backup node\n  # node_type: \"Listener\"\n\n  performance:\n    # Number of parallel threads used for search operations. If 0 - auto selection.\n    max_search_threads: 0\n\n    # CPU budget, how many CPUs (threads) to allocate for an optimization job.\n    # If 0 - auto selection, keep 1 or more CPUs unallocated depending on CPU size\n    # If negative - subtract this number of CPUs from the available CPUs.\n    # If positive - use this exact number of CPUs.\n    optimizer_cpu_budget: 0\n\n    # Prevent DDoS of too many concurrent updates in distributed mode.\n    # One external update usually triggers multiple internal updates, which breaks internal\n    # timings. For example, the health check timing and consensus timing.\n    # If null - auto selection.\n    update_rate_limit: null\n\n    # Limit for number of incoming automatic shard transfers per collection on this node, does not affect user-requested transfers.\n    # The same value should be used on all nodes in a cluster.\n    # Default is to allow 1 transfer.\n    # If null - allow unlimited transfers.\n    #incoming_shard_transfers_limit: 1\n\n    # Limit for number of outgoing automatic shard transfers per collection on this node, does not affect user-requested transfers.\n    # The same value should be used on all nodes in a cluster.\n    # Default is to allow 1 transfer.\n    # If null - allow unlimited transfers.\n    #outgoing_shard_transfers_limit: 1",
+    "text": "#     buffer_size_bytes: 1024\n\nstorage:\n  # Where to store all the data\n  storage_path: ./storage\n\n  # Where to store snapshots\n  snapshots_path: ./snapshots\n\n  snapshots_config:\n    # \"local\" or \"s3\" - where to store snapshots\n    snapshots_storage: local\n    # s3_config:\n    #   bucket: \"\"\n    #   region: \"\"\n    #   access_key: \"\"\n    #   secret_key: \"\"\n\n  # Where to store temporary files\n  # If null, temporary snapshots are stored in: storage/snapshots_temp/\n  temp_path: null\n\n  # If true - point payloads will not be stored in memory.\n  # It will be read from the disk every time it is requested.\n  # This setting saves RAM by (slightly) increasing the response time.\n  # Note: those payload values that are involved in filtering and are indexed - remain in RAM.\n  #\n  # Default: true\n  on_disk_payload: true\n\n  # Maximum number of concurrent updates to shard replicas\n  # If `null` - maximum concurrency is used.\n  update_concurrency: null\n\n  # Write-ahead-log related configuration\n  wal:\n    # Size of a single WAL segment\n    wal_capacity_mb: 32\n\n    # Number of WAL segments to create ahead of actual data requirement\n    wal_segments_ahead: 0\n\n  # Normal node - receives all updates and answers all queries\n  node_type: \"Normal\"\n\n  # Listener node - receives all updates, but does not answer search/read queries\n  # Useful for setting up a dedicated backup node\n  # node_type: \"Listener\"\n\n  performance:\n    # Number of parallel threads used for search operations. If 0 - auto selection.\n    max_search_threads: 0\n\n    # CPU budget, how many CPUs (threads) to allocate for an optimization job.\n    # If 0 - auto selection, keep 1 or more CPUs unallocated depending on CPU size\n    # If negative - subtract this number of CPUs from the available CPUs.\n    # If positive - use this exact number of CPUs.\n    optimizer_cpu_budget: 0\n\n    # Prevent DDoS of too many concurrent updates in distributed mode.\n    # One external update usually triggers multiple internal updates, which breaks internal\n    # timings. For example, the health check timing and consensus timing.\n    # If null - auto selection.\n    update_rate_limit: null",
+    "metadata": {
+      "chunk_id": "951a782b39b8-0029",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_guides_configuration\\_documentation_guides_configuration_.md",
+      "filename": "_documentation_guides_configuration_.md",
+      "file_extension": ".md",
+      "chunk_index": 29,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "buffer_size_bytes: 1024"
+      ],
+      "heading_text": "buffer_size_bytes: 1024",
+      "token_count": 512,
+      "char_count": 2142,
+      "start_char": 16293,
+      "end_char": 18435,
+      "semantic_score": 0.7999999999999999,
+      "structural_score": 0.7,
+      "retrieval_quality": 0.8687500000000001,
+      "chunking_strategy": "hierarchical_precise_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:25.018047",
+      "document_id": "951a782b39b8",
+      "document_name": "_documentation_guides_configuration_",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_guides_configuration\\_documentation_guides_configuration_.md",
+      "source_filename": "_documentation_guides_configuration_.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_guides_configuration",
+      "relative_path": "Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_guides_configuration\\_documentation_guides_configuration_.md",
+      "hierarchy_path": "buffer_size_bytes: 1024",
+      "chunk_hash": "8c04cc4d3ca84602",
+      "content_digest": "8c04cc4d3ca84602",
+      "chunk_length": 2142,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "snapshots",
+          "null",
+          "storage",
+          "the",
+          "number",
+          "updates",
+          "wal",
+          "node",
+          "cpus",
+          "where",
+          "store",
+          "all",
+          "for",
+          "size",
+          "path",
+          "are",
+          "true",
+          "this",
+          "and",
+          "update"
+        ],
+        "term_weights": [
+          {
+            "term": "snapshots",
+            "tf": 8,
+            "weight": 0.032389
+          },
+          {
+            "term": "null",
+            "tf": 6,
+            "weight": 0.024291
+          },
+          {
+            "term": "storage",
+            "tf": 5,
+            "weight": 0.020243
+          },
+          {
+            "term": "the",
+            "tf": 5,
+            "weight": 0.020243
+          },
+          {
+            "term": "number",
+            "tf": 5,
+            "weight": 0.020243
+          },
+          {
+            "term": "updates",
+            "tf": 5,
+            "weight": 0.020243
+          },
+          {
+            "term": "wal",
+            "tf": 5,
+            "weight": 0.020243
+          },
+          {
+            "term": "node",
+            "tf": 5,
+            "weight": 0.020243
+          },
+          {
+            "term": "cpus",
+            "tf": 5,
+            "weight": 0.020243
+          },
+          {
+            "term": "where",
+            "tf": 4,
+            "weight": 0.016194
+          },
+          {
+            "term": "store",
+            "tf": 4,
+            "weight": 0.016194
+          },
+          {
+            "term": "all",
+            "tf": 4,
+            "weight": 0.016194
+          },
+          {
+            "term": "for",
+            "tf": 4,
+            "weight": 0.016194
+          },
+          {
+            "term": "size",
+            "tf": 3,
+            "weight": 0.012146
+          },
+          {
+            "term": "path",
+            "tf": 3,
+            "weight": 0.012146
+          },
+          {
+            "term": "are",
+            "tf": 3,
+            "weight": 0.012146
+          },
+          {
+            "term": "true",
+            "tf": 3,
+            "weight": 0.012146
+          },
+          {
+            "term": "this",
+            "tf": 3,
+            "weight": 0.012146
+          },
+          {
+            "term": "and",
+            "tf": 3,
+            "weight": 0.012146
+          },
+          {
+            "term": "update",
+            "tf": 3,
+            "weight": 0.012146
+          }
+        ],
+        "unique_terms": 139,
+        "total_terms": 247
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "buffer_size_bytes: 1024",
+        "cpus",
+        "node",
+        "null",
+        "number",
+        "snapshots",
+        "storage",
+        "the",
+        "updates",
+        "wal",
+        "where"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.7999999999999999,
+      "structural": 0.7,
+      "retrieval_quality": 0.8687500000000001,
+      "overall": 0.7895833333333334
+    }
+  },
+  {
+    "text": "# Maximum size (in KiloBytes) of vectors allowed for plain index.\n    # Default value based on experiments and observations.\n    # Note: 1Kb = 1 vector of size 256\n    # To explicitly disable vector indexing, set to `0`.\n    # If not set, the default value will be used.\n    indexing_threshold_kb: 10000\n\n    # Interval between forced flushes.\n    flush_interval_sec: 5\n\n    # Max number of threads (jobs) for running optimizations per shard.\n    # Note: each optimization job will also use `max_indexing_threads` threads by itself for index building.\n    # If null - have no limit and choose dynamically to saturate CPU.\n    # If 0 - no optimization threads, optimizations will be disabled.\n    max_optimization_threads: null\n\n  # This section has the same options as 'optimizers' above. All values specified here will overwrite the collections\n  # optimizers configs regardless of the config above and the options specified at collection creation.\n  #optimizers_overwrite:\n  #  deleted_threshold: 0.2\n  #  vacuum_min_vector_number: 1000\n  #  default_segment_number: 0\n  #  max_segment_size_kb: null\n  #  indexing_threshold_kb: 10000\n  #  flush_interval_sec: 5\n  #  max_optimization_threads: null\n\n  # Default parameters of HNSW Index. Could be overridden for each collection or named vector individually\n  hnsw_index:\n    # Number of edges per node in the index graph. Larger the value - more accurate the search, more space required.\n    m: 16\n\n    # Number of neighbours to consider during the index building. Larger the value - more accurate the search, more time required to build index.\n    ef_construct: 100\n\n    # Minimal size threshold (in KiloBytes) below which full-scan is preferred over HNSW search.\n    # This measures the total size of vectors being queried against.\n    # When the maximum estimated amount of points that a condition satisfies is smaller than\n    # `full_scan_threshold_kb`, the query planner will use full-scan search instead of HNSW index\n    # traversal for better performance.\n    # Note: 1Kb = 1 vector of size 256\n    full_scan_threshold_kb: 10000",
     "metadata": {
       "chunk_id": "951a782b39b8-0031",
       "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_guides_configuration\\_documentation_guides_configuration_.md",
@@ -2570,17 +2784,18 @@
         "buffer_size_bytes: 1024"
       ],
       "heading_text": "buffer_size_bytes: 1024",
-      "token_count": 359,
-      "char_count": 1613,
-      "start_char": 17452,
-      "end_char": 19067,
+      "token_count": 497,
+      "char_count": 2086,
+      "start_char": 20589,
+      "end_char": 22675,
       "semantic_score": 0.7,
-      "structural_score": 0.8999999999999999,
-      "retrieval_quality": 0.6546635627530365,
+      "structural_score": 0.7,
+      "retrieval_quality": 0.5162140939597315,
       "chunking_strategy": "hierarchical_precise_semchunk",
       "content_type": "prose_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:42.313258",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:25.019232",
       "document_id": "951a782b39b8",
       "document_name": "_documentation_guides_configuration_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_guides_configuration\\_documentation_guides_configuration_.md",
@@ -2588,9 +2803,9 @@
       "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_guides_configuration",
       "relative_path": "Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_guides_configuration\\_documentation_guides_configuration_.md",
       "hierarchy_path": "buffer_size_bytes: 1024",
-      "chunk_hash": "5e1329369e1d57c7",
-      "content_digest": "5e1329369e1d57c7",
-      "chunk_length": 1613,
+      "chunk_hash": "7be0916cea288394",
+      "content_digest": "7be0916cea288394",
+      "chunk_length": 2086,
       "payload_version": "1.3",
       "collection_hints": [
         "qdrant_ecosystem"
@@ -2599,131 +2814,131 @@
         "version": "1.0",
         "weighting": "tf-normalized",
         "top_terms": [
-          "transfers",
-          "node",
-          "for",
-          "all",
-          "number",
-          "cpus",
-          "limit",
-          "updates",
-          "this",
           "the",
-          "null",
-          "shard",
-          "allow",
-          "does",
-          "not",
-          "search",
+          "index",
+          "size",
+          "threshold",
           "threads",
-          "used",
-          "auto",
-          "selection"
+          "for",
+          "vector",
+          "will",
+          "max",
+          "number",
+          "default",
+          "value",
+          "indexing",
+          "optimization",
+          "null",
+          "hnsw",
+          "more",
+          "search",
+          "full",
+          "scan"
         ],
         "term_weights": [
           {
-            "term": "transfers",
-            "tf": 8,
-            "weight": 0.041885
+            "term": "the",
+            "tf": 14,
+            "weight": 0.05668
           },
           {
-            "term": "node",
-            "tf": 7,
-            "weight": 0.036649
+            "term": "index",
+            "tf": 8,
+            "weight": 0.032389
+          },
+          {
+            "term": "size",
+            "tf": 6,
+            "weight": 0.024291
+          },
+          {
+            "term": "threshold",
+            "tf": 6,
+            "weight": 0.024291
+          },
+          {
+            "term": "threads",
+            "tf": 6,
+            "weight": 0.024291
           },
           {
             "term": "for",
-            "tf": 6,
-            "weight": 0.031414
+            "tf": 5,
+            "weight": 0.020243
           },
           {
-            "term": "all",
+            "term": "vector",
             "tf": 5,
-            "weight": 0.026178
+            "weight": 0.020243
+          },
+          {
+            "term": "will",
+            "tf": 5,
+            "weight": 0.020243
+          },
+          {
+            "term": "max",
+            "tf": 5,
+            "weight": 0.020243
           },
           {
             "term": "number",
             "tf": 5,
-            "weight": 0.026178
+            "weight": 0.020243
           },
           {
-            "term": "cpus",
-            "tf": 5,
-            "weight": 0.026178
-          },
-          {
-            "term": "limit",
-            "tf": 5,
-            "weight": 0.026178
-          },
-          {
-            "term": "updates",
+            "term": "default",
             "tf": 4,
-            "weight": 0.020942
+            "weight": 0.016194
           },
           {
-            "term": "this",
+            "term": "value",
             "tf": 4,
-            "weight": 0.020942
+            "weight": 0.016194
           },
           {
-            "term": "the",
+            "term": "indexing",
             "tf": 4,
-            "weight": 0.020942
+            "weight": 0.016194
+          },
+          {
+            "term": "optimization",
+            "tf": 4,
+            "weight": 0.016194
           },
           {
             "term": "null",
             "tf": 4,
-            "weight": 0.020942
+            "weight": 0.016194
           },
           {
-            "term": "shard",
+            "term": "hnsw",
             "tf": 4,
-            "weight": 0.020942
+            "weight": 0.016194
           },
           {
-            "term": "allow",
+            "term": "more",
             "tf": 4,
-            "weight": 0.020942
-          },
-          {
-            "term": "does",
-            "tf": 3,
-            "weight": 0.015707
-          },
-          {
-            "term": "not",
-            "tf": 3,
-            "weight": 0.015707
+            "weight": 0.016194
           },
           {
             "term": "search",
-            "tf": 3,
-            "weight": 0.015707
+            "tf": 4,
+            "weight": 0.016194
           },
           {
-            "term": "threads",
-            "tf": 3,
-            "weight": 0.015707
+            "term": "full",
+            "tf": 4,
+            "weight": 0.016194
           },
           {
-            "term": "used",
-            "tf": 3,
-            "weight": 0.015707
-          },
-          {
-            "term": "auto",
-            "tf": 3,
-            "weight": 0.015707
-          },
-          {
-            "term": "selection",
-            "tf": 3,
-            "weight": 0.015707
+            "term": "scan",
+            "tf": 4,
+            "weight": 0.016194
           }
         ],
-        "unique_terms": 96,
-        "total_terms": 191
+        "unique_terms": 129,
+        "total_terms": 247
       },
       "modal_hint": "prose",
       "content_flags": {
@@ -2734,34 +2949,34 @@
         "has_formula": false
       },
       "search_keywords": [
-        "all",
         "buffer_size_bytes: 1024",
-        "cpus",
         "for",
-        "limit",
-        "node",
+        "index",
+        "max",
         "number",
+        "size",
         "the",
-        "this",
-        "transfers",
-        "updates"
+        "threads",
+        "threshold",
+        "vector",
+        "will"
       ]
     },
     "advanced_scores": {
       "semantic": 0.7,
-      "structural": 0.8999999999999999,
-      "retrieval_quality": 0.6546635627530365,
-      "overall": 0.7515545209176788
+      "structural": 0.7,
+      "retrieval_quality": 0.5162140939597315,
+      "overall": 0.6387380313199105
     }
   },
   {
-    "text": "# traversal for better performance.\n    # Note: 1Kb = 1 vector of size 256\n    full_scan_threshold_kb: 10000\n\n    # Number of parallel threads used for background index building.\n    # If 0 - automatically select.\n    # Best to keep between 8 and 16 to prevent likelihood of building broken/inefficient HNSW graphs.\n    # On small CPUs, less threads are used.\n    max_indexing_threads: 0\n\n    # Store HNSW index on disk. If set to false, index will be stored in RAM. Default: false\n    on_disk: false\n\n    # Custom M param for hnsw graph built for payload index. If not set, default M will be used.\n    payload_m: null\n\n  # Default shard transfer method to use if none is defined.\n  # If null - don't have a shard transfer preference, choose automatically.\n  # If stream_records, snapshot or wal_delta - prefer this specific method.\n  # More info: https://qdrant.tech/documentation/guides/distributed_deployment/#shard-transfer-method\n  shard_transfer_method: null\n\n  # Default parameters for collections\n  collection:\n    # Number of replicas of each shard that network tries to maintain\n    replication_factor: 1\n\n    # How many replicas should apply the operation for us to consider it successful\n    write_consistency_factor: 1\n\n    # Default parameters for vectors.\n    vectors:\n      # Whether vectors should be stored in memory or on disk.\n      on_disk: null\n\n    # shard_number_per_node: 1\n\n    # Default quantization configuration.\n    # More info: https://qdrant.tech/documentation/guides/quantization\n    quantization: null",
+    "text": "# Number of parallel threads used for background index building.\n    # If 0 - automatically select.\n    # Best to keep between 8 and 16 to prevent likelihood of building broken/inefficient HNSW graphs.\n    # On small CPUs, less threads are used.\n    max_indexing_threads: 0\n\n    # Store HNSW index on disk. If set to false, index will be stored in RAM. Default: false\n    on_disk: false\n\n    # Custom M param for hnsw graph built for payload index. If not set, default M will be used.\n    payload_m: null\n\n  # Default shard transfer method to use if none is defined.\n  # If null - don't have a shard transfer preference, choose automatically.\n  # If stream_records, snapshot or wal_delta - prefer this specific method.\n  # More info: https://qdrant.tech/documentation/guides/distributed_deployment/#shard-transfer-method\n  shard_transfer_method: null\n\n  # Default parameters for collections\n  collection:\n    # Number of replicas of each shard that network tries to maintain\n    replication_factor: 1\n\n    # How many replicas should apply the operation for us to consider it successful\n    write_consistency_factor: 1\n\n    # Default parameters for vectors.\n    vectors:\n      # Whether vectors should be stored in memory or on disk.\n      on_disk: null\n\n    # shard_number_per_node: 1\n\n    # Default quantization configuration.\n    # More info: https://qdrant.tech/documentation/guides/quantization\n    quantization: null\n\n    # Default strict mode parameters for newly created collections.\n    strict_mode:\n      # Whether strict mode is enabled for a collection or not.\n      enabled: false\n\n      # Max allowed `limit` parameter for all APIs that don't have their own max limit.\n      max_query_limit: null\n\n      # Max allowed `timeout` parameter.\n      max_timeout: null\n\n      # Allow usage of unindexed fields in retrieval based (eg. search) filters.\n      unindexed_filtering_retrieve: null\n\n      # Allow usage of unindexed fields in filtered updates (eg. delete by payload).\n      unindexed_filtering_update: null\n\n      # Max HNSW value allowed in search parameters.\n      search_max_hnsw_ef: null\n\n      # Whether exact search is allowed or not.\n      search_allow_exact: null",
     "metadata": {
-      "chunk_id": "951a782b39b8-0035",
+      "chunk_id": "951a782b39b8-0032",
       "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_guides_configuration\\_documentation_guides_configuration_.md",
       "filename": "_documentation_guides_configuration_.md",
       "file_extension": ".md",
-      "chunk_index": 35,
+      "chunk_index": 32,
       "document_level": 1,
       "parent_chunk_id": null,
       "child_chunk_ids": [],
@@ -2769,17 +2984,18 @@
         "buffer_size_bytes: 1024"
       ],
       "heading_text": "buffer_size_bytes: 1024",
-      "token_count": 365,
-      "char_count": 1535,
-      "start_char": 22575,
-      "end_char": 24114,
+      "token_count": 500,
+      "char_count": 2188,
+      "start_char": 22675,
+      "end_char": 24863,
       "semantic_score": 0.7,
       "structural_score": 0.7,
-      "retrieval_quality": 0.6935579710144928,
+      "retrieval_quality": 0.8682926829268294,
       "chunking_strategy": "hierarchical_precise_semchunk",
       "content_type": "prose_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:42.313258",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:25.019607",
       "document_id": "951a782b39b8",
       "document_name": "_documentation_guides_configuration_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_guides_configuration\\_documentation_guides_configuration_.md",
@@ -2787,9 +3003,9 @@
       "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_guides_configuration",
       "relative_path": "Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_guides_configuration\\_documentation_guides_configuration_.md",
       "hierarchy_path": "buffer_size_bytes: 1024",
-      "chunk_hash": "883a029140fc09a9",
-      "content_digest": "883a029140fc09a9",
-      "chunk_length": 1535,
+      "chunk_hash": "7eb14e379fc83eab",
+      "content_digest": "7eb14e379fc83eab",
+      "chunk_length": 2188,
       "payload_version": "1.3",
       "collection_hints": [
         "qdrant_ecosystem"
@@ -2798,131 +3014,131 @@
         "version": "1.0",
         "weighting": "tf-normalized",
         "top_terms": [
+          "null",
           "for",
+          "max",
           "default",
           "shard",
-          "null",
+          "hnsw",
+          "search",
           "index",
           "disk",
+          "false",
           "transfer",
           "method",
+          "parameters",
+          "allowed",
+          "unindexed",
           "number",
           "threads",
           "used",
-          "hnsw",
-          "false",
-          "vectors",
-          "quantization",
-          "building",
-          "automatically",
-          "set",
-          "will",
-          "stored"
+          "payload",
+          "not"
         ],
         "term_weights": [
           {
+            "term": "null",
+            "tf": 11,
+            "weight": 0.044898
+          },
+          {
             "term": "for",
-            "tf": 7,
-            "weight": 0.040936
+            "tf": 9,
+            "weight": 0.036735
+          },
+          {
+            "term": "max",
+            "tf": 8,
+            "weight": 0.032653
           },
           {
             "term": "default",
-            "tf": 6,
-            "weight": 0.035088
+            "tf": 7,
+            "weight": 0.028571
           },
           {
             "term": "shard",
             "tf": 6,
-            "weight": 0.035088
+            "weight": 0.02449
           },
           {
-            "term": "null",
+            "term": "hnsw",
             "tf": 5,
-            "weight": 0.02924
+            "weight": 0.020408
+          },
+          {
+            "term": "search",
+            "tf": 5,
+            "weight": 0.020408
           },
           {
             "term": "index",
             "tf": 4,
-            "weight": 0.023392
+            "weight": 0.016327
           },
           {
             "term": "disk",
             "tf": 4,
-            "weight": 0.023392
+            "weight": 0.016327
+          },
+          {
+            "term": "false",
+            "tf": 4,
+            "weight": 0.016327
           },
           {
             "term": "transfer",
             "tf": 4,
-            "weight": 0.023392
+            "weight": 0.016327
           },
           {
             "term": "method",
             "tf": 4,
-            "weight": 0.023392
+            "weight": 0.016327
+          },
+          {
+            "term": "parameters",
+            "tf": 4,
+            "weight": 0.016327
+          },
+          {
+            "term": "allowed",
+            "tf": 4,
+            "weight": 0.016327
+          },
+          {
+            "term": "unindexed",
+            "tf": 4,
+            "weight": 0.016327
           },
           {
             "term": "number",
             "tf": 3,
-            "weight": 0.017544
+            "weight": 0.012245
           },
           {
             "term": "threads",
             "tf": 3,
-            "weight": 0.017544
+            "weight": 0.012245
           },
           {
             "term": "used",
             "tf": 3,
-            "weight": 0.017544
+            "weight": 0.012245
           },
           {
-            "term": "hnsw",
+            "term": "payload",
             "tf": 3,
-            "weight": 0.017544
+            "weight": 0.012245
           },
           {
-            "term": "false",
+            "term": "not",
             "tf": 3,
-            "weight": 0.017544
-          },
-          {
-            "term": "vectors",
-            "tf": 3,
-            "weight": 0.017544
-          },
-          {
-            "term": "quantization",
-            "tf": 3,
-            "weight": 0.017544
-          },
-          {
-            "term": "building",
-            "tf": 2,
-            "weight": 0.011696
-          },
-          {
-            "term": "automatically",
-            "tf": 2,
-            "weight": 0.011696
-          },
-          {
-            "term": "set",
-            "tf": 2,
-            "weight": 0.011696
-          },
-          {
-            "term": "will",
-            "tf": 2,
-            "weight": 0.011696
-          },
-          {
-            "term": "stored",
-            "tf": 2,
-            "weight": 0.011696
+            "weight": 0.012245
           }
         ],
-        "unique_terms": 108,
-        "total_terms": 171
+        "unique_terms": 126,
+        "total_terms": 245
       },
       "modal_hint": "prose",
       "content_flags": {
@@ -2936,429 +3152,31 @@
         "buffer_size_bytes: 1024",
         "default",
         "disk",
+        "false",
         "for",
+        "hnsw",
         "index",
-        "method",
+        "max",
         "null",
-        "number",
-        "shard",
-        "threads",
-        "transfer"
+        "search",
+        "shard"
       ]
     },
     "advanced_scores": {
       "semantic": 0.7,
       "structural": 0.7,
-      "retrieval_quality": 0.6935579710144928,
-      "overall": 0.6978526570048308
+      "retrieval_quality": 0.8682926829268294,
+      "overall": 0.7560975609756099
     }
   },
   {
-    "text": "# Default parameters for vectors.\n    vectors:\n      # Whether vectors should be stored in memory or on disk.\n      on_disk: null\n\n    # shard_number_per_node: 1\n\n    # Default quantization configuration.\n    # More info: https://qdrant.tech/documentation/guides/quantization\n    quantization: null\n\n    # Default strict mode parameters for newly created collections.\n    strict_mode:\n      # Whether strict mode is enabled for a collection or not.\n      enabled: false\n\n      # Max allowed `limit` parameter for all APIs that don't have their own max limit.\n      max_query_limit: null\n\n      # Max allowed `timeout` parameter.\n      max_timeout: null\n\n      # Allow usage of unindexed fields in retrieval based (eg. search) filters.\n      unindexed_filtering_retrieve: null\n\n      # Allow usage of unindexed fields in filtered updates (eg. delete by payload).\n      unindexed_filtering_update: null\n\n      # Max HNSW value allowed in search parameters.\n      search_max_hnsw_ef: null\n\n      # Whether exact search is allowed or not.\n      search_allow_exact: null\n\n      # Max oversampling value allowed in search.\n      search_max_oversampling: null\n\n  # Maximum number of collections allowed to be created\n  # If null - no limit.\n  max_collections: null\n\nservice:\n  # Maximum size of POST data in a single request in megabytes\n  max_request_size_mb: 32\n\n  # Number of parallel workers used for serving the api. If 0 - equal to the number of available cores.\n  # If missing - Same as storage.max_search_threads\n  max_workers: 0\n\n  # Host to bind the service on\n  host: 0.0.0.0\n\n  # HTTP(S) port to bind the service on\n  http_port: 6333",
+    "text": "# Read more: https://qdrant.tech/documentation/guides/telemetry\ntelemetry_disabled: false",
     "metadata": {
       "chunk_id": "951a782b39b8-0036",
       "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_guides_configuration\\_documentation_guides_configuration_.md",
       "filename": "_documentation_guides_configuration_.md",
       "file_extension": ".md",
       "chunk_index": 36,
-      "document_level": 1,
-      "parent_chunk_id": null,
-      "child_chunk_ids": [],
-      "section_path": [
-        "buffer_size_bytes: 1024"
-      ],
-      "heading_text": "buffer_size_bytes: 1024",
-      "token_count": 392,
-      "char_count": 1638,
-      "start_char": 23812,
-      "end_char": 25454,
-      "semantic_score": 0.7,
-      "structural_score": 0.7,
-      "retrieval_quality": 0.6876460829493088,
-      "chunking_strategy": "hierarchical_precise_semchunk",
-      "content_type": "prose_section",
-      "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:42.313258",
-      "document_id": "951a782b39b8",
-      "document_name": "_documentation_guides_configuration_",
-      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_guides_configuration\\_documentation_guides_configuration_.md",
-      "source_filename": "_documentation_guides_configuration_.md",
-      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_guides_configuration",
-      "relative_path": "Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_guides_configuration\\_documentation_guides_configuration_.md",
-      "hierarchy_path": "buffer_size_bytes: 1024",
-      "chunk_hash": "ed3e331fb9c62cb0",
-      "content_digest": "ed3e331fb9c62cb0",
-      "chunk_length": 1638,
-      "payload_version": "1.3",
-      "collection_hints": [
-        "qdrant_ecosystem"
-      ],
-      "sparse_features": {
-        "version": "1.0",
-        "weighting": "tf-normalized",
-        "top_terms": [
-          "max",
-          "null",
-          "search",
-          "allowed",
-          "for",
-          "number",
-          "limit",
-          "unindexed",
-          "the",
-          "default",
-          "parameters",
-          "vectors",
-          "whether",
-          "quantization",
-          "strict",
-          "mode",
-          "collections",
-          "allow",
-          "service",
-          "disk"
-        ],
-        "term_weights": [
-          {
-            "term": "max",
-            "tf": 13,
-            "weight": 0.071823
-          },
-          {
-            "term": "null",
-            "tf": 11,
-            "weight": 0.060773
-          },
-          {
-            "term": "search",
-            "tf": 8,
-            "weight": 0.044199
-          },
-          {
-            "term": "allowed",
-            "tf": 6,
-            "weight": 0.033149
-          },
-          {
-            "term": "for",
-            "tf": 5,
-            "weight": 0.027624
-          },
-          {
-            "term": "number",
-            "tf": 4,
-            "weight": 0.022099
-          },
-          {
-            "term": "limit",
-            "tf": 4,
-            "weight": 0.022099
-          },
-          {
-            "term": "unindexed",
-            "tf": 4,
-            "weight": 0.022099
-          },
-          {
-            "term": "the",
-            "tf": 4,
-            "weight": 0.022099
-          },
-          {
-            "term": "default",
-            "tf": 3,
-            "weight": 0.016575
-          },
-          {
-            "term": "parameters",
-            "tf": 3,
-            "weight": 0.016575
-          },
-          {
-            "term": "vectors",
-            "tf": 3,
-            "weight": 0.016575
-          },
-          {
-            "term": "whether",
-            "tf": 3,
-            "weight": 0.016575
-          },
-          {
-            "term": "quantization",
-            "tf": 3,
-            "weight": 0.016575
-          },
-          {
-            "term": "strict",
-            "tf": 3,
-            "weight": 0.016575
-          },
-          {
-            "term": "mode",
-            "tf": 3,
-            "weight": 0.016575
-          },
-          {
-            "term": "collections",
-            "tf": 3,
-            "weight": 0.016575
-          },
-          {
-            "term": "allow",
-            "tf": 3,
-            "weight": 0.016575
-          },
-          {
-            "term": "service",
-            "tf": 3,
-            "weight": 0.016575
-          },
-          {
-            "term": "disk",
-            "tf": 2,
-            "weight": 0.01105
-          }
-        ],
-        "unique_terms": 90,
-        "total_terms": 181
-      },
-      "modal_hint": "prose",
-      "content_flags": {
-        "has_code_block": false,
-        "has_table": false,
-        "has_list": false,
-        "has_json": false,
-        "has_formula": false
-      },
-      "search_keywords": [
-        "allowed",
-        "buffer_size_bytes: 1024",
-        "default",
-        "for",
-        "limit",
-        "max",
-        "null",
-        "number",
-        "search",
-        "the",
-        "unindexed"
-      ]
-    },
-    "advanced_scores": {
-      "semantic": 0.7,
-      "structural": 0.7,
-      "retrieval_quality": 0.6876460829493088,
-      "overall": 0.6958820276497696
-    }
-  },
-  {
-    "text": "# Uncomment to enable.\n  # api_key: your_secret_api_key_here\n\n  # Set an api-key for read-only operations.\n  # If set, all requests must include a header with the api-key.\n  # example header: `api-key: <API-KEY>`\n  #\n  # If you enable this you should also enable TLS.\n  # (Either above or via an external service like nginx.)\n  # Sending an api-key over an unencrypted channel is insecure.\n  #\n  # Uncomment to enable.\n  # read_only_api_key: your_secret_read_only_api_key_here\n\n  # Uncomment to enable JWT Role Based Access Control (RBAC).\n  # If enabled, you can generate JWT tokens with fine-grained rules for access control.\n  # Use generated token instead of API key.\n  #\n  # jwt_rbac: true\n\n  # Hardware reporting adds information to the API responses with a\n  # hint on how many resources were used to execute the request.\n  #\n  # Warning: experimental, this feature is still under development and is not supported yet.\n  #\n  # Uncomment to enable.\n  # hardware_reporting: true\n\ncluster:\n  # Use `enabled: true` to run Qdrant in distributed deployment mode\n  enabled: false\n\n  # Configuration of the inter-cluster communication\n  p2p:\n    # Port for internal communication between peers\n    port: 6335\n\n    # Use TLS for communication between peers\n    enable_tls: false",
-    "metadata": {
-      "chunk_id": "951a782b39b8-0038",
-      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_guides_configuration\\_documentation_guides_configuration_.md",
-      "filename": "_documentation_guides_configuration_.md",
-      "file_extension": ".md",
-      "chunk_index": 38,
-      "document_level": 1,
-      "parent_chunk_id": null,
-      "child_chunk_ids": [],
-      "section_path": [
-        "buffer_size_bytes: 1024"
-      ],
-      "heading_text": "buffer_size_bytes: 1024",
-      "token_count": 305,
-      "char_count": 1276,
-      "start_char": 26323,
-      "end_char": 27601,
-      "semantic_score": 0.7,
-      "structural_score": 0.7,
-      "retrieval_quality": 0.678410994764398,
-      "chunking_strategy": "hierarchical_precise_semchunk",
-      "content_type": "prose_section",
-      "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:42.313258",
-      "document_id": "951a782b39b8",
-      "document_name": "_documentation_guides_configuration_",
-      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_guides_configuration\\_documentation_guides_configuration_.md",
-      "source_filename": "_documentation_guides_configuration_.md",
-      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_guides_configuration",
-      "relative_path": "Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_guides_configuration\\_documentation_guides_configuration_.md",
-      "hierarchy_path": "buffer_size_bytes: 1024",
-      "chunk_hash": "b8721230fa9adbeb",
-      "content_digest": "b8721230fa9adbeb",
-      "chunk_length": 1276,
-      "payload_version": "1.3",
-      "collection_hints": [
-        "qdrant_ecosystem"
-      ],
-      "sparse_features": {
-        "version": "1.0",
-        "weighting": "tf-normalized",
-        "top_terms": [
-          "api",
-          "key",
-          "enable",
-          "uncomment",
-          "for",
-          "the",
-          "read",
-          "only",
-          "with",
-          "you",
-          "tls",
-          "jwt",
-          "enabled",
-          "use",
-          "true",
-          "communication",
-          "your",
-          "secret",
-          "here",
-          "set"
-        ],
-        "term_weights": [
-          {
-            "term": "api",
-            "tf": 11,
-            "weight": 0.067073
-          },
-          {
-            "term": "key",
-            "tf": 10,
-            "weight": 0.060976
-          },
-          {
-            "term": "enable",
-            "tf": 7,
-            "weight": 0.042683
-          },
-          {
-            "term": "uncomment",
-            "tf": 4,
-            "weight": 0.02439
-          },
-          {
-            "term": "for",
-            "tf": 4,
-            "weight": 0.02439
-          },
-          {
-            "term": "the",
-            "tf": 4,
-            "weight": 0.02439
-          },
-          {
-            "term": "read",
-            "tf": 3,
-            "weight": 0.018293
-          },
-          {
-            "term": "only",
-            "tf": 3,
-            "weight": 0.018293
-          },
-          {
-            "term": "with",
-            "tf": 3,
-            "weight": 0.018293
-          },
-          {
-            "term": "you",
-            "tf": 3,
-            "weight": 0.018293
-          },
-          {
-            "term": "tls",
-            "tf": 3,
-            "weight": 0.018293
-          },
-          {
-            "term": "jwt",
-            "tf": 3,
-            "weight": 0.018293
-          },
-          {
-            "term": "enabled",
-            "tf": 3,
-            "weight": 0.018293
-          },
-          {
-            "term": "use",
-            "tf": 3,
-            "weight": 0.018293
-          },
-          {
-            "term": "true",
-            "tf": 3,
-            "weight": 0.018293
-          },
-          {
-            "term": "communication",
-            "tf": 3,
-            "weight": 0.018293
-          },
-          {
-            "term": "your",
-            "tf": 2,
-            "weight": 0.012195
-          },
-          {
-            "term": "secret",
-            "tf": 2,
-            "weight": 0.012195
-          },
-          {
-            "term": "here",
-            "tf": 2,
-            "weight": 0.012195
-          },
-          {
-            "term": "set",
-            "tf": 2,
-            "weight": 0.012195
-          }
-        ],
-        "unique_terms": 94,
-        "total_terms": 164
-      },
-      "modal_hint": "prose",
-      "content_flags": {
-        "has_code_block": false,
-        "has_table": false,
-        "has_list": false,
-        "has_json": false,
-        "has_formula": false
-      },
-      "search_keywords": [
-        "api",
-        "buffer_size_bytes: 1024",
-        "enable",
-        "for",
-        "key",
-        "only",
-        "read",
-        "the",
-        "uncomment",
-        "with",
-        "you"
-      ]
-    },
-    "advanced_scores": {
-      "semantic": 0.7,
-      "structural": 0.7,
-      "retrieval_quality": 0.678410994764398,
-      "overall": 0.692803664921466
-    }
-  },
-  {
-    "text": "# Read more: https://qdrant.tech/documentation/guides/telemetry\ntelemetry_disabled: false",
-    "metadata": {
-      "chunk_id": "951a782b39b8-0041",
-      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_guides_configuration\\_documentation_guides_configuration_.md",
-      "filename": "_documentation_guides_configuration_.md",
-      "file_extension": ".md",
-      "chunk_index": 41,
       "document_level": 1,
       "parent_chunk_id": null,
       "child_chunk_ids": [],
@@ -3376,7 +3194,8 @@
       "chunking_strategy": "hierarchical_precise_semchunk",
       "content_type": "prose_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:42.313258",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:25.020468",
       "document_id": "951a782b39b8",
       "document_name": "_documentation_guides_configuration_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_guides_configuration\\_documentation_guides_configuration_.md",
@@ -3493,11 +3312,11 @@
   {
     "text": "# TLS configuration.",
     "metadata": {
-      "chunk_id": "951a782b39b8-0042",
+      "chunk_id": "951a782b39b8-0037",
       "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_guides_configuration\\_documentation_guides_configuration_.md",
       "filename": "_documentation_guides_configuration_.md",
       "file_extension": ".md",
-      "chunk_index": 42,
+      "chunk_index": 37,
       "document_level": 1,
       "parent_chunk_id": null,
       "child_chunk_ids": [],
@@ -3515,7 +3334,8 @@
       "chunking_strategy": "hierarchical_precise_semchunk",
       "content_type": "prose_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:42.313258",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:25.020538",
       "document_id": "951a782b39b8",
       "document_name": "_documentation_guides_configuration_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_guides_configuration\\_documentation_guides_configuration_.md",
@@ -3576,11 +3396,11 @@
   {
     "text": "##### Was this page useful? Yes No  Thank you for your feedback! 🙏  We are sorry to hear that. 😔 You can [edit](https:/github.com/qdrant/landing_page/tree/master/qdrant-landing/content/documentation/guides/configuration.md) this page on GitHub, or [create](https://github.com/qdrant/landing_page/issues/new/choose) a GitHub issue. On this page:  - [Configuration](#configuration.md)    - [Configuration Files](#configuration-files.md)   - [Environment Variables](#environment-variables.md)   - [Loading Order and Priority](#loading-order-and-priority.md)     - [Overriding Behavior](#overriding-behavior.md)   - [Configuration Validation](#configuration-validation.md)   - [Configuration Options](#configuration-options.md)  * [Edit on Github](https://github.com/qdrant/landing_page/tree/master/qdrant-landing/content/documentation/guides/configuration.md) * [Create an issue](https://github.com/qdrant/landing_page/issues/new/choose)",
     "metadata": {
-      "chunk_id": "951a782b39b8-0044",
+      "chunk_id": "951a782b39b8-0039",
       "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_guides_configuration\\_documentation_guides_configuration_.md",
       "filename": "_documentation_guides_configuration_.md",
       "file_extension": ".md",
-      "chunk_index": 44,
+      "chunk_index": 39,
       "document_level": 1,
       "parent_chunk_id": null,
       "child_chunk_ids": [],
@@ -3598,7 +3418,8 @@
       "chunking_strategy": "hierarchical_precise_structural",
       "content_type": "list_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:42.313258",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:25.021363",
       "document_id": "951a782b39b8",
       "document_name": "_documentation_guides_configuration_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_guides_configuration\\_documentation_guides_configuration_.md",

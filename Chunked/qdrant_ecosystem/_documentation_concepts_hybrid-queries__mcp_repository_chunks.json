@@ -24,7 +24,8 @@
       "chunking_strategy": "hybrid_adaptive_structural",
       "content_type": "list_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:38.435945",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:21.480616",
       "document_id": "2c49d1b91247",
       "document_name": "_documentation_concepts_hybrid-queries_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_hybrid-queries\\_documentation_concepts_hybrid-queries_.md",
@@ -223,7 +224,8 @@
       "chunking_strategy": "hybrid_adaptive_structural",
       "content_type": "list_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:38.437120",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:21.481830",
       "document_id": "2c49d1b91247",
       "document_name": "_documentation_concepts_hybrid-queries_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_hybrid-queries\\_documentation_concepts_hybrid-queries_.md",
@@ -422,7 +424,8 @@
       "chunking_strategy": "hybrid_adaptive_structural",
       "content_type": "list_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:38.437120",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:21.482211",
       "document_id": "2c49d1b91247",
       "document_name": "_documentation_concepts_hybrid-queries_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_hybrid-queries\\_documentation_concepts_hybrid-queries_.md",
@@ -585,7 +588,8 @@
       "chunking_strategy": "hybrid_adaptive_structural",
       "content_type": "list_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:38.437120",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:21.483069",
       "document_id": "2c49d1b91247",
       "document_name": "_documentation_concepts_hybrid-queries_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_hybrid-queries\\_documentation_concepts_hybrid-queries_.md",
@@ -784,7 +788,8 @@
       "chunking_strategy": "hybrid_adaptive_structural",
       "content_type": "list_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:38.437120",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:21.484210",
       "document_id": "2c49d1b91247",
       "document_name": "_documentation_concepts_hybrid-queries_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_hybrid-queries\\_documentation_concepts_hybrid-queries_.md",
@@ -983,7 +988,8 @@
       "chunking_strategy": "hybrid_adaptive_structural",
       "content_type": "list_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:38.437120",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:21.484609",
       "document_id": "2c49d1b91247",
       "document_name": "_documentation_concepts_hybrid-queries_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_hybrid-queries\\_documentation_concepts_hybrid-queries_.md",
@@ -1140,7 +1146,7 @@
     }
   },
   {
-    "text": "## Hybrid Search\n\nOne of the most common problems when you have different representations of the same data is to combine the queried points for each representation into a single result.\n\nFusing results from multiple queries\n\nFor example, in text search, it is often useful to combine dense and sparse vectors get the best of semantics, plus the best of matching specific words.\n\nQdrant currently has two ways of combining the results from different queries:\n\n- `rrf` - [Reciprocal Rank Fusion](https://plg.uwaterloo.ca/~gvcormac/cormacksigir09-rrf.pdf)\n\n  Considers the positions of results within each query, and boosts the ones that appear closer to the top in multiple of them.\n\n- `dbsf` - [Distribution-Based Score Fusion ](https://medium.com/plain-simple-software/distribution-based-score-fusion-dbsf-a-new-approach-to-vector-search-ranking-f87c37488b18)*(available as of v1.11.0)*\n\n  Normalizes the scores of the points in each query, using the mean +/- the 3rd standard deviation as limits, and then sums the scores of the same point across different queries.\n\n  `dbsf` is stateless and calculates the normalization limits only based on the results of each query, not on all the scores that it has seen.\n\nHere is an example of Reciprocal Rank Fusion for a query containing two prefetches against different named vectors configured to respectively hold sparse and dense vectors.\n\n```http\nPOST /collections/{collection_name}/points/query\n{\n    \"prefetch\": [\n        {\n            \"query\": { \n                \"indices\": [1, 42],    // <┐\n                \"values\": [0.22, 0.8]  // <┴─sparse vector\n             },\n            \"using\": \"sparse\",\n            \"limit\": 20\n        },\n        {\n            \"query\": [0.01, 0.45, 0.67, ...], // <-- dense vector\n            \"using\": \"dense\",\n            \"limit\": 20\n        }\n    ],\n    \"query\": { \"fusion\": \"rrf\" }, // <--- reciprocal rank fusion\n    \"limit\": 10\n}\n```\n\n```python\nfrom qdrant_client import QdrantClient, models\n\nclient = QdrantClient(url=\"http://localhost:6333\")\n\nclient.query_points(\n    collection_name=\"{collection_name}\",\n    prefetch=[\n        models.Prefetch(\n            query=models.SparseVector(indices=[1, 42], values=[0.22, 0.8]),\n            using=\"sparse\",\n            limit=20,\n        ),\n        models.Prefetch(\n            query=[0.01, 0.45, 0.67],  # <-- dense vector\n            using=\"dense\",\n            limit=20,\n        ),\n    ],\n    query=models.FusionQuery(fusion=models.Fusion.RRF),\n)\n```",
+    "text": "## Hybrid Search\n\nOne of the most common problems when you have different representations of the same data is to combine the queried points for each representation into a single result.\n\nFusing results from multiple queries\n\nFor example, in text search, it is often useful to combine dense and sparse vectors get the best of semantics, plus the best of matching specific words.\n\nQdrant currently has two ways of combining the results from different queries:\n\n- `rrf` - [Reciprocal Rank Fusion](https://plg.uwaterloo.ca/~gvcormac/cormacksigir09-rrf.pdf)\n\n  Considers the positions of results within each query, and boosts the ones that appear closer to the top in multiple of them.\n\n- `dbsf` - [Distribution-Based Score Fusion ](https://medium.com/plain-simple-software/distribution-based-score-fusion-dbsf-a-new-approach-to-vector-search-ranking-f87c37488b18)*(available as of v1.11.0)*\n\n  Normalizes the scores of the points in each query, using the mean +/- the 3rd standard deviation as limits, and then sums the scores of the same point across different queries.\n\n  `dbsf` is stateless and calculates the normalization limits only based on the results of each query, not on all the scores that it has seen.\n\nHere is an example of Reciprocal Rank Fusion for a query containing two prefetches against different named vectors configured to respectively hold sparse and dense vectors.\n\n```http\nPOST /collections/{collection_name}/points/query\n{\n    \"prefetch\": [\n        {\n            \"query\": { \n                \"indices\": [1, 42],    // <┐\n                \"values\": [0.22, 0.8]  // <┴─sparse vector\n             },\n            \"using\": \"sparse\",\n            \"limit\": 20\n        },\n        {\n            \"query\": [0.01, 0.45, 0.67, ...], // <-- dense vector\n            \"using\": \"dense\",\n            \"limit\": 20\n        }\n    ],\n    \"query\": { \"fusion\": \"rrf\" }, // <--- reciprocal rank fusion\n    \"limit\": 10\n}\n```\n\n```python\nfrom qdrant_client import QdrantClient, models\n\nclient = QdrantClient(url=\"http://localhost:6333\")\n\nclient.query_points(\n    collection_name=\"{collection_name}\",\n    prefetch=[\n        models.Prefetch(\n            query=models.SparseVector(indices=[1, 42], values=[0.22, 0.8]),\n            using=\"sparse\",\n            limit=20,\n        ),\n        models.Prefetch(\n            query=[0.01, 0.45, 0.67],  # <-- dense vector\n            using=\"dense\",\n            limit=20,\n        ),\n    ],\n    query=models.FusionQuery(fusion=models.Fusion.RRF),\n)\n```\n\n```typescript\nimport { QdrantClient } from \"@qdrant/js-client-rest\";\n\nconst client = new QdrantClient({ host: \"localhost\", port: 6333 });\n\nclient.query(\"{collection_name}\", {\n    prefetch: [\n        {\n            query: {\n                values: [0.22, 0.8],\n                indices: [1, 42],\n            },\n            using: 'sparse',\n            limit: 20,\n        },\n        {\n            query: [0.01, 0.45, 0.67],\n            using: 'dense',\n            limit: 20,\n        },\n    ],\n    query: {\n        fusion: 'rrf',\n    },\n});\n```\n\n```rust\nuse qdrant_client::Qdrant;\nuse qdrant_client::qdrant::{Fusion, PrefetchQueryBuilder, Query, QueryPointsBuilder};\n\nlet client = Qdrant::from_url(\"http://localhost:6334\").build()?;\n\nclient.query(\n    QueryPointsBuilder::new(\"{collection_name}\")\n        .add_prefetch(PrefetchQueryBuilder::default()\n            .query(Query::new_nearest([(1, 0.22), (42, 0.8)].as_slice()))\n            .using(\"sparse\")\n            .limit(20u64)\n        )\n        .add_prefetch(PrefetchQueryBuilder::default()\n            .query(Query::new_nearest(vec![0.01, 0.45, 0.67]))\n            .using(\"dense\")\n            .limit(20u64)\n        )\n        .query(Query::new_fusion(Fusion::Rrf))\n).await?;\n```\n\n```java\nimport static io.qdrant.client.QueryFactory.nearest;\n\nimport java.util.List;\n\nimport static io.qdrant.client.QueryFactory.fusion;",
     "metadata": {
       "chunk_id": "2c49d1b91247-0011",
       "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_hybrid-queries\\_documentation_concepts_hybrid-queries_.md",
@@ -1154,17 +1160,18 @@
         "Hybrid Search"
       ],
       "heading_text": "Hybrid Search",
-      "token_count": 616,
-      "char_count": 2478,
+      "token_count": 990,
+      "char_count": 3845,
       "start_char": 12541,
-      "end_char": 15019,
+      "end_char": 16386,
       "semantic_score": 0.7,
       "structural_score": 0.7999999999999998,
-      "retrieval_quality": 0.8856643356643357,
+      "retrieval_quality": 0.8795275590551181,
       "chunking_strategy": "hybrid_adaptive_semchunk",
       "content_type": "prose_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:38.443627",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:21.489212",
       "document_id": "2c49d1b91247",
       "document_name": "_documentation_concepts_hybrid-queries_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_hybrid-queries\\_documentation_concepts_hybrid-queries_.md",
@@ -1172,9 +1179,9 @@
       "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_hybrid-queries",
       "relative_path": "Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_hybrid-queries\\_documentation_concepts_hybrid-queries_.md",
       "hierarchy_path": "Hybrid Search",
-      "chunk_hash": "6ba060ceb91afa04",
-      "content_digest": "6ba060ceb91afa04",
-      "chunk_length": 2478,
+      "chunk_hash": "32772869dccc4219",
+      "content_digest": "32772869dccc4219",
+      "chunk_length": 3845,
       "payload_version": "1.3",
       "collection_hints": [
         "qdrant_ecosystem"
@@ -1183,131 +1190,131 @@
         "version": "1.0",
         "weighting": "tf-normalized",
         "top_terms": [
-          "the",
           "query",
+          "the",
           "fusion",
-          "dense",
-          "models",
-          "and",
-          "sparse",
+          "client",
+          "qdrant",
           "using",
           "limit",
-          "different",
-          "points",
-          "each",
-          "results",
-          "rrf",
-          "vector",
+          "dense",
+          "sparse",
           "prefetch",
-          "search",
-          "for",
+          "rrf",
+          "new",
+          "models",
           "from",
-          "queries"
+          "and",
+          "collection",
+          "name",
+          "import",
+          "different",
+          "points"
         ],
         "term_weights": [
           {
-            "term": "the",
-            "tf": 18,
-            "weight": 0.070312
+            "term": "query",
+            "tf": 24,
+            "weight": 0.065395
           },
           {
-            "term": "query",
-            "tf": 12,
-            "weight": 0.046875
+            "term": "the",
+            "tf": 18,
+            "weight": 0.049046
           },
           {
             "term": "fusion",
-            "tf": 8,
-            "weight": 0.03125
+            "tf": 13,
+            "weight": 0.035422
+          },
+          {
+            "term": "client",
+            "tf": 12,
+            "weight": 0.032698
+          },
+          {
+            "term": "qdrant",
+            "tf": 10,
+            "weight": 0.027248
+          },
+          {
+            "term": "using",
+            "tf": 9,
+            "weight": 0.024523
+          },
+          {
+            "term": "limit",
+            "tf": 9,
+            "weight": 0.024523
           },
           {
             "term": "dense",
+            "tf": 8,
+            "weight": 0.021798
+          },
+          {
+            "term": "sparse",
+            "tf": 7,
+            "weight": 0.019074
+          },
+          {
+            "term": "prefetch",
+            "tf": 7,
+            "weight": 0.019074
+          },
+          {
+            "term": "rrf",
             "tf": 6,
-            "weight": 0.023438
+            "weight": 0.016349
+          },
+          {
+            "term": "new",
+            "tf": 6,
+            "weight": 0.016349
           },
           {
             "term": "models",
             "tf": 6,
-            "weight": 0.023438
+            "weight": 0.016349
+          },
+          {
+            "term": "from",
+            "tf": 5,
+            "weight": 0.013624
           },
           {
             "term": "and",
             "tf": 5,
-            "weight": 0.019531
+            "weight": 0.013624
           },
           {
-            "term": "sparse",
+            "term": "collection",
             "tf": 5,
-            "weight": 0.019531
+            "weight": 0.013624
           },
           {
-            "term": "using",
+            "term": "name",
             "tf": 5,
-            "weight": 0.019531
+            "weight": 0.013624
           },
           {
-            "term": "limit",
+            "term": "import",
             "tf": 5,
-            "weight": 0.019531
+            "weight": 0.013624
           },
           {
             "term": "different",
             "tf": 4,
-            "weight": 0.015625
+            "weight": 0.010899
           },
           {
             "term": "points",
             "tf": 4,
-            "weight": 0.015625
-          },
-          {
-            "term": "each",
-            "tf": 4,
-            "weight": 0.015625
-          },
-          {
-            "term": "results",
-            "tf": 4,
-            "weight": 0.015625
-          },
-          {
-            "term": "rrf",
-            "tf": 4,
-            "weight": 0.015625
-          },
-          {
-            "term": "vector",
-            "tf": 4,
-            "weight": 0.015625
-          },
-          {
-            "term": "prefetch",
-            "tf": 4,
-            "weight": 0.015625
-          },
-          {
-            "term": "search",
-            "tf": 3,
-            "weight": 0.011719
-          },
-          {
-            "term": "for",
-            "tf": 3,
-            "weight": 0.011719
-          },
-          {
-            "term": "from",
-            "tf": 3,
-            "weight": 0.011719
-          },
-          {
-            "term": "queries",
-            "tf": 3,
-            "weight": 0.011719
+            "weight": 0.010899
           }
         ],
-        "unique_terms": 131,
-        "total_terms": 256
+        "unique_terms": 155,
+        "total_terms": 367
       },
       "modal_hint": "code",
       "content_flags": {
@@ -1319,12 +1326,12 @@
       },
       "search_keywords": [
         "Hybrid Search",
-        "and",
+        "client",
         "dense",
-        "different",
         "fusion",
         "limit",
-        "models",
+        "prefetch",
+        "qdrant",
         "query",
         "sparse",
         "the",
@@ -1334,18 +1341,18 @@
     "advanced_scores": {
       "semantic": 0.7,
       "structural": 0.7999999999999998,
-      "retrieval_quality": 0.8856643356643357,
-      "overall": 0.7952214452214452
+      "retrieval_quality": 0.8795275590551181,
+      "overall": 0.7931758530183727
     }
   },
   {
-    "text": "### Re-scoring examples\n\nFetch 1000 results using a shorter MRL byte vector, then re-score them using the full vector and get the top 10.\n\n```http\nPOST /collections/{collection_name}/points/query\n{\n    \"prefetch\": {\n        \"query\": [1, 23, 45, 67], // <------------- small byte vector\n        \"using\": \"mrl_byte\"\n        \"limit\": 1000\n    },\n    \"query\": [0.01, 0.299, 0.45, 0.67, ...], // <-- full vector\n    \"using\": \"full\",\n    \"limit\": 10\n}\n```\n\n```python\nfrom qdrant_client import QdrantClient, models\n\nclient = QdrantClient(url=\"http://localhost:6333\")\n\nclient.query_points(\n    collection_name=\"{collection_name}\",\n    prefetch=models.Prefetch(\n        query=[1, 23, 45, 67],  # <------------- small byte vector\n        using=\"mrl_byte\",\n        limit=1000,\n    ),\n    query=[0.01, 0.299, 0.45, 0.67],  # <-- full vector\n    using=\"full\",\n    limit=10,\n)\n```\n\n```typescript\nimport { QdrantClient } from \"@qdrant/js-client-rest\";\n\nconst client = new QdrantClient({ host: \"localhost\", port: 6333 });\n\nclient.query(\"{collection_name}\", {\n  prefetch: {\n    query: [1, 23, 45, 67], // <------------- small byte vector\n    using: 'mrl_byte',\n    limit: 1000,\n  },\n  query: [0.01, 0.299, 0.45, 0.67], // <-- full vector,\n  using: 'full',\n  limit: 10,\n});\n```\n\n```rust\nuse qdrant_client::Qdrant;\nuse qdrant_client::qdrant::{PrefetchQueryBuilder, Query, QueryPointsBuilder};\n\nlet client = Qdrant::from_url(\"http://localhost:6334\").build()?;\n\nclient.query(\n    QueryPointsBuilder::new(\"{collection_name}\")\n        .add_prefetch(PrefetchQueryBuilder::default()\n            .query(Query::new_nearest(vec![1.0, 23.0, 45.0, 67.0]))\n            .using(\"mlr_byte\")\n            .limit(1000u64)\n        )\n        .query(Query::new_nearest(vec![0.01, 0.299, 0.45, 0.67]))\n        .using(\"full\")\n        .limit(10u64)\n).await?;\n```\n\n```java\nimport static io.qdrant.client.QueryFactory.nearest;\n\nimport io.qdrant.client.QdrantClient;\nimport io.qdrant.client.QdrantGrpcClient;\nimport io.qdrant.client.grpc.Points.PrefetchQuery;\nimport io.qdrant.client.grpc.Points.QueryPoints;\n\nQdrantClient client =\n    new QdrantClient(QdrantGrpcClient.newBuilder(\"localhost\", 6334, false).build());",
+    "text": "### Re-scoring examples\n\nFetch 1000 results using a shorter MRL byte vector, then re-score them using the full vector and get the top 10.\n\n```http\nPOST /collections/{collection_name}/points/query\n{\n    \"prefetch\": {\n        \"query\": [1, 23, 45, 67], // <------------- small byte vector\n        \"using\": \"mrl_byte\"\n        \"limit\": 1000\n    },\n    \"query\": [0.01, 0.299, 0.45, 0.67, ...], // <-- full vector\n    \"using\": \"full\",\n    \"limit\": 10\n}\n```\n\n```python\nfrom qdrant_client import QdrantClient, models\n\nclient = QdrantClient(url=\"http://localhost:6333\")\n\nclient.query_points(\n    collection_name=\"{collection_name}\",\n    prefetch=models.Prefetch(\n        query=[1, 23, 45, 67],  # <------------- small byte vector\n        using=\"mrl_byte\",\n        limit=1000,\n    ),\n    query=[0.01, 0.299, 0.45, 0.67],  # <-- full vector\n    using=\"full\",\n    limit=10,\n)\n```\n\n```typescript\nimport { QdrantClient } from \"@qdrant/js-client-rest\";\n\nconst client = new QdrantClient({ host: \"localhost\", port: 6333 });\n\nclient.query(\"{collection_name}\", {\n  prefetch: {\n    query: [1, 23, 45, 67], // <------------- small byte vector\n    using: 'mrl_byte',\n    limit: 1000,\n  },\n  query: [0.01, 0.299, 0.45, 0.67], // <-- full vector,\n  using: 'full',\n  limit: 10,\n});\n```\n\n```rust\nuse qdrant_client::Qdrant;\nuse qdrant_client::qdrant::{PrefetchQueryBuilder, Query, QueryPointsBuilder};\n\nlet client = Qdrant::from_url(\"http://localhost:6334\").build()?;\n\nclient.query(\n    QueryPointsBuilder::new(\"{collection_name}\")\n        .add_prefetch(PrefetchQueryBuilder::default()\n            .query(Query::new_nearest(vec![1.0, 23.0, 45.0, 67.0]))\n            .using(\"mlr_byte\")\n            .limit(1000u64)\n        )\n        .query(Query::new_nearest(vec![0.01, 0.299, 0.45, 0.67]))\n        .using(\"full\")\n        .limit(10u64)\n).await?;\n```\n\n```java\nimport static io.qdrant.client.QueryFactory.nearest;\n\nimport io.qdrant.client.QdrantClient;\nimport io.qdrant.client.QdrantGrpcClient;\nimport io.qdrant.client.grpc.Points.PrefetchQuery;\nimport io.qdrant.client.grpc.Points.QueryPoints;\n\nQdrantClient client =\n    new QdrantClient(QdrantGrpcClient.newBuilder(\"localhost\", 6334, false).build());\n\nclient\n    .queryAsync(\n        QueryPoints.newBuilder()\n            .setCollectionName(\"{collection_name}\")\n            .addPrefetch(\n                PrefetchQuery.newBuilder()\n                    .setQuery(nearest(1, 23, 45, 67))\t// <------------- small byte vector\n                    .setLimit(1000)\n                    .setUsing(\"mrl_byte\")\n                    .build())\n            .setQuery(nearest(0.01f, 0.299f, 0.45f, 0.67f))\t // <-- full vector\n            .setUsing(\"full\")\n            .setLimit(10)\n            .build())\n    .get();\n```\n\n```csharp\nusing Qdrant.Client;\nusing Qdrant.Client.Grpc;\n\nvar client = new QdrantClient(\"localhost\", 6334);\n\nawait client.QueryAsync(\n  collectionName: \"{collection_name}\",\n  prefetch: new List<PrefetchQuery> {\n    new() {\n      Query = new float[] { 1,23, 45, 67 }, // <------------- small byte vector\n        Using = \"mrl_byte\",\n        Limit = 1000\n    }\n  },\n  query: new float[] { 0.01f, 0.299f, 0.45f, 0.67f }, // <-- full vector\n  usingVector: \"full\",\n  limit: 10\n);\n```\n\n```go\nimport (\n\t\"context\"\n\n\t\"github.com/qdrant/go-client/qdrant\"\n)\n\nclient, err := qdrant.NewClient(&qdrant.Config{\n\tHost: \"localhost\",\n\tPort: 6334,\n})",
     "metadata": {
-      "chunk_id": "2c49d1b91247-0015",
+      "chunk_id": "2c49d1b91247-0014",
       "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_hybrid-queries\\_documentation_concepts_hybrid-queries_.md",
       "filename": "_documentation_concepts_hybrid-queries_.md",
       "file_extension": ".md",
-      "chunk_index": 15,
+      "chunk_index": 14,
       "document_level": 1,
       "parent_chunk_id": null,
       "child_chunk_ids": [],
@@ -1353,17 +1360,18 @@
         "Re-scoring examples"
       ],
       "heading_text": "Re-scoring examples",
-      "token_count": 670,
-      "char_count": 2170,
+      "token_count": 1014,
+      "char_count": 3353,
       "start_char": 19378,
-      "end_char": 21548,
+      "end_char": 22731,
       "semantic_score": 0.7,
       "structural_score": 0.7,
-      "retrieval_quality": 0.888265306122449,
+      "retrieval_quality": 0.8687500000000001,
       "chunking_strategy": "hybrid_adaptive_semchunk",
       "content_type": "prose_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:38.464695",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:21.502133",
       "document_id": "2c49d1b91247",
       "document_name": "_documentation_concepts_hybrid-queries_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_hybrid-queries\\_documentation_concepts_hybrid-queries_.md",
@@ -1371,9 +1379,9 @@
       "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_hybrid-queries",
       "relative_path": "Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_hybrid-queries\\_documentation_concepts_hybrid-queries_.md",
       "hierarchy_path": "Re-scoring examples",
-      "chunk_hash": "e67860a01e9dcbc2",
-      "content_digest": "e67860a01e9dcbc2",
-      "chunk_length": 2170,
+      "chunk_hash": "fc1da1c5e685632b",
+      "content_digest": "fc1da1c5e685632b",
+      "chunk_length": 3353,
       "payload_version": "1.3",
       "collection_hints": [
         "qdrant_ecosystem"
@@ -1383,130 +1391,130 @@
         "weighting": "tf-normalized",
         "top_terms": [
           "client",
-          "query",
           "qdrant",
+          "query",
           "using",
           "byte",
           "vector",
           "full",
           "limit",
+          "new",
           "import",
           "qdrantclient",
           "collection",
           "name",
-          "prefetch",
-          "new",
           "1000",
           "mrl",
-          "points",
-          "299",
+          "prefetch",
           "localhost",
-          "http"
+          "small",
+          "nearest",
+          "points"
         ],
         "term_weights": [
           {
             "term": "client",
-            "tf": 16,
-            "weight": 0.076555
-          },
-          {
-            "term": "query",
-            "tf": 15,
-            "weight": 0.07177
+            "tf": 23,
+            "weight": 0.074675
           },
           {
             "term": "qdrant",
-            "tf": 12,
-            "weight": 0.057416
+            "tf": 18,
+            "weight": 0.058442
+          },
+          {
+            "term": "query",
+            "tf": 17,
+            "weight": 0.055195
           },
           {
             "term": "using",
-            "tf": 10,
-            "weight": 0.047847
+            "tf": 13,
+            "weight": 0.042208
           },
           {
             "term": "byte",
-            "tf": 8,
-            "weight": 0.038278
+            "tf": 12,
+            "weight": 0.038961
           },
           {
             "term": "vector",
-            "tf": 8,
-            "weight": 0.038278
+            "tf": 12,
+            "weight": 0.038961
           },
           {
             "term": "full",
-            "tf": 8,
-            "weight": 0.038278
+            "tf": 12,
+            "weight": 0.038961
           },
           {
             "term": "limit",
-            "tf": 8,
-            "weight": 0.038278
-          },
-          {
-            "term": "import",
-            "tf": 7,
-            "weight": 0.033493
-          },
-          {
-            "term": "qdrantclient",
-            "tf": 7,
-            "weight": 0.033493
-          },
-          {
-            "term": "collection",
-            "tf": 5,
-            "weight": 0.023923
-          },
-          {
-            "term": "name",
-            "tf": 5,
-            "weight": 0.023923
-          },
-          {
-            "term": "prefetch",
-            "tf": 5,
-            "weight": 0.023923
+            "tf": 10,
+            "weight": 0.032468
           },
           {
             "term": "new",
-            "tf": 5,
-            "weight": 0.023923
+            "tf": 10,
+            "weight": 0.032468
+          },
+          {
+            "term": "import",
+            "tf": 8,
+            "weight": 0.025974
+          },
+          {
+            "term": "qdrantclient",
+            "tf": 8,
+            "weight": 0.025974
+          },
+          {
+            "term": "collection",
+            "tf": 7,
+            "weight": 0.022727
+          },
+          {
+            "term": "name",
+            "tf": 7,
+            "weight": 0.022727
           },
           {
             "term": "1000",
-            "tf": 4,
-            "weight": 0.019139
+            "tf": 6,
+            "weight": 0.019481
           },
           {
             "term": "mrl",
-            "tf": 4,
-            "weight": 0.019139
+            "tf": 6,
+            "weight": 0.019481
+          },
+          {
+            "term": "prefetch",
+            "tf": 6,
+            "weight": 0.019481
+          },
+          {
+            "term": "localhost",
+            "tf": 6,
+            "weight": 0.019481
+          },
+          {
+            "term": "small",
+            "tf": 5,
+            "weight": 0.016234
+          },
+          {
+            "term": "nearest",
+            "tf": 5,
+            "weight": 0.016234
           },
           {
             "term": "points",
             "tf": 4,
-            "weight": 0.019139
-          },
-          {
-            "term": "299",
-            "tf": 4,
-            "weight": 0.019139
-          },
-          {
-            "term": "localhost",
-            "tf": 4,
-            "weight": 0.019139
-          },
-          {
-            "term": "http",
-            "tf": 3,
-            "weight": 0.014354
+            "weight": 0.012987
           }
         ],
-        "unique_terms": 69,
-        "total_terms": 209
+        "unique_terms": 91,
+        "total_terms": 308
       },
       "modal_hint": "code",
       "content_flags": {
@@ -1523,8 +1531,8 @@
         "full",
         "import",
         "limit",
+        "new",
         "qdrant",
-        "qdrantclient",
         "query",
         "using",
         "vector"
@@ -1533,18 +1541,18 @@
     "advanced_scores": {
       "semantic": 0.7,
       "structural": 0.7,
-      "retrieval_quality": 0.888265306122449,
-      "overall": 0.7627551020408164
+      "retrieval_quality": 0.8687500000000001,
+      "overall": 0.75625
     }
   },
   {
-    "text": "### Maximal Marginal Relevance (MMR)\n\n*Available as of v1.15.0*\n\nA useful algorithm to improve the diversity of the results is [Maximal Marginal Relevance (MMR)](https://www.cs.cmu.edu/~jgc/publication/The_Use_MMR_Diversity_Based_LTMIR_1998.pdf). It excels when the dataset has many redundant or very similar points for a query.\n\nMMR selects candidates iteratively, starting with the most relevant point (higher similarity to the query). For each next point, it selects the one that hasn’t been chosen yet which has the best combination of relevance and higher separation to the already selected points.\n\n$$ MMR = \\arg \\max\\_{D\\_i \\in R\\setminus S}\\[\\lambda sim(D\\_i, Q) - (1 - \\lambda)\\max\\_{D\\_j \\in S}sim(D\\_i, D\\_j)] $$\n\nWhere $R$ is the candidates set, $S$ is the selected set, $Q$ is the query vector, $sim$ is the similarity function, and $\\lambda = 1 - diversity$.\n\nThis is implemented in Qdrant as a parameter of a nearest neighbors query. You define the vector to get the nearest candidates, and a `diversity` parameter which controls the balance between relevance (0.0) and diversity (1.0).\n\n```http\nPOST /collections/{collection_name}/points/query\n{\n  \"query\": {\n    \"nearest\": [0.01, 0.45, 0.67, ...], // search vector\n    \"mmr\": {\n      \"diversity\": 0.5, // 0.0 - relevance; 1.0 - diversity\n      \"candidates_limit\": 100 // num of candidates to preselect\n    }\n  },\n  \"limit\": 10\n}\n```\n\n```python\nfrom qdrant_client import QdrantClient, models\n\nclient = QdrantClient(url=\"http://localhost:6333\")\n\nclient.query_points(\n    collection_name=\"{collection_name}\",\n    query=models.NearestQuery(\n        nearest=[0.01, 0.45, 0.67], # search vector\n        mmr=models.Mmr(\n            diversity=0.5, # 0.0 - relevance; 1.0 - diversity\n            candidates_limit=100, # num of candidates to preselect\n        )\n    ),\n    limit=10,\n)\n```\n\n```typescript\nimport { QdrantClient } from \"@qdrant/js-client-rest\";\n\nconst client = new QdrantClient({ host: \"localhost\", port: 6333 });\n\nclient.query(\"{collection_name}\", {\n  query: {\n    nearest: [0.01, 0.45, 0.67, ...], // search vector\n    mmr: {\n      diversity: 0.5, // 0.0 - relevance; 1.0 - diversity\n      candidates_limit: 100 // num of candidates to preselect\n    }\n  },\n  limit: 10,\n});\n```\n\n```rust\nuse qdrant_client::Qdrant;\nuse qdrant_client::qdrant::{PrefetchQueryBuilder, Query, QueryPointsBuilder};\n\nlet client = Qdrant::from_url(\"http://localhost:6334\").build()?;",
+    "text": "### Maximal Marginal Relevance (MMR)\n\n*Available as of v1.15.0*\n\nA useful algorithm to improve the diversity of the results is [Maximal Marginal Relevance (MMR)](https://www.cs.cmu.edu/~jgc/publication/The_Use_MMR_Diversity_Based_LTMIR_1998.pdf). It excels when the dataset has many redundant or very similar points for a query.\n\nMMR selects candidates iteratively, starting with the most relevant point (higher similarity to the query). For each next point, it selects the one that hasn’t been chosen yet which has the best combination of relevance and higher separation to the already selected points.\n\n$$ MMR = \\arg \\max\\_{D\\_i \\in R\\setminus S}\\[\\lambda sim(D\\_i, Q) - (1 - \\lambda)\\max\\_{D\\_j \\in S}sim(D\\_i, D\\_j)] $$\n\nWhere $R$ is the candidates set, $S$ is the selected set, $Q$ is the query vector, $sim$ is the similarity function, and $\\lambda = 1 - diversity$.\n\nThis is implemented in Qdrant as a parameter of a nearest neighbors query. You define the vector to get the nearest candidates, and a `diversity` parameter which controls the balance between relevance (0.0) and diversity (1.0).\n\n```http\nPOST /collections/{collection_name}/points/query\n{\n  \"query\": {\n    \"nearest\": [0.01, 0.45, 0.67, ...], // search vector\n    \"mmr\": {\n      \"diversity\": 0.5, // 0.0 - relevance; 1.0 - diversity\n      \"candidates_limit\": 100 // num of candidates to preselect\n    }\n  },\n  \"limit\": 10\n}\n```\n\n```python\nfrom qdrant_client import QdrantClient, models\n\nclient = QdrantClient(url=\"http://localhost:6333\")\n\nclient.query_points(\n    collection_name=\"{collection_name}\",\n    query=models.NearestQuery(\n        nearest=[0.01, 0.45, 0.67], # search vector\n        mmr=models.Mmr(\n            diversity=0.5, # 0.0 - relevance; 1.0 - diversity\n            candidates_limit=100, # num of candidates to preselect\n        )\n    ),\n    limit=10,\n)\n```\n\n```typescript\nimport { QdrantClient } from \"@qdrant/js-client-rest\";\n\nconst client = new QdrantClient({ host: \"localhost\", port: 6333 });\n\nclient.query(\"{collection_name}\", {\n  query: {\n    nearest: [0.01, 0.45, 0.67, ...], // search vector\n    mmr: {\n      diversity: 0.5, // 0.0 - relevance; 1.0 - diversity\n      candidates_limit: 100 // num of candidates to preselect\n    }\n  },\n  limit: 10,\n});\n```\n\n```rust\nuse qdrant_client::Qdrant;\nuse qdrant_client::qdrant::{PrefetchQueryBuilder, Query, QueryPointsBuilder};\n\nlet client = Qdrant::from_url(\"http://localhost:6334\").build()?;\n\nclient.query(\n    QueryPointsBuilder::new(\"{collection_name}\")\n        .query(Query::new_nearest_with_mmr(\n            vec![0.01, 0.45, 0.67], // search vector\n            MmrBuilder::new()\n                .diversity(0.5) // 0.0 - relevance; 1.0 - diversity\n                .candidates_limit(100) // num of candidates to preselect\n        ))\n        .limit(10)\n).await?;\n```\n\n```java\nimport static io.qdrant.client.QueryFactory.nearest;\nimport static io.qdrant.client.VectorInputFactory.vectorInput;\n\nimport io.qdrant.client.QdrantClient;\nimport io.qdrant.client.QdrantGrpcClient;\nimport io.qdrant.client.grpc.Points.Mmr;\nimport io.qdrant.client.grpc.Points.QueryPoints;\n\nQdrantClient client = new QdrantClient(QdrantGrpcClient.newBuilder(\"localhost\", 6334, false).build());",
     "metadata": {
-      "chunk_id": "2c49d1b91247-0024",
+      "chunk_id": "2c49d1b91247-0019",
       "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_hybrid-queries\\_documentation_concepts_hybrid-queries_.md",
       "filename": "_documentation_concepts_hybrid-queries_.md",
       "file_extension": ".md",
-      "chunk_index": 24,
+      "chunk_index": 19,
       "document_level": 1,
       "parent_chunk_id": null,
       "child_chunk_ids": [],
@@ -1552,17 +1560,18 @@
         "Maximal Marginal Relevance (MMR)"
       ],
       "heading_text": "Maximal Marginal Relevance (MMR)",
-      "token_count": 708,
-      "char_count": 2430,
+      "token_count": 917,
+      "char_count": 3206,
       "start_char": 32766,
-      "end_char": 35196,
+      "end_char": 35972,
       "semantic_score": 0.7,
       "structural_score": 0.7999999999999998,
-      "retrieval_quality": 0.6774509803921569,
+      "retrieval_quality": 0.6697478991596639,
       "chunking_strategy": "hybrid_adaptive_semchunk",
       "content_type": "prose_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:38.477313",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:21.506744",
       "document_id": "2c49d1b91247",
       "document_name": "_documentation_concepts_hybrid-queries_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_hybrid-queries\\_documentation_concepts_hybrid-queries_.md",
@@ -1570,9 +1579,9 @@
       "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_hybrid-queries",
       "relative_path": "Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_hybrid-queries\\_documentation_concepts_hybrid-queries_.md",
       "hierarchy_path": "Maximal Marginal Relevance (MMR)",
-      "chunk_hash": "2ba23e3c486869b2",
-      "content_digest": "2ba23e3c486869b2",
-      "chunk_length": 2430,
+      "chunk_hash": "ea7effc46a9e618f",
+      "content_digest": "ea7effc46a9e618f",
+      "chunk_length": 3206,
       "payload_version": "1.3",
       "collection_hints": [
         "qdrant_ecosystem"
@@ -1581,131 +1590,131 @@
         "version": "1.0",
         "weighting": "tf-normalized",
         "top_terms": [
+          "client",
           "the",
-          "diversity",
           "query",
+          "qdrant",
+          "diversity",
           "mmr",
           "candidates",
-          "client",
-          "qdrant",
           "relevance",
           "limit",
-          "vector",
+          "import",
           "nearest",
+          "qdrantclient",
           "points",
-          "and",
+          "vector",
           "collection",
           "name",
-          "qdrantclient",
-          "use",
-          "lambda",
-          "sim",
-          "http"
+          "new",
+          "and",
+          "search",
+          "100"
         ],
         "term_weights": [
           {
-            "term": "the",
-            "tf": 16,
-            "weight": 0.064257
+            "term": "client",
+            "tf": 17,
+            "weight": 0.053125
           },
           {
-            "term": "diversity",
-            "tf": 11,
-            "weight": 0.044177
+            "term": "the",
+            "tf": 16,
+            "weight": 0.05
           },
           {
             "term": "query",
-            "tf": 11,
-            "weight": 0.044177
-          },
-          {
-            "term": "mmr",
-            "tf": 9,
-            "weight": 0.036145
-          },
-          {
-            "term": "candidates",
-            "tf": 9,
-            "weight": 0.036145
-          },
-          {
-            "term": "client",
-            "tf": 9,
-            "weight": 0.036145
+            "tf": 14,
+            "weight": 0.04375
           },
           {
             "term": "qdrant",
-            "tf": 8,
-            "weight": 0.032129
+            "tf": 14,
+            "weight": 0.04375
+          },
+          {
+            "term": "diversity",
+            "tf": 13,
+            "weight": 0.040625
+          },
+          {
+            "term": "mmr",
+            "tf": 11,
+            "weight": 0.034375
+          },
+          {
+            "term": "candidates",
+            "tf": 11,
+            "weight": 0.034375
           },
           {
             "term": "relevance",
-            "tf": 7,
-            "weight": 0.028112
+            "tf": 8,
+            "weight": 0.025
           },
           {
             "term": "limit",
-            "tf": 6,
-            "weight": 0.024096
+            "tf": 8,
+            "weight": 0.025
           },
           {
-            "term": "vector",
-            "tf": 5,
-            "weight": 0.02008
+            "term": "import",
+            "tf": 8,
+            "weight": 0.025
           },
           {
             "term": "nearest",
-            "tf": 5,
-            "weight": 0.02008
+            "tf": 7,
+            "weight": 0.021875
+          },
+          {
+            "term": "qdrantclient",
+            "tf": 7,
+            "weight": 0.021875
           },
           {
             "term": "points",
-            "tf": 4,
-            "weight": 0.016064
+            "tf": 6,
+            "weight": 0.01875
+          },
+          {
+            "term": "vector",
+            "tf": 6,
+            "weight": 0.01875
+          },
+          {
+            "term": "collection",
+            "tf": 5,
+            "weight": 0.015625
+          },
+          {
+            "term": "name",
+            "tf": 5,
+            "weight": 0.015625
+          },
+          {
+            "term": "new",
+            "tf": 5,
+            "weight": 0.015625
           },
           {
             "term": "and",
             "tf": 4,
-            "weight": 0.016064
+            "weight": 0.0125
           },
           {
-            "term": "collection",
+            "term": "search",
             "tf": 4,
-            "weight": 0.016064
+            "weight": 0.0125
           },
           {
-            "term": "name",
+            "term": "100",
             "tf": 4,
-            "weight": 0.016064
-          },
-          {
-            "term": "qdrantclient",
-            "tf": 4,
-            "weight": 0.016064
-          },
-          {
-            "term": "use",
-            "tf": 3,
-            "weight": 0.012048
-          },
-          {
-            "term": "lambda",
-            "tf": 3,
-            "weight": 0.012048
-          },
-          {
-            "term": "sim",
-            "tf": 3,
-            "weight": 0.012048
-          },
-          {
-            "term": "http",
-            "tf": 3,
-            "weight": 0.012048
+            "weight": 0.0125
           }
         ],
-        "unique_terms": 111,
-        "total_terms": 249
+        "unique_terms": 124,
+        "total_terms": 320
       },
       "modal_hint": "code",
       "content_flags": {
@@ -1720,30 +1729,30 @@
         "candidates",
         "client",
         "diversity",
+        "import",
         "limit",
         "mmr",
         "qdrant",
         "query",
         "relevance",
-        "the",
-        "vector"
+        "the"
       ]
     },
     "advanced_scores": {
       "semantic": 0.7,
       "structural": 0.7999999999999998,
-      "retrieval_quality": 0.6774509803921569,
-      "overall": 0.7258169934640523
+      "retrieval_quality": 0.6697478991596639,
+      "overall": 0.7232492997198879
     }
   },
   {
-    "text": "## Score boosting\n\n*Available as of v1.14.0*\n\nWhen introducing vector search to specific applications, sometimes business logic needs to be considered for ranking the final list of results.\n\nA quick example is [our own documentation search bar](https://github.com/qdrant/page-search). It has vectors for every part of the documentation site. If one were to perform a search by “just” using the vectors, all kinds of elements would be equally considered good results. However, when searching for documentation, we can establish a hierarchy of importance:\n\n`title > content > snippets`\n\nOne way to solve this is to weight the results based on the kind of element. For example, we can assign a higher weight to titles and content, and keep snippets unboosted.\n\nPseudocode would be something like:\n\n`score = score + (is_title * 0.5) + (is_content * 0.25)`\n\nQuery API can rescore points with custom formulas. They can be based on:\n\n- Dynamic payload values\n- Conditions\n- Scores of prefetches\n\nTo express the formula, the syntax uses objects to identify each element. Taking the documentation example, the request would look like this:\n\n```http\nPOST /collections/{collection_name}/points/query\n{\n    \"prefetch\": {\n        \"query\": [0.2, 0.8, ...],  // <-- dense vector\n        \"limit\": 50\n    }\n    \"query\": {\n        \"formula\": {\n            \"sum\": [\n                \"$score\",\n                { \n                    \"mult\": [ \n                        0.5,\n                        { \n                            \"key\": \"tag\",\n                            \"match\": { \"any\": [\"h1\", \"h2\", \"h3\", \"h4\"] } \n                        } \n                    ]\n                },\n                {\n                    \"mult\": [\n                        0.25,\n                        { \n                            \"key\": \"tag\",\n                            \"match\": { \"any\": [\"p\", \"li\"] } \n                        }\n                    ]\n                }\n            ]\n        }\n    }\n}\n```\n\n```python\nfrom qdrant_client import models\n\n\ntag_boosted = client.query_points(\n    collection_name=\"{collection_name}\",\n    prefetch=models.Prefetch(\n        query=[0.2, 0.8, ...],  # <-- dense vector\n        limit=50\n    ),\n    query=models.FormulaQuery(\n        formula=models.SumExpression(sum=[\n            \"$score\",\n            models.MultExpression(mult=[0.5, models.FieldCondition(key=\"tag\", match=models.MatchAny(any=[\"h1\", \"h2\", \"h3\", \"h4\"]))]),\n            models.MultExpression(mult=[0.25, models.FieldCondition(key=\"tag\", match=models.MatchAny(any=[\"p\", \"li\"]))])\n        ]\n    ))\n)\n```",
+    "text": "## Score boosting\n\n*Available as of v1.14.0*\n\nWhen introducing vector search to specific applications, sometimes business logic needs to be considered for ranking the final list of results.\n\nA quick example is [our own documentation search bar](https://github.com/qdrant/page-search). It has vectors for every part of the documentation site. If one were to perform a search by “just” using the vectors, all kinds of elements would be equally considered good results. However, when searching for documentation, we can establish a hierarchy of importance:\n\n`title > content > snippets`\n\nOne way to solve this is to weight the results based on the kind of element. For example, we can assign a higher weight to titles and content, and keep snippets unboosted.\n\nPseudocode would be something like:\n\n`score = score + (is_title * 0.5) + (is_content * 0.25)`\n\nQuery API can rescore points with custom formulas. They can be based on:\n\n- Dynamic payload values\n- Conditions\n- Scores of prefetches\n\nTo express the formula, the syntax uses objects to identify each element. Taking the documentation example, the request would look like this:\n\n```http\nPOST /collections/{collection_name}/points/query\n{\n    \"prefetch\": {\n        \"query\": [0.2, 0.8, ...],  // <-- dense vector\n        \"limit\": 50\n    }\n    \"query\": {\n        \"formula\": {\n            \"sum\": [\n                \"$score\",\n                { \n                    \"mult\": [ \n                        0.5,\n                        { \n                            \"key\": \"tag\",\n                            \"match\": { \"any\": [\"h1\", \"h2\", \"h3\", \"h4\"] } \n                        } \n                    ]\n                },\n                {\n                    \"mult\": [\n                        0.25,\n                        { \n                            \"key\": \"tag\",\n                            \"match\": { \"any\": [\"p\", \"li\"] } \n                        }\n                    ]\n                }\n            ]\n        }\n    }\n}\n```\n\n```python\nfrom qdrant_client import models",
     "metadata": {
-      "chunk_id": "2c49d1b91247-0027",
+      "chunk_id": "2c49d1b91247-0021",
       "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_hybrid-queries\\_documentation_concepts_hybrid-queries_.md",
       "filename": "_documentation_concepts_hybrid-queries_.md",
       "file_extension": ".md",
-      "chunk_index": 27,
+      "chunk_index": 21,
       "document_level": 1,
       "parent_chunk_id": null,
       "child_chunk_ids": [],
@@ -1751,17 +1760,18 @@
         "Score boosting"
       ],
       "heading_text": "Score boosting",
-      "token_count": 581,
-      "char_count": 2573,
+      "token_count": 437,
+      "char_count": 2016,
       "start_char": 37736,
-      "end_char": 40309,
-      "semantic_score": 0.7,
+      "end_char": 39752,
+      "semantic_score": 0.7999999999999999,
       "structural_score": 0.7999999999999998,
-      "retrieval_quality": 0.8964028776978419,
+      "retrieval_quality": 0.7290757085020243,
       "chunking_strategy": "hybrid_adaptive_semchunk",
       "content_type": "prose_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:38.487105",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:21.516747",
       "document_id": "2c49d1b91247",
       "document_name": "_documentation_concepts_hybrid-queries_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_hybrid-queries\\_documentation_concepts_hybrid-queries_.md",
@@ -1769,9 +1779,9 @@
       "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_hybrid-queries",
       "relative_path": "Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_hybrid-queries\\_documentation_concepts_hybrid-queries_.md",
       "hierarchy_path": "Score boosting",
-      "chunk_hash": "ddfc27d3b41196d8",
-      "content_digest": "ddfc27d3b41196d8",
-      "chunk_length": 2573,
+      "chunk_hash": "ddee694f16d6d5f6",
+      "content_digest": "ddee694f16d6d5f6",
+      "chunk_length": 2016,
       "payload_version": "1.3",
       "collection_hints": [
         "qdrant_ecosystem"
@@ -1780,131 +1790,131 @@
         "version": "1.0",
         "weighting": "tf-normalized",
         "top_terms": [
-          "models",
           "the",
-          "query",
           "score",
-          "tag",
           "search",
           "for",
           "documentation",
           "can",
-          "mult",
-          "key",
-          "match",
-          "any",
-          "vector",
+          "query",
           "results",
           "example",
           "would",
           "content",
-          "points",
-          "formula"
+          "when",
+          "vector",
+          "considered",
+          "qdrant",
+          "vectors",
+          "one",
+          "title",
+          "snippets",
+          "this"
         ],
         "term_weights": [
           {
-            "term": "models",
-            "tf": 10,
-            "weight": 0.046296
-          },
-          {
             "term": "the",
             "tf": 9,
-            "weight": 0.041667
-          },
-          {
-            "term": "query",
-            "tf": 7,
-            "weight": 0.032407
+            "weight": 0.052941
           },
           {
             "term": "score",
-            "tf": 5,
-            "weight": 0.023148
-          },
-          {
-            "term": "tag",
-            "tf": 5,
-            "weight": 0.023148
+            "tf": 4,
+            "weight": 0.023529
           },
           {
             "term": "search",
             "tf": 4,
-            "weight": 0.018519
+            "weight": 0.023529
           },
           {
             "term": "for",
             "tf": 4,
-            "weight": 0.018519
+            "weight": 0.023529
           },
           {
             "term": "documentation",
             "tf": 4,
-            "weight": 0.018519
+            "weight": 0.023529
           },
           {
             "term": "can",
             "tf": 4,
-            "weight": 0.018519
+            "weight": 0.023529
           },
           {
-            "term": "mult",
+            "term": "query",
             "tf": 4,
-            "weight": 0.018519
-          },
-          {
-            "term": "key",
-            "tf": 4,
-            "weight": 0.018519
-          },
-          {
-            "term": "match",
-            "tf": 4,
-            "weight": 0.018519
-          },
-          {
-            "term": "any",
-            "tf": 4,
-            "weight": 0.018519
-          },
-          {
-            "term": "vector",
-            "tf": 3,
-            "weight": 0.013889
+            "weight": 0.023529
           },
           {
             "term": "results",
             "tf": 3,
-            "weight": 0.013889
+            "weight": 0.017647
           },
           {
             "term": "example",
             "tf": 3,
-            "weight": 0.013889
+            "weight": 0.017647
           },
           {
             "term": "would",
             "tf": 3,
-            "weight": 0.013889
+            "weight": 0.017647
           },
           {
             "term": "content",
             "tf": 3,
-            "weight": 0.013889
+            "weight": 0.017647
           },
           {
-            "term": "points",
-            "tf": 3,
-            "weight": 0.013889
+            "term": "when",
+            "tf": 2,
+            "weight": 0.011765
           },
           {
-            "term": "formula",
-            "tf": 3,
-            "weight": 0.013889
+            "term": "vector",
+            "tf": 2,
+            "weight": 0.011765
+          },
+          {
+            "term": "considered",
+            "tf": 2,
+            "weight": 0.011765
+          },
+          {
+            "term": "qdrant",
+            "tf": 2,
+            "weight": 0.011765
+          },
+          {
+            "term": "vectors",
+            "tf": 2,
+            "weight": 0.011765
+          },
+          {
+            "term": "one",
+            "tf": 2,
+            "weight": 0.011765
+          },
+          {
+            "term": "title",
+            "tf": 2,
+            "weight": 0.011765
+          },
+          {
+            "term": "snippets",
+            "tf": 2,
+            "weight": 0.011765
+          },
+          {
+            "term": "this",
+            "tf": 2,
+            "weight": 0.011765
           }
         ],
-        "unique_terms": 121,
-        "total_terms": 216
+        "unique_terms": 115,
+        "total_terms": 170
       },
       "modal_hint": "code",
       "content_flags": {
@@ -1912,37 +1922,37 @@
         "has_table": false,
         "has_list": true,
         "has_json": false,
-        "has_formula": true
+        "has_formula": false
       },
       "search_keywords": [
         "Score boosting",
         "can",
         "documentation",
+        "example",
         "for",
-        "models",
-        "mult",
         "query",
+        "results",
         "score",
         "search",
-        "tag",
-        "the"
+        "the",
+        "would"
       ]
     },
     "advanced_scores": {
-      "semantic": 0.7,
+      "semantic": 0.7999999999999999,
       "structural": 0.7999999999999998,
-      "retrieval_quality": 0.8964028776978419,
-      "overall": 0.7988009592326138
+      "retrieval_quality": 0.7290757085020243,
+      "overall": 0.7763585695006746
     }
   },
   {
-    "text": "### Boost points closer to user\n\nAnother example. Combine the score with how close the result is to a user.\n\nConsidering each point has an associated geo location, we can calculate the distance between the point and the request’s location.\n\nAssuming we have cosine scores in the prefetch, we can use a helper function to clamp the geographical distance between 0 and 1, by using a decay function. Once clamped, we can sum the score and the distance together. Pseudocode:\n\n`score = score + gauss_decay(distance)`\n\nIn this case we use a **gauss\\_decay** function.\n\n```http\nPOST /collections/{collection_name}/points/query\n{\n    \"prefetch\": { \"query\": [0.2, 0.8, ...], \"limit\": 50 },\n    \"query\": {\n        \"formula\": {\n            \"sum\": [\n                \"$score\",\n                {\n                    \"gauss_decay\": {\n                        \"x\": {\n                            \"geo_distance\": {\n                                \"origin\": { \"lat\": 52.504043, \"lon\": 13.393236 }\n                                \"to\": \"geo.location\"\n                            }\n                        },\n                        \"scale\": 5000 // 5km\n                    }\n                }\n            ]\n        },\n        \"defaults\": { \"geo.location\": {\"lat\": 48.137154, \"lon\": 11.576124} }\n    }\n}\n```\n\n```python\nfrom qdrant_client import models\n\n\ngeo_boosted = client.query_points(\n    collection_name=\"{collection_name}\",\n    prefetch=models.Prefetch(\n        query=[0.2, 0.8, ...],  # <-- dense vector\n        limit=50\n    ),\n    query=models.FormulaQuery(\n        formula=models.SumExpression(sum=[\n            \"$score\",\n            models.GaussDecayExpression(\n                gauss_decay=models.DecayParamsExpression(\n                    x=models.GeoDistance(\n                        geo_distance=models.GeoDistanceParams(\n                            origin=models.GeoPoint(\n                                lat=52.504043,\n                                lon=13.393236\n                            ),  # Berlin\n                            to=\"geo.location\"\n                        )\n                    ),\n                    scale=5000  # 5km\n                )\n            )\n        ]),\n        defaults={\"geo.location\": models.GeoPoint(lat=48.137154, lon=11.576124)}  # Munich\n    )\n)\n```\n\n```typescript\nimport { QdrantClient } from \"@qdrant/js-client-rest\";\n\nconst client = new QdrantClient({ host: \"localhost\", port: 6333 });",
+    "text": "### Boost points closer to user\n\nAnother example. Combine the score with how close the result is to a user.\n\nConsidering each point has an associated geo location, we can calculate the distance between the point and the request’s location.\n\nAssuming we have cosine scores in the prefetch, we can use a helper function to clamp the geographical distance between 0 and 1, by using a decay function. Once clamped, we can sum the score and the distance together. Pseudocode:\n\n`score = score + gauss_decay(distance)`\n\nIn this case we use a **gauss\\_decay** function.\n\n```http\nPOST /collections/{collection_name}/points/query\n{\n    \"prefetch\": { \"query\": [0.2, 0.8, ...], \"limit\": 50 },\n    \"query\": {\n        \"formula\": {\n            \"sum\": [\n                \"$score\",\n                {\n                    \"gauss_decay\": {\n                        \"x\": {\n                            \"geo_distance\": {\n                                \"origin\": { \"lat\": 52.504043, \"lon\": 13.393236 }\n                                \"to\": \"geo.location\"\n                            }\n                        },\n                        \"scale\": 5000 // 5km\n                    }\n                }\n            ]\n        },\n        \"defaults\": { \"geo.location\": {\"lat\": 48.137154, \"lon\": 11.576124} }\n    }\n}\n```\n\n```python\nfrom qdrant_client import models",
     "metadata": {
-      "chunk_id": "2c49d1b91247-0032",
+      "chunk_id": "2c49d1b91247-0025",
       "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_hybrid-queries\\_documentation_concepts_hybrid-queries_.md",
       "filename": "_documentation_concepts_hybrid-queries_.md",
       "file_extension": ".md",
-      "chunk_index": 32,
+      "chunk_index": 25,
       "document_level": 1,
       "parent_chunk_id": null,
       "child_chunk_ids": [],
@@ -1950,17 +1960,18 @@
         "Boost points closer to user"
       ],
       "heading_text": "Boost points closer to user",
-      "token_count": 529,
-      "char_count": 2417,
+      "token_count": 300,
+      "char_count": 1329,
       "start_char": 49077,
-      "end_char": 51494,
+      "end_char": 50406,
       "semantic_score": 0.7,
       "structural_score": 0.7,
-      "retrieval_quality": 0.9041666666666668,
+      "retrieval_quality": 0.6951612903225807,
       "chunking_strategy": "hybrid_adaptive_semchunk",
       "content_type": "prose_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:38.506588",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:21.525397",
       "document_id": "2c49d1b91247",
       "document_name": "_documentation_concepts_hybrid-queries_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_hybrid-queries\\_documentation_concepts_hybrid-queries_.md",
@@ -1968,9 +1979,9 @@
       "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_hybrid-queries",
       "relative_path": "Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_hybrid-queries\\_documentation_concepts_hybrid-queries_.md",
       "hierarchy_path": "Boost points closer to user",
-      "chunk_hash": "dc6e2faba310b993",
-      "content_digest": "dc6e2faba310b993",
-      "chunk_length": 2417,
+      "chunk_hash": "96ed41574e20e303",
+      "content_digest": "96ed41574e20e303",
+      "chunk_length": 1329,
       "payload_version": "1.3",
       "collection_hints": [
         "qdrant_ecosystem"
@@ -1979,131 +1990,131 @@
         "version": "1.0",
         "weighting": "tf-normalized",
         "top_terms": [
-          "models",
           "the",
-          "geo",
           "score",
-          "location",
           "distance",
-          "query",
+          "geo",
+          "location",
           "decay",
-          "prefetch",
-          "gauss",
-          "lat",
-          "lon",
-          "client",
-          "points",
           "can",
           "and",
           "function",
+          "gauss",
+          "query",
+          "points",
+          "user",
+          "point",
+          "between",
+          "prefetch",
+          "use",
           "sum",
-          "collection",
-          "name"
+          "lat",
+          "lon"
         ],
         "term_weights": [
           {
-            "term": "models",
-            "tf": 10,
-            "weight": 0.05291
-          },
-          {
             "term": "the",
             "tf": 9,
-            "weight": 0.047619
-          },
-          {
-            "term": "geo",
-            "tf": 8,
-            "weight": 0.042328
+            "weight": 0.078261
           },
           {
             "term": "score",
-            "tf": 6,
-            "weight": 0.031746
-          },
-          {
-            "term": "location",
-            "tf": 6,
-            "weight": 0.031746
+            "tf": 5,
+            "weight": 0.043478
           },
           {
             "term": "distance",
-            "tf": 6,
-            "weight": 0.031746
+            "tf": 5,
+            "weight": 0.043478
           },
           {
-            "term": "query",
-            "tf": 6,
-            "weight": 0.031746
+            "term": "geo",
+            "tf": 4,
+            "weight": 0.034783
+          },
+          {
+            "term": "location",
+            "tf": 4,
+            "weight": 0.034783
           },
           {
             "term": "decay",
-            "tf": 5,
-            "weight": 0.026455
-          },
-          {
-            "term": "prefetch",
             "tf": 4,
-            "weight": 0.021164
-          },
-          {
-            "term": "gauss",
-            "tf": 4,
-            "weight": 0.021164
-          },
-          {
-            "term": "lat",
-            "tf": 4,
-            "weight": 0.021164
-          },
-          {
-            "term": "lon",
-            "tf": 4,
-            "weight": 0.021164
-          },
-          {
-            "term": "client",
-            "tf": 4,
-            "weight": 0.021164
-          },
-          {
-            "term": "points",
-            "tf": 3,
-            "weight": 0.015873
+            "weight": 0.034783
           },
           {
             "term": "can",
             "tf": 3,
-            "weight": 0.015873
+            "weight": 0.026087
           },
           {
             "term": "and",
             "tf": 3,
-            "weight": 0.015873
+            "weight": 0.026087
           },
           {
             "term": "function",
             "tf": 3,
-            "weight": 0.015873
+            "weight": 0.026087
+          },
+          {
+            "term": "gauss",
+            "tf": 3,
+            "weight": 0.026087
+          },
+          {
+            "term": "query",
+            "tf": 3,
+            "weight": 0.026087
+          },
+          {
+            "term": "points",
+            "tf": 2,
+            "weight": 0.017391
+          },
+          {
+            "term": "user",
+            "tf": 2,
+            "weight": 0.017391
+          },
+          {
+            "term": "point",
+            "tf": 2,
+            "weight": 0.017391
+          },
+          {
+            "term": "between",
+            "tf": 2,
+            "weight": 0.017391
+          },
+          {
+            "term": "prefetch",
+            "tf": 2,
+            "weight": 0.017391
+          },
+          {
+            "term": "use",
+            "tf": 2,
+            "weight": 0.017391
           },
           {
             "term": "sum",
-            "tf": 3,
-            "weight": 0.015873
+            "tf": 2,
+            "weight": 0.017391
           },
           {
-            "term": "collection",
-            "tf": 3,
-            "weight": 0.015873
+            "term": "lat",
+            "tf": 2,
+            "weight": 0.017391
           },
           {
-            "term": "name",
-            "tf": 3,
-            "weight": 0.015873
+            "term": "lon",
+            "tf": 2,
+            "weight": 0.017391
           }
         ],
-        "unique_terms": 92,
-        "total_terms": 189
+        "unique_terms": 71,
+        "total_terms": 115
       },
       "modal_hint": "code",
       "content_flags": {
@@ -2111,18 +2122,18 @@
         "has_table": false,
         "has_list": false,
         "has_json": false,
-        "has_formula": true
+        "has_formula": false
       },
       "search_keywords": [
         "Boost points closer to user",
+        "and",
+        "can",
         "decay",
         "distance",
+        "function",
         "gauss",
         "geo",
         "location",
-        "models",
-        "prefetch",
-        "query",
         "score",
         "the"
       ]
@@ -2130,18 +2141,18 @@
     "advanced_scores": {
       "semantic": 0.7,
       "structural": 0.7,
-      "retrieval_quality": 0.9041666666666668,
-      "overall": 0.7680555555555556
+      "retrieval_quality": 0.6951612903225807,
+      "overall": 0.6983870967741935
     }
   },
   {
     "text": "### Time-based score boosting  Or combine the score with the information on how “fresh” the result is. It’s applicable to (news) articles and in general many other different types of searches (think of the “newest” filter you use in applications). To implement time-based score boosting, you’ll need each point to have a datetime field in its payload, e.g., when the item was uploaded or last updated. Then we can calculate the time difference in seconds between this payload value and the current time, our `target`. With an exponential decay function, perfect for use cases with time, as freshness is a very quickly lost quality, we can convert this time difference into a value between 0 and 1, then add it to the original score to prioritise fresh results. `score = score + exp_decay(current_time - point_time)`  That’s how it will look for an application where, after 1 day, results start being only half-relevant (so get a score of 0.5): ```http POST /collections/{collection_name}/points/query {     \"prefetch\": {         \"query\": [0.2, 0.8, ...],  // <-- dense vector         \"limit\": 50     },     \"query\": {         \"formula\": {             \"sum\": [                 \"$score\", // the final score = score + exp_decay(target_time - x_time)                 {                     \"exp_decay\": {                         \"x\": {                             \"datetime_key\": \"update_time\" // payload key                         },                         \"target\": {                             \"datetime\": \"YYYY-MM-DDT00:00:00Z\" // current datetime                         },                         \"scale\": 86400, // 1 day in seconds                         \"midpoint\": 0.5 // if item's \"update_time\" is more than 1 day apart from current datetime, relevance score is less than 0.5                     }                 }             ]         }     } } ``` ```python from qdrant_client import models   time_boosted = client.query_points(     collection_name=\"{collection_name}\",     prefetch=models.Prefetch(         query=[0.2, 0.8, ...],  # <-- dense vector         limit=50     ),     query=models.FormulaQuery(         formula=models.SumExpression(             sum=[                 \"$score\", # the final score = score + exp_decay(target_time - x_time)                 models.ExpDecayExpression(                     exp_decay=models.DecayParamsExpression(                         x=models.DatetimeKeyExpression(                             datetime_key=\"upload_time\" # payload key                          ),                         target=models.DatetimeExpression(                             datetime=\"YYYY-MM-DDT00:00:00Z\" # current datetime                         ),                         scale=86400, # 1 day in seconds                         midpoint=0.5 # if item's \"update_time\" is more than 1 day apart from current datetime, relevance score is less than 0.5                     )                 )             ]         )     ) ) ``` ```typescript import { QdrantClient } from \"@qdrant/js-client-rest\";  const client = new QdrantClient({ host: \"localhost\", port: 6333 });  const time_boosted = await client.query(collectionName, {   prefetch: {     query: [0.2, 0.8, ...], // <-- dense vector     limit: 50   },    query: {       formula: {           sum: [ //  the final score = score + exp_decay(target_time - x_time)               \"$score\",               {                   exp_decay: {                       x: {                           datetime_key: \"update_time\" // payload key                       },                       target: {                           datetime: \"YYYY-MM-DDT00:00:00Z\" // current datetime                       },                       midpoint: 0.5,                       scale: 86400 // 1 day in seconds                   }               }           ]       }   } }); ``` ```rust",
     "metadata": {
-      "chunk_id": "2c49d1b91247-0036",
+      "chunk_id": "2c49d1b91247-0028",
       "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_hybrid-queries\\_documentation_concepts_hybrid-queries_.md",
       "filename": "_documentation_concepts_hybrid-queries_.md",
       "file_extension": ".md",
-      "chunk_index": 36,
+      "chunk_index": 28,
       "document_level": 1,
       "parent_chunk_id": null,
       "child_chunk_ids": [],
@@ -2159,7 +2170,8 @@
       "chunking_strategy": "hybrid_adaptive_structural",
       "content_type": "table_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:38.506588",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:21.528753",
       "document_id": "2c49d1b91247",
       "document_name": "_documentation_concepts_hybrid-queries_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_hybrid-queries\\_documentation_concepts_hybrid-queries_.md",
@@ -2336,11 +2348,11 @@
   {
     "text": "##### Was this page useful? Yes No  Thank you for your feedback! 🙏  We are sorry to hear that. 😔 You can [edit](https:/github.com/qdrant/landing_page/tree/master/qdrant-landing/content/documentation/concepts/hybrid-queries.md) this page on GitHub, or [create](https://github.com/qdrant/landing_page/issues/new/choose) a GitHub issue. On this page:  - [Hybrid and Multi-Stage Queries](#hybrid-and-multi-stage-queries.md)    - [Hybrid Search](#hybrid-search.md)    - [Multi-stage queries](#multi-stage-queries.md)      - [Re-scoring examples](#re-scoring-examples.md)     - [Maximal Marginal Relevance (MMR)](#maximal-marginal-relevance-mmr.md)    - [Score boosting](#score-boosting.md)      - [Boost points closer to user](#boost-points-closer-to-user.md)     - [Time-based score boosting](#time-based-score-boosting.md)    - [Grouping](#grouping.md)  * [Edit on Github](https://github.com/qdrant/landing_page/tree/master/qdrant-landing/content/documentation/concepts/hybrid-queries.md) * [Create an issue](https://github.com/qdrant/landing_page/issues/new/choose)",
     "metadata": {
-      "chunk_id": "2c49d1b91247-0041",
+      "chunk_id": "2c49d1b91247-0032",
       "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_hybrid-queries\\_documentation_concepts_hybrid-queries_.md",
       "filename": "_documentation_concepts_hybrid-queries_.md",
       "file_extension": ".md",
-      "chunk_index": 41,
+      "chunk_index": 32,
       "document_level": 1,
       "parent_chunk_id": null,
       "child_chunk_ids": [],
@@ -2358,7 +2370,8 @@
       "chunking_strategy": "hybrid_adaptive_structural",
       "content_type": "list_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:38.516990",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:21.536555",
       "document_id": "2c49d1b91247",
       "document_name": "_documentation_concepts_hybrid-queries_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_hybrid-queries\\_documentation_concepts_hybrid-queries_.md",

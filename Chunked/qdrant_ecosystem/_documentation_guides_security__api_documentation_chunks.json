@@ -24,7 +24,8 @@
       "chunking_strategy": "hierarchical_precise_structural",
       "content_type": "list_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:42.722942",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:25.360669",
       "document_id": "0fcb3048276b",
       "document_name": "_documentation_guides_security_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_guides_security\\_documentation_guides_security_.md",
@@ -223,7 +224,8 @@
       "chunking_strategy": "hierarchical_precise_structural",
       "content_type": "list_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:42.723940",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:25.361902",
       "document_id": "0fcb3048276b",
       "document_name": "_documentation_guides_security_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_guides_security\\_documentation_guides_security_.md",
@@ -422,7 +424,8 @@
       "chunking_strategy": "hierarchical_precise_structural",
       "content_type": "list_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:42.725096",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:25.362268",
       "document_id": "0fcb3048276b",
       "document_name": "_documentation_guides_security_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_guides_security\\_documentation_guides_security_.md",
@@ -585,7 +588,8 @@
       "chunking_strategy": "hierarchical_precise_structural",
       "content_type": "list_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:42.725096",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:25.363172",
       "document_id": "0fcb3048276b",
       "document_name": "_documentation_guides_security_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_guides_security\\_documentation_guides_security_.md",
@@ -784,7 +788,8 @@
       "chunking_strategy": "hierarchical_precise_structural",
       "content_type": "list_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:42.725096",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:25.364344",
       "document_id": "0fcb3048276b",
       "document_name": "_documentation_guides_security_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_guides_security\\_documentation_guides_security_.md",
@@ -983,7 +988,8 @@
       "chunking_strategy": "hierarchical_precise_structural",
       "content_type": "list_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:42.727232",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:25.364743",
       "document_id": "0fcb3048276b",
       "document_name": "_documentation_guides_security_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_guides_security\\_documentation_guides_security_.md",
@@ -1134,7 +1140,7 @@
     }
   },
   {
-    "text": "## Authentication\n\n*Available as of v1.2.0*\n\nQdrant supports a simple form of client authentication using a static API key. This can be used to secure your instance.\n\nTo enable API key based authentication in your own Qdrant instance you must specify a key in the configuration:\n\n```yaml\nservice:\n  # Set an api-key.\n  # If set, all requests must include a header with the api-key.\n  # example header: `api-key: <API-KEY>`\n  #\n  # If you enable this you should also enable TLS.\n  # (Either above or via an external service like nginx.)\n  # Sending an api-key over an unencrypted channel is insecure.\n  api_key: your_secret_api_key_here\n```\n\nOr alternatively, you can use the environment variable:\n\n```bash\ndocker run -p 6333:6333 \\\n    -e QDRANT__SERVICE__API_KEY=your_secret_api_key_here \\\n    qdrant/qdrant\n```\n\n[TLS](#tls.md) must be used to prevent leaking the API key over an unencrypted connection.\n\nFor using API key based authentication in Qdrant Cloud see the cloud [Authentication](https://qdrant.tech/documentation/cloud/authentication/) section.\n\nThe API key then needs to be present in all REST or gRPC requests to your instance. All official Qdrant clients for Python, Go, Rust, .NET and Java support the API key parameter.\n\n```bash\ncurl \\\n  -X GET https://localhost:6333 \\\n  --header 'api-key: your_secret_api_key_here'\n```\n\n```python\nfrom qdrant_client import QdrantClient\n\nclient = QdrantClient(\n    url=\"https://localhost:6333\",\n    api_key=\"your_secret_api_key_here\",\n)\n```",
+    "text": "## Authentication\n\n*Available as of v1.2.0*\n\nQdrant supports a simple form of client authentication using a static API key. This can be used to secure your instance.\n\nTo enable API key based authentication in your own Qdrant instance you must specify a key in the configuration:\n\n```yaml\nservice:\n  # Set an api-key.\n  # If set, all requests must include a header with the api-key.\n  # example header: `api-key: <API-KEY>`\n  #\n  # If you enable this you should also enable TLS.\n  # (Either above or via an external service like nginx.)\n  # Sending an api-key over an unencrypted channel is insecure.\n  api_key: your_secret_api_key_here\n```\n\nOr alternatively, you can use the environment variable:\n\n```bash\ndocker run -p 6333:6333 \\\n    -e QDRANT__SERVICE__API_KEY=your_secret_api_key_here \\\n    qdrant/qdrant\n```\n\n[TLS](#tls.md) must be used to prevent leaking the API key over an unencrypted connection.\n\nFor using API key based authentication in Qdrant Cloud see the cloud [Authentication](https://qdrant.tech/documentation/cloud/authentication/) section.\n\nThe API key then needs to be present in all REST or gRPC requests to your instance. All official Qdrant clients for Python, Go, Rust, .NET and Java support the API key parameter.\n\n```bash\ncurl \\\n  -X GET https://localhost:6333 \\\n  --header 'api-key: your_secret_api_key_here'\n```\n\n```python\nfrom qdrant_client import QdrantClient\n\nclient = QdrantClient(\n    url=\"https://localhost:6333\",\n    api_key=\"your_secret_api_key_here\",\n)\n```\n\n```typescript\nimport { QdrantClient } from \"@qdrant/js-client-rest\";\n\nconst client = new QdrantClient({\n  url: \"http://localhost\",\n  port: 6333,\n  apiKey: \"your_secret_api_key_here\",\n});\n```\n\n```rust\nuse qdrant_client::Qdrant;\n\nlet client = Qdrant::from_url(\"https://xyz-example.eu-central.aws.cloud.qdrant.io:6334\")\n    .api_key(\"<paste-your-api-key-here>\")\n    .build()?;\n```",
     "metadata": {
       "chunk_id": "0fcb3048276b-0011",
       "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_guides_security\\_documentation_guides_security_.md",
@@ -1148,17 +1154,18 @@
         "Authentication"
       ],
       "heading_text": "Authentication",
-      "token_count": 375,
-      "char_count": 1492,
+      "token_count": 488,
+      "char_count": 1871,
       "start_char": 11691,
-      "end_char": 13183,
+      "end_char": 13562,
       "semantic_score": 0.7,
       "structural_score": 0.7999999999999998,
-      "retrieval_quality": 0.6974514563106797,
+      "retrieval_quality": 0.7332644067796611,
       "chunking_strategy": "hierarchical_precise_semchunk",
       "content_type": "prose_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:42.729785",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:25.366487",
       "document_id": "0fcb3048276b",
       "document_name": "_documentation_guides_security_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_guides_security\\_documentation_guides_security_.md",
@@ -1166,9 +1173,9 @@
       "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_guides_security",
       "relative_path": "Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_guides_security\\_documentation_guides_security_.md",
       "hierarchy_path": "Authentication",
-      "chunk_hash": "6340f4385b59ddbd",
-      "content_digest": "6340f4385b59ddbd",
-      "chunk_length": 1492,
+      "chunk_hash": "b73b0f8f20f942d9",
+      "content_digest": "b73b0f8f20f942d9",
+      "chunk_length": 1871,
       "payload_version": "1.3",
       "collection_hints": [
         "qdrant_ecosystem"
@@ -1181,127 +1188,127 @@
           "api",
           "qdrant",
           "your",
+          "client",
           "the",
           "authentication",
-          "you",
-          "secret",
           "here",
+          "secret",
           "6333",
-          "client",
+          "you",
+          "cloud",
+          "https",
+          "qdrantclient",
           "instance",
           "enable",
           "must",
           "service",
           "all",
-          "header",
-          "tls",
-          "cloud",
-          "https"
+          "header"
         ],
         "term_weights": [
           {
             "term": "key",
-            "tf": 20,
-            "weight": 0.101523
+            "tf": 23,
+            "weight": 0.093878
           },
           {
             "term": "api",
-            "tf": 19,
-            "weight": 0.096447
+            "tf": 22,
+            "weight": 0.089796
           },
           {
             "term": "qdrant",
-            "tf": 9,
-            "weight": 0.045685
+            "tf": 14,
+            "weight": 0.057143
           },
           {
             "term": "your",
+            "tf": 9,
+            "weight": 0.036735
+          },
+          {
+            "term": "client",
             "tf": 7,
-            "weight": 0.035533
+            "weight": 0.028571
           },
           {
             "term": "the",
             "tf": 7,
-            "weight": 0.035533
+            "weight": 0.028571
           },
           {
             "term": "authentication",
             "tf": 6,
-            "weight": 0.030457
+            "weight": 0.02449
+          },
+          {
+            "term": "here",
+            "tf": 6,
+            "weight": 0.02449
+          },
+          {
+            "term": "secret",
+            "tf": 5,
+            "weight": 0.020408
+          },
+          {
+            "term": "6333",
+            "tf": 5,
+            "weight": 0.020408
           },
           {
             "term": "you",
             "tf": 4,
-            "weight": 0.020305
+            "weight": 0.016327
           },
           {
-            "term": "secret",
+            "term": "cloud",
             "tf": 4,
-            "weight": 0.020305
+            "weight": 0.016327
           },
           {
-            "term": "here",
+            "term": "https",
             "tf": 4,
-            "weight": 0.020305
+            "weight": 0.016327
           },
           {
-            "term": "6333",
+            "term": "qdrantclient",
             "tf": 4,
-            "weight": 0.020305
-          },
-          {
-            "term": "client",
-            "tf": 3,
-            "weight": 0.015228
+            "weight": 0.016327
           },
           {
             "term": "instance",
             "tf": 3,
-            "weight": 0.015228
+            "weight": 0.012245
           },
           {
             "term": "enable",
             "tf": 3,
-            "weight": 0.015228
+            "weight": 0.012245
           },
           {
             "term": "must",
             "tf": 3,
-            "weight": 0.015228
+            "weight": 0.012245
           },
           {
             "term": "service",
             "tf": 3,
-            "weight": 0.015228
+            "weight": 0.012245
           },
           {
             "term": "all",
             "tf": 3,
-            "weight": 0.015228
+            "weight": 0.012245
           },
           {
             "term": "header",
             "tf": 3,
-            "weight": 0.015228
-          },
-          {
-            "term": "tls",
-            "tf": 3,
-            "weight": 0.015228
-          },
-          {
-            "term": "cloud",
-            "tf": 3,
-            "weight": 0.015228
-          },
-          {
-            "term": "https",
-            "tf": 3,
-            "weight": 0.015228
+            "weight": 0.012245
           }
         ],
-        "unique_terms": 89,
-        "total_terms": 197
+        "unique_terms": 102,
+        "total_terms": 245
       },
       "modal_hint": "code",
       "content_flags": {
@@ -1316,10 +1323,210 @@
         "Authentication",
         "api",
         "authentication",
+        "client",
         "here",
         "key",
         "qdrant",
         "secret",
+        "the",
+        "your"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.7999999999999998,
+      "retrieval_quality": 0.7332644067796611,
+      "overall": 0.7444214689265536
+    }
+  },
+  {
+    "text": "### Granular access control with JWT\n\n*Available as of v1.9.0*\n\nFor more complex cases, Qdrant supports granular access control with [JSON Web Tokens (JWT)](https://jwt.io/). This allows you to create tokens which restrict access to data stored in your cluster, and build [Role-based access control (RBAC)](https://en.wikipedia.org/wiki/Role-based_access_control) on top of that. In this way, you can define permissions for users and restrict access to sensitive endpoints.\n\nTo enable JWT-based authentication in your own Qdrant instance you need to specify the `api-key` and enable the `jwt_rbac` feature in the configuration:\n\n```yaml\nservice:\n  api_key: you_secret_api_key_here\n  jwt_rbac: true\n```\n\nOr with the environment variables:\n\n```bash\nexport QDRANT__SERVICE__API_KEY=your_secret_api_key_here\nexport QDRANT__SERVICE__JWT_RBAC=true\n```\n\nThe `api_key` you set in the configuration will be used to encode and decode the JWTs, so –needless to say– keep it secure. If your `api_key` changes, all existing tokens will be invalid.\n\nTo use JWT-based authentication, you need to provide it as a bearer token in the `Authorization` header, or as an key in the `Api-Key` header of your requests.\n\n```http\nAuthorization: Bearer <JWT>\n\n// or\n\nApi-Key: <JWT>\n```\n\n```python\nfrom qdrant_client import QdrantClient\n\nqdrant_client = QdrantClient(\n    \"xyz-example.eu-central.aws.cloud.qdrant.io\",\n    api_key=\"<JWT>\",\n)\n```\n\n```typescript\nimport { QdrantClient } from \"@qdrant/js-client-rest\";\n\nconst client = new QdrantClient({\n  host: \"xyz-example.eu-central.aws.cloud.qdrant.io\",\n  apiKey: \"<JWT>\",\n});\n```\n\n```rust\nuse qdrant_client::Qdrant;\n\nlet client = Qdrant::from_url(\"https://xyz-example.eu-central.aws.cloud.qdrant.io:6334\")\n    .api_key(\"<JWT>\")\n    .build()?;\n```\n\n```java\nimport io.qdrant.client.QdrantClient;\nimport io.qdrant.client.QdrantGrpcClient;",
+    "metadata": {
+      "chunk_id": "0fcb3048276b-0014",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_guides_security\\_documentation_guides_security_.md",
+      "filename": "_documentation_guides_security_.md",
+      "file_extension": ".md",
+      "chunk_index": 14,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Granular access control with JWT"
+      ],
+      "heading_text": "Granular access control with JWT",
+      "token_count": 488,
+      "char_count": 1859,
+      "start_char": 15117,
+      "end_char": 16976,
+      "semantic_score": 0.7,
+      "structural_score": 0.7999999999999998,
+      "retrieval_quality": 0.7373090909090908,
+      "chunking_strategy": "hierarchical_precise_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:25.368350",
+      "document_id": "0fcb3048276b",
+      "document_name": "_documentation_guides_security_",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_guides_security\\_documentation_guides_security_.md",
+      "source_filename": "_documentation_guides_security_.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_guides_security",
+      "relative_path": "Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_guides_security\\_documentation_guides_security_.md",
+      "hierarchy_path": "Granular access control with JWT",
+      "chunk_hash": "ae714e65ab9bdba9",
+      "content_digest": "ae714e65ab9bdba9",
+      "chunk_length": 1859,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "qdrant",
+          "jwt",
+          "key",
+          "api",
+          "the",
+          "client",
+          "access",
+          "you",
+          "your",
+          "qdrantclient",
+          "control",
+          "and",
+          "based",
+          "rbac",
+          "import",
+          "with",
+          "tokens",
+          "https",
+          "service",
+          "from"
+        ],
+        "term_weights": [
+          {
+            "term": "qdrant",
+            "tf": 15,
+            "weight": 0.062241
+          },
+          {
+            "term": "jwt",
+            "tf": 13,
+            "weight": 0.053942
+          },
+          {
+            "term": "key",
+            "tf": 12,
+            "weight": 0.049793
+          },
+          {
+            "term": "api",
+            "tf": 11,
+            "weight": 0.045643
+          },
+          {
+            "term": "the",
+            "tf": 9,
+            "weight": 0.037344
+          },
+          {
+            "term": "client",
+            "tf": 8,
+            "weight": 0.033195
+          },
+          {
+            "term": "access",
+            "tf": 6,
+            "weight": 0.024896
+          },
+          {
+            "term": "you",
+            "tf": 6,
+            "weight": 0.024896
+          },
+          {
+            "term": "your",
+            "tf": 5,
+            "weight": 0.020747
+          },
+          {
+            "term": "qdrantclient",
+            "tf": 5,
+            "weight": 0.020747
+          },
+          {
+            "term": "control",
+            "tf": 4,
+            "weight": 0.016598
+          },
+          {
+            "term": "and",
+            "tf": 4,
+            "weight": 0.016598
+          },
+          {
+            "term": "based",
+            "tf": 4,
+            "weight": 0.016598
+          },
+          {
+            "term": "rbac",
+            "tf": 4,
+            "weight": 0.016598
+          },
+          {
+            "term": "import",
+            "tf": 4,
+            "weight": 0.016598
+          },
+          {
+            "term": "with",
+            "tf": 3,
+            "weight": 0.012448
+          },
+          {
+            "term": "tokens",
+            "tf": 3,
+            "weight": 0.012448
+          },
+          {
+            "term": "https",
+            "tf": 3,
+            "weight": 0.012448
+          },
+          {
+            "term": "service",
+            "tf": 3,
+            "weight": 0.012448
+          },
+          {
+            "term": "from",
+            "tf": 3,
+            "weight": 0.012448
+          }
+        ],
+        "unique_terms": 107,
+        "total_terms": 241
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Granular access control with JWT",
+        "access",
+        "api",
+        "client",
+        "jwt",
+        "key",
+        "qdrant",
+        "qdrantclient",
         "the",
         "you",
         "your"
@@ -1328,18 +1535,418 @@
     "advanced_scores": {
       "semantic": 0.7,
       "structural": 0.7999999999999998,
-      "retrieval_quality": 0.6974514563106797,
-      "overall": 0.7324838187702265
+      "retrieval_quality": 0.7373090909090908,
+      "overall": 0.7457696969696969
+    }
+  },
+  {
+    "text": "#### Generating JSON Web Tokens\n\nDue to the nature of JWT, anyone who knows the `api_key` can generate tokens by using any of the existing libraries and tools, it is not necessary for them to have access to the Qdrant instance to generate them.\n\nFor convenience, we have added a JWT generation tool the Qdrant Web UI under the 🔑 tab, if you’re using the default url, it will be at `http://localhost:6333/dashboard#/jwt`.\n\n- **JWT Header** - Qdrant uses the `HS256` algorithm to decode the tokens.\n\n  ```json\n  {\n    \"alg\": \"HS256\",\n    \"typ\": \"JWT\"\n  }\n  ```\n\n- **JWT Payload** - You can include any combination of the [parameters available](#jwt-configuration.md) in the payload. Keep reading for more info on each one.\n\n  ```json\n  {\n    \"exp\": 1640995200, // Expiration time\n    \"value_exists\": ..., // Validate this token by looking for a point with a payload value\n    \"access\": \"r\", // Define the access level.\n  }\n  ```\n\n**Signing the token** - To confirm that the generated token is valid, it needs to be signed with the `api_key` you have set in the configuration. That would mean, that someone who knows the `api_key` gives the authorization for the new token to be used in the Qdrant instance. Qdrant can validate the signature, because it knows the `api_key` and can decode the token.\n\nThe process of token generation can be done on the client side offline, and doesn’t require any communication with the Qdrant instance.\n\nHere is an example of libraries that can be used to generate JWT tokens:\n\n- Python: [PyJWT](https://pyjwt.readthedocs.io/en/stable/)\n- JavaScript: [jsonwebtoken](https://www.npmjs.com/package/jsonwebtoken)\n- Rust: [jsonwebtoken](https://crates.io/crates/jsonwebtoken)",
+    "metadata": {
+      "chunk_id": "0fcb3048276b-0016",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_guides_security\\_documentation_guides_security_.md",
+      "filename": "_documentation_guides_security_.md",
+      "file_extension": ".md",
+      "chunk_index": 16,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Generating JSON Web Tokens"
+      ],
+      "heading_text": "Generating JSON Web Tokens",
+      "token_count": 419,
+      "char_count": 1702,
+      "start_char": 17594,
+      "end_char": 19296,
+      "semantic_score": 0.7,
+      "structural_score": 0.7999999999999998,
+      "retrieval_quality": 0.6926260700389105,
+      "chunking_strategy": "hierarchical_precise_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:25.369069",
+      "document_id": "0fcb3048276b",
+      "document_name": "_documentation_guides_security_",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_guides_security\\_documentation_guides_security_.md",
+      "source_filename": "_documentation_guides_security_.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_guides_security",
+      "relative_path": "Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_guides_security\\_documentation_guides_security_.md",
+      "hierarchy_path": "Generating JSON Web Tokens",
+      "chunk_hash": "8eea9dc002ebdcac",
+      "content_digest": "8eea9dc002ebdcac",
+      "chunk_length": 1702,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "the",
+          "jwt",
+          "can",
+          "qdrant",
+          "token",
+          "for",
+          "tokens",
+          "api",
+          "key",
+          "that",
+          "jsonwebtoken",
+          "json",
+          "knows",
+          "generate",
+          "any",
+          "and",
+          "have",
+          "access",
+          "instance",
+          "you"
+        ],
+        "term_weights": [
+          {
+            "term": "the",
+            "tf": 26,
+            "weight": 0.118182
+          },
+          {
+            "term": "jwt",
+            "tf": 8,
+            "weight": 0.036364
+          },
+          {
+            "term": "can",
+            "tf": 6,
+            "weight": 0.027273
+          },
+          {
+            "term": "qdrant",
+            "tf": 6,
+            "weight": 0.027273
+          },
+          {
+            "term": "token",
+            "tf": 6,
+            "weight": 0.027273
+          },
+          {
+            "term": "for",
+            "tf": 5,
+            "weight": 0.022727
+          },
+          {
+            "term": "tokens",
+            "tf": 4,
+            "weight": 0.018182
+          },
+          {
+            "term": "api",
+            "tf": 4,
+            "weight": 0.018182
+          },
+          {
+            "term": "key",
+            "tf": 4,
+            "weight": 0.018182
+          },
+          {
+            "term": "that",
+            "tf": 4,
+            "weight": 0.018182
+          },
+          {
+            "term": "jsonwebtoken",
+            "tf": 4,
+            "weight": 0.018182
+          },
+          {
+            "term": "json",
+            "tf": 3,
+            "weight": 0.013636
+          },
+          {
+            "term": "knows",
+            "tf": 3,
+            "weight": 0.013636
+          },
+          {
+            "term": "generate",
+            "tf": 3,
+            "weight": 0.013636
+          },
+          {
+            "term": "any",
+            "tf": 3,
+            "weight": 0.013636
+          },
+          {
+            "term": "and",
+            "tf": 3,
+            "weight": 0.013636
+          },
+          {
+            "term": "have",
+            "tf": 3,
+            "weight": 0.013636
+          },
+          {
+            "term": "access",
+            "tf": 3,
+            "weight": 0.013636
+          },
+          {
+            "term": "instance",
+            "tf": 3,
+            "weight": 0.013636
+          },
+          {
+            "term": "you",
+            "tf": 3,
+            "weight": 0.013636
+          }
+        ],
+        "unique_terms": 116,
+        "total_terms": 220
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": true,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Generating JSON Web Tokens",
+        "api",
+        "can",
+        "for",
+        "jwt",
+        "key",
+        "qdrant",
+        "that",
+        "the",
+        "token",
+        "tokens"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.7999999999999998,
+      "retrieval_quality": 0.6926260700389105,
+      "overall": 0.7308753566796368
+    }
+  },
+  {
+    "text": "#### JWT Configuration\n\nThese are the available options, or **claims** in the JWT lingo. You can use them in the JWT payload to define its functionality.\n\n- **`exp`** - The expiration time of the token. This is a Unix timestamp in seconds. The token will be invalid after this time. The check for this claim includes a 30-second leeway to account for clock skew.\n\n  ```json\n  {\n    \"exp\": 1640995200, // Expiration time\n  }\n  ```\n\n- **`value_exists`** - This is a claim that can be used to validate the token against the data stored in a collection. Structure of this claim is as follows:\n\n  ```json\n  {\n    \"value_exists\": {\n      \"collection\": \"my_validation_collection\",\n      \"matches\": [\n        { \"key\": \"my_key\", \"value\": \"value_that_must_exist\" }\n      ],\n    },\n  }\n  ```\n\n  If this claim is present, Qdrant will check if there is a point in the collection with the specified key-values. If it does, the token is valid.\n\n  This claim is especially useful if you want to have an ability to revoke tokens without changing the `api_key`. Consider a case where you have a collection of users, and you want to revoke access to a specific user.\n\n  ```json\n  {\n    \"value_exists\": {\n      \"collection\": \"users\",\n      \"matches\": [\n        { \"key\": \"user_id\", \"value\": \"andrey\" },\n        { \"key\": \"role\", \"value\": \"manager\" }\n      ],\n    },\n  }\n  ```\n\n  You can create a token with this claim, and when you want to revoke access, you can change the `role` of the user to something else, and the token will be invalid.\n\n- **`access`** - This claim defines the [access level](#table-of-access.md) of the token. If this claim is present, Qdrant will check if the token has the required access level to perform the operation. If this claim is **not** present, **manage** access is assumed.\n\n  It can provide global access with `r` for read-only, or `m` for manage. For example:\n\n  ```json\n  {\n    \"access\": \"r\"\n  }\n  ```",
+    "metadata": {
+      "chunk_id": "0fcb3048276b-0017",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_guides_security\\_documentation_guides_security_.md",
+      "filename": "_documentation_guides_security_.md",
+      "file_extension": ".md",
+      "chunk_index": 17,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "JWT Configuration"
+      ],
+      "heading_text": "JWT Configuration",
+      "token_count": 489,
+      "char_count": 1919,
+      "start_char": 19298,
+      "end_char": 21217,
+      "semantic_score": 0.7,
+      "structural_score": 0.7999999999999998,
+      "retrieval_quality": 0.6883393442622951,
+      "chunking_strategy": "hierarchical_precise_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:25.370662",
+      "document_id": "0fcb3048276b",
+      "document_name": "_documentation_guides_security_",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_guides_security\\_documentation_guides_security_.md",
+      "source_filename": "_documentation_guides_security_.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_guides_security",
+      "relative_path": "Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_guides_security\\_documentation_guides_security_.md",
+      "hierarchy_path": "JWT Configuration",
+      "chunk_hash": "55a803f4342b9470",
+      "content_digest": "55a803f4342b9470",
+      "chunk_length": 1919,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "the",
+          "this",
+          "claim",
+          "access",
+          "token",
+          "you",
+          "value",
+          "collection",
+          "key",
+          "can",
+          "for",
+          "will",
+          "json",
+          "jwt",
+          "time",
+          "check",
+          "exists",
+          "present",
+          "with",
+          "want"
+        ],
+        "term_weights": [
+          {
+            "term": "the",
+            "tf": 21,
+            "weight": 0.093333
+          },
+          {
+            "term": "this",
+            "tf": 11,
+            "weight": 0.048889
+          },
+          {
+            "term": "claim",
+            "tf": 9,
+            "weight": 0.04
+          },
+          {
+            "term": "access",
+            "tf": 9,
+            "weight": 0.04
+          },
+          {
+            "term": "token",
+            "tf": 8,
+            "weight": 0.035556
+          },
+          {
+            "term": "you",
+            "tf": 7,
+            "weight": 0.031111
+          },
+          {
+            "term": "value",
+            "tf": 7,
+            "weight": 0.031111
+          },
+          {
+            "term": "collection",
+            "tf": 6,
+            "weight": 0.026667
+          },
+          {
+            "term": "key",
+            "tf": 6,
+            "weight": 0.026667
+          },
+          {
+            "term": "can",
+            "tf": 5,
+            "weight": 0.022222
+          },
+          {
+            "term": "for",
+            "tf": 5,
+            "weight": 0.022222
+          },
+          {
+            "term": "will",
+            "tf": 4,
+            "weight": 0.017778
+          },
+          {
+            "term": "json",
+            "tf": 4,
+            "weight": 0.017778
+          },
+          {
+            "term": "jwt",
+            "tf": 3,
+            "weight": 0.013333
+          },
+          {
+            "term": "time",
+            "tf": 3,
+            "weight": 0.013333
+          },
+          {
+            "term": "check",
+            "tf": 3,
+            "weight": 0.013333
+          },
+          {
+            "term": "exists",
+            "tf": 3,
+            "weight": 0.013333
+          },
+          {
+            "term": "present",
+            "tf": 3,
+            "weight": 0.013333
+          },
+          {
+            "term": "with",
+            "tf": 3,
+            "weight": 0.013333
+          },
+          {
+            "term": "want",
+            "tf": 3,
+            "weight": 0.013333
+          }
+        ],
+        "unique_terms": 105,
+        "total_terms": 225
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": true,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "JWT Configuration",
+        "access",
+        "can",
+        "claim",
+        "collection",
+        "key",
+        "the",
+        "this",
+        "token",
+        "value",
+        "you"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.7999999999999998,
+      "retrieval_quality": 0.6883393442622951,
+      "overall": 0.7294464480874318
     }
   },
   {
     "text": "## TLS\n\n*Available as of v1.2.0*\n\nTLS for encrypted connections can be enabled on your Qdrant instance to secure connections.\n\nConnections are unencrypted by default. This allows sniffing and [MitM](https://en.wikipedia.org/wiki/Man-in-the-middle_attack) attacks.\n\nFirst make sure you have a certificate and private key for TLS, usually in `.pem` format. On your local machine you may use [mkcert](https://github.com/FiloSottile/mkcert#readme) to generate a self signed certificate.\n\nTo enable TLS, set the following properties in the Qdrant configuration with the correct paths and restart:\n\n```yaml\nservice:\n  # Enable HTTPS for the REST and gRPC API\n  enable_tls: true",
     "metadata": {
-      "chunk_id": "0fcb3048276b-0025",
+      "chunk_id": "0fcb3048276b-0021",
       "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_guides_security\\_documentation_guides_security_.md",
       "filename": "_documentation_guides_security_.md",
       "file_extension": ".md",
-      "chunk_index": 25,
+      "chunk_index": 21,
       "document_level": 1,
       "parent_chunk_id": null,
       "child_chunk_ids": [],
@@ -1357,7 +1964,8 @@
       "chunking_strategy": "hierarchical_precise_semchunk",
       "content_type": "prose_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:42.743118",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:25.379565",
       "document_id": "0fcb3048276b",
       "document_name": "_documentation_guides_security_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_guides_security\\_documentation_guides_security_.md",
@@ -1534,11 +2142,11 @@
   {
     "text": "# TLS configuration.",
     "metadata": {
-      "chunk_id": "0fcb3048276b-0026",
+      "chunk_id": "0fcb3048276b-0022",
       "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_guides_security\\_documentation_guides_security_.md",
       "filename": "_documentation_guides_security_.md",
       "file_extension": ".md",
-      "chunk_index": 26,
+      "chunk_index": 22,
       "document_level": 1,
       "parent_chunk_id": null,
       "child_chunk_ids": [],
@@ -1556,7 +2164,8 @@
       "chunking_strategy": "hierarchical_precise_semchunk",
       "content_type": "prose_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:42.744482",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:25.379679",
       "document_id": "0fcb3048276b",
       "document_name": "_documentation_guides_security_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_guides_security\\_documentation_guides_security_.md",
@@ -1615,13 +2224,13 @@
     }
   },
   {
-    "text": "# Required if either service.enable_tls or cluster.p2p.enable_tls is true.\ntls:\n  # Server certificate chain file\n  cert: ./tls/cert.pem\n\n  # Server private key file\n  key: ./tls/key.pem\n```\n\nFor internal communication when running cluster mode, TLS can be enabled with:\n\n```yaml\ncluster:\n  # Configuration of the inter-cluster communication\n  p2p:\n    # Use TLS for communication between peers\n    enable_tls: true\n```\n\nWith TLS enabled, you must start using HTTPS connections. For example:\n\n```bash\ncurl -X GET https://localhost:6333\n```\n\n```python\nfrom qdrant_client import QdrantClient\n\nclient = QdrantClient(\n    url=\"https://localhost:6333\",\n)\n```\n\n```typescript\nimport { QdrantClient } from \"@qdrant/js-client-rest\";\n\nconst client = new QdrantClient({ url: \"https://localhost\", port: 6333 });\n```\n\n```rust\nuse qdrant_client::Qdrant;\n\nlet client = Qdrant::from_url(\"http://localhost:6334\").build()?;\n```\n\nCertificate rotation is enabled with a default refresh time of one hour. This reloads certificate files every hour while Qdrant is running. This way changed certificates are picked up when they get updated externally. The refresh time can be tuned by changing the `tls.cert_ttl` setting. You can leave this on, even if you don’t plan to update your certificates. Currently this is only supported for the REST API.",
+    "text": "# Required if either service.enable_tls or cluster.p2p.enable_tls is true.\ntls:\n  # Server certificate chain file\n  cert: ./tls/cert.pem\n\n  # Server private key file\n  key: ./tls/key.pem\n```\n\nFor internal communication when running cluster mode, TLS can be enabled with:\n\n```yaml\ncluster:\n  # Configuration of the inter-cluster communication\n  p2p:\n    # Use TLS for communication between peers\n    enable_tls: true\n```\n\nWith TLS enabled, you must start using HTTPS connections. For example:\n\n```bash\ncurl -X GET https://localhost:6333\n```\n\n```python\nfrom qdrant_client import QdrantClient\n\nclient = QdrantClient(\n    url=\"https://localhost:6333\",\n)\n```\n\n```typescript\nimport { QdrantClient } from \"@qdrant/js-client-rest\";\n\nconst client = new QdrantClient({ url: \"https://localhost\", port: 6333 });\n```\n\n```rust\nuse qdrant_client::Qdrant;\n\nlet client = Qdrant::from_url(\"http://localhost:6334\").build()?;\n```\n\nCertificate rotation is enabled with a default refresh time of one hour. This reloads certificate files every hour while Qdrant is running. This way changed certificates are picked up when they get updated externally. The refresh time can be tuned by changing the `tls.cert_ttl` setting. You can leave this on, even if you don’t plan to update your certificates. Currently this is only supported for the REST API.\n\nOptionally, you can enable client certificate validation on the server against a local certificate authority. Set the following properties and restart:\n\n```yaml\nservice:\n  # Check user HTTPS client certificate against CA file specified in tls config\n  verify_https_client_certificate: false",
     "metadata": {
-      "chunk_id": "0fcb3048276b-0027",
+      "chunk_id": "0fcb3048276b-0023",
       "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_guides_security\\_documentation_guides_security_.md",
       "filename": "_documentation_guides_security_.md",
       "file_extension": ".md",
-      "chunk_index": 27,
+      "chunk_index": 23,
       "document_level": 1,
       "parent_chunk_id": null,
       "child_chunk_ids": [],
@@ -1629,17 +2238,18 @@
         "Required if either service.enable_tls or cluster.p2p.enable_tls is true."
       ],
       "heading_text": "Required if either service.enable_tls or cluster.p2p.enable_tls is true.",
-      "token_count": 326,
-      "char_count": 1324,
+      "token_count": 378,
+      "char_count": 1616,
       "start_char": 31943,
-      "end_char": 33267,
+      "end_char": 33559,
       "semantic_score": 0.7,
-      "structural_score": 0.8999999999999999,
-      "retrieval_quality": 0.7135303370786518,
+      "structural_score": 0.7,
+      "retrieval_quality": 0.7203444444444445,
       "chunking_strategy": "hierarchical_precise_semchunk",
       "content_type": "prose_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:42.744863",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:25.380444",
       "document_id": "0fcb3048276b",
       "document_name": "_documentation_guides_security_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_guides_security\\_documentation_guides_security_.md",
@@ -1647,9 +2257,9 @@
       "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_guides_security",
       "relative_path": "Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_guides_security\\_documentation_guides_security_.md",
       "hierarchy_path": "Required if either service.enable_tls or cluster.p2p.enable_tls is true.",
-      "chunk_hash": "47c710e5961198b7",
-      "content_digest": "47c710e5961198b7",
-      "chunk_length": 1324,
+      "chunk_hash": "2729d6be38502b7a",
+      "content_digest": "2729d6be38502b7a",
+      "chunk_length": 1616,
       "payload_version": "1.3",
       "collection_hints": [
         "qdrant_ecosystem"
@@ -1659,130 +2269,130 @@
         "weighting": "tf-normalized",
         "top_terms": [
           "tls",
-          "qdrant",
           "client",
-          "cluster",
-          "for",
+          "certificate",
           "the",
           "https",
+          "qdrant",
+          "enable",
+          "cluster",
+          "for",
+          "can",
+          "you",
           "localhost",
           "qdrantclient",
           "this",
-          "enable",
-          "certificate",
+          "server",
+          "file",
           "cert",
           "key",
           "communication",
-          "can",
-          "enabled",
-          "with",
-          "you",
-          "6333"
+          "enabled"
         ],
         "term_weights": [
           {
             "term": "tls",
-            "tf": 10,
-            "weight": 0.057803
+            "tf": 11,
+            "weight": 0.052632
+          },
+          {
+            "term": "client",
+            "tf": 9,
+            "weight": 0.043062
+          },
+          {
+            "term": "certificate",
+            "tf": 7,
+            "weight": 0.033493
+          },
+          {
+            "term": "the",
+            "tf": 6,
+            "weight": 0.028708
+          },
+          {
+            "term": "https",
+            "tf": 6,
+            "weight": 0.028708
           },
           {
             "term": "qdrant",
             "tf": 6,
-            "weight": 0.034682
+            "weight": 0.028708
           },
           {
-            "term": "client",
-            "tf": 6,
-            "weight": 0.034682
+            "term": "enable",
+            "tf": 4,
+            "weight": 0.019139
           },
           {
             "term": "cluster",
             "tf": 4,
-            "weight": 0.023121
+            "weight": 0.019139
           },
           {
             "term": "for",
             "tf": 4,
-            "weight": 0.023121
+            "weight": 0.019139
           },
           {
-            "term": "the",
+            "term": "can",
             "tf": 4,
-            "weight": 0.023121
+            "weight": 0.019139
           },
           {
-            "term": "https",
+            "term": "you",
             "tf": 4,
-            "weight": 0.023121
+            "weight": 0.019139
           },
           {
             "term": "localhost",
             "tf": 4,
-            "weight": 0.023121
+            "weight": 0.019139
           },
           {
             "term": "qdrantclient",
             "tf": 4,
-            "weight": 0.023121
+            "weight": 0.019139
           },
           {
             "term": "this",
             "tf": 4,
-            "weight": 0.023121
+            "weight": 0.019139
           },
           {
-            "term": "enable",
+            "term": "server",
             "tf": 3,
-            "weight": 0.017341
+            "weight": 0.014354
           },
           {
-            "term": "certificate",
+            "term": "file",
             "tf": 3,
-            "weight": 0.017341
+            "weight": 0.014354
           },
           {
             "term": "cert",
             "tf": 3,
-            "weight": 0.017341
+            "weight": 0.014354
           },
           {
             "term": "key",
             "tf": 3,
-            "weight": 0.017341
+            "weight": 0.014354
           },
           {
             "term": "communication",
             "tf": 3,
-            "weight": 0.017341
-          },
-          {
-            "term": "can",
-            "tf": 3,
-            "weight": 0.017341
+            "weight": 0.014354
           },
           {
             "term": "enabled",
             "tf": 3,
-            "weight": 0.017341
-          },
-          {
-            "term": "with",
-            "tf": 3,
-            "weight": 0.017341
-          },
-          {
-            "term": "you",
-            "tf": 3,
-            "weight": 0.017341
-          },
-          {
-            "term": "6333",
-            "tf": 3,
-            "weight": 0.017341
+            "weight": 0.014354
           }
         ],
-        "unique_terms": 94,
-        "total_terms": 173
+        "unique_terms": 110,
+        "total_terms": 209
       },
       "modal_hint": "code",
       "content_flags": {
@@ -1794,33 +2404,33 @@
       },
       "search_keywords": [
         "Required if either service.enable_tls or cluster.p2p.enable_tls is true.",
+        "can",
+        "certificate",
         "client",
         "cluster",
+        "enable",
         "for",
         "https",
-        "localhost",
         "qdrant",
-        "qdrantclient",
         "the",
-        "this",
         "tls"
       ]
     },
     "advanced_scores": {
       "semantic": 0.7,
-      "structural": 0.8999999999999999,
-      "retrieval_quality": 0.7135303370786518,
-      "overall": 0.7711767790262173
+      "structural": 0.7,
+      "retrieval_quality": 0.7203444444444445,
+      "overall": 0.7067814814814813
     }
   },
   {
     "text": "# TLS configuration.",
     "metadata": {
-      "chunk_id": "0fcb3048276b-0029",
+      "chunk_id": "0fcb3048276b-0024",
       "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_guides_security\\_documentation_guides_security_.md",
       "filename": "_documentation_guides_security_.md",
       "file_extension": ".md",
-      "chunk_index": 29,
+      "chunk_index": 24,
       "document_level": 1,
       "parent_chunk_id": null,
       "child_chunk_ids": [],
@@ -1838,7 +2448,8 @@
       "chunking_strategy": "hierarchical_precise_semchunk",
       "content_type": "prose_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:42.744863",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:25.380516",
       "document_id": "0fcb3048276b",
       "document_name": "_documentation_guides_security_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_guides_security\\_documentation_guides_security_.md",
@@ -1899,11 +2510,11 @@
   {
     "text": "##### Was this page useful? Yes No  Thank you for your feedback! 🙏  We are sorry to hear that. 😔 You can [edit](https:/github.com/qdrant/landing_page/tree/master/qdrant-landing/content/documentation/guides/security.md) this page on GitHub, or [create](https://github.com/qdrant/landing_page/issues/new/choose) a GitHub issue. On this page:  - [Security](#security.md)    - [Authentication](#authentication.md)      - [Read-only API key](#read-only-api-key.md)     - [Granular access control with JWT](#granular-access-control-with-jwt.md)     - [Table of access](#table-of-access.md)    - [TLS](#tls.md)    - [Hardening](#hardening.md)  * [Edit on Github](https://github.com/qdrant/landing_page/tree/master/qdrant-landing/content/documentation/guides/security.md) * [Create an issue](https://github.com/qdrant/landing_page/issues/new/choose)",
     "metadata": {
-      "chunk_id": "0fcb3048276b-0033",
+      "chunk_id": "0fcb3048276b-0028",
       "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_guides_security\\_documentation_guides_security_.md",
       "filename": "_documentation_guides_security_.md",
       "file_extension": ".md",
-      "chunk_index": 33,
+      "chunk_index": 28,
       "document_level": 1,
       "parent_chunk_id": null,
       "child_chunk_ids": [],
@@ -1921,7 +2532,8 @@
       "chunking_strategy": "hierarchical_precise_structural",
       "content_type": "list_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:42.747988",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:25.383501",
       "document_id": "0fcb3048276b",
       "document_name": "_documentation_guides_security_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_guides_security\\_documentation_guides_security_.md",

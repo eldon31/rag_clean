@@ -24,7 +24,8 @@
       "chunking_strategy": "hybrid_adaptive_structural",
       "content_type": "list_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:38.293743",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:21.384783",
       "document_id": "e8f29afde80c",
       "document_name": "_documentation_concepts_filtering_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_filtering\\_documentation_concepts_filtering_.md",
@@ -223,7 +224,8 @@
       "chunking_strategy": "hybrid_adaptive_structural",
       "content_type": "list_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:38.293743",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:21.386002",
       "document_id": "e8f29afde80c",
       "document_name": "_documentation_concepts_filtering_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_filtering\\_documentation_concepts_filtering_.md",
@@ -422,7 +424,8 @@
       "chunking_strategy": "hybrid_adaptive_structural",
       "content_type": "list_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:38.293743",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:21.386383",
       "document_id": "e8f29afde80c",
       "document_name": "_documentation_concepts_filtering_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_filtering\\_documentation_concepts_filtering_.md",
@@ -585,7 +588,8 @@
       "chunking_strategy": "hybrid_adaptive_structural",
       "content_type": "list_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:38.299284",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:21.387237",
       "document_id": "e8f29afde80c",
       "document_name": "_documentation_concepts_filtering_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_filtering\\_documentation_concepts_filtering_.md",
@@ -784,7 +788,8 @@
       "chunking_strategy": "hybrid_adaptive_structural",
       "content_type": "list_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:38.302469",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:21.388392",
       "document_id": "e8f29afde80c",
       "document_name": "_documentation_concepts_filtering_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_filtering\\_documentation_concepts_filtering_.md",
@@ -983,7 +988,8 @@
       "chunking_strategy": "hybrid_adaptive_semchunk",
       "content_type": "prose_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:38.303671",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:21.389207",
       "document_id": "e8f29afde80c",
       "document_name": "_documentation_concepts_filtering_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_filtering\\_documentation_concepts_filtering_.md",
@@ -1182,7 +1188,8 @@
       "chunking_strategy": "hybrid_adaptive_structural",
       "content_type": "table_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:38.303671",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:21.389368",
       "document_id": "e8f29afde80c",
       "document_name": "_documentation_concepts_filtering_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_filtering\\_documentation_concepts_filtering_.md",
@@ -1345,7 +1352,7 @@
     }
   },
   {
-    "text": "### Must\n\nExample:\n\n```http\nPOST /collections/{collection_name}/points/scroll\n{\n    \"filter\": {\n        \"must\": [\n            { \"key\": \"city\", \"match\": { \"value\": \"London\" } },\n            { \"key\": \"color\", \"match\": { \"value\": \"red\" } }\n        ]\n    }\n    ...\n}\n```\n\n```python\nfrom qdrant_client import QdrantClient, models\n\nclient = QdrantClient(url=\"http://localhost:6333\")\n\nclient.scroll(\n    collection_name=\"{collection_name}\",\n    scroll_filter=models.Filter(\n        must=[\n            models.FieldCondition(\n                key=\"city\",\n                match=models.MatchValue(value=\"London\"),\n            ),\n            models.FieldCondition(\n                key=\"color\",\n                match=models.MatchValue(value=\"red\"),\n            ),\n        ]\n    ),\n)\n```\n\n```typescript\nimport { QdrantClient } from \"@qdrant/js-client-rest\";\n\nconst client = new QdrantClient({ host: \"localhost\", port: 6333 });\n\nclient.scroll(\"{collection_name}\", {\n  filter: {\n    must: [\n      {\n        key: \"city\",\n        match: { value: \"London\" },\n      },\n      {\n        key: \"color\",\n        match: { value: \"red\" },\n      },\n    ],\n  },\n});\n```\n\n```rust\nuse qdrant_client::qdrant::{Condition, Filter, ScrollPointsBuilder};\nuse qdrant_client::Qdrant;\n\nlet client = Qdrant::from_url(\"http://localhost:6334\").build()?;\n\nclient\n    .scroll(\n        ScrollPointsBuilder::new(\"{collection_name}\").filter(Filter::must([\n            Condition::matches(\"city\", \"london\".to_string()),\n            Condition::matches(\"color\", \"red\".to_string()),\n        ])),\n    )\n    .await?;\n```\n\n```java\nimport java.util.List;\n\nimport static io.qdrant.client.ConditionFactory.matchKeyword;\n\nimport io.qdrant.client.QdrantClient;\nimport io.qdrant.client.QdrantGrpcClient;\nimport io.qdrant.client.grpc.Points.Filter;\nimport io.qdrant.client.grpc.Points.ScrollPoints;\n\nQdrantClient client =\n    new QdrantClient(QdrantGrpcClient.newBuilder(\"localhost\", 6334, false).build());\n\nclient\n    .scrollAsync(\n        ScrollPoints.newBuilder()\n            .setCollectionName(\"{collection_name}\")\n            .setFilter(\n                Filter.newBuilder()\n                    .addAllMust(\n                        List.of(matchKeyword(\"city\", \"London\"), matchKeyword(\"color\", \"red\")))\n                    .build())\n            .build())\n    .get();\n```\n\n```csharp\nusing Qdrant.Client;\nusing static Qdrant.Client.Grpc.Conditions;\n\nvar client = new QdrantClient(\"localhost\", 6334);\n\n// & operator combines two conditions in an AND conjunction(must)\nawait client.ScrollAsync(\n\tcollectionName: \"{collection_name}\",\n\tfilter: MatchKeyword(\"city\", \"London\") & MatchKeyword(\"color\", \"red\")\n);\n```\n\n```go\nimport (\n\t\"context\"\n\n\t\"github.com/qdrant/go-client/qdrant\"\n)\n\nclient, err := qdrant.NewClient(&qdrant.Config{\n\tHost: \"localhost\",\n\tPort: 6334,\n})\n\nclient.Scroll(context.Background(), &qdrant.ScrollPoints{\n\tCollectionName: \"{collection_name}\",\n\tFilter: &qdrant.Filter{\n\t\tMust: []*qdrant.Condition{\n\t\t\tqdrant.NewMatch(\"city\", \"London\"),\n\t\t\tqdrant.NewMatch(\"color\", \"red\"),\n\t\t},\n\t},\n})\n```\n\nFiltered points would be:\n\n```json\n[{ \"id\": 2, \"city\": \"London\", \"color\": \"red\" }]\n```",
+    "text": "### Must\n\nExample:\n\n```http\nPOST /collections/{collection_name}/points/scroll\n{\n    \"filter\": {\n        \"must\": [\n            { \"key\": \"city\", \"match\": { \"value\": \"London\" } },\n            { \"key\": \"color\", \"match\": { \"value\": \"red\" } }\n        ]\n    }\n    ...\n}\n```\n\n```python\nfrom qdrant_client import QdrantClient, models\n\nclient = QdrantClient(url=\"http://localhost:6333\")\n\nclient.scroll(\n    collection_name=\"{collection_name}\",\n    scroll_filter=models.Filter(\n        must=[\n            models.FieldCondition(\n                key=\"city\",\n                match=models.MatchValue(value=\"London\"),\n            ),\n            models.FieldCondition(\n                key=\"color\",\n                match=models.MatchValue(value=\"red\"),\n            ),\n        ]\n    ),\n)\n```\n\n```typescript\nimport { QdrantClient } from \"@qdrant/js-client-rest\";\n\nconst client = new QdrantClient({ host: \"localhost\", port: 6333 });\n\nclient.scroll(\"{collection_name}\", {\n  filter: {\n    must: [\n      {\n        key: \"city\",\n        match: { value: \"London\" },\n      },\n      {\n        key: \"color\",\n        match: { value: \"red\" },\n      },\n    ],\n  },\n});\n```\n\n```rust\nuse qdrant_client::qdrant::{Condition, Filter, ScrollPointsBuilder};\nuse qdrant_client::Qdrant;\n\nlet client = Qdrant::from_url(\"http://localhost:6334\").build()?;\n\nclient\n    .scroll(\n        ScrollPointsBuilder::new(\"{collection_name}\").filter(Filter::must([\n            Condition::matches(\"city\", \"london\".to_string()),\n            Condition::matches(\"color\", \"red\".to_string()),\n        ])),\n    )\n    .await?;\n```\n\n```java\nimport java.util.List;\n\nimport static io.qdrant.client.ConditionFactory.matchKeyword;\n\nimport io.qdrant.client.QdrantClient;\nimport io.qdrant.client.QdrantGrpcClient;\nimport io.qdrant.client.grpc.Points.Filter;\nimport io.qdrant.client.grpc.Points.ScrollPoints;\n\nQdrantClient client =\n    new QdrantClient(QdrantGrpcClient.newBuilder(\"localhost\", 6334, false).build());\n\nclient\n    .scrollAsync(\n        ScrollPoints.newBuilder()\n            .setCollectionName(\"{collection_name}\")\n            .setFilter(\n                Filter.newBuilder()\n                    .addAllMust(\n                        List.of(matchKeyword(\"city\", \"London\"), matchKeyword(\"color\", \"red\")))\n                    .build())\n            .build())\n    .get();\n```\n\n```csharp\nusing Qdrant.Client;\nusing static Qdrant.Client.Grpc.Conditions;\n\nvar client = new QdrantClient(\"localhost\", 6334);\n\n// & operator combines two conditions in an AND conjunction(must)\nawait client.ScrollAsync(\n\tcollectionName: \"{collection_name}\",\n\tfilter: MatchKeyword(\"city\", \"London\") & MatchKeyword(\"color\", \"red\")\n);\n```\n\n```go\nimport (\n\t\"context\"\n\n\t\"github.com/qdrant/go-client/qdrant\"\n)\n\nclient, err := qdrant.NewClient(&qdrant.Config{\n\tHost: \"localhost\",\n\tPort: 6334,\n})\n\nclient.Scroll(context.Background(), &qdrant.ScrollPoints{\n\tCollectionName: \"{collection_name}\",\n\tFilter: &qdrant.Filter{\n\t\tMust: []*qdrant.Condition{\n\t\t\tqdrant.NewMatch(\"city\", \"London\"),\n\t\t\tqdrant.NewMatch(\"color\", \"red\"),\n\t\t},\n\t},\n})\n```\n\nFiltered points would be:\n\n```json\n[{ \"id\": 2, \"city\": \"London\", \"color\": \"red\" }]\n```\n\nWhen using `must`, the clause becomes `true` only if every condition listed inside `must` is satisfied. In this sense, `must` is equivalent to the operator `AND`.",
     "metadata": {
       "chunk_id": "e8f29afde80c-0013",
       "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_filtering\\_documentation_concepts_filtering_.md",
@@ -1359,17 +1366,18 @@
         "Must"
       ],
       "heading_text": "Must",
-      "token_count": 785,
-      "char_count": 3129,
+      "token_count": 824,
+      "char_count": 3293,
       "start_char": 12958,
-      "end_char": 16087,
+      "end_char": 16251,
       "semantic_score": 0.7,
-      "structural_score": 0.7,
-      "retrieval_quality": 0.8892116182572614,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.8932584269662922,
       "chunking_strategy": "hybrid_adaptive_semchunk",
       "content_type": "prose_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:38.309522",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:21.391680",
       "document_id": "e8f29afde80c",
       "document_name": "_documentation_concepts_filtering_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_filtering\\_documentation_concepts_filtering_.md",
@@ -1377,9 +1385,9 @@
       "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_filtering",
       "relative_path": "Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_filtering\\_documentation_concepts_filtering_.md",
       "hierarchy_path": "Must",
-      "chunk_hash": "413b1386c1f82a74",
-      "content_digest": "413b1386c1f82a74",
-      "chunk_length": 3129,
+      "chunk_hash": "16eacb57060161ba",
+      "content_digest": "16eacb57060161ba",
+      "chunk_length": 3293,
       "payload_version": "1.3",
       "collection_hints": [
         "qdrant_ecosystem"
@@ -1391,6 +1399,7 @@
           "client",
           "qdrant",
           "filter",
+          "must",
           "import",
           "collection",
           "name",
@@ -1399,120 +1408,119 @@
           "color",
           "red",
           "qdrantclient",
-          "must",
           "scroll",
           "key",
           "match",
           "value",
           "models",
           "localhost",
-          "matchkeyword",
-          "points"
+          "condition",
+          "matchkeyword"
         ],
         "term_weights": [
           {
             "term": "client",
             "tf": 24,
-            "weight": 0.085409
+            "weight": 0.07947
           },
           {
             "term": "qdrant",
             "tf": 23,
-            "weight": 0.081851
+            "weight": 0.076159
           },
           {
             "term": "filter",
             "tf": 12,
-            "weight": 0.042705
+            "weight": 0.039735
+          },
+          {
+            "term": "must",
+            "tf": 10,
+            "weight": 0.033113
           },
           {
             "term": "import",
             "tf": 9,
-            "weight": 0.032028
+            "weight": 0.029801
           },
           {
             "term": "collection",
             "tf": 8,
-            "weight": 0.02847
+            "weight": 0.02649
           },
           {
             "term": "name",
             "tf": 8,
-            "weight": 0.02847
+            "weight": 0.02649
           },
           {
             "term": "city",
             "tf": 8,
-            "weight": 0.02847
+            "weight": 0.02649
           },
           {
             "term": "london",
             "tf": 8,
-            "weight": 0.02847
+            "weight": 0.02649
           },
           {
             "term": "color",
             "tf": 8,
-            "weight": 0.02847
+            "weight": 0.02649
           },
           {
             "term": "red",
             "tf": 8,
-            "weight": 0.02847
+            "weight": 0.02649
           },
           {
             "term": "qdrantclient",
             "tf": 8,
-            "weight": 0.02847
-          },
-          {
-            "term": "must",
-            "tf": 7,
-            "weight": 0.024911
+            "weight": 0.02649
           },
           {
             "term": "scroll",
             "tf": 6,
-            "weight": 0.021352
+            "weight": 0.019868
           },
           {
             "term": "key",
             "tf": 6,
-            "weight": 0.021352
+            "weight": 0.019868
           },
           {
             "term": "match",
             "tf": 6,
-            "weight": 0.021352
+            "weight": 0.019868
           },
           {
             "term": "value",
             "tf": 6,
-            "weight": 0.021352
+            "weight": 0.019868
           },
           {
             "term": "models",
             "tf": 6,
-            "weight": 0.021352
+            "weight": 0.019868
           },
           {
             "term": "localhost",
             "tf": 6,
-            "weight": 0.021352
+            "weight": 0.019868
+          },
+          {
+            "term": "condition",
+            "tf": 5,
+            "weight": 0.016556
           },
           {
             "term": "matchkeyword",
             "tf": 5,
-            "weight": 0.017794
-          },
-          {
-            "term": "points",
-            "tf": 4,
-            "weight": 0.014235
+            "weight": 0.016556
           }
         ],
-        "unique_terms": 82,
-        "total_terms": 281
+        "unique_terms": 95,
+        "total_terms": 302
       },
       "modal_hint": "code",
       "content_flags": {
@@ -1531,26 +1539,26 @@
         "filter",
         "import",
         "london",
+        "must",
         "name",
-        "qdrant",
-        "red"
+        "qdrant"
       ]
     },
     "advanced_scores": {
       "semantic": 0.7,
-      "structural": 0.7,
-      "retrieval_quality": 0.8892116182572614,
-      "overall": 0.7630705394190871
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.8932584269662922,
+      "overall": 0.8310861423220973
     }
   },
   {
-    "text": "### Should\n\nExample:\n\n```http\nPOST /collections/{collection_name}/points/scroll\n{\n    \"filter\": {\n        \"should\": [\n            { \"key\": \"city\", \"match\": { \"value\": \"London\" } },\n            { \"key\": \"color\", \"match\": { \"value\": \"red\" } }\n        ]\n    }\n}\n```\n\n```python\nclient.scroll(\n    collection_name=\"{collection_name}\",\n    scroll_filter=models.Filter(\n        should=[\n            models.FieldCondition(\n                key=\"city\",\n                match=models.MatchValue(value=\"London\"),\n            ),\n            models.FieldCondition(\n                key=\"color\",\n                match=models.MatchValue(value=\"red\"),\n            ),\n        ]\n    ),\n)\n```\n\n```typescript\nclient.scroll(\"{collection_name}\", {\n  filter: {\n    should: [\n      {\n        key: \"city\",\n        match: { value: \"London\" },\n      },\n      {\n        key: \"color\",\n        match: { value: \"red\" },\n      },\n    ],\n  },\n});\n```\n\n```rust\nuse qdrant_client::qdrant::{Condition, Filter, ScrollPointsBuilder};\nuse qdrant_client::Qdrant;\n\nlet client = Qdrant::from_url(\"http://localhost:6334\").build()?;\n\nclient\n    .scroll(\n        ScrollPointsBuilder::new(\"{collection_name}\").filter(Filter::should([\n            Condition::matches(\"city\", \"london\".to_string()),\n            Condition::matches(\"color\", \"red\".to_string()),\n        ])),\n    )\n    .await?;\n```\n\n```java\nimport static io.qdrant.client.ConditionFactory.matchKeyword;\n\nimport io.qdrant.client.grpc.Points.Filter;\nimport io.qdrant.client.grpc.Points.ScrollPoints;\nimport java.util.List;\n\nclient\n    .scrollAsync(\n        ScrollPoints.newBuilder()\n            .setCollectionName(\"{collection_name}\")\n            .setFilter(\n                Filter.newBuilder()\n                    .addAllShould(\n                        List.of(matchKeyword(\"city\", \"London\"), matchKeyword(\"color\", \"red\")))\n                    .build())\n            .build())\n    .get();\n```\n\n```csharp\nusing Qdrant.Client;\nusing static Qdrant.Client.Grpc.Conditions;\n\nvar client = new QdrantClient(\"localhost\", 6334);\n\n// | operator combines two conditions in an OR disjunction(should)\nawait client.ScrollAsync(\n\tcollectionName: \"{collection_name}\",\n\tfilter: MatchKeyword(\"city\", \"London\") | MatchKeyword(\"color\", \"red\")\n);\n```\n\n```go\nimport (\n\t\"context\"\n\n\t\"github.com/qdrant/go-client/qdrant\"\n)\n\nclient, err := qdrant.NewClient(&qdrant.Config{\n\tHost: \"localhost\",\n\tPort: 6334,\n})\n\nclient.Scroll(context.Background(), &qdrant.ScrollPoints{\n\tCollectionName: \"{collection_name}\",\n\tFilter: &qdrant.Filter{\n\t\tShould: []*qdrant.Condition{\n\t\t\tqdrant.NewMatch(\"city\", \"London\"),\n\t\t\tqdrant.NewMatch(\"color\", \"red\"),\n\t\t},\n\t},\n})\n```\n\nFiltered points would be:\n\n```json\n[\n  { \"id\": 1, \"city\": \"London\", \"color\": \"green\" },\n  { \"id\": 2, \"city\": \"London\", \"color\": \"red\" },\n  { \"id\": 3, \"city\": \"London\", \"color\": \"blue\" },\n  { \"id\": 4, \"city\": \"Berlin\", \"color\": \"red\" }\n]\n```",
+    "text": "### Should\n\nExample:\n\n```http\nPOST /collections/{collection_name}/points/scroll\n{\n    \"filter\": {\n        \"should\": [\n            { \"key\": \"city\", \"match\": { \"value\": \"London\" } },\n            { \"key\": \"color\", \"match\": { \"value\": \"red\" } }\n        ]\n    }\n}\n```\n\n```python\nclient.scroll(\n    collection_name=\"{collection_name}\",\n    scroll_filter=models.Filter(\n        should=[\n            models.FieldCondition(\n                key=\"city\",\n                match=models.MatchValue(value=\"London\"),\n            ),\n            models.FieldCondition(\n                key=\"color\",\n                match=models.MatchValue(value=\"red\"),\n            ),\n        ]\n    ),\n)\n```\n\n```typescript\nclient.scroll(\"{collection_name}\", {\n  filter: {\n    should: [\n      {\n        key: \"city\",\n        match: { value: \"London\" },\n      },\n      {\n        key: \"color\",\n        match: { value: \"red\" },\n      },\n    ],\n  },\n});\n```\n\n```rust\nuse qdrant_client::qdrant::{Condition, Filter, ScrollPointsBuilder};\nuse qdrant_client::Qdrant;\n\nlet client = Qdrant::from_url(\"http://localhost:6334\").build()?;\n\nclient\n    .scroll(\n        ScrollPointsBuilder::new(\"{collection_name}\").filter(Filter::should([\n            Condition::matches(\"city\", \"london\".to_string()),\n            Condition::matches(\"color\", \"red\".to_string()),\n        ])),\n    )\n    .await?;\n```\n\n```java\nimport static io.qdrant.client.ConditionFactory.matchKeyword;\n\nimport io.qdrant.client.grpc.Points.Filter;\nimport io.qdrant.client.grpc.Points.ScrollPoints;\nimport java.util.List;\n\nclient\n    .scrollAsync(\n        ScrollPoints.newBuilder()\n            .setCollectionName(\"{collection_name}\")\n            .setFilter(\n                Filter.newBuilder()\n                    .addAllShould(\n                        List.of(matchKeyword(\"city\", \"London\"), matchKeyword(\"color\", \"red\")))\n                    .build())\n            .build())\n    .get();\n```\n\n```csharp\nusing Qdrant.Client;\nusing static Qdrant.Client.Grpc.Conditions;\n\nvar client = new QdrantClient(\"localhost\", 6334);\n\n// | operator combines two conditions in an OR disjunction(should)\nawait client.ScrollAsync(\n\tcollectionName: \"{collection_name}\",\n\tfilter: MatchKeyword(\"city\", \"London\") | MatchKeyword(\"color\", \"red\")\n);\n```\n\n```go\nimport (\n\t\"context\"\n\n\t\"github.com/qdrant/go-client/qdrant\"\n)\n\nclient, err := qdrant.NewClient(&qdrant.Config{\n\tHost: \"localhost\",\n\tPort: 6334,\n})\n\nclient.Scroll(context.Background(), &qdrant.ScrollPoints{\n\tCollectionName: \"{collection_name}\",\n\tFilter: &qdrant.Filter{\n\t\tShould: []*qdrant.Condition{\n\t\t\tqdrant.NewMatch(\"city\", \"London\"),\n\t\t\tqdrant.NewMatch(\"color\", \"red\"),\n\t\t},\n\t},\n})\n```\n\nFiltered points would be:\n\n```json\n[\n  { \"id\": 1, \"city\": \"London\", \"color\": \"green\" },\n  { \"id\": 2, \"city\": \"London\", \"color\": \"red\" },\n  { \"id\": 3, \"city\": \"London\", \"color\": \"blue\" },\n  { \"id\": 4, \"city\": \"Berlin\", \"color\": \"red\" }\n]\n```\n\nWhen using `should`, the clause becomes `true` if at least one condition listed inside `should` is satisfied. In this sense, `should` is equivalent to the operator `OR`.",
     "metadata": {
-      "chunk_id": "e8f29afde80c-0015",
+      "chunk_id": "e8f29afde80c-0014",
       "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_filtering\\_documentation_concepts_filtering_.md",
       "filename": "_documentation_concepts_filtering_.md",
       "file_extension": ".md",
-      "chunk_index": 15,
+      "chunk_index": 14,
       "document_level": 1,
       "parent_chunk_id": null,
       "child_chunk_ids": [],
@@ -1558,17 +1566,18 @@
         "Should"
       ],
       "heading_text": "Should",
-      "token_count": 732,
-      "char_count": 2876,
+      "token_count": 772,
+      "char_count": 3047,
       "start_char": 16253,
-      "end_char": 19129,
+      "end_char": 19300,
       "semantic_score": 0.7,
-      "structural_score": 0.7,
-      "retrieval_quality": 0.8831168831168832,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.8883720930232559,
       "chunking_strategy": "hybrid_adaptive_semchunk",
       "content_type": "prose_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:38.310416",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:21.393811",
       "document_id": "e8f29afde80c",
       "document_name": "_documentation_concepts_filtering_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_filtering\\_documentation_concepts_filtering_.md",
@@ -1576,9 +1585,9 @@
       "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_filtering",
       "relative_path": "Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_filtering\\_documentation_concepts_filtering_.md",
       "hierarchy_path": "Should",
-      "chunk_hash": "16fc66154dfab930",
-      "content_digest": "16fc66154dfab930",
-      "chunk_length": 2876,
+      "chunk_hash": "39393f9bfd8a4508",
+      "content_digest": "39393f9bfd8a4508",
+      "chunk_length": 3047,
       "payload_version": "1.3",
       "collection_hints": [
         "qdrant_ecosystem"
@@ -1592,126 +1601,126 @@
           "filter",
           "city",
           "color",
+          "should",
           "london",
           "red",
           "collection",
           "name",
-          "should",
           "scroll",
           "key",
           "match",
           "value",
           "models",
+          "condition",
           "import",
           "matchkeyword",
           "points",
-          "condition",
           "localhost"
         ],
         "term_weights": [
           {
             "term": "qdrant",
             "tf": 19,
-            "weight": 0.076613
+            "weight": 0.070896
           },
           {
             "term": "client",
             "tf": 17,
-            "weight": 0.068548
+            "weight": 0.063433
           },
           {
             "term": "filter",
             "tf": 12,
-            "weight": 0.048387
+            "weight": 0.044776
           },
           {
             "term": "city",
             "tf": 11,
-            "weight": 0.044355
+            "weight": 0.041045
           },
           {
             "term": "color",
             "tf": 11,
-            "weight": 0.044355
+            "weight": 0.041045
+          },
+          {
+            "term": "should",
+            "tf": 10,
+            "weight": 0.037313
           },
           {
             "term": "london",
             "tf": 10,
-            "weight": 0.040323
+            "weight": 0.037313
           },
           {
             "term": "red",
             "tf": 9,
-            "weight": 0.03629
+            "weight": 0.033582
           },
           {
             "term": "collection",
             "tf": 8,
-            "weight": 0.032258
+            "weight": 0.029851
           },
           {
             "term": "name",
             "tf": 8,
-            "weight": 0.032258
-          },
-          {
-            "term": "should",
-            "tf": 7,
-            "weight": 0.028226
+            "weight": 0.029851
           },
           {
             "term": "scroll",
             "tf": 6,
-            "weight": 0.024194
+            "weight": 0.022388
           },
           {
             "term": "key",
             "tf": 6,
-            "weight": 0.024194
+            "weight": 0.022388
           },
           {
             "term": "match",
             "tf": 6,
-            "weight": 0.024194
+            "weight": 0.022388
           },
           {
             "term": "value",
             "tf": 6,
-            "weight": 0.024194
+            "weight": 0.022388
           },
           {
             "term": "models",
             "tf": 5,
-            "weight": 0.020161
+            "weight": 0.018657
+          },
+          {
+            "term": "condition",
+            "tf": 5,
+            "weight": 0.018657
           },
           {
             "term": "import",
             "tf": 5,
-            "weight": 0.020161
+            "weight": 0.018657
           },
           {
             "term": "matchkeyword",
             "tf": 5,
-            "weight": 0.020161
+            "weight": 0.018657
           },
           {
             "term": "points",
             "tf": 4,
-            "weight": 0.016129
-          },
-          {
-            "term": "condition",
-            "tf": 4,
-            "weight": 0.016129
+            "weight": 0.014925
           },
           {
             "term": "localhost",
             "tf": 3,
-            "weight": 0.012097
+            "weight": 0.011194
           }
         ],
-        "unique_terms": 79,
-        "total_terms": 248
+        "unique_terms": 92,
+        "total_terms": 268
       },
       "modal_hint": "code",
       "content_flags": {
@@ -1737,19 +1746,19 @@
     },
     "advanced_scores": {
       "semantic": 0.7,
-      "structural": 0.7,
-      "retrieval_quality": 0.8831168831168832,
-      "overall": 0.7610389610389611
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.8883720930232559,
+      "overall": 0.8294573643410853
     }
   },
   {
     "text": "### Must Not\n\nExample:\n\n```http\nPOST /collections/{collection_name}/points/scroll\n{\n    \"filter\": {\n        \"must_not\": [\n            { \"key\": \"city\", \"match\": { \"value\": \"London\" } },\n            { \"key\": \"color\", \"match\": { \"value\": \"red\" } }\n        ]\n    }\n}\n```\n\n```python\nclient.scroll(\n    collection_name=\"{collection_name}\",\n    scroll_filter=models.Filter(\n        must_not=[\n            models.FieldCondition(key=\"city\", match=models.MatchValue(value=\"London\")),\n            models.FieldCondition(key=\"color\", match=models.MatchValue(value=\"red\")),\n        ]\n    ),\n)\n```\n\n```typescript\nclient.scroll(\"{collection_name}\", {\n  filter: {\n    must_not: [\n      {\n        key: \"city\",\n        match: { value: \"London\" },\n      },\n      {\n        key: \"color\",\n        match: { value: \"red\" },\n      },\n    ],\n  },\n});\n```\n\n```rust\nuse qdrant_client::qdrant::{Condition, Filter, ScrollPointsBuilder};\nuse qdrant_client::Qdrant;\n\nlet client = Qdrant::from_url(\"http://localhost:6334\").build()?;\n\nclient\n    .scroll(\n        ScrollPointsBuilder::new(\"{collection_name}\").filter(Filter::must_not([\n            Condition::matches(\"city\", \"london\".to_string()),\n            Condition::matches(\"color\", \"red\".to_string()),\n        ])),\n    )\n    .await?;\n```\n\n```java\nimport java.util.List;\n\nimport static io.qdrant.client.ConditionFactory.matchKeyword;\n\nimport io.qdrant.client.grpc.Points.Filter;\nimport io.qdrant.client.grpc.Points.ScrollPoints;\n\nclient\n    .scrollAsync(\n        ScrollPoints.newBuilder()\n            .setCollectionName(\"{collection_name}\")\n            .setFilter(\n                Filter.newBuilder()\n                    .addAllMustNot(\n                        List.of(matchKeyword(\"city\", \"London\"), matchKeyword(\"color\", \"red\")))\n                    .build())\n            .build())\n    .get();\n```\n\n```csharp\nusing Qdrant.Client;\nusing static Qdrant.Client.Grpc.Conditions;\n\nvar client = new QdrantClient(\"localhost\", 6334);\n\n// The ! operator negates the condition(must not)\nawait client.ScrollAsync(\n\tcollectionName: \"{collection_name}\",\n\tfilter: !(MatchKeyword(\"city\", \"London\") & MatchKeyword(\"color\", \"red\"))\n);\n```\n\n```go\nimport (\n\t\"context\"\n\n\t\"github.com/qdrant/go-client/qdrant\"\n)\n\nclient, err := qdrant.NewClient(&qdrant.Config{\n\tHost: \"localhost\",\n\tPort: 6334,\n})\n\nclient.Scroll(context.Background(), &qdrant.ScrollPoints{\n\tCollectionName: \"{collection_name}\",\n\tFilter: &qdrant.Filter{\n\t\tMustNot: []*qdrant.Condition{\n\t\t\tqdrant.NewMatch(\"city\", \"London\"),\n\t\t\tqdrant.NewMatch(\"color\", \"red\"),\n\t\t},\n\t},\n})\n```\n\nFiltered points would be:\n\n```json\n[\n  { \"id\": 5, \"city\": \"Moscow\", \"color\": \"green\" },\n  { \"id\": 6, \"city\": \"Moscow\", \"color\": \"blue\" }\n]\n```\n\nWhen using `must_not`, the clause becomes `true` if none of the conditions listed inside `must_not` is satisfied. In this sense, `must_not` is equivalent to the expression `(NOT A) AND (NOT B) AND (NOT C)`.",
     "metadata": {
-      "chunk_id": "e8f29afde80c-0017",
+      "chunk_id": "e8f29afde80c-0015",
       "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_filtering\\_documentation_concepts_filtering_.md",
       "filename": "_documentation_concepts_filtering_.md",
       "file_extension": ".md",
-      "chunk_index": 17,
+      "chunk_index": 15,
       "document_level": 1,
       "parent_chunk_id": null,
       "child_chunk_ids": [],
@@ -1767,7 +1776,8 @@
       "chunking_strategy": "hybrid_adaptive_semchunk",
       "content_type": "prose_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:38.317522",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:21.395554",
       "document_id": "e8f29afde80c",
       "document_name": "_documentation_concepts_filtering_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_filtering\\_documentation_concepts_filtering_.md",
@@ -1942,13 +1952,13 @@
     }
   },
   {
-    "text": "### Clauses combination\n\nIt is also possible to use several clauses simultaneously:\n\n```http\nPOST /collections/{collection_name}/points/scroll\n{\n    \"filter\": {\n        \"must\": [\n            { \"key\": \"city\", \"match\": { \"value\": \"London\" } }\n        ],\n        \"must_not\": [\n            { \"key\": \"color\", \"match\": { \"value\": \"red\" } }\n        ]\n    }\n}\n```\n\n```python\nclient.scroll(\n    collection_name=\"{collection_name}\",\n    scroll_filter=models.Filter(\n        must=[\n            models.FieldCondition(key=\"city\", match=models.MatchValue(value=\"London\")),\n        ],\n        must_not=[\n            models.FieldCondition(key=\"color\", match=models.MatchValue(value=\"red\")),\n        ],\n    ),\n)\n```\n\n```typescript\nclient.scroll(\"{collection_name}\", {\n  filter: {\n    must: [\n      {\n        key: \"city\",\n        match: { value: \"London\" },\n      },\n    ],\n    must_not: [\n      {\n        key: \"color\",\n        match: { value: \"red\" },\n      },\n    ],\n  },\n});\n```\n\n```rust\nuse qdrant_client::qdrant::{Condition, Filter, ScrollPointsBuilder};\n\nclient\n    .scroll(\n        ScrollPointsBuilder::new(\"{collection_name}\").filter(Filter {\n            must: vec![Condition::matches(\"city\", \"London\".to_string())],\n            must_not: vec![Condition::matches(\"color\", \"red\".to_string())],\n            ..Default::default()\n        }),\n    )\n    .await?;\n```\n\n```java\nimport static io.qdrant.client.ConditionFactory.matchKeyword;\n\nimport io.qdrant.client.grpc.Points.Filter;\nimport io.qdrant.client.grpc.Points.ScrollPoints;\n\nclient\n    .scrollAsync(\n        ScrollPoints.newBuilder()\n            .setCollectionName(\"{collection_name}\")\n            .setFilter(\n                Filter.newBuilder()\n                    .addMust(matchKeyword(\"city\", \"London\"))\n                    .addMustNot(matchKeyword(\"color\", \"red\"))\n                    .build())\n            .build())\n    .get();\n```\n\n```csharp\nusing Qdrant.Client;\nusing static Qdrant.Client.Grpc.Conditions;\n\nvar client = new QdrantClient(\"localhost\", 6334);\n\nawait client.ScrollAsync(\n\tcollectionName: \"{collection_name}\",\n\tfilter: MatchKeyword(\"city\", \"London\") & !MatchKeyword(\"color\", \"red\")\n);\n```\n\n```go\nimport (\n\t\"context\"\n\n\t\"github.com/qdrant/go-client/qdrant\"\n)\n\nclient, err := qdrant.NewClient(&qdrant.Config{\n\tHost: \"localhost\",\n\tPort: 6334,\n})\n\nclient.Scroll(context.Background(), &qdrant.ScrollPoints{\n\tCollectionName: \"{collection_name}\",\n\tFilter: &qdrant.Filter{\n\t\tMust: []*qdrant.Condition{\n\t\t\tqdrant.NewMatch(\"city\", \"London\"),\n\t\t},\n\t\tMustNot: []*qdrant.Condition{\n\t\t\tqdrant.NewMatch(\"color\", \"red\"),\n\t\t},\n\t},\n})\n```\n\nFiltered points would be:\n\n```json\n[\n  { \"id\": 1, \"city\": \"London\", \"color\": \"green\" },\n  { \"id\": 3, \"city\": \"London\", \"color\": \"blue\" }\n]\n```\n\nIn this case, the conditions are combined by `AND`.\n\nAlso, the conditions could be recursively nested. Example:",
+    "text": "### Clauses combination\n\nIt is also possible to use several clauses simultaneously:\n\n```http\nPOST /collections/{collection_name}/points/scroll\n{\n    \"filter\": {\n        \"must\": [\n            { \"key\": \"city\", \"match\": { \"value\": \"London\" } }\n        ],\n        \"must_not\": [\n            { \"key\": \"color\", \"match\": { \"value\": \"red\" } }\n        ]\n    }\n}\n```\n\n```python\nclient.scroll(\n    collection_name=\"{collection_name}\",\n    scroll_filter=models.Filter(\n        must=[\n            models.FieldCondition(key=\"city\", match=models.MatchValue(value=\"London\")),\n        ],\n        must_not=[\n            models.FieldCondition(key=\"color\", match=models.MatchValue(value=\"red\")),\n        ],\n    ),\n)\n```\n\n```typescript\nclient.scroll(\"{collection_name}\", {\n  filter: {\n    must: [\n      {\n        key: \"city\",\n        match: { value: \"London\" },\n      },\n    ],\n    must_not: [\n      {\n        key: \"color\",\n        match: { value: \"red\" },\n      },\n    ],\n  },\n});\n```\n\n```rust\nuse qdrant_client::qdrant::{Condition, Filter, ScrollPointsBuilder};\n\nclient\n    .scroll(\n        ScrollPointsBuilder::new(\"{collection_name}\").filter(Filter {\n            must: vec![Condition::matches(\"city\", \"London\".to_string())],\n            must_not: vec![Condition::matches(\"color\", \"red\".to_string())],\n            ..Default::default()\n        }),\n    )\n    .await?;\n```\n\n```java\nimport static io.qdrant.client.ConditionFactory.matchKeyword;\n\nimport io.qdrant.client.grpc.Points.Filter;\nimport io.qdrant.client.grpc.Points.ScrollPoints;\n\nclient\n    .scrollAsync(\n        ScrollPoints.newBuilder()\n            .setCollectionName(\"{collection_name}\")\n            .setFilter(\n                Filter.newBuilder()\n                    .addMust(matchKeyword(\"city\", \"London\"))\n                    .addMustNot(matchKeyword(\"color\", \"red\"))\n                    .build())\n            .build())\n    .get();\n```\n\n```csharp\nusing Qdrant.Client;\nusing static Qdrant.Client.Grpc.Conditions;\n\nvar client = new QdrantClient(\"localhost\", 6334);\n\nawait client.ScrollAsync(\n\tcollectionName: \"{collection_name}\",\n\tfilter: MatchKeyword(\"city\", \"London\") & !MatchKeyword(\"color\", \"red\")\n);\n```\n\n```go\nimport (\n\t\"context\"\n\n\t\"github.com/qdrant/go-client/qdrant\"\n)\n\nclient, err := qdrant.NewClient(&qdrant.Config{\n\tHost: \"localhost\",\n\tPort: 6334,\n})\n\nclient.Scroll(context.Background(), &qdrant.ScrollPoints{\n\tCollectionName: \"{collection_name}\",\n\tFilter: &qdrant.Filter{\n\t\tMust: []*qdrant.Condition{\n\t\t\tqdrant.NewMatch(\"city\", \"London\"),\n\t\t},\n\t\tMustNot: []*qdrant.Condition{\n\t\t\tqdrant.NewMatch(\"color\", \"red\"),\n\t\t},\n\t},\n})\n```\n\nFiltered points would be:\n\n```json\n[\n  { \"id\": 1, \"city\": \"London\", \"color\": \"green\" },\n  { \"id\": 3, \"city\": \"London\", \"color\": \"blue\" }\n]\n```\n\nIn this case, the conditions are combined by `AND`.\n\nAlso, the conditions could be recursively nested. Example:\n\n```http\nPOST /collections/{collection_name}/points/scroll\n{\n    \"filter\": {\n        \"must_not\": [\n            {\n                \"must\": [\n                    { \"key\": \"city\", \"match\": { \"value\": \"London\" } },\n                    { \"key\": \"color\", \"match\": { \"value\": \"red\" } }\n                ]\n            }\n        ]\n    }\n}\n```\n\n```python\nclient.scroll(\n    collection_name=\"{collection_name}\",\n    scroll_filter=models.Filter(\n        must_not=[\n            models.Filter(\n                must=[\n                    models.FieldCondition(\n                        key=\"city\", match=models.MatchValue(value=\"London\")\n                    ),\n                    models.FieldCondition(\n                        key=\"color\", match=models.MatchValue(value=\"red\")\n                    ),\n                ],\n            ),\n        ],\n    ),\n)\n```\n\n```typescript\nclient.scroll(\"{collection_name}\", {\n  filter: {\n    must_not: [\n      {\n        must: [\n          {\n            key: \"city\",\n            match: { value: \"London\" },\n          },\n          {\n            key: \"color\",\n            match: { value: \"red\" },\n          },\n        ],\n      },\n    ],\n  },\n});\n```\n\n```rust\nuse qdrant_client::qdrant::{Condition, Filter, ScrollPointsBuilder};",
     "metadata": {
-      "chunk_id": "e8f29afde80c-0018",
+      "chunk_id": "e8f29afde80c-0016",
       "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_filtering\\_documentation_concepts_filtering_.md",
       "filename": "_documentation_concepts_filtering_.md",
       "file_extension": ".md",
-      "chunk_index": 18,
+      "chunk_index": 16,
       "document_level": 1,
       "parent_chunk_id": null,
       "child_chunk_ids": [],
@@ -1956,17 +1966,18 @@
         "Clauses combination"
       ],
       "heading_text": "Clauses combination",
-      "token_count": 715,
-      "char_count": 2838,
+      "token_count": 977,
+      "char_count": 4079,
       "start_char": 22195,
-      "end_char": 25033,
+      "end_char": 26274,
       "semantic_score": 0.7,
       "structural_score": 0.7,
-      "retrieval_quality": 0.8957081545064378,
+      "retrieval_quality": 0.8445121951219512,
       "chunking_strategy": "hybrid_adaptive_semchunk",
       "content_type": "prose_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:38.321255",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:21.399288",
       "document_id": "e8f29afde80c",
       "document_name": "_documentation_concepts_filtering_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_filtering\\_documentation_concepts_filtering_.md",
@@ -1974,9 +1985,9 @@
       "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_filtering",
       "relative_path": "Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_filtering\\_documentation_concepts_filtering_.md",
       "hierarchy_path": "Clauses combination",
-      "chunk_hash": "15921792ea6253d7",
-      "content_digest": "15921792ea6253d7",
-      "chunk_length": 2838,
+      "chunk_hash": "25f4e8b5044bea6a",
+      "content_digest": "25f4e8b5044bea6a",
+      "chunk_length": 4079,
       "payload_version": "1.3",
       "collection_hints": [
         "qdrant_ecosystem"
@@ -1986,130 +1997,130 @@
         "weighting": "tf-normalized",
         "top_terms": [
           "qdrant",
-          "client",
           "filter",
+          "client",
           "must",
-          "city",
-          "london",
-          "color",
           "collection",
           "name",
-          "red",
-          "scroll",
           "key",
+          "city",
           "match",
           "value",
+          "london",
+          "color",
           "models",
-          "condition",
-          "matchkeyword",
-          "points",
+          "scroll",
+          "red",
           "not",
-          "import"
+          "condition",
+          "points",
+          "matchkeyword",
+          "fieldcondition"
         ],
         "term_weights": [
           {
             "term": "qdrant",
-            "tf": 17,
-            "weight": 0.06746
-          },
-          {
-            "term": "client",
-            "tf": 15,
-            "weight": 0.059524
+            "tf": 19,
+            "weight": 0.056886
           },
           {
             "term": "filter",
-            "tf": 12,
-            "weight": 0.047619
+            "tf": 18,
+            "weight": 0.053892
+          },
+          {
+            "term": "client",
+            "tf": 18,
+            "weight": 0.053892
           },
           {
             "term": "must",
-            "tf": 9,
-            "weight": 0.035714
-          },
-          {
-            "term": "city",
-            "tf": 9,
-            "weight": 0.035714
-          },
-          {
-            "term": "london",
-            "tf": 9,
-            "weight": 0.035714
-          },
-          {
-            "term": "color",
-            "tf": 9,
-            "weight": 0.035714
+            "tf": 15,
+            "weight": 0.04491
           },
           {
             "term": "collection",
-            "tf": 8,
-            "weight": 0.031746
+            "tf": 12,
+            "weight": 0.035928
           },
           {
             "term": "name",
-            "tf": 8,
-            "weight": 0.031746
-          },
-          {
-            "term": "red",
-            "tf": 7,
-            "weight": 0.027778
-          },
-          {
-            "term": "scroll",
-            "tf": 6,
-            "weight": 0.02381
+            "tf": 12,
+            "weight": 0.035928
           },
           {
             "term": "key",
-            "tf": 6,
-            "weight": 0.02381
+            "tf": 12,
+            "weight": 0.035928
+          },
+          {
+            "term": "city",
+            "tf": 12,
+            "weight": 0.035928
           },
           {
             "term": "match",
-            "tf": 6,
-            "weight": 0.02381
+            "tf": 12,
+            "weight": 0.035928
           },
           {
             "term": "value",
-            "tf": 6,
-            "weight": 0.02381
+            "tf": 12,
+            "weight": 0.035928
+          },
+          {
+            "term": "london",
+            "tf": 12,
+            "weight": 0.035928
+          },
+          {
+            "term": "color",
+            "tf": 12,
+            "weight": 0.035928
           },
           {
             "term": "models",
-            "tf": 5,
-            "weight": 0.019841
+            "tf": 11,
+            "weight": 0.032934
+          },
+          {
+            "term": "scroll",
+            "tf": 10,
+            "weight": 0.02994
+          },
+          {
+            "term": "red",
+            "tf": 10,
+            "weight": 0.02994
+          },
+          {
+            "term": "not",
+            "tf": 7,
+            "weight": 0.020958
           },
           {
             "term": "condition",
+            "tf": 6,
+            "weight": 0.017964
+          },
+          {
+            "term": "points",
             "tf": 5,
-            "weight": 0.019841
+            "weight": 0.01497
           },
           {
             "term": "matchkeyword",
             "tf": 5,
-            "weight": 0.019841
+            "weight": 0.01497
           },
           {
-            "term": "points",
+            "term": "fieldcondition",
             "tf": 4,
-            "weight": 0.015873
-          },
-          {
-            "term": "not",
-            "tf": 4,
-            "weight": 0.015873
-          },
-          {
-            "term": "import",
-            "tf": 4,
-            "weight": 0.015873
+            "weight": 0.011976
           }
         ],
         "unique_terms": 89,
-        "total_terms": 252
+        "total_terms": 334
       },
       "modal_hint": "code",
       "content_flags": {
@@ -2124,30 +2135,30 @@
         "city",
         "client",
         "collection",
-        "color",
         "filter",
-        "london",
+        "key",
+        "match",
         "must",
         "name",
         "qdrant",
-        "red"
+        "value"
       ]
     },
     "advanced_scores": {
       "semantic": 0.7,
       "structural": 0.7,
-      "retrieval_quality": 0.8957081545064378,
-      "overall": 0.7652360515021459
+      "retrieval_quality": 0.8445121951219512,
+      "overall": 0.748170731707317
     }
   },
   {
     "text": "### Match\n\n```json\n{\n  \"key\": \"color\",\n  \"match\": {\n    \"value\": \"red\"\n  }\n}\n```\n\n```python\nmodels.FieldCondition(\n    key=\"color\",\n    match=models.MatchValue(value=\"red\"),\n)\n```\n\n```typescript\n{\n    key: 'color', \n    match: {value: 'red'}\n}\n```\n\n```rust\nCondition::matches(\"color\", \"red\".to_string())\n```\n\n```java\nmatchKeyword(\"color\", \"red\");\n```\n\n```csharp\nusing static Qdrant.Client.Grpc.Conditions;\n\nMatchKeyword(\"color\", \"red\");\n```\n\n```go\nimport \"github.com/qdrant/go-client/qdrant\"\n\nqdrant.NewMatch(\"color\", \"red\")\n```\n\nFor the other types, the match condition will look exactly the same, except for the type used:\n\n```json\n{\n  \"key\": \"count\",\n  \"match\": {\n    \"value\": 0\n  }\n}\n```\n\n```python\nmodels.FieldCondition(\n    key=\"count\",\n    match=models.MatchValue(value=0),\n)\n```\n\n```typescript\n{\n    key: 'count',\n    match: {value: 0}    \n}\n```\n\n```rust\nCondition::matches(\"count\", 0)\n```\n\n```java\nimport static io.qdrant.client.ConditionFactory.match;\n\nmatch(\"count\", 0);\n```\n\n```csharp\nusing static Qdrant.Client.Grpc.Conditions;\n\nMatch(\"count\", 0);\n```\n\n```go\nimport \"github.com/qdrant/go-client/qdrant\"\n\nqdrant.NewMatchInt(\"count\", 0)\n```\n\nThe simplest kind of condition is one that checks if the stored value equals the given one. If several values are stored, at least one of them should match the condition. You can apply it to [keyword](https://qdrant.tech/documentation/concepts/payload/#keyword), [integer](https://qdrant.tech/documentation/concepts/payload/#integer) and [bool](https://qdrant.tech/documentation/concepts/payload/#bool) payloads.",
     "metadata": {
-      "chunk_id": "e8f29afde80c-0022",
+      "chunk_id": "e8f29afde80c-0019",
       "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_filtering\\_documentation_concepts_filtering_.md",
       "filename": "_documentation_concepts_filtering_.md",
       "file_extension": ".md",
-      "chunk_index": 22,
+      "chunk_index": 19,
       "document_level": 1,
       "parent_chunk_id": null,
       "child_chunk_ids": [],
@@ -2165,7 +2176,8 @@
       "chunking_strategy": "hybrid_adaptive_semchunk",
       "content_type": "prose_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:38.321255",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:21.400571",
       "document_id": "e8f29afde80c",
       "document_name": "_documentation_concepts_filtering_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_filtering\\_documentation_concepts_filtering_.md",
@@ -2342,11 +2354,11 @@
   {
     "text": "### Match Any\n\n*Available as of v1.1.0*\n\nIn case you want to check if the stored value is one of multiple values, you can use the Match Any condition. Match Any works as a logical OR for the given values. It can also be described as a `IN` operator.\n\nYou can apply it to [keyword](https://qdrant.tech/documentation/concepts/payload/#keyword) and [integer](https://qdrant.tech/documentation/concepts/payload/#integer) payloads.\n\nExample:\n\n```json\n{\n  \"key\": \"color\",\n  \"match\": {\n    \"any\": [\"black\", \"yellow\"]\n  }\n}\n```\n\n```python\nmodels.FieldCondition(\n    key=\"color\",\n    match=models.MatchAny(any=[\"black\", \"yellow\"]),\n)\n```\n\n```typescript\n{\n    key: 'color',\n    match: {any: ['black', 'yellow']}    \n}\n```\n\n```rust\nCondition::matches(\"color\", vec![\"black\".to_string(), \"yellow\".to_string()])\n```\n\n```java\nimport static io.qdrant.client.ConditionFactory.matchKeywords;\n\nmatchKeywords(\"color\", List.of(\"black\", \"yellow\"));\n```\n\n```csharp\nusing static Qdrant.Client.Grpc.Conditions;\n\nMatch(\"color\", [\"black\", \"yellow\"]);\n```\n\n```go\nimport \"github.com/qdrant/go-client/qdrant\"\n\nqdrant.NewMatchKeywords(\"color\", \"black\", \"yellow\")\n```\n\nIn this example, the condition will be satisfied if the stored value is either `black` or `yellow`.\n\nIf the stored value is an array, it should have at least one value matching any of the given values. E.g. if the stored value is `[\"black\", \"green\"]`, the condition will be satisfied, because `\"black\"` is in `[\"black\", \"yellow\"]`.",
     "metadata": {
-      "chunk_id": "e8f29afde80c-0023",
+      "chunk_id": "e8f29afde80c-0020",
       "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_filtering\\_documentation_concepts_filtering_.md",
       "filename": "_documentation_concepts_filtering_.md",
       "file_extension": ".md",
-      "chunk_index": 23,
+      "chunk_index": 20,
       "document_level": 1,
       "parent_chunk_id": null,
       "child_chunk_ids": [],
@@ -2364,7 +2376,8 @@
       "chunking_strategy": "hybrid_adaptive_semchunk",
       "content_type": "prose_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:38.321255",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:21.401174",
       "document_id": "e8f29afde80c",
       "document_name": "_documentation_concepts_filtering_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_filtering\\_documentation_concepts_filtering_.md",
@@ -2541,11 +2554,11 @@
   {
     "text": "### Match Except\n\n*Available as of v1.2.0*\n\nIn case you want to check if the stored value is not one of multiple values, you can use the Match Except condition. Match Except works as a logical NOR for the given values. It can also be described as a `NOT IN` operator.\n\nYou can apply it to [keyword](https://qdrant.tech/documentation/concepts/payload/#keyword) and [integer](https://qdrant.tech/documentation/concepts/payload/#integer) payloads.\n\nExample:\n\n```json\n{\n  \"key\": \"color\",\n  \"match\": {\n    \"except\": [\"black\", \"yellow\"]\n  }\n}\n```\n\n```python\nmodels.FieldCondition(\n    key=\"color\",\n    match=models.MatchExcept(**{\"except\": [\"black\", \"yellow\"]}),\n)\n```\n\n```typescript\n{\n    key: 'color',\n    match: {except: ['black', 'yellow']}\n}\n```\n\n```rust\nuse qdrant_client::qdrant::r#match::MatchValue;\n\nCondition::matches(\n    \"color\",\n    !MatchValue::from(vec![\"black\".to_string(), \"yellow\".to_string()]),\n)\n```\n\n```java\nimport static io.qdrant.client.ConditionFactory.matchExceptKeywords;\n\nmatchExceptKeywords(\"color\", List.of(\"black\", \"yellow\"));\n```\n\n```csharp\nusing static Qdrant.Client.Grpc.Conditions;\n\nMatch(\"color\", [\"black\", \"yellow\"]);\n```\n\n```go\nimport \"github.com/qdrant/go-client/qdrant\"\n\nqdrant.NewMatchExcept(\"color\", \"black\", \"yellow\")\n```\n\nIn this example, the condition will be satisfied if the stored value is neither `black` nor `yellow`.\n\nIf the stored value is an array, it should have at least one value not matching any of the given values. E.g. if the stored value is `[\"black\", \"green\"]`, the condition will be satisfied, because `\"green\"` does not match `\"black\"` nor `\"yellow\"`.",
     "metadata": {
-      "chunk_id": "e8f29afde80c-0024",
+      "chunk_id": "e8f29afde80c-0021",
       "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_filtering\\_documentation_concepts_filtering_.md",
       "filename": "_documentation_concepts_filtering_.md",
       "file_extension": ".md",
-      "chunk_index": 24,
+      "chunk_index": 21,
       "document_level": 1,
       "parent_chunk_id": null,
       "child_chunk_ids": [],
@@ -2563,7 +2576,8 @@
       "chunking_strategy": "hybrid_adaptive_semchunk",
       "content_type": "prose_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:38.321255",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:21.401827",
       "document_id": "e8f29afde80c",
       "document_name": "_documentation_concepts_filtering_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_filtering\\_documentation_concepts_filtering_.md",
@@ -2738,13 +2752,13 @@
     }
   },
   {
-    "text": "### Nested key\n\n*Available as of v1.1.0*\n\nPayloads being arbitrary JSON object, it is likely that you will need to filter on a nested field.\n\nFor convenience, we use a syntax similar to what can be found in the [Jq](https://stedolan.github.io/jq/manual/#Basicfilters) project.\n\nSuppose we have a set of points with the following payload:\n\n```json\n[\n  {\n    \"id\": 1,\n    \"country\": {\n      \"name\": \"Germany\",\n      \"cities\": [\n        {\n          \"name\": \"Berlin\",\n          \"population\": 3.7,\n          \"sightseeing\": [\"Brandenburg Gate\", \"Reichstag\"]\n        },\n        {\n          \"name\": \"Munich\",\n          \"population\": 1.5,\n          \"sightseeing\": [\"Marienplatz\", \"Olympiapark\"]\n        }\n      ]\n    }\n  },\n  {\n    \"id\": 2,\n    \"country\": {\n      \"name\": \"Japan\",\n      \"cities\": [\n        {\n          \"name\": \"Tokyo\",\n          \"population\": 9.3,\n          \"sightseeing\": [\"Tokyo Tower\", \"Tokyo Skytree\"]\n        },\n        {\n          \"name\": \"Osaka\",\n          \"population\": 2.7,\n          \"sightseeing\": [\"Osaka Castle\", \"Universal Studios Japan\"]\n        }\n      ]\n    }\n  }\n]\n```\n\nYou can search on a nested field using a dot notation.\n\n```http\nPOST /collections/{collection_name}/points/scroll\n{\n    \"filter\": {\n        \"should\": [\n            {\n                \"key\": \"country.name\",\n                \"match\": {\n                    \"value\": \"Germany\"\n                }\n            }\n        ]\n    }\n}\n```\n\n```python\nclient.scroll(\n    collection_name=\"{collection_name}\",\n    scroll_filter=models.Filter(\n        should=[\n            models.FieldCondition(\n                key=\"country.name\", match=models.MatchValue(value=\"Germany\")\n            ),\n        ],\n    ),\n)\n```\n\n```typescript\nclient.scroll(\"{collection_name}\", {\n  filter: {\n    should: [\n      {\n        key: \"country.name\",\n        match: { value: \"Germany\" },\n      },\n    ],\n  },\n});\n```\n\n```rust\nuse qdrant_client::qdrant::{Condition, Filter, ScrollPointsBuilder};\n\nclient\n    .scroll(\n        ScrollPointsBuilder::new(\"{collection_name}\").filter(Filter::should([\n            Condition::matches(\"country.name\", \"Germany\".to_string()),\n        ])),\n    )\n    .await?;\n```\n\n```java\nimport static io.qdrant.client.ConditionFactory.matchKeyword;\n\nimport io.qdrant.client.grpc.Points.Filter;\nimport io.qdrant.client.grpc.Points.ScrollPoints;\n\nclient\n    .scrollAsync(\n        ScrollPoints.newBuilder()\n            .setCollectionName(\"{collection_name}\")\n            .setFilter(\n                Filter.newBuilder()\n                    .addShould(matchKeyword(\"country.name\", \"Germany\"))\n                    .build())\n            .build())\n    .get();\n```\n\n```csharp\nusing Qdrant.Client;\nusing Qdrant.Client.Grpc;\nusing static Qdrant.Client.Grpc.Conditions;\n\nvar client = new QdrantClient(\"localhost\", 6334);\n\nawait client.ScrollAsync(collectionName: \"{collection_name}\", filter: MatchKeyword(\"country.name\", \"Germany\"));\n```\n\n```go\nimport (\n\t\"context\"\n\n\t\"github.com/qdrant/go-client/qdrant\"\n)\n\nclient, err := qdrant.NewClient(&qdrant.Config{\n\tHost: \"localhost\",\n\tPort: 6334,\n})\n\nclient.Scroll(context.Background(), &qdrant.ScrollPoints{\n\tCollectionName: \"{collection_name}\",\n\tFilter: &qdrant.Filter{\n\t\tShould: []*qdrant.Condition{\n\t\t\tqdrant.NewMatch(\"country.name\", \"Germany\"),\n\t\t},\n\t},\n})\n```\n\nYou can also search through arrays by projecting inner values using the `[]` syntax.",
+    "text": "### Nested key\n\n*Available as of v1.1.0*\n\nPayloads being arbitrary JSON object, it is likely that you will need to filter on a nested field.\n\nFor convenience, we use a syntax similar to what can be found in the [Jq](https://stedolan.github.io/jq/manual/#Basicfilters) project.\n\nSuppose we have a set of points with the following payload:\n\n```json\n[\n  {\n    \"id\": 1,\n    \"country\": {\n      \"name\": \"Germany\",\n      \"cities\": [\n        {\n          \"name\": \"Berlin\",\n          \"population\": 3.7,\n          \"sightseeing\": [\"Brandenburg Gate\", \"Reichstag\"]\n        },\n        {\n          \"name\": \"Munich\",\n          \"population\": 1.5,\n          \"sightseeing\": [\"Marienplatz\", \"Olympiapark\"]\n        }\n      ]\n    }\n  },\n  {\n    \"id\": 2,\n    \"country\": {\n      \"name\": \"Japan\",\n      \"cities\": [\n        {\n          \"name\": \"Tokyo\",\n          \"population\": 9.3,\n          \"sightseeing\": [\"Tokyo Tower\", \"Tokyo Skytree\"]\n        },\n        {\n          \"name\": \"Osaka\",\n          \"population\": 2.7,\n          \"sightseeing\": [\"Osaka Castle\", \"Universal Studios Japan\"]\n        }\n      ]\n    }\n  }\n]\n```\n\nYou can search on a nested field using a dot notation.\n\n```http\nPOST /collections/{collection_name}/points/scroll\n{\n    \"filter\": {\n        \"should\": [\n            {\n                \"key\": \"country.name\",\n                \"match\": {\n                    \"value\": \"Germany\"\n                }\n            }\n        ]\n    }\n}\n```\n\n```python\nclient.scroll(\n    collection_name=\"{collection_name}\",\n    scroll_filter=models.Filter(\n        should=[\n            models.FieldCondition(\n                key=\"country.name\", match=models.MatchValue(value=\"Germany\")\n            ),\n        ],\n    ),\n)\n```\n\n```typescript\nclient.scroll(\"{collection_name}\", {\n  filter: {\n    should: [\n      {\n        key: \"country.name\",\n        match: { value: \"Germany\" },\n      },\n    ],\n  },\n});\n```\n\n```rust\nuse qdrant_client::qdrant::{Condition, Filter, ScrollPointsBuilder};\n\nclient\n    .scroll(\n        ScrollPointsBuilder::new(\"{collection_name}\").filter(Filter::should([\n            Condition::matches(\"country.name\", \"Germany\".to_string()),\n        ])),\n    )\n    .await?;\n```\n\n```java\nimport static io.qdrant.client.ConditionFactory.matchKeyword;\n\nimport io.qdrant.client.grpc.Points.Filter;\nimport io.qdrant.client.grpc.Points.ScrollPoints;\n\nclient\n    .scrollAsync(\n        ScrollPoints.newBuilder()\n            .setCollectionName(\"{collection_name}\")\n            .setFilter(\n                Filter.newBuilder()\n                    .addShould(matchKeyword(\"country.name\", \"Germany\"))\n                    .build())\n            .build())\n    .get();\n```\n\n```csharp\nusing Qdrant.Client;\nusing Qdrant.Client.Grpc;\nusing static Qdrant.Client.Grpc.Conditions;\n\nvar client = new QdrantClient(\"localhost\", 6334);\n\nawait client.ScrollAsync(collectionName: \"{collection_name}\", filter: MatchKeyword(\"country.name\", \"Germany\"));\n```\n\n```go\nimport (\n\t\"context\"\n\n\t\"github.com/qdrant/go-client/qdrant\"\n)\n\nclient, err := qdrant.NewClient(&qdrant.Config{\n\tHost: \"localhost\",\n\tPort: 6334,\n})\n\nclient.Scroll(context.Background(), &qdrant.ScrollPoints{\n\tCollectionName: \"{collection_name}\",\n\tFilter: &qdrant.Filter{\n\t\tShould: []*qdrant.Condition{\n\t\t\tqdrant.NewMatch(\"country.name\", \"Germany\"),\n\t\t},\n\t},\n})\n```\n\nYou can also search through arrays by projecting inner values using the `[]` syntax.\n\n```http\nPOST /collections/{collection_name}/points/scroll\n{\n    \"filter\": {\n        \"should\": [\n            {\n                \"key\": \"country.cities[].population\",\n                \"range\": {\n                    \"gte\": 9.0,\n                }\n            }\n        ]\n    }\n}\n```\n\n```python\nclient.scroll(\n    collection_name=\"{collection_name}\",\n    scroll_filter=models.Filter(\n        should=[\n            models.FieldCondition(\n                key=\"country.cities[].population\",\n                range=models.Range(\n                    gt=None,\n                    gte=9.0,\n                    lt=None,\n                    lte=None,\n                ),\n            ),\n        ],\n    ),\n)\n```",
     "metadata": {
-      "chunk_id": "e8f29afde80c-0025",
+      "chunk_id": "e8f29afde80c-0022",
       "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_filtering\\_documentation_concepts_filtering_.md",
       "filename": "_documentation_concepts_filtering_.md",
       "file_extension": ".md",
-      "chunk_index": 25,
+      "chunk_index": 22,
       "document_level": 1,
       "parent_chunk_id": null,
       "child_chunk_ids": [],
@@ -2752,17 +2766,18 @@
         "Nested key"
       ],
       "heading_text": "Nested key",
-      "token_count": 824,
-      "char_count": 3355,
+      "token_count": 959,
+      "char_count": 4047,
       "start_char": 33451,
-      "end_char": 36806,
+      "end_char": 37498,
       "semantic_score": 0.7,
-      "structural_score": 0.9999999999999999,
-      "retrieval_quality": 0.6968421052631579,
+      "structural_score": 0.7999999999999998,
+      "retrieval_quality": 0.6824074074074074,
       "chunking_strategy": "hybrid_adaptive_semchunk",
       "content_type": "prose_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:38.333572",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:21.407748",
       "document_id": "e8f29afde80c",
       "document_name": "_documentation_concepts_filtering_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_filtering\\_documentation_concepts_filtering_.md",
@@ -2770,9 +2785,9 @@
       "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_filtering",
       "relative_path": "Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_filtering\\_documentation_concepts_filtering_.md",
       "hierarchy_path": "Nested key",
-      "chunk_hash": "de1942f40f0bf8f6",
-      "content_digest": "de1942f40f0bf8f6",
-      "chunk_length": 3355,
+      "chunk_hash": "a4c25ce432ce083b",
+      "content_digest": "a4c25ce432ce083b",
+      "chunk_length": 4047,
       "payload_version": "1.3",
       "collection_hints": [
         "qdrant_ecosystem"
@@ -2783,129 +2798,129 @@
         "top_terms": [
           "name",
           "client",
-          "qdrant",
           "filter",
+          "qdrant",
           "country",
-          "germany",
           "collection",
           "scroll",
-          "using",
+          "germany",
           "should",
           "key",
-          "points",
           "population",
+          "models",
+          "points",
+          "using",
+          "cities",
           "sightseeing",
           "import",
           "grpc",
           "nested",
-          "you",
-          "can",
-          "the"
+          "you"
         ],
         "term_weights": [
           {
             "term": "name",
-            "tf": 21,
-            "weight": 0.075812
+            "tf": 24,
+            "weight": 0.075472
           },
           {
             "term": "client",
+            "tf": 17,
+            "weight": 0.053459
+          },
+          {
+            "term": "filter",
             "tf": 16,
-            "weight": 0.057762
+            "weight": 0.050314
           },
           {
             "term": "qdrant",
             "tf": 16,
-            "weight": 0.057762
-          },
-          {
-            "term": "filter",
-            "tf": 13,
-            "weight": 0.046931
+            "weight": 0.050314
           },
           {
             "term": "country",
+            "tf": 11,
+            "weight": 0.034591
+          },
+          {
+            "term": "collection",
+            "tf": 11,
+            "weight": 0.034591
+          },
+          {
+            "term": "scroll",
             "tf": 9,
-            "weight": 0.032491
+            "weight": 0.028302
           },
           {
             "term": "germany",
             "tf": 8,
-            "weight": 0.028881
+            "weight": 0.025157
           },
           {
-            "term": "collection",
-            "tf": 8,
-            "weight": 0.028881
+            "term": "should",
+            "tf": 7,
+            "weight": 0.022013
           },
           {
-            "term": "scroll",
+            "term": "key",
             "tf": 6,
-            "weight": 0.021661
+            "weight": 0.018868
+          },
+          {
+            "term": "population",
+            "tf": 6,
+            "weight": 0.018868
+          },
+          {
+            "term": "models",
+            "tf": 6,
+            "weight": 0.018868
+          },
+          {
+            "term": "points",
+            "tf": 5,
+            "weight": 0.015723
           },
           {
             "term": "using",
             "tf": 5,
-            "weight": 0.018051
+            "weight": 0.015723
           },
           {
-            "term": "should",
-            "tf": 5,
-            "weight": 0.018051
-          },
-          {
-            "term": "key",
+            "term": "cities",
             "tf": 4,
-            "weight": 0.01444
-          },
-          {
-            "term": "points",
-            "tf": 4,
-            "weight": 0.01444
-          },
-          {
-            "term": "population",
-            "tf": 4,
-            "weight": 0.01444
+            "weight": 0.012579
           },
           {
             "term": "sightseeing",
             "tf": 4,
-            "weight": 0.01444
+            "weight": 0.012579
           },
           {
             "term": "import",
             "tf": 4,
-            "weight": 0.01444
+            "weight": 0.012579
           },
           {
             "term": "grpc",
             "tf": 4,
-            "weight": 0.01444
+            "weight": 0.012579
           },
           {
             "term": "nested",
             "tf": 3,
-            "weight": 0.01083
+            "weight": 0.009434
           },
           {
             "term": "you",
             "tf": 3,
-            "weight": 0.01083
-          },
-          {
-            "term": "can",
-            "tf": 3,
-            "weight": 0.01083
-          },
-          {
-            "term": "the",
-            "tf": 3,
-            "weight": 0.01083
+            "weight": 0.009434
           }
         ],
-        "unique_terms": 120,
-        "total_terms": 277
+        "unique_terms": 124,
+        "total_terms": 318
       },
       "modal_hint": "code",
       "content_flags": {
@@ -2922,28 +2937,28 @@
         "country",
         "filter",
         "germany",
+        "key",
         "name",
         "qdrant",
         "scroll",
-        "should",
-        "using"
+        "should"
       ]
     },
     "advanced_scores": {
       "semantic": 0.7,
-      "structural": 0.9999999999999999,
-      "retrieval_quality": 0.6968421052631579,
-      "overall": 0.7989473684210525
+      "structural": 0.7999999999999998,
+      "retrieval_quality": 0.6824074074074074,
+      "overall": 0.727469135802469
     }
   },
   {
-    "text": "### Nested object filter\n\n*Available as of v1.2.0*\n\nBy default, the conditions are taking into account the entire payload of a point.\n\nFor instance, given two points with the following payload:\n\n```json\n[\n  {\n    \"id\": 1,\n    \"dinosaur\": \"t-rex\",\n    \"diet\": [\n      { \"food\": \"leaves\", \"likes\": false},\n      { \"food\": \"meat\", \"likes\": true}\n    ]\n  },\n  {\n    \"id\": 2,\n    \"dinosaur\": \"diplodocus\",\n    \"diet\": [\n      { \"food\": \"leaves\", \"likes\": true},\n      { \"food\": \"meat\", \"likes\": false}\n    ]\n  }\n]\n```\n\nThe following query would match both points:\n\n```http\nPOST /collections/{collection_name}/points/scroll\n{\n    \"filter\": {\n        \"must\": [\n            {\n                \"key\": \"diet[].food\",\n                  \"match\": {\n                    \"value\": \"meat\"\n                }\n            },\n            {\n                \"key\": \"diet[].likes\",\n                  \"match\": {\n                    \"value\": true\n                }\n            }\n        ]\n    }\n}\n```\n\n```python\nclient.scroll(\n    collection_name=\"{collection_name}\",\n    scroll_filter=models.Filter(\n        must=[\n            models.FieldCondition(\n                key=\"diet[].food\", match=models.MatchValue(value=\"meat\")\n            ),\n            models.FieldCondition(\n                key=\"diet[].likes\", match=models.MatchValue(value=True)\n            ),\n        ],\n    ),\n)\n```\n\n```typescript\nclient.scroll(\"{collection_name}\", {\n  filter: {\n    must: [\n      {\n        key: \"diet[].food\",\n        match: { value: \"meat\" },\n      },\n      {\n        key: \"diet[].likes\",\n        match: { value: true },\n      },\n    ],\n  },\n});\n```\n\n```rust\nuse qdrant_client::qdrant::{Condition, Filter, ScrollPointsBuilder};\n\nclient\n    .scroll(\n        ScrollPointsBuilder::new(\"{collection_name}\").filter(Filter::must([\n            Condition::matches(\"diet[].food\", \"meat\".to_string()),\n            Condition::matches(\"diet[].likes\", true),\n        ])),\n    )\n    .await?;\n```\n\n```java\nimport java.util.List;\n\nimport static io.qdrant.client.ConditionFactory.match;\nimport static io.qdrant.client.ConditionFactory.matchKeyword;\n\nimport io.qdrant.client.QdrantClient;\nimport io.qdrant.client.QdrantGrpcClient;\nimport io.qdrant.client.grpc.Points.Filter;\nimport io.qdrant.client.grpc.Points.ScrollPoints;\n\nQdrantClient client =\n    new QdrantClient(QdrantGrpcClient.newBuilder(\"localhost\", 6334, false).build());\n\nclient\n    .scrollAsync(\n        ScrollPoints.newBuilder()\n            .setCollectionName(\"{collection_name}\")\n            .setFilter(\n                Filter.newBuilder()\n                    .addAllMust(\n                        List.of(matchKeyword(\"diet[].food\", \"meat\"), match(\"diet[].likes\", true)))\n                    .build())\n            .build())\n    .get();\n```\n\n```csharp\nusing Qdrant.Client;\nusing static Qdrant.Client.Grpc.Conditions;\n\nvar client = new QdrantClient(\"localhost\", 6334);",
+    "text": "### Nested object filter\n\n*Available as of v1.2.0*\n\nBy default, the conditions are taking into account the entire payload of a point.\n\nFor instance, given two points with the following payload:\n\n```json\n[\n  {\n    \"id\": 1,\n    \"dinosaur\": \"t-rex\",\n    \"diet\": [\n      { \"food\": \"leaves\", \"likes\": false},\n      { \"food\": \"meat\", \"likes\": true}\n    ]\n  },\n  {\n    \"id\": 2,\n    \"dinosaur\": \"diplodocus\",\n    \"diet\": [\n      { \"food\": \"leaves\", \"likes\": true},\n      { \"food\": \"meat\", \"likes\": false}\n    ]\n  }\n]\n```\n\nThe following query would match both points:\n\n```http\nPOST /collections/{collection_name}/points/scroll\n{\n    \"filter\": {\n        \"must\": [\n            {\n                \"key\": \"diet[].food\",\n                  \"match\": {\n                    \"value\": \"meat\"\n                }\n            },\n            {\n                \"key\": \"diet[].likes\",\n                  \"match\": {\n                    \"value\": true\n                }\n            }\n        ]\n    }\n}\n```\n\n```python\nclient.scroll(\n    collection_name=\"{collection_name}\",\n    scroll_filter=models.Filter(\n        must=[\n            models.FieldCondition(\n                key=\"diet[].food\", match=models.MatchValue(value=\"meat\")\n            ),\n            models.FieldCondition(\n                key=\"diet[].likes\", match=models.MatchValue(value=True)\n            ),\n        ],\n    ),\n)\n```\n\n```typescript\nclient.scroll(\"{collection_name}\", {\n  filter: {\n    must: [\n      {\n        key: \"diet[].food\",\n        match: { value: \"meat\" },\n      },\n      {\n        key: \"diet[].likes\",\n        match: { value: true },\n      },\n    ],\n  },\n});\n```\n\n```rust\nuse qdrant_client::qdrant::{Condition, Filter, ScrollPointsBuilder};\n\nclient\n    .scroll(\n        ScrollPointsBuilder::new(\"{collection_name}\").filter(Filter::must([\n            Condition::matches(\"diet[].food\", \"meat\".to_string()),\n            Condition::matches(\"diet[].likes\", true),\n        ])),\n    )\n    .await?;\n```\n\n```java\nimport java.util.List;\n\nimport static io.qdrant.client.ConditionFactory.match;\nimport static io.qdrant.client.ConditionFactory.matchKeyword;\n\nimport io.qdrant.client.QdrantClient;\nimport io.qdrant.client.QdrantGrpcClient;\nimport io.qdrant.client.grpc.Points.Filter;\nimport io.qdrant.client.grpc.Points.ScrollPoints;\n\nQdrantClient client =\n    new QdrantClient(QdrantGrpcClient.newBuilder(\"localhost\", 6334, false).build());\n\nclient\n    .scrollAsync(\n        ScrollPoints.newBuilder()\n            .setCollectionName(\"{collection_name}\")\n            .setFilter(\n                Filter.newBuilder()\n                    .addAllMust(\n                        List.of(matchKeyword(\"diet[].food\", \"meat\"), match(\"diet[].likes\", true)))\n                    .build())\n            .build())\n    .get();\n```\n\n```csharp\nusing Qdrant.Client;\nusing static Qdrant.Client.Grpc.Conditions;\n\nvar client = new QdrantClient(\"localhost\", 6334);\n\nawait client.ScrollAsync(\n\tcollectionName: \"{collection_name}\",\n\tfilter: MatchKeyword(\"diet[].food\", \"meat\") & Match(\"diet[].likes\", true)\n);\n```\n\n```go\nimport (\n\t\"context\"\n\n\t\"github.com/qdrant/go-client/qdrant\"\n)\n\nclient, err := qdrant.NewClient(&qdrant.Config{\n\tHost: \"localhost\",\n\tPort: 6334,\n})\n\nclient.Scroll(context.Background(), &qdrant.ScrollPoints{\n\tCollectionName: \"{collection_name}\",\n\tFilter: &qdrant.Filter{\n\t\tMust: []*qdrant.Condition{\n\t\t\tqdrant.NewMatch(\"diet[].food\", \"meat\"),\n\t\t\tqdrant.NewMatchBool(\"diet[].likes\", true),\n\t\t},\n\t},\n})\n```\n\nThis happens because both points are matching the two conditions:\n\n- the “t-rex” matches food=meat on `diet[1].food` and likes=true on `diet[1].likes`\n- the “diplodocus” matches food=meat on `diet[1].food` and likes=true on `diet[0].likes`\n\nTo retrieve only the points which are matching the conditions on an array element basis, that is the point with id 1 in this example, you would need to use a nested object filter.\n\nNested object filters allow arrays of objects to be queried independently of each other.\n\nIt is achieved by using the `nested` condition type formed by a payload key to focus on and a filter to apply.",
     "metadata": {
-      "chunk_id": "e8f29afde80c-0028",
+      "chunk_id": "e8f29afde80c-0025",
       "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_filtering\\_documentation_concepts_filtering_.md",
       "filename": "_documentation_concepts_filtering_.md",
       "file_extension": ".md",
-      "chunk_index": 28,
+      "chunk_index": 25,
       "document_level": 1,
       "parent_chunk_id": null,
       "child_chunk_ids": [],
@@ -2951,17 +2966,18 @@
         "Nested object filter"
       ],
       "heading_text": "Nested object filter",
-      "token_count": 692,
-      "char_count": 2874,
+      "token_count": 1006,
+      "char_count": 4054,
       "start_char": 42076,
-      "end_char": 44950,
+      "end_char": 46130,
       "semantic_score": 0.6,
-      "structural_score": 0.7999999999999998,
-      "retrieval_quality": 0.684304932735426,
+      "structural_score": 0.9999999999999999,
+      "retrieval_quality": 0.8760869565217393,
       "chunking_strategy": "hybrid_adaptive_semchunk",
       "content_type": "prose_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:38.342703",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:21.416161",
       "document_id": "e8f29afde80c",
       "document_name": "_documentation_concepts_filtering_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_filtering\\_documentation_concepts_filtering_.md",
@@ -2969,9 +2985,9 @@
       "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_filtering",
       "relative_path": "Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_filtering\\_documentation_concepts_filtering_.md",
       "hierarchy_path": "Nested object filter",
-      "chunk_hash": "8d43166f95574e78",
-      "content_digest": "8d43166f95574e78",
-      "chunk_length": 2874,
+      "chunk_hash": "0e3853023d3384d8",
+      "content_digest": "0e3853023d3384d8",
+      "chunk_length": 4054,
       "payload_version": "1.3",
       "collection_hints": [
         "qdrant_ecosystem"
@@ -2980,137 +2996,137 @@
         "version": "1.0",
         "weighting": "tf-normalized",
         "top_terms": [
-          "client",
           "diet",
-          "filter",
+          "client",
           "qdrant",
+          "filter",
           "food",
           "likes",
-          "match",
+          "the",
           "meat",
           "true",
-          "import",
+          "match",
           "collection",
           "name",
-          "key",
-          "value",
+          "import",
           "points",
+          "key",
           "scroll",
-          "models",
-          "the",
+          "value",
           "must",
-          "qdrantclient"
+          "models",
+          "condition"
         ],
         "term_weights": [
           {
-            "term": "client",
-            "tf": 15,
-            "weight": 0.062241
-          },
-          {
             "term": "diet",
-            "tf": 12,
-            "weight": 0.049793
+            "tf": 20,
+            "weight": 0.052632
           },
           {
-            "term": "filter",
-            "tf": 10,
-            "weight": 0.041494
+            "term": "client",
+            "tf": 19,
+            "weight": 0.05
           },
           {
             "term": "qdrant",
-            "tf": 10,
-            "weight": 0.041494
+            "tf": 19,
+            "weight": 0.05
+          },
+          {
+            "term": "filter",
+            "tf": 15,
+            "weight": 0.039474
           },
           {
             "term": "food",
-            "tf": 9,
-            "weight": 0.037344
+            "tf": 15,
+            "weight": 0.039474
           },
           {
             "term": "likes",
-            "tf": 9,
-            "weight": 0.037344
+            "tf": 15,
+            "weight": 0.039474
           },
           {
-            "term": "match",
-            "tf": 9,
-            "weight": 0.037344
+            "term": "the",
+            "tf": 11,
+            "weight": 0.028947
           },
           {
             "term": "meat",
-            "tf": 7,
-            "weight": 0.029046
+            "tf": 11,
+            "weight": 0.028947
           },
           {
             "term": "true",
-            "tf": 7,
-            "weight": 0.029046
+            "tf": 11,
+            "weight": 0.028947
           },
           {
-            "term": "import",
-            "tf": 7,
-            "weight": 0.029046
+            "term": "match",
+            "tf": 10,
+            "weight": 0.026316
           },
           {
             "term": "collection",
-            "tf": 6,
-            "weight": 0.024896
+            "tf": 8,
+            "weight": 0.021053
           },
           {
             "term": "name",
-            "tf": 6,
-            "weight": 0.024896
+            "tf": 8,
+            "weight": 0.021053
+          },
+          {
+            "term": "import",
+            "tf": 8,
+            "weight": 0.021053
+          },
+          {
+            "term": "points",
+            "tf": 7,
+            "weight": 0.018421
           },
           {
             "term": "key",
+            "tf": 7,
+            "weight": 0.018421
+          },
+          {
+            "term": "scroll",
             "tf": 6,
-            "weight": 0.024896
+            "weight": 0.015789
           },
           {
             "term": "value",
             "tf": 6,
-            "weight": 0.024896
+            "weight": 0.015789
           },
           {
-            "term": "points",
+            "term": "must",
             "tf": 5,
-            "weight": 0.020747
-          },
-          {
-            "term": "scroll",
-            "tf": 5,
-            "weight": 0.020747
+            "weight": 0.013158
           },
           {
             "term": "models",
             "tf": 5,
-            "weight": 0.020747
+            "weight": 0.013158
           },
           {
-            "term": "the",
-            "tf": 4,
-            "weight": 0.016598
-          },
-          {
-            "term": "must",
-            "tf": 4,
-            "weight": 0.016598
-          },
-          {
-            "term": "qdrantclient",
-            "tf": 4,
-            "weight": 0.016598
+            "term": "condition",
+            "tf": 5,
+            "weight": 0.013158
           }
         ],
-        "unique_terms": 83,
-        "total_terms": 241
+        "unique_terms": 123,
+        "total_terms": 380
       },
       "modal_hint": "code",
       "content_flags": {
         "has_code_block": true,
         "has_table": false,
-        "has_list": false,
+        "has_list": true,
         "has_json": false,
         "has_formula": false
       },
@@ -3120,29 +3136,29 @@
         "diet",
         "filter",
         "food",
-        "import",
         "likes",
         "match",
         "meat",
         "qdrant",
+        "the",
         "true"
       ]
     },
     "advanced_scores": {
       "semantic": 0.6,
-      "structural": 0.7999999999999998,
-      "retrieval_quality": 0.684304932735426,
-      "overall": 0.6947683109118087
+      "structural": 0.9999999999999999,
+      "retrieval_quality": 0.8760869565217393,
+      "overall": 0.8253623188405798
     }
   },
   {
     "text": "### Full Text Match\n\n*Available as of v0.10.0*\n\nA special case of the `match` condition is the `text` match condition. It allows you to search for a specific substring, token or phrase within the text field.\n\nExact texts that will match the condition depend on full-text index configuration. Configuration is defined during the index creation and describe at [full-text index](https://qdrant.tech/documentation/concepts/indexing/#full-text-index).\n\nIf there is no full-text index for the field, the condition will work as exact substring match.\n\n```json\n{\n  \"key\": \"description\",\n  \"match\": {\n    \"text\": \"good cheap\"\n  }\n}\n```\n\n```python\nmodels.FieldCondition(\n    key=\"description\",\n    match=models.MatchText(text=\"good cheap\"),\n)\n```\n\n```typescript\n{\n    key: 'description',\n    match: {text: 'good cheap'}    \n}\n```\n\n```rust\nuse qdrant_client::qdrant::Condition;\n\nCondition::matches_text(\"description\", \"good cheap\")\n```\n\n```java\nimport static io.qdrant.client.ConditionFactory.matchText;\n\nmatchText(\"description\", \"good cheap\");\n```\n\n```csharp\nusing static Qdrant.Client.Grpc.Conditions;\n\nMatchText(\"description\", \"good cheap\");\n```\n\n```go\nimport \"github.com/qdrant/go-client/qdrant\"\n\nqdrant.NewMatchText(\"description\", \"good cheap\")\n```\n\nIf the query has several words, then the condition will be satisfied only if all of them are present in the text.",
     "metadata": {
-      "chunk_id": "e8f29afde80c-0032",
+      "chunk_id": "e8f29afde80c-0028",
       "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_filtering\\_documentation_concepts_filtering_.md",
       "filename": "_documentation_concepts_filtering_.md",
       "file_extension": ".md",
-      "chunk_index": 32,
+      "chunk_index": 28,
       "document_level": 1,
       "parent_chunk_id": null,
       "child_chunk_ids": [],
@@ -3160,7 +3176,8 @@
       "chunking_strategy": "hybrid_adaptive_semchunk",
       "content_type": "prose_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:38.342703",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:21.418247",
       "document_id": "e8f29afde80c",
       "document_name": "_documentation_concepts_filtering_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_filtering\\_documentation_concepts_filtering_.md",
@@ -3337,11 +3354,11 @@
   {
     "text": "### Phrase Match\n\n*Available as of v1.15.0*\n\nA match `phrase` condition also leverages [full-text index](https://qdrant.tech/documentation/concepts/indexing/#full-text-index), to perform exact phrase comparisons. It allows you to search for a specific token phrase within the text field.\n\nFor example, the text `\"quick brown fox\"` will be matched by the query `\"brown fox\"`, but not by `\"fox brown\"`.\n\nThe index must be configured with `phrase_matching` parameter set to `true`. If the index has phrase matching disabled, phrase conditions won't match anything.\n\nIf there is no full-text index for the field, the condition will work as exact substring match.\n\n```json\n{\n  \"key\": \"description\",\n  \"match\": {\n    \"phrase\": \"brown fox\"\n  }\n}\n```\n\n```python\nmodels.FieldCondition(\n    key=\"description\",\n    match=models.MatchPhrase(phrase=\"brown fox\"),\n)\n```\n\n```typescript\n{\n    key: 'description',\n    match: {phrase: 'brown fox'}\n}\n```\n\n```rust\nuse qdrant_client::qdrant::Condition;\n\nCondition::matches_phrase(\"description\", \"brown fox\")\n```\n\n```java\nimport static io.qdrant.client.ConditionFactory.matchPhrase;\n\nmatchPhrase(\"description\", \"brown fox\");\n```\n\n```csharp\nusing static Qdrant.Client.Grpc.Conditions;\n\nMatchPhrase(\"description\", \"brown fox\");\n```\n\n```go\nimport \"github.com/qdrant/go-client/qdrant\"\n\nqdrant.NewMatchPhrase(\"description\", \"brown fox\")\n```",
     "metadata": {
-      "chunk_id": "e8f29afde80c-0033",
+      "chunk_id": "e8f29afde80c-0029",
       "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_filtering\\_documentation_concepts_filtering_.md",
       "filename": "_documentation_concepts_filtering_.md",
       "file_extension": ".md",
-      "chunk_index": 33,
+      "chunk_index": 29,
       "document_level": 1,
       "parent_chunk_id": null,
       "child_chunk_ids": [],
@@ -3359,7 +3376,8 @@
       "chunking_strategy": "hybrid_adaptive_semchunk",
       "content_type": "prose_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:38.342703",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:21.418872",
       "document_id": "e8f29afde80c",
       "document_name": "_documentation_concepts_filtering_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_filtering\\_documentation_concepts_filtering_.md",
@@ -3536,11 +3554,11 @@
   {
     "text": "### Range\n\n```json\n{\n  \"key\": \"price\",\n  \"range\": {\n    \"gt\": null,\n    \"gte\": 100.0,\n    \"lt\": null,\n    \"lte\": 450.0\n  }\n}\n```\n\n```python\nmodels.FieldCondition(\n    key=\"price\",\n    range=models.Range(\n        gt=None,\n        gte=100.0,\n        lt=None,\n        lte=450.0,\n    ),\n)\n```\n\n```typescript\n{\n    key: 'price',\n    range: {\n        gt: null,\n        gte: 100.0,\n        lt: null,\n        lte: 450.0    \n    }    \n}\n```\n\n```rust\nuse qdrant_client::qdrant::{Condition, Range};\n\nCondition::range(\n    \"price\",\n    Range {\n        gt: None,\n        gte: Some(100.0),\n        lt: None,\n        lte: Some(450.0),\n    },\n)\n```\n\n```java\nimport static io.qdrant.client.ConditionFactory.range;\n\nimport io.qdrant.client.grpc.Points.Range;\n\nrange(\"price\", Range.newBuilder().setGte(100.0).setLte(450).build());\n```\n\n```csharp\nusing static Qdrant.Client.Grpc.Conditions;\n\nRange(\"price\", new Qdrant.Client.Grpc.Range { Gte = 100.0, Lte = 450 });\n```\n\n```go\nimport \"github.com/qdrant/go-client/qdrant\"\n\nqdrant.NewRange(\"price\", &qdrant.Range{\n\tGte: qdrant.PtrOf(100.0),\n\tLte: qdrant.PtrOf(450.0),\n})\n```\n\nThe `range` condition sets the range of possible values for stored payload values. If several values are stored, at least one of them should match the condition.\n\nComparisons that can be used:\n\n- `gt` - greater than\n- `gte` - greater than or equal\n- `lt` - less than\n- `lte` - less than or equal\n\nCan be applied to [float](https://qdrant.tech/documentation/concepts/payload/#float) and [integer](https://qdrant.tech/documentation/concepts/payload/#integer) payloads.",
     "metadata": {
-      "chunk_id": "e8f29afde80c-0034",
+      "chunk_id": "e8f29afde80c-0030",
       "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_filtering\\_documentation_concepts_filtering_.md",
       "filename": "_documentation_concepts_filtering_.md",
       "file_extension": ".md",
-      "chunk_index": 34,
+      "chunk_index": 30,
       "document_level": 1,
       "parent_chunk_id": null,
       "child_chunk_ids": [],
@@ -3558,7 +3576,8 @@
       "chunking_strategy": "hybrid_adaptive_semchunk",
       "content_type": "prose_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:38.350881",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:21.419640",
       "document_id": "e8f29afde80c",
       "document_name": "_documentation_concepts_filtering_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_filtering\\_documentation_concepts_filtering_.md",
@@ -3735,11 +3754,11 @@
   {
     "text": "### Datetime Range\n\nThe datetime range is a unique range condition, used for [datetime](https://qdrant.tech/documentation/concepts/payload/#datetime) payloads, which supports RFC 3339 formats. You do not need to convert dates to UNIX timestaps. During comparison, timestamps are parsed and converted to UTC.\n\n*Available as of v1.8.0*\n\n```json\n{\n  \"key\": \"date\",\n  \"range\": {\n    \"gt\": \"2023-02-08T10:49:00Z\",\n    \"gte\": null,\n    \"lt\": null,\n    \"lte\": \"2024-01-31 10:14:31Z\"\n  }\n}\n```\n\n```python\nmodels.FieldCondition(\n    key=\"date\",\n    range=models.DatetimeRange(\n        gt=\"2023-02-08T10:49:00Z\",\n        gte=None,\n        lt=None,\n        lte=\"2024-01-31T10:14:31Z\",\n    ),\n)\n```\n\n```typescript\n{\n    key: 'date',\n    range: {\n        gt: '2023-02-08T10:49:00Z',\n        gte: null,\n        lt: null,\n        lte: '2024-01-31T10:14:31Z'\n    }\n}\n```\n\n```rust\nuse qdrant_client::qdrant::{Condition, DatetimeRange, Timestamp};\n\nCondition::datetime_range(\n    \"date\",\n    DatetimeRange {\n        gt: Some(Timestamp::date_time(2023, 2, 8, 10, 49, 0).unwrap()),\n        gte: None,\n        lt: None,\n        lte: Some(Timestamp::date_time(2024, 1, 31, 10, 14, 31).unwrap()),\n    },\n)\n```\n\n```java\nimport static io.qdrant.client.ConditionFactory.datetimeRange;\n\nimport com.google.protobuf.Timestamp;\nimport io.qdrant.client.grpc.Points.DatetimeRange;\nimport java.time.Instant;\n\nlong gt = Instant.parse(\"2023-02-08T10:49:00Z\").getEpochSecond();\nlong lte = Instant.parse(\"2024-01-31T10:14:31Z\").getEpochSecond();\n\ndatetimeRange(\"date\",\n    DatetimeRange.newBuilder()\n        .setGt(Timestamp.newBuilder().setSeconds(gt))\n        .setLte(Timestamp.newBuilder().setSeconds(lte))\n        .build());\n```\n\n```csharp\nusing Qdrant.Client.Grpc;\n\nConditions.DatetimeRange(\n    field: \"date\",\n    gt: new DateTime(2023, 2, 8, 10, 49, 0, DateTimeKind.Utc),\n    lte: new DateTime(2024, 1, 31, 10, 14, 31, DateTimeKind.Utc)\n);\n```\n\n```go\nimport (\n\t\"time\"\n\n\t\"github.com/qdrant/go-client/qdrant\"\n\t\"google.golang.org/protobuf/types/known/timestamppb\"\n)\n\nqdrant.NewDatetimeRange(\"date\", &qdrant.DatetimeRange{\n\tGt:  timestamppb.New(time.Date(2023, 2, 8, 10, 49, 0, 0, time.UTC)),\n\tLte: timestamppb.New(time.Date(2024, 1, 31, 10, 14, 31, 0, time.UTC)),\n})\n```",
     "metadata": {
-      "chunk_id": "e8f29afde80c-0035",
+      "chunk_id": "e8f29afde80c-0031",
       "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_filtering\\_documentation_concepts_filtering_.md",
       "filename": "_documentation_concepts_filtering_.md",
       "file_extension": ".md",
-      "chunk_index": 35,
+      "chunk_index": 31,
       "document_level": 1,
       "parent_chunk_id": null,
       "child_chunk_ids": [],
@@ -3757,7 +3776,8 @@
       "chunking_strategy": "hybrid_adaptive_semchunk",
       "content_type": "prose_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:38.356218",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:21.420730",
       "document_id": "e8f29afde80c",
       "document_name": "_documentation_concepts_filtering_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_filtering\\_documentation_concepts_filtering_.md",
@@ -3934,11 +3954,11 @@
   {
     "text": "### UUID Match\n\n*Available as of v1.11.0*\n\nMatching of UUID values works similarly to the regular `match` condition for strings. Functionally, it will work with `keyword` and `uuid` indexes exactly the same, but `uuid` index is more memory efficient.\n\n```json\n{\n  \"key\": \"uuid\",\n  \"match\": {\n    \"value\": \"f47ac10b-58cc-4372-a567-0e02b2c3d479\"\n  }\n}\n```\n\n```python\nmodels.FieldCondition(\n    key=\"uuid\",\n    match=models.MatchValue(value=\"f47ac10b-58cc-4372-a567-0e02b2c3d479\"),\n)\n```\n\n```typescript\n{\n    key: 'uuid',\n    match: {value: 'f47ac10b-58cc-4372-a567-0e02b2c3d479'}    \n}\n```\n\n```rust\nCondition::matches(\"uuid\", \"f47ac10b-58cc-4372-a567-0e02b2c3d479\".to_string())\n```\n\n```java\nmatchKeyword(\"uuid\", \"f47ac10b-58cc-4372-a567-0e02b2c3d479\");\n```\n\n```csharp\nusing static Qdrant.Client.Grpc.Conditions;\n\nMatchKeyword(\"uuid\", \"f47ac10b-58cc-4372-a567-0e02b2c3d479\");\n```\n\n```go\nimport \"github.com/qdrant/go-client/qdrant\"\n\nqdrant.NewMatch(\"uuid\", \"f47ac10b-58cc-4372-a567-0e02b2c3d479\")\n```",
     "metadata": {
-      "chunk_id": "e8f29afde80c-0036",
+      "chunk_id": "e8f29afde80c-0032",
       "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_filtering\\_documentation_concepts_filtering_.md",
       "filename": "_documentation_concepts_filtering_.md",
       "file_extension": ".md",
-      "chunk_index": 36,
+      "chunk_index": 32,
       "document_level": 1,
       "parent_chunk_id": null,
       "child_chunk_ids": [],
@@ -3956,7 +3976,8 @@
       "chunking_strategy": "hybrid_adaptive_semchunk",
       "content_type": "prose_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:38.356218",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:21.421301",
       "document_id": "e8f29afde80c",
       "document_name": "_documentation_concepts_filtering_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_filtering\\_documentation_concepts_filtering_.md",
@@ -4133,11 +4154,11 @@
   {
     "text": "#### Geo Bounding Box\n\n```json\n{\n  \"key\": \"location\",\n  \"geo_bounding_box\": {\n    \"bottom_right\": {\n      \"lon\": 13.455868,\n      \"lat\": 52.495862\n    },\n    \"top_left\": {\n      \"lon\": 13.403683,\n      \"lat\": 52.520711\n    }\n  }\n}\n```\n\n```python\nmodels.FieldCondition(\n    key=\"location\",\n    geo_bounding_box=models.GeoBoundingBox(\n        bottom_right=models.GeoPoint(\n            lon=13.455868,\n            lat=52.495862,\n        ),\n        top_left=models.GeoPoint(\n            lon=13.403683,\n            lat=52.520711,\n        ),\n    ),\n)\n```\n\n```typescript\n{\n    key: 'location',\n    geo_bounding_box: {\n        bottom_right: {\n            lon: 13.455868,\n            lat: 52.495862\n        },\n        top_left: {\n            lon: 13.403683,\n            lat: 52.520711\n        }\n    }\n}\n```\n\n```rust\nuse qdrant_client::qdrant::{Condition, GeoBoundingBox, GeoPoint};\n\nCondition::geo_bounding_box(\n    \"location\",\n    GeoBoundingBox {\n        bottom_right: Some(GeoPoint {\n            lon: 13.455868,\n            lat: 52.495862,\n        }),\n        top_left: Some(GeoPoint {\n            lon: 13.403683,\n            lat: 52.520711,\n        }),\n    },\n)\n```\n\n```java\nimport static io.qdrant.client.ConditionFactory.geoBoundingBox;\n\ngeoBoundingBox(\"location\", 52.520711, 13.403683, 52.495862, 13.455868);\n```\n\n```csharp\nusing static Qdrant.Client.Grpc.Conditions;\n\nGeoBoundingBox(\"location\", 52.520711, 13.403683, 52.495862, 13.455868);\n```\n\n```go\nimport \"github.com/qdrant/go-client/qdrant\"\n\nqdrant.NewGeoBoundingBox(\"location\", 52.520711, 13.403683, 52.495862, 13.455868)\n```\n\nIt matches with `location`s inside a rectangle with the coordinates of the upper left corner in `bottom_right` and the coordinates of the lower right corner in `top_left`.",
     "metadata": {
-      "chunk_id": "e8f29afde80c-0038",
+      "chunk_id": "e8f29afde80c-0034",
       "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_filtering\\_documentation_concepts_filtering_.md",
       "filename": "_documentation_concepts_filtering_.md",
       "file_extension": ".md",
-      "chunk_index": 38,
+      "chunk_index": 34,
       "document_level": 1,
       "parent_chunk_id": null,
       "child_chunk_ids": [],
@@ -4155,7 +4176,8 @@
       "chunking_strategy": "hybrid_adaptive_semchunk",
       "content_type": "prose_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:38.356218",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:21.422270",
       "document_id": "e8f29afde80c",
       "document_name": "_documentation_concepts_filtering_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_filtering\\_documentation_concepts_filtering_.md",
@@ -4332,11 +4354,11 @@
   {
     "text": "#### Geo Radius\n\n```json\n{\n  \"key\": \"location\",\n  \"geo_radius\": {\n    \"center\": {\n      \"lon\": 13.403683,\n      \"lat\": 52.520711\n    },\n    \"radius\": 1000.0\n  }\n}\n```\n\n```python\nmodels.FieldCondition(\n    key=\"location\",\n    geo_radius=models.GeoRadius(\n        center=models.GeoPoint(\n            lon=13.403683,\n            lat=52.520711,\n        ),\n        radius=1000.0,\n    ),\n)\n```\n\n```typescript\n{\n    key: 'location',\n    geo_radius: {\n        center: {\n            lon: 13.403683,\n            lat: 52.520711\n        },\n        radius: 1000.0\n    }    \n}\n```\n\n```rust\nuse qdrant_client::qdrant::{Condition, GeoPoint, GeoRadius};\n\nCondition::geo_radius(\n    \"location\",\n    GeoRadius {\n        center: Some(GeoPoint {\n            lon: 13.403683,\n            lat: 52.520711,\n        }),\n        radius: 1000.0,\n    },\n)\n```\n\n```java\nimport static io.qdrant.client.ConditionFactory.geoRadius;\n\ngeoRadius(\"location\", 52.520711, 13.403683, 1000.0f);\n```\n\n```csharp\nusing static Qdrant.Client.Grpc.Conditions;\n\nGeoRadius(\"location\", 52.520711, 13.403683, 1000.0f);\n```\n\n```go\nimport \"github.com/qdrant/go-client/qdrant\"\n\nqdrant.NewGeoRadius(\"location\", 52.520711, 13.403683, 1000.0)\n```\n\nIt matches with `location`s inside a circle with the `center` at the center and a radius of `radius` meters.\n\nIf several values are stored, at least one of them should match the condition. These conditions can only be applied to payloads that match the [geo-data format](https://qdrant.tech/documentation/concepts/payload/#geo).",
     "metadata": {
-      "chunk_id": "e8f29afde80c-0039",
+      "chunk_id": "e8f29afde80c-0035",
       "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_filtering\\_documentation_concepts_filtering_.md",
       "filename": "_documentation_concepts_filtering_.md",
       "file_extension": ".md",
-      "chunk_index": 39,
+      "chunk_index": 35,
       "document_level": 1,
       "parent_chunk_id": null,
       "child_chunk_ids": [],
@@ -4354,7 +4376,8 @@
       "chunking_strategy": "hybrid_adaptive_semchunk",
       "content_type": "prose_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:38.361374",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:21.423045",
       "document_id": "e8f29afde80c",
       "document_name": "_documentation_concepts_filtering_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_filtering\\_documentation_concepts_filtering_.md",
@@ -4531,11 +4554,11 @@
   {
     "text": "### Values count\n\nIn addition to the direct value comparison, it is also possible to filter by the amount of values.\n\nFor example, given the data:\n\n```json\n[\n  { \"id\": 1, \"name\": \"product A\", \"comments\": [\"Very good!\", \"Excellent\"] },\n  { \"id\": 2, \"name\": \"product B\", \"comments\": [\"meh\", \"expected more\", \"ok\"] }\n]\n```\n\nWe can perform the search only among the items with more than two comments:\n\n```json\n{\n  \"key\": \"comments\",\n  \"values_count\": {\n    \"gt\": 2\n  }\n}\n```\n\n```python\nmodels.FieldCondition(\n    key=\"comments\",\n    values_count=models.ValuesCount(gt=2),\n)\n```\n\n```typescript\n{\n    key: 'comments',\n    values_count: {gt: 2}    \n}\n```\n\n```rust\nuse qdrant_client::qdrant::{Condition, ValuesCount};\n\nCondition::values_count(\n    \"comments\",\n    ValuesCount {\n        gt: Some(2),\n        ..Default::default()\n    },\n)\n```\n\n```java\nimport static io.qdrant.client.ConditionFactory.valuesCount;\n\nimport io.qdrant.client.grpc.Points.ValuesCount;\n\nvaluesCount(\"comments\", ValuesCount.newBuilder().setGt(2).build());\n```\n\n```csharp\nusing Qdrant.Client.Grpc;\nusing static Qdrant.Client.Grpc.Conditions;\n\nValuesCount(\"comments\", new ValuesCount { Gt = 2 });\n```\n\n```go\nimport \"github.com/qdrant/go-client/qdrant\"\n\nqdrant.NewValuesCount(\"comments\", &qdrant.ValuesCount{\n\tGt: qdrant.PtrOf(uint64(2)),\n})\n```\n\nThe result would be:\n\n```json\n[{ \"id\": 2, \"name\": \"product B\", \"comments\": [\"meh\", \"expected more\", \"ok\"] }]\n```\n\nIf stored value is not an array - it is assumed that the amount of values is equals to 1.",
     "metadata": {
-      "chunk_id": "e8f29afde80c-0044",
+      "chunk_id": "e8f29afde80c-0039",
       "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_filtering\\_documentation_concepts_filtering_.md",
       "filename": "_documentation_concepts_filtering_.md",
       "file_extension": ".md",
-      "chunk_index": 44,
+      "chunk_index": 39,
       "document_level": 1,
       "parent_chunk_id": null,
       "child_chunk_ids": [],
@@ -4553,7 +4576,8 @@
       "chunking_strategy": "hybrid_adaptive_semchunk",
       "content_type": "prose_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:38.372494",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:21.431290",
       "document_id": "e8f29afde80c",
       "document_name": "_documentation_concepts_filtering_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_filtering\\_documentation_concepts_filtering_.md",
@@ -4730,11 +4754,11 @@
   {
     "text": "### Is Empty\n\nSometimes it is also useful to filter out records that are missing some value. The `IsEmpty` condition may help you with that:\n\n```json\n{\n  \"is_empty\": {\n    \"key\": \"reports\"\n  }\n}\n```\n\n```python\nmodels.IsEmptyCondition(\n    is_empty=models.PayloadField(key=\"reports\"),\n)\n```\n\n```typescript\n{\n  is_empty: {\n    key: \"reports\"\n  }\n}\n```\n\n```rust\nuse qdrant_client::qdrant::Condition;\n\nCondition::is_empty(\"reports\")\n```\n\n```java\nimport static io.qdrant.client.ConditionFactory.isEmpty;\n\nisEmpty(\"reports\");\n```\n\n```csharp\nusing Qdrant.Client.Grpc;\nusing static Qdrant.Client.Grpc.Conditions;\n\nIsEmpty(\"reports\");\n```\n\n```go\nimport \"github.com/qdrant/go-client/qdrant\"\n\nqdrant.NewIsEmpty(\"reports\")\n```\n\nThis condition will match all records where the field `reports` either does not exist, or has `null` or `[]` value.\n\nThe **IsEmpty** is often useful together with the logical negation **must\\_not**. In this case all non-empty values will be selected.",
     "metadata": {
-      "chunk_id": "e8f29afde80c-0045",
+      "chunk_id": "e8f29afde80c-0040",
       "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_filtering\\_documentation_concepts_filtering_.md",
       "filename": "_documentation_concepts_filtering_.md",
       "file_extension": ".md",
-      "chunk_index": 45,
+      "chunk_index": 40,
       "document_level": 1,
       "parent_chunk_id": null,
       "child_chunk_ids": [],
@@ -4752,7 +4776,8 @@
       "chunking_strategy": "hybrid_adaptive_semchunk",
       "content_type": "prose_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:38.372494",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:21.431783",
       "document_id": "e8f29afde80c",
       "document_name": "_documentation_concepts_filtering_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_filtering\\_documentation_concepts_filtering_.md",
@@ -4929,11 +4954,11 @@
   {
     "text": "### Is Null\n\nIt is not possible to test for `NULL` values with the **match** condition. We have to use `IsNull` condition instead:\n\n```json\n{\n    \"is_null\": {\n        \"key\": \"reports\"\n    }\n}\n```\n\n```python\nmodels.IsNullCondition(\n    is_null=models.PayloadField(key=\"reports\"),\n)\n```\n\n```typescript\n{\n  is_null: {\n    key: \"reports\"\n  }\n}\n```\n\n```rust\nuse qdrant_client::qdrant::Condition;\n\nCondition::is_null(\"reports\")\n```\n\n```java\nimport static io.qdrant.client.ConditionFactory.isNull;\n\nisNull(\"reports\");\n```\n\n```csharp\nusing Qdrant.Client.Grpc;\nusing static Qdrant.Client.Grpc.Conditions;\n\nIsNull(\"reports\");\n```\n\n```go\nimport \"github.com/qdrant/go-client/qdrant\"\n\nqdrant.NewIsNull(\"reports\")\n```\n\nThis condition will match all records where the field `reports` exists and has `NULL` value.",
     "metadata": {
-      "chunk_id": "e8f29afde80c-0046",
+      "chunk_id": "e8f29afde80c-0041",
       "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_filtering\\_documentation_concepts_filtering_.md",
       "filename": "_documentation_concepts_filtering_.md",
       "file_extension": ".md",
-      "chunk_index": 46,
+      "chunk_index": 41,
       "document_level": 1,
       "parent_chunk_id": null,
       "child_chunk_ids": [],
@@ -4951,7 +4976,8 @@
       "chunking_strategy": "hybrid_adaptive_semchunk",
       "content_type": "prose_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:38.372494",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:21.432205",
       "document_id": "e8f29afde80c",
       "document_name": "_documentation_concepts_filtering_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_filtering\\_documentation_concepts_filtering_.md",
@@ -5128,11 +5154,11 @@
   {
     "text": "### Has id\n\nThis type of query is not related to payload, but can be very useful in some situations. For example, the user could mark some specific search results as irrelevant, or we want to search only among the specified points.\n\n```http\nPOST /collections/{collection_name}/points/scroll\n{\n    \"filter\": {\n        \"must\": [\n            { \"has_id\": [1,3,5,7,9,11] }\n        ]\n    }\n    ...\n}\n```\n\n```python\nclient.scroll(\n    collection_name=\"{collection_name}\",\n    scroll_filter=models.Filter(\n        must=[\n            models.HasIdCondition(has_id=[1, 3, 5, 7, 9, 11]),\n        ],\n    ),\n)\n```\n\n```typescript\nclient.scroll(\"{collection_name}\", {\n  filter: {\n    must: [\n      {\n        has_id: [1, 3, 5, 7, 9, 11],\n      },\n    ],\n  },\n});\n```\n\n```rust\nuse qdrant_client::qdrant::{Condition, Filter, ScrollPointsBuilder};\nuse qdrant_client::Qdrant;\n\nlet client = Qdrant::from_url(\"http://localhost:6334\").build()?;\n    \nclient\n    .scroll(\n        ScrollPointsBuilder::new(\"{collection_name}\")\n            .filter(Filter::must([Condition::has_id([1, 3, 5, 7, 9, 11])])),\n    )\n    .await?;\n```\n\n```java\nimport java.util.List;\n\nimport static io.qdrant.client.ConditionFactory.hasId;\nimport static io.qdrant.client.PointIdFactory.id;\n\nimport io.qdrant.client.grpc.Points.Filter;\nimport io.qdrant.client.grpc.Points.ScrollPoints;\n\nclient\n    .scrollAsync(\n        ScrollPoints.newBuilder()\n            .setCollectionName(\"{collection_name}\")\n            .setFilter(\n                Filter.newBuilder()\n                    .addMust(hasId(List.of(id(1), id(3), id(5), id(7), id(9), id(11))))\n                    .build())\n            .build())\n    .get();\n```\n\n```csharp\nusing Qdrant.Client;\nusing static Qdrant.Client.Grpc.Conditions;\n\nvar client = new QdrantClient(\"localhost\", 6334);\n\nawait client.ScrollAsync(collectionName: \"{collection_name}\", filter: HasId([1, 3, 5, 7, 9, 11]));\n```\n\n```go\nimport (\n\t\"context\"\n\n\t\"github.com/qdrant/go-client/qdrant\"\n)\n\nclient, err := qdrant.NewClient(&qdrant.Config{\n\tHost: \"localhost\",\n\tPort: 6334,\n})\n\nclient.Scroll(context.Background(), &qdrant.ScrollPoints{\n\tCollectionName: \"{collection_name}\",\n\tFilter: &qdrant.Filter{\n\t\tMust: []*qdrant.Condition{\n\t\t\tqdrant.NewHasID(\n\t\t\t\tqdrant.NewIDNum(1),\n\t\t\t\tqdrant.NewIDNum(3),\n\t\t\t\tqdrant.NewIDNum(5),\n\t\t\t\tqdrant.NewIDNum(7),\n\t\t\t\tqdrant.NewIDNum(9),\n\t\t\t\tqdrant.NewIDNum(11),\n\t\t\t),\n\t\t},\n\t},\n})\n```\n\nFiltered points would be:\n\n```json\n[\n  { \"id\": 1, \"city\": \"London\", \"color\": \"green\" },\n  { \"id\": 3, \"city\": \"London\", \"color\": \"blue\" },\n  { \"id\": 5, \"city\": \"Moscow\", \"color\": \"green\" }\n]\n```",
     "metadata": {
-      "chunk_id": "e8f29afde80c-0047",
+      "chunk_id": "e8f29afde80c-0042",
       "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_filtering\\_documentation_concepts_filtering_.md",
       "filename": "_documentation_concepts_filtering_.md",
       "file_extension": ".md",
-      "chunk_index": 47,
+      "chunk_index": 42,
       "document_level": 1,
       "parent_chunk_id": null,
       "child_chunk_ids": [],
@@ -5150,7 +5176,8 @@
       "chunking_strategy": "hybrid_adaptive_semchunk",
       "content_type": "prose_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:38.372494",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:21.433491",
       "document_id": "e8f29afde80c",
       "document_name": "_documentation_concepts_filtering_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_filtering\\_documentation_concepts_filtering_.md",
@@ -5327,11 +5354,11 @@
   {
     "text": "### Has vector\n\n*Available as of v1.13.0*\n\nThis condition enables filtering by the presence of a given named vector on a point.\n\nFor example, if we have two named vector in our collection.\n\n```http\nPUT /collections/{collection_name}\n{\n    \"vectors\": {\n        \"image\": {\n            \"size\": 4,\n            \"distance\": \"Dot\"\n        },\n        \"text\": {\n            \"size\": 8,\n            \"distance\": \"Cosine\"\n        }\n    },\n    \"sparse_vectors\": {\n        \"sparse-image\": {},\n        \"sparse-text\": {},\n    },\n}\n```\n\nSome points in the collection might have all vectors, some might have only a subset of them.\n\nIf your collection does not have named vectors, use an empty (`\"\"`) name.\n\nThis is how you can search for points which have the dense `image` vector defined:\n\n```http\nPOST /collections/{collection_name}/points/scroll\n{\n    \"filter\": {\n        \"must\": [\n            { \"has_vector\": \"image\" }\n        ]\n    }\n}\n```\n\n```python\nfrom qdrant_client import QdrantClient, models\n\nclient = QdrantClient(url=\"http://localhost:6333\")\n\nclient.scroll(\n    collection_name=\"{collection_name}\",\n    scroll_filter=models.Filter(\n        must=[\n            models.HasVectorCondition(has_vector=\"image\"),\n        ],\n    ),\n)\n```\n\n```typescript\nclient.scroll(\"{collection_name}\", {\n  filter: {\n    must: [\n      {\n        has_vector: \"image\",\n      },\n    ],\n  },\n});\n```\n\n```rust\nuse qdrant_client::qdrant::{Condition, Filter, ScrollPointsBuilder};\nuse qdrant_client::Qdrant;\n\nlet client = Qdrant::from_url(\"http://localhost:6334\").build()?;\n    \nclient\n    .scroll(\n        ScrollPointsBuilder::new(\"{collection_name}\")\n            .filter(Filter::must([Condition::has_vector(\"image\")])),\n    )\n    .await?;\n```\n\n```java\nimport java.util.List;\n\nimport static io.qdrant.client.ConditionFactory.hasVector;\nimport static io.qdrant.client.PointIdFactory.id;\n\nimport io.qdrant.client.grpc.Points.Filter;\nimport io.qdrant.client.grpc.Points.ScrollPoints;\n\nclient\n    .scrollAsync(\n        ScrollPoints.newBuilder()\n            .setCollectionName(\"{collection_name}\")\n            .setFilter(\n                Filter.newBuilder()\n                    .addMust(hasVector(\"image\"))\n                    .build())\n            .build())\n    .get();\n```\n\n```csharp\nusing Qdrant.Client;\nusing static Qdrant.Client.Grpc.Conditions;\n\nvar client = new QdrantClient(\"localhost\", 6334);\n\nawait client.ScrollAsync(collectionName: \"{collection_name}\", filter: HasVector(\"image\"));\n```\n\n```go\nimport (\n\t\"context\"\n\n\t\"github.com/qdrant/go-client/qdrant\"\n)\n\nclient, err := qdrant.NewClient(&qdrant.Config{\n\tHost: \"localhost\",\n\tPort: 6334,\n})\n\nclient.Scroll(context.Background(), &qdrant.ScrollPoints{\n\tCollectionName: \"{collection_name}\",\n\tFilter: &qdrant.Filter{\n\t\tMust: []*qdrant.Condition{\n\t\t\tqdrant.NewHasVector(\n        \"image\",\n\t\t\t),\n\t\t},\n\t},\n})\n```",
     "metadata": {
-      "chunk_id": "e8f29afde80c-0048",
+      "chunk_id": "e8f29afde80c-0043",
       "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_filtering\\_documentation_concepts_filtering_.md",
       "filename": "_documentation_concepts_filtering_.md",
       "file_extension": ".md",
-      "chunk_index": 48,
+      "chunk_index": 43,
       "document_level": 1,
       "parent_chunk_id": null,
       "child_chunk_ids": [],
@@ -5349,7 +5376,8 @@
       "chunking_strategy": "hybrid_adaptive_semchunk",
       "content_type": "prose_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:38.372494",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:21.434728",
       "document_id": "e8f29afde80c",
       "document_name": "_documentation_concepts_filtering_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_filtering\\_documentation_concepts_filtering_.md",

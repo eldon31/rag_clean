@@ -24,7 +24,8 @@
       "chunking_strategy": "hierarchical_precise_semchunk",
       "content_type": "prose_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:45.802064",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:28.196614",
       "document_id": "e1df4b0e0215",
       "document_name": "_qdrant_qdrant_2.1-application-initialization-and-runtime",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_2.1-application-initialization-and-runtime.md",
@@ -223,7 +224,8 @@
       "chunking_strategy": "hierarchical_precise_structural",
       "content_type": "list_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:45.804186",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:28.198705",
       "document_id": "e1df4b0e0215",
       "document_name": "_qdrant_qdrant_2.1-application-initialization-and-runtime",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_2.1-application-initialization-and-runtime.md",
@@ -422,7 +424,8 @@
       "chunking_strategy": "hierarchical_precise_structural",
       "content_type": "list_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:45.804186",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:28.200454",
       "document_id": "e1df4b0e0215",
       "document_name": "_qdrant_qdrant_2.1-application-initialization-and-runtime",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_2.1-application-initialization-and-runtime.md",
@@ -621,7 +624,8 @@
       "chunking_strategy": "hierarchical_precise_semchunk",
       "content_type": "prose_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:45.808662",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:28.201865",
       "document_id": "e1df4b0e0215",
       "document_name": "_qdrant_qdrant_2.1-application-initialization-and-runtime",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_2.1-application-initialization-and-runtime.md",
@@ -820,7 +824,8 @@
       "chunking_strategy": "hierarchical_precise_semchunk",
       "content_type": "prose_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:45.809514",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:28.202406",
       "document_id": "e1df4b0e0215",
       "document_name": "_qdrant_qdrant_2.1-application-initialization-and-runtime",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_2.1-application-initialization-and-runtime.md",
@@ -1019,7 +1024,8 @@
       "chunking_strategy": "hierarchical_precise_semchunk",
       "content_type": "prose_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:45.810039",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:28.202901",
       "document_id": "e1df4b0e0215",
       "document_name": "_qdrant_qdrant_2.1-application-initialization-and-runtime",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_2.1-application-initialization-and-runtime.md",
@@ -1194,7 +1200,7 @@
     }
   },
   {
-    "text": "### Consensus Initialization Flow\n\nThe `Consensus::run()` function [src/consensus.rs63-170](https://github.com/qdrant/qdrant/blob/48203e41/src/consensus.rs#L63-L170) performs:\n\n1. **TLS Configuration** [src/consensus.rs76](https://github.com/qdrant/qdrant/blob/48203e41/src/consensus.rs#L76-L76)\n\n   - Loads TLS client config if `cluster.p2p.enable_tls` is enabled\n\n2. **Consensus Object Creation** [src/consensus.rs82-93](https://github.com/qdrant/qdrant/blob/48203e41/src/consensus.rs#L82-L93)\n\n   - Calls `Consensus::new()` with state, bootstrap peer, URI, config\n   - Creates bounded tokio channel for backpressure\n\n3. **Bootstrap or Recovery** [src/consensus.rs213-244](https://github.com/qdrant/qdrant/blob/48203e41/src/consensus.rs#L213-L244)\n\n   - New deployment: Bootstrap from peer or initialize as first peer\n   - Existing deployment: Recover state and potentially update URI\n\n4. **Thread Spawning** [src/consensus.rs96-115](https://github.com/qdrant/qdrant/blob/48203e41/src/consensus.rs#L96-L115)\n\n   - Main consensus thread runs `consensus.start()`\n   - Sets high thread priority on Linux for better latency\n   - Error handling reports to `ConsensusStateRef`\n\n5. **Proposal Forwarder** [src/consensus.rs117-139](https://github.com/qdrant/qdrant/blob/48203e41/src/consensus.rs#L117-L139)\n\n   - Separate thread forwards proposals from `std::sync::mpsc` to tokio channel\n   - Bridges sync and async worlds",
+    "text": "### Consensus Initialization Flow\n\nThe `Consensus::run()` function [src/consensus.rs63-170](https://github.com/qdrant/qdrant/blob/48203e41/src/consensus.rs#L63-L170) performs:\n\n1. **TLS Configuration** [src/consensus.rs76](https://github.com/qdrant/qdrant/blob/48203e41/src/consensus.rs#L76-L76)\n\n   - Loads TLS client config if `cluster.p2p.enable_tls` is enabled\n\n2. **Consensus Object Creation** [src/consensus.rs82-93](https://github.com/qdrant/qdrant/blob/48203e41/src/consensus.rs#L82-L93)\n\n   - Calls `Consensus::new()` with state, bootstrap peer, URI, config\n   - Creates bounded tokio channel for backpressure\n\n3. **Bootstrap or Recovery** [src/consensus.rs213-244](https://github.com/qdrant/qdrant/blob/48203e41/src/consensus.rs#L213-L244)\n\n   - New deployment: Bootstrap from peer or initialize as first peer\n   - Existing deployment: Recover state and potentially update URI\n\n4. **Thread Spawning** [src/consensus.rs96-115](https://github.com/qdrant/qdrant/blob/48203e41/src/consensus.rs#L96-L115)\n\n   - Main consensus thread runs `consensus.start()`\n   - Sets high thread priority on Linux for better latency\n   - Error handling reports to `ConsensusStateRef`\n\n5. **Proposal Forwarder** [src/consensus.rs117-139](https://github.com/qdrant/qdrant/blob/48203e41/src/consensus.rs#L117-L139)\n\n   - Separate thread forwards proposals from `std::sync::mpsc` to tokio channel\n   - Bridges sync and async worlds\n\n6. **Internal gRPC Server** [src/consensus.rs152-168](https://github.com/qdrant/qdrant/blob/48203e41/src/consensus.rs#L152-L168)\n\n   - Spawns thread for internal peer communication\n   - Receives Raft messages via gRPC and forwards to consensus",
     "metadata": {
       "chunk_id": "e1df4b0e0215-0020",
       "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_2.1-application-initialization-and-runtime.md",
@@ -1208,17 +1214,18 @@
         "Consensus Initialization Flow"
       ],
       "heading_text": "Consensus Initialization Flow",
-      "token_count": 408,
-      "char_count": 1416,
+      "token_count": 478,
+      "char_count": 1661,
       "start_char": 16489,
-      "end_char": 17905,
+      "end_char": 18150,
       "semantic_score": 0.6,
       "structural_score": 0.7999999999999998,
-      "retrieval_quality": 0.5618736842105263,
+      "retrieval_quality": 0.5706058823529412,
       "chunking_strategy": "hierarchical_precise_semchunk",
       "content_type": "prose_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:45.812065",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:28.204175",
       "document_id": "e1df4b0e0215",
       "document_name": "_qdrant_qdrant_2.1-application-initialization-and-runtime",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_2.1-application-initialization-and-runtime.md",
@@ -1226,9 +1233,9 @@
       "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant",
       "relative_path": "Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_2.1-application-initialization-and-runtime.md",
       "hierarchy_path": "Consensus Initialization Flow",
-      "chunk_hash": "d6b2277fb50cdf2c",
-      "content_digest": "d6b2277fb50cdf2c",
-      "chunk_length": 1416,
+      "chunk_hash": "de47dd71867fca85",
+      "content_digest": "de47dd71867fca85",
+      "chunk_length": 1661,
       "payload_version": "1.3",
       "collection_hints": [
         "qdrant_ecosystem"
@@ -1246,122 +1253,122 @@
           "blob",
           "48203e41",
           "thread",
+          "peer",
           "tls",
           "bootstrap",
-          "peer",
+          "for",
+          "and",
           "l76",
           "config",
           "new",
           "state",
           "uri",
-          "tokio",
-          "channel",
-          "for"
+          "tokio"
         ],
         "term_weights": [
           {
             "term": "consensus",
-            "tf": 18,
-            "weight": 0.1
+            "tf": 21,
+            "weight": 0.099057
           },
           {
             "term": "src",
-            "tf": 12,
-            "weight": 0.066667
+            "tf": 14,
+            "weight": 0.066038
           },
           {
             "term": "qdrant",
-            "tf": 12,
-            "weight": 0.066667
+            "tf": 14,
+            "weight": 0.066038
           },
           {
             "term": "https",
-            "tf": 6,
-            "weight": 0.033333
+            "tf": 7,
+            "weight": 0.033019
           },
           {
             "term": "github",
-            "tf": 6,
-            "weight": 0.033333
+            "tf": 7,
+            "weight": 0.033019
           },
           {
             "term": "com",
-            "tf": 6,
-            "weight": 0.033333
+            "tf": 7,
+            "weight": 0.033019
           },
           {
             "term": "blob",
-            "tf": 6,
-            "weight": 0.033333
+            "tf": 7,
+            "weight": 0.033019
           },
           {
             "term": "48203e41",
-            "tf": 6,
-            "weight": 0.033333
+            "tf": 7,
+            "weight": 0.033019
           },
           {
             "term": "thread",
+            "tf": 5,
+            "weight": 0.023585
+          },
+          {
+            "term": "peer",
             "tf": 4,
-            "weight": 0.022222
+            "weight": 0.018868
           },
           {
             "term": "tls",
             "tf": 3,
-            "weight": 0.016667
+            "weight": 0.014151
           },
           {
             "term": "bootstrap",
             "tf": 3,
-            "weight": 0.016667
+            "weight": 0.014151
           },
           {
-            "term": "peer",
+            "term": "for",
             "tf": 3,
-            "weight": 0.016667
+            "weight": 0.014151
+          },
+          {
+            "term": "and",
+            "tf": 3,
+            "weight": 0.014151
           },
           {
             "term": "l76",
             "tf": 2,
-            "weight": 0.011111
+            "weight": 0.009434
           },
           {
             "term": "config",
             "tf": 2,
-            "weight": 0.011111
+            "weight": 0.009434
           },
           {
             "term": "new",
             "tf": 2,
-            "weight": 0.011111
+            "weight": 0.009434
           },
           {
             "term": "state",
             "tf": 2,
-            "weight": 0.011111
+            "weight": 0.009434
           },
           {
             "term": "uri",
             "tf": 2,
-            "weight": 0.011111
+            "weight": 0.009434
           },
           {
             "term": "tokio",
             "tf": 2,
-            "weight": 0.011111
-          },
-          {
-            "term": "channel",
-            "tf": 2,
-            "weight": 0.011111
-          },
-          {
-            "term": "for",
-            "tf": 2,
-            "weight": 0.011111
+            "weight": 0.009434
           }
         ],
-        "unique_terms": 95,
-        "total_terms": 180
+        "unique_terms": 108,
+        "total_terms": 212
       },
       "modal_hint": "code",
       "content_flags": {
@@ -1379,17 +1386,17 @@
         "consensus",
         "github",
         "https",
+        "peer",
         "qdrant",
         "src",
-        "thread",
-        "tls"
+        "thread"
       ]
     },
     "advanced_scores": {
       "semantic": 0.6,
       "structural": 0.7999999999999998,
-      "retrieval_quality": 0.5618736842105263,
-      "overall": 0.6539578947368421
+      "retrieval_quality": 0.5706058823529412,
+      "overall": 0.6568686274509804
     }
   },
   {
@@ -1417,7 +1424,8 @@
       "chunking_strategy": "hierarchical_precise_semchunk",
       "content_type": "prose_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:45.812065",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:28.204423",
       "document_id": "e1df4b0e0215",
       "document_name": "_qdrant_qdrant_2.1-application-initialization-and-runtime",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_2.1-application-initialization-and-runtime.md",

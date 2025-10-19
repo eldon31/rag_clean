@@ -36,6 +36,7 @@ import pickle
 import torch
 import gc
 import warnings
+from contextlib import nullcontext
 from pathlib import Path
 from typing import Dict, List, Any, Optional, Tuple, Union, Set
 from datetime import datetime
@@ -48,6 +49,7 @@ import threading
 import hashlib
 from functools import lru_cache
 import textwrap
+import requests
 
 # Core ML libraries
 from sentence_transformers import SentenceTransformer, CrossEncoder
@@ -81,6 +83,77 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
+
+class JinaEmbeddingsClient:
+    """Lightweight client for Jina embedding API."""
+
+    def __init__(
+        self,
+        api_key: str,
+        model_name: str = "jina-embeddings-v4",
+        endpoint: str = "https://api.jina.ai/v1/embeddings",
+        timeout: int = 60,
+        max_retries: int = 3,
+        backoff_factor: float = 1.5,
+    ) -> None:
+        if not api_key:
+            raise ValueError("JINA_API_KEY is required for jina-embeddings-v4")
+
+        self.api_key = api_key
+        self.model_name = model_name
+        self.endpoint = endpoint
+        self.timeout = timeout
+        self.max_retries = max(1, max_retries)
+        self.backoff_factor = max(0.5, backoff_factor)
+
+        self.session = requests.Session()
+        self.session.headers.update({
+            "Authorization": f"Bearer {self.api_key}",
+            "Content-Type": "application/json",
+            "Accept": "application/json",
+        })
+
+    def embed(
+        self,
+        texts: List[str],
+        *,
+        late_chunking: bool = True,
+        return_multivector: bool = True,
+        truncate: Optional[int] = None,
+    ) -> List[Dict[str, Any]]:
+        payload: Dict[str, Any] = {
+            "model": self.model_name,
+            "input": texts,
+            "late_chunking": late_chunking,
+        }
+        if return_multivector:
+            payload["return_multivector"] = True
+        if truncate is not None:
+            payload["truncate"] = truncate
+
+        attempt = 0
+        while True:
+            try:
+                response = self.session.post(self.endpoint, json=payload, timeout=self.timeout)
+                if response.status_code == 200:
+                    data = response.json()
+                    return data.get("data", [])
+
+                error_message = response.text
+                logger.warning(
+                    "Jina embeddings request failed (%s): %s", response.status_code, error_message
+                )
+            except requests.RequestException as exc:
+                logger.warning("Jina embeddings request error: %s", exc)
+
+            attempt += 1
+            if attempt >= self.max_retries:
+                raise RuntimeError("Exceeded retries when calling Jina embeddings API")
+
+            sleep_seconds = self.backoff_factor ** attempt
+            logger.info("Retrying Jina embeddings request in %.1fs", sleep_seconds)
+            time.sleep(sleep_seconds)
+
 # ============================================================================
 # SOTA MODEL CONFIGURATIONS (Kaggle T4 x2 Optimized)
 # ============================================================================
@@ -99,6 +172,8 @@ class ModelConfig:
     recommended_batch_size: int = 32
     memory_efficient: bool = True
     supports_flash_attention: bool = False
+    requires_api: bool = False
+    api_endpoint: Optional[str] = None
     
 # Kaggle T4 x2 Optimized Models (15.83GB VRAM each)
 KAGGLE_OPTIMIZED_MODELS = {
@@ -111,6 +186,17 @@ KAGGLE_OPTIMIZED_MODELS = {
         query_prefix="Represent this query for searching relevant code: ",
         recommended_batch_size=64,  # Larger batch for smaller model
         memory_efficient=True
+    ),
+    "jina-code-embeddings-1.5b": ModelConfig(
+        name="jina-code-embeddings-1.5b",
+        hf_model_id="jina-code-embeddings-1.5b",
+        vector_dim=1536,
+        max_tokens=8192,
+        query_prefix="Encode this code snippet for semantic retrieval: ",
+        recommended_batch_size=32,
+        memory_efficient=True,
+        requires_api=True,
+        api_endpoint="https://api.jina.ai/v1/embeddings",
     ),
     
     "bge-m3": ModelConfig(
@@ -180,6 +266,17 @@ KAGGLE_OPTIMIZED_MODELS = {
         max_tokens=512,
         recommended_batch_size=64,
         memory_efficient=True
+    ),
+
+    "jina-embeddings-v4": ModelConfig(
+        name="jina-embeddings-v4",
+        hf_model_id="jina-embeddings-v4",
+        vector_dim=2048,
+        max_tokens=8192,
+        recommended_batch_size=32,
+        memory_efficient=True,
+        requires_api=True,
+        api_endpoint="https://api.jina.ai/v1/embeddings"
     )
 }
 
@@ -287,7 +384,7 @@ class KaggleExportConfig:
 class EnsembleConfig:
     """Multi-model ensemble configuration"""
     # Ensemble models to use
-    ensemble_models: List[str] = field(default_factory=lambda: ["nomic-coderank", "bge-m3"])
+    ensemble_models: List[str] = field(default_factory=lambda: ["jina-code-embeddings-1.5b", "bge-m3"])
     
     # Ensemble weighting strategy
     weighting_strategy: str = "equal"  # equal, performance_based, adaptive
@@ -418,13 +515,14 @@ class UltimateKaggleEmbedderV4:
     
     def __init__(
         self,
-        model_name: str = "nomic-coderank",
+        model_name: str = "jina-code-embeddings-1.5b",
         gpu_config: Optional[KaggleGPUConfig] = None,
         export_config: Optional[KaggleExportConfig] = None,
         preprocessing_config: Optional[AdvancedPreprocessingConfig] = None,
         enable_ensemble: bool = False,
         ensemble_config: Optional[EnsembleConfig] = None,
-        reranking_config: Optional[RerankingConfig] = None
+        reranking_config: Optional[RerankingConfig] = None,
+        companion_dense_models: Optional[List[str]] = None,
     ):
         """Initialize Ultimate Kaggle Embedder V4"""
 
@@ -432,8 +530,8 @@ class UltimateKaggleEmbedderV4:
 
         # Validate model
         if model_name not in KAGGLE_OPTIMIZED_MODELS:
-            logger.warning(f"Unknown model {model_name}, defaulting to nomic-coderank")
-            model_name = "nomic-coderank"
+            logger.warning(f"Unknown model {model_name}, defaulting to jina-code-embeddings-1.5b")
+            model_name = "jina-code-embeddings-1.5b"
         
         self.model_config = KAGGLE_OPTIMIZED_MODELS[model_name]
         self.model_name = model_name
@@ -448,6 +546,13 @@ class UltimateKaggleEmbedderV4:
         self.reranking_config = reranking_config or RerankingConfig()
         self._canonical_collection_hint: Optional[str] = None
         self._target_collection_cache: Optional[str] = None
+
+        self.embedding_backend: str = "local"
+        self.api_client: Optional[JinaEmbeddingsClient] = None
+        self.multivectors_by_model: Dict[str, List[List[List[float]]]] = {}
+        self.multivector_dimensions: Dict[str, int] = {}
+        self.multivector_comparators: Dict[str, str] = {}
+        self.primary_vector_name: str = self.model_name
         
         # Kaggle environment detection
         self.is_kaggle = '/kaggle' in os.getcwd() or os.path.exists('/kaggle')
@@ -461,20 +566,31 @@ class UltimateKaggleEmbedderV4:
                 if not working_path.is_absolute():
                     self.export_config.working_dir = str(Path("/kaggle/working") / working_path)
         
-        # GPU setup
+        # GPU setup with CPU fallback for local runs
         self.device_count = torch.cuda.device_count()
         if self.device_count == 0:
-            logger.error("No GPU detected! This embedder requires Kaggle T4 x2")
-            raise RuntimeError("GPU required for Kaggle embedder")
+            logger.warning(
+                "No GPU detected; falling back to CPU mode. Embedding will be significantly slower."
+            )
+            self.device = "cpu"
+            self.device_count = 1
+            # Adjust Kaggle-specific defaults so CPU execution remains stable
+            self.gpu_config.device_count = 1
+            self.gpu_config.precision = "fp32"
+            self.gpu_config.enable_memory_efficient_attention = False
+            self.gpu_config.enable_torch_compile = False
+            self.gpu_config.enable_mixed_precision = False
+            self.gpu_config.base_batch_size = 8
+            self.gpu_config.dynamic_batching = False
+        else:
+            self.device = "cuda"
+            logger.info(f"Detected {self.device_count} GPU(s)")
 
-        self.device = "cuda"
-        logger.info(f"Detected {self.device_count} GPU(s)")
-
-        # Log GPU information
-        for i in range(self.device_count):
-            gpu_name = torch.cuda.get_device_name(i)
-            gpu_memory = torch.cuda.get_device_properties(i).total_memory / 1e9
-            logger.info(f"  GPU {i}: {gpu_name} ({gpu_memory:.1f}GB)")
+            # Log GPU information
+            for i in range(self.device_count):
+                gpu_name = torch.cuda.get_device_name(i)
+                gpu_memory = torch.cuda.get_device_properties(i).total_memory / 1e9
+                logger.info(f"  GPU {i}: {gpu_name} ({gpu_memory:.1f}GB)")
         
         # Advanced preprocessing with caching
         self.text_cache = AdvancedTextCache() if self.preprocessing_config.enable_text_caching else None
@@ -483,7 +599,17 @@ class UltimateKaggleEmbedderV4:
         self.models: Dict[str, Any] = {}  # For ensemble support
         self.primary_model: Optional[SentenceTransformer] = None
         self.reranker = None  # CrossEncoder reranking model
+
+        # Dense companion models (e.g., bge-small alongside CodeRank)
+        if companion_dense_models is None and model_name == "nomic-coderank":
+            companion_dense_models = ["bge-small"]
+        self.companion_dense_model_names: List[str] = companion_dense_models or []
+        self.companion_models: Dict[str, SentenceTransformer] = {}
+        self.companion_model_configs: Dict[str, ModelConfig] = {}
+        self.companion_batch_sizes: Dict[str, int] = {}
+
         self._initialize_embedding_models()
+        self._initialize_companion_models()
         
         # Initialize reranker if enabled
         if self.reranking_config.enable_reranking:
@@ -491,6 +617,7 @@ class UltimateKaggleEmbedderV4:
         
         # Storage
         self.embeddings: Optional[np.ndarray] = None
+        self.embeddings_by_model: Dict[str, np.ndarray] = {}
         self.chunks_metadata: List[Dict[str, Any]] = []
         self.chunk_texts: List[str] = []
         self.raw_chunk_texts: List[str] = []
@@ -518,6 +645,22 @@ class UltimateKaggleEmbedderV4:
     def _initialize_embedding_models(self):
         """Initialize embedding models with advanced optimization"""
 
+        if self.model_config.requires_api:
+            if self.model_name.startswith("jina"):
+                api_key = os.environ.get("JINA_API_KEY") or "jina_f92dfe592c06499b9b90b377e615c933VCBNZ_E029kaEcNPykc-oKsn9_v2"
+                endpoint = self.model_config.api_endpoint or "https://api.jina.ai/v1/embeddings"
+                self.embedding_backend = "jina_api"
+                self.api_client = JinaEmbeddingsClient(
+                    api_key=api_key or "",
+                    model_name=self.model_config.hf_model_id,
+                    endpoint=endpoint,
+                )
+                self.primary_model = None
+                self.models[self.model_name] = "jina_api_client"
+                logger.info("Using Jina embeddings API backend; local model load skipped")
+                return
+            raise ValueError(f"API-backed model {self.model_name} is not supported")
+
         logger.info(f"Loading embedding model: {self.model_config.hf_model_id}")
 
         # Optimal batch size for this model
@@ -531,7 +674,7 @@ class UltimateKaggleEmbedderV4:
         }
         
         # Precision optimization for T4
-        if self.gpu_config.precision == "fp16":
+        if self.gpu_config.precision == "fp16" and self.device == "cuda":
             model_kwargs["torch_dtype"] = torch.float16
             logger.info("Using FP16 precision for T4 optimization")
         
@@ -568,6 +711,50 @@ class UltimateKaggleEmbedderV4:
             torch.cuda.empty_cache()
             logger.info("GPU memory cache cleared")
     
+    def _initialize_companion_models(self) -> None:
+        """Load additional dense encoders that accompany the primary model."""
+
+        if not self.companion_dense_model_names:
+            return
+
+        for companion_name in self.companion_dense_model_names:
+            if companion_name == self.model_name:
+                logger.debug("Skipping companion %s because it matches the primary model", companion_name)
+                continue
+
+            config = KAGGLE_OPTIMIZED_MODELS.get(companion_name)
+            if config is None:
+                logger.warning("Companion model %s not found in registry; skipping", companion_name)
+                continue
+
+            if companion_name in self.companion_models:
+                continue
+
+            try:
+                logger.info("Loading companion dense model: %s (%sD)", config.hf_model_id, config.vector_dim)
+                model = SentenceTransformer(
+                    config.hf_model_id,
+                    trust_remote_code=config.trust_remote_code,
+                    device=self.device,
+                )
+
+                if self.gpu_config.precision == "fp16" and self.device == "cuda":
+                    model = model.half()
+
+                self.companion_models[companion_name] = model
+                self.companion_model_configs[companion_name] = config
+                batch_size = self.gpu_config.get_optimal_batch_size(config)
+                if self.device == "cpu":
+                    batch_size = max(1, min(batch_size, 8))
+                self.companion_batch_sizes[companion_name] = batch_size
+                self.models.setdefault(companion_name, model)
+                logger.info("Companion model %s ready (batch size %s)", companion_name, batch_size)
+            except Exception as exc:
+                logger.error("Failed to load companion model %s: %s", companion_name, exc)
+
+        if self.device == "cuda" and self.companion_models:
+            torch.cuda.empty_cache()
+
     def _initialize_reranking_model(self):
         """Initialize CrossEncoder for reranking"""
         
@@ -590,6 +777,10 @@ class UltimateKaggleEmbedderV4:
         """Initialize multiple models for ensemble embedding"""
         
         if not self.enable_ensemble or not self.ensemble_config:
+            return
+
+        if self.embedding_backend != "local":
+            logger.info("Companion models are unavailable for API-backed embeddings")
             return
         
         logger.info(f"Loading ensemble models: {self.ensemble_config.ensemble_models}")
@@ -1517,7 +1708,15 @@ class UltimateKaggleEmbedderV4:
         logger.info("Starting Kaggle T4 x2 optimized embedding generation")
         logger.info(f"Total chunks: {total_chunks}")
         logger.info(f"Model: {self.model_name} ({self.model_config.vector_dim}D)")
-        logger.info(f"GPUs: {self.device_count}x T4")
+        if self.device == "cuda":
+            logger.info(f"GPUs: {self.device_count}x T4")
+        else:
+            logger.info("Running in CPU fallback mode")
+
+        self.embeddings_by_model = {}
+        self.multivectors_by_model = {}
+        self.multivector_dimensions = {}
+        self.multivector_comparators = {}
         
         # Start monitoring
         if enable_monitoring:
@@ -1527,14 +1726,34 @@ class UltimateKaggleEmbedderV4:
         
         # Dynamic batch size optimization
         optimal_batch = self.gpu_config.get_optimal_batch_size(self.model_config)
-        total_batch_size = optimal_batch * self.device_count if self.device_count > 1 else optimal_batch
+        if self.device == "cpu":
+            optimal_batch = max(1, min(optimal_batch, 8))
+        if self.embedding_backend == "jina_api":
+            optimal_batch = max(1, min(optimal_batch, 16))
+            total_batch_size = optimal_batch
+        else:
+            total_batch_size = optimal_batch * self.device_count if self.device_count > 1 else optimal_batch
 
-        logger.info(f"Optimal batch size: {total_batch_size} ({optimal_batch} per GPU)")
+        batch_unit = "per GPU" if self.device == "cuda" else "per device"
+        logger.info(f"Optimal batch size: {total_batch_size} ({optimal_batch} {batch_unit})")
         
         # Process in optimized batches
         all_embeddings = []
         total_batches = (total_chunks + total_batch_size - 1) // total_batch_size
+
+        companion_batches: Dict[str, List[np.ndarray]] = {
+            name: [] for name in self.companion_models
+        }
+        companion_adjustments: Dict[str, int] = {
+            name: 0 for name in self.companion_models
+        }
         
+        dimension_adjustments = 0
+        jina_multivectors: List[List[List[float]]] = []
+        jina_multivector_channel: Optional[str] = None
+        if self.embedding_backend == "jina_api":
+            jina_multivector_channel = f"{self.model_name}_late_interaction"
+
         try:
             for batch_idx in range(0, total_chunks, total_batch_size):
                 batch_start = time.time()
@@ -1547,31 +1766,76 @@ class UltimateKaggleEmbedderV4:
                 logger.info(f"Processing batch {batch_num}/{total_batches} ({len(batch_texts)} chunks)")
                 
                 # GPU memory management
-                if batch_num % 5 == 0:  # Clear cache every 5 batches
+                if self.device == "cuda" and batch_num % 5 == 0:
                     torch.cuda.empty_cache()
                     gc.collect()
                 
-                # Generate embeddings with T4 optimization
-                with torch.autocast(device_type="cuda", enabled=self.gpu_config.enable_mixed_precision):
-                    if self.enable_ensemble:
-                        # Use ensemble of models
-                        batch_embeddings = self.generate_ensemble_embeddings(batch_texts)
-                    elif self.primary_model is not None and hasattr(self.primary_model, 'encode'):
-                        # Standard SentenceTransformer
-                        primary_model = self._get_primary_model()
-                        batch_embeddings = primary_model.encode(
-                            batch_texts,
-                            batch_size=optimal_batch,
-                            show_progress_bar=False,  # Reduce log spam
-                            convert_to_numpy=True,
-                            normalize_embeddings=True,
-                            device=self.device
+                # Generate embeddings with T4 optimization (or CPU fallback)
+                companion_outputs: Dict[str, np.ndarray] = {}
+                batch_multivectors: Optional[List[List[List[float]]]] = None
+
+                if self.embedding_backend == "jina_api":
+                    batch_embeddings, batch_multivectors = self._encode_with_jina_api(batch_texts)
+                else:
+                    autocast_ctx = (
+                        torch.autocast(
+                            device_type="cuda",
+                            enabled=self.gpu_config.enable_mixed_precision
                         )
-                    else:
-                        # ONNX or other backend
-                        batch_embeddings = self._encode_with_backend(batch_texts, optimal_batch)
+                        if self.device == "cuda"
+                        else nullcontext()
+                    )
+
+                    with autocast_ctx:
+                        if self.enable_ensemble:
+                            # Use ensemble of models
+                            batch_embeddings = self.generate_ensemble_embeddings(batch_texts)
+                        elif self.primary_model is not None and hasattr(self.primary_model, 'encode'):
+                            # Standard SentenceTransformer
+                            primary_model = self._get_primary_model()
+                            batch_embeddings = primary_model.encode(
+                                batch_texts,
+                                batch_size=optimal_batch,
+                                show_progress_bar=False,  # Reduce log spam
+                                convert_to_numpy=True,
+                                normalize_embeddings=True,
+                                device=self.device
+                            )
+                        else:
+                            # ONNX or other backend
+                            batch_embeddings = self._encode_with_backend(batch_texts, optimal_batch)
+
+                        for companion_name, companion_model in self.companion_models.items():
+                            comp_batch_size = self.companion_batch_sizes.get(companion_name, optimal_batch)
+                            companion_outputs[companion_name] = companion_model.encode(
+                                batch_texts,
+                                batch_size=comp_batch_size,
+                                show_progress_bar=False,
+                                convert_to_numpy=True,
+                                normalize_embeddings=True,
+                                device=self.device,
+                            )
+
+                batch_embeddings, adjusted = self._ensure_embedding_dimension(batch_embeddings)
+                if adjusted:
+                    dimension_adjustments += 1
                 
                 all_embeddings.append(batch_embeddings)
+
+                if batch_multivectors is not None:
+                    jina_multivectors.extend(batch_multivectors)
+
+                for companion_name, companion_matrix in companion_outputs.items():
+                    config = self.companion_model_configs.get(companion_name)
+                    expected_dim = config.vector_dim if config else None
+                    adjusted_companion = False
+                    companion_matrix, adjusted_companion = self._ensure_embedding_dimension(
+                        companion_matrix,
+                        expected_dim=expected_dim,
+                    )
+                    if adjusted_companion:
+                        companion_adjustments[companion_name] += 1
+                    companion_batches[companion_name].append(companion_matrix)
                 
                 # Batch statistics
                 batch_time = time.time() - batch_start
@@ -1586,11 +1850,43 @@ class UltimateKaggleEmbedderV4:
             
             # Combine all embeddings
             self.embeddings = np.vstack(all_embeddings)
-            
-            # Compression for Kaggle export
+
+            if self.embeddings.shape[1] != self.model_config.vector_dim:
+                raise ValueError(
+                    f"Embedding dimension mismatch after aggregation: expected {self.model_config.vector_dim}, "
+                    f"got {self.embeddings.shape[1]}"
+                )
+
             if self.export_config.compress_embeddings:
                 self.embeddings = self.embeddings.astype(np.float32)
                 logger.info("Embeddings compressed to float32")
+
+            self.embeddings_by_model = {self.model_name: self.embeddings}
+
+            for companion_name, batch_list in companion_batches.items():
+                if not batch_list:
+                    continue
+                companion_full = np.vstack(batch_list)
+                if self.export_config.compress_embeddings:
+                    companion_full = companion_full.astype(np.float32)
+                self.embeddings_by_model[companion_name] = companion_full
+
+            if self.embedding_backend == "jina_api" and jina_multivector_channel:
+                if len(jina_multivectors) != total_chunks:
+                    logger.warning(
+                        "Jina multivector count mismatch (expected %s, got %s)",
+                        total_chunks,
+                        len(jina_multivectors),
+                    )
+                else:
+                    self.multivectors_by_model[jina_multivector_channel] = jina_multivectors
+                    representative = next(
+                        (vectors for vectors in jina_multivectors if vectors),
+                        None,
+                    )
+                    if representative:
+                        self.multivector_dimensions[jina_multivector_channel] = len(representative[0])
+                    self.multivector_comparators[jina_multivector_channel] = "max_sim"
             
         except Exception as e:
             logger.error(f"Embedding generation failed: {e}")
@@ -1608,6 +1904,14 @@ class UltimateKaggleEmbedderV4:
         embeddings = self._require_embeddings()
         embedding_memory_mb = embeddings.nbytes / 1024 / 1024
         memory_per_chunk_kb = (embedding_memory_mb * 1024) / total_chunks
+
+        companion_memory_mb = {}
+        companion_dimensions = {}
+        for companion_name, companion_array in self.embeddings_by_model.items():
+            if companion_name == self.model_name:
+                continue
+            companion_memory_mb[companion_name] = companion_array.nbytes / 1024 / 1024
+            companion_dimensions[companion_name] = companion_array.shape[1]
         
         results = {
             "total_embeddings_generated": len(embeddings),
@@ -1623,8 +1927,33 @@ class UltimateKaggleEmbedderV4:
             "embedding_memory_mb": embedding_memory_mb,
             "memory_per_chunk_kb": memory_per_chunk_kb,
             "kaggle_optimized": True,
-            "performance_stats": dict(self.processing_stats)
+            "performance_stats": dict(self.processing_stats),
+            "dimension_adjustments": dimension_adjustments
         }
+
+        if self.multivectors_by_model:
+            multivector_stats: Dict[str, Dict[str, Any]] = {}
+            for name, channel_vectors in self.multivectors_by_model.items():
+                total_vectors = sum(len(vectors) for vectors in channel_vectors)
+                average_vectors = total_vectors / len(channel_vectors) if channel_vectors else 0.0
+                dimension = self.multivector_dimensions.get(name)
+                multivector_stats[name] = {
+                    "dimension": dimension,
+                    "comparator": self.multivector_comparators.get(name, "max_sim"),
+                    "average_vectors_per_point": average_vectors,
+                }
+            results["multivector_channels"] = multivector_stats
+
+        if companion_memory_mb:
+            results["companion_models"] = {
+                name: {
+                    "embedding_dimension": companion_dimensions.get(name),
+                    "memory_mb": companion_memory_mb.get(name),
+                    "batch_size": self.companion_batch_sizes.get(name),
+                    "dimension_adjustments": companion_adjustments.get(name, 0),
+                }
+                for name in companion_memory_mb
+            }
 
         logger.info("Kaggle embedding generation complete")
         logger.info(f"Generated {results['total_embeddings_generated']} embeddings")
@@ -1633,14 +1962,105 @@ class UltimateKaggleEmbedderV4:
         logger.info(f"Speed: {results['chunks_per_second']:.1f} chunks/second")
         logger.info(f"Memory: {results['embedding_memory_mb']:.1f}MB ({results['memory_per_chunk_kb']:.2f}KB per chunk)")
 
+        if companion_memory_mb:
+            formatted = ", ".join(
+                f"{name}={memory:.1f}MB/{companion_dimensions.get(name)}D"
+                for name, memory in companion_memory_mb.items()
+            )
+            logger.info("Companion dense embeddings: %s", formatted)
+
         return results
     
+    def _encode_with_jina_api(
+        self,
+        texts: List[str],
+    ) -> Tuple[np.ndarray, List[List[List[float]]]]:
+        """Request embeddings from the Jina API, including multivector outputs."""
+
+        if self.api_client is None:
+            raise RuntimeError("Jina API client is not initialized")
+
+        response = self.api_client.embed(
+            texts,
+            late_chunking=True,
+            return_multivector=True,
+        )
+
+        if len(response) != len(texts):
+            raise RuntimeError(
+                f"Jina API returned {len(response)} results for {len(texts)} inputs"
+            )
+
+        dense_vectors: List[List[float]] = []
+        multivectors: List[List[List[float]]] = []
+
+        for idx, item in enumerate(response):
+            embedding = item.get("embedding")
+            if embedding is None and isinstance(item.get("data"), dict):
+                embedding = item["data"].get("embedding")
+
+            if embedding is None:
+                raise RuntimeError(f"Jina response missing embedding for item {idx}")
+
+            dense_vectors.append(np.asarray(embedding, dtype=np.float32).tolist())
+
+            chunk_vectors: List[List[float]] = []
+            embedded_chunks = item.get("embedded_chunks") or item.get("multivector") or item.get("multivectors")
+
+            if isinstance(embedded_chunks, list):
+                for chunk in embedded_chunks:
+                    if isinstance(chunk, dict):
+                        chunk_embedding = (
+                            chunk.get("embedding")
+                            or chunk.get("vector")
+                            or (chunk.get("values") if isinstance(chunk.get("values"), list) else None)
+                        )
+                        if chunk_embedding is None and isinstance(chunk.get("embeddings"), list):
+                            inner = chunk["embeddings"][0]
+                            if isinstance(inner, list):
+                                chunk_embedding = inner
+                        if isinstance(chunk_embedding, list):
+                            chunk_vectors.append(np.asarray(chunk_embedding, dtype=np.float32).tolist())
+                    elif isinstance(chunk, list):
+                        chunk_vectors.append(np.asarray(chunk, dtype=np.float32).tolist())
+
+            multivectors.append(chunk_vectors)
+
+        dense_array = np.asarray(dense_vectors, dtype=np.float32)
+        return dense_array, multivectors
+
     def _encode_with_backend(self, texts: List[str], batch_size: int) -> np.ndarray:
         """Encode with alternative backend (ONNX, etc.)"""
         # Placeholder for backend-specific encoding
         # Would implement ONNX/TensorRT specific logic here
         logger.warning("Backend encoding not implemented, using fallback")
         return np.random.rand(len(texts), self.model_config.vector_dim).astype(np.float32)
+
+    def _ensure_embedding_dimension(
+        self,
+        matrix: np.ndarray,
+        expected_dim: Optional[int] = None,
+    ) -> Tuple[np.ndarray, bool]:
+        """Ensure embeddings align with the configured vector dimension."""
+
+        expected_dim = expected_dim or self.model_config.vector_dim
+        actual_dim = matrix.shape[1]
+
+        if actual_dim == expected_dim:
+            return matrix, False
+
+        if actual_dim < expected_dim:
+            raise ValueError(
+                f"Embedding dimension {actual_dim} is smaller than expected {expected_dim}; "
+                "cannot safely upsample vectors"
+            )
+
+        logger.warning(
+            "Embedding dimension mismatch detected (%s -> %s); trimming to maintain compatibility",
+            actual_dim,
+            expected_dim,
+        )
+        return matrix[:, :expected_dim], True
     
     def _save_intermediate_results(self, embeddings_list: List[np.ndarray], batch_num: int):
         """Save intermediate results during processing"""
@@ -1663,6 +2083,11 @@ class UltimateKaggleEmbedderV4:
         if self.embeddings is None:
             raise ValueError("No embeddings to export. Generate embeddings first.")
         embeddings = self._require_embeddings()
+        companion_arrays = {
+            name: array
+            for name, array in self.embeddings_by_model.items()
+            if name != self.model_name
+        }
 
         logger.info("Exporting embeddings for local Qdrant integration...")
 
@@ -1675,6 +2100,13 @@ class UltimateKaggleEmbedderV4:
             np.save(numpy_path, embeddings)
             exported_files["numpy"] = numpy_path
             logger.info(f"NumPy embeddings: {numpy_path}")
+
+            for companion_name, companion_array in companion_arrays.items():
+                safe_name = companion_name.replace("-", "_")
+                companion_path = f"{base_path}_{safe_name}_embeddings.npy"
+                np.save(companion_path, companion_array)
+                exported_files[f"numpy_{safe_name}"] = companion_path
+                logger.info(f"NumPy embeddings ({companion_name}): {companion_path}")
         
         # 2. JSONL format (for Qdrant upload)
         if self.export_config.export_jsonl:
@@ -1682,6 +2114,18 @@ class UltimateKaggleEmbedderV4:
             self._export_qdrant_jsonl(jsonl_path)
             exported_files["jsonl"] = jsonl_path
             logger.info(f"Qdrant JSONL: {jsonl_path}")
+
+        if self.multivectors_by_model:
+            multivector_path = f"{base_path}_multivectors.json"
+            multivector_payload = {
+                "channels": self.multivectors_by_model,
+                "dimensions": self.multivector_dimensions,
+                "comparators": self.multivector_comparators,
+            }
+            with open(multivector_path, "w", encoding="utf-8") as handle:
+                json.dump(multivector_payload, handle, ensure_ascii=False)
+            exported_files["multivectors"] = multivector_path
+            logger.info(f"Multivector JSON: {multivector_path}")
 
         # 2b. Sparse JSONL sidecar
         if self.export_config.export_sparse_jsonl and any(self.sparse_vectors):
@@ -1727,31 +2171,90 @@ class UltimateKaggleEmbedderV4:
     def _export_qdrant_jsonl(self, file_path: str):
         """Export in JSONL format for Qdrant upload"""
         embeddings = self._require_embeddings()
+        companion_arrays = {
+            name: array
+            for name, array in self.embeddings_by_model.items()
+            if name != self.model_name
+        }
+
+        dense_vector_names = [self.model_name, *companion_arrays.keys()]
+
         with open(file_path, 'w', encoding='utf-8') as f:
-            for i, (embedding, metadata, text, sparse_vector) in enumerate(zip(embeddings, self.chunks_metadata, self.chunk_texts, self.sparse_vectors)):
-                qdrant_point = {
-                    "id": i,
-                    "vector": embedding.tolist(),
-                    "payload": {
-                        **metadata,
-                        "text_preview": text[:500],  # First 500 chars for quick preview
-                        "full_text_length": len(text),
-                        "kaggle_export_timestamp": datetime.now().isoformat(),
-                        "model_info": {
-                            "name": self.model_name,
-                            "dimension": self.model_config.vector_dim,
-                            "version": "v4"
-                        }
-                    }
+            total = len(embeddings)
+            for i in range(total):
+                metadata = self.chunks_metadata[i]
+                text = self.chunk_texts[i]
+                sparse_vector = self.sparse_vectors[i] if i < len(self.sparse_vectors) else None
+
+                payload_model_info = {
+                    "name": self.model_name,
+                    "hf_model_id": self.model_config.hf_model_id,
+                    "dimension": self.model_config.vector_dim,
+                    "version": "v4",
                 }
 
+                companion_payload = {}
+                vector_payload: Dict[str, Any] = {
+                    self.model_name: embeddings[i].tolist()
+                }
+
+                for companion_name, companion_array in companion_arrays.items():
+                    vector_payload[companion_name] = companion_array[i].tolist()
+                    config = self.companion_model_configs.get(companion_name)
+                    companion_payload[companion_name] = {
+                        "dimension": companion_array.shape[1],
+                        "hf_model_id": config.hf_model_id if config else None,
+                    }
+
+                if companion_payload:
+                    payload_model_info["companions"] = companion_payload
+
+                multivector_channel_counts: Dict[str, int] = {}
+                if self.multivectors_by_model:
+                    multivector_meta = {}
+                    for channel_name, channel_vectors in self.multivectors_by_model.items():
+                        channel_dimension = self.multivector_dimensions.get(channel_name)
+                        comparator = self.multivector_comparators.get(channel_name, "max_sim")
+                        multivector_meta[channel_name] = {
+                            "dimension": channel_dimension,
+                            "comparator": comparator,
+                        }
+
+                        point_vectors = channel_vectors[i] if i < len(channel_vectors) else []
+                        multivector_channel_counts[channel_name] = len(point_vectors)
+                        vector_payload[channel_name] = {"vectors": point_vectors}
+
+                    payload_model_info["multivectors"] = multivector_meta
+
+                payload = {
+                    **metadata,
+                    "text_preview": text[:500],
+                    "full_text_length": len(text),
+                    "kaggle_export_timestamp": datetime.now().isoformat(),
+                    "model_info": payload_model_info,
+                    "primary_vector_name": self.model_name,
+                    "dense_vector_names": dense_vector_names,
+                }
+
+                if companion_arrays:
+                    payload["companion_vector_dimensions"] = {
+                        name: info["dimension"] for name, info in companion_payload.items()
+                    }
+
                 if sparse_vector:
-                    qdrant_point["payload"]["sparse_vector"] = {
+                    payload["sparse_vector"] = {
                         "indices": sparse_vector.get("indices", []),
                         "values": sparse_vector.get("values", []),
                         "tokens": sparse_vector.get("tokens", []),
                         "stats": sparse_vector.get("stats", {})
                     }
+
+                if multivector_channel_counts:
+                    payload["multivector_counts"] = multivector_channel_counts
+                    payload["multivector_channels"] = list(multivector_channel_counts.keys())
+
+                qdrant_point: Dict[str, Any] = {"id": i, "payload": payload}
+                qdrant_point["vectors"] = vector_payload
 
                 f.write(json.dumps(qdrant_point, ensure_ascii=False) + '\n')
 
@@ -1846,6 +2349,30 @@ class UltimateKaggleEmbedderV4:
                 "coverage_ratio": available / len(self.sparse_vectors) if self.sparse_vectors else 0.0
             }
         
+        if self.embeddings_by_model:
+            stats["dense_vector_layout"] = {
+                name: {
+                    "dimension": array.shape[1],
+                    "memory_mb": array.nbytes / 1024 / 1024,
+                    "is_primary": name == self.model_name,
+                }
+                for name, array in self.embeddings_by_model.items()
+            }
+
+        if self.multivectors_by_model:
+            stats["multivector_layout"] = {
+                name: {
+                    "dimension": self.multivector_dimensions.get(name),
+                    "comparator": self.multivector_comparators.get(name, "max_sim"),
+                    "average_vectors_per_point": (
+                        sum(len(vectors) for vectors in channel) / len(channel)
+                        if channel
+                        else 0.0
+                    ),
+                }
+                for name, channel in self.multivectors_by_model.items()
+            }
+
         if self.text_cache:
             stats["preprocessing_cache"] = self.text_cache.get_stats()
         
@@ -1856,6 +2383,36 @@ class UltimateKaggleEmbedderV4:
         """Generate Python script for local Qdrant upload"""
 
         collection_name = self.get_target_collection_name()
+
+        vector_files_map: Dict[str, str] = {}
+        vector_dimensions_map: Dict[str, int] = {}
+
+        primary_numpy_filename = ""
+        if "numpy" in exported_files:
+            primary_numpy_filename = os.path.basename(exported_files["numpy"])
+            vector_files_map[self.model_name] = primary_numpy_filename
+            vector_dimensions_map[self.model_name] = self.model_config.vector_dim
+        else:
+            logger.warning("Primary NumPy embeddings file missing; upload script will have limited functionality")
+
+        for model_name, array in self.embeddings_by_model.items():
+            if model_name == self.model_name:
+                continue
+            safe_name = model_name.replace("-", "_")
+            numpy_key = f"numpy_{safe_name}"
+            companion_path = exported_files.get(numpy_key)
+            if not companion_path:
+                logger.warning("Companion embeddings for %s not exported; skipping in upload script", model_name)
+                continue
+            vector_files_map[model_name] = os.path.basename(companion_path)
+            vector_dimensions_map[model_name] = array.shape[1]
+
+        dense_vector_names = list(vector_files_map.keys())
+
+        vector_files_json = json.dumps(vector_files_map)
+        vector_dimensions_json = json.dumps(vector_dimensions_map)
+        dense_vector_names_json = json.dumps(dense_vector_names)
+        primary_vector_name = self.model_name
 
         script_content = textwrap.dedent(f'''#!/usr/bin/env python3
 """
@@ -1875,7 +2432,13 @@ from datetime import datetime
 
 import numpy as np
 from qdrant_client import QdrantClient
-from qdrant_client.models import Distance, VectorParams, PointStruct
+from qdrant_client.models import (
+    Distance,
+    VectorParams,
+    PointStruct,
+    MultiVectorConfig,
+    MultiVectorComparator,
+)
 
 
 logging.basicConfig(level=logging.INFO)
@@ -1892,20 +2455,29 @@ def upload_to_qdrant():
 
     # File paths (adjust if needed)
     files = {{
-        "embeddings": "{os.path.basename(exported_files.get('numpy', ''))}",
+        "embeddings": "{primary_numpy_filename}",
         "metadata": "{os.path.basename(exported_files.get('metadata', ''))}",
         "texts": "{os.path.basename(exported_files.get('texts', ''))}",
         "stats": "{os.path.basename(exported_files.get('stats', ''))}",
         "jsonl": "{os.path.basename(exported_files.get('jsonl', ''))}",
-        "sparse": "{os.path.basename(exported_files.get('sparse_jsonl', ''))}"
+        "sparse": "{os.path.basename(exported_files.get('sparse_jsonl', ''))}",
+        "multivectors": "{os.path.basename(exported_files.get('multivectors', ''))}"
     }}
+
+    vector_files = json.loads("""{vector_files_json}""")
+    vector_dimensions = json.loads("""{vector_dimensions_json}""")
+    dense_vector_names = json.loads("""{dense_vector_names_json}""")
+    primary_vector_name = "{primary_vector_name}"
+
+    vector_files = {{name: path for name, path in vector_files.items() if path}}
+    dense_vector_names = [name for name in dense_vector_names if name in vector_files]
 
     try:
         client = QdrantClient(host=qdrant_host, port=qdrant_port)
         logger.info(f"Connected to Qdrant at {{qdrant_host}}:{{qdrant_port}}")
 
         logger.info("Loading exported data...")
-        embeddings = np.load(files["embeddings"])
+        dense_vectors = {{name: np.load(path) for name, path in vector_files.items()}}
 
         with open(files["metadata"], "r", encoding="utf-8") as handle:
             metadata_list = json.load(handle)
@@ -1913,22 +2485,90 @@ def upload_to_qdrant():
         with open(files["texts"], "r", encoding="utf-8") as handle:
             texts_list = json.load(handle)
 
-        logger.info(f"Loaded {{len(embeddings)}} embeddings ({{embeddings.shape[1]}}D)")
+        multivector_channels = {{}}
+        multivector_dimensions = {{}}
+        multivector_comparators = {{}}
+
+        if files.get("multivectors"):
+            with open(files["multivectors"], "r", encoding="utf-8") as handle:
+                multivector_blob = json.load(handle)
+            multivector_channels = multivector_blob.get("channels", {{}})
+            multivector_dimensions = multivector_blob.get("dimensions", {{}})
+            multivector_comparators = multivector_blob.get("comparators", {{}})
+
+        if not dense_vectors:
+            raise RuntimeError("No dense embedding files were found; cannot proceed with upload")
+
+        point_count = len(metadata_list)
+
+        for name in dense_vector_names:
+            vectors = dense_vectors.get(name)
+            if vectors is None:
+                raise RuntimeError(f"Missing dense vectors for {{name}}")
+            if len(vectors) != point_count:
+                raise ValueError(
+                    f"Vector count mismatch for {{name}}: expected {{point_count}}, got {{len(vectors)}}"
+                )
+            vector_dim = vector_dimensions.get(name, vectors.shape[1])
+            logger.info("Loaded %s embeddings for %s (%sD)", len(vectors), name, vector_dim)
 
         if files.get("sparse"):
             logger.info(f"Sparse sidecar detected: {{files['sparse']}}")
+
+        multivector_names = list(multivector_channels.keys())
+        for name in multivector_names:
+            channel_vectors = multivector_channels.get(name, [])
+            if len(channel_vectors) != point_count:
+                raise ValueError(
+                    f"Multivector count mismatch for {{name}}: expected {{point_count}}, got {{len(channel_vectors)}}"
+                )
+        if multivector_names:
+            logger.info("Multivector channels detected: %s", ", ".join(multivector_names))
 
         try:
             client.get_collection(collection_name)
             logger.info(f"Collection '{{collection_name}}' already exists")
         except Exception:
             logger.info(f"Creating collection: {{collection_name}}")
+            vector_params = {{
+                name: VectorParams(size=vector_dimensions.get(name, dense_vectors[name].shape[1]), distance=Distance.COSINE)
+                for name in dense_vector_names
+            }}
+            for name in multivector_names:
+                dimension = multivector_dimensions.get(name)
+                if dimension is None:
+                    channel_vectors = multivector_channels.get(name, [])
+                    first_non_empty = next((vec for vec in channel_vectors if vec), [])
+                    if first_non_empty:
+                        dimension = len(first_non_empty[0])
+                if dimension is None:
+                    raise RuntimeError(f"Could not determine dimension for multivector channel {{name}}")
+                comparator_value = multivector_comparators.get(name, "max_sim")
+                try:
+                    comparator_enum = MultiVectorComparator(comparator_value)
+                except ValueError:
+                    logger.warning(
+                        "Unknown comparator '%s' for multivector channel %s; defaulting to max_sim",
+                        comparator_value,
+                        name,
+                    )
+                    comparator_enum = MultiVectorComparator.MAX_SIM
+                multivector_dimensions[name] = dimension
+                vector_params[name] = VectorParams(
+                    size=dimension,
+                    distance=Distance.COSINE,
+                    multivector_config=MultiVectorConfig(
+                        comparator=comparator_enum
+                    ),
+                )
+            if len(vector_params) == 1:
+                vectors_config = next(iter(vector_params.values()))
+            else:
+                vectors_config = vector_params
+
             client.create_collection(
                 collection_name=collection_name,
-                vectors_config=VectorParams(
-                    size=embeddings.shape[1],
-                    distance=Distance.COSINE,
-                ),
+                vectors_config=vectors_config,
                 hnsw_config={{
                     "m": 48,
                     "ef_construct": 512,
@@ -1946,16 +2586,38 @@ def upload_to_qdrant():
         logger.info("Preparing points for upload...")
         points = []
 
-        for i, (embedding, metadata, text) in enumerate(zip(embeddings, metadata_list, texts_list)):
+        for i in range(point_count):
+            metadata = metadata_list[i]
+            text = texts_list[i]
+            vector_payload = {{
+                name: dense_vectors[name][i].tolist()
+                for name in dense_vector_names
+            }}
+            for name in multivector_names:
+                channel_data = multivector_channels[name][i]
+                if channel_data is None:
+                    channel_data = []
+                if channel_data and isinstance(channel_data[0], (list, tuple)):
+                    channel_data = [list(vec) for vec in channel_data]
+                vector_payload[name] = {{"vectors": channel_data}}
+            payload_data = {{
+                **metadata,
+                "text_preview": text[:500],
+                "full_text_length": len(text),
+                "local_upload_timestamp": datetime.now().isoformat(),
+                "primary_vector_name": primary_vector_name,
+                "dense_vector_names": dense_vector_names,
+            }}
+            if multivector_names:
+                payload_data.setdefault("multivector_channels", multivector_names)
+                if multivector_dimensions:
+                    payload_data.setdefault("multivector_dimensions", multivector_dimensions)
+                if multivector_comparators:
+                    payload_data.setdefault("multivector_comparators", multivector_comparators)
             point = PointStruct(
                 id=i,
-                vector=embedding.tolist(),
-                payload={{
-                    **metadata,
-                    "text_preview": text[:500],
-                    "full_text_length": len(text),
-                    "local_upload_timestamp": datetime.now().isoformat(),
-                }},
+                vectors=vector_payload,
+                payload=payload_data,
             )
             points.append(point)
 
@@ -1976,7 +2638,10 @@ def upload_to_qdrant():
         logger.info("Testing search...")
         test_results = client.search(
             collection_name=collection_name,
-            query_vector=embeddings[0].tolist(),
+            query_vector=(
+                primary_vector_name,
+                dense_vectors[primary_vector_name][0].tolist(),
+            ),
             limit=5,
         )
 

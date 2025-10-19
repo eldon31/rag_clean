@@ -24,7 +24,8 @@
       "chunking_strategy": "hierarchical_precise_structural",
       "content_type": "list_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:38.648355",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:21.658279",
       "document_id": "b9cf3b2b1aa1",
       "document_name": "_documentation_concepts_optimizer_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_optimizer\\_documentation_concepts_optimizer_.md",
@@ -223,7 +224,8 @@
       "chunking_strategy": "hierarchical_precise_structural",
       "content_type": "list_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:38.649459",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:21.659534",
       "document_id": "b9cf3b2b1aa1",
       "document_name": "_documentation_concepts_optimizer_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_optimizer\\_documentation_concepts_optimizer_.md",
@@ -422,7 +424,8 @@
       "chunking_strategy": "hierarchical_precise_structural",
       "content_type": "list_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:38.650355",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:21.659924",
       "document_id": "b9cf3b2b1aa1",
       "document_name": "_documentation_concepts_optimizer_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_optimizer\\_documentation_concepts_optimizer_.md",
@@ -585,7 +588,8 @@
       "chunking_strategy": "hierarchical_precise_structural",
       "content_type": "list_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:38.650852",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:21.660805",
       "document_id": "b9cf3b2b1aa1",
       "document_name": "_documentation_concepts_optimizer_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_optimizer\\_documentation_concepts_optimizer_.md",
@@ -784,7 +788,8 @@
       "chunking_strategy": "hierarchical_precise_structural",
       "content_type": "list_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:38.651606",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:21.661966",
       "document_id": "b9cf3b2b1aa1",
       "document_name": "_documentation_concepts_optimizer_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_optimizer\\_documentation_concepts_optimizer_.md",
@@ -983,7 +988,8 @@
       "chunking_strategy": "hierarchical_precise_semchunk",
       "content_type": "prose_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:38.652415",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:21.662787",
       "document_id": "b9cf3b2b1aa1",
       "document_name": "_documentation_concepts_optimizer_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_optimizer\\_documentation_concepts_optimizer_.md",
@@ -1182,7 +1188,8 @@
       "chunking_strategy": "hierarchical_precise_semchunk",
       "content_type": "prose_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:38.653416",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:21.663156",
       "document_id": "b9cf3b2b1aa1",
       "document_name": "_documentation_concepts_optimizer_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_optimizer\\_documentation_concepts_optimizer_.md",
@@ -1357,7 +1364,7 @@
     }
   },
   {
-    "text": "## Merge Optimizer\n\nThe service may require the creation of temporary segments. Such segments, for example, are created as copy-on-write segments during optimization itself.\n\nIt is also essential to have at least one small segment that Qdrant will use to store frequently updated data. On the other hand, too many small segments lead to suboptimal search performance.\n\nThe merge optimizer constantly tries to reduce the number of segments if there currently are too many. The desired number of segments is specified with `default_segment_number` and defaults to the number of CPUs. The optimizer may takes at least the three smallest segments and merges them into one.\n\nSegments will not be merged if they’ll exceed the maximum configured segment size with `max_segment_size_kb`. It prevents creating segments that are too large to efficiently index. Increasing this number may help to reduce the number of segments if you have a lot of data, and can potentially improve search performance.\n\nThe criteria for starting the optimizer are defined in the configuration file.\n\nHere is an example of parameter values:\n\n```yaml\nstorage:\n  optimizers:\n    # Target amount of segments optimizer will try to keep.\n    # Real amount of segments may vary depending on multiple parameters:\n    #  - Amount of stored points\n    #  - Current write RPS\n    #\n    # It is recommended to select default number of segments as a factor of the number of search threads,\n    # so that each segment would be handled evenly by one of the threads.\n    # If `default_segment_number = 0`, will be automatically selected by the number of available CPUs\n    default_segment_number: 0\n\n    # Do not create segments larger this size (in KiloBytes).\n    # Large segments might require disproportionately long indexation times,\n    # therefore it makes sense to limit the size of segments.\n    #\n    # If indexation speed have more priority for your - make this parameter lower.\n    # If search speed is more important - make this parameter higher.",
+    "text": "## Merge Optimizer\n\nThe service may require the creation of temporary segments. Such segments, for example, are created as copy-on-write segments during optimization itself.\n\nIt is also essential to have at least one small segment that Qdrant will use to store frequently updated data. On the other hand, too many small segments lead to suboptimal search performance.\n\nThe merge optimizer constantly tries to reduce the number of segments if there currently are too many. The desired number of segments is specified with `default_segment_number` and defaults to the number of CPUs. The optimizer may takes at least the three smallest segments and merges them into one.\n\nSegments will not be merged if they’ll exceed the maximum configured segment size with `max_segment_size_kb`. It prevents creating segments that are too large to efficiently index. Increasing this number may help to reduce the number of segments if you have a lot of data, and can potentially improve search performance.\n\nThe criteria for starting the optimizer are defined in the configuration file.\n\nHere is an example of parameter values:\n\n```yaml\nstorage:\n  optimizers:\n    # Target amount of segments optimizer will try to keep.\n    # Real amount of segments may vary depending on multiple parameters:\n    #  - Amount of stored points\n    #  - Current write RPS\n    #\n    # It is recommended to select default number of segments as a factor of the number of search threads,\n    # so that each segment would be handled evenly by one of the threads.\n    # If `default_segment_number = 0`, will be automatically selected by the number of available CPUs\n    default_segment_number: 0\n\n    # Do not create segments larger this size (in KiloBytes).\n    # Large segments might require disproportionately long indexation times,\n    # therefore it makes sense to limit the size of segments.\n    #\n    # If indexation speed have more priority for your - make this parameter lower.\n    # If search speed is more important - make this parameter higher.\n    # Note: 1Kb = 1 vector of size 256\n    # If not set, will be automatically selected considering the number of available CPUs.\n    max_segment_size_kb: null\n```",
     "metadata": {
       "chunk_id": "b9cf3b2b1aa1-0012",
       "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_optimizer\\_documentation_concepts_optimizer_.md",
@@ -1371,17 +1378,18 @@
         "Merge Optimizer"
       ],
       "heading_text": "Merge Optimizer",
-      "token_count": 401,
-      "char_count": 2015,
+      "token_count": 444,
+      "char_count": 2179,
       "start_char": 13218,
-      "end_char": 15233,
+      "end_char": 15397,
       "semantic_score": 0.7,
-      "structural_score": 0.8999999999999999,
-      "retrieval_quality": 0.6811832807570978,
+      "structural_score": 0.7,
+      "retrieval_quality": 0.6906344023323615,
       "chunking_strategy": "hierarchical_precise_semchunk",
       "content_type": "prose_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:38.654414",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:21.663839",
       "document_id": "b9cf3b2b1aa1",
       "document_name": "_documentation_concepts_optimizer_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_optimizer\\_documentation_concepts_optimizer_.md",
@@ -1389,9 +1397,9 @@
       "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_optimizer",
       "relative_path": "Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_optimizer\\_documentation_concepts_optimizer_.md",
       "hierarchy_path": "Merge Optimizer",
-      "chunk_hash": "019c955650efcac0",
-      "content_digest": "019c955650efcac0",
-      "chunk_length": 2015,
+      "chunk_hash": "3911763e7d30f55a",
+      "content_digest": "3911763e7d30f55a",
+      "chunk_length": 2179,
       "payload_version": "1.3",
       "collection_hints": [
         "qdrant_ecosystem"
@@ -1404,13 +1412,13 @@
           "segments",
           "number",
           "segment",
+          "size",
           "optimizer",
+          "will",
           "may",
           "are",
-          "will",
           "search",
           "default",
-          "size",
           "this",
           "for",
           "have",
@@ -1418,113 +1426,113 @@
           "that",
           "too",
           "and",
-          "parameter",
-          "amount"
+          "cpus",
+          "not"
         ],
         "term_weights": [
           {
             "term": "the",
-            "tf": 18,
-            "weight": 0.073469
+            "tf": 19,
+            "weight": 0.07197
           },
           {
             "term": "segments",
             "tf": 16,
-            "weight": 0.065306
+            "weight": 0.060606
           },
           {
             "term": "number",
-            "tf": 11,
-            "weight": 0.044898
+            "tf": 12,
+            "weight": 0.045455
           },
           {
             "term": "segment",
-            "tf": 7,
-            "weight": 0.028571
+            "tf": 8,
+            "weight": 0.030303
+          },
+          {
+            "term": "size",
+            "tf": 6,
+            "weight": 0.022727
           },
           {
             "term": "optimizer",
             "tf": 5,
-            "weight": 0.020408
+            "weight": 0.018939
+          },
+          {
+            "term": "will",
+            "tf": 5,
+            "weight": 0.018939
           },
           {
             "term": "may",
             "tf": 4,
-            "weight": 0.016327
+            "weight": 0.015152
           },
           {
             "term": "are",
             "tf": 4,
-            "weight": 0.016327
-          },
-          {
-            "term": "will",
-            "tf": 4,
-            "weight": 0.016327
+            "weight": 0.015152
           },
           {
             "term": "search",
             "tf": 4,
-            "weight": 0.016327
+            "weight": 0.015152
           },
           {
             "term": "default",
             "tf": 4,
-            "weight": 0.016327
-          },
-          {
-            "term": "size",
-            "tf": 4,
-            "weight": 0.016327
+            "weight": 0.015152
           },
           {
             "term": "this",
             "tf": 4,
-            "weight": 0.016327
+            "weight": 0.015152
           },
           {
             "term": "for",
             "tf": 3,
-            "weight": 0.012245
+            "weight": 0.011364
           },
           {
             "term": "have",
             "tf": 3,
-            "weight": 0.012245
+            "weight": 0.011364
           },
           {
             "term": "one",
             "tf": 3,
-            "weight": 0.012245
+            "weight": 0.011364
           },
           {
             "term": "that",
             "tf": 3,
-            "weight": 0.012245
+            "weight": 0.011364
           },
           {
             "term": "too",
             "tf": 3,
-            "weight": 0.012245
+            "weight": 0.011364
           },
           {
             "term": "and",
             "tf": 3,
-            "weight": 0.012245
+            "weight": 0.011364
           },
           {
-            "term": "parameter",
+            "term": "cpus",
             "tf": 3,
-            "weight": 0.012245
+            "weight": 0.011364
           },
           {
-            "term": "amount",
+            "term": "not",
             "tf": 3,
-            "weight": 0.012245
+            "weight": 0.011364
           }
         ],
-        "unique_terms": 137,
-        "total_terms": 245
+        "unique_terms": 144,
+        "total_terms": 264
       },
       "modal_hint": "code",
       "content_flags": {
@@ -1537,32 +1545,32 @@
       "search_keywords": [
         "Merge Optimizer",
         "are",
-        "default",
         "may",
         "number",
         "optimizer",
         "search",
         "segment",
         "segments",
+        "size",
         "the",
         "will"
       ]
     },
     "advanced_scores": {
       "semantic": 0.7,
-      "structural": 0.8999999999999999,
-      "retrieval_quality": 0.6811832807570978,
-      "overall": 0.7603944269190325
+      "structural": 0.7,
+      "retrieval_quality": 0.6906344023323615,
+      "overall": 0.6968781341107871
     }
   },
   {
-    "text": "## Indexing Optimizer\n\nQdrant allows you to choose the type of indexes and data storage methods used depending on the number of records. So, for example, if the number of points is less than 10000, using any index would be less efficient than a brute force scan.\n\nThe Indexing Optimizer is used to implement the enabling of indexes and memmap storage when the minimal amount of records is reached.\n\nThe criteria for starting the optimizer are defined in the configuration file.\n\nHere is an example of parameter values:\n\n```yaml\nstorage:\n  optimizers:\n    # Maximum size (in kilobytes) of vectors to store in-memory per segment.\n    # Segments larger than this threshold will be stored as read-only memmaped file.\n    # Memmap storage is disabled by default, to enable it, set this threshold to a reasonable value.\n    # To disable memmap storage, set this to `0`.\n    # Note: 1Kb = 1 vector of size 256\n    memmap_threshold: 200000\n\n    # Maximum size (in kilobytes) of vectors allowed for plain index, exceeding this threshold will enable vector indexing\n    # Default value is 20,000, based on <https://github.com/google-research/google-research/blob/master/scann/docs/algorithms.md>.\n    # To disable vector indexing, set to `0`.\n    # Note: 1kB = 1 vector of size 256.\n    indexing_threshold_kb: 20000\n```",
+    "text": "## Indexing Optimizer\n\nQdrant allows you to choose the type of indexes and data storage methods used depending on the number of records. So, for example, if the number of points is less than 10000, using any index would be less efficient than a brute force scan.\n\nThe Indexing Optimizer is used to implement the enabling of indexes and memmap storage when the minimal amount of records is reached.\n\nThe criteria for starting the optimizer are defined in the configuration file.\n\nHere is an example of parameter values:\n\n```yaml\nstorage:\n  optimizers:\n    # Maximum size (in kilobytes) of vectors to store in-memory per segment.\n    # Segments larger than this threshold will be stored as read-only memmaped file.\n    # Memmap storage is disabled by default, to enable it, set this threshold to a reasonable value.\n    # To disable memmap storage, set this to `0`.\n    # Note: 1Kb = 1 vector of size 256\n    memmap_threshold: 200000\n\n    # Maximum size (in kilobytes) of vectors allowed for plain index, exceeding this threshold will enable vector indexing\n    # Default value is 20,000, based on <https://github.com/google-research/google-research/blob/master/scann/docs/algorithms.md>.\n    # To disable vector indexing, set to `0`.\n    # Note: 1kB = 1 vector of size 256.\n    indexing_threshold_kb: 20000\n```\n\nIn addition to the configuration file, you can also set optimizer parameters separately for each [collection](https://qdrant.tech/documentation/concepts/collections/).\n\nDynamic parameter updates may be useful, for example, for more efficient initial loading of points. You can disable indexing during the upload process with these settings and enable it immediately after it is finished. As a result, you will not waste extra computation resources on rebuilding the index.",
     "metadata": {
-      "chunk_id": "b9cf3b2b1aa1-0014",
+      "chunk_id": "b9cf3b2b1aa1-0013",
       "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_optimizer\\_documentation_concepts_optimizer_.md",
       "filename": "_documentation_concepts_optimizer_.md",
       "file_extension": ".md",
-      "chunk_index": 14,
+      "chunk_index": 13,
       "document_level": 1,
       "parent_chunk_id": null,
       "child_chunk_ids": [],
@@ -1570,17 +1578,18 @@
         "Indexing Optimizer"
       ],
       "heading_text": "Indexing Optimizer",
-      "token_count": 310,
-      "char_count": 1309,
+      "token_count": 397,
+      "char_count": 1783,
       "start_char": 15399,
-      "end_char": 16708,
+      "end_char": 17182,
       "semantic_score": 0.7,
-      "structural_score": 0.7,
-      "retrieval_quality": 0.6663668341708542,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.6890619771863118,
       "chunking_strategy": "hierarchical_precise_semchunk",
       "content_type": "prose_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:38.655413",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:21.664447",
       "document_id": "b9cf3b2b1aa1",
       "document_name": "_documentation_concepts_optimizer_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_optimizer\\_documentation_concepts_optimizer_.md",
@@ -1588,9 +1597,9 @@
       "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_optimizer",
       "relative_path": "Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_optimizer\\_documentation_concepts_optimizer_.md",
       "hierarchy_path": "Indexing Optimizer",
-      "chunk_hash": "c9008b1d58b6be1b",
-      "content_digest": "c9008b1d58b6be1b",
-      "chunk_length": 1309,
+      "chunk_hash": "7fadb75c5fd7891b",
+      "content_digest": "7fadb75c5fd7891b",
+      "chunk_length": 1783,
       "payload_version": "1.3",
       "collection_hints": [
         "qdrant_ecosystem"
@@ -1601,129 +1610,129 @@
         "top_terms": [
           "the",
           "indexing",
+          "for",
           "storage",
           "threshold",
+          "optimizer",
+          "you",
           "memmap",
           "size",
           "this",
-          "vector",
-          "optimizer",
-          "for",
-          "than",
           "set",
-          "indexes",
+          "vector",
           "and",
-          "used",
-          "number",
-          "records",
           "example",
-          "less",
-          "index"
+          "than",
+          "index",
+          "file",
+          "will",
+          "enable",
+          "disable"
         ],
         "term_weights": [
           {
             "term": "the",
-            "tf": 9,
-            "weight": 0.057692
+            "tf": 12,
+            "weight": 0.055556
           },
           {
             "term": "indexing",
-            "tf": 5,
-            "weight": 0.032051
+            "tf": 6,
+            "weight": 0.027778
+          },
+          {
+            "term": "for",
+            "tf": 6,
+            "weight": 0.027778
           },
           {
             "term": "storage",
             "tf": 5,
-            "weight": 0.032051
+            "weight": 0.023148
           },
           {
             "term": "threshold",
             "tf": 5,
-            "weight": 0.032051
+            "weight": 0.023148
+          },
+          {
+            "term": "optimizer",
+            "tf": 4,
+            "weight": 0.018519
+          },
+          {
+            "term": "you",
+            "tf": 4,
+            "weight": 0.018519
           },
           {
             "term": "memmap",
             "tf": 4,
-            "weight": 0.025641
+            "weight": 0.018519
           },
           {
             "term": "size",
             "tf": 4,
-            "weight": 0.025641
+            "weight": 0.018519
           },
           {
             "term": "this",
             "tf": 4,
-            "weight": 0.025641
+            "weight": 0.018519
+          },
+          {
+            "term": "set",
+            "tf": 4,
+            "weight": 0.018519
           },
           {
             "term": "vector",
             "tf": 4,
-            "weight": 0.025641
+            "weight": 0.018519
           },
           {
-            "term": "optimizer",
+            "term": "and",
             "tf": 3,
-            "weight": 0.019231
+            "weight": 0.013889
           },
           {
-            "term": "for",
+            "term": "example",
             "tf": 3,
-            "weight": 0.019231
+            "weight": 0.013889
           },
           {
             "term": "than",
             "tf": 3,
-            "weight": 0.019231
-          },
-          {
-            "term": "set",
-            "tf": 3,
-            "weight": 0.019231
-          },
-          {
-            "term": "indexes",
-            "tf": 2,
-            "weight": 0.012821
-          },
-          {
-            "term": "and",
-            "tf": 2,
-            "weight": 0.012821
-          },
-          {
-            "term": "used",
-            "tf": 2,
-            "weight": 0.012821
-          },
-          {
-            "term": "number",
-            "tf": 2,
-            "weight": 0.012821
-          },
-          {
-            "term": "records",
-            "tf": 2,
-            "weight": 0.012821
-          },
-          {
-            "term": "example",
-            "tf": 2,
-            "weight": 0.012821
-          },
-          {
-            "term": "less",
-            "tf": 2,
-            "weight": 0.012821
+            "weight": 0.013889
           },
           {
             "term": "index",
-            "tf": 2,
-            "weight": 0.012821
+            "tf": 3,
+            "weight": 0.013889
+          },
+          {
+            "term": "file",
+            "tf": 3,
+            "weight": 0.013889
+          },
+          {
+            "term": "will",
+            "tf": 3,
+            "weight": 0.013889
+          },
+          {
+            "term": "enable",
+            "tf": 3,
+            "weight": 0.013889
+          },
+          {
+            "term": "disable",
+            "tf": 3,
+            "weight": 0.013889
           }
         ],
-        "unique_terms": 94,
-        "total_terms": 156
+        "unique_terms": 128,
+        "total_terms": 216
       },
       "modal_hint": "code",
       "content_flags": {
@@ -1744,213 +1753,14 @@
         "the",
         "this",
         "threshold",
-        "vector"
-      ]
-    },
-    "advanced_scores": {
-      "semantic": 0.7,
-      "structural": 0.7,
-      "retrieval_quality": 0.6663668341708542,
-      "overall": 0.6887889447236181
-    }
-  },
-  {
-    "text": "# Note: 1kB = 1 vector of size 256.\n    indexing_threshold_kb: 20000\n```\n\nIn addition to the configuration file, you can also set optimizer parameters separately for each [collection](https://qdrant.tech/documentation/concepts/collections/).\n\nDynamic parameter updates may be useful, for example, for more efficient initial loading of points. You can disable indexing during the upload process with these settings and enable it immediately after it is finished. As a result, you will not waste extra computation resources on rebuilding the index.",
-    "metadata": {
-      "chunk_id": "b9cf3b2b1aa1-0015",
-      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_optimizer\\_documentation_concepts_optimizer_.md",
-      "filename": "_documentation_concepts_optimizer_.md",
-      "file_extension": ".md",
-      "chunk_index": 15,
-      "document_level": 1,
-      "parent_chunk_id": null,
-      "child_chunk_ids": [],
-      "section_path": [
-        "Indexing Optimizer"
-      ],
-      "heading_text": "Indexing Optimizer",
-      "token_count": 112,
-      "char_count": 546,
-      "start_char": 16632,
-      "end_char": 17182,
-      "semantic_score": 0.7,
-      "structural_score": 0.8999999999999999,
-      "retrieval_quality": 0.7544736842105263,
-      "chunking_strategy": "hierarchical_precise_semchunk",
-      "content_type": "prose_section",
-      "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:38.655413",
-      "document_id": "b9cf3b2b1aa1",
-      "document_name": "_documentation_concepts_optimizer_",
-      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_optimizer\\_documentation_concepts_optimizer_.md",
-      "source_filename": "_documentation_concepts_optimizer_.md",
-      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_optimizer",
-      "relative_path": "Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_concepts_optimizer\\_documentation_concepts_optimizer_.md",
-      "hierarchy_path": "Indexing Optimizer",
-      "chunk_hash": "d6fd3f782cd8e8fd",
-      "content_digest": "d6fd3f782cd8e8fd",
-      "chunk_length": 546,
-      "payload_version": "1.3",
-      "collection_hints": [
-        "qdrant_ecosystem"
-      ],
-      "sparse_features": {
-        "version": "1.0",
-        "weighting": "tf-normalized",
-        "top_terms": [
-          "the",
-          "you",
-          "for",
-          "indexing",
-          "can",
-          "note",
-          "1kb",
-          "vector",
-          "size",
-          "256",
-          "threshold",
-          "20000",
-          "addition",
-          "configuration",
-          "file",
-          "also",
-          "set",
-          "optimizer",
-          "parameters",
-          "separately"
-        ],
-        "term_weights": [
-          {
-            "term": "the",
-            "tf": 3,
-            "weight": 0.044118
-          },
-          {
-            "term": "you",
-            "tf": 3,
-            "weight": 0.044118
-          },
-          {
-            "term": "for",
-            "tf": 3,
-            "weight": 0.044118
-          },
-          {
-            "term": "indexing",
-            "tf": 2,
-            "weight": 0.029412
-          },
-          {
-            "term": "can",
-            "tf": 2,
-            "weight": 0.029412
-          },
-          {
-            "term": "note",
-            "tf": 1,
-            "weight": 0.014706
-          },
-          {
-            "term": "1kb",
-            "tf": 1,
-            "weight": 0.014706
-          },
-          {
-            "term": "vector",
-            "tf": 1,
-            "weight": 0.014706
-          },
-          {
-            "term": "size",
-            "tf": 1,
-            "weight": 0.014706
-          },
-          {
-            "term": "256",
-            "tf": 1,
-            "weight": 0.014706
-          },
-          {
-            "term": "threshold",
-            "tf": 1,
-            "weight": 0.014706
-          },
-          {
-            "term": "20000",
-            "tf": 1,
-            "weight": 0.014706
-          },
-          {
-            "term": "addition",
-            "tf": 1,
-            "weight": 0.014706
-          },
-          {
-            "term": "configuration",
-            "tf": 1,
-            "weight": 0.014706
-          },
-          {
-            "term": "file",
-            "tf": 1,
-            "weight": 0.014706
-          },
-          {
-            "term": "also",
-            "tf": 1,
-            "weight": 0.014706
-          },
-          {
-            "term": "set",
-            "tf": 1,
-            "weight": 0.014706
-          },
-          {
-            "term": "optimizer",
-            "tf": 1,
-            "weight": 0.014706
-          },
-          {
-            "term": "parameters",
-            "tf": 1,
-            "weight": 0.014706
-          },
-          {
-            "term": "separately",
-            "tf": 1,
-            "weight": 0.014706
-          }
-        ],
-        "unique_terms": 60,
-        "total_terms": 68
-      },
-      "modal_hint": "code",
-      "content_flags": {
-        "has_code_block": true,
-        "has_table": false,
-        "has_list": false,
-        "has_json": false,
-        "has_formula": false
-      },
-      "search_keywords": [
-        "1kb",
-        "256",
-        "Indexing Optimizer",
-        "can",
-        "for",
-        "indexing",
-        "note",
-        "size",
-        "the",
-        "vector",
         "you"
       ]
     },
     "advanced_scores": {
       "semantic": 0.7,
       "structural": 0.8999999999999999,
-      "retrieval_quality": 0.7544736842105263,
-      "overall": 0.7848245614035086
+      "retrieval_quality": 0.6890619771863118,
+      "overall": 0.7630206590621039
     }
   }
 ]

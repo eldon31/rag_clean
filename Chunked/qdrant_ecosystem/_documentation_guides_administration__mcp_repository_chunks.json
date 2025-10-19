@@ -24,7 +24,8 @@
       "chunking_strategy": "hybrid_adaptive_structural",
       "content_type": "list_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:42.214528",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:24.910263",
       "document_id": "9e588505e768",
       "document_name": "_documentation_guides_administration_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_guides_administration\\_documentation_guides_administration_.md",
@@ -223,7 +224,8 @@
       "chunking_strategy": "hybrid_adaptive_structural",
       "content_type": "list_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:42.215698",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:24.911568",
       "document_id": "9e588505e768",
       "document_name": "_documentation_guides_administration_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_guides_administration\\_documentation_guides_administration_.md",
@@ -422,7 +424,8 @@
       "chunking_strategy": "hybrid_adaptive_structural",
       "content_type": "list_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:42.215698",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:24.911943",
       "document_id": "9e588505e768",
       "document_name": "_documentation_guides_administration_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_guides_administration\\_documentation_guides_administration_.md",
@@ -585,7 +588,8 @@
       "chunking_strategy": "hybrid_adaptive_structural",
       "content_type": "list_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:42.215698",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:24.912799",
       "document_id": "9e588505e768",
       "document_name": "_documentation_guides_administration_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_guides_administration\\_documentation_guides_administration_.md",
@@ -784,7 +788,8 @@
       "chunking_strategy": "hybrid_adaptive_structural",
       "content_type": "list_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:42.215698",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:24.913898",
       "document_id": "9e588505e768",
       "document_name": "_documentation_guides_administration_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_guides_administration\\_documentation_guides_administration_.md",
@@ -983,7 +988,8 @@
       "chunking_strategy": "hybrid_adaptive_structural",
       "content_type": "list_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:42.215698",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:24.914289",
       "document_id": "9e588505e768",
       "document_name": "_documentation_guides_administration_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_guides_administration\\_documentation_guides_administration_.md",
@@ -1158,7 +1164,8 @@
       "chunking_strategy": "hybrid_adaptive_semchunk",
       "content_type": "prose_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:42.215698",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:24.914476",
       "document_id": "9e588505e768",
       "document_name": "_documentation_guides_administration_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_guides_administration\\_documentation_guides_administration_.md",
@@ -1309,7 +1316,7 @@
     }
   },
   {
-    "text": "## Strict mode\n\n*Available as of v1.13.0*\n\nStrict mode is a feature to restrict certain type of operations on the collection in order to protect it.\n\nThe goal is to prevent inefficient usage patterns that could overload the collections.\n\nThis configuration ensures a more predictible and responsive service when you do not have control over the queries that are being executed.\n\nHere is a non exhaustive list of operations that can be restricted using strict mode:\n\n- Preventing querying non indexed payload which can be very slow\n- Maximum number of filtering conditions in a query\n- Maximum batch size when inserting vectors\n- Maximum collection size (in terms of vectors or payload size)\n\nSee [schema definitions](https://api.qdrant.tech/api-reference/collections/create-collection#request.body.strict_mode_config) for all the `strict_mode_config` parameters.\n\nUpon crossing a limit, the server will return a client side error with the information about the limit that was crossed.\n\nAs part of the config, the `enabled` field act as a toggle to enable or disable the strict mode dynamically.\n\nThe `strict_mode_config` can be enabled when [creating](#create-a-collection.md) a collection, for instance below to activate the `unindexed_filtering_retrieve` limit.\n\nSetting `unindexed_filtering_retrieve` to false prevents the usage of filtering on a non indexed payload key.\n\n```http\nPUT /collections/{collection_name}\n{\n    \"strict_mode_config\": {\n        \"enabled\": true,\n        \"unindexed_filtering_retrieve\": false\n    }\n}\n```\n\n```bash\ncurl -X PUT http://localhost:6333/collections/{collection_name} \\\n  -H 'Content-Type: application/json' \\\n  --data-raw '{\n    \"strict_mode_config\": {\n        \"enabled\":\" true,\n        \"unindexed_filtering_retrieve\": false\n    }\n  }'\n```\n\n```python\nfrom qdrant_client import QdrantClient, models\n\nclient = QdrantClient(url=\"http://localhost:6333\")\n\nclient.create_collection(\n    collection_name=\"{collection_name}\",\n    strict_mode_config=models.StrictModeConfig(enabled=True, unindexed_filtering_retrieve=false),\n)\n```\n\n```typescript\nimport { QdrantClient } from \"@qdrant/js-client-rest\";\n\nconst client = new QdrantClient({ host: \"localhost\", port: 6333 });\n\nclient.createCollection(\"{collection_name}\", {\n  strict_mode_config: {\n    enabled: true,\n    unindexed_filtering_retrieve: false,\n  },\n});\n```\n\n```rust\nuse qdrant_client::Qdrant;\nuse qdrant_client::qdrant::{CreateCollectionBuilder, StrictModeConfigBuilder};\n\nlet client = Qdrant::from_url(\"http://localhost:6334\").build()?;\n\nclient\n    .create_collection(\n        CreateCollectionBuilder::new(\"{collection_name}\")\n            .strict_config_mode(StrictModeConfigBuilder::default().enabled(true).unindexed_filtering_retrieve(false)),\n    )\n    .await?;\n```\n\n```java\nimport io.qdrant.client.QdrantClient;\nimport io.qdrant.client.QdrantGrpcClient;\nimport io.qdrant.client.grpc.Collections.CreateCollection;\nimport io.qdrant.client.grpc.Collections.StrictModeCOnfig;\n\nQdrantClient client =\n    new QdrantClient(QdrantGrpcClient.newBuilder(\"localhost\", 6334, false).build());\n\nclient\n    .createCollectionAsync(\n        CreateCollection.newBuilder()\n            .setCollectionName(\"{collection_name}\")\n            .setStrictModeConfig(\n                StrictModeConfig.newBuilder().setEnabled(true).setUnindexedFilteringRetrieve(false).build())\n            .build())\n    .get();\n```\n\n```csharp\nusing Qdrant.Client;\nusing Qdrant.Client.Grpc;",
+    "text": "## Strict mode\n\n*Available as of v1.13.0*\n\nStrict mode is a feature to restrict certain type of operations on the collection in order to protect it.\n\nThe goal is to prevent inefficient usage patterns that could overload the collections.\n\nThis configuration ensures a more predictible and responsive service when you do not have control over the queries that are being executed.\n\nHere is a non exhaustive list of operations that can be restricted using strict mode:\n\n- Preventing querying non indexed payload which can be very slow\n- Maximum number of filtering conditions in a query\n- Maximum batch size when inserting vectors\n- Maximum collection size (in terms of vectors or payload size)\n\nSee [schema definitions](https://api.qdrant.tech/api-reference/collections/create-collection#request.body.strict_mode_config) for all the `strict_mode_config` parameters.\n\nUpon crossing a limit, the server will return a client side error with the information about the limit that was crossed.\n\nAs part of the config, the `enabled` field act as a toggle to enable or disable the strict mode dynamically.\n\nThe `strict_mode_config` can be enabled when [creating](#create-a-collection.md) a collection, for instance below to activate the `unindexed_filtering_retrieve` limit.\n\nSetting `unindexed_filtering_retrieve` to false prevents the usage of filtering on a non indexed payload key.\n\n```http\nPUT /collections/{collection_name}\n{\n    \"strict_mode_config\": {\n        \"enabled\": true,\n        \"unindexed_filtering_retrieve\": false\n    }\n}\n```\n\n```bash\ncurl -X PUT http://localhost:6333/collections/{collection_name} \\\n  -H 'Content-Type: application/json' \\\n  --data-raw '{\n    \"strict_mode_config\": {\n        \"enabled\":\" true,\n        \"unindexed_filtering_retrieve\": false\n    }\n  }'\n```\n\n```python\nfrom qdrant_client import QdrantClient, models\n\nclient = QdrantClient(url=\"http://localhost:6333\")\n\nclient.create_collection(\n    collection_name=\"{collection_name}\",\n    strict_mode_config=models.StrictModeConfig(enabled=True, unindexed_filtering_retrieve=false),\n)\n```\n\n```typescript\nimport { QdrantClient } from \"@qdrant/js-client-rest\";\n\nconst client = new QdrantClient({ host: \"localhost\", port: 6333 });\n\nclient.createCollection(\"{collection_name}\", {\n  strict_mode_config: {\n    enabled: true,\n    unindexed_filtering_retrieve: false,\n  },\n});\n```\n\n```rust\nuse qdrant_client::Qdrant;\nuse qdrant_client::qdrant::{CreateCollectionBuilder, StrictModeConfigBuilder};\n\nlet client = Qdrant::from_url(\"http://localhost:6334\").build()?;\n\nclient\n    .create_collection(\n        CreateCollectionBuilder::new(\"{collection_name}\")\n            .strict_config_mode(StrictModeConfigBuilder::default().enabled(true).unindexed_filtering_retrieve(false)),\n    )\n    .await?;\n```\n\n```java\nimport io.qdrant.client.QdrantClient;\nimport io.qdrant.client.QdrantGrpcClient;\nimport io.qdrant.client.grpc.Collections.CreateCollection;\nimport io.qdrant.client.grpc.Collections.StrictModeCOnfig;\n\nQdrantClient client =\n    new QdrantClient(QdrantGrpcClient.newBuilder(\"localhost\", 6334, false).build());\n\nclient\n    .createCollectionAsync(\n        CreateCollection.newBuilder()\n            .setCollectionName(\"{collection_name}\")\n            .setStrictModeConfig(\n                StrictModeConfig.newBuilder().setEnabled(true).setUnindexedFilteringRetrieve(false).build())\n            .build())\n    .get();\n```\n\n```csharp\nusing Qdrant.Client;\nusing Qdrant.Client.Grpc;\n\nvar client = new QdrantClient(\"localhost\", 6334);\n\nawait client.CreateCollectionAsync(\n  collectionName: \"{collection_name}\",\n  strictModeConfig: new StrictModeConfig { enabled = true, unindexed_filtering_retrieve = false }\n);\n```\n\n```go\nimport (\n  \"context\"\n\n  \"github.com/qdrant/go-client/qdrant\"\n)\n\nclient, err := qdrant.NewClient(&qdrant.Config{\n  Host: \"localhost\",\n  Port: 6334,\n})\n\nclient.CreateCollection(context.Background(), &qdrant.CreateCollection{\n  CollectionName: \"{collection_name}\",\n  StrictModeConfig: &qdrant.StrictModeConfig{\n    Enabled: qdrant.PtrOf(true),\n    IndexingThreshold: qdrant.PtrOf(false),\n  },\n})\n```\n\nOr activate it later on an existing collection through the [collection update](#update-collection-parameters.md) API:\n\n```http\nPATCH /collections/{collection_name}\n{\n    \"strict_mode_config\": {\n        \"enabled\": true,\n        \"unindexed_filtering_retrieve\": false\n    }\n}\n```",
     "metadata": {
       "chunk_id": "9e588505e768-0013",
       "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_guides_administration\\_documentation_guides_administration_.md",
@@ -1323,17 +1330,18 @@
         "Strict mode"
       ],
       "heading_text": "Strict mode",
-      "token_count": 781,
-      "char_count": 3436,
+      "token_count": 1011,
+      "char_count": 4350,
       "start_char": 13675,
-      "end_char": 17111,
+      "end_char": 18025,
       "semantic_score": 0.7,
       "structural_score": 0.7999999999999998,
-      "retrieval_quality": 0.6918495297805642,
+      "retrieval_quality": 0.681060606060606,
       "chunking_strategy": "hybrid_adaptive_semchunk",
       "content_type": "prose_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:42.224448",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:24.920425",
       "document_id": "9e588505e768",
       "document_name": "_documentation_guides_administration_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_guides_administration\\_documentation_guides_administration_.md",
@@ -1341,9 +1349,9 @@
       "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_guides_administration",
       "relative_path": "Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_guides_administration\\_documentation_guides_administration_.md",
       "hierarchy_path": "Strict mode",
-      "chunk_hash": "7e8b02a20ba77a1d",
-      "content_digest": "7e8b02a20ba77a1d",
-      "chunk_length": 3436,
+      "chunk_hash": "613705ca7faf94da",
+      "content_digest": "613705ca7faf94da",
+      "chunk_length": 4350,
       "payload_version": "1.3",
       "collection_hints": [
         "qdrant_ecosystem"
@@ -1353,130 +1361,130 @@
         "weighting": "tf-normalized",
         "top_terms": [
           "client",
-          "the",
-          "collection",
           "qdrant",
+          "collection",
+          "the",
           "strict",
           "mode",
           "filtering",
           "config",
           "false",
           "enabled",
+          "name",
           "unindexed",
           "retrieve",
-          "name",
+          "true",
           "qdrantclient",
           "collections",
-          "true",
-          "import",
           "localhost",
-          "that",
-          "create"
+          "import",
+          "strictmodeconfig",
+          "http"
         ],
         "term_weights": [
           {
             "term": "client",
-            "tf": 19,
-            "weight": 0.052055
-          },
-          {
-            "term": "the",
-            "tf": 14,
-            "weight": 0.038356
-          },
-          {
-            "term": "collection",
-            "tf": 14,
-            "weight": 0.038356
+            "tf": 24,
+            "weight": 0.053452
           },
           {
             "term": "qdrant",
-            "tf": 14,
-            "weight": 0.038356
+            "tf": 22,
+            "weight": 0.048998
+          },
+          {
+            "term": "collection",
+            "tf": 20,
+            "weight": 0.044543
+          },
+          {
+            "term": "the",
+            "tf": 15,
+            "weight": 0.033408
           },
           {
             "term": "strict",
-            "tf": 12,
-            "weight": 0.032877
+            "tf": 13,
+            "weight": 0.028953
           },
           {
             "term": "mode",
-            "tf": 12,
-            "weight": 0.032877
+            "tf": 13,
+            "weight": 0.028953
           },
           {
             "term": "filtering",
-            "tf": 9,
-            "weight": 0.024658
+            "tf": 11,
+            "weight": 0.024499
           },
           {
             "term": "config",
-            "tf": 9,
-            "weight": 0.024658
+            "tf": 11,
+            "weight": 0.024499
           },
           {
             "term": "false",
-            "tf": 8,
-            "weight": 0.021918
+            "tf": 11,
+            "weight": 0.024499
           },
           {
             "term": "enabled",
-            "tf": 7,
-            "weight": 0.019178
-          },
-          {
-            "term": "unindexed",
-            "tf": 7,
-            "weight": 0.019178
-          },
-          {
-            "term": "retrieve",
-            "tf": 7,
-            "weight": 0.019178
+            "tf": 10,
+            "weight": 0.022272
           },
           {
             "term": "name",
-            "tf": 7,
-            "weight": 0.019178
+            "tf": 10,
+            "weight": 0.022272
           },
           {
-            "term": "qdrantclient",
-            "tf": 7,
-            "weight": 0.019178
+            "term": "unindexed",
+            "tf": 9,
+            "weight": 0.020045
           },
           {
-            "term": "collections",
-            "tf": 6,
-            "weight": 0.016438
+            "term": "retrieve",
+            "tf": 9,
+            "weight": 0.020045
           },
           {
             "term": "true",
-            "tf": 6,
-            "weight": 0.016438
+            "tf": 9,
+            "weight": 0.020045
           },
           {
-            "term": "import",
-            "tf": 6,
-            "weight": 0.016438
+            "term": "qdrantclient",
+            "tf": 8,
+            "weight": 0.017817
+          },
+          {
+            "term": "collections",
+            "tf": 7,
+            "weight": 0.01559
           },
           {
             "term": "localhost",
+            "tf": 7,
+            "weight": 0.01559
+          },
+          {
+            "term": "import",
+            "tf": 7,
+            "weight": 0.01559
+          },
+          {
+            "term": "strictmodeconfig",
+            "tf": 7,
+            "weight": 0.01559
+          },
+          {
+            "term": "http",
             "tf": 5,
-            "weight": 0.013699
-          },
-          {
-            "term": "that",
-            "tf": 4,
-            "weight": 0.010959
-          },
-          {
-            "term": "create",
-            "tf": 4,
-            "weight": 0.010959
+            "weight": 0.011136
           }
         ],
-        "unique_terms": 157,
-        "total_terms": 365
+        "unique_terms": 172,
+        "total_terms": 449
       },
       "modal_hint": "code",
       "content_flags": {
@@ -1503,8 +1511,8 @@
     "advanced_scores": {
       "semantic": 0.7,
       "structural": 0.7999999999999998,
-      "retrieval_quality": 0.6918495297805642,
-      "overall": 0.7306165099268546
+      "retrieval_quality": 0.681060606060606,
+      "overall": 0.7270202020202019
     }
   },
   {
@@ -1532,7 +1540,8 @@
       "chunking_strategy": "hybrid_adaptive_structural",
       "content_type": "list_section",
       "embedding_model": "jina-code-embeddings-1.5b",
-      "processing_timestamp": "2025-10-20T04:38:42.225450",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T07:48:24.921737",
       "document_id": "9e588505e768",
       "document_name": "_documentation_guides_administration_",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_documentation\\documentation_guides_administration\\_documentation_guides_administration_.md",

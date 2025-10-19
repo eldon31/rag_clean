@@ -17,6 +17,8 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
+SENTINEL_PATH = REPO_ROOT / "output" / "STOP_AFTER_CHUNKING.flag"
+
 IS_KAGGLE = Path("/kaggle").exists()
 
 # Kaggle-friendly defaults so the notebook can invoke this module without a long CLI string.
@@ -30,7 +32,7 @@ KAGGLE_DEFAULTS = {
         "fast_docs",
         "pydantic",
     ],
-    "model": "nomic-coderank",
+    "model": "jina-code-embeddings-1.5b",
     "enable_ensemble": True,
     "skip_existing": True,
     "summary": "embedding_summary.json",
@@ -71,11 +73,11 @@ def _parse_args(argv: List[str]) -> argparse.Namespace:
     parser.add_argument(
         "--collections",
         nargs="*",
-        help="Optional list of collection folder names to process. Defaults to autodiscovery.",
+        help="Optional list of collection folder names to process. Defaults to autodiscovery (or summary-based list if available).",
     )
     parser.add_argument(
         "--model",
-        default=KAGGLE_DEFAULTS["model"] if IS_KAGGLE else "nomic-coderank",
+        default=KAGGLE_DEFAULTS["model"] if IS_KAGGLE else "jina-code-embeddings-1.5b",
         help="Embedding model key defined in Kaggle embedder configuration.",
     )
     parser.add_argument(
@@ -227,6 +229,13 @@ def _run_for_collection(
 
 
 def main(argv: List[str]) -> int:
+    if SENTINEL_PATH.exists():
+        print(
+            "🛑 Embedding stage skipped: sentinel file detected at "
+            f"{SENTINEL_PATH}. Remove the file to continue the pipeline."
+        )
+        return 0
+
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
 
     args = _parse_args(argv)
@@ -237,6 +246,22 @@ def main(argv: List[str]) -> int:
     requested_collections = args.collections
     if requested_collections is None and IS_KAGGLE:
         requested_collections = KAGGLE_DEFAULTS["collections"]
+    elif requested_collections is None:
+        summary_file = output_root / "embedding_summary.json"
+        if summary_file.exists():
+            try:
+                with summary_file.open("r", encoding="utf-8") as handle:
+                    prior_runs = json.load(handle)
+                if isinstance(prior_runs, list):
+                    candidate_names = [
+                        item.get("collection")
+                        for item in prior_runs
+                        if isinstance(item, dict) and item.get("collection")
+                    ]
+                    requested_collections = [name for name in candidate_names if isinstance(name, str)] or None
+            except Exception:  # pragma: no cover - defensive
+                LOGGER.warning("Failed to reuse collection names from %s", summary_file)
+                requested_collections = None
 
     collections = _discover_collections(chunks_root, requested_collections)
     if not collections:

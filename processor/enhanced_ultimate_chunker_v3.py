@@ -11,16 +11,39 @@ from collections import Counter, defaultdict
 from dataclasses import dataclass, asdict, field
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict, Iterable, List, Optional, Sequence, Tuple
 import hashlib
 
 import numpy as np
 import tiktoken
-from sentence_transformers import SentenceTransformer
+
+try:
+    from sentence_transformers import SentenceTransformer
+except ImportError:  # pragma: no cover - optional dependency
+    SentenceTransformer = None  # type: ignore[assignment]
 from sklearn.metrics.pairwise import cosine_similarity
+
+try:
+    import semchunk  # type: ignore
+except ImportError:  # pragma: no cover - optional dependency
+    semchunk = None  # type: ignore
+
+try:
+    from tree_sitter import Language, Parser  # type: ignore
+except ImportError:  # pragma: no cover - optional dependency
+    Language = None  # type: ignore
+    Parser = None  # type: ignore
+
+try:
+    from tree_sitter_languages import get_language  # type: ignore
+except ImportError:  # pragma: no cover - optional dependency
+    get_language = None  # type: ignore
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
+
+DEFAULT_EMBEDDING_MODEL = "jina-code-embeddings-1.5b"
+DEFAULT_EMBEDDING_DIMENSION = 1536
 
 
 @dataclass
@@ -47,6 +70,7 @@ class HierarchicalMetadata:
     chunking_strategy: str = "hierarchical_balanced"
     content_type: str = "hierarchical_section"
     embedding_model: str = ""
+    embedding_dimension: int = DEFAULT_EMBEDDING_DIMENSION
     processing_timestamp: str = field(default_factory=lambda: datetime.now().isoformat())
 
 
@@ -55,11 +79,43 @@ class EnhancedUltimateChunkerV3:
 
     def __init__(
         self,
-        embedding_model: str = "nomic-ai/CodeRankEmbed",
+    embedding_model: str = DEFAULT_EMBEDDING_MODEL,
+        embedding_dimension: int = DEFAULT_EMBEDDING_DIMENSION,
         tokenizer_name: str = "cl100k_base",
+        quality_thresholds: Optional[Dict[str, float]] = None,
+        fallback_promotion_ratio: float = 0.25,
+        fallback_promotion_cap: int = 40,
     ) -> None:
-        self.embedding_model_name = embedding_model
-        self.embedder = SentenceTransformer(embedding_model, trust_remote_code=True)
+        self.embedding_model_name = embedding_model or "semantic_scoring_disabled"
+        self.embedding_dimension = max(1, int(embedding_dimension))
+        self.embedder: Optional[Any] = None
+        self.enable_semantic_scoring = False
+
+        if embedding_model and SentenceTransformer is not None:
+            try:
+                self.embedder = SentenceTransformer(embedding_model, trust_remote_code=True)
+                self.enable_semantic_scoring = True
+                try:
+                    model_dimension = getattr(
+                        self.embedder,
+                        "get_sentence_embedding_dimension",
+                        lambda: self.embedding_dimension,
+                    )()
+                    if isinstance(model_dimension, int) and model_dimension > 0:
+                        self.embedding_dimension = model_dimension
+                except Exception:  # pragma: no cover - defensive
+                    logger.debug("Unable to determine embedding dimension from model %s", embedding_model)
+            except Exception as exc:  # pragma: no cover - defensive
+                logger.warning(
+                    "Failed to load semantic model %s (%s); semantic scoring disabled",
+                    embedding_model,
+                    exc,
+                )
+        elif embedding_model and SentenceTransformer is None:
+            logger.warning(
+                "SentenceTransformer package not available; semantic scoring disabled"
+            )
+
         self.tokenizer = tiktoken.get_encoding(tokenizer_name)
         self.project_root = Path.cwd()
 
@@ -130,12 +186,49 @@ class EnhancedUltimateChunkerV3:
             },
         }
 
-        self.quality_thresholds = {
-            "min_semantic_score": 0.65,
-            "min_structural_score": 0.70,
-            "min_retrieval_quality": 0.60,
-            "min_information_density": 0.40,
+        self._semchunk_available = semchunk is not None
+        self._semchunk_cache: Dict[int, Any] = {}
+        self._tree_sitter_languages: Dict[str, Any] = {}
+        self._tree_sitter_node_types: Dict[str, Sequence[str]] = {
+            "python": ["function_definition", "class_definition"],
+            "javascript": ["function_declaration", "method_definition", "class_declaration"],
+            "typescript": ["function_declaration", "method_definition", "class_declaration"],
+            "java": ["class_declaration", "method_declaration"],
+            "go": ["function_declaration", "method_declaration"],
+            "rust": ["function_item", "impl_item", "struct_item"],
+            "c": ["function_definition"],
+            "cpp": ["function_definition", "class_specifier"],
         }
+        self._tree_sitter_supported = Parser is not None and get_language is not None
+
+        self.language_hints_by_extension: Dict[str, str] = {
+            ".py": "python",
+            ".ipynb": "python",
+            ".js": "javascript",
+            ".ts": "typescript",
+            ".tsx": "typescript",
+            ".jsx": "javascript",
+            ".java": "java",
+            ".go": "go",
+            ".rs": "rust",
+            ".c": "c",
+            ".h": "c",
+            ".cpp": "cpp",
+            ".hpp": "cpp",
+        }
+
+        self.quality_thresholds = {
+            "min_semantic_score": 0.55,
+            "min_structural_score": 0.60,
+            "min_retrieval_quality": 0.50,
+            "min_information_density": 0.35,
+        }
+
+        if quality_thresholds:
+            self.quality_thresholds.update(quality_thresholds)
+
+        self.fallback_promotion_ratio = max(0.05, min(fallback_promotion_ratio, 1.0))
+        self.fallback_promotion_cap = max(5, fallback_promotion_cap)
 
         self.default_collection_hints: Dict[str, List[str]] = {
             "mcp_repository": ["qdrant_ecosystem"],
@@ -164,6 +257,111 @@ class EnhancedUltimateChunkerV3:
             return str(Path(filename).resolve().relative_to(self.project_root))
         except ValueError:
             return str(Path(filename))
+
+    @staticmethod
+    def _build_byte_to_char_lookup(text: str) -> List[int]:
+        lookup: List[int] = [0]
+        for index, character in enumerate(text):
+            lookup.extend([index + 1] * len(character.encode("utf-8")))
+        return lookup
+
+    def _looks_like_code(self, text: str) -> bool:
+        if "```" in text:
+            return True
+        code_keywords = ["def ", "class ", "function ", "#include", "import ", "public ", "void "]
+        keyword_hits = sum(1 for keyword in code_keywords if keyword in text)
+        punctuation_density = sum(text.count(sym) for sym in "{}();:=") / max(len(text), 1)
+        return keyword_hits >= 2 or punctuation_density > 0.025
+
+    def _get_semchunk_chunker(self, chunk_size: int):
+        if not self._semchunk_available:
+            return None
+        chunk_size = max(32, int(chunk_size))
+        if chunk_size not in self._semchunk_cache:
+            def token_counter(value: str) -> int:
+                return len(self._encode_tokens(value))
+
+            try:
+                chunker_factory = getattr(semchunk, "chunkerify", None) if semchunk else None
+                if chunker_factory is None:
+                    raise AttributeError("semchunk.chunkerify not available")
+                self._semchunk_cache[chunk_size] = chunker_factory(token_counter, chunk_size)
+            except Exception as exc:  # pragma: no cover - defensive
+                logger.warning("Semchunk initialisation failed: %s", exc)
+                self._semchunk_available = False
+                return None
+        return self._semchunk_cache.get(chunk_size)
+
+    def _get_tree_sitter_language(self, language_name: Optional[str]):
+        if not language_name or not self._tree_sitter_supported:
+            return None
+        if language_name not in self._tree_sitter_languages:
+            try:
+                language_loader = get_language
+                if language_loader is None:
+                    raise RuntimeError("tree_sitter_languages.get_language unavailable")
+                self._tree_sitter_languages[language_name] = language_loader(language_name)
+            except Exception as exc:  # pragma: no cover - defensive
+                logger.warning("Tree-sitter language load failed for %s: %s", language_name, exc)
+                self._tree_sitter_languages[language_name] = None
+        return self._tree_sitter_languages.get(language_name)
+
+    def _select_chunking_backend(
+        self,
+        section_text: str,
+        filename: str,
+        block_meta: Dict[str, Any],
+    ) -> Tuple[str, str, Optional[str]]:
+        modal_flags = self._detect_modal_hints(section_text)
+        extension = Path(filename).suffix.lower()
+        language_hint = self.language_hints_by_extension.get(extension)
+
+        if modal_flags["modal_hint"] == "code" or self._looks_like_code(section_text) or language_hint:
+            language_hint = language_hint or "python"
+            if self._get_tree_sitter_language(language_hint):
+                return "tree_sitter", "code_block", language_hint
+        if modal_flags["modal_hint"] == "table":
+            return "hierarchical", "table_section", None
+        if modal_flags["modal_hint"] == "list":
+            return "hierarchical", "list_section", None
+        if self._semchunk_available:
+            return "semchunk", "prose_section", None
+        return "hierarchical", "hierarchical_section", None
+
+    def _create_chunk_metadata(
+        self,
+        text: str,
+        section_path: Sequence[str],
+        filename: str,
+        document_id: str,
+        chunk_index: int,
+        chunking_strategy: str,
+        start_char: int,
+        content_type: str,
+        end_char: Optional[int] = None,
+        embedding_dimension: Optional[int] = None,
+    ) -> HierarchicalMetadata:
+        end_value = end_char if end_char is not None else start_char + len(text)
+        metadata = HierarchicalMetadata(
+            chunk_id=f"{document_id}-{chunk_index:04d}",
+            source_file=filename,
+            filename=Path(filename).name,
+            file_extension=Path(filename).suffix,
+            chunk_index=chunk_index,
+            document_level=len(section_path),
+            parent_chunk_id=None,
+            section_path=list(section_path),
+            heading_text=section_path[-1] if section_path else "",
+            token_count=len(self._encode_tokens(text)),
+            char_count=len(text),
+            start_char=start_char,
+            end_char=end_value,
+            chunking_strategy=chunking_strategy,
+            content_type=content_type,
+            embedding_model=self.embedding_model_name,
+            embedding_dimension=embedding_dimension if embedding_dimension is not None else self.embedding_dimension,
+        )
+        return metadata
 
     @staticmethod
     def _compute_chunk_hash(text: str) -> str:
@@ -460,14 +658,28 @@ class EnhancedUltimateChunkerV3:
             })
 
         lines = text.split("\n")
+        line_offsets: List[int] = []
+        running_offset = 0
+        for line in lines:
+            line_offsets.append(running_offset)
+            running_offset += len(line) + 1
+        total_length = len(text)
+
         if not structure["headings"]:
-            structure["content_blocks"].append({
-                "heading": None,
-                "content": text,
-                "length": len(text),
-                "start_line": 1,
-                "end_line": len(lines),
-            })
+            stripped = text.strip()
+            if stripped:
+                leading_trim = len(text) - len(text.lstrip())
+                start_char = leading_trim
+                end_char = start_char + len(stripped)
+                structure["content_blocks"].append({
+                    "heading": None,
+                    "content": stripped,
+                    "length": len(stripped),
+                    "start_line": 1,
+                    "end_line": len(lines),
+                    "start_char": start_char,
+                    "end_char": end_char,
+                })
         else:
             for idx, heading in enumerate(structure["headings"]):
                 start = heading["start_line"] - 1
@@ -476,15 +688,23 @@ class EnhancedUltimateChunkerV3:
                     if idx + 1 < len(structure["headings"])
                     else len(lines)
                 )
-                section_text = "\n".join(lines[start:end]).strip()
+                block_start_char = line_offsets[start] if start < len(line_offsets) else total_length
+                block_end_char = line_offsets[end] if end < len(line_offsets) else total_length
+                raw_section = text[block_start_char:block_end_char]
+                section_text = raw_section.strip()
                 if not section_text:
                     continue
+                leading_trim = len(raw_section) - len(raw_section.lstrip())
+                start_char = block_start_char + leading_trim
+                end_char = start_char + len(section_text)
                 structure["content_blocks"].append({
                     "heading": heading,
                     "content": section_text,
                     "length": len(section_text),
                     "start_line": start + 1,
                     "end_line": end,
+                    "start_char": start_char,
+                    "end_char": end_char,
                 })
 
         return structure
@@ -508,7 +728,7 @@ class EnhancedUltimateChunkerV3:
             sentences.append(" ".join(current).strip())
         return [s for s in sentences if s.strip()]
 
-    def _chunk_section_content(
+    def _chunk_section_structural(
         self,
         section_text: str,
         section_path: List[str],
@@ -516,8 +736,13 @@ class EnhancedUltimateChunkerV3:
         strategy_name: str,
         start_chunk_index: int,
         document_id: str,
+        block_start_char: int,
+        content_type: str,
     ) -> List[Dict[str, Any]]:
-        strategy = self.chunking_strategies[strategy_name]
+        strategy = self.chunking_strategies.get(
+            strategy_name,
+            self.chunking_strategies["hierarchical_balanced"],
+        )
         max_tokens = strategy["max_tokens"]
         overlap = strategy["overlap"]
 
@@ -534,22 +759,17 @@ class EnhancedUltimateChunkerV3:
             if not text:
                 buffer = []
                 return
-            metadata = HierarchicalMetadata(
-                chunk_id=f"{document_id}-{start_chunk_index + len(chunks):04d}",
-                source_file=filename,
-                filename=Path(filename).name,
-                file_extension=Path(filename).suffix,
-                chunk_index=start_chunk_index + len(chunks),
-                document_level=len(section_path),
-                parent_chunk_id=None,
+            chunk_index = start_chunk_index + len(chunks)
+            metadata = self._create_chunk_metadata(
+                text=text,
                 section_path=section_path,
-                heading_text=section_path[-1] if section_path else "",
-                token_count=len(self._encode_tokens(text)),
-                char_count=len(text),
-                start_char=start_char,
-                end_char=start_char + len(text),
-                chunking_strategy=strategy_name,
-                embedding_model=self.embedding_model_name,
+                filename=filename,
+                document_id=document_id,
+                chunk_index=chunk_index,
+                chunking_strategy=f"{strategy_name}_structural",
+                start_char=block_start_char + start_char,
+                content_type=content_type,
+                end_char=block_start_char + start_char + len(text),
             )
             chunks.append({"text": text, "metadata": metadata})
 
@@ -580,6 +800,215 @@ class EnhancedUltimateChunkerV3:
         flush_buffer()
         return chunks
 
+    def _chunk_section_semchunk(
+        self,
+        section_text: str,
+        section_path: List[str],
+        filename: str,
+        strategy_label: str,
+        start_chunk_index: int,
+        document_id: str,
+        block_start_char: int,
+        content_type: str,
+        max_tokens: int,
+        overlap: int,
+    ) -> List[Dict[str, Any]]:
+        chunker = self._get_semchunk_chunker(max_tokens)
+        if chunker is None:
+            return self._chunk_section_structural(
+                section_text,
+                section_path,
+                filename,
+                strategy_label.rsplit("_", 1)[0] if "_" in strategy_label else strategy_label,
+                start_chunk_index,
+                document_id,
+                block_start_char,
+                content_type,
+            )
+
+        kwargs: Dict[str, Any] = {"offsets": True}
+        if overlap:
+            kwargs["overlap"] = min(overlap, max_tokens - 1)
+
+        try:
+            chunk_texts, offsets = chunker(section_text, **kwargs)
+        except TypeError:  # pragma: no cover - compatibility
+            chunk_texts = chunker(section_text)
+            offsets = None
+
+        if isinstance(chunk_texts, list) and chunk_texts and isinstance(chunk_texts[0], list):
+            chunk_texts = chunk_texts[0]
+            offsets = offsets[0] if offsets else None
+
+        results: List[Dict[str, Any]] = []
+        running_offset = 0
+
+        for idx, chunk_text in enumerate(chunk_texts):
+            text = chunk_text.strip()
+            if not text:
+                continue
+            if offsets and idx < len(offsets):
+                start_offset, end_offset = offsets[idx]
+            else:
+                start_offset = running_offset
+                end_offset = start_offset + len(text)
+            chunk_index = start_chunk_index + len(results)
+            metadata = self._create_chunk_metadata(
+                text=text,
+                section_path=section_path,
+                filename=filename,
+                document_id=document_id,
+                chunk_index=chunk_index,
+                chunking_strategy=strategy_label,
+                start_char=block_start_char + start_offset,
+                content_type=content_type,
+                end_char=block_start_char + end_offset,
+                embedding_dimension=self.embedding_dimension,
+            )
+            results.append({"text": text, "metadata": metadata})
+            running_offset = end_offset
+
+        return results
+
+    def _collect_tree_sitter_nodes(self, root_node: Any, language_hint: str) -> List[Any]:
+        target_types = list(self._tree_sitter_node_types.get(language_hint, []))
+        if not target_types:
+            target_types = list(self._tree_sitter_node_types.get("python", []))
+        if not target_types:
+            return []
+
+        nodes: List[Any] = []
+        stack: List[Any] = [root_node]
+
+        while stack:
+            node = stack.pop()
+            if not getattr(node, "is_named", lambda: True)():
+                continue
+            if node.type in target_types:
+                parent = getattr(node, "parent", None)
+                parent_type = parent.type if parent else None
+                if parent_type not in target_types:
+                    nodes.append(node)
+                continue
+            children = getattr(node, "children", [])
+            stack.extend(reversed(children))
+
+        nodes.sort(key=lambda n: n.start_byte)
+        return nodes
+
+    def _chunk_section_tree_sitter(
+        self,
+        section_text: str,
+        section_path: List[str],
+        filename: str,
+        strategy_name: str,
+        start_chunk_index: int,
+        document_id: str,
+        block_start_char: int,
+        content_type: str,
+        language_hint: str,
+    ) -> List[Dict[str, Any]]:
+        language = self._get_tree_sitter_language(language_hint)
+        if language is None or Parser is None:
+            return self._chunk_section_structural(
+                section_text,
+                section_path,
+                filename,
+                strategy_name,
+                start_chunk_index,
+                document_id,
+                block_start_char,
+                content_type,
+            )
+
+        parser = Parser()  # type: ignore[call-arg]
+        parser.set_language(language)  # type: ignore[attr-defined]
+        try:
+            tree = parser.parse(section_text.encode("utf-8"))
+        except Exception as exc:  # pragma: no cover - defensive
+            logger.warning("Tree-sitter parse failed (%s); falling back", exc)
+            return self._chunk_section_structural(
+                section_text,
+                section_path,
+                filename,
+                strategy_name,
+                start_chunk_index,
+                document_id,
+                block_start_char,
+                content_type,
+            )
+
+        nodes = self._collect_tree_sitter_nodes(tree.root_node, language_hint)
+        if not nodes:
+            return self._chunk_section_structural(
+                section_text,
+                section_path,
+                filename,
+                strategy_name,
+                start_chunk_index,
+                document_id,
+                block_start_char,
+                content_type,
+            )
+
+        lookup = self._build_byte_to_char_lookup(section_text)
+        strategy = self.chunking_strategies.get(
+            strategy_name,
+            self.chunking_strategies["hierarchical_balanced"],
+        )
+        max_tokens = strategy["max_tokens"]
+        overlap = strategy["overlap"]
+
+        chunks: List[Dict[str, Any]] = []
+
+        for node in nodes:
+            start_byte = min(node.start_byte, len(lookup) - 1)
+            end_byte = min(node.end_byte, len(lookup) - 1)
+            char_start = lookup[start_byte]
+            char_end = lookup[end_byte]
+            slice_text = section_text[char_start:char_end]
+            stripped = slice_text.strip()
+            if not stripped:
+                continue
+            leading_trim = len(slice_text) - len(slice_text.lstrip())
+            adjusted_start = char_start + leading_trim
+            adjusted_end = adjusted_start + len(stripped)
+            token_count = len(self._encode_tokens(stripped))
+
+            if token_count > max_tokens and self._semchunk_available:
+                sub_chunks = self._chunk_section_semchunk(
+                    stripped,
+                    section_path,
+                    filename,
+                    f"{strategy_name}_tree_sitter_semchunk",
+                    start_chunk_index + len(chunks),
+                    document_id,
+                    block_start_char + adjusted_start,
+                    content_type,
+                    max_tokens,
+                    overlap,
+                )
+                chunks.extend(sub_chunks)
+                continue
+
+            chunk_index = start_chunk_index + len(chunks)
+            metadata = self._create_chunk_metadata(
+                text=stripped,
+                section_path=section_path,
+                filename=filename,
+                document_id=document_id,
+                chunk_index=chunk_index,
+                chunking_strategy=f"{strategy_name}_tree_sitter",
+                start_char=block_start_char + adjusted_start,
+                content_type=content_type,
+                end_char=block_start_char + adjusted_end,
+                embedding_dimension=self.embedding_dimension,
+            )
+            metadata.section_path.append(f"{language_hint}:{node.type}")
+            chunks.append({"text": stripped, "metadata": metadata})
+
+        return chunks
+
     # ------------------------------------------------------------------
     # Quality calculations
     # ------------------------------------------------------------------
@@ -587,6 +1016,8 @@ class EnhancedUltimateChunkerV3:
         sentences = [s.strip() for s in text.split('.') if len(s.strip()) > 10]
         if len(sentences) < 2:
             return 0.8
+        if not self.enable_semantic_scoring or self.embedder is None:
+            return self._semantic_coherence_heuristic(sentences)
         try:
             embeddings = self.embedder.encode(sentences[:5])
             similarities: List[float] = []
@@ -600,7 +1031,25 @@ class EnhancedUltimateChunkerV3:
             return float(np.mean(similarities)) if similarities else 0.5
         except Exception as exc:  # pragma: no cover - defensive
             logger.warning("Semantic coherence calculation failed: %s", exc)
-            return 0.5
+            return self._semantic_coherence_heuristic(sentences)
+
+    @staticmethod
+    def _semantic_coherence_heuristic(sentences: List[str]) -> float:
+        """Lightweight fallback for semantic coherence when no encoder is available."""
+
+        total_length = sum(len(sentence) for sentence in sentences)
+        avg_length = total_length / max(len(sentences), 1)
+        diversity = len({sentence[:40] for sentence in sentences}) / max(len(sentences), 1)
+
+        score = 0.6
+        if avg_length > 120:
+            score += 0.1
+        if diversity > 0.7:
+            score += 0.1
+        if avg_length < 60:
+            score -= 0.1
+
+        return max(0.4, min(0.9, score))
 
     def calculate_structural_score(self, chunk_text: str, structure_info: Dict[str, Any]) -> float:
         score = 0.4
@@ -669,31 +1118,74 @@ class EnhancedUltimateChunkerV3:
 
         chunks: List[Dict[str, Any]] = []
         chunk_index = 0
+        strategy = self.chunking_strategies.get(strategy_name, self.chunking_strategies["hierarchical_balanced"])
 
-        if structure["content_blocks"]:
-            for block in structure["content_blocks"]:
-                heading = block.get("heading")
-                section_path = [heading["title"]] if heading else []
-                section_chunks = self._chunk_section_content(
-                    block["content"],
+        content_blocks = structure["content_blocks"]
+        if not content_blocks and text.strip():
+            stripped = text.strip()
+            leading_trim = len(text) - len(text.lstrip())
+            content_blocks = [{
+                "heading": None,
+                "content": stripped,
+                "start_char": leading_trim,
+                "end_char": leading_trim + len(stripped),
+            }]
+
+        for block in content_blocks:
+            section_text = block.get("content", "")
+            if not section_text:
+                continue
+            heading = block.get("heading")
+            section_path = [heading["title"]] if heading else []
+            block_start_char = block.get("start_char", 0)
+            backend, content_type_hint, language_hint = self._select_chunking_backend(
+                section_text,
+                filename,
+                block,
+            )
+            content_type = content_type_hint or "hierarchical_section"
+
+            if backend == "semchunk":
+                section_chunks = self._chunk_section_semchunk(
+                    section_text,
+                    section_path,
+                    filename,
+                    f"{strategy_name}_semchunk",
+                    chunk_index,
+                    document_id,
+                    block_start_char,
+                    content_type,
+                    strategy["max_tokens"],
+                    strategy["overlap"],
+                )
+            elif backend == "tree_sitter":
+                section_chunks = self._chunk_section_tree_sitter(
+                    section_text,
                     section_path,
                     filename,
                     strategy_name,
                     chunk_index,
                     document_id,
+                    block_start_char,
+                    content_type,
+                    language_hint or "python",
                 )
-                chunks.extend(section_chunks)
-                chunk_index += len(section_chunks)
-        else:
-            section_chunks = self._chunk_section_content(
-                text,
-                [],
-                filename,
-                strategy_name,
-                chunk_index,
-                document_id,
-            )
+            else:
+                section_chunks = self._chunk_section_structural(
+                    section_text,
+                    section_path,
+                    filename,
+                    strategy_name,
+                    chunk_index,
+                    document_id,
+                    block_start_char,
+                    content_type,
+                )
+
+            if not section_chunks:
+                continue
             chunks.extend(section_chunks)
+            chunk_index += len(section_chunks)
 
         accepted: List[Dict[str, Any]] = []
         fallback: List[Dict[str, Any]] = []
@@ -725,6 +1217,7 @@ class EnhancedUltimateChunkerV3:
             metadata_dict["payload_version"] = "1.3"
             metadata_dict["collection_hints"] = self._collection_hints(metadata_dict.get("content_type", ""))
             metadata_dict.setdefault("embedding_model", self.embedding_model_name)
+            metadata_dict.setdefault("embedding_dimension", self.embedding_dimension)
 
             sparse_features = self._compute_sparse_features(chunk["text"])
             metadata_dict["sparse_features"] = sparse_features
@@ -760,7 +1253,14 @@ class EnhancedUltimateChunkerV3:
 
         if not accepted and fallback:
             fallback.sort(key=lambda c: c["advanced_scores"]["overall"], reverse=True)
-            promoted = fallback[: max(1, min(5, len(fallback)))]
+            limit = max(
+                1,
+                min(
+                    self.fallback_promotion_cap,
+                    int(len(fallback) * self.fallback_promotion_ratio),
+                ),
+            )
+            promoted = fallback[:limit]
             for chunk in promoted:
                 chunk["metadata"]["quality_fallback"] = True
                 chunk["metadata"]["quality_notes"] = "Promoted via relaxed thresholds"
