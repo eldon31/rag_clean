@@ -16,6 +16,25 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
+IS_KAGGLE = Path("/kaggle").exists()
+
+# Kaggle-friendly defaults so the notebook can invoke this module without a long CLI string.
+KAGGLE_DEFAULTS = {
+    "chunks_root": Path("/kaggle/input/rag_clean_chunked"),
+    "output_root": Path("/kaggle/working/Embeddings"),
+    "collections": [
+        "qdrant_ecosystem",
+        "sentence_transformers",
+        "docling",
+        "fast_docs",
+        "pydantic",
+    ],
+    "model": "nomic-coderank",
+    "enable_ensemble": True,
+    "skip_existing": True,
+    "summary": "embedding_summary.json",
+}
+
 from processor.kaggle_ultimate_embedder_v4 import (
     KaggleExportConfig,
     KaggleGPUConfig,
@@ -30,14 +49,21 @@ def _parse_args(argv: List[str]) -> argparse.Namespace:
         description="Generate embeddings for one or more chunked collections using the Kaggle V4 embedder.",
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
     )
+    default_chunks_root = (
+        str(KAGGLE_DEFAULTS["chunks_root"]) if IS_KAGGLE else str(Path.cwd() / "Chunked")
+    )
+    default_output_root = (
+        str(KAGGLE_DEFAULTS["output_root"]) if IS_KAGGLE else str(Path("ultimate_embeddings_v4"))
+    )
+
     parser.add_argument(
         "--chunks-root",
-        default=str(Path.cwd() / "Chunked"),
+        default=default_chunks_root,
         help="Root directory containing per-collection chunk folders or individual chunk JSON files.",
     )
     parser.add_argument(
         "--output-root",
-        default=str(Path("/kaggle/working/ultimate_embeddings_v4")),
+        default=default_output_root,
         help="Directory where exported embeddings and sidecars will be written.",
     )
     parser.add_argument(
@@ -47,22 +73,24 @@ def _parse_args(argv: List[str]) -> argparse.Namespace:
     )
     parser.add_argument(
         "--model",
-        default="nomic-coderank",
+        default=KAGGLE_DEFAULTS["model"] if IS_KAGGLE else "nomic-coderank",
         help="Embedding model key defined in Kaggle embedder configuration.",
     )
     parser.add_argument(
         "--enable-ensemble",
         action="store_true",
+        default=KAGGLE_DEFAULTS["enable_ensemble"] if IS_KAGGLE else False,
         help="Enable ensemble mode defined inside the embedder (requires ensemble config).",
     )
     parser.add_argument(
         "--skip-existing",
         action="store_true",
+        default=KAGGLE_DEFAULTS["skip_existing"] if IS_KAGGLE else False,
         help="Skip collections that already have a .npy export in the target output directory.",
     )
     parser.add_argument(
         "--summary",
-        default="embedding_summary.json",
+        default=KAGGLE_DEFAULTS["summary"] if IS_KAGGLE else "embedding_summary.json",
         help="Filename (relative to output root) for the run summary JSON file.",
     )
     return parser.parse_args(argv)
@@ -166,7 +194,11 @@ def main(argv: List[str]) -> int:
     output_root = Path(args.output_root).resolve()
     output_root.mkdir(parents=True, exist_ok=True)
 
-    collections = _discover_collections(chunks_root, args.collections)
+    requested_collections = args.collections
+    if requested_collections is None and IS_KAGGLE:
+        requested_collections = KAGGLE_DEFAULTS["collections"]
+
+    collections = _discover_collections(chunks_root, requested_collections)
     if not collections:
         LOGGER.error("No collections found under %s", chunks_root)
         return 1
