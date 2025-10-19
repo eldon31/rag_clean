@@ -1,20 +1,20 @@
 #!/usr/bin/env python3
 """
-🚀 ULTIMATE KAGGLE EMBEDDER V4 🚀
-Split Architecture: Kaggle T4 x2 GPU → Local Qdrant
+ULTIMATE KAGGLE EMBEDDER V4
+Split Architecture: Kaggle T4 x2 GPU -> Local Qdrant
 
 DEPLOYMENT MODEL:
 - Kaggle: GPU embedding generation (T4 x2)
-- Local: Qdrant vector database + search
-- Connection: Download embeddings from Kaggle → Upload to local Qdrant
+- Local: Qdrant vector database and search
+- Connection: Download embeddings from Kaggle -> Upload to local Qdrant
 
 V4 OPTIMIZATIONS (from 9,654-vector knowledge base audit):
-✅ Backend optimization (ONNX/TensorRT for Kaggle GPUs)
-✅ Advanced memory management (optimized for T4 x2)
-✅ Enhanced preprocessing pipeline with caching
-✅ Multi-model ensemble support
-✅ Distributed training optimizations
-✅ Production-grade export formats
+- Backend optimization (ONNX/TensorRT for Kaggle GPUs)
+- Advanced memory management (optimized for T4 x2)
+- Enhanced preprocessing pipeline with caching
+- Multi-model ensemble support
+- Distributed training optimizations
+- Production-grade export formats
 
 PERFORMANCE TARGET:
 - V3: 12-18s for 3,096 chunks (172-258 chunks/sec)
@@ -37,7 +37,7 @@ import torch
 import gc
 import warnings
 from pathlib import Path
-from typing import Dict, List, Any, Optional, Tuple, Union
+from typing import Dict, List, Any, Optional, Tuple, Union, Set
 from datetime import datetime
 from collections import defaultdict
 import time
@@ -81,7 +81,7 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 # ============================================================================
-# 🎯 SOTA MODEL CONFIGURATIONS (Kaggle T4 x2 Optimized)
+# SOTA MODEL CONFIGURATIONS (Kaggle T4 x2 Optimized)
 # ============================================================================
 
 @dataclass 
@@ -101,7 +101,7 @@ class ModelConfig:
     
 # Kaggle T4 x2 Optimized Models (15.83GB VRAM each)
 KAGGLE_OPTIMIZED_MODELS = {
-    # 🥇 Primary: Best for Kaggle T4 x2
+    # Primary: Best for Kaggle T4 x2
     "nomic-coderank": ModelConfig(
         name="nomic-coderank",
         hf_model_id="nomic-ai/CodeRankEmbed",
@@ -130,7 +130,7 @@ KAGGLE_OPTIMIZED_MODELS = {
         memory_efficient=True
     ),
     
-    # 🔥 Advanced: For larger VRAM budgets
+    # Advanced: For larger VRAM budgets
     "gte-qwen2-1.5b": ModelConfig(
         name="gte-qwen2-1.5b", 
         hf_model_id="Alibaba-NLP/gte-Qwen2-1.5B-instruct",
@@ -151,7 +151,7 @@ KAGGLE_OPTIMIZED_MODELS = {
         supports_flash_attention=True
     ),
     
-    # ⚡ Speed: Ultra-fast for testing
+    # Speed: Ultra-fast for testing
     "all-miniLM-l6": ModelConfig(
         name="all-miniLM-l6",
         hf_model_id="sentence-transformers/all-MiniLM-L6-v2",
@@ -161,7 +161,7 @@ KAGGLE_OPTIMIZED_MODELS = {
         memory_efficient=True
     ),
     
-    # 🔥 Missing models from V3
+    # Additional models from V3
     "gte-qwen2-7b": ModelConfig(
         name="gte-qwen2-7b",
         hf_model_id="Alibaba-NLP/gte-Qwen2-7B-instruct", 
@@ -182,7 +182,7 @@ KAGGLE_OPTIMIZED_MODELS = {
     )
 }
 
-# 🎯 CROSSENCODER RERANKING MODELS (Production Ready)
+# CROSSENCODER RERANKING MODELS (Production Ready)
 RERANKING_MODELS = {
     # Fast and efficient rerankers for T4 x2
     "ms-marco-v2": "cross-encoder/ms-marco-MiniLM-L-6-v2",  # Fast, good quality
@@ -196,7 +196,7 @@ RERANKING_MODELS = {
 
 @dataclass
 class KaggleGPUConfig:
-    """🔥 Kaggle T4 x2 specific GPU configuration"""
+    """Kaggle T4 x2 specific GPU configuration"""
     # Hardware specs
     device_count: int = 2  # T4 x2
     vram_per_gpu_gb: float = 15.83
@@ -256,7 +256,7 @@ class KaggleGPUConfig:
 
 @dataclass
 class KaggleExportConfig:
-    """📦 Export configuration for local Qdrant integration"""
+    """Export configuration for local Qdrant integration"""
     # Output formats
     export_numpy: bool = True           # .npy files
     export_jsonl: bool = True          # JSONL for Qdrant upload
@@ -284,7 +284,7 @@ class KaggleExportConfig:
 
 @dataclass
 class EnsembleConfig:
-    """🚀 Multi-model ensemble configuration"""
+    """Multi-model ensemble configuration"""
     # Ensemble models to use
     ensemble_models: List[str] = field(default_factory=lambda: ["nomic-coderank", "bge-m3"])
     
@@ -301,7 +301,7 @@ class EnsembleConfig:
 
 @dataclass
 class RerankingConfig:
-    """🎯 CrossEncoder reranking configuration"""
+    """CrossEncoder reranking configuration"""
     # Reranking model
     model_name: str = "ms-marco-v2"  # Default reranker
     enable_reranking: bool = False
@@ -317,7 +317,7 @@ class RerankingConfig:
 
 @dataclass
 class AdvancedPreprocessingConfig:
-    """🧠 Advanced document preprocessing with caching"""
+    """Advanced document preprocessing with caching"""
     # Text preprocessing
     enable_text_caching: bool = True
     normalize_whitespace: bool = True
@@ -333,7 +333,7 @@ class AdvancedPreprocessingConfig:
     enable_memory_scaling: bool = True
     memory_scale_factor: float = 0.8
     adaptive_batch_sizing: bool = True
-    """🧠 Advanced document preprocessing with caching"""
+    """Advanced document preprocessing with caching"""
     # Text preprocessing
     enable_text_caching: bool = True
     normalize_whitespace: bool = True
@@ -351,7 +351,7 @@ class AdvancedPreprocessingConfig:
     adaptive_batch_sizing: bool = True
 
 class AdvancedTextCache:
-    """🚀 Intelligent text preprocessing cache"""
+    """Intelligent text preprocessing cache"""
     
     def __init__(self, max_size: int = 10000):
         self.cache = {}
@@ -399,20 +399,20 @@ class AdvancedTextCache:
 
 class UltimateKaggleEmbedderV4:
     """
-    🚀 Ultimate Kaggle Embedder V4 - Split Architecture Optimized
-    
+    Ultimate Kaggle Embedder V4 - Split Architecture Optimized
+
     SPLIT DEPLOYMENT MODEL:
     - Kaggle T4 x2: GPU embedding generation only
-    - Local machine: Qdrant vector database + search
+    - Local machine: Qdrant vector database and search
     - Export: Optimized formats for local upload
-    
+
     V4 ENHANCEMENTS (from 9,654-vector audit):
-    ✅ Backend optimization (ONNX/TensorRT when available)
-    ✅ Advanced memory management for T4 x2
-    ✅ Intelligent preprocessing with caching
-    ✅ Multi-model ensemble capability
-    ✅ Production-grade export formats
-    ✅ Kaggle-specific optimizations
+    - Backend optimization (ONNX/TensorRT when available)
+    - Advanced memory management for T4 x2
+    - Intelligent preprocessing with caching
+    - Multi-model ensemble capability
+    - Production-grade export formats
+    - Kaggle-specific optimizations
     """
     
     def __init__(
@@ -426,9 +426,9 @@ class UltimateKaggleEmbedderV4:
         reranking_config: Optional[RerankingConfig] = None
     ):
         """Initialize Ultimate Kaggle Embedder V4"""
-        
-        logger.info("🚀 Initializing Ultimate Kaggle Embedder V4 (Split Architecture)")
-        
+
+        logger.info("Initializing Ultimate Kaggle Embedder V4 (Split Architecture)")
+
         # Validate model
         if model_name not in KAGGLE_OPTIMIZED_MODELS:
             logger.warning(f"Unknown model {model_name}, defaulting to nomic-coderank")
@@ -436,8 +436,8 @@ class UltimateKaggleEmbedderV4:
         
         self.model_config = KAGGLE_OPTIMIZED_MODELS[model_name]
         self.model_name = model_name
-        logger.info(f"📊 Selected model: {self.model_config.name} ({self.model_config.vector_dim}D)")
-        
+        logger.info(f"Selected model: {self.model_config.name} ({self.model_config.vector_dim}D)")
+
         # Configuration
         self.gpu_config = gpu_config or KaggleGPUConfig()
         self.export_config = export_config or KaggleExportConfig()
@@ -449,19 +449,19 @@ class UltimateKaggleEmbedderV4:
         # Kaggle environment detection
         self.is_kaggle = '/kaggle' in os.getcwd() or os.path.exists('/kaggle')
         if self.is_kaggle:
-            logger.info("🔥 Kaggle environment detected - optimizing for T4 x2")
+            logger.info("Kaggle environment detected - optimizing for T4 x2")
             self.gpu_config.kaggle_environment = True
             self.export_config.working_dir = "/kaggle/working"
         
         # GPU setup
         self.device_count = torch.cuda.device_count()
         if self.device_count == 0:
-            logger.error("❌ No GPU detected! This embedder requires Kaggle T4 x2")
+            logger.error("No GPU detected! This embedder requires Kaggle T4 x2")
             raise RuntimeError("GPU required for Kaggle embedder")
-        
+
         self.device = "cuda"
-        logger.info(f"🔥 Detected {self.device_count} GPU(s)")
-        
+        logger.info(f"Detected {self.device_count} GPU(s)")
+
         # Log GPU information
         for i in range(self.device_count):
             gpu_name = torch.cuda.get_device_name(i)
@@ -492,8 +492,8 @@ class UltimateKaggleEmbedderV4:
         # Performance monitoring
         self.monitor_thread = None
         self.monitoring_active = False
-        
-        logger.info("✅ Ultimate Kaggle Embedder V4 initialized successfully")
+
+        logger.info("Ultimate Kaggle Embedder V4 initialized successfully")
     
     def _get_primary_model(self) -> Any:
         """Return the primary encoder, ensuring it is initialized."""
@@ -509,13 +509,13 @@ class UltimateKaggleEmbedderV4:
 
     def _initialize_embedding_models(self):
         """Initialize embedding models with advanced optimization"""
-        
-        logger.info(f"🔄 Loading embedding model: {self.model_config.hf_model_id}")
-        
+
+        logger.info(f"Loading embedding model: {self.model_config.hf_model_id}")
+
         # Optimal batch size for this model
         optimal_batch = self.gpu_config.get_optimal_batch_size(self.model_config)
-        logger.info(f"📦 Optimal batch size: {optimal_batch}")
-        
+        logger.info(f"Optimal batch size: {optimal_batch}")
+
         # Model loading configuration
         model_kwargs = {
             "trust_remote_code": self.model_config.trust_remote_code,
@@ -525,23 +525,23 @@ class UltimateKaggleEmbedderV4:
         # Precision optimization for T4
         if self.gpu_config.precision == "fp16":
             model_kwargs["torch_dtype"] = torch.float16
-            logger.info("⚡ Using FP16 precision for T4 optimization")
+            logger.info("Using FP16 precision for T4 optimization")
         
         # Flash Attention for supported models
         if (self.model_config.supports_flash_attention and 
             self.gpu_config.enable_memory_efficient_attention):
             try:
                 model_kwargs["attn_implementation"] = "flash_attention_2"
-                logger.info("⚡ Flash Attention 2 enabled")
+                logger.info("Flash Attention 2 enabled")
             except Exception as e:
                 logger.warning(f"Flash Attention not available: {e}")
         
         # Backend optimization
         if self.gpu_config.backend == "onnx" and ONNX_AVAILABLE:
-            logger.info("🔧 Attempting ONNX backend optimization...")
+            logger.info("Attempting ONNX backend optimization...")
             try:
                 self.primary_model = self._load_onnx_model()
-                logger.info("✅ ONNX backend loaded successfully")
+                logger.info("ONNX backend loaded successfully")
             except Exception as e:
                 logger.warning(f"ONNX backend failed, using PyTorch: {e}")
                 self.primary_model = self._load_pytorch_model(model_kwargs, optimal_batch)
@@ -558,7 +558,7 @@ class UltimateKaggleEmbedderV4:
         # Memory optimization
         if self.device == "cuda":
             torch.cuda.empty_cache()
-            logger.info("🧹 GPU memory cache cleared")
+            logger.info("GPU memory cache cleared")
     
     def _initialize_reranking_model(self):
         """Initialize CrossEncoder for reranking"""
@@ -568,13 +568,13 @@ class UltimateKaggleEmbedderV4:
             self.reranking_config.model_name = "ms-marco-v2"
         
         reranker_model = RERANKING_MODELS[self.reranking_config.model_name]
-        logger.info(f"🔄 Loading reranking model: {reranker_model}")
+        logger.info(f"Loading reranking model: {reranker_model}")
         
         try:
             self.reranker = CrossEncoder(reranker_model, device=self.device)
-            logger.info("✅ CrossEncoder reranking model loaded successfully")
+            logger.info("CrossEncoder reranking model loaded successfully")
         except Exception as e:
-            logger.error(f"❌ Failed to load reranking model: {e}")
+            logger.error(f"Failed to load reranking model: {e}")
             self.reranking_config.enable_reranking = False
             self.reranker = None
     
@@ -584,7 +584,7 @@ class UltimateKaggleEmbedderV4:
         if not self.enable_ensemble or not self.ensemble_config:
             return
         
-        logger.info(f"🔄 Loading ensemble models: {self.ensemble_config.ensemble_models}")
+        logger.info(f"Loading ensemble models: {self.ensemble_config.ensemble_models}")
         
         for model_name in self.ensemble_config.ensemble_models:
             if model_name not in KAGGLE_OPTIMIZED_MODELS:
@@ -597,7 +597,7 @@ class UltimateKaggleEmbedderV4:
             
             try:
                 model_config = KAGGLE_OPTIMIZED_MODELS[model_name]
-                logger.info(f"📦 Loading ensemble model: {model_config.hf_model_id}")
+                logger.info(f"Loading ensemble model: {model_config.hf_model_id}")
                 
                 # Load with minimal configuration for ensemble
                 ensemble_model = SentenceTransformer(
@@ -611,10 +611,10 @@ class UltimateKaggleEmbedderV4:
                     ensemble_model = ensemble_model.half()
                 
                 self.models[model_name] = ensemble_model
-                logger.info(f"✅ Ensemble model {model_name} loaded")
+                logger.info(f"Ensemble model {model_name} loaded")
                 
             except Exception as e:
-                logger.error(f"❌ Failed to load ensemble model {model_name}: {e}")
+                logger.error(f"Failed to load ensemble model {model_name}: {e}")
     
     def generate_ensemble_embeddings(self, texts: List[str]) -> np.ndarray:
         """Generate embeddings using ensemble of models"""
@@ -635,7 +635,7 @@ class UltimateKaggleEmbedderV4:
         # Get embeddings from each model
         for model_name, model in self.models.items():
             try:
-                logger.debug(f"🔄 Generating embeddings with {model_name}")
+                logger.debug(f"Generating embeddings with {model_name}")
                 
                 embeddings = model.encode(
                     texts,
@@ -744,8 +744,8 @@ class UltimateKaggleEmbedderV4:
             return []
         
         # Step 4: Rerank with CrossEncoder
-        logger.info(f"🔄 Reranking {len(query_doc_pairs)} candidates...")
-        
+        logger.info(f"Reranking {len(query_doc_pairs)} candidates...")
+
         try:
             rerank_scores = self.reranker.predict(query_doc_pairs)
             
@@ -767,11 +767,11 @@ class UltimateKaggleEmbedderV4:
                 }
                 results.append(result)
             
-            logger.info(f"✅ Reranking complete. Top score: {results[0]['score']:.4f}")
+            logger.info(f"Reranking complete. Top score: {results[0]['score']:.4f}")
             return results
             
         except Exception as e:
-            logger.error(f"❌ Reranking failed: {e}")
+            logger.error(f"Reranking failed: {e}")
             return self._embedding_only_search(query, top_k)
     
     def _embedding_only_search(self, query: str, top_k: int) -> List[Dict[str, Any]]:
@@ -816,23 +816,23 @@ class UltimateKaggleEmbedderV4:
             # Apply FP16 conversion after loading if needed
             if torch_dtype is not None and torch_dtype == torch.float16 and self.device == "cuda":
                 model = model.half()
-                logger.info("✅ Converted model to FP16 after loading")
+                logger.info("Converted model to FP16 after loading")
         except Exception as e:
             logger.error(f"Failed to load model: {e}")
             raise
         
         # Multi-GPU setup for T4 x2
         if self.device_count > 1:
-            logger.info(f"🔥 Setting up multi-GPU processing ({self.device_count} GPUs)")
+            logger.info(f"Setting up multi-GPU processing ({self.device_count} GPUs)")
             if self.gpu_config.strategy == "data_parallel":
                 model = torch.nn.DataParallel(model)
-                logger.info("📊 Data parallel enabled")
+                logger.info("Data parallel enabled")
         
         # PyTorch 2.0 compilation (if available)
         if self.gpu_config.enable_torch_compile and hasattr(torch, 'compile'):
             try:
                 model = torch.compile(model, mode="reduce-overhead")
-                logger.info("⚡ PyTorch 2.0 compilation enabled")
+                logger.info("PyTorch 2.0 compilation enabled")
             except Exception as e:
                 logger.warning(f"PyTorch compilation failed: {e}")
         
@@ -1046,26 +1046,101 @@ class UltimateKaggleEmbedderV4:
 
         return "prose" if text.strip() else None
     
+    def _resolve_chunks_directory(self, preferred_dir: str) -> Tuple[Optional[Path], List[Path]]:
+        """Resolve the most likely chunks directory, mirroring Kaggle input layout."""
+
+        attempted: List[Path] = []
+        candidates: List[Path] = []
+        project_root = Path(__file__).resolve().parents[1]
+
+        preferred_path = Path(preferred_dir)
+        candidates.extend([
+            preferred_path,
+            preferred_path / "Chunked",
+            preferred_path / "chunked",
+        ])
+
+        if self.is_kaggle:
+            # Prefer the working directory used by the notebook runtime
+            candidates.extend([
+                Path("/kaggle/working/rad_clean/Chunked"),
+                Path("/kaggle/working/Chunked"),
+            ])
+
+            # Mirror Kaggle's /kaggle/input/<dataset>/Chunked structure
+            kaggle_root = Path("/kaggle/input")
+            if kaggle_root.exists():
+                for dataset_dir in sorted(kaggle_root.iterdir()):
+                    if not dataset_dir.is_dir():
+                        continue
+                    candidates.extend([
+                        dataset_dir / "Chunked",
+                        dataset_dir / "chunked",
+                        dataset_dir,
+                    ])
+
+            # Common fallback names from upload script
+            candidates.extend([
+                Path("/kaggle/input/docs-chunks-output"),
+                Path("/kaggle/input/docs-chunks-output/Chunked"),
+            ])
+        else:
+            local_root = project_root / "DOCS_CHUNKS_OUTPUT"
+            candidates.extend([
+                project_root / "Chunked",
+                project_root / "chunked",
+                project_root / "output" / "Chunked",
+                local_root,
+                local_root / "Chunked",
+                local_root / "chunked",
+                Path(r"C:\Users\raze0\Documents\LLM_KNOWLEDGE_CREATOR\RAG\RAG_CLEAN\DOCS_CHUNKS_OUTPUT"),
+            ])
+
+        seen: Set[Path] = set()
+
+        def looks_like_chunk_dir(path: Path) -> bool:
+            if not path.exists() or path.is_file():
+                return False
+            try:
+                for entry in path.iterdir():
+                    if entry.is_dir():
+                        return True
+                    if entry.suffix.lower() == ".json":
+                        return True
+            except Exception:
+                return False
+            return False
+
+        for candidate in candidates:
+            if candidate in seen:
+                continue
+            seen.add(candidate)
+            attempted.append(candidate)
+            if looks_like_chunk_dir(candidate):
+                logger.info(f"Resolved chunks directory to {candidate}")
+                return candidate, attempted
+
+        return None, attempted
+    
     def load_chunks_from_processing(
         self,
-        chunks_dir: str = "/kaggle/input/docs-chunks-output"  # Kaggle input path
+        chunks_dir: str = "/kaggle/working/rad_clean/Chunked"
     ) -> Dict[str, Any]:
-        """
-        Load processed chunks for Kaggle environment
-        """
+        """Load processed chunks, preferring Kaggle's working `Chunked` folder when present."""
         
-        # Detect environment and adjust path
+        preferred_dir = chunks_dir
         if not self.is_kaggle:
-            chunks_dir = r"C:\Users\raze0\Documents\LLM_KNOWLEDGE_CREATOR\RAG\RAG_CLEAN\DOCS_CHUNKS_OUTPUT"
-        
-        logger.info(f"📂 Loading chunks from {chunks_dir}")
-        chunks_path = Path(chunks_dir)
-        
-        if not chunks_path.exists():
-            logger.error(f"❌ Chunks directory not found: {chunks_dir}")
+            preferred_dir = r"C:\Users\raze0\Documents\LLM_KNOWLEDGE_CREATOR\RAG\RAG_CLEAN\DOCS_CHUNKS_OUTPUT"
+
+        chunks_path, attempted_paths = self._resolve_chunks_directory(preferred_dir)
+
+        if chunks_path is None:
+            logger.error("Chunks directory not found. Tried: %s", ", ".join(str(p) for p in attempted_paths))
             if self.is_kaggle:
-                logger.info("💡 On Kaggle: Upload DOCS_CHUNKS_OUTPUT as input dataset")
+                logger.info("On Kaggle: ensure the uploaded dataset contains a Chunked/ directory")
             return {"error": "Chunks directory not found"}
+
+        logger.info(f"Loading chunks from {chunks_path}")
         
         results = {
             "collections_loaded": 0,
@@ -1109,7 +1184,7 @@ class UltimateKaggleEmbedderV4:
             collection_chunks = 0
             priority = collection_priorities.get(canonical_collection, 0.5)
             
-            logger.info(f"📁 Loading single collection: {collection_name} -> {canonical_collection}")
+            logger.info(f"Loading single collection: {collection_name} -> {canonical_collection}")
             
             # Enhanced glob patterns to catch all chunk file variations
             chunk_file_patterns = [
@@ -1125,12 +1200,12 @@ class UltimateKaggleEmbedderV4:
             # Remove duplicates
             chunk_files_found = list(set(chunk_files_found))
             
-            logger.info(f"🔍 Found {len(chunk_files_found)} JSON files matching patterns")
+            logger.info(f"Found {len(chunk_files_found)} JSON files matching patterns")
             
             if not chunk_files_found:
                 # List all files in directory for debugging
                 all_files = list(chunks_path.iterdir())
-                logger.warning(f"⚠️ No chunk files found! Directory contains {len(all_files)} items:")
+                logger.warning(f"No chunk files found; directory contains {len(all_files)} items:")
                 for f in all_files[:10]:  # Show first 10 items
                     logger.warning(f"   - {f.name} ({'file' if f.is_file() else 'dir'})")
             
@@ -1225,39 +1300,39 @@ class UltimateKaggleEmbedderV4:
                         self.raw_chunk_texts.append(original_text)
                         collection_chunks += 1
                     
-                    logger.debug(f"  📄 Loaded {len(file_chunks)} chunks from {chunk_file.name}")
+                    logger.debug(f"  Loaded {len(file_chunks)} chunks from {chunk_file.name}")
                     
                 except Exception as e:
                     error_msg = f"Error loading {chunk_file}: {e}"
-                    logger.error(f"❌ {error_msg}")
+                    logger.error(f"Error: {error_msg}")
                     results["loading_errors"].append(error_msg)
             
             results["chunks_by_collection"][collection_name] = collection_chunks
             results["collections_loaded"] += 1
-            logger.info(f"✅ Collection '{collection_name}': {collection_chunks} chunks (priority: {priority})")
+            logger.info(f"Collection '{collection_name}': {collection_chunks} chunks (priority: {priority})")
         
         else:
             # Multi-collection mode: iterate through subdirectories
-            logger.info(f"🔍 Multi-collection mode: scanning subdirectories in {chunks_path}")
+            logger.info(f"Multi-collection mode: scanning subdirectories in {chunks_path}")
             subdirs = [d for d in chunks_path.iterdir() if d.is_dir() and d.name != "__pycache__"]
-            logger.info(f"📁 Found {len(subdirs)} subdirectories: {[d.name for d in subdirs]}")
+            logger.info(f"Found {len(subdirs)} subdirectories: {[d.name for d in subdirs]}")
             
             for collection_dir in subdirs:
                 collection_name = collection_dir.name
                 collection_chunks = 0
                 
-                logger.info(f"📁 Processing subdirectory: {collection_name}")
+                logger.info(f"Processing subdirectory: {collection_name}")
                 priority = collection_priorities.get(collection_name, 0.5)
                 canonical_collection = self._normalize_collection_name(collection_name)
                 
                 # Enhanced debugging for multi-collection mode
                 chunk_files_found = list(collection_dir.rglob("*_chunks.json"))
-                logger.info(f"   🔍 Pattern *_chunks.json: Found {len(chunk_files_found)} files")
+                logger.info(f"   Pattern *_chunks.json: Found {len(chunk_files_found)} files")
                 
                 if not chunk_files_found:
                     # Debug: Try other patterns
                     all_json = list(collection_dir.rglob("*.json"))
-                    logger.warning(f"   ⚠️ No *_chunks.json found, but found {len(all_json)} total JSON files")
+                    logger.warning(f"   No *_chunks.json found, but found {len(all_json)} total JSON files")
                     if all_json:
                         logger.warning(f"      Example files: {[f.name for f in all_json[:5]]}")
                         # Try loading all JSON files as fallback
@@ -1351,32 +1426,32 @@ class UltimateKaggleEmbedderV4:
                             self.raw_chunk_texts.append(original_text)
                             collection_chunks += 1
                         
-                        logger.debug(f"  📄 Loaded {len(file_chunks)} chunks from {chunk_file.name}")
+                        logger.debug(f"  Loaded {len(file_chunks)} chunks from {chunk_file.name}")
                         
                     except Exception as e:
                         error_msg = f"Error loading {chunk_file}: {e}"
-                        logger.error(f"❌ {error_msg}")
+                        logger.error(f"Error: {error_msg}")
                         results["loading_errors"].append(error_msg)
                 
                 results["chunks_by_collection"][collection_name] = collection_chunks
                 results["collections_loaded"] += 1
-                logger.info(f"✅ Collection '{collection_name}': {collection_chunks} chunks (priority: {priority})")
+                logger.info(f"Collection '{collection_name}': {collection_chunks} chunks (priority: {priority})")
         
         results["total_chunks_loaded"] = len(self.chunks_metadata)
         results["memory_usage_mb"] = psutil.Process().memory_info().rss / 1024 / 1024
-        
+
         # Preprocessing statistics
         if self.text_cache:
             results["preprocessing_stats"] = self.text_cache.get_stats()
-        
-        logger.info(f"🎯 Chunk loading complete!")
-        logger.info(f"📊 Total chunks: {results['total_chunks_loaded']}")
-        logger.info(f"📊 Memory usage: {results['memory_usage_mb']:.1f}MB")
-        
+
+        logger.info("Chunk loading complete")
+        logger.info(f"Total chunks: {results['total_chunks_loaded']}")
+        logger.info(f"Memory usage: {results['memory_usage_mb']:.1f}MB")
+
         if self.text_cache:
             cache_stats = results["preprocessing_stats"]
-            logger.info(f"🧠 Cache hit rate: {cache_stats['hit_rate']:.2%}")
-        
+            logger.info(f"Cache hit rate: {cache_stats['hit_rate']:.2%}")
+
         results["modal_hint_counts"] = dict(sorted(modal_hint_distribution.items()))
 
         return results
@@ -1394,10 +1469,10 @@ class UltimateKaggleEmbedderV4:
             raise ValueError("No chunks loaded. Call load_chunks_from_processing() first.")
         
         total_chunks = len(self.chunk_texts)
-        logger.info(f"🔥 Starting Kaggle T4 x2 optimized embedding generation")
-        logger.info(f"📊 Total chunks: {total_chunks}")
-        logger.info(f"🎯 Model: {self.model_name} ({self.model_config.vector_dim}D)")
-        logger.info(f"🔥 GPUs: {self.device_count}x T4")
+        logger.info("Starting Kaggle T4 x2 optimized embedding generation")
+        logger.info(f"Total chunks: {total_chunks}")
+        logger.info(f"Model: {self.model_name} ({self.model_config.vector_dim}D)")
+        logger.info(f"GPUs: {self.device_count}x T4")
         
         # Start monitoring
         if enable_monitoring:
@@ -1408,8 +1483,8 @@ class UltimateKaggleEmbedderV4:
         # Dynamic batch size optimization
         optimal_batch = self.gpu_config.get_optimal_batch_size(self.model_config)
         total_batch_size = optimal_batch * self.device_count if self.device_count > 1 else optimal_batch
-        
-        logger.info(f"📦 Optimal batch size: {total_batch_size} ({optimal_batch} per GPU)")
+
+        logger.info(f"Optimal batch size: {total_batch_size} ({optimal_batch} per GPU)")
         
         # Process in optimized batches
         all_embeddings = []
@@ -1424,7 +1499,7 @@ class UltimateKaggleEmbedderV4:
                 batch_texts = self.chunk_texts[batch_idx:batch_end]
                 batch_num = (batch_idx // total_batch_size) + 1
                 
-                logger.info(f"🔄 Processing batch {batch_num}/{total_batches} ({len(batch_texts)} chunks)")
+                logger.info(f"Processing batch {batch_num}/{total_batches} ({len(batch_texts)} chunks)")
                 
                 # GPU memory management
                 if batch_num % 5 == 0:  # Clear cache every 5 batches
@@ -1458,7 +1533,7 @@ class UltimateKaggleEmbedderV4:
                 chunks_per_second = len(batch_texts) / batch_time
                 progress = (batch_end / total_chunks) * 100
                 
-                logger.info(f"✅ Batch {batch_num}: {chunks_per_second:.1f} chunks/sec, Progress: {progress:.1f}%")
+                logger.info(f"Batch {batch_num}: {chunks_per_second:.1f} chunks/sec, Progress: {progress:.1f}%")
                 
                 # Save intermediate results for long processes
                 if save_intermediate and batch_num % 10 == 0:
@@ -1470,10 +1545,10 @@ class UltimateKaggleEmbedderV4:
             # Compression for Kaggle export
             if self.export_config.compress_embeddings:
                 self.embeddings = self.embeddings.astype(np.float32)
-                logger.info("🗜️ Embeddings compressed to float32")
+                logger.info("Embeddings compressed to float32")
             
         except Exception as e:
-            logger.error(f"❌ Embedding generation failed: {e}")
+            logger.error(f"Embedding generation failed: {e}")
             raise
         finally:
             # Stop monitoring
@@ -1505,14 +1580,14 @@ class UltimateKaggleEmbedderV4:
             "kaggle_optimized": True,
             "performance_stats": dict(self.processing_stats)
         }
-        
-        logger.info(f"🎯 Kaggle embedding generation complete!")
-        logger.info(f"📊 Generated {results['total_embeddings_generated']} embeddings")
-        logger.info(f"📊 Dimension: {results['embedding_dimension']}")
-        logger.info(f"⏱️ Total time: {results['processing_time_seconds']:.2f}s")
-        logger.info(f"🚀 Speed: {results['chunks_per_second']:.1f} chunks/second")
-        logger.info(f"💾 Memory: {results['embedding_memory_mb']:.1f}MB ({results['memory_per_chunk_kb']:.2f}KB per chunk)")
-        
+
+        logger.info("Kaggle embedding generation complete")
+        logger.info(f"Generated {results['total_embeddings_generated']} embeddings")
+        logger.info(f"Dimension: {results['embedding_dimension']}")
+        logger.info(f"Total time: {results['processing_time_seconds']:.2f}s")
+        logger.info(f"Speed: {results['chunks_per_second']:.1f} chunks/second")
+        logger.info(f"Memory: {results['embedding_memory_mb']:.1f}MB ({results['memory_per_chunk_kb']:.2f}KB per chunk)")
+
         return results
     
     def _encode_with_backend(self, texts: List[str], batch_size: int) -> np.ndarray:
@@ -1531,7 +1606,7 @@ class UltimateKaggleEmbedderV4:
             intermediate_path = self.export_config.get_output_path(f"_intermediate_batch_{batch_num}")
             embeddings_so_far = np.vstack(embeddings_list)
             np.save(f"{intermediate_path}.npy", embeddings_so_far.astype(np.float32))
-            logger.info(f"💾 Intermediate results saved: {intermediate_path}.npy")
+            logger.info(f"Intermediate results saved: {intermediate_path}.npy")
         except Exception as e:
             logger.warning(f"Failed to save intermediate results: {e}")
     
@@ -1543,9 +1618,9 @@ class UltimateKaggleEmbedderV4:
         if self.embeddings is None:
             raise ValueError("No embeddings to export. Generate embeddings first.")
         embeddings = self._require_embeddings()
-        
-        logger.info("📦 Exporting embeddings for local Qdrant integration...")
-        
+
+        logger.info("Exporting embeddings for local Qdrant integration...")
+
         exported_files = {}
         base_path = self.export_config.get_output_path()
         
@@ -1554,28 +1629,28 @@ class UltimateKaggleEmbedderV4:
             numpy_path = f"{base_path}_embeddings.npy"
             np.save(numpy_path, embeddings)
             exported_files["numpy"] = numpy_path
-            logger.info(f"✅ NumPy embeddings: {numpy_path}")
+            logger.info(f"NumPy embeddings: {numpy_path}")
         
         # 2. JSONL format (for Qdrant upload)
         if self.export_config.export_jsonl:
             jsonl_path = f"{base_path}_qdrant.jsonl"
             self._export_qdrant_jsonl(jsonl_path)
             exported_files["jsonl"] = jsonl_path
-            logger.info(f"✅ Qdrant JSONL: {jsonl_path}")
+            logger.info(f"Qdrant JSONL: {jsonl_path}")
 
         # 2b. Sparse JSONL sidecar
         if self.export_config.export_sparse_jsonl and any(self.sparse_vectors):
             sparse_path = f"{base_path}_sparse.jsonl"
             self._export_sparse_jsonl(sparse_path)
             exported_files["sparse_jsonl"] = sparse_path
-            logger.info(f"✅ Sparse JSONL: {sparse_path}")
+            logger.info(f"Sparse JSONL: {sparse_path}")
         
         # 3. FAISS index (for fast similarity search)
         if self.export_config.export_faiss:
             faiss_path = f"{base_path}_index.faiss"
             self._export_faiss_index(faiss_path)
             exported_files["faiss"] = faiss_path
-            logger.info(f"✅ FAISS index: {faiss_path}")
+            logger.info(f"FAISS index: {faiss_path}")
         
         # 4. Metadata files
         metadata_path = f"{base_path}_metadata.json"
@@ -1596,10 +1671,10 @@ class UltimateKaggleEmbedderV4:
         self._generate_upload_script(script_path, exported_files)
         exported_files["upload_script"] = script_path
         
-        logger.info(f"🎯 Export complete! Files ready for download:")
+        logger.info("Export complete; files ready for download:")
         for file_type, file_path in exported_files.items():
             file_size_mb = os.path.getsize(file_path) / 1024 / 1024
-            logger.info(f"  📁 {file_type}: {os.path.basename(file_path)} ({file_size_mb:.1f}MB)")
+            logger.info(f"  {file_type}: {os.path.basename(file_path)} ({file_size_mb:.1f}MB)")
         
         return exported_files
     
@@ -1638,7 +1713,7 @@ class UltimateKaggleEmbedderV4:
         """Export hashed sparse vectors as a sidecar JSONL file."""
 
         if not self.sparse_vectors or not any(self.sparse_vectors):
-            logger.info("ℹ️ No sparse vectors available for export; skipping sparse JSONL generation.")
+            logger.info("No sparse vectors available for export; skipping sparse JSONL generation.")
             return
 
         with open(file_path, 'w', encoding='utf-8') as f:
@@ -1779,10 +1854,10 @@ def upload_to_qdrant():
     try:
         # Connect to Qdrant
         client = QdrantClient(host=QDRANT_HOST, port=QDRANT_PORT)
-        logger.info(f"✅ Connected to Qdrant at {{QDRANT_HOST}}:{{QDRANT_PORT}}")
+    logger.info(f"Connected to Qdrant at {{QDRANT_HOST}}:{{QDRANT_PORT}}")
         
         # Load data
-        logger.info("📂 Loading exported data...")
+    logger.info("Loading exported data...")
         embeddings = np.load(FILES["embeddings"])
         
         with open(FILES["metadata"], 'r', encoding='utf-8') as f:
@@ -1791,17 +1866,17 @@ def upload_to_qdrant():
         with open(FILES["texts"], 'r', encoding='utf-8') as f:
             texts_list = json.load(f)
         
-        logger.info(f"📊 Loaded {{len(embeddings)}} embeddings ({{embeddings.shape[1]}}D)")
+    logger.info(f"Loaded {{len(embeddings)}} embeddings ({{embeddings.shape[1]}}D)")
 
         if FILES.get("sparse"):
-            logger.info(f"ℹ️ Sparse sidecar detected: {{FILES['sparse']}}")
+            logger.info(f"Sparse sidecar detected: {{FILES['sparse']}}")
         
         # Create collection
         try:
             client.get_collection(COLLECTION_NAME)
-            logger.info(f"📋 Collection '{{COLLECTION_NAME}}' already exists")
+            logger.info(f"Collection '{{COLLECTION_NAME}}' already exists")
         except:
-            logger.info(f"🔧 Creating collection: {{COLLECTION_NAME}}")
+            logger.info(f"Creating collection: {{COLLECTION_NAME}}")
             client.create_collection(
                 collection_name=COLLECTION_NAME,
                 vectors_config=VectorParams(
@@ -1825,7 +1900,7 @@ def upload_to_qdrant():
             )
         
         # Prepare points
-        logger.info("🔄 Preparing points for upload...")
+    logger.info("Preparing points for upload...")
         points = []
         
         for i, (embedding, metadata, text) in enumerate(zip(embeddings, metadata_list, texts_list)):
@@ -1845,7 +1920,7 @@ def upload_to_qdrant():
         batch_size = 1000
         total_batches = (len(points) + batch_size - 1) // batch_size
         
-        logger.info(f"📤 Uploading {{len(points)}} points in {{total_batches}} batches...")
+    logger.info(f"Uploading {{len(points)}} points in {{total_batches}} batches...")
         
         for i in range(0, len(points), batch_size):
             batch = points[i:i + batch_size]
@@ -1857,25 +1932,25 @@ def upload_to_qdrant():
                 wait=True
             )
             
-            logger.info(f"✅ Uploaded batch {{batch_num}}/{{total_batches}} ({{len(batch)}} points)")
+            logger.info(f"Uploaded batch {{batch_num}}/{{total_batches}} ({{len(batch)}} points)")
         
         # Verify upload
         collection_info = client.get_collection(COLLECTION_NAME)
-        logger.info(f"🎯 Upload complete! Collection has {{collection_info.points_count}} points")
+    logger.info(f"Upload complete; collection has {{collection_info.points_count}} points")
         
         # Test search
-        logger.info("🔍 Testing search...")
+    logger.info("Testing search...")
         test_results = client.search(
             collection_name=COLLECTION_NAME,
             query_vector=embeddings[0].tolist(),
             limit=5
         )
         
-        logger.info(f"✅ Search test successful! Found {{len(test_results)}} results")
-        logger.info(f"🚀 Your embeddings are ready for use in collection: {{COLLECTION_NAME}}")
+    logger.info(f"Search test successful; found {{len(test_results)}} results")
+    logger.info(f"Embeddings are ready for use in collection: {{COLLECTION_NAME}}")
         
     except Exception as e:
-        logger.error(f"❌ Upload failed: {{e}}")
+    logger.error(f"Upload failed: {{e}}")
         raise
 
 if __name__ == "__main__":
@@ -1928,7 +2003,7 @@ if __name__ == "__main__":
         self.monitoring_active = True
         self.monitor_thread = threading.Thread(target=monitor, daemon=True)
         self.monitor_thread.start()
-        logger.info("📊 Performance monitoring started")
+        logger.info("Performance monitoring started")
     
     def _stop_performance_monitoring(self):
         """Stop performance monitoring"""
@@ -1937,12 +2012,12 @@ if __name__ == "__main__":
             self.monitoring_active = False
             if self.monitor_thread:
                 self.monitor_thread.join(timeout=3)
-            logger.info("📊 Performance monitoring stopped")
+            logger.info("Performance monitoring stopped")
 
 def main():
     """Main function for Kaggle usage with V4 features demo"""
     
-    logger.info("🚀 Ultimate Kaggle Embedder V4 - Complete Feature Demo")
+    logger.info("Ultimate Kaggle Embedder V4 - Complete Feature Demo")
     
     # Configuration for Kaggle T4 x2
     gpu_config = KaggleGPUConfig(
@@ -1983,7 +2058,7 @@ def main():
     ]
     
     for config in test_configs:
-        logger.info(f"\n🔄 Testing {config['name']}")
+        logger.info(f"\nTesting {config['name']}")
         
         try:
             # Initialize embedder with V4 features
@@ -1999,57 +2074,57 @@ def main():
             # Set reranking based on config
             if config["reranking"]:
                 embedder.reranking_config.enable_reranking = True
-            
+
             # Load chunks
-            logger.info("📂 Loading chunks...")
+            logger.info("Loading chunks...")
             loading_results = embedder.load_chunks_from_processing()
-            
+
             if loading_results.get("total_chunks_loaded", 0) == 0:
-                logger.error("❌ No chunks loaded!")
+                logger.error("No chunks loaded!")
                 continue
-            
-            logger.info(f"✅ Loaded {loading_results['total_chunks_loaded']} chunks")
-            
+
+            logger.info(f"Loaded {loading_results['total_chunks_loaded']} chunks")
+
             # Generate embeddings
-            logger.info("🔥 Generating embeddings...")
+            logger.info("Generating embeddings...")
             embedding_results = embedder.generate_embeddings_kaggle_optimized()
-            
+
             # Demo search with reranking (if enabled)
             if config["reranking"] and embedding_results.get('total_embeddings_generated', 0) > 0:
-                logger.info("🔍 Testing semantic search with reranking...")
+                logger.info("Testing semantic search with reranking...")
                 try:
                     search_results = embedder.search_with_reranking(
                         query="How to optimize vector search performance?",
                         top_k=5
                     )
-                    logger.info(f"✅ Found {len(search_results)} reranked results")
+                    logger.info(f"Found {len(search_results)} reranked results")
                     if search_results:
                         logger.info(f"  Top result score: {search_results[0]['score']:.4f}")
                 except Exception as e:
                     logger.warning(f"Search demo failed: {e}")
-            
+
             # Export for local Qdrant
-            logger.info("📦 Exporting for local Qdrant...")
+            logger.info("Exporting for local Qdrant...")
             exported_files = embedder.export_for_local_qdrant()
-            
+
             # Results summary
-            logger.info(f"\n📊 Results for {config['name']}:")
-            logger.info(f"  🎯 Embeddings: {embedding_results['total_embeddings_generated']}")
-            logger.info(f"  📏 Dimension: {embedding_results['embedding_dimension']}")
-            logger.info(f"  ⏱️ Time: {embedding_results['processing_time_seconds']:.2f}s")
-            logger.info(f"  🚀 Speed: {embedding_results['chunks_per_second']:.1f} chunks/sec")
-            logger.info(f"  💾 Memory: {embedding_results['embedding_memory_mb']:.1f}MB")
-            logger.info(f"  📦 Exported files: {len(exported_files)}")
-            
+            logger.info(f"\nResults for {config['name']}:")
+            logger.info(f"  Embeddings: {embedding_results['total_embeddings_generated']}")
+            logger.info(f"  Dimension: {embedding_results['embedding_dimension']}")
+            logger.info(f"  Time: {embedding_results['processing_time_seconds']:.2f}s")
+            logger.info(f"  Speed: {embedding_results['chunks_per_second']:.1f} chunks/sec")
+            logger.info(f"  Memory: {embedding_results['embedding_memory_mb']:.1f}MB")
+            logger.info(f"  Exported files: {len(exported_files)}")
+
             # Only test first config in demo to save time
             break
-            
+
         except Exception as e:
-            logger.error(f"❌ Failed with {config['name']}: {e}")
+            logger.error(f"Failed with {config['name']}: {e}")
             continue
     
-    logger.info("\n🎯 V4 Demo complete! Download exported files and run upload script locally.")
-    logger.info("✨ V4 Features tested: Enhanced models, ensemble embedding, CrossEncoder reranking")
+    logger.info("\nV4 Demo complete. Download exported files and run upload script locally.")
+    logger.info("V4 Features tested: Enhanced models, ensemble embedding, CrossEncoder reranking")
 
 if __name__ == "__main__":
     main()
