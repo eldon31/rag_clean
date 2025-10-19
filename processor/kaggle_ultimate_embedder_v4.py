@@ -21,13 +21,20 @@ PERFORMANCE TARGET:
 - V4: 6-10s for 3,096 chunks (310-516 chunks/sec) - 80% improvement
 """
 
+import os
+
+# Force JAX/TensorFlow to remain on CPU so Kaggle doesn't crash when both stacks register CUDA plugins.
+os.environ.setdefault("JAX_PLATFORMS", "cpu")
+os.environ.setdefault("JAX_PLATFORM_NAME", "cpu")
+os.environ.setdefault("TF_CPP_MIN_LOG_LEVEL", "3")
+os.environ.setdefault("XLA_PYTHON_CLIENT_PREALLOCATE", "false")
+
 import json
 import logging
 import numpy as np
 import pickle
 import torch
 import gc
-import os
 import warnings
 from pathlib import Path
 from typing import Dict, List, Any, Optional, Tuple, Union
