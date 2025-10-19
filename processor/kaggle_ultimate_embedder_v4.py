@@ -478,8 +478,8 @@ class UltimateKaggleEmbedderV4:
         self.embeddings: Optional[np.ndarray] = None
         self.chunks_metadata: List[Dict[str, Any]] = []
         self.chunk_texts: List[str] = []
-    self.raw_chunk_texts: List[str] = []
-    self.sparse_vectors: List[Optional[Dict[str, Any]]] = []
+        self.raw_chunk_texts: List[str] = []
+        self.sparse_vectors: List[Optional[Dict[str, Any]]] = []
         self.processing_stats: defaultdict[str, List[Any]] = defaultdict(list)
         
         # Performance monitoring
