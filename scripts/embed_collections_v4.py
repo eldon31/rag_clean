@@ -12,6 +12,10 @@ from typing import Dict, List
 
 import torch
 
+REPO_ROOT = Path(__file__).resolve().parent.parent
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
+
 from processor.kaggle_ultimate_embedder_v4 import (
     KaggleExportConfig,
     KaggleGPUConfig,
