@@ -1,567 +1,6 @@
 [
   {
-    "text": "## Custom Schema Generation  Both the core schema generation and JSON schema generation support customization through various mechanisms:",
-    "metadata": {
-      "chunk_id": "6c6e259f17f1-0008",
-      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\pydantic\\_pydantic_pydantic_5-schema-generation.md",
-      "filename": "_pydantic_pydantic_5-schema-generation.md",
-      "file_extension": ".md",
-      "chunk_index": 8,
-      "document_level": 1,
-      "parent_chunk_id": null,
-      "child_chunk_ids": [],
-      "section_path": [
-        "Custom Schema Generation"
-      ],
-      "heading_text": "Custom Schema Generation",
-      "token_count": 20,
-      "char_count": 137,
-      "start_char": 0,
-      "end_char": 137,
-      "semantic_score": 0.8,
-      "structural_score": 0.8999999999999999,
-      "retrieval_quality": 0.32333333333333336,
-      "chunking_strategy": "hybrid_adaptive",
-      "content_type": "hierarchical_section",
-      "embedding_model": "nomic-ai/CodeRankEmbed",
-      "processing_timestamp": "2025-10-19T15:02:38.934596",
-      "document_id": "6c6e259f17f1",
-      "document_name": "_pydantic_pydantic_5-schema-generation",
-      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\pydantic\\_pydantic_pydantic_5-schema-generation.md",
-      "source_filename": "_pydantic_pydantic_5-schema-generation.md",
-      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\pydantic",
-      "relative_path": "Docs\\pydantic\\_pydantic_pydantic_5-schema-generation.md",
-      "hierarchy_path": "Custom Schema Generation",
-      "chunk_hash": "9ca3fade149d993c",
-      "content_digest": "9ca3fade149d993c",
-      "chunk_length": 137,
-      "payload_version": "1.3",
-      "collection_hints": [
-        "qdrant_ecosystem"
-      ],
-      "sparse_features": {
-        "version": "1.0",
-        "weighting": "tf-normalized",
-        "top_terms": [
-          "schema",
-          "generation",
-          "custom",
-          "both",
-          "the",
-          "core",
-          "and",
-          "json",
-          "support",
-          "customization",
-          "through",
-          "various",
-          "mechanisms"
-        ],
-        "term_weights": [
-          {
-            "term": "schema",
-            "tf": 3,
-            "weight": 0.176471
-          },
-          {
-            "term": "generation",
-            "tf": 3,
-            "weight": 0.176471
-          },
-          {
-            "term": "custom",
-            "tf": 1,
-            "weight": 0.058824
-          },
-          {
-            "term": "both",
-            "tf": 1,
-            "weight": 0.058824
-          },
-          {
-            "term": "the",
-            "tf": 1,
-            "weight": 0.058824
-          },
-          {
-            "term": "core",
-            "tf": 1,
-            "weight": 0.058824
-          },
-          {
-            "term": "and",
-            "tf": 1,
-            "weight": 0.058824
-          },
-          {
-            "term": "json",
-            "tf": 1,
-            "weight": 0.058824
-          },
-          {
-            "term": "support",
-            "tf": 1,
-            "weight": 0.058824
-          },
-          {
-            "term": "customization",
-            "tf": 1,
-            "weight": 0.058824
-          },
-          {
-            "term": "through",
-            "tf": 1,
-            "weight": 0.058824
-          },
-          {
-            "term": "various",
-            "tf": 1,
-            "weight": 0.058824
-          },
-          {
-            "term": "mechanisms",
-            "tf": 1,
-            "weight": 0.058824
-          }
-        ],
-        "unique_terms": 13,
-        "total_terms": 17
-      },
-      "modal_hint": "prose",
-      "content_flags": {
-        "has_code_block": false,
-        "has_table": false,
-        "has_list": false,
-        "has_json": false,
-        "has_formula": false
-      },
-      "search_keywords": [
-        "Custom Schema Generation",
-        "and",
-        "both",
-        "core",
-        "custom",
-        "customization",
-        "generation",
-        "json",
-        "schema",
-        "support",
-        "the"
-      ],
-      "quality_fallback": true,
-      "quality_notes": "Promoted via relaxed thresholds"
-    },
-    "advanced_scores": {
-      "semantic": 0.8,
-      "structural": 0.8999999999999999,
-      "retrieval_quality": 0.32333333333333336,
-      "overall": 0.6744444444444445
-    }
-  },
-  {
-    "text": "# Schema Generation  Relevant source files  - [pydantic/\\_internal/\\_core\\_metadata.py](https://github.com/pydantic/pydantic/blob/76ef0b08/pydantic/_internal/_core_metadata.py) - [pydantic/\\_internal/\\_generate\\_schema.py](https://github.com/pydantic/pydantic/blob/76ef0b08/pydantic/_internal/_generate_schema.py) - [pydantic/json\\_schema.py](https://github.com/pydantic/pydantic/blob/76ef0b08/pydantic/json_schema.py) - [pyproject.toml](https://github.com/pydantic/pydantic/blob/76ef0b08/pyproject.toml) - [tests/test\\_datetime.py](https://github.com/pydantic/pydantic/blob/76ef0b08/tests/test_datetime.py) - [tests/test\\_json\\_schema.py](https://github.com/pydantic/pydantic/blob/76ef0b08/tests/test_json_schema.py)  Schema generation is the process that converts Python types and annotations into Pydantic's internal schema representation and JSON Schema. This page focuses on how Pydantic transforms type annotations into both core schemas (used internally for validation and serialization) and JSON schemas (for external documentation and compatibility). For information about how to use JSON Schema with Pydantic models, see the relevant documentation section.",
-    "metadata": {
-      "chunk_id": "6c6e259f17f1-0000",
-      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\pydantic\\_pydantic_pydantic_5-schema-generation.md",
-      "filename": "_pydantic_pydantic_5-schema-generation.md",
-      "file_extension": ".md",
-      "chunk_index": 0,
-      "document_level": 1,
-      "parent_chunk_id": null,
-      "child_chunk_ids": [],
-      "section_path": [
-        "Schema Generation"
-      ],
-      "heading_text": "Schema Generation",
-      "token_count": 295,
-      "char_count": 1166,
-      "start_char": 0,
-      "end_char": 1166,
-      "semantic_score": 0.3694223463535309,
-      "structural_score": 0.8999999999999999,
-      "retrieval_quality": 0.7000000000000001,
-      "chunking_strategy": "hybrid_adaptive",
-      "content_type": "hierarchical_section",
-      "embedding_model": "nomic-ai/CodeRankEmbed",
-      "processing_timestamp": "2025-10-19T15:02:38.931915",
-      "document_id": "6c6e259f17f1",
-      "document_name": "_pydantic_pydantic_5-schema-generation",
-      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\pydantic\\_pydantic_pydantic_5-schema-generation.md",
-      "source_filename": "_pydantic_pydantic_5-schema-generation.md",
-      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\pydantic",
-      "relative_path": "Docs\\pydantic\\_pydantic_pydantic_5-schema-generation.md",
-      "hierarchy_path": "Schema Generation",
-      "chunk_hash": "fe887fe9a14805cd",
-      "content_digest": "fe887fe9a14805cd",
-      "chunk_length": 1166,
-      "payload_version": "1.3",
-      "collection_hints": [
-        "qdrant_ecosystem"
-      ],
-      "sparse_features": {
-        "version": "1.0",
-        "weighting": "tf-normalized",
-        "top_terms": [
-          "pydantic",
-          "schema",
-          "json",
-          "https",
-          "github",
-          "com",
-          "blob",
-          "76ef0b08",
-          "internal",
-          "and",
-          "tests",
-          "test",
-          "core",
-          "for",
-          "generation",
-          "relevant",
-          "metadata",
-          "generate",
-          "pyproject",
-          "toml"
-        ],
-        "term_weights": [
-          {
-            "term": "pydantic",
-            "tf": 21,
-            "weight": 0.143836
-          },
-          {
-            "term": "schema",
-            "tf": 11,
-            "weight": 0.075342
-          },
-          {
-            "term": "json",
-            "tf": 7,
-            "weight": 0.047945
-          },
-          {
-            "term": "https",
-            "tf": 6,
-            "weight": 0.041096
-          },
-          {
-            "term": "github",
-            "tf": 6,
-            "weight": 0.041096
-          },
-          {
-            "term": "com",
-            "tf": 6,
-            "weight": 0.041096
-          },
-          {
-            "term": "blob",
-            "tf": 6,
-            "weight": 0.041096
-          },
-          {
-            "term": "76ef0b08",
-            "tf": 6,
-            "weight": 0.041096
-          },
-          {
-            "term": "internal",
-            "tf": 5,
-            "weight": 0.034247
-          },
-          {
-            "term": "and",
-            "tf": 5,
-            "weight": 0.034247
-          },
-          {
-            "term": "tests",
-            "tf": 4,
-            "weight": 0.027397
-          },
-          {
-            "term": "test",
-            "tf": 4,
-            "weight": 0.027397
-          },
-          {
-            "term": "core",
-            "tf": 3,
-            "weight": 0.020548
-          },
-          {
-            "term": "for",
-            "tf": 3,
-            "weight": 0.020548
-          },
-          {
-            "term": "generation",
-            "tf": 2,
-            "weight": 0.013699
-          },
-          {
-            "term": "relevant",
-            "tf": 2,
-            "weight": 0.013699
-          },
-          {
-            "term": "metadata",
-            "tf": 2,
-            "weight": 0.013699
-          },
-          {
-            "term": "generate",
-            "tf": 2,
-            "weight": 0.013699
-          },
-          {
-            "term": "pyproject",
-            "tf": 2,
-            "weight": 0.013699
-          },
-          {
-            "term": "toml",
-            "tf": 2,
-            "weight": 0.013699
-          }
-        ],
-        "unique_terms": 54,
-        "total_terms": 146
-      },
-      "modal_hint": "prose",
-      "content_flags": {
-        "has_code_block": false,
-        "has_table": false,
-        "has_list": false,
-        "has_json": false,
-        "has_formula": false
-      },
-      "search_keywords": [
-        "76ef0b08",
-        "Schema Generation",
-        "and",
-        "blob",
-        "com",
-        "github",
-        "https",
-        "internal",
-        "json",
-        "pydantic",
-        "schema"
-      ],
-      "quality_fallback": true,
-      "quality_notes": "Promoted via relaxed thresholds"
-    },
-    "advanced_scores": {
-      "semantic": 0.3694223463535309,
-      "structural": 0.8999999999999999,
-      "retrieval_quality": 0.7000000000000001,
-      "overall": 0.656474115451177
-    }
-  },
-  {
-    "text": "### On this page  - [Schema Generation](#schema-generation.md) - [Schema Generation Architecture](#schema-generation-architecture.md) - [Core Schema Generation](#core-schema-generation.md) - [Type Matching and Schema Mapping](#type-matching-and-schema-mapping.md) - [Schema Generation Process](#schema-generation-process.md) - [JSON Schema Generation](#json-schema-generation.md) - [JSON Schema Modes](#json-schema-modes.md) - [JSON Schema Type Handlers](#json-schema-type-handlers.md) - [Custom Schema Generation](#custom-schema-generation.md) - [Custom Core Schema Generation](#custom-core-schema-generation.md) - [Custom JSON Schema Generation](#custom-json-schema-generation.md) - [Schema Reference Handling](#schema-reference-handling.md) - [Working with Schema Generation](#working-with-schema-generation.md) - [Schema Validation and Serialization](#schema-validation-and-serialization.md)",
-    "metadata": {
-      "chunk_id": "6c6e259f17f1-0014",
-      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\pydantic\\_pydantic_pydantic_5-schema-generation.md",
-      "filename": "_pydantic_pydantic_5-schema-generation.md",
-      "file_extension": ".md",
-      "chunk_index": 14,
-      "document_level": 1,
-      "parent_chunk_id": null,
-      "child_chunk_ids": [],
-      "section_path": [
-        "On this page"
-      ],
-      "heading_text": "On this page",
-      "token_count": 192,
-      "char_count": 895,
-      "start_char": 0,
-      "end_char": 895,
-      "semantic_score": 0.5954509377479553,
-      "structural_score": 0.8999999999999999,
-      "retrieval_quality": 0.4490909090909091,
-      "chunking_strategy": "hybrid_adaptive",
-      "content_type": "hierarchical_section",
-      "embedding_model": "nomic-ai/CodeRankEmbed",
-      "processing_timestamp": "2025-10-19T15:02:38.937255",
-      "document_id": "6c6e259f17f1",
-      "document_name": "_pydantic_pydantic_5-schema-generation",
-      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\pydantic\\_pydantic_pydantic_5-schema-generation.md",
-      "source_filename": "_pydantic_pydantic_5-schema-generation.md",
-      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\pydantic",
-      "relative_path": "Docs\\pydantic\\_pydantic_pydantic_5-schema-generation.md",
-      "hierarchy_path": "On this page",
-      "chunk_hash": "b580c500351968a1",
-      "content_digest": "b580c500351968a1",
-      "chunk_length": 895,
-      "payload_version": "1.3",
-      "collection_hints": [
-        "qdrant_ecosystem"
-      ],
-      "sparse_features": {
-        "version": "1.0",
-        "weighting": "tf-normalized",
-        "top_terms": [
-          "schema",
-          "generation",
-          "json",
-          "custom",
-          "core",
-          "type",
-          "and",
-          "architecture",
-          "matching",
-          "mapping",
-          "process",
-          "modes",
-          "handlers",
-          "reference",
-          "handling",
-          "working",
-          "with",
-          "validation",
-          "serialization",
-          "this"
-        ],
-        "term_weights": [
-          {
-            "term": "schema",
-            "tf": 28,
-            "weight": 0.285714
-          },
-          {
-            "term": "generation",
-            "tf": 18,
-            "weight": 0.183673
-          },
-          {
-            "term": "json",
-            "tf": 8,
-            "weight": 0.081633
-          },
-          {
-            "term": "custom",
-            "tf": 6,
-            "weight": 0.061224
-          },
-          {
-            "term": "core",
-            "tf": 4,
-            "weight": 0.040816
-          },
-          {
-            "term": "type",
-            "tf": 4,
-            "weight": 0.040816
-          },
-          {
-            "term": "and",
-            "tf": 4,
-            "weight": 0.040816
-          },
-          {
-            "term": "architecture",
-            "tf": 2,
-            "weight": 0.020408
-          },
-          {
-            "term": "matching",
-            "tf": 2,
-            "weight": 0.020408
-          },
-          {
-            "term": "mapping",
-            "tf": 2,
-            "weight": 0.020408
-          },
-          {
-            "term": "process",
-            "tf": 2,
-            "weight": 0.020408
-          },
-          {
-            "term": "modes",
-            "tf": 2,
-            "weight": 0.020408
-          },
-          {
-            "term": "handlers",
-            "tf": 2,
-            "weight": 0.020408
-          },
-          {
-            "term": "reference",
-            "tf": 2,
-            "weight": 0.020408
-          },
-          {
-            "term": "handling",
-            "tf": 2,
-            "weight": 0.020408
-          },
-          {
-            "term": "working",
-            "tf": 2,
-            "weight": 0.020408
-          },
-          {
-            "term": "with",
-            "tf": 2,
-            "weight": 0.020408
-          },
-          {
-            "term": "validation",
-            "tf": 2,
-            "weight": 0.020408
-          },
-          {
-            "term": "serialization",
-            "tf": 2,
-            "weight": 0.020408
-          },
-          {
-            "term": "this",
-            "tf": 1,
-            "weight": 0.010204
-          }
-        ],
-        "unique_terms": 21,
-        "total_terms": 98
-      },
-      "modal_hint": "prose",
-      "content_flags": {
-        "has_code_block": false,
-        "has_table": false,
-        "has_list": false,
-        "has_json": false,
-        "has_formula": false
-      },
-      "search_keywords": [
-        "On this page",
-        "and",
-        "architecture",
-        "core",
-        "custom",
-        "generation",
-        "json",
-        "mapping",
-        "matching",
-        "schema",
-        "type"
-      ],
-      "quality_fallback": true,
-      "quality_notes": "Promoted via relaxed thresholds"
-    },
-    "advanced_scores": {
-      "semantic": 0.5954509377479553,
-      "structural": 0.8999999999999999,
-      "retrieval_quality": 0.4490909090909091,
-      "overall": 0.6481806156129548
-    }
-  },
-  {
-    "text": "## Core Schema Generation  The core schema generation is handled by the `GenerateSchema` class, which converts Python types to pydantic-core schemas. It's a comprehensive system that supports a wide variety of Python types and provides the foundation for Pydantic's validation and serialization capabilities. ``` ``` Sources: [pydantic/\\_internal/\\_generate\\_schema.py318-343](https://github.com/pydantic/pydantic/blob/76ef0b08/pydantic/_internal/_generate_schema.py#L318-L343) [pydantic/\\_internal/\\_generate\\_schema.py679-702](https://github.com/pydantic/pydantic/blob/76ef0b08/pydantic/_internal/_generate_schema.py#L679-L702)",
+    "text": "## Core Schema Generation\n\nThe core schema generation is handled by the `GenerateSchema` class, which converts Python types to pydantic-core schemas. It's a comprehensive system that supports a wide variety of Python types and provides the foundation for Pydantic's validation and serialization capabilities.\n\n```\n```\n\nSources: [pydantic/\\_internal/\\_generate\\_schema.py318-343](https://github.com/pydantic/pydantic/blob/76ef0b08/pydantic/_internal/_generate_schema.py#L318-L343) [pydantic/\\_internal/\\_generate\\_schema.py679-702](https://github.com/pydantic/pydantic/blob/76ef0b08/pydantic/_internal/_generate_schema.py#L679-L702)",
     "metadata": {
       "chunk_id": "6c6e259f17f1-0002",
       "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\pydantic\\_pydantic_pydantic_5-schema-generation.md",
@@ -575,17 +14,17 @@
         "Core Schema Generation"
       ],
       "heading_text": "Core Schema Generation",
-      "token_count": 159,
-      "char_count": 629,
-      "start_char": 0,
-      "end_char": 629,
-      "semantic_score": 0.384596049785614,
-      "structural_score": 0.8999999999999999,
+      "token_count": 161,
+      "char_count": 631,
+      "start_char": 4190,
+      "end_char": 4821,
+      "semantic_score": 0.7,
+      "structural_score": 0.7,
       "retrieval_quality": 0.5275,
-      "chunking_strategy": "hybrid_adaptive",
-      "content_type": "hierarchical_section",
-      "embedding_model": "nomic-ai/CodeRankEmbed",
-      "processing_timestamp": "2025-10-19T15:02:38.932798",
+      "chunking_strategy": "hybrid_adaptive_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "processing_timestamp": "2025-10-20T04:38:35.718568",
       "document_id": "6c6e259f17f1",
       "document_name": "_pydantic_pydantic_5-schema-generation",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\pydantic\\_pydantic_pydantic_5-schema-generation.md",
@@ -593,9 +32,9 @@
       "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\pydantic",
       "relative_path": "Docs\\pydantic\\_pydantic_pydantic_5-schema-generation.md",
       "hierarchy_path": "Core Schema Generation",
-      "chunk_hash": "7a8f97e80a0133f9",
-      "content_digest": "7a8f97e80a0133f9",
-      "chunk_length": 629,
+      "chunk_hash": "c5c3dcf8873cc227",
+      "content_digest": "c5c3dcf8873cc227",
+      "chunk_length": 631,
       "payload_version": "1.3",
       "collection_hints": [
         "qdrant_ecosystem"
@@ -750,19 +189,614 @@
         "schema",
         "the",
         "types"
-      ],
-      "quality_fallback": true,
-      "quality_notes": "Promoted via relaxed thresholds"
+      ]
     },
     "advanced_scores": {
-      "semantic": 0.384596049785614,
-      "structural": 0.8999999999999999,
+      "semantic": 0.7,
+      "structural": 0.7,
       "retrieval_quality": 0.5275,
-      "overall": 0.6040320165952046
+      "overall": 0.6425
     }
   },
   {
-    "text": "## Schema Reference Handling  Both schema generation systems handle references to avoid duplicating schemas for the same types. The core schema uses a definition registry, while JSON Schema uses standard `$ref` references: ``` ``` The reference handling ensures efficient schema representation and prevents circular references from causing infinite recursion. Sources: [pydantic/\\_internal/\\_generate\\_schema.py723-736](https://github.com/pydantic/pydantic/blob/76ef0b08/pydantic/_internal/_generate_schema.py#L723-L736) [pydantic/json\\_schema.py140-214](https://github.com/pydantic/pydantic/blob/76ef0b08/pydantic/json_schema.py#L140-L214)",
+    "text": "### Type Matching and Schema Mapping\n\nThe core schema generation uses a type matching system to map Python types to appropriate schema generation methods. The `match_type` method contains the primary mapping logic:\n\n```\n```\n\nSources: [pydantic/\\_internal/\\_generate\\_schema.py991-1042](https://github.com/pydantic/pydantic/blob/76ef0b08/pydantic/_internal/_generate_schema.py#L991-L1042)",
+    "metadata": {
+      "chunk_id": "6c6e259f17f1-0003",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\pydantic\\_pydantic_pydantic_5-schema-generation.md",
+      "filename": "_pydantic_pydantic_5-schema-generation.md",
+      "file_extension": ".md",
+      "chunk_index": 3,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Type Matching and Schema Mapping"
+      ],
+      "heading_text": "Type Matching and Schema Mapping",
+      "token_count": 95,
+      "char_count": 387,
+      "start_char": 4823,
+      "end_char": 5210,
+      "semantic_score": 0.7,
+      "structural_score": 0.7,
+      "retrieval_quality": 0.5066666666666666,
+      "chunking_strategy": "hybrid_adaptive_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "processing_timestamp": "2025-10-20T04:38:35.718568",
+      "document_id": "6c6e259f17f1",
+      "document_name": "_pydantic_pydantic_5-schema-generation",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\pydantic\\_pydantic_pydantic_5-schema-generation.md",
+      "source_filename": "_pydantic_pydantic_5-schema-generation.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\pydantic",
+      "relative_path": "Docs\\pydantic\\_pydantic_pydantic_5-schema-generation.md",
+      "hierarchy_path": "Type Matching and Schema Mapping",
+      "chunk_hash": "c45c161415a966ee",
+      "content_digest": "c45c161415a966ee",
+      "chunk_length": 387,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "schema",
+          "pydantic",
+          "type",
+          "the",
+          "matching",
+          "mapping",
+          "generation",
+          "internal",
+          "generate",
+          "and",
+          "core",
+          "uses",
+          "system",
+          "map",
+          "python",
+          "types",
+          "appropriate",
+          "methods",
+          "match",
+          "method"
+        ],
+        "term_weights": [
+          {
+            "term": "schema",
+            "tf": 5,
+            "weight": 0.102041
+          },
+          {
+            "term": "pydantic",
+            "tf": 4,
+            "weight": 0.081633
+          },
+          {
+            "term": "type",
+            "tf": 3,
+            "weight": 0.061224
+          },
+          {
+            "term": "the",
+            "tf": 3,
+            "weight": 0.061224
+          },
+          {
+            "term": "matching",
+            "tf": 2,
+            "weight": 0.040816
+          },
+          {
+            "term": "mapping",
+            "tf": 2,
+            "weight": 0.040816
+          },
+          {
+            "term": "generation",
+            "tf": 2,
+            "weight": 0.040816
+          },
+          {
+            "term": "internal",
+            "tf": 2,
+            "weight": 0.040816
+          },
+          {
+            "term": "generate",
+            "tf": 2,
+            "weight": 0.040816
+          },
+          {
+            "term": "and",
+            "tf": 1,
+            "weight": 0.020408
+          },
+          {
+            "term": "core",
+            "tf": 1,
+            "weight": 0.020408
+          },
+          {
+            "term": "uses",
+            "tf": 1,
+            "weight": 0.020408
+          },
+          {
+            "term": "system",
+            "tf": 1,
+            "weight": 0.020408
+          },
+          {
+            "term": "map",
+            "tf": 1,
+            "weight": 0.020408
+          },
+          {
+            "term": "python",
+            "tf": 1,
+            "weight": 0.020408
+          },
+          {
+            "term": "types",
+            "tf": 1,
+            "weight": 0.020408
+          },
+          {
+            "term": "appropriate",
+            "tf": 1,
+            "weight": 0.020408
+          },
+          {
+            "term": "methods",
+            "tf": 1,
+            "weight": 0.020408
+          },
+          {
+            "term": "match",
+            "tf": 1,
+            "weight": 0.020408
+          },
+          {
+            "term": "method",
+            "tf": 1,
+            "weight": 0.020408
+          }
+        ],
+        "unique_terms": 33,
+        "total_terms": 49
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Type Matching and Schema Mapping",
+        "and",
+        "generate",
+        "generation",
+        "internal",
+        "mapping",
+        "matching",
+        "pydantic",
+        "schema",
+        "the",
+        "type"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.7,
+      "retrieval_quality": 0.5066666666666666,
+      "overall": 0.6355555555555555
+    }
+  },
+  {
+    "text": "### Schema Generation Process\n\nThe main entry point for generating a core schema is the `generate_schema` method. The process involves:\n\n1. Checking if the type implements `__get_pydantic_core_schema__` for custom handling\n2. Resolving forward references and type variables\n3. Mapping the type to an appropriate schema generation method\n4. Recursively processing nested types\n5. Adding metadata and customizations to the schema\n\nSources: [pydantic/\\_internal/\\_generate\\_schema.py679-716](https://github.com/pydantic/pydantic/blob/76ef0b08/pydantic/_internal/_generate_schema.py#L679-L716)",
+    "metadata": {
+      "chunk_id": "6c6e259f17f1-0004",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\pydantic\\_pydantic_pydantic_5-schema-generation.md",
+      "filename": "_pydantic_pydantic_5-schema-generation.md",
+      "file_extension": ".md",
+      "chunk_index": 4,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Schema Generation Process"
+      ],
+      "heading_text": "Schema Generation Process",
+      "token_count": 139,
+      "char_count": 589,
+      "start_char": 5212,
+      "end_char": 5801,
+      "semantic_score": 0.6,
+      "structural_score": 0.7,
+      "retrieval_quality": 0.5174193548387097,
+      "chunking_strategy": "hybrid_adaptive_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "processing_timestamp": "2025-10-20T04:38:35.719515",
+      "document_id": "6c6e259f17f1",
+      "document_name": "_pydantic_pydantic_5-schema-generation",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\pydantic\\_pydantic_pydantic_5-schema-generation.md",
+      "source_filename": "_pydantic_pydantic_5-schema-generation.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\pydantic",
+      "relative_path": "Docs\\pydantic\\_pydantic_pydantic_5-schema-generation.md",
+      "hierarchy_path": "Schema Generation Process",
+      "chunk_hash": "6c95783875133964",
+      "content_digest": "6c95783875133964",
+      "chunk_length": 589,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "schema",
+          "the",
+          "pydantic",
+          "generate",
+          "type",
+          "generation",
+          "process",
+          "for",
+          "core",
+          "method",
+          "and",
+          "internal",
+          "main",
+          "entry",
+          "point",
+          "generating",
+          "involves",
+          "checking",
+          "implements",
+          "get"
+        ],
+        "term_weights": [
+          {
+            "term": "schema",
+            "tf": 8,
+            "weight": 0.111111
+          },
+          {
+            "term": "the",
+            "tf": 6,
+            "weight": 0.083333
+          },
+          {
+            "term": "pydantic",
+            "tf": 5,
+            "weight": 0.069444
+          },
+          {
+            "term": "generate",
+            "tf": 3,
+            "weight": 0.041667
+          },
+          {
+            "term": "type",
+            "tf": 3,
+            "weight": 0.041667
+          },
+          {
+            "term": "generation",
+            "tf": 2,
+            "weight": 0.027778
+          },
+          {
+            "term": "process",
+            "tf": 2,
+            "weight": 0.027778
+          },
+          {
+            "term": "for",
+            "tf": 2,
+            "weight": 0.027778
+          },
+          {
+            "term": "core",
+            "tf": 2,
+            "weight": 0.027778
+          },
+          {
+            "term": "method",
+            "tf": 2,
+            "weight": 0.027778
+          },
+          {
+            "term": "and",
+            "tf": 2,
+            "weight": 0.027778
+          },
+          {
+            "term": "internal",
+            "tf": 2,
+            "weight": 0.027778
+          },
+          {
+            "term": "main",
+            "tf": 1,
+            "weight": 0.013889
+          },
+          {
+            "term": "entry",
+            "tf": 1,
+            "weight": 0.013889
+          },
+          {
+            "term": "point",
+            "tf": 1,
+            "weight": 0.013889
+          },
+          {
+            "term": "generating",
+            "tf": 1,
+            "weight": 0.013889
+          },
+          {
+            "term": "involves",
+            "tf": 1,
+            "weight": 0.013889
+          },
+          {
+            "term": "checking",
+            "tf": 1,
+            "weight": 0.013889
+          },
+          {
+            "term": "implements",
+            "tf": 1,
+            "weight": 0.013889
+          },
+          {
+            "term": "get",
+            "tf": 1,
+            "weight": 0.013889
+          }
+        ],
+        "unique_terms": 45,
+        "total_terms": 72
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Schema Generation Process",
+        "core",
+        "for",
+        "generate",
+        "generation",
+        "method",
+        "process",
+        "pydantic",
+        "schema",
+        "the",
+        "type"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.6,
+      "structural": 0.7,
+      "retrieval_quality": 0.5174193548387097,
+      "overall": 0.6058064516129033
+    }
+  },
+  {
+    "text": "### Custom Core Schema Generation\n\nCustom types can define how they're converted to core schemas by implementing the `__get_pydantic_core_schema__` method:\n\n```\n```\n\nSources: [pydantic/\\_internal/\\_generate\\_schema.py850-890](https://github.com/pydantic/pydantic/blob/76ef0b08/pydantic/_internal/_generate_schema.py#L850-L890)",
+    "metadata": {
+      "chunk_id": "6c6e259f17f1-0009",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\pydantic\\_pydantic_pydantic_5-schema-generation.md",
+      "filename": "_pydantic_pydantic_5-schema-generation.md",
+      "file_extension": ".md",
+      "chunk_index": 9,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Custom Core Schema Generation"
+      ],
+      "heading_text": "Custom Core Schema Generation",
+      "token_count": 87,
+      "char_count": 326,
+      "start_char": 7164,
+      "end_char": 7490,
+      "semantic_score": 0.7,
+      "structural_score": 0.7,
+      "retrieval_quality": 0.5525,
+      "chunking_strategy": "hybrid_adaptive_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "processing_timestamp": "2025-10-20T04:38:35.720508",
+      "document_id": "6c6e259f17f1",
+      "document_name": "_pydantic_pydantic_5-schema-generation",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\pydantic\\_pydantic_pydantic_5-schema-generation.md",
+      "source_filename": "_pydantic_pydantic_5-schema-generation.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\pydantic",
+      "relative_path": "Docs\\pydantic\\_pydantic_pydantic_5-schema-generation.md",
+      "hierarchy_path": "Custom Core Schema Generation",
+      "chunk_hash": "162e0b426ce5df71",
+      "content_digest": "162e0b426ce5df71",
+      "chunk_length": 326,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "pydantic",
+          "schema",
+          "core",
+          "custom",
+          "internal",
+          "generate",
+          "generation",
+          "types",
+          "can",
+          "define",
+          "how",
+          "they",
+          "converted",
+          "schemas",
+          "implementing",
+          "the",
+          "get",
+          "method",
+          "sources",
+          "py850"
+        ],
+        "term_weights": [
+          {
+            "term": "pydantic",
+            "tf": 5,
+            "weight": 0.125
+          },
+          {
+            "term": "schema",
+            "tf": 4,
+            "weight": 0.1
+          },
+          {
+            "term": "core",
+            "tf": 3,
+            "weight": 0.075
+          },
+          {
+            "term": "custom",
+            "tf": 2,
+            "weight": 0.05
+          },
+          {
+            "term": "internal",
+            "tf": 2,
+            "weight": 0.05
+          },
+          {
+            "term": "generate",
+            "tf": 2,
+            "weight": 0.05
+          },
+          {
+            "term": "generation",
+            "tf": 1,
+            "weight": 0.025
+          },
+          {
+            "term": "types",
+            "tf": 1,
+            "weight": 0.025
+          },
+          {
+            "term": "can",
+            "tf": 1,
+            "weight": 0.025
+          },
+          {
+            "term": "define",
+            "tf": 1,
+            "weight": 0.025
+          },
+          {
+            "term": "how",
+            "tf": 1,
+            "weight": 0.025
+          },
+          {
+            "term": "they",
+            "tf": 1,
+            "weight": 0.025
+          },
+          {
+            "term": "converted",
+            "tf": 1,
+            "weight": 0.025
+          },
+          {
+            "term": "schemas",
+            "tf": 1,
+            "weight": 0.025
+          },
+          {
+            "term": "implementing",
+            "tf": 1,
+            "weight": 0.025
+          },
+          {
+            "term": "the",
+            "tf": 1,
+            "weight": 0.025
+          },
+          {
+            "term": "get",
+            "tf": 1,
+            "weight": 0.025
+          },
+          {
+            "term": "method",
+            "tf": 1,
+            "weight": 0.025
+          },
+          {
+            "term": "sources",
+            "tf": 1,
+            "weight": 0.025
+          },
+          {
+            "term": "py850",
+            "tf": 1,
+            "weight": 0.025
+          }
+        ],
+        "unique_terms": 28,
+        "total_terms": 40
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Custom Core Schema Generation",
+        "can",
+        "core",
+        "custom",
+        "define",
+        "generate",
+        "generation",
+        "internal",
+        "pydantic",
+        "schema",
+        "types"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.7,
+      "retrieval_quality": 0.5525,
+      "overall": 0.6508333333333333
+    }
+  },
+  {
+    "text": "## Schema Reference Handling\n\nBoth schema generation systems handle references to avoid duplicating schemas for the same types. The core schema uses a definition registry, while JSON Schema uses standard `$ref` references:\n\n```\n```\n\nThe reference handling ensures efficient schema representation and prevents circular references from causing infinite recursion.\n\nSources: [pydantic/\\_internal/\\_generate\\_schema.py723-736](https://github.com/pydantic/pydantic/blob/76ef0b08/pydantic/_internal/_generate_schema.py#L723-L736) [pydantic/json\\_schema.py140-214](https://github.com/pydantic/pydantic/blob/76ef0b08/pydantic/json_schema.py#L140-L214)",
     "metadata": {
       "chunk_id": "6c6e259f17f1-0011",
       "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\pydantic\\_pydantic_pydantic_5-schema-generation.md",
@@ -776,17 +810,17 @@
         "Schema Reference Handling"
       ],
       "heading_text": "Schema Reference Handling",
-      "token_count": 149,
-      "char_count": 640,
-      "start_char": 0,
-      "end_char": 640,
-      "semantic_score": 0.34848999977111816,
-      "structural_score": 0.8999999999999999,
+      "token_count": 151,
+      "char_count": 643,
+      "start_char": 7939,
+      "end_char": 8582,
+      "semantic_score": 0.7,
+      "structural_score": 0.7,
       "retrieval_quality": 0.5265384615384615,
-      "chunking_strategy": "hybrid_adaptive",
-      "content_type": "hierarchical_section",
-      "embedding_model": "nomic-ai/CodeRankEmbed",
-      "processing_timestamp": "2025-10-19T15:02:38.935538",
+      "chunking_strategy": "hybrid_adaptive_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "processing_timestamp": "2025-10-20T04:38:35.722510",
       "document_id": "6c6e259f17f1",
       "document_name": "_pydantic_pydantic_5-schema-generation",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\pydantic\\_pydantic_pydantic_5-schema-generation.md",
@@ -794,9 +828,9 @@
       "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\pydantic",
       "relative_path": "Docs\\pydantic\\_pydantic_pydantic_5-schema-generation.md",
       "hierarchy_path": "Schema Reference Handling",
-      "chunk_hash": "95178bc14b66b762",
-      "content_digest": "95178bc14b66b762",
-      "chunk_length": 640,
+      "chunk_hash": "a136631ab21193df",
+      "content_digest": "a136631ab21193df",
+      "chunk_length": 643,
       "payload_version": "1.3",
       "collection_hints": [
         "qdrant_ecosystem"
@@ -951,15 +985,212 @@
         "schema",
         "the",
         "uses"
-      ],
-      "quality_fallback": true,
-      "quality_notes": "Promoted via relaxed thresholds"
+      ]
     },
     "advanced_scores": {
-      "semantic": 0.34848999977111816,
-      "structural": 0.8999999999999999,
+      "semantic": 0.7,
+      "structural": 0.7,
       "retrieval_quality": 0.5265384615384615,
-      "overall": 0.5916761537698599
+      "overall": 0.6421794871794871
+    }
+  },
+  {
+    "text": "## Working with Schema Generation  Schema generation is typically handled automatically by Pydantic, but understanding its mechanisms helps when:  1. Implementing custom types with specific validation or serialization behavior 2. Creating advanced validation rules that combine multiple types 3. Working with tools that consume JSON Schema (like API documentation tools) 4. Debugging validation and serialization issues  To directly access the schema generation functionality:  - **Core Schema**: Use `model.__pydantic_core_schema__` to access the core schema of a model - **JSON Schema**: Use `model.model_json_schema()` to generate a JSON schema for a model  Sources: [pydantic/\\_internal/\\_generate\\_schema.py679-716](https://github.com/pydantic/pydantic/blob/76ef0b08/pydantic/_internal/_generate_schema.py#L679-L716) [pydantic/json\\_schema.py378-425](https://github.com/pydantic/pydantic/blob/76ef0b08/pydantic/json_schema.py#L378-L425)",
+    "metadata": {
+      "chunk_id": "6c6e259f17f1-0012",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\pydantic\\_pydantic_pydantic_5-schema-generation.md",
+      "filename": "_pydantic_pydantic_5-schema-generation.md",
+      "file_extension": ".md",
+      "chunk_index": 12,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Working with Schema Generation"
+      ],
+      "heading_text": "Working with Schema Generation",
+      "token_count": 221,
+      "char_count": 941,
+      "start_char": 8584,
+      "end_char": 9525,
+      "semantic_score": 0.7,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5052173913043478,
+      "chunking_strategy": "hybrid_adaptive_structural",
+      "content_type": "list_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "processing_timestamp": "2025-10-20T04:38:35.722510",
+      "document_id": "6c6e259f17f1",
+      "document_name": "_pydantic_pydantic_5-schema-generation",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\pydantic\\_pydantic_pydantic_5-schema-generation.md",
+      "source_filename": "_pydantic_pydantic_5-schema-generation.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\pydantic",
+      "relative_path": "Docs\\pydantic\\_pydantic_pydantic_5-schema-generation.md",
+      "hierarchy_path": "Working with Schema Generation",
+      "chunk_hash": "40887e10e7d7a767",
+      "content_digest": "40887e10e7d7a767",
+      "chunk_length": 941,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "schema",
+          "pydantic",
+          "json",
+          "model",
+          "with",
+          "generation",
+          "validation",
+          "core",
+          "generate",
+          "working",
+          "types",
+          "serialization",
+          "that",
+          "tools",
+          "access",
+          "the",
+          "use",
+          "internal",
+          "https",
+          "github"
+        ],
+        "term_weights": [
+          {
+            "term": "schema",
+            "tf": 14,
+            "weight": 0.121739
+          },
+          {
+            "term": "pydantic",
+            "tf": 10,
+            "weight": 0.086957
+          },
+          {
+            "term": "json",
+            "tf": 6,
+            "weight": 0.052174
+          },
+          {
+            "term": "model",
+            "tf": 5,
+            "weight": 0.043478
+          },
+          {
+            "term": "with",
+            "tf": 3,
+            "weight": 0.026087
+          },
+          {
+            "term": "generation",
+            "tf": 3,
+            "weight": 0.026087
+          },
+          {
+            "term": "validation",
+            "tf": 3,
+            "weight": 0.026087
+          },
+          {
+            "term": "core",
+            "tf": 3,
+            "weight": 0.026087
+          },
+          {
+            "term": "generate",
+            "tf": 3,
+            "weight": 0.026087
+          },
+          {
+            "term": "working",
+            "tf": 2,
+            "weight": 0.017391
+          },
+          {
+            "term": "types",
+            "tf": 2,
+            "weight": 0.017391
+          },
+          {
+            "term": "serialization",
+            "tf": 2,
+            "weight": 0.017391
+          },
+          {
+            "term": "that",
+            "tf": 2,
+            "weight": 0.017391
+          },
+          {
+            "term": "tools",
+            "tf": 2,
+            "weight": 0.017391
+          },
+          {
+            "term": "access",
+            "tf": 2,
+            "weight": 0.017391
+          },
+          {
+            "term": "the",
+            "tf": 2,
+            "weight": 0.017391
+          },
+          {
+            "term": "use",
+            "tf": 2,
+            "weight": 0.017391
+          },
+          {
+            "term": "internal",
+            "tf": 2,
+            "weight": 0.017391
+          },
+          {
+            "term": "https",
+            "tf": 2,
+            "weight": 0.017391
+          },
+          {
+            "term": "github",
+            "tf": 2,
+            "weight": 0.017391
+          }
+        ],
+        "unique_terms": 60,
+        "total_terms": 115
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Working with Schema Generation",
+        "core",
+        "generate",
+        "generation",
+        "json",
+        "model",
+        "pydantic",
+        "schema",
+        "validation",
+        "with",
+        "working"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5052173913043478,
+      "overall": 0.7017391304347825
     }
   }
 ]

@@ -1,6 +1,6 @@
 [
   {
-    "text": "#### Sparse Module Pipeline ```mermaid graph LR     Text[\"Input Text\"] --> MLMTrans[\"MLMTransformer<br/>auto_model + MLM head\"]     MLMTrans --> TokenLogits[\"Token Logits<br/>[batch, seq_len, vocab_size]\"]     TokenLogits --> SpladePool[\"SpladePooling<br/>pooling_strategy + activation\"]     SpladePool --> SparseEmb[\"Sparse Embedding<br/>[batch, vocab_size]\"]          subgraph SparseModules[\"Sparse Module Types\"]         MLMTrans         SpladePool     end ```",
+    "text": "#### Sparse Module Pipeline\n\n```mermaid\ngraph LR\n    Text[\"Input Text\"] --> MLMTrans[\"MLMTransformer<br/>auto_model + MLM head\"]\n    MLMTrans --> TokenLogits[\"Token Logits<br/>[batch, seq_len, vocab_size]\"]\n    TokenLogits --> SpladePool[\"SpladePooling<br/>pooling_strategy + activation\"]\n    SpladePool --> SparseEmb[\"Sparse Embedding<br/>[batch, vocab_size]\"]\n    \n    subgraph SparseModules[\"Sparse Module Types\"]\n        MLMTrans\n        SpladePool\n    end\n```",
     "metadata": {
       "chunk_id": "9eeaa096c300-0002",
       "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers\\Training_arguments_must_specify_router_mapping.md",
@@ -14,17 +14,17 @@
         "Sparse Module Pipeline"
       ],
       "heading_text": "Sparse Module Pipeline",
-      "token_count": 113,
-      "char_count": 463,
-      "start_char": 0,
-      "end_char": 463,
+      "token_count": 120,
+      "char_count": 464,
+      "start_char": 543,
+      "end_char": 1007,
       "semantic_score": 0.8,
-      "structural_score": 0.8999999999999999,
+      "structural_score": 0.7,
       "retrieval_quality": 0.5268421052631579,
-      "chunking_strategy": "hybrid_adaptive",
-      "content_type": "hierarchical_section",
-      "embedding_model": "nomic-ai/CodeRankEmbed",
-      "processing_timestamp": "2025-10-19T15:54:27.789522",
+      "chunking_strategy": "hybrid_adaptive_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "processing_timestamp": "2025-10-20T04:38:47.681886",
       "document_id": "9eeaa096c300",
       "document_name": "Training_arguments_must_specify_router_mapping",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers\\Training_arguments_must_specify_router_mapping.md",
@@ -32,9 +32,9 @@
       "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers",
       "relative_path": "Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers\\Training_arguments_must_specify_router_mapping.md",
       "hierarchy_path": "Sparse Module Pipeline",
-      "chunk_hash": "5727d14804a83cd7",
-      "content_digest": "5727d14804a83cd7",
-      "chunk_length": 463,
+      "chunk_hash": "4874f638201a60a2",
+      "content_digest": "4874f638201a60a2",
+      "chunk_length": 464,
       "payload_version": "1.3",
       "collection_hints": [
         "qdrant_ecosystem"
@@ -189,19 +189,801 @@
         "text",
         "tokenlogits",
         "vocab"
-      ],
-      "quality_fallback": true,
-      "quality_notes": "Promoted via relaxed thresholds"
+      ]
     },
     "advanced_scores": {
       "semantic": 0.8,
-      "structural": 0.8999999999999999,
+      "structural": 0.7,
       "retrieval_quality": 0.5268421052631579,
-      "overall": 0.7422807017543859
+      "overall": 0.6756140350877193
     }
   },
   {
-    "text": "### Installation Options Overview  The library provides five main installation configurations that correspond to different usage patterns: ```mermaid graph TB     subgraph \"Installation Options\"         Default[\"Default<br/>Basic inference\"]         ONNX[\"ONNX<br/>Optimized inference\"]         OpenVINO[\"OpenVINO<br/>Intel optimization\"]         Training[\"Default + Training<br/>Model training\"]         Development[\"Development<br/>Contributing\"]     end          subgraph \"Core Capabilities\"         Default --> LoadSave[\"Model loading/saving\"]         Default --> Inference[\"Embedding generation\"]                  ONNX --> ONNXOpt[\"ONNX optimization\"]         ONNX --> Quantization[\"Model quantization\"]                  OpenVINO --> IntelOpt[\"Intel hardware optimization\"]                  Training --> TrainLoop[\"Training loops\"]         Training --> Evaluation[\"Model evaluation\"]                  Development --> Testing[\"Unit testing\"]         Development --> Linting[\"Code formatting\"]     end          subgraph \"Backend Support\"         LoadSave --> PyTorchBackend[\"PyTorch backend\"]         ONNXOpt --> ONNXBackend[\"ONNX Runtime backend\"]         IntelOpt --> OpenVINOBackend[\"OpenVINO backend\"]     end          subgraph \"Model Types\"         PyTorchBackend --> SentenceTransformer[\"SentenceTransformer\"]         PyTorchBackend --> SparseEncoder[\"SparseEncoder\"]         PyTorchBackend --> CrossEncoder[\"CrossEncoder\"]                  ONNXBackend --> OptimizedModels[\"Optimized models\"]         OpenVINOBackend --> IntelModels[\"Intel-optimized models\"]     end ``` **Sources:** [docs/installation.md:3-8]()",
+    "text": "### Module Interface Requirements\n\nEach module must implement:\n\n```python\ndef forward(self, features: dict[str, torch.Tensor]) -> dict[str, torch.Tensor]:\n    # Transform features and return updated dictionary\n    pass\n\ndef save(self, output_path: str, **kwargs) -> None:\n    # Save module configuration and weights\n    pass\n```\n\nInputModules additionally require:\n\n```python\ndef tokenize(self, texts: list[str], **kwargs) -> dict[str, torch.Tensor]:\n    # Convert text to model features\n    pass\n```\n\nSources: [sentence_transformers/models/Module.py:33-89](), [sentence_transformers/models/InputModule.py:60-73]()",
+    "metadata": {
+      "chunk_id": "9eeaa096c300-0007",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers\\Training_arguments_must_specify_router_mapping.md",
+      "filename": "Training_arguments_must_specify_router_mapping.md",
+      "file_extension": ".md",
+      "chunk_index": 7,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Module Interface Requirements"
+      ],
+      "heading_text": "Module Interface Requirements",
+      "token_count": 141,
+      "char_count": 614,
+      "start_char": 3321,
+      "end_char": 3935,
+      "semantic_score": 0.7,
+      "structural_score": 0.7,
+      "retrieval_quality": 0.5042857142857142,
+      "chunking_strategy": "hybrid_adaptive_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "processing_timestamp": "2025-10-20T04:38:47.684286",
+      "document_id": "9eeaa096c300",
+      "document_name": "Training_arguments_must_specify_router_mapping",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers\\Training_arguments_must_specify_router_mapping.md",
+      "source_filename": "Training_arguments_must_specify_router_mapping.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers",
+      "relative_path": "Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers\\Training_arguments_must_specify_router_mapping.md",
+      "hierarchy_path": "Module Interface Requirements",
+      "chunk_hash": "8999b5b43a4467c6",
+      "content_digest": "8999b5b43a4467c6",
+      "chunk_length": 614,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "str",
+          "module",
+          "def",
+          "self",
+          "features",
+          "dict",
+          "torch",
+          "tensor",
+          "pass",
+          "python",
+          "and",
+          "save",
+          "kwargs",
+          "sentence",
+          "transformers",
+          "models",
+          "interface",
+          "requirements",
+          "each",
+          "must"
+        ],
+        "term_weights": [
+          {
+            "term": "str",
+            "tf": 5,
+            "weight": 0.071429
+          },
+          {
+            "term": "module",
+            "tf": 4,
+            "weight": 0.057143
+          },
+          {
+            "term": "def",
+            "tf": 3,
+            "weight": 0.042857
+          },
+          {
+            "term": "self",
+            "tf": 3,
+            "weight": 0.042857
+          },
+          {
+            "term": "features",
+            "tf": 3,
+            "weight": 0.042857
+          },
+          {
+            "term": "dict",
+            "tf": 3,
+            "weight": 0.042857
+          },
+          {
+            "term": "torch",
+            "tf": 3,
+            "weight": 0.042857
+          },
+          {
+            "term": "tensor",
+            "tf": 3,
+            "weight": 0.042857
+          },
+          {
+            "term": "pass",
+            "tf": 3,
+            "weight": 0.042857
+          },
+          {
+            "term": "python",
+            "tf": 2,
+            "weight": 0.028571
+          },
+          {
+            "term": "and",
+            "tf": 2,
+            "weight": 0.028571
+          },
+          {
+            "term": "save",
+            "tf": 2,
+            "weight": 0.028571
+          },
+          {
+            "term": "kwargs",
+            "tf": 2,
+            "weight": 0.028571
+          },
+          {
+            "term": "sentence",
+            "tf": 2,
+            "weight": 0.028571
+          },
+          {
+            "term": "transformers",
+            "tf": 2,
+            "weight": 0.028571
+          },
+          {
+            "term": "models",
+            "tf": 2,
+            "weight": 0.028571
+          },
+          {
+            "term": "interface",
+            "tf": 1,
+            "weight": 0.014286
+          },
+          {
+            "term": "requirements",
+            "tf": 1,
+            "weight": 0.014286
+          },
+          {
+            "term": "each",
+            "tf": 1,
+            "weight": 0.014286
+          },
+          {
+            "term": "must",
+            "tf": 1,
+            "weight": 0.014286
+          }
+        ],
+        "unique_terms": 42,
+        "total_terms": 70
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Module Interface Requirements",
+        "def",
+        "dict",
+        "features",
+        "module",
+        "pass",
+        "python",
+        "self",
+        "str",
+        "tensor",
+        "torch"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.7,
+      "retrieval_quality": 0.5042857142857142,
+      "overall": 0.6347619047619047
+    }
+  },
+  {
+    "text": "## Use Cases and Applications\n\nThe CrossEncoder is commonly used in several scenarios:\n\n1. **Reranking**: As the second stage in a retrieve-and-rerank pipeline\n   ```\n   Query → SentenceTransformer (retrieval) → Top-k documents → CrossEncoder (reranking) → Reranked results\n   ```\n\n2. **Text Pair Classification**: Directly scoring or classifying pairs of texts\n   - Natural language inference (entailment/contradiction)\n   - Semantic textual similarity\n   - Question-answer relevance\n\n3. **High-Precision Scoring**: When maximum accuracy is needed for a limited number of text pairs\n\nCrossEncoder models typically achieve higher accuracy than SentenceTransformer models for direct text pair comparison tasks, but they are computationally more expensive for large-scale comparisons.\n\nSources: [README.md:93-131]()",
+    "metadata": {
+      "chunk_id": "9eeaa096c300-0008",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers\\Training_arguments_must_specify_router_mapping.md",
+      "filename": "Training_arguments_must_specify_router_mapping.md",
+      "file_extension": ".md",
+      "chunk_index": 8,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Use Cases and Applications"
+      ],
+      "heading_text": "Use Cases and Applications",
+      "token_count": 173,
+      "char_count": 813,
+      "start_char": 3937,
+      "end_char": 4750,
+      "semantic_score": 0.7999999999999999,
+      "structural_score": 0.7999999999999998,
+      "retrieval_quality": 0.528235294117647,
+      "chunking_strategy": "hybrid_adaptive_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "processing_timestamp": "2025-10-20T04:38:47.684864",
+      "document_id": "9eeaa096c300",
+      "document_name": "Training_arguments_must_specify_router_mapping",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers\\Training_arguments_must_specify_router_mapping.md",
+      "source_filename": "Training_arguments_must_specify_router_mapping.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers",
+      "relative_path": "Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers\\Training_arguments_must_specify_router_mapping.md",
+      "hierarchy_path": "Use Cases and Applications",
+      "chunk_hash": "9eeb08a2d9e6e51d",
+      "content_digest": "9eeb08a2d9e6e51d",
+      "chunk_length": 813,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "crossencoder",
+          "text",
+          "for",
+          "and",
+          "the",
+          "reranking",
+          "sentencetransformer",
+          "pair",
+          "scoring",
+          "pairs",
+          "accuracy",
+          "models",
+          "use",
+          "cases",
+          "applications",
+          "commonly",
+          "used",
+          "several",
+          "scenarios",
+          "second"
+        ],
+        "term_weights": [
+          {
+            "term": "crossencoder",
+            "tf": 3,
+            "weight": 0.034884
+          },
+          {
+            "term": "text",
+            "tf": 3,
+            "weight": 0.034884
+          },
+          {
+            "term": "for",
+            "tf": 3,
+            "weight": 0.034884
+          },
+          {
+            "term": "and",
+            "tf": 2,
+            "weight": 0.023256
+          },
+          {
+            "term": "the",
+            "tf": 2,
+            "weight": 0.023256
+          },
+          {
+            "term": "reranking",
+            "tf": 2,
+            "weight": 0.023256
+          },
+          {
+            "term": "sentencetransformer",
+            "tf": 2,
+            "weight": 0.023256
+          },
+          {
+            "term": "pair",
+            "tf": 2,
+            "weight": 0.023256
+          },
+          {
+            "term": "scoring",
+            "tf": 2,
+            "weight": 0.023256
+          },
+          {
+            "term": "pairs",
+            "tf": 2,
+            "weight": 0.023256
+          },
+          {
+            "term": "accuracy",
+            "tf": 2,
+            "weight": 0.023256
+          },
+          {
+            "term": "models",
+            "tf": 2,
+            "weight": 0.023256
+          },
+          {
+            "term": "use",
+            "tf": 1,
+            "weight": 0.011628
+          },
+          {
+            "term": "cases",
+            "tf": 1,
+            "weight": 0.011628
+          },
+          {
+            "term": "applications",
+            "tf": 1,
+            "weight": 0.011628
+          },
+          {
+            "term": "commonly",
+            "tf": 1,
+            "weight": 0.011628
+          },
+          {
+            "term": "used",
+            "tf": 1,
+            "weight": 0.011628
+          },
+          {
+            "term": "several",
+            "tf": 1,
+            "weight": 0.011628
+          },
+          {
+            "term": "scenarios",
+            "tf": 1,
+            "weight": 0.011628
+          },
+          {
+            "term": "second",
+            "tf": 1,
+            "weight": 0.011628
+          }
+        ],
+        "unique_terms": 71,
+        "total_terms": 86
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": true,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Use Cases and Applications",
+        "and",
+        "crossencoder",
+        "for",
+        "pair",
+        "pairs",
+        "reranking",
+        "scoring",
+        "sentencetransformer",
+        "text",
+        "the"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.7999999999999999,
+      "structural": 0.7999999999999998,
+      "retrieval_quality": 0.528235294117647,
+      "overall": 0.7094117647058823
+    }
+  },
+  {
+    "text": "# Installation & Setup\n\n\n\n\nThis document covers installation procedures and dependency requirements for the sentence-transformers library. It explains the different installation options available for various use cases including basic inference, training, backend optimization, and development. For basic usage examples after installation, see [Quickstart Guide](#2.1). For training-specific setup details, see [Training](#3).",
+    "metadata": {
+      "chunk_id": "9eeaa096c300-0010",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers\\Training_arguments_must_specify_router_mapping.md",
+      "filename": "Training_arguments_must_specify_router_mapping.md",
+      "file_extension": ".md",
+      "chunk_index": 10,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Installation & Setup"
+      ],
+      "heading_text": "Installation & Setup",
+      "token_count": 74,
+      "char_count": 425,
+      "start_char": 5632,
+      "end_char": 6057,
+      "semantic_score": 0.7,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.73,
+      "chunking_strategy": "hybrid_adaptive_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "processing_timestamp": "2025-10-20T04:38:47.685375",
+      "document_id": "9eeaa096c300",
+      "document_name": "Training_arguments_must_specify_router_mapping",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers\\Training_arguments_must_specify_router_mapping.md",
+      "source_filename": "Training_arguments_must_specify_router_mapping.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers",
+      "relative_path": "Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers\\Training_arguments_must_specify_router_mapping.md",
+      "hierarchy_path": "Installation & Setup",
+      "chunk_hash": "ab15192e1bab0ab1",
+      "content_digest": "ab15192e1bab0ab1",
+      "chunk_length": 425,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "installation",
+          "for",
+          "training",
+          "setup",
+          "and",
+          "the",
+          "basic",
+          "see",
+          "this",
+          "document",
+          "covers",
+          "procedures",
+          "dependency",
+          "requirements",
+          "sentence",
+          "transformers",
+          "library",
+          "explains",
+          "different",
+          "options"
+        ],
+        "term_weights": [
+          {
+            "term": "installation",
+            "tf": 4,
+            "weight": 0.081633
+          },
+          {
+            "term": "for",
+            "tf": 4,
+            "weight": 0.081633
+          },
+          {
+            "term": "training",
+            "tf": 3,
+            "weight": 0.061224
+          },
+          {
+            "term": "setup",
+            "tf": 2,
+            "weight": 0.040816
+          },
+          {
+            "term": "and",
+            "tf": 2,
+            "weight": 0.040816
+          },
+          {
+            "term": "the",
+            "tf": 2,
+            "weight": 0.040816
+          },
+          {
+            "term": "basic",
+            "tf": 2,
+            "weight": 0.040816
+          },
+          {
+            "term": "see",
+            "tf": 2,
+            "weight": 0.040816
+          },
+          {
+            "term": "this",
+            "tf": 1,
+            "weight": 0.020408
+          },
+          {
+            "term": "document",
+            "tf": 1,
+            "weight": 0.020408
+          },
+          {
+            "term": "covers",
+            "tf": 1,
+            "weight": 0.020408
+          },
+          {
+            "term": "procedures",
+            "tf": 1,
+            "weight": 0.020408
+          },
+          {
+            "term": "dependency",
+            "tf": 1,
+            "weight": 0.020408
+          },
+          {
+            "term": "requirements",
+            "tf": 1,
+            "weight": 0.020408
+          },
+          {
+            "term": "sentence",
+            "tf": 1,
+            "weight": 0.020408
+          },
+          {
+            "term": "transformers",
+            "tf": 1,
+            "weight": 0.020408
+          },
+          {
+            "term": "library",
+            "tf": 1,
+            "weight": 0.020408
+          },
+          {
+            "term": "explains",
+            "tf": 1,
+            "weight": 0.020408
+          },
+          {
+            "term": "different",
+            "tf": 1,
+            "weight": 0.020408
+          },
+          {
+            "term": "options",
+            "tf": 1,
+            "weight": 0.020408
+          }
+        ],
+        "unique_terms": 36,
+        "total_terms": 49
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Installation & Setup",
+        "and",
+        "basic",
+        "document",
+        "for",
+        "installation",
+        "see",
+        "setup",
+        "the",
+        "this",
+        "training"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.73,
+      "overall": 0.7766666666666667
+    }
+  },
+  {
+    "text": "## System Requirements\n\nThe sentence-transformers library requires **Python 3.9+**, **PyTorch 1.11.0+**, and **transformers v4.41.0+**. The library supports multiple backends and deployment scenarios through optional dependencies.",
+    "metadata": {
+      "chunk_id": "9eeaa096c300-0011",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers\\Training_arguments_must_specify_router_mapping.md",
+      "filename": "Training_arguments_must_specify_router_mapping.md",
+      "file_extension": ".md",
+      "chunk_index": 11,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "System Requirements"
+      ],
+      "heading_text": "System Requirements",
+      "token_count": 56,
+      "char_count": 230,
+      "start_char": 6059,
+      "end_char": 6289,
+      "semantic_score": 0.6,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.554,
+      "chunking_strategy": "hybrid_adaptive_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "processing_timestamp": "2025-10-20T04:38:47.685375",
+      "document_id": "9eeaa096c300",
+      "document_name": "Training_arguments_must_specify_router_mapping",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers\\Training_arguments_must_specify_router_mapping.md",
+      "source_filename": "Training_arguments_must_specify_router_mapping.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers",
+      "relative_path": "Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers\\Training_arguments_must_specify_router_mapping.md",
+      "hierarchy_path": "System Requirements",
+      "chunk_hash": "d18a65b5c9aa4e87",
+      "content_digest": "d18a65b5c9aa4e87",
+      "chunk_length": 230,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "the",
+          "transformers",
+          "library",
+          "and",
+          "system",
+          "requirements",
+          "sentence",
+          "requires",
+          "python",
+          "pytorch",
+          "supports",
+          "multiple",
+          "backends",
+          "deployment",
+          "scenarios",
+          "through",
+          "optional",
+          "dependencies"
+        ],
+        "term_weights": [
+          {
+            "term": "the",
+            "tf": 2,
+            "weight": 0.090909
+          },
+          {
+            "term": "transformers",
+            "tf": 2,
+            "weight": 0.090909
+          },
+          {
+            "term": "library",
+            "tf": 2,
+            "weight": 0.090909
+          },
+          {
+            "term": "and",
+            "tf": 2,
+            "weight": 0.090909
+          },
+          {
+            "term": "system",
+            "tf": 1,
+            "weight": 0.045455
+          },
+          {
+            "term": "requirements",
+            "tf": 1,
+            "weight": 0.045455
+          },
+          {
+            "term": "sentence",
+            "tf": 1,
+            "weight": 0.045455
+          },
+          {
+            "term": "requires",
+            "tf": 1,
+            "weight": 0.045455
+          },
+          {
+            "term": "python",
+            "tf": 1,
+            "weight": 0.045455
+          },
+          {
+            "term": "pytorch",
+            "tf": 1,
+            "weight": 0.045455
+          },
+          {
+            "term": "supports",
+            "tf": 1,
+            "weight": 0.045455
+          },
+          {
+            "term": "multiple",
+            "tf": 1,
+            "weight": 0.045455
+          },
+          {
+            "term": "backends",
+            "tf": 1,
+            "weight": 0.045455
+          },
+          {
+            "term": "deployment",
+            "tf": 1,
+            "weight": 0.045455
+          },
+          {
+            "term": "scenarios",
+            "tf": 1,
+            "weight": 0.045455
+          },
+          {
+            "term": "through",
+            "tf": 1,
+            "weight": 0.045455
+          },
+          {
+            "term": "optional",
+            "tf": 1,
+            "weight": 0.045455
+          },
+          {
+            "term": "dependencies",
+            "tf": 1,
+            "weight": 0.045455
+          }
+        ],
+        "unique_terms": 18,
+        "total_terms": 22
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "System Requirements",
+        "and",
+        "library",
+        "python",
+        "pytorch",
+        "requirements",
+        "requires",
+        "sentence",
+        "system",
+        "the",
+        "transformers"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.6,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.554,
+      "overall": 0.6846666666666668
+    }
+  },
+  {
+    "text": "### Installation Options Overview\n\nThe library provides five main installation configurations that correspond to different usage patterns:\n\n```mermaid\ngraph TB\n    subgraph \"Installation Options\"\n        Default[\"Default<br/>Basic inference\"]\n        ONNX[\"ONNX<br/>Optimized inference\"]\n        OpenVINO[\"OpenVINO<br/>Intel optimization\"]\n        Training[\"Default + Training<br/>Model training\"]\n        Development[\"Development<br/>Contributing\"]\n    end\n    \n    subgraph \"Core Capabilities\"\n        Default --> LoadSave[\"Model loading/saving\"]\n        Default --> Inference[\"Embedding generation\"]\n        \n        ONNX --> ONNXOpt[\"ONNX optimization\"]\n        ONNX --> Quantization[\"Model quantization\"]\n        \n        OpenVINO --> IntelOpt[\"Intel hardware optimization\"]\n        \n        Training --> TrainLoop[\"Training loops\"]\n        Training --> Evaluation[\"Model evaluation\"]\n        \n        Development --> Testing[\"Unit testing\"]\n        Development --> Linting[\"Code formatting\"]\n    end\n    \n    subgraph \"Backend Support\"\n        LoadSave --> PyTorchBackend[\"PyTorch backend\"]\n        ONNXOpt --> ONNXBackend[\"ONNX Runtime backend\"]\n        IntelOpt --> OpenVINOBackend[\"OpenVINO backend\"]\n    end\n    \n    subgraph \"Model Types\"\n        PyTorchBackend --> SentenceTransformer[\"SentenceTransformer\"]\n        PyTorchBackend --> SparseEncoder[\"SparseEncoder\"]\n        PyTorchBackend --> CrossEncoder[\"CrossEncoder\"]\n        \n        ONNXBackend --> OptimizedModels[\"Optimized models\"]\n        OpenVINOBackend --> IntelModels[\"Intel-optimized models\"]\n    end\n```\n\n**Sources:** [docs/installation.md:3-8]()",
     "metadata": {
       "chunk_id": "9eeaa096c300-0012",
       "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers\\Training_arguments_must_specify_router_mapping.md",
@@ -215,17 +997,17 @@
         "Installation Options Overview"
       ],
       "heading_text": "Installation Options Overview",
-      "token_count": 325,
-      "char_count": 1621,
-      "start_char": 0,
-      "end_char": 1621,
+      "token_count": 337,
+      "char_count": 1623,
+      "start_char": 6291,
+      "end_char": 7914,
       "semantic_score": 0.8,
-      "structural_score": 0.8999999999999999,
-      "retrieval_quality": 0.5077564102564103,
-      "chunking_strategy": "hybrid_adaptive",
-      "content_type": "hierarchical_section",
-      "embedding_model": "nomic-ai/CodeRankEmbed",
-      "processing_timestamp": "2025-10-19T15:54:27.793384",
+      "structural_score": 0.7999999999999998,
+      "retrieval_quality": 0.5113564102564102,
+      "chunking_strategy": "hybrid_adaptive_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "processing_timestamp": "2025-10-20T04:38:47.685375",
       "document_id": "9eeaa096c300",
       "document_name": "Training_arguments_must_specify_router_mapping",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers\\Training_arguments_must_specify_router_mapping.md",
@@ -233,9 +1015,9 @@
       "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers",
       "relative_path": "Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers\\Training_arguments_must_specify_router_mapping.md",
       "hierarchy_path": "Installation Options Overview",
-      "chunk_hash": "dafb604cda38c82b",
-      "content_digest": "dafb604cda38c82b",
-      "chunk_length": 1621,
+      "chunk_hash": "e009cc72b787cd61",
+      "content_digest": "e009cc72b787cd61",
+      "chunk_length": 1623,
       "payload_version": "1.3",
       "collection_hints": [
         "qdrant_ecosystem"
@@ -390,509 +1172,13 @@
         "openvino",
         "subgraph",
         "training"
-      ],
-      "quality_fallback": true,
-      "quality_notes": "Promoted via relaxed thresholds"
+      ]
     },
     "advanced_scores": {
       "semantic": 0.8,
-      "structural": 0.8999999999999999,
-      "retrieval_quality": 0.5077564102564103,
-      "overall": 0.7359188034188033
-    }
-  },
-  {
-    "text": "### pip Installation  The recommended installation method uses pip with specific extras for different use cases:  | Installation Type | Command | Use Case | |------------------|---------|----------| | Default | `pip install -U sentence-transformers` | Basic inference only | | ONNX (GPU+CPU) | `pip install -U \"sentence-transformers[onnx-gpu]\"` | Optimized inference with GPU support | | ONNX (CPU only) | `pip install -U \"sentence-transformers[onnx]\"` | CPU-only optimized inference | | OpenVINO | `pip install -U \"sentence-transformers[openvino]\"` | Intel hardware optimization | | Training | `pip install -U \"sentence-transformers[train]\"` | Model training capabilities | | Development | `pip install -U \"sentence-transformers[dev]\"` | Full development environment |",
-    "metadata": {
-      "chunk_id": "9eeaa096c300-0014",
-      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers\\Training_arguments_must_specify_router_mapping.md",
-      "filename": "Training_arguments_must_specify_router_mapping.md",
-      "file_extension": ".md",
-      "chunk_index": 14,
-      "document_level": 1,
-      "parent_chunk_id": null,
-      "child_chunk_ids": [],
-      "section_path": [
-        "pip Installation"
-      ],
-      "heading_text": "pip Installation",
-      "token_count": 180,
-      "char_count": 769,
-      "start_char": 0,
-      "end_char": 769,
-      "semantic_score": 0.8,
-      "structural_score": 0.8999999999999999,
-      "retrieval_quality": 0.435631067961165,
-      "chunking_strategy": "hybrid_adaptive",
-      "content_type": "hierarchical_section",
-      "embedding_model": "nomic-ai/CodeRankEmbed",
-      "processing_timestamp": "2025-10-19T15:54:27.793972",
-      "document_id": "9eeaa096c300",
-      "document_name": "Training_arguments_must_specify_router_mapping",
-      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers\\Training_arguments_must_specify_router_mapping.md",
-      "source_filename": "Training_arguments_must_specify_router_mapping.md",
-      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers",
-      "relative_path": "Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers\\Training_arguments_must_specify_router_mapping.md",
-      "hierarchy_path": "pip Installation",
-      "chunk_hash": "f8a118b1c79e4f54",
-      "content_digest": "f8a118b1c79e4f54",
-      "chunk_length": 769,
-      "payload_version": "1.3",
-      "collection_hints": [
-        "qdrant_ecosystem"
-      ],
-      "sparse_features": {
-        "version": "1.0",
-        "weighting": "tf-normalized",
-        "top_terms": [
-          "pip",
-          "install",
-          "sentence",
-          "transformers",
-          "onnx",
-          "installation",
-          "inference",
-          "only",
-          "gpu",
-          "cpu",
-          "with",
-          "use",
-          "optimized",
-          "openvino",
-          "training",
-          "development",
-          "the",
-          "recommended",
-          "method",
-          "uses"
-        ],
-        "term_weights": [
-          {
-            "term": "pip",
-            "tf": 8,
-            "weight": 0.098765
-          },
-          {
-            "term": "install",
-            "tf": 6,
-            "weight": 0.074074
-          },
-          {
-            "term": "sentence",
-            "tf": 6,
-            "weight": 0.074074
-          },
-          {
-            "term": "transformers",
-            "tf": 6,
-            "weight": 0.074074
-          },
-          {
-            "term": "onnx",
-            "tf": 4,
-            "weight": 0.049383
-          },
-          {
-            "term": "installation",
-            "tf": 3,
-            "weight": 0.037037
-          },
-          {
-            "term": "inference",
-            "tf": 3,
-            "weight": 0.037037
-          },
-          {
-            "term": "only",
-            "tf": 3,
-            "weight": 0.037037
-          },
-          {
-            "term": "gpu",
-            "tf": 3,
-            "weight": 0.037037
-          },
-          {
-            "term": "cpu",
-            "tf": 3,
-            "weight": 0.037037
-          },
-          {
-            "term": "with",
-            "tf": 2,
-            "weight": 0.024691
-          },
-          {
-            "term": "use",
-            "tf": 2,
-            "weight": 0.024691
-          },
-          {
-            "term": "optimized",
-            "tf": 2,
-            "weight": 0.024691
-          },
-          {
-            "term": "openvino",
-            "tf": 2,
-            "weight": 0.024691
-          },
-          {
-            "term": "training",
-            "tf": 2,
-            "weight": 0.024691
-          },
-          {
-            "term": "development",
-            "tf": 2,
-            "weight": 0.024691
-          },
-          {
-            "term": "the",
-            "tf": 1,
-            "weight": 0.012346
-          },
-          {
-            "term": "recommended",
-            "tf": 1,
-            "weight": 0.012346
-          },
-          {
-            "term": "method",
-            "tf": 1,
-            "weight": 0.012346
-          },
-          {
-            "term": "uses",
-            "tf": 1,
-            "weight": 0.012346
-          }
-        ],
-        "unique_terms": 40,
-        "total_terms": 81
-      },
-      "modal_hint": "prose",
-      "content_flags": {
-        "has_code_block": false,
-        "has_table": false,
-        "has_list": false,
-        "has_json": false,
-        "has_formula": false
-      },
-      "search_keywords": [
-        "cpu",
-        "gpu",
-        "inference",
-        "install",
-        "installation",
-        "only",
-        "onnx",
-        "pip",
-        "pip Installation",
-        "sentence",
-        "transformers"
-      ],
-      "quality_fallback": true,
-      "quality_notes": "Promoted via relaxed thresholds"
-    },
-    "advanced_scores": {
-      "semantic": 0.8,
-      "structural": 0.8999999999999999,
-      "retrieval_quality": 0.435631067961165,
-      "overall": 0.7118770226537215
-    }
-  },
-  {
-    "text": "#### Sparse Module Types  | Module | Purpose | Output Shape | |--------|---------|--------------| | `MLMTransformer` | Contextual token predictions | `[batch, seq_len, vocab_size]` | | `SpladePooling` | Aggregate tokens to sparse vector | `[batch, vocab_size]` | | `SparseStaticEmbedding` | Pre-computed static weights | `[batch, vocab_size]` | | `SparseAutoEncoder` | Learned sparse representations | `[batch, latent_dim]` |  Key configuration: - `pooling_strategy`: `\"max\"`, `\"mean\"`, `\"sum\"`   - `activation_function`: `\"relu\"`, `\"log1p_relu\"`, `\"identity\"` - `k`: Number of top-k active dimensions (for `SparseAutoEncoder`)  Sources: [sentence_transformers/sparse_encoder/models/MLMTransformer.py](), [sentence_transformers/sparse_encoder/models/SpladePooling.py](), [sentence_transformers/sparse_encoder/models/SparseStaticEmbedding.py](), [sentence_transformers/sparse_encoder/models/SparseAutoEncoder.py]()",
-    "metadata": {
-      "chunk_id": "9eeaa096c300-0003",
-      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers\\Training_arguments_must_specify_router_mapping.md",
-      "filename": "Training_arguments_must_specify_router_mapping.md",
-      "file_extension": ".md",
-      "chunk_index": 3,
-      "document_level": 1,
-      "parent_chunk_id": null,
-      "child_chunk_ids": [],
-      "section_path": [
-        "Sparse Module Types"
-      ],
-      "heading_text": "Sparse Module Types",
-      "token_count": 226,
-      "char_count": 913,
-      "start_char": 0,
-      "end_char": 913,
-      "semantic_score": 0.7159983515739441,
-      "structural_score": 0.8999999999999999,
-      "retrieval_quality": 0.48390243902439023,
-      "chunking_strategy": "hybrid_adaptive",
-      "content_type": "hierarchical_section",
-      "embedding_model": "nomic-ai/CodeRankEmbed",
-      "processing_timestamp": "2025-10-19T15:54:27.790015",
-      "document_id": "9eeaa096c300",
-      "document_name": "Training_arguments_must_specify_router_mapping",
-      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers\\Training_arguments_must_specify_router_mapping.md",
-      "source_filename": "Training_arguments_must_specify_router_mapping.md",
-      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers",
-      "relative_path": "Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers\\Training_arguments_must_specify_router_mapping.md",
-      "hierarchy_path": "Sparse Module Types",
-      "chunk_hash": "74fd22d8f983412d",
-      "content_digest": "74fd22d8f983412d",
-      "chunk_length": 913,
-      "payload_version": "1.3",
-      "collection_hints": [
-        "qdrant_ecosystem"
-      ],
-      "sparse_features": {
-        "version": "1.0",
-        "weighting": "tf-normalized",
-        "top_terms": [
-          "sparse",
-          "batch",
-          "sentence",
-          "transformers",
-          "encoder",
-          "models",
-          "vocab",
-          "size",
-          "sparseautoencoder",
-          "module",
-          "mlmtransformer",
-          "spladepooling",
-          "sparsestaticembedding",
-          "relu",
-          "types",
-          "purpose",
-          "output",
-          "shape",
-          "contextual",
-          "token"
-        ],
-        "term_weights": [
-          {
-            "term": "sparse",
-            "tf": 7,
-            "weight": 0.084337
-          },
-          {
-            "term": "batch",
-            "tf": 4,
-            "weight": 0.048193
-          },
-          {
-            "term": "sentence",
-            "tf": 4,
-            "weight": 0.048193
-          },
-          {
-            "term": "transformers",
-            "tf": 4,
-            "weight": 0.048193
-          },
-          {
-            "term": "encoder",
-            "tf": 4,
-            "weight": 0.048193
-          },
-          {
-            "term": "models",
-            "tf": 4,
-            "weight": 0.048193
-          },
-          {
-            "term": "vocab",
-            "tf": 3,
-            "weight": 0.036145
-          },
-          {
-            "term": "size",
-            "tf": 3,
-            "weight": 0.036145
-          },
-          {
-            "term": "sparseautoencoder",
-            "tf": 3,
-            "weight": 0.036145
-          },
-          {
-            "term": "module",
-            "tf": 2,
-            "weight": 0.024096
-          },
-          {
-            "term": "mlmtransformer",
-            "tf": 2,
-            "weight": 0.024096
-          },
-          {
-            "term": "spladepooling",
-            "tf": 2,
-            "weight": 0.024096
-          },
-          {
-            "term": "sparsestaticembedding",
-            "tf": 2,
-            "weight": 0.024096
-          },
-          {
-            "term": "relu",
-            "tf": 2,
-            "weight": 0.024096
-          },
-          {
-            "term": "types",
-            "tf": 1,
-            "weight": 0.012048
-          },
-          {
-            "term": "purpose",
-            "tf": 1,
-            "weight": 0.012048
-          },
-          {
-            "term": "output",
-            "tf": 1,
-            "weight": 0.012048
-          },
-          {
-            "term": "shape",
-            "tf": 1,
-            "weight": 0.012048
-          },
-          {
-            "term": "contextual",
-            "tf": 1,
-            "weight": 0.012048
-          },
-          {
-            "term": "token",
-            "tf": 1,
-            "weight": 0.012048
-          }
-        ],
-        "unique_terms": 51,
-        "total_terms": 83
-      },
-      "modal_hint": "prose",
-      "content_flags": {
-        "has_code_block": false,
-        "has_table": false,
-        "has_list": false,
-        "has_json": false,
-        "has_formula": false
-      },
-      "search_keywords": [
-        "Sparse Module Types",
-        "batch",
-        "encoder",
-        "models",
-        "module",
-        "sentence",
-        "size",
-        "sparse",
-        "sparseautoencoder",
-        "transformers",
-        "vocab"
-      ],
-      "quality_fallback": true,
-      "quality_notes": "Promoted via relaxed thresholds"
-    },
-    "advanced_scores": {
-      "semantic": 0.7159983515739441,
-      "structural": 0.8999999999999999,
-      "retrieval_quality": 0.48390243902439023,
-      "overall": 0.6999669301994448
-    }
-  },
-  {
-    "text": "## Advanced Module Types",
-    "metadata": {
-      "chunk_id": "9eeaa096c300-0000",
-      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers\\Training_arguments_must_specify_router_mapping.md",
-      "filename": "Training_arguments_must_specify_router_mapping.md",
-      "file_extension": ".md",
-      "chunk_index": 0,
-      "document_level": 1,
-      "parent_chunk_id": null,
-      "child_chunk_ids": [],
-      "section_path": [
-        "Advanced Module Types"
-      ],
-      "heading_text": "Advanced Module Types",
-      "token_count": 4,
-      "char_count": 24,
-      "start_char": 0,
-      "end_char": 24,
-      "semantic_score": 0.8,
-      "structural_score": 0.8999999999999999,
-      "retrieval_quality": 0.39,
-      "chunking_strategy": "hybrid_adaptive",
-      "content_type": "hierarchical_section",
-      "embedding_model": "nomic-ai/CodeRankEmbed",
-      "processing_timestamp": "2025-10-19T15:54:27.789109",
-      "document_id": "9eeaa096c300",
-      "document_name": "Training_arguments_must_specify_router_mapping",
-      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers\\Training_arguments_must_specify_router_mapping.md",
-      "source_filename": "Training_arguments_must_specify_router_mapping.md",
-      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers",
-      "relative_path": "Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers\\Training_arguments_must_specify_router_mapping.md",
-      "hierarchy_path": "Advanced Module Types",
-      "chunk_hash": "b8d0ae29c81b6e2a",
-      "content_digest": "b8d0ae29c81b6e2a",
-      "chunk_length": 24,
-      "payload_version": "1.3",
-      "collection_hints": [
-        "qdrant_ecosystem"
-      ],
-      "sparse_features": {
-        "version": "1.0",
-        "weighting": "tf-normalized",
-        "top_terms": [
-          "advanced",
-          "module",
-          "types"
-        ],
-        "term_weights": [
-          {
-            "term": "advanced",
-            "tf": 1,
-            "weight": 0.333333
-          },
-          {
-            "term": "module",
-            "tf": 1,
-            "weight": 0.333333
-          },
-          {
-            "term": "types",
-            "tf": 1,
-            "weight": 0.333333
-          }
-        ],
-        "unique_terms": 3,
-        "total_terms": 3
-      },
-      "modal_hint": "prose",
-      "content_flags": {
-        "has_code_block": false,
-        "has_table": false,
-        "has_list": false,
-        "has_json": false,
-        "has_formula": false
-      },
-      "search_keywords": [
-        "Advanced Module Types",
-        "advanced",
-        "module",
-        "types"
-      ],
-      "quality_fallback": true,
-      "quality_notes": "Promoted via relaxed thresholds"
-    },
-    "advanced_scores": {
-      "semantic": 0.8,
-      "structural": 0.8999999999999999,
-      "retrieval_quality": 0.39,
-      "overall": 0.6966666666666667
+      "structural": 0.7999999999999998,
+      "retrieval_quality": 0.5113564102564102,
+      "overall": 0.70378547008547
     }
   }
 ]

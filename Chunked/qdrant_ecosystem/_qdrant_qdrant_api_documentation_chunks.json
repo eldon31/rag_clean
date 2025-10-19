@@ -1,12 +1,1206 @@
 [
   {
-    "text": "### Standalone Mode  In standalone mode, Qdrant runs as a single process: ``` ``` **Diagram: Standalone Deployment**  - All data stored locally - No consensus coordination overhead - Suitable for development, testing, and single-machine production deployments",
+    "text": "## Purpose and Scope  This document provides a high-level overview of Qdrant, a vector similarity search engine and vector database written in Rust. It covers the fundamental concepts, system architecture, and deployment modes. This introduction is intended to orient developers and operators to Qdrant's core functionality and how its major components fit together. For detailed information about specific subsystems, see:  - System architecture layers: [System Architecture](qdrant/qdrant/2-system-architecture.md) - Vector storage and indexing strategies: [Vector Storage and Indexing](qdrant/qdrant/3-vector-storage-and-indexing.md) - Distributed deployment and clustering: [Distributed System Features](qdrant/qdrant/7-distributed-system-features.md) - API endpoints and interfaces: [API Reference](qdrant/qdrant/9-api-reference.md)  **Sources:** [README.md1-237](https://github.com/qdrant/qdrant/blob/48203e41/README.md#L1-L237) [Cargo.toml1-400](https://github.com/qdrant/qdrant/blob/48203e41/Cargo.toml#L1-L400)  ---",
     "metadata": {
-      "chunk_id": "1fc99e7c8ebe-0010",
+      "chunk_id": "1fc99e7c8ebe-0001",
       "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant.md",
       "filename": "_qdrant_qdrant.md",
       "file_extension": ".md",
-      "chunk_index": 10,
+      "chunk_index": 1,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Purpose and Scope"
+      ],
+      "heading_text": "Purpose and Scope",
+      "token_count": 249,
+      "char_count": 1024,
+      "start_char": 6304,
+      "end_char": 7328,
+      "semantic_score": 0.7,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5268421052631579,
+      "chunking_strategy": "hierarchical_precise_structural",
+      "content_type": "list_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "processing_timestamp": "2025-10-20T04:38:45.491593",
+      "document_id": "1fc99e7c8ebe",
+      "document_name": "_qdrant_qdrant",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant.md",
+      "source_filename": "_qdrant_qdrant.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant",
+      "relative_path": "Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant.md",
+      "hierarchy_path": "Purpose and Scope",
+      "chunk_hash": "b5b7edfb11428270",
+      "content_digest": "b5b7edfb11428270",
+      "chunk_length": 1024,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "qdrant",
+          "and",
+          "system",
+          "vector",
+          "architecture",
+          "storage",
+          "indexing",
+          "distributed",
+          "api",
+          "this",
+          "deployment",
+          "features",
+          "reference",
+          "readme",
+          "https",
+          "github",
+          "com",
+          "blob",
+          "48203e41",
+          "cargo"
+        ],
+        "term_weights": [
+          {
+            "term": "qdrant",
+            "tf": 14,
+            "weight": 0.112903
+          },
+          {
+            "term": "and",
+            "tf": 10,
+            "weight": 0.080645
+          },
+          {
+            "term": "system",
+            "tf": 6,
+            "weight": 0.048387
+          },
+          {
+            "term": "vector",
+            "tf": 5,
+            "weight": 0.040323
+          },
+          {
+            "term": "architecture",
+            "tf": 4,
+            "weight": 0.032258
+          },
+          {
+            "term": "storage",
+            "tf": 3,
+            "weight": 0.024194
+          },
+          {
+            "term": "indexing",
+            "tf": 3,
+            "weight": 0.024194
+          },
+          {
+            "term": "distributed",
+            "tf": 3,
+            "weight": 0.024194
+          },
+          {
+            "term": "api",
+            "tf": 3,
+            "weight": 0.024194
+          },
+          {
+            "term": "this",
+            "tf": 2,
+            "weight": 0.016129
+          },
+          {
+            "term": "deployment",
+            "tf": 2,
+            "weight": 0.016129
+          },
+          {
+            "term": "features",
+            "tf": 2,
+            "weight": 0.016129
+          },
+          {
+            "term": "reference",
+            "tf": 2,
+            "weight": 0.016129
+          },
+          {
+            "term": "readme",
+            "tf": 2,
+            "weight": 0.016129
+          },
+          {
+            "term": "https",
+            "tf": 2,
+            "weight": 0.016129
+          },
+          {
+            "term": "github",
+            "tf": 2,
+            "weight": 0.016129
+          },
+          {
+            "term": "com",
+            "tf": 2,
+            "weight": 0.016129
+          },
+          {
+            "term": "blob",
+            "tf": 2,
+            "weight": 0.016129
+          },
+          {
+            "term": "48203e41",
+            "tf": 2,
+            "weight": 0.016129
+          },
+          {
+            "term": "cargo",
+            "tf": 2,
+            "weight": 0.016129
+          }
+        ],
+        "unique_terms": 71,
+        "total_terms": 124
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Purpose and Scope",
+        "and",
+        "api",
+        "architecture",
+        "distributed",
+        "indexing",
+        "qdrant",
+        "storage",
+        "system",
+        "this",
+        "vector"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5268421052631579,
+      "overall": 0.7089473684210525
+    }
+  },
+  {
+    "text": "## What is Qdrant? Qdrant (read: *quadrant*) is a production-ready vector similarity search engine that provides:  - **Vector storage and search**: Store high-dimensional vectors and perform similarity searches with various distance metrics (Dot product, Cosine, Euclidean) - **Payload filtering**: Attach JSON payloads to vectors and filter search results based on payload values - **Horizontal scaling**: Distributed deployment with sharding and replication for billion-scale datasets - **Multiple APIs**: REST API (port 6333) and gRPC interface for production workloads - **Persistence**: All data persisted to disk with write-ahead logging (WAL)  The system is designed for neural network and semantic-based matching applications, including semantic search, recommendation engines, and similarity-based retrieval systems. **Sources:** [README.md22-28](https://github.com/qdrant/qdrant/blob/48203e41/README.md#L22-L28) [lib/common/common/src/defaults.rs9-13](https://github.com/qdrant/qdrant/blob/48203e41/lib/common/common/src/defaults.rs#L9-L13)  ---",
+    "metadata": {
+      "chunk_id": "1fc99e7c8ebe-0002",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant.md",
+      "filename": "_qdrant_qdrant.md",
+      "file_extension": ".md",
+      "chunk_index": 2,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "What is Qdrant?"
+      ],
+      "heading_text": "What is Qdrant?",
+      "token_count": 236,
+      "char_count": 1055,
+      "start_char": 7331,
+      "end_char": 8386,
+      "semantic_score": 0.7999999999999999,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5364285714285714,
+      "chunking_strategy": "hierarchical_precise_structural",
+      "content_type": "list_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "processing_timestamp": "2025-10-20T04:38:45.491593",
+      "document_id": "1fc99e7c8ebe",
+      "document_name": "_qdrant_qdrant",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant.md",
+      "source_filename": "_qdrant_qdrant.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant",
+      "relative_path": "Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant.md",
+      "hierarchy_path": "What is Qdrant?",
+      "chunk_hash": "db3881b5ab5a8f55",
+      "content_digest": "db3881b5ab5a8f55",
+      "chunk_length": 1055,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "and",
+          "qdrant",
+          "search",
+          "common",
+          "similarity",
+          "with",
+          "based",
+          "for",
+          "production",
+          "vector",
+          "vectors",
+          "payload",
+          "semantic",
+          "readme",
+          "https",
+          "github",
+          "com",
+          "blob",
+          "48203e41",
+          "lib"
+        ],
+        "term_weights": [
+          {
+            "term": "and",
+            "tf": 7,
+            "weight": 0.052632
+          },
+          {
+            "term": "qdrant",
+            "tf": 6,
+            "weight": 0.045113
+          },
+          {
+            "term": "search",
+            "tf": 4,
+            "weight": 0.030075
+          },
+          {
+            "term": "common",
+            "tf": 4,
+            "weight": 0.030075
+          },
+          {
+            "term": "similarity",
+            "tf": 3,
+            "weight": 0.022556
+          },
+          {
+            "term": "with",
+            "tf": 3,
+            "weight": 0.022556
+          },
+          {
+            "term": "based",
+            "tf": 3,
+            "weight": 0.022556
+          },
+          {
+            "term": "for",
+            "tf": 3,
+            "weight": 0.022556
+          },
+          {
+            "term": "production",
+            "tf": 2,
+            "weight": 0.015038
+          },
+          {
+            "term": "vector",
+            "tf": 2,
+            "weight": 0.015038
+          },
+          {
+            "term": "vectors",
+            "tf": 2,
+            "weight": 0.015038
+          },
+          {
+            "term": "payload",
+            "tf": 2,
+            "weight": 0.015038
+          },
+          {
+            "term": "semantic",
+            "tf": 2,
+            "weight": 0.015038
+          },
+          {
+            "term": "readme",
+            "tf": 2,
+            "weight": 0.015038
+          },
+          {
+            "term": "https",
+            "tf": 2,
+            "weight": 0.015038
+          },
+          {
+            "term": "github",
+            "tf": 2,
+            "weight": 0.015038
+          },
+          {
+            "term": "com",
+            "tf": 2,
+            "weight": 0.015038
+          },
+          {
+            "term": "blob",
+            "tf": 2,
+            "weight": 0.015038
+          },
+          {
+            "term": "48203e41",
+            "tf": 2,
+            "weight": 0.015038
+          },
+          {
+            "term": "lib",
+            "tf": 2,
+            "weight": 0.015038
+          }
+        ],
+        "unique_terms": 94,
+        "total_terms": 133
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "What is Qdrant?",
+        "and",
+        "based",
+        "common",
+        "for",
+        "production",
+        "qdrant",
+        "search",
+        "similarity",
+        "vector",
+        "with"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.7999999999999999,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5364285714285714,
+      "overall": 0.7454761904761904
+    }
+  },
+  {
+    "text": "### Vectors  Vectors are numerical representations of data (embeddings). Qdrant supports:  - **Dense vectors**: Fixed-size arrays of floating-point numbers - **Sparse vectors**: Vectors with mostly zero values, stored efficiently as index-value pairs - **Multi-vectors**: Multiple vectors per point for different embedding models - **Named vectors**: Collections can store multiple vector types per point  **Sources:** [README.md23-24](https://github.com/qdrant/qdrant/blob/48203e41/README.md#L23-L24) [QUICK\\_START.md120-135](https://github.com/qdrant/qdrant/blob/48203e41/QUICK_START.md#L120-L135)",
+    "metadata": {
+      "chunk_id": "1fc99e7c8ebe-0005",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant.md",
+      "filename": "_qdrant_qdrant.md",
+      "file_extension": ".md",
+      "chunk_index": 5,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Vectors"
+      ],
+      "heading_text": "Vectors",
+      "token_count": 152,
+      "char_count": 599,
+      "start_char": 8897,
+      "end_char": 9496,
+      "semantic_score": 0.7,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5257142857142857,
+      "chunking_strategy": "hierarchical_precise_structural",
+      "content_type": "list_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "processing_timestamp": "2025-10-20T04:38:45.491593",
+      "document_id": "1fc99e7c8ebe",
+      "document_name": "_qdrant_qdrant",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant.md",
+      "source_filename": "_qdrant_qdrant.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant",
+      "relative_path": "Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant.md",
+      "hierarchy_path": "Vectors",
+      "chunk_hash": "361ab660d636a001",
+      "content_digest": "361ab660d636a001",
+      "chunk_length": 599,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "vectors",
+          "qdrant",
+          "point",
+          "multiple",
+          "per",
+          "readme",
+          "https",
+          "github",
+          "com",
+          "blob",
+          "48203e41",
+          "quick",
+          "start",
+          "are",
+          "numerical",
+          "representations",
+          "data",
+          "embeddings",
+          "supports",
+          "dense"
+        ],
+        "term_weights": [
+          {
+            "term": "vectors",
+            "tf": 8,
+            "weight": 0.103896
+          },
+          {
+            "term": "qdrant",
+            "tf": 5,
+            "weight": 0.064935
+          },
+          {
+            "term": "point",
+            "tf": 3,
+            "weight": 0.038961
+          },
+          {
+            "term": "multiple",
+            "tf": 2,
+            "weight": 0.025974
+          },
+          {
+            "term": "per",
+            "tf": 2,
+            "weight": 0.025974
+          },
+          {
+            "term": "readme",
+            "tf": 2,
+            "weight": 0.025974
+          },
+          {
+            "term": "https",
+            "tf": 2,
+            "weight": 0.025974
+          },
+          {
+            "term": "github",
+            "tf": 2,
+            "weight": 0.025974
+          },
+          {
+            "term": "com",
+            "tf": 2,
+            "weight": 0.025974
+          },
+          {
+            "term": "blob",
+            "tf": 2,
+            "weight": 0.025974
+          },
+          {
+            "term": "48203e41",
+            "tf": 2,
+            "weight": 0.025974
+          },
+          {
+            "term": "quick",
+            "tf": 2,
+            "weight": 0.025974
+          },
+          {
+            "term": "start",
+            "tf": 2,
+            "weight": 0.025974
+          },
+          {
+            "term": "are",
+            "tf": 1,
+            "weight": 0.012987
+          },
+          {
+            "term": "numerical",
+            "tf": 1,
+            "weight": 0.012987
+          },
+          {
+            "term": "representations",
+            "tf": 1,
+            "weight": 0.012987
+          },
+          {
+            "term": "data",
+            "tf": 1,
+            "weight": 0.012987
+          },
+          {
+            "term": "embeddings",
+            "tf": 1,
+            "weight": 0.012987
+          },
+          {
+            "term": "supports",
+            "tf": 1,
+            "weight": 0.012987
+          },
+          {
+            "term": "dense",
+            "tf": 1,
+            "weight": 0.012987
+          }
+        ],
+        "unique_terms": 54,
+        "total_terms": 77
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Vectors",
+        "blob",
+        "com",
+        "github",
+        "https",
+        "multiple",
+        "per",
+        "point",
+        "qdrant",
+        "readme",
+        "vectors"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5257142857142857,
+      "overall": 0.7085714285714285
+    }
+  },
+  {
+    "text": "### Collections\n\nA **collection** is a named container that groups points with a shared vector configuration. Collections define:\n\n- Vector dimensions and distance metrics\n- Indexing parameters (HNSW configuration)\n- Optimization settings\n- Sharding and replication strategy (in distributed mode)\n\n```\n```\n\n**Diagram: Collection Structure**\n\n**Sources:** [QUICK\\_START.md44-116](https://github.com/qdrant/qdrant/blob/48203e41/QUICK_START.md#L44-L116) [lib/collection/Cargo.toml1-112](https://github.com/qdrant/qdrant/blob/48203e41/lib/collection/Cargo.toml#L1-L112)",
+    "metadata": {
+      "chunk_id": "1fc99e7c8ebe-0006",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant.md",
+      "filename": "_qdrant_qdrant.md",
+      "file_extension": ".md",
+      "chunk_index": 6,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Collections"
+      ],
+      "heading_text": "Collections",
+      "token_count": 146,
+      "char_count": 565,
+      "start_char": 9498,
+      "end_char": 10063,
+      "semantic_score": 0.7,
+      "structural_score": 0.7999999999999998,
+      "retrieval_quality": 0.53375,
+      "chunking_strategy": "hierarchical_precise_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "processing_timestamp": "2025-10-20T04:38:45.491593",
+      "document_id": "1fc99e7c8ebe",
+      "document_name": "_qdrant_qdrant",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant.md",
+      "source_filename": "_qdrant_qdrant.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant",
+      "relative_path": "Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant.md",
+      "hierarchy_path": "Collections",
+      "chunk_hash": "a1d467bab9fe8c5a",
+      "content_digest": "a1d467bab9fe8c5a",
+      "chunk_length": 565,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "collection",
+          "qdrant",
+          "collections",
+          "vector",
+          "configuration",
+          "and",
+          "quick",
+          "start",
+          "https",
+          "github",
+          "com",
+          "blob",
+          "48203e41",
+          "lib",
+          "cargo",
+          "named",
+          "container",
+          "that",
+          "groups",
+          "points"
+        ],
+        "term_weights": [
+          {
+            "term": "collection",
+            "tf": 4,
+            "weight": 0.060606
+          },
+          {
+            "term": "qdrant",
+            "tf": 4,
+            "weight": 0.060606
+          },
+          {
+            "term": "collections",
+            "tf": 2,
+            "weight": 0.030303
+          },
+          {
+            "term": "vector",
+            "tf": 2,
+            "weight": 0.030303
+          },
+          {
+            "term": "configuration",
+            "tf": 2,
+            "weight": 0.030303
+          },
+          {
+            "term": "and",
+            "tf": 2,
+            "weight": 0.030303
+          },
+          {
+            "term": "quick",
+            "tf": 2,
+            "weight": 0.030303
+          },
+          {
+            "term": "start",
+            "tf": 2,
+            "weight": 0.030303
+          },
+          {
+            "term": "https",
+            "tf": 2,
+            "weight": 0.030303
+          },
+          {
+            "term": "github",
+            "tf": 2,
+            "weight": 0.030303
+          },
+          {
+            "term": "com",
+            "tf": 2,
+            "weight": 0.030303
+          },
+          {
+            "term": "blob",
+            "tf": 2,
+            "weight": 0.030303
+          },
+          {
+            "term": "48203e41",
+            "tf": 2,
+            "weight": 0.030303
+          },
+          {
+            "term": "lib",
+            "tf": 2,
+            "weight": 0.030303
+          },
+          {
+            "term": "cargo",
+            "tf": 2,
+            "weight": 0.030303
+          },
+          {
+            "term": "named",
+            "tf": 1,
+            "weight": 0.015152
+          },
+          {
+            "term": "container",
+            "tf": 1,
+            "weight": 0.015152
+          },
+          {
+            "term": "that",
+            "tf": 1,
+            "weight": 0.015152
+          },
+          {
+            "term": "groups",
+            "tf": 1,
+            "weight": 0.015152
+          },
+          {
+            "term": "points",
+            "tf": 1,
+            "weight": 0.015152
+          }
+        ],
+        "unique_terms": 47,
+        "total_terms": 66
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": true,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Collections",
+        "and",
+        "collection",
+        "collections",
+        "configuration",
+        "github",
+        "https",
+        "qdrant",
+        "quick",
+        "start",
+        "vector"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.7999999999999998,
+      "retrieval_quality": 0.53375,
+      "overall": 0.6779166666666665
+    }
+  },
+  {
+    "text": "### Segments  Within each collection, data is organized into **segments** - immutable data units containing:  - Vector storage (dense/sparse vectors) - Payload storage (JSON data) - Vector indices (HNSW, Plain, or Sparse indices) - Payload indices (for filtering) - ID tracker (mapping external to internal IDs)  Segments are the basic unit of storage and optimization in Qdrant. **Sources:** Diagram 1 in high-level architecture diagrams  ---",
+    "metadata": {
+      "chunk_id": "1fc99e7c8ebe-0007",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant.md",
+      "filename": "_qdrant_qdrant.md",
+      "file_extension": ".md",
+      "chunk_index": 7,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Segments"
+      ],
+      "heading_text": "Segments",
+      "token_count": 98,
+      "char_count": 443,
+      "start_char": 10065,
+      "end_char": 10508,
+      "semantic_score": 0.7999999999999999,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.53,
+      "chunking_strategy": "hierarchical_precise_structural",
+      "content_type": "list_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "processing_timestamp": "2025-10-20T04:38:45.491593",
+      "document_id": "1fc99e7c8ebe",
+      "document_name": "_qdrant_qdrant",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant.md",
+      "source_filename": "_qdrant_qdrant.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant",
+      "relative_path": "Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant.md",
+      "hierarchy_path": "Segments",
+      "chunk_hash": "7c059e8327c3faf6",
+      "content_digest": "7c059e8327c3faf6",
+      "chunk_length": 443,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "segments",
+          "data",
+          "storage",
+          "indices",
+          "vector",
+          "sparse",
+          "payload",
+          "within",
+          "each",
+          "collection",
+          "organized",
+          "into",
+          "immutable",
+          "units",
+          "containing",
+          "dense",
+          "vectors",
+          "json",
+          "hnsw",
+          "plain"
+        ],
+        "term_weights": [
+          {
+            "term": "segments",
+            "tf": 3,
+            "weight": 0.058824
+          },
+          {
+            "term": "data",
+            "tf": 3,
+            "weight": 0.058824
+          },
+          {
+            "term": "storage",
+            "tf": 3,
+            "weight": 0.058824
+          },
+          {
+            "term": "indices",
+            "tf": 3,
+            "weight": 0.058824
+          },
+          {
+            "term": "vector",
+            "tf": 2,
+            "weight": 0.039216
+          },
+          {
+            "term": "sparse",
+            "tf": 2,
+            "weight": 0.039216
+          },
+          {
+            "term": "payload",
+            "tf": 2,
+            "weight": 0.039216
+          },
+          {
+            "term": "within",
+            "tf": 1,
+            "weight": 0.019608
+          },
+          {
+            "term": "each",
+            "tf": 1,
+            "weight": 0.019608
+          },
+          {
+            "term": "collection",
+            "tf": 1,
+            "weight": 0.019608
+          },
+          {
+            "term": "organized",
+            "tf": 1,
+            "weight": 0.019608
+          },
+          {
+            "term": "into",
+            "tf": 1,
+            "weight": 0.019608
+          },
+          {
+            "term": "immutable",
+            "tf": 1,
+            "weight": 0.019608
+          },
+          {
+            "term": "units",
+            "tf": 1,
+            "weight": 0.019608
+          },
+          {
+            "term": "containing",
+            "tf": 1,
+            "weight": 0.019608
+          },
+          {
+            "term": "dense",
+            "tf": 1,
+            "weight": 0.019608
+          },
+          {
+            "term": "vectors",
+            "tf": 1,
+            "weight": 0.019608
+          },
+          {
+            "term": "json",
+            "tf": 1,
+            "weight": 0.019608
+          },
+          {
+            "term": "hnsw",
+            "tf": 1,
+            "weight": 0.019608
+          },
+          {
+            "term": "plain",
+            "tf": 1,
+            "weight": 0.019608
+          }
+        ],
+        "unique_terms": 40,
+        "total_terms": 51
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Segments",
+        "collection",
+        "data",
+        "each",
+        "indices",
+        "payload",
+        "segments",
+        "sparse",
+        "storage",
+        "vector",
+        "within"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.7999999999999999,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.53,
+      "overall": 0.7433333333333332
+    }
+  },
+  {
+    "text": "## System Architecture Overview\n\nQdrant employs a layered architecture with clear separation of concerns:\n\n```\n```\n\n**Diagram: Layered Architecture from API to Storage**\n\nThe key architectural layers are:\n\n1. **API Layer**: HTTP/REST (Actix-web) and gRPC (Tonic) endpoints handle client requests\n2. **Service Orchestration**: Request routing and consensus coordination\n3. **Collection Management**: Logical data containers with sharding strategy\n4. **Shard Distribution**: Local shards (hosted on current node) and remote shards (proxies to other peers)\n5. **Segment Management**: Immutable data units with indices and storage\n6. **Persistence**: Disk-backed storage with memory-mapped files and WAL\n\n**Sources:** Diagram 1 from high-level architecture, [Cargo.toml78-86](https://github.com/qdrant/qdrant/blob/48203e41/Cargo.toml#L78-L86) [lib/segment/Cargo.toml1-223](https://github.com/qdrant/qdrant/blob/48203e41/lib/segment/Cargo.toml#L1-L223)",
+    "metadata": {
+      "chunk_id": "1fc99e7c8ebe-0008",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant.md",
+      "filename": "_qdrant_qdrant.md",
+      "file_extension": ".md",
+      "chunk_index": 8,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "System Architecture Overview"
+      ],
+      "heading_text": "System Architecture Overview",
+      "token_count": 235,
+      "char_count": 947,
+      "start_char": 10511,
+      "end_char": 11458,
+      "semantic_score": 0.7,
+      "structural_score": 0.7999999999999998,
+      "retrieval_quality": 0.5389999999999999,
+      "chunking_strategy": "hierarchical_precise_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "processing_timestamp": "2025-10-20T04:38:45.491593",
+      "document_id": "1fc99e7c8ebe",
+      "document_name": "_qdrant_qdrant",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant.md",
+      "source_filename": "_qdrant_qdrant.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant",
+      "relative_path": "Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant.md",
+      "hierarchy_path": "System Architecture Overview",
+      "chunk_hash": "1e089750f6f95dc3",
+      "content_digest": "1e089750f6f95dc3",
+      "chunk_length": 947,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "qdrant",
+          "and",
+          "architecture",
+          "with",
+          "cargo",
+          "storage",
+          "segment",
+          "layered",
+          "diagram",
+          "from",
+          "api",
+          "management",
+          "data",
+          "shards",
+          "https",
+          "github",
+          "com",
+          "blob",
+          "48203e41",
+          "toml"
+        ],
+        "term_weights": [
+          {
+            "term": "qdrant",
+            "tf": 5,
+            "weight": 0.042373
+          },
+          {
+            "term": "and",
+            "tf": 5,
+            "weight": 0.042373
+          },
+          {
+            "term": "architecture",
+            "tf": 4,
+            "weight": 0.033898
+          },
+          {
+            "term": "with",
+            "tf": 4,
+            "weight": 0.033898
+          },
+          {
+            "term": "cargo",
+            "tf": 4,
+            "weight": 0.033898
+          },
+          {
+            "term": "storage",
+            "tf": 3,
+            "weight": 0.025424
+          },
+          {
+            "term": "segment",
+            "tf": 3,
+            "weight": 0.025424
+          },
+          {
+            "term": "layered",
+            "tf": 2,
+            "weight": 0.016949
+          },
+          {
+            "term": "diagram",
+            "tf": 2,
+            "weight": 0.016949
+          },
+          {
+            "term": "from",
+            "tf": 2,
+            "weight": 0.016949
+          },
+          {
+            "term": "api",
+            "tf": 2,
+            "weight": 0.016949
+          },
+          {
+            "term": "management",
+            "tf": 2,
+            "weight": 0.016949
+          },
+          {
+            "term": "data",
+            "tf": 2,
+            "weight": 0.016949
+          },
+          {
+            "term": "shards",
+            "tf": 2,
+            "weight": 0.016949
+          },
+          {
+            "term": "https",
+            "tf": 2,
+            "weight": 0.016949
+          },
+          {
+            "term": "github",
+            "tf": 2,
+            "weight": 0.016949
+          },
+          {
+            "term": "com",
+            "tf": 2,
+            "weight": 0.016949
+          },
+          {
+            "term": "blob",
+            "tf": 2,
+            "weight": 0.016949
+          },
+          {
+            "term": "48203e41",
+            "tf": 2,
+            "weight": 0.016949
+          },
+          {
+            "term": "toml",
+            "tf": 2,
+            "weight": 0.016949
+          }
+        ],
+        "unique_terms": 83,
+        "total_terms": 118
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "System Architecture Overview",
+        "and",
+        "architecture",
+        "cargo",
+        "diagram",
+        "from",
+        "layered",
+        "qdrant",
+        "segment",
+        "storage",
+        "with"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.7999999999999998,
+      "retrieval_quality": 0.5389999999999999,
+      "overall": 0.6796666666666665
+    }
+  },
+  {
+    "text": "### Standalone Mode\n\nIn standalone mode, Qdrant runs as a single process:\n\n```\n```\n\n**Diagram: Standalone Deployment**\n\n- All data stored locally\n- No consensus coordination overhead\n- Suitable for development, testing, and single-machine production deployments",
+    "metadata": {
+      "chunk_id": "1fc99e7c8ebe-0011",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant.md",
+      "filename": "_qdrant_qdrant.md",
+      "file_extension": ".md",
+      "chunk_index": 11,
       "document_level": 1,
       "parent_chunk_id": null,
       "child_chunk_ids": [],
@@ -14,17 +1208,17 @@
         "Standalone Mode"
       ],
       "heading_text": "Standalone Mode",
-      "token_count": 50,
-      "char_count": 259,
-      "start_char": 0,
-      "end_char": 259,
+      "token_count": 53,
+      "char_count": 261,
+      "start_char": 11601,
+      "end_char": 11862,
       "semantic_score": 0.8,
-      "structural_score": 0.8999999999999999,
+      "structural_score": 0.7999999999999998,
       "retrieval_quality": 0.5483333333333333,
-      "chunking_strategy": "hierarchical_precise",
-      "content_type": "hierarchical_section",
-      "embedding_model": "nomic-ai/CodeRankEmbed",
-      "processing_timestamp": "2025-10-19T15:37:44.105842",
+      "chunking_strategy": "hierarchical_precise_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "processing_timestamp": "2025-10-20T04:38:45.491593",
       "document_id": "1fc99e7c8ebe",
       "document_name": "_qdrant_qdrant",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant.md",
@@ -32,9 +1226,9 @@
       "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant",
       "relative_path": "Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant.md",
       "hierarchy_path": "Standalone Mode",
-      "chunk_hash": "67de7d97a2046ef6",
-      "content_digest": "67de7d97a2046ef6",
-      "chunk_length": 259,
+      "chunk_hash": "300ab1f359592a7c",
+      "content_digest": "300ab1f359592a7c",
+      "chunk_length": 261,
       "payload_version": "1.3",
       "collection_hints": [
         "qdrant_ecosystem"
@@ -173,7 +1367,7 @@
       "content_flags": {
         "has_code_block": true,
         "has_table": false,
-        "has_list": false,
+        "has_list": true,
         "has_json": false,
         "has_formula": false
       },
@@ -189,53 +1383,51 @@
         "runs",
         "single",
         "standalone"
-      ],
-      "quality_fallback": true,
-      "quality_notes": "Promoted via relaxed thresholds"
+      ]
     },
     "advanced_scores": {
       "semantic": 0.8,
-      "structural": 0.8999999999999999,
+      "structural": 0.7999999999999998,
       "retrieval_quality": 0.5483333333333333,
-      "overall": 0.7494444444444444
+      "overall": 0.7161111111111111
     }
   },
   {
-    "text": "## Core Concepts",
+    "text": "### REST API  The REST API is built with **Actix-web** and provides:  - Collection management (`/collections/*`) - Point operations (`/collections/{name}/points/*`) - Search and query endpoints - Cluster management (`/cluster/*`) - Snapshots and telemetry  Example endpoint structure:  | Endpoint                            | Method | Purpose           | | ----------------------------------- | ------ | ----------------- | | `/collections/{name}`               | PUT    | Create collection | | `/collections/{name}/points`        | PUT    | Upsert points     | | `/collections/{name}/points/search` | POST   | Search vectors    | | `/collections/{name}/points/scroll` | POST   | Iterate points    |  **Sources:** [Cargo.toml78-80](https://github.com/qdrant/qdrant/blob/48203e41/Cargo.toml#L78-L80) [docs/redoc/index.html1-103](https://github.com/qdrant/qdrant/blob/48203e41/docs/redoc/index.html#L1-L103)",
     "metadata": {
-      "chunk_id": "1fc99e7c8ebe-0003",
+      "chunk_id": "1fc99e7c8ebe-0014",
       "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant.md",
       "filename": "_qdrant_qdrant.md",
       "file_extension": ".md",
-      "chunk_index": 3,
+      "chunk_index": 14,
       "document_level": 1,
       "parent_chunk_id": null,
       "child_chunk_ids": [],
       "section_path": [
-        "Core Concepts"
+        "REST API"
       ],
-      "heading_text": "Core Concepts",
-      "token_count": 3,
-      "char_count": 16,
-      "start_char": 0,
-      "end_char": 16,
-      "semantic_score": 0.8,
+      "heading_text": "REST API",
+      "token_count": 223,
+      "char_count": 905,
+      "start_char": 12655,
+      "end_char": 13560,
+      "semantic_score": 0.7999999999999999,
       "structural_score": 0.8999999999999999,
-      "retrieval_quality": 0.39,
-      "chunking_strategy": "hierarchical_precise",
-      "content_type": "hierarchical_section",
-      "embedding_model": "nomic-ai/CodeRankEmbed",
-      "processing_timestamp": "2025-10-19T15:37:44.103427",
+      "retrieval_quality": 0.6558823529411765,
+      "chunking_strategy": "hierarchical_precise_structural",
+      "content_type": "table_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "processing_timestamp": "2025-10-20T04:38:45.491593",
       "document_id": "1fc99e7c8ebe",
       "document_name": "_qdrant_qdrant",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant.md",
       "source_filename": "_qdrant_qdrant.md",
       "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant",
       "relative_path": "Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant.md",
-      "hierarchy_path": "Core Concepts",
-      "chunk_hash": "93264d6748f842a3",
-      "content_digest": "93264d6748f842a3",
-      "chunk_length": 16,
+      "hierarchy_path": "REST API",
+      "chunk_hash": "dd355c93cf7984c4",
+      "content_digest": "dd355c93cf7984c4",
+      "chunk_length": 905,
       "payload_version": "1.3",
       "collection_hints": [
         "qdrant_ecosystem"
@@ -244,23 +1436,131 @@
         "version": "1.0",
         "weighting": "tf-normalized",
         "top_terms": [
-          "core",
-          "concepts"
+          "collections",
+          "points",
+          "name",
+          "qdrant",
+          "and",
+          "search",
+          "rest",
+          "api",
+          "collection",
+          "management",
+          "cluster",
+          "endpoint",
+          "put",
+          "post",
+          "cargo",
+          "https",
+          "github",
+          "com",
+          "blob",
+          "48203e41"
         ],
         "term_weights": [
           {
-            "term": "core",
-            "tf": 1,
-            "weight": 0.5
+            "term": "collections",
+            "tf": 6,
+            "weight": 0.065934
           },
           {
-            "term": "concepts",
-            "tf": 1,
-            "weight": 0.5
+            "term": "points",
+            "tf": 6,
+            "weight": 0.065934
+          },
+          {
+            "term": "name",
+            "tf": 5,
+            "weight": 0.054945
+          },
+          {
+            "term": "qdrant",
+            "tf": 4,
+            "weight": 0.043956
+          },
+          {
+            "term": "and",
+            "tf": 3,
+            "weight": 0.032967
+          },
+          {
+            "term": "search",
+            "tf": 3,
+            "weight": 0.032967
+          },
+          {
+            "term": "rest",
+            "tf": 2,
+            "weight": 0.021978
+          },
+          {
+            "term": "api",
+            "tf": 2,
+            "weight": 0.021978
+          },
+          {
+            "term": "collection",
+            "tf": 2,
+            "weight": 0.021978
+          },
+          {
+            "term": "management",
+            "tf": 2,
+            "weight": 0.021978
+          },
+          {
+            "term": "cluster",
+            "tf": 2,
+            "weight": 0.021978
+          },
+          {
+            "term": "endpoint",
+            "tf": 2,
+            "weight": 0.021978
+          },
+          {
+            "term": "put",
+            "tf": 2,
+            "weight": 0.021978
+          },
+          {
+            "term": "post",
+            "tf": 2,
+            "weight": 0.021978
+          },
+          {
+            "term": "cargo",
+            "tf": 2,
+            "weight": 0.021978
+          },
+          {
+            "term": "https",
+            "tf": 2,
+            "weight": 0.021978
+          },
+          {
+            "term": "github",
+            "tf": 2,
+            "weight": 0.021978
+          },
+          {
+            "term": "com",
+            "tf": 2,
+            "weight": 0.021978
+          },
+          {
+            "term": "blob",
+            "tf": 2,
+            "weight": 0.021978
+          },
+          {
+            "term": "48203e41",
+            "tf": 2,
+            "weight": 0.021978
           }
         ],
-        "unique_terms": 2,
-        "total_terms": 2
+        "unique_terms": 53,
+        "total_terms": 91
       },
       "modal_hint": "prose",
       "content_flags": {
@@ -271,141 +1571,62 @@
         "has_formula": false
       },
       "search_keywords": [
-        "Core Concepts",
-        "concepts",
-        "core"
-      ],
-      "quality_fallback": true,
-      "quality_notes": "Promoted via relaxed thresholds"
+        "REST API",
+        "and",
+        "api",
+        "collection",
+        "collections",
+        "management",
+        "name",
+        "points",
+        "qdrant",
+        "rest",
+        "search"
+      ]
     },
     "advanced_scores": {
-      "semantic": 0.8,
+      "semantic": 0.7999999999999999,
       "structural": 0.8999999999999999,
-      "retrieval_quality": 0.39,
-      "overall": 0.6966666666666667
+      "retrieval_quality": 0.6558823529411765,
+      "overall": 0.7852941176470587
     }
   },
   {
-    "text": "## Deployment Modes",
+    "text": "### gRPC API  The gRPC interface uses **Tonic** and provides:  - All REST API functionality with protocol buffer definitions - Better performance for production workloads - Streaming support for batch operations - Protocol definitions in `lib/api/src/grpc/proto/*.proto`  The gRPC service runs on the same port as REST (6333) with automatic protocol detection. **Sources:** [Cargo.toml81-84](https://github.com/qdrant/qdrant/blob/48203e41/Cargo.toml#L81-L84) [lib/api/Cargo.toml17-47](https://github.com/qdrant/qdrant/blob/48203e41/lib/api/Cargo.toml#L17-L47)  ---",
     "metadata": {
-      "chunk_id": "1fc99e7c8ebe-0009",
+      "chunk_id": "1fc99e7c8ebe-0015",
       "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant.md",
       "filename": "_qdrant_qdrant.md",
       "file_extension": ".md",
-      "chunk_index": 9,
+      "chunk_index": 15,
       "document_level": 1,
       "parent_chunk_id": null,
       "child_chunk_ids": [],
       "section_path": [
-        "Deployment Modes"
+        "gRPC API"
       ],
-      "heading_text": "Deployment Modes",
-      "token_count": 3,
-      "char_count": 19,
-      "start_char": 0,
-      "end_char": 19,
-      "semantic_score": 0.8,
+      "heading_text": "gRPC API",
+      "token_count": 152,
+      "char_count": 564,
+      "start_char": 13562,
+      "end_char": 14126,
+      "semantic_score": 0.7,
       "structural_score": 0.8999999999999999,
-      "retrieval_quality": 0.39,
-      "chunking_strategy": "hierarchical_precise",
-      "content_type": "hierarchical_section",
-      "embedding_model": "nomic-ai/CodeRankEmbed",
-      "processing_timestamp": "2025-10-19T15:37:44.105709",
+      "retrieval_quality": 0.5136363636363637,
+      "chunking_strategy": "hierarchical_precise_structural",
+      "content_type": "list_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "processing_timestamp": "2025-10-20T04:38:45.491593",
       "document_id": "1fc99e7c8ebe",
       "document_name": "_qdrant_qdrant",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant.md",
       "source_filename": "_qdrant_qdrant.md",
       "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant",
       "relative_path": "Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant.md",
-      "hierarchy_path": "Deployment Modes",
-      "chunk_hash": "8e6be916569bf661",
-      "content_digest": "8e6be916569bf661",
-      "chunk_length": 19,
-      "payload_version": "1.3",
-      "collection_hints": [
-        "qdrant_ecosystem"
-      ],
-      "sparse_features": {
-        "version": "1.0",
-        "weighting": "tf-normalized",
-        "top_terms": [
-          "deployment",
-          "modes"
-        ],
-        "term_weights": [
-          {
-            "term": "deployment",
-            "tf": 1,
-            "weight": 0.5
-          },
-          {
-            "term": "modes",
-            "tf": 1,
-            "weight": 0.5
-          }
-        ],
-        "unique_terms": 2,
-        "total_terms": 2
-      },
-      "modal_hint": "prose",
-      "content_flags": {
-        "has_code_block": false,
-        "has_table": false,
-        "has_list": false,
-        "has_json": false,
-        "has_formula": false
-      },
-      "search_keywords": [
-        "Deployment Modes",
-        "deployment",
-        "modes"
-      ],
-      "quality_fallback": true,
-      "quality_notes": "Promoted via relaxed thresholds"
-    },
-    "advanced_scores": {
-      "semantic": 0.8,
-      "structural": 0.8999999999999999,
-      "retrieval_quality": 0.39,
-      "overall": 0.6966666666666667
-    }
-  },
-  {
-    "text": "## API Interfaces",
-    "metadata": {
-      "chunk_id": "1fc99e7c8ebe-0012",
-      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant.md",
-      "filename": "_qdrant_qdrant.md",
-      "file_extension": ".md",
-      "chunk_index": 12,
-      "document_level": 1,
-      "parent_chunk_id": null,
-      "child_chunk_ids": [],
-      "section_path": [
-        "API Interfaces"
-      ],
-      "heading_text": "API Interfaces",
-      "token_count": 3,
-      "char_count": 17,
-      "start_char": 0,
-      "end_char": 17,
-      "semantic_score": 0.8,
-      "structural_score": 0.8999999999999999,
-      "retrieval_quality": 0.39,
-      "chunking_strategy": "hierarchical_precise",
-      "content_type": "hierarchical_section",
-      "embedding_model": "nomic-ai/CodeRankEmbed",
-      "processing_timestamp": "2025-10-19T15:37:44.106350",
-      "document_id": "1fc99e7c8ebe",
-      "document_name": "_qdrant_qdrant",
-      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant.md",
-      "source_filename": "_qdrant_qdrant.md",
-      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant",
-      "relative_path": "Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant.md",
-      "hierarchy_path": "API Interfaces",
-      "chunk_hash": "f658030c34787072",
-      "content_digest": "f658030c34787072",
-      "chunk_length": 17,
+      "hierarchy_path": "gRPC API",
+      "chunk_hash": "8509ccb1fbf8f3a4",
+      "content_digest": "8509ccb1fbf8f3a4",
+      "chunk_length": 564,
       "payload_version": "1.3",
       "collection_hints": [
         "qdrant_ecosystem"
@@ -415,22 +1636,130 @@
         "weighting": "tf-normalized",
         "top_terms": [
           "api",
-          "interfaces"
+          "grpc",
+          "cargo",
+          "qdrant",
+          "the",
+          "protocol",
+          "lib",
+          "rest",
+          "with",
+          "definitions",
+          "for",
+          "proto",
+          "https",
+          "github",
+          "com",
+          "blob",
+          "48203e41",
+          "toml",
+          "interface",
+          "uses"
         ],
         "term_weights": [
           {
             "term": "api",
-            "tf": 1,
-            "weight": 0.5
+            "tf": 5,
+            "weight": 0.063291
           },
           {
-            "term": "interfaces",
+            "term": "grpc",
+            "tf": 4,
+            "weight": 0.050633
+          },
+          {
+            "term": "cargo",
+            "tf": 4,
+            "weight": 0.050633
+          },
+          {
+            "term": "qdrant",
+            "tf": 4,
+            "weight": 0.050633
+          },
+          {
+            "term": "the",
+            "tf": 3,
+            "weight": 0.037975
+          },
+          {
+            "term": "protocol",
+            "tf": 3,
+            "weight": 0.037975
+          },
+          {
+            "term": "lib",
+            "tf": 3,
+            "weight": 0.037975
+          },
+          {
+            "term": "rest",
+            "tf": 2,
+            "weight": 0.025316
+          },
+          {
+            "term": "with",
+            "tf": 2,
+            "weight": 0.025316
+          },
+          {
+            "term": "definitions",
+            "tf": 2,
+            "weight": 0.025316
+          },
+          {
+            "term": "for",
+            "tf": 2,
+            "weight": 0.025316
+          },
+          {
+            "term": "proto",
+            "tf": 2,
+            "weight": 0.025316
+          },
+          {
+            "term": "https",
+            "tf": 2,
+            "weight": 0.025316
+          },
+          {
+            "term": "github",
+            "tf": 2,
+            "weight": 0.025316
+          },
+          {
+            "term": "com",
+            "tf": 2,
+            "weight": 0.025316
+          },
+          {
+            "term": "blob",
+            "tf": 2,
+            "weight": 0.025316
+          },
+          {
+            "term": "48203e41",
+            "tf": 2,
+            "weight": 0.025316
+          },
+          {
+            "term": "toml",
+            "tf": 2,
+            "weight": 0.025316
+          },
+          {
+            "term": "interface",
             "tf": 1,
-            "weight": 0.5
+            "weight": 0.012658
+          },
+          {
+            "term": "uses",
+            "tf": 1,
+            "weight": 0.012658
           }
         ],
-        "unique_terms": 2,
-        "total_terms": 2
+        "unique_terms": 49,
+        "total_terms": 79
       },
       "modal_hint": "prose",
       "content_flags": {
@@ -441,28 +1770,34 @@
         "has_formula": false
       },
       "search_keywords": [
-        "API Interfaces",
         "api",
-        "interfaces"
-      ],
-      "quality_fallback": true,
-      "quality_notes": "Promoted via relaxed thresholds"
+        "cargo",
+        "definitions",
+        "gRPC API",
+        "grpc",
+        "lib",
+        "protocol",
+        "qdrant",
+        "rest",
+        "the",
+        "with"
+      ]
     },
     "advanced_scores": {
-      "semantic": 0.8,
+      "semantic": 0.7,
       "structural": 0.8999999999999999,
-      "retrieval_quality": 0.39,
-      "overall": 0.6966666666666667
+      "retrieval_quality": 0.5136363636363637,
+      "overall": 0.7045454545454545
     }
   },
   {
     "text": "## Next Steps  For deeper understanding of specific subsystems:  - **Architecture details**: See [System Architecture](qdrant/qdrant/2-system-architecture.md) for the complete layer breakdown - **Vector indexing**: See [Vector Storage and Indexing](qdrant/qdrant/3-vector-storage-and-indexing.md) for HNSW, quantization, and sparse vectors - **Search processing**: See [Search and Query Processing](qdrant/qdrant/5-search-and-query-processing.md) for the complete query flow - **Distributed features**: See [Distributed System Features](qdrant/qdrant/7-distributed-system-features.md) for Raft consensus and shard management - **Configuration**: See [Configuration and Deployment](qdrant/qdrant/10-configuration-and-deployment.md) for setup and deployment options  **Sources:** Table of contents JSON structure  Dismiss  Refresh this wiki  Enter email to refresh",
     "metadata": {
-      "chunk_id": "1fc99e7c8ebe-0017",
+      "chunk_id": "1fc99e7c8ebe-0018",
       "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant.md",
       "filename": "_qdrant_qdrant.md",
       "file_extension": ".md",
-      "chunk_index": 17,
+      "chunk_index": 18,
       "document_level": 1,
       "parent_chunk_id": null,
       "child_chunk_ids": [],
@@ -472,15 +1807,15 @@
       "heading_text": "Next Steps",
       "token_count": 197,
       "char_count": 862,
-      "start_char": 0,
-      "end_char": 862,
-      "semantic_score": 0.44651633501052856,
+      "start_char": 14856,
+      "end_char": 15718,
+      "semantic_score": 0.7999999999999999,
       "structural_score": 0.8999999999999999,
       "retrieval_quality": 0.7088235294117647,
-      "chunking_strategy": "hierarchical_precise",
-      "content_type": "hierarchical_section",
-      "embedding_model": "nomic-ai/CodeRankEmbed",
-      "processing_timestamp": "2025-10-19T15:37:44.108068",
+      "chunking_strategy": "hierarchical_precise_structural",
+      "content_type": "list_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "processing_timestamp": "2025-10-20T04:38:45.491593",
       "document_id": "1fc99e7c8ebe",
       "document_name": "_qdrant_qdrant",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant.md",
@@ -645,15 +1980,212 @@
         "see",
         "system",
         "vector"
-      ],
-      "quality_fallback": true,
-      "quality_notes": "Promoted via relaxed thresholds"
+      ]
     },
     "advanced_scores": {
-      "semantic": 0.44651633501052856,
+      "semantic": 0.7999999999999999,
       "structural": 0.8999999999999999,
       "retrieval_quality": 0.7088235294117647,
-      "overall": 0.6851132881407644
+      "overall": 0.8029411764705882
+    }
+  },
+  {
+    "text": "### On this page  - [Introduction to Qdrant](#introduction-to-qdrant.md) - [Purpose and Scope](#purpose-and-scope.md) - [What is Qdrant?](#what-is-qdrant.md) - [Core Concepts](#core-concepts.md) - [Points](#points.md) - [Vectors](#vectors.md) - [Collections](#collections.md) - [Segments](#segments.md) - [System Architecture Overview](#system-architecture-overview.md) - [Deployment Modes](#deployment-modes.md) - [Standalone Mode](#standalone-mode.md) - [Distributed Mode](#distributed-mode.md) - [API Interfaces](#api-interfaces.md) - [REST API](#rest-api.md) - [gRPC API](#grpc-api.md) - [Key Features Mapping to Code](#key-features-mapping-to-code.md) - [Version and Compatibility](#version-and-compatibility.md) - [Next Steps](#next-steps.md)",
+    "metadata": {
+      "chunk_id": "1fc99e7c8ebe-0019",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant.md",
+      "filename": "_qdrant_qdrant.md",
+      "file_extension": ".md",
+      "chunk_index": 19,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "On this page"
+      ],
+      "heading_text": "On this page",
+      "token_count": 218,
+      "char_count": 748,
+      "start_char": 15720,
+      "end_char": 16468,
+      "semantic_score": 0.6,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.6980645161290323,
+      "chunking_strategy": "hierarchical_precise_structural",
+      "content_type": "list_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "processing_timestamp": "2025-10-20T04:38:45.491593",
+      "document_id": "1fc99e7c8ebe",
+      "document_name": "_qdrant_qdrant",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant.md",
+      "source_filename": "_qdrant_qdrant.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant",
+      "relative_path": "Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant.md",
+      "hierarchy_path": "On this page",
+      "chunk_hash": "c5f7f94221e9fd82",
+      "content_digest": "c5f7f94221e9fd82",
+      "chunk_length": 748,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "api",
+          "qdrant",
+          "and",
+          "mode",
+          "introduction",
+          "purpose",
+          "scope",
+          "what",
+          "core",
+          "concepts",
+          "points",
+          "vectors",
+          "collections",
+          "segments",
+          "system",
+          "architecture",
+          "overview",
+          "deployment",
+          "modes",
+          "standalone"
+        ],
+        "term_weights": [
+          {
+            "term": "api",
+            "tf": 6,
+            "weight": 0.078947
+          },
+          {
+            "term": "qdrant",
+            "tf": 4,
+            "weight": 0.052632
+          },
+          {
+            "term": "and",
+            "tf": 4,
+            "weight": 0.052632
+          },
+          {
+            "term": "mode",
+            "tf": 4,
+            "weight": 0.052632
+          },
+          {
+            "term": "introduction",
+            "tf": 2,
+            "weight": 0.026316
+          },
+          {
+            "term": "purpose",
+            "tf": 2,
+            "weight": 0.026316
+          },
+          {
+            "term": "scope",
+            "tf": 2,
+            "weight": 0.026316
+          },
+          {
+            "term": "what",
+            "tf": 2,
+            "weight": 0.026316
+          },
+          {
+            "term": "core",
+            "tf": 2,
+            "weight": 0.026316
+          },
+          {
+            "term": "concepts",
+            "tf": 2,
+            "weight": 0.026316
+          },
+          {
+            "term": "points",
+            "tf": 2,
+            "weight": 0.026316
+          },
+          {
+            "term": "vectors",
+            "tf": 2,
+            "weight": 0.026316
+          },
+          {
+            "term": "collections",
+            "tf": 2,
+            "weight": 0.026316
+          },
+          {
+            "term": "segments",
+            "tf": 2,
+            "weight": 0.026316
+          },
+          {
+            "term": "system",
+            "tf": 2,
+            "weight": 0.026316
+          },
+          {
+            "term": "architecture",
+            "tf": 2,
+            "weight": 0.026316
+          },
+          {
+            "term": "overview",
+            "tf": 2,
+            "weight": 0.026316
+          },
+          {
+            "term": "deployment",
+            "tf": 2,
+            "weight": 0.026316
+          },
+          {
+            "term": "modes",
+            "tf": 2,
+            "weight": 0.026316
+          },
+          {
+            "term": "standalone",
+            "tf": 2,
+            "weight": 0.026316
+          }
+        ],
+        "unique_terms": 34,
+        "total_terms": 76
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "On this page",
+        "and",
+        "api",
+        "concepts",
+        "core",
+        "introduction",
+        "mode",
+        "purpose",
+        "qdrant",
+        "scope",
+        "what"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.6,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.6980645161290323,
+      "overall": 0.7326881720430108
     }
   }
 ]

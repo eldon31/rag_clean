@@ -1,6 +1,1731 @@
 [
   {
-    "text": "## Storage Element Data Types  Vectors can be stored with different precision levels, trading accuracy for memory and performance.",
+    "text": "## Purpose and Scope  This page provides an overview of vector storage strategies and indexing approaches in Qdrant. It covers the core abstractions for storing vector data, the different storage backends available, and how indexing structures are layered on top of storage. This page focuses on the architectural design and available options. For implementation details of specific index types, see:  - **HNSW Index**: [3.2](qdrant/qdrant/3.2-hnsw-index-implementation.md) - **Vector Quantization**: [3.3](qdrant/qdrant/3.3-vector-quantization.md) - **Sparse Vector Indexing**: [3.4](qdrant/qdrant/3.4-sparse-vector-indexing.md)  For storage format details, see [3.1](qdrant/qdrant/3.1-vector-storage-formats.md). For how segments use these components, see [2.5](qdrant/qdrant/2.5-segment-lifecycle-and-construction.md). ---",
+    "metadata": {
+      "chunk_id": "2a0595821471-0001",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_3-vector-storage-and-indexing.md",
+      "filename": "_qdrant_qdrant_3-vector-storage-and-indexing.md",
+      "file_extension": ".md",
+      "chunk_index": 1,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Purpose and Scope"
+      ],
+      "heading_text": "Purpose and Scope",
+      "token_count": 220,
+      "char_count": 825,
+      "start_char": 5992,
+      "end_char": 6817,
+      "semantic_score": 0.6,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.515,
+      "chunking_strategy": "hierarchical_precise_structural",
+      "content_type": "list_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "processing_timestamp": "2025-10-20T04:38:45.939947",
+      "document_id": "2a0595821471",
+      "document_name": "_qdrant_qdrant_3-vector-storage-and-indexing",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_3-vector-storage-and-indexing.md",
+      "source_filename": "_qdrant_qdrant_3-vector-storage-and-indexing.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant",
+      "relative_path": "Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_3-vector-storage-and-indexing.md",
+      "hierarchy_path": "Purpose and Scope",
+      "chunk_hash": "ace2fcf9da9e0440",
+      "content_digest": "ace2fcf9da9e0440",
+      "chunk_length": 825,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "qdrant",
+          "vector",
+          "and",
+          "storage",
+          "indexing",
+          "for",
+          "the",
+          "index",
+          "see",
+          "this",
+          "page",
+          "available",
+          "how",
+          "implementation",
+          "details",
+          "hnsw",
+          "quantization",
+          "sparse",
+          "purpose",
+          "scope"
+        ],
+        "term_weights": [
+          {
+            "term": "qdrant",
+            "tf": 11,
+            "weight": 0.115789
+          },
+          {
+            "term": "vector",
+            "tf": 7,
+            "weight": 0.073684
+          },
+          {
+            "term": "and",
+            "tf": 5,
+            "weight": 0.052632
+          },
+          {
+            "term": "storage",
+            "tf": 5,
+            "weight": 0.052632
+          },
+          {
+            "term": "indexing",
+            "tf": 4,
+            "weight": 0.042105
+          },
+          {
+            "term": "for",
+            "tf": 4,
+            "weight": 0.042105
+          },
+          {
+            "term": "the",
+            "tf": 3,
+            "weight": 0.031579
+          },
+          {
+            "term": "index",
+            "tf": 3,
+            "weight": 0.031579
+          },
+          {
+            "term": "see",
+            "tf": 3,
+            "weight": 0.031579
+          },
+          {
+            "term": "this",
+            "tf": 2,
+            "weight": 0.021053
+          },
+          {
+            "term": "page",
+            "tf": 2,
+            "weight": 0.021053
+          },
+          {
+            "term": "available",
+            "tf": 2,
+            "weight": 0.021053
+          },
+          {
+            "term": "how",
+            "tf": 2,
+            "weight": 0.021053
+          },
+          {
+            "term": "implementation",
+            "tf": 2,
+            "weight": 0.021053
+          },
+          {
+            "term": "details",
+            "tf": 2,
+            "weight": 0.021053
+          },
+          {
+            "term": "hnsw",
+            "tf": 2,
+            "weight": 0.021053
+          },
+          {
+            "term": "quantization",
+            "tf": 2,
+            "weight": 0.021053
+          },
+          {
+            "term": "sparse",
+            "tf": 2,
+            "weight": 0.021053
+          },
+          {
+            "term": "purpose",
+            "tf": 1,
+            "weight": 0.010526
+          },
+          {
+            "term": "scope",
+            "tf": 1,
+            "weight": 0.010526
+          }
+        ],
+        "unique_terms": 50,
+        "total_terms": 95
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Purpose and Scope",
+        "and",
+        "for",
+        "index",
+        "indexing",
+        "qdrant",
+        "see",
+        "storage",
+        "the",
+        "this",
+        "vector"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.6,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.515,
+      "overall": 0.6716666666666667
+    }
+  },
+  {
+    "text": "## Vector Storage Backends\n\nQdrant supports multiple storage backends, each optimized for different use cases. The choice is controlled by `VectorStorageType` configuration.",
+    "metadata": {
+      "chunk_id": "2a0595821471-0005",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_3-vector-storage-and-indexing.md",
+      "filename": "_qdrant_qdrant_3-vector-storage-and-indexing.md",
+      "file_extension": ".md",
+      "chunk_index": 5,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Vector Storage Backends"
+      ],
+      "heading_text": "Vector Storage Backends",
+      "token_count": 34,
+      "char_count": 173,
+      "start_char": 8823,
+      "end_char": 8996,
+      "semantic_score": 0.7,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5763636363636364,
+      "chunking_strategy": "hierarchical_precise_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "processing_timestamp": "2025-10-20T04:38:45.941394",
+      "document_id": "2a0595821471",
+      "document_name": "_qdrant_qdrant_3-vector-storage-and-indexing",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_3-vector-storage-and-indexing.md",
+      "source_filename": "_qdrant_qdrant_3-vector-storage-and-indexing.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant",
+      "relative_path": "Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_3-vector-storage-and-indexing.md",
+      "hierarchy_path": "Vector Storage Backends",
+      "chunk_hash": "0b490d4f8145cd99",
+      "content_digest": "0b490d4f8145cd99",
+      "chunk_length": 173,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "storage",
+          "backends",
+          "vector",
+          "qdrant",
+          "supports",
+          "multiple",
+          "each",
+          "optimized",
+          "for",
+          "different",
+          "use",
+          "cases",
+          "the",
+          "choice",
+          "controlled",
+          "vectorstoragetype",
+          "configuration"
+        ],
+        "term_weights": [
+          {
+            "term": "storage",
+            "tf": 2,
+            "weight": 0.105263
+          },
+          {
+            "term": "backends",
+            "tf": 2,
+            "weight": 0.105263
+          },
+          {
+            "term": "vector",
+            "tf": 1,
+            "weight": 0.052632
+          },
+          {
+            "term": "qdrant",
+            "tf": 1,
+            "weight": 0.052632
+          },
+          {
+            "term": "supports",
+            "tf": 1,
+            "weight": 0.052632
+          },
+          {
+            "term": "multiple",
+            "tf": 1,
+            "weight": 0.052632
+          },
+          {
+            "term": "each",
+            "tf": 1,
+            "weight": 0.052632
+          },
+          {
+            "term": "optimized",
+            "tf": 1,
+            "weight": 0.052632
+          },
+          {
+            "term": "for",
+            "tf": 1,
+            "weight": 0.052632
+          },
+          {
+            "term": "different",
+            "tf": 1,
+            "weight": 0.052632
+          },
+          {
+            "term": "use",
+            "tf": 1,
+            "weight": 0.052632
+          },
+          {
+            "term": "cases",
+            "tf": 1,
+            "weight": 0.052632
+          },
+          {
+            "term": "the",
+            "tf": 1,
+            "weight": 0.052632
+          },
+          {
+            "term": "choice",
+            "tf": 1,
+            "weight": 0.052632
+          },
+          {
+            "term": "controlled",
+            "tf": 1,
+            "weight": 0.052632
+          },
+          {
+            "term": "vectorstoragetype",
+            "tf": 1,
+            "weight": 0.052632
+          },
+          {
+            "term": "configuration",
+            "tf": 1,
+            "weight": 0.052632
+          }
+        ],
+        "unique_terms": 17,
+        "total_terms": 19
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Vector Storage Backends",
+        "backends",
+        "different",
+        "each",
+        "for",
+        "multiple",
+        "optimized",
+        "qdrant",
+        "storage",
+        "supports",
+        "vector"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5763636363636364,
+      "overall": 0.7254545454545455
+    }
+  },
+  {
+    "text": "## Vector Index Types\n\nQdrant provides three main index types, each with different performance characteristics.",
+    "metadata": {
+      "chunk_id": "2a0595821471-0011",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_3-vector-storage-and-indexing.md",
+      "filename": "_qdrant_qdrant_3-vector-storage-and-indexing.md",
+      "file_extension": ".md",
+      "chunk_index": 11,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Vector Index Types"
+      ],
+      "heading_text": "Vector Index Types",
+      "token_count": 20,
+      "char_count": 111,
+      "start_char": 12198,
+      "end_char": 12309,
+      "semantic_score": 0.8,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.57,
+      "chunking_strategy": "hierarchical_precise_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "processing_timestamp": "2025-10-20T04:38:45.943857",
+      "document_id": "2a0595821471",
+      "document_name": "_qdrant_qdrant_3-vector-storage-and-indexing",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_3-vector-storage-and-indexing.md",
+      "source_filename": "_qdrant_qdrant_3-vector-storage-and-indexing.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant",
+      "relative_path": "Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_3-vector-storage-and-indexing.md",
+      "hierarchy_path": "Vector Index Types",
+      "chunk_hash": "d26da39103d68956",
+      "content_digest": "d26da39103d68956",
+      "chunk_length": 111,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "index",
+          "types",
+          "vector",
+          "qdrant",
+          "provides",
+          "three",
+          "main",
+          "each",
+          "with",
+          "different",
+          "performance",
+          "characteristics"
+        ],
+        "term_weights": [
+          {
+            "term": "index",
+            "tf": 2,
+            "weight": 0.142857
+          },
+          {
+            "term": "types",
+            "tf": 2,
+            "weight": 0.142857
+          },
+          {
+            "term": "vector",
+            "tf": 1,
+            "weight": 0.071429
+          },
+          {
+            "term": "qdrant",
+            "tf": 1,
+            "weight": 0.071429
+          },
+          {
+            "term": "provides",
+            "tf": 1,
+            "weight": 0.071429
+          },
+          {
+            "term": "three",
+            "tf": 1,
+            "weight": 0.071429
+          },
+          {
+            "term": "main",
+            "tf": 1,
+            "weight": 0.071429
+          },
+          {
+            "term": "each",
+            "tf": 1,
+            "weight": 0.071429
+          },
+          {
+            "term": "with",
+            "tf": 1,
+            "weight": 0.071429
+          },
+          {
+            "term": "different",
+            "tf": 1,
+            "weight": 0.071429
+          },
+          {
+            "term": "performance",
+            "tf": 1,
+            "weight": 0.071429
+          },
+          {
+            "term": "characteristics",
+            "tf": 1,
+            "weight": 0.071429
+          }
+        ],
+        "unique_terms": 12,
+        "total_terms": 14
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Vector Index Types",
+        "different",
+        "each",
+        "index",
+        "main",
+        "provides",
+        "qdrant",
+        "three",
+        "types",
+        "vector",
+        "with"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.8,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.57,
+      "overall": 0.7566666666666667
+    }
+  },
+  {
+    "text": "### PlainVectorIndex  - **Algorithm:** Brute-force linear scan - **Accuracy:** 100% (exact search) - **Speed:** O(n) per query - **Use case:** Small collections (<10K vectors), perfect recall required - **Implementation:** [lib/segment/src/index/plain\\_vector\\_index.rs](https://github.com/qdrant/qdrant/blob/48203e41/lib/segment/src/index/plain_vector_index.rs)",
+    "metadata": {
+      "chunk_id": "2a0595821471-0013",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_3-vector-storage-and-indexing.md",
+      "filename": "_qdrant_qdrant_3-vector-storage-and-indexing.md",
+      "file_extension": ".md",
+      "chunk_index": 13,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "PlainVectorIndex"
+      ],
+      "heading_text": "PlainVectorIndex",
+      "token_count": 92,
+      "char_count": 362,
+      "start_char": 12667,
+      "end_char": 13029,
+      "semantic_score": 0.7,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.55,
+      "chunking_strategy": "hierarchical_precise_structural",
+      "content_type": "list_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "processing_timestamp": "2025-10-20T04:38:45.943988",
+      "document_id": "2a0595821471",
+      "document_name": "_qdrant_qdrant_3-vector-storage-and-indexing",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_3-vector-storage-and-indexing.md",
+      "source_filename": "_qdrant_qdrant_3-vector-storage-and-indexing.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant",
+      "relative_path": "Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_3-vector-storage-and-indexing.md",
+      "hierarchy_path": "PlainVectorIndex",
+      "chunk_hash": "5b3ef4c62f9afef1",
+      "content_digest": "5b3ef4c62f9afef1",
+      "chunk_length": 362,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "index",
+          "lib",
+          "segment",
+          "src",
+          "plain",
+          "vector",
+          "qdrant",
+          "plainvectorindex",
+          "algorithm",
+          "brute",
+          "force",
+          "linear",
+          "scan",
+          "accuracy",
+          "100",
+          "exact",
+          "search",
+          "speed",
+          "per",
+          "query"
+        ],
+        "term_weights": [
+          {
+            "term": "index",
+            "tf": 4,
+            "weight": 0.090909
+          },
+          {
+            "term": "lib",
+            "tf": 2,
+            "weight": 0.045455
+          },
+          {
+            "term": "segment",
+            "tf": 2,
+            "weight": 0.045455
+          },
+          {
+            "term": "src",
+            "tf": 2,
+            "weight": 0.045455
+          },
+          {
+            "term": "plain",
+            "tf": 2,
+            "weight": 0.045455
+          },
+          {
+            "term": "vector",
+            "tf": 2,
+            "weight": 0.045455
+          },
+          {
+            "term": "qdrant",
+            "tf": 2,
+            "weight": 0.045455
+          },
+          {
+            "term": "plainvectorindex",
+            "tf": 1,
+            "weight": 0.022727
+          },
+          {
+            "term": "algorithm",
+            "tf": 1,
+            "weight": 0.022727
+          },
+          {
+            "term": "brute",
+            "tf": 1,
+            "weight": 0.022727
+          },
+          {
+            "term": "force",
+            "tf": 1,
+            "weight": 0.022727
+          },
+          {
+            "term": "linear",
+            "tf": 1,
+            "weight": 0.022727
+          },
+          {
+            "term": "scan",
+            "tf": 1,
+            "weight": 0.022727
+          },
+          {
+            "term": "accuracy",
+            "tf": 1,
+            "weight": 0.022727
+          },
+          {
+            "term": "100",
+            "tf": 1,
+            "weight": 0.022727
+          },
+          {
+            "term": "exact",
+            "tf": 1,
+            "weight": 0.022727
+          },
+          {
+            "term": "search",
+            "tf": 1,
+            "weight": 0.022727
+          },
+          {
+            "term": "speed",
+            "tf": 1,
+            "weight": 0.022727
+          },
+          {
+            "term": "per",
+            "tf": 1,
+            "weight": 0.022727
+          },
+          {
+            "term": "query",
+            "tf": 1,
+            "weight": 0.022727
+          }
+        ],
+        "unique_terms": 35,
+        "total_terms": 44
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "PlainVectorIndex",
+        "algorithm",
+        "brute",
+        "index",
+        "lib",
+        "plain",
+        "plainvectorindex",
+        "qdrant",
+        "segment",
+        "src",
+        "vector"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.55,
+      "overall": 0.7166666666666667
+    }
+  },
+  {
+    "text": "### HNSWIndex  - **Algorithm:** Hierarchical Navigable Small World graph - **Accuracy:** Approximate (tunable via `ef` parameter) - **Speed:** O(log n) expected - **Use case:** Large collections, fast search with acceptable recall - **Implementation:** See [3.2](qdrant/qdrant/3.2-hnsw-index-implementation.md) for details",
+    "metadata": {
+      "chunk_id": "2a0595821471-0014",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_3-vector-storage-and-indexing.md",
+      "filename": "_qdrant_qdrant_3-vector-storage-and-indexing.md",
+      "file_extension": ".md",
+      "chunk_index": 14,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "HNSWIndex"
+      ],
+      "heading_text": "HNSWIndex",
+      "token_count": 85,
+      "char_count": 322,
+      "start_char": 13031,
+      "end_char": 13353,
+      "semantic_score": 0.7,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5575675675675675,
+      "chunking_strategy": "hierarchical_precise_structural",
+      "content_type": "list_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "processing_timestamp": "2025-10-20T04:38:45.943988",
+      "document_id": "2a0595821471",
+      "document_name": "_qdrant_qdrant_3-vector-storage-and-indexing",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_3-vector-storage-and-indexing.md",
+      "source_filename": "_qdrant_qdrant_3-vector-storage-and-indexing.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant",
+      "relative_path": "Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_3-vector-storage-and-indexing.md",
+      "hierarchy_path": "HNSWIndex",
+      "chunk_hash": "fe87673e0b6a1e0c",
+      "content_digest": "fe87673e0b6a1e0c",
+      "chunk_length": 322,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "implementation",
+          "qdrant",
+          "hnswindex",
+          "algorithm",
+          "hierarchical",
+          "navigable",
+          "small",
+          "world",
+          "graph",
+          "accuracy",
+          "approximate",
+          "tunable",
+          "via",
+          "parameter",
+          "speed",
+          "log",
+          "expected",
+          "use",
+          "case",
+          "large"
+        ],
+        "term_weights": [
+          {
+            "term": "implementation",
+            "tf": 2,
+            "weight": 0.060606
+          },
+          {
+            "term": "qdrant",
+            "tf": 2,
+            "weight": 0.060606
+          },
+          {
+            "term": "hnswindex",
+            "tf": 1,
+            "weight": 0.030303
+          },
+          {
+            "term": "algorithm",
+            "tf": 1,
+            "weight": 0.030303
+          },
+          {
+            "term": "hierarchical",
+            "tf": 1,
+            "weight": 0.030303
+          },
+          {
+            "term": "navigable",
+            "tf": 1,
+            "weight": 0.030303
+          },
+          {
+            "term": "small",
+            "tf": 1,
+            "weight": 0.030303
+          },
+          {
+            "term": "world",
+            "tf": 1,
+            "weight": 0.030303
+          },
+          {
+            "term": "graph",
+            "tf": 1,
+            "weight": 0.030303
+          },
+          {
+            "term": "accuracy",
+            "tf": 1,
+            "weight": 0.030303
+          },
+          {
+            "term": "approximate",
+            "tf": 1,
+            "weight": 0.030303
+          },
+          {
+            "term": "tunable",
+            "tf": 1,
+            "weight": 0.030303
+          },
+          {
+            "term": "via",
+            "tf": 1,
+            "weight": 0.030303
+          },
+          {
+            "term": "parameter",
+            "tf": 1,
+            "weight": 0.030303
+          },
+          {
+            "term": "speed",
+            "tf": 1,
+            "weight": 0.030303
+          },
+          {
+            "term": "log",
+            "tf": 1,
+            "weight": 0.030303
+          },
+          {
+            "term": "expected",
+            "tf": 1,
+            "weight": 0.030303
+          },
+          {
+            "term": "use",
+            "tf": 1,
+            "weight": 0.030303
+          },
+          {
+            "term": "case",
+            "tf": 1,
+            "weight": 0.030303
+          },
+          {
+            "term": "large",
+            "tf": 1,
+            "weight": 0.030303
+          }
+        ],
+        "unique_terms": 31,
+        "total_terms": 33
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "HNSWIndex",
+        "accuracy",
+        "algorithm",
+        "graph",
+        "hierarchical",
+        "hnswindex",
+        "implementation",
+        "navigable",
+        "qdrant",
+        "small",
+        "world"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5575675675675675,
+      "overall": 0.7191891891891892
+    }
+  },
+  {
+    "text": "### Index Selection in Code\n\nThe function `open_vector_index()` in [lib/segment/src/segment\\_constructor/segment\\_constructor\\_base.rs291-318](https://github.com/qdrant/qdrant/blob/48203e41/lib/segment/src/segment_constructor/segment_constructor_base.rs#L291-L318) selects the index type:\n\n```\nmatch &vector_config.index {\n    Indexes::Plain {} => VectorIndexEnum::Plain(PlainVectorIndex::new(...)),\n    Indexes::Hnsw(hnsw_config) => VectorIndexEnum::Hnsw(HNSWIndex::open(...)),\n}\n```\n\n**Sources:** [lib/segment/src/segment\\_constructor/segment\\_constructor\\_base.rs291-318](https://github.com/qdrant/qdrant/blob/48203e41/lib/segment/src/segment_constructor/segment_constructor_base.rs#L291-L318)\n\n---",
+    "metadata": {
+      "chunk_id": "2a0595821471-0016",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_3-vector-storage-and-indexing.md",
+      "filename": "_qdrant_qdrant_3-vector-storage-and-indexing.md",
+      "file_extension": ".md",
+      "chunk_index": 16,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Index Selection in Code"
+      ],
+      "heading_text": "Index Selection in Code",
+      "token_count": 190,
+      "char_count": 701,
+      "start_char": 14073,
+      "end_char": 14774,
+      "semantic_score": 0.7,
+      "structural_score": 0.7999999999999998,
+      "retrieval_quality": 0.53,
+      "chunking_strategy": "hierarchical_precise_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "processing_timestamp": "2025-10-20T04:38:45.945002",
+      "document_id": "2a0595821471",
+      "document_name": "_qdrant_qdrant_3-vector-storage-and-indexing",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_3-vector-storage-and-indexing.md",
+      "source_filename": "_qdrant_qdrant_3-vector-storage-and-indexing.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant",
+      "relative_path": "Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_3-vector-storage-and-indexing.md",
+      "hierarchy_path": "Index Selection in Code",
+      "chunk_hash": "460808bca708c3da",
+      "content_digest": "460808bca708c3da",
+      "chunk_length": 701,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "segment",
+          "constructor",
+          "index",
+          "lib",
+          "src",
+          "base",
+          "qdrant",
+          "hnsw",
+          "the",
+          "open",
+          "vector",
+          "rs291",
+          "318",
+          "https",
+          "github",
+          "com",
+          "blob",
+          "48203e41",
+          "l291",
+          "l318"
+        ],
+        "term_weights": [
+          {
+            "term": "segment",
+            "tf": 12,
+            "weight": 0.141176
+          },
+          {
+            "term": "constructor",
+            "tf": 8,
+            "weight": 0.094118
+          },
+          {
+            "term": "index",
+            "tf": 4,
+            "weight": 0.047059
+          },
+          {
+            "term": "lib",
+            "tf": 4,
+            "weight": 0.047059
+          },
+          {
+            "term": "src",
+            "tf": 4,
+            "weight": 0.047059
+          },
+          {
+            "term": "base",
+            "tf": 4,
+            "weight": 0.047059
+          },
+          {
+            "term": "qdrant",
+            "tf": 4,
+            "weight": 0.047059
+          },
+          {
+            "term": "hnsw",
+            "tf": 3,
+            "weight": 0.035294
+          },
+          {
+            "term": "the",
+            "tf": 2,
+            "weight": 0.023529
+          },
+          {
+            "term": "open",
+            "tf": 2,
+            "weight": 0.023529
+          },
+          {
+            "term": "vector",
+            "tf": 2,
+            "weight": 0.023529
+          },
+          {
+            "term": "rs291",
+            "tf": 2,
+            "weight": 0.023529
+          },
+          {
+            "term": "318",
+            "tf": 2,
+            "weight": 0.023529
+          },
+          {
+            "term": "https",
+            "tf": 2,
+            "weight": 0.023529
+          },
+          {
+            "term": "github",
+            "tf": 2,
+            "weight": 0.023529
+          },
+          {
+            "term": "com",
+            "tf": 2,
+            "weight": 0.023529
+          },
+          {
+            "term": "blob",
+            "tf": 2,
+            "weight": 0.023529
+          },
+          {
+            "term": "48203e41",
+            "tf": 2,
+            "weight": 0.023529
+          },
+          {
+            "term": "l291",
+            "tf": 2,
+            "weight": 0.023529
+          },
+          {
+            "term": "l318",
+            "tf": 2,
+            "weight": 0.023529
+          }
+        ],
+        "unique_terms": 34,
+        "total_terms": 85
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Index Selection in Code",
+        "base",
+        "constructor",
+        "hnsw",
+        "index",
+        "lib",
+        "open",
+        "qdrant",
+        "segment",
+        "src",
+        "the"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.7999999999999998,
+      "retrieval_quality": 0.53,
+      "overall": 0.6766666666666666
+    }
+  },
+  {
+    "text": "### Dense Vectors  Standard fixed-dimensional vectors. Most common use case (e.g., embeddings from neural networks). - **Storage trait:** `DenseVectorStorage<T>` in [lib/segment/src/vector\\_storage/vector\\_storage\\_base.rs152-183](https://github.com/qdrant/qdrant/blob/48203e41/lib/segment/src/vector_storage/vector_storage_base.rs#L152-L183) - **Element types:** `VectorElementType` (f32), `VectorElementTypeByte` (u8), `VectorElementTypeHalf` (f16) - **Access methods:** `get_dense<P>()`, `get_dense_batch()`",
+    "metadata": {
+      "chunk_id": "2a0595821471-0018",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_3-vector-storage-and-indexing.md",
+      "filename": "_qdrant_qdrant_3-vector-storage-and-indexing.md",
+      "file_extension": ".md",
+      "chunk_index": 18,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Dense Vectors"
+      ],
+      "heading_text": "Dense Vectors",
+      "token_count": 133,
+      "char_count": 510,
+      "start_char": 14885,
+      "end_char": 15395,
+      "semantic_score": 0.7,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5728571428571428,
+      "chunking_strategy": "hierarchical_precise_structural",
+      "content_type": "list_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "processing_timestamp": "2025-10-20T04:38:45.945002",
+      "document_id": "2a0595821471",
+      "document_name": "_qdrant_qdrant_3-vector-storage-and-indexing",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_3-vector-storage-and-indexing.md",
+      "source_filename": "_qdrant_qdrant_3-vector-storage-and-indexing.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant",
+      "relative_path": "Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_3-vector-storage-and-indexing.md",
+      "hierarchy_path": "Dense Vectors",
+      "chunk_hash": "eb5b25b0723599f0",
+      "content_digest": "eb5b25b0723599f0",
+      "chunk_length": 510,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "storage",
+          "vector",
+          "dense",
+          "vectors",
+          "lib",
+          "segment",
+          "src",
+          "base",
+          "qdrant",
+          "get",
+          "standard",
+          "fixed",
+          "dimensional",
+          "most",
+          "common",
+          "use",
+          "case",
+          "embeddings",
+          "from",
+          "neural"
+        ],
+        "term_weights": [
+          {
+            "term": "storage",
+            "tf": 5,
+            "weight": 0.086207
+          },
+          {
+            "term": "vector",
+            "tf": 4,
+            "weight": 0.068966
+          },
+          {
+            "term": "dense",
+            "tf": 3,
+            "weight": 0.051724
+          },
+          {
+            "term": "vectors",
+            "tf": 2,
+            "weight": 0.034483
+          },
+          {
+            "term": "lib",
+            "tf": 2,
+            "weight": 0.034483
+          },
+          {
+            "term": "segment",
+            "tf": 2,
+            "weight": 0.034483
+          },
+          {
+            "term": "src",
+            "tf": 2,
+            "weight": 0.034483
+          },
+          {
+            "term": "base",
+            "tf": 2,
+            "weight": 0.034483
+          },
+          {
+            "term": "qdrant",
+            "tf": 2,
+            "weight": 0.034483
+          },
+          {
+            "term": "get",
+            "tf": 2,
+            "weight": 0.034483
+          },
+          {
+            "term": "standard",
+            "tf": 1,
+            "weight": 0.017241
+          },
+          {
+            "term": "fixed",
+            "tf": 1,
+            "weight": 0.017241
+          },
+          {
+            "term": "dimensional",
+            "tf": 1,
+            "weight": 0.017241
+          },
+          {
+            "term": "most",
+            "tf": 1,
+            "weight": 0.017241
+          },
+          {
+            "term": "common",
+            "tf": 1,
+            "weight": 0.017241
+          },
+          {
+            "term": "use",
+            "tf": 1,
+            "weight": 0.017241
+          },
+          {
+            "term": "case",
+            "tf": 1,
+            "weight": 0.017241
+          },
+          {
+            "term": "embeddings",
+            "tf": 1,
+            "weight": 0.017241
+          },
+          {
+            "term": "from",
+            "tf": 1,
+            "weight": 0.017241
+          },
+          {
+            "term": "neural",
+            "tf": 1,
+            "weight": 0.017241
+          }
+        ],
+        "unique_terms": 42,
+        "total_terms": 58
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Dense Vectors",
+        "base",
+        "dense",
+        "get",
+        "lib",
+        "qdrant",
+        "segment",
+        "src",
+        "storage",
+        "vector",
+        "vectors"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5728571428571428,
+      "overall": 0.7242857142857142
+    }
+  },
+  {
+    "text": "### Sparse Vectors  High-dimensional vectors with mostly zero values, stored as (index, value) pairs. - **Storage trait:** `SparseVectorStorage` in [lib/segment/src/vector\\_storage/vector\\_storage\\_base.rs185-191](https://github.com/qdrant/qdrant/blob/48203e41/lib/segment/src/vector_storage/vector_storage_base.rs#L185-L191) - **Format:** `SparseVector` from sparse crate - **Access methods:** `get_sparse<P>()`, `get_sparse_opt<P>()`",
+    "metadata": {
+      "chunk_id": "2a0595821471-0019",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_3-vector-storage-and-indexing.md",
+      "filename": "_qdrant_qdrant_3-vector-storage-and-indexing.md",
+      "file_extension": ".md",
+      "chunk_index": 19,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Sparse Vectors"
+      ],
+      "heading_text": "Sparse Vectors",
+      "token_count": 112,
+      "char_count": 435,
+      "start_char": 15398,
+      "end_char": 15833,
+      "semantic_score": 0.7,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5512903225806451,
+      "chunking_strategy": "hierarchical_precise_structural",
+      "content_type": "list_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "processing_timestamp": "2025-10-20T04:38:45.946042",
+      "document_id": "2a0595821471",
+      "document_name": "_qdrant_qdrant_3-vector-storage-and-indexing",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_3-vector-storage-and-indexing.md",
+      "source_filename": "_qdrant_qdrant_3-vector-storage-and-indexing.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant",
+      "relative_path": "Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_3-vector-storage-and-indexing.md",
+      "hierarchy_path": "Sparse Vectors",
+      "chunk_hash": "fd36f932a62f15b2",
+      "content_digest": "fd36f932a62f15b2",
+      "chunk_length": 435,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "storage",
+          "sparse",
+          "vector",
+          "vectors",
+          "lib",
+          "segment",
+          "src",
+          "base",
+          "qdrant",
+          "get",
+          "high",
+          "dimensional",
+          "with",
+          "mostly",
+          "zero",
+          "values",
+          "stored",
+          "index",
+          "value",
+          "pairs"
+        ],
+        "term_weights": [
+          {
+            "term": "storage",
+            "tf": 5,
+            "weight": 0.090909
+          },
+          {
+            "term": "sparse",
+            "tf": 4,
+            "weight": 0.072727
+          },
+          {
+            "term": "vector",
+            "tf": 4,
+            "weight": 0.072727
+          },
+          {
+            "term": "vectors",
+            "tf": 2,
+            "weight": 0.036364
+          },
+          {
+            "term": "lib",
+            "tf": 2,
+            "weight": 0.036364
+          },
+          {
+            "term": "segment",
+            "tf": 2,
+            "weight": 0.036364
+          },
+          {
+            "term": "src",
+            "tf": 2,
+            "weight": 0.036364
+          },
+          {
+            "term": "base",
+            "tf": 2,
+            "weight": 0.036364
+          },
+          {
+            "term": "qdrant",
+            "tf": 2,
+            "weight": 0.036364
+          },
+          {
+            "term": "get",
+            "tf": 2,
+            "weight": 0.036364
+          },
+          {
+            "term": "high",
+            "tf": 1,
+            "weight": 0.018182
+          },
+          {
+            "term": "dimensional",
+            "tf": 1,
+            "weight": 0.018182
+          },
+          {
+            "term": "with",
+            "tf": 1,
+            "weight": 0.018182
+          },
+          {
+            "term": "mostly",
+            "tf": 1,
+            "weight": 0.018182
+          },
+          {
+            "term": "zero",
+            "tf": 1,
+            "weight": 0.018182
+          },
+          {
+            "term": "values",
+            "tf": 1,
+            "weight": 0.018182
+          },
+          {
+            "term": "stored",
+            "tf": 1,
+            "weight": 0.018182
+          },
+          {
+            "term": "index",
+            "tf": 1,
+            "weight": 0.018182
+          },
+          {
+            "term": "value",
+            "tf": 1,
+            "weight": 0.018182
+          },
+          {
+            "term": "pairs",
+            "tf": 1,
+            "weight": 0.018182
+          }
+        ],
+        "unique_terms": 38,
+        "total_terms": 55
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Sparse Vectors",
+        "base",
+        "get",
+        "lib",
+        "qdrant",
+        "segment",
+        "sparse",
+        "src",
+        "storage",
+        "vector",
+        "vectors"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5512903225806451,
+      "overall": 0.7170967741935484
+    }
+  },
+  {
+    "text": "### Multi-Dense Vectors  Multiple dense vectors per point (e.g., ColBERT embeddings). - **Storage trait:** `MultiVectorStorage<T>` in [lib/segment/src/vector\\_storage/vector\\_storage\\_base.rs193-214](https://github.com/qdrant/qdrant/blob/48203e41/lib/segment/src/vector_storage/vector_storage_base.rs#L193-L214) - **Configuration:** `MultiVectorConfig` specifies comparator (max\\_sim, etc.) - **Access methods:** `get_multi<P>()`, `get_batch_multi()`  **Sources:** [lib/segment/src/vector\\_storage/vector\\_storage\\_base.rs152-214](https://github.com/qdrant/qdrant/blob/48203e41/lib/segment/src/vector_storage/vector_storage_base.rs#L152-L214) [lib/sparse/src/common/sparse\\_vector.rs](https://github.com/qdrant/qdrant/blob/48203e41/lib/sparse/src/common/sparse_vector.rs)  ---",
+    "metadata": {
+      "chunk_id": "2a0595821471-0020",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_3-vector-storage-and-indexing.md",
+      "filename": "_qdrant_qdrant_3-vector-storage-and-indexing.md",
+      "file_extension": ".md",
+      "chunk_index": 20,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Multi-Dense Vectors"
+      ],
+      "heading_text": "Multi-Dense Vectors",
+      "token_count": 210,
+      "char_count": 776,
+      "start_char": 15836,
+      "end_char": 16612,
+      "semantic_score": 0.7,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5627272727272727,
+      "chunking_strategy": "hierarchical_precise_structural",
+      "content_type": "list_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "processing_timestamp": "2025-10-20T04:38:45.946042",
+      "document_id": "2a0595821471",
+      "document_name": "_qdrant_qdrant_3-vector-storage-and-indexing",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_3-vector-storage-and-indexing.md",
+      "source_filename": "_qdrant_qdrant_3-vector-storage-and-indexing.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant",
+      "relative_path": "Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_3-vector-storage-and-indexing.md",
+      "hierarchy_path": "Multi-Dense Vectors",
+      "chunk_hash": "d2cef734a746f06c",
+      "content_digest": "d2cef734a746f06c",
+      "chunk_length": 776,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "vector",
+          "storage",
+          "lib",
+          "src",
+          "qdrant",
+          "segment",
+          "base",
+          "sparse",
+          "multi",
+          "https",
+          "github",
+          "com",
+          "blob",
+          "48203e41",
+          "dense",
+          "vectors",
+          "214",
+          "l214",
+          "get",
+          "common"
+        ],
+        "term_weights": [
+          {
+            "term": "vector",
+            "tf": 10,
+            "weight": 0.09901
+          },
+          {
+            "term": "storage",
+            "tf": 9,
+            "weight": 0.089109
+          },
+          {
+            "term": "lib",
+            "tf": 6,
+            "weight": 0.059406
+          },
+          {
+            "term": "src",
+            "tf": 6,
+            "weight": 0.059406
+          },
+          {
+            "term": "qdrant",
+            "tf": 6,
+            "weight": 0.059406
+          },
+          {
+            "term": "segment",
+            "tf": 4,
+            "weight": 0.039604
+          },
+          {
+            "term": "base",
+            "tf": 4,
+            "weight": 0.039604
+          },
+          {
+            "term": "sparse",
+            "tf": 4,
+            "weight": 0.039604
+          },
+          {
+            "term": "multi",
+            "tf": 3,
+            "weight": 0.029703
+          },
+          {
+            "term": "https",
+            "tf": 3,
+            "weight": 0.029703
+          },
+          {
+            "term": "github",
+            "tf": 3,
+            "weight": 0.029703
+          },
+          {
+            "term": "com",
+            "tf": 3,
+            "weight": 0.029703
+          },
+          {
+            "term": "blob",
+            "tf": 3,
+            "weight": 0.029703
+          },
+          {
+            "term": "48203e41",
+            "tf": 3,
+            "weight": 0.029703
+          },
+          {
+            "term": "dense",
+            "tf": 2,
+            "weight": 0.019802
+          },
+          {
+            "term": "vectors",
+            "tf": 2,
+            "weight": 0.019802
+          },
+          {
+            "term": "214",
+            "tf": 2,
+            "weight": 0.019802
+          },
+          {
+            "term": "l214",
+            "tf": 2,
+            "weight": 0.019802
+          },
+          {
+            "term": "get",
+            "tf": 2,
+            "weight": 0.019802
+          },
+          {
+            "term": "common",
+            "tf": 2,
+            "weight": 0.019802
+          }
+        ],
+        "unique_terms": 42,
+        "total_terms": 101
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Multi-Dense Vectors",
+        "base",
+        "https",
+        "lib",
+        "multi",
+        "qdrant",
+        "segment",
+        "sparse",
+        "src",
+        "storage",
+        "vector"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5627272727272727,
+      "overall": 0.7209090909090908
+    }
+  },
+  {
+    "text": "## Storage Element Data Types\n\nVectors can be stored with different precision levels, trading accuracy for memory and performance.",
     "metadata": {
       "chunk_id": "2a0595821471-0021",
       "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_3-vector-storage-and-indexing.md",
@@ -14,17 +1739,17 @@
         "Storage Element Data Types"
       ],
       "heading_text": "Storage Element Data Types",
-      "token_count": 23,
+      "token_count": 22,
       "char_count": 130,
-      "start_char": 0,
-      "end_char": 130,
+      "start_char": 16615,
+      "end_char": 16745,
       "semantic_score": 0.8,
       "structural_score": 0.8999999999999999,
       "retrieval_quality": 0.59,
-      "chunking_strategy": "hierarchical_precise",
-      "content_type": "hierarchical_section",
-      "embedding_model": "nomic-ai/CodeRankEmbed",
-      "processing_timestamp": "2025-10-19T15:40:56.848492",
+      "chunking_strategy": "hierarchical_precise_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "processing_timestamp": "2025-10-20T04:38:45.946042",
       "document_id": "2a0595821471",
       "document_name": "_qdrant_qdrant_3-vector-storage-and-indexing",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_3-vector-storage-and-indexing.md",
@@ -32,8 +1757,8 @@
       "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant",
       "relative_path": "Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_3-vector-storage-and-indexing.md",
       "hierarchy_path": "Storage Element Data Types",
-      "chunk_hash": "650f592a174b59ab",
-      "content_digest": "650f592a174b59ab",
+      "chunk_hash": "3e8d95c9859ec36d",
+      "content_digest": "3e8d95c9859ec36d",
       "chunk_length": 130,
       "payload_version": "1.3",
       "collection_hints": [
@@ -171,9 +1896,7 @@
         "types",
         "vectors",
         "with"
-      ],
-      "quality_fallback": true,
-      "quality_notes": "Promoted via relaxed thresholds"
+      ]
     },
     "advanced_scores": {
       "semantic": 0.8,
@@ -183,41 +1906,41 @@
     }
   },
   {
-    "text": "## Vector Index Types  Qdrant provides three main index types, each with different performance characteristics.",
+    "text": "### Quantization Architecture\n\n```\n```\n\n**Key concept:** Quantized vectors are stored separately from original vectors. Search happens on compressed data first (fast), then top candidates are rescored with original vectors (accurate).\n\n**Sources:** [lib/segment/src/vector\\_storage/quantized/quantized\\_vectors.rs](https://github.com/qdrant/qdrant/blob/48203e41/lib/segment/src/vector_storage/quantized/quantized_vectors.rs) [lib/quantization/](https://github.com/qdrant/qdrant/blob/48203e41/lib/quantization/)\n\nFor detailed quantization implementation, see [3.3](qdrant/qdrant/3.3-vector-quantization.md).\n\n---",
     "metadata": {
-      "chunk_id": "2a0595821471-0011",
+      "chunk_id": "2a0595821471-0025",
       "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_3-vector-storage-and-indexing.md",
       "filename": "_qdrant_qdrant_3-vector-storage-and-indexing.md",
       "file_extension": ".md",
-      "chunk_index": 11,
+      "chunk_index": 25,
       "document_level": 1,
       "parent_chunk_id": null,
       "child_chunk_ids": [],
       "section_path": [
-        "Vector Index Types"
+        "Quantization Architecture"
       ],
-      "heading_text": "Vector Index Types",
-      "token_count": 20,
-      "char_count": 111,
-      "start_char": 0,
-      "end_char": 111,
-      "semantic_score": 0.8,
-      "structural_score": 0.8999999999999999,
-      "retrieval_quality": 0.57,
-      "chunking_strategy": "hierarchical_precise",
-      "content_type": "hierarchical_section",
-      "embedding_model": "nomic-ai/CodeRankEmbed",
-      "processing_timestamp": "2025-10-19T15:40:56.843925",
+      "heading_text": "Quantization Architecture",
+      "token_count": 157,
+      "char_count": 611,
+      "start_char": 17968,
+      "end_char": 18579,
+      "semantic_score": 0.7,
+      "structural_score": 0.7999999999999998,
+      "retrieval_quality": 0.5534146341463415,
+      "chunking_strategy": "hierarchical_precise_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "processing_timestamp": "2025-10-20T04:38:45.947666",
       "document_id": "2a0595821471",
       "document_name": "_qdrant_qdrant_3-vector-storage-and-indexing",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_3-vector-storage-and-indexing.md",
       "source_filename": "_qdrant_qdrant_3-vector-storage-and-indexing.md",
       "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant",
       "relative_path": "Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_3-vector-storage-and-indexing.md",
-      "hierarchy_path": "Vector Index Types",
-      "chunk_hash": "f4bc93ea0f9b4130",
-      "content_digest": "f4bc93ea0f9b4130",
-      "chunk_length": 111,
+      "hierarchy_path": "Quantization Architecture",
+      "chunk_hash": "538a8635861cec98",
+      "content_digest": "538a8635861cec98",
+      "chunk_length": 611,
       "payload_version": "1.3",
       "collection_hints": [
         "qdrant_ecosystem"
@@ -226,316 +1949,197 @@
         "version": "1.0",
         "weighting": "tf-normalized",
         "top_terms": [
-          "index",
-          "types",
-          "vector",
           "qdrant",
-          "provides",
-          "three",
-          "main",
-          "each",
-          "with",
-          "different",
-          "performance",
-          "characteristics"
-        ],
-        "term_weights": [
-          {
-            "term": "index",
-            "tf": 2,
-            "weight": 0.142857
-          },
-          {
-            "term": "types",
-            "tf": 2,
-            "weight": 0.142857
-          },
-          {
-            "term": "vector",
-            "tf": 1,
-            "weight": 0.071429
-          },
-          {
-            "term": "qdrant",
-            "tf": 1,
-            "weight": 0.071429
-          },
-          {
-            "term": "provides",
-            "tf": 1,
-            "weight": 0.071429
-          },
-          {
-            "term": "three",
-            "tf": 1,
-            "weight": 0.071429
-          },
-          {
-            "term": "main",
-            "tf": 1,
-            "weight": 0.071429
-          },
-          {
-            "term": "each",
-            "tf": 1,
-            "weight": 0.071429
-          },
-          {
-            "term": "with",
-            "tf": 1,
-            "weight": 0.071429
-          },
-          {
-            "term": "different",
-            "tf": 1,
-            "weight": 0.071429
-          },
-          {
-            "term": "performance",
-            "tf": 1,
-            "weight": 0.071429
-          },
-          {
-            "term": "characteristics",
-            "tf": 1,
-            "weight": 0.071429
-          }
-        ],
-        "unique_terms": 12,
-        "total_terms": 14
-      },
-      "modal_hint": "prose",
-      "content_flags": {
-        "has_code_block": false,
-        "has_table": false,
-        "has_list": false,
-        "has_json": false,
-        "has_formula": false
-      },
-      "search_keywords": [
-        "Vector Index Types",
-        "different",
-        "each",
-        "index",
-        "main",
-        "provides",
-        "qdrant",
-        "three",
-        "types",
-        "vector",
-        "with"
-      ],
-      "quality_fallback": true,
-      "quality_notes": "Promoted via relaxed thresholds"
-    },
-    "advanced_scores": {
-      "semantic": 0.8,
-      "structural": 0.8999999999999999,
-      "retrieval_quality": 0.57,
-      "overall": 0.7566666666666667
-    }
-  },
-  {
-    "text": "## Vector Data Types  Qdrant supports three classes of vectors, each with specialized storage and indexing.",
-    "metadata": {
-      "chunk_id": "2a0595821471-0017",
-      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_3-vector-storage-and-indexing.md",
-      "filename": "_qdrant_qdrant_3-vector-storage-and-indexing.md",
-      "file_extension": ".md",
-      "chunk_index": 17,
-      "document_level": 1,
-      "parent_chunk_id": null,
-      "child_chunk_ids": [],
-      "section_path": [
-        "Vector Data Types"
-      ],
-      "heading_text": "Vector Data Types",
-      "token_count": 21,
-      "char_count": 107,
-      "start_char": 0,
-      "end_char": 107,
-      "semantic_score": 0.8,
-      "structural_score": 0.8999999999999999,
-      "retrieval_quality": 0.39,
-      "chunking_strategy": "hierarchical_precise",
-      "content_type": "hierarchical_section",
-      "embedding_model": "nomic-ai/CodeRankEmbed",
-      "processing_timestamp": "2025-10-19T15:40:56.847436",
-      "document_id": "2a0595821471",
-      "document_name": "_qdrant_qdrant_3-vector-storage-and-indexing",
-      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_3-vector-storage-and-indexing.md",
-      "source_filename": "_qdrant_qdrant_3-vector-storage-and-indexing.md",
-      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant",
-      "relative_path": "Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_3-vector-storage-and-indexing.md",
-      "hierarchy_path": "Vector Data Types",
-      "chunk_hash": "36ded40546ab01f5",
-      "content_digest": "36ded40546ab01f5",
-      "chunk_length": 107,
-      "payload_version": "1.3",
-      "collection_hints": [
-        "qdrant_ecosystem"
-      ],
-      "sparse_features": {
-        "version": "1.0",
-        "weighting": "tf-normalized",
-        "top_terms": [
-          "vector",
-          "data",
-          "types",
-          "qdrant",
-          "supports",
-          "three",
-          "classes",
+          "quantization",
+          "quantized",
           "vectors",
-          "each",
-          "with",
-          "specialized",
+          "lib",
+          "vector",
+          "are",
+          "original",
+          "segment",
+          "src",
           "storage",
-          "and",
-          "indexing"
+          "https",
+          "github",
+          "com",
+          "blob",
+          "48203e41",
+          "architecture",
+          "key",
+          "concept",
+          "stored"
         ],
         "term_weights": [
           {
-            "term": "vector",
-            "tf": 1,
-            "weight": 0.071429
-          },
-          {
-            "term": "data",
-            "tf": 1,
-            "weight": 0.071429
-          },
-          {
-            "term": "types",
-            "tf": 1,
-            "weight": 0.071429
-          },
-          {
             "term": "qdrant",
-            "tf": 1,
-            "weight": 0.071429
+            "tf": 6,
+            "weight": 0.084507
           },
           {
-            "term": "supports",
-            "tf": 1,
-            "weight": 0.071429
+            "term": "quantization",
+            "tf": 5,
+            "weight": 0.070423
           },
           {
-            "term": "three",
-            "tf": 1,
-            "weight": 0.071429
-          },
-          {
-            "term": "classes",
-            "tf": 1,
-            "weight": 0.071429
+            "term": "quantized",
+            "tf": 5,
+            "weight": 0.070423
           },
           {
             "term": "vectors",
-            "tf": 1,
-            "weight": 0.071429
+            "tf": 5,
+            "weight": 0.070423
           },
           {
-            "term": "each",
-            "tf": 1,
-            "weight": 0.071429
+            "term": "lib",
+            "tf": 4,
+            "weight": 0.056338
           },
           {
-            "term": "with",
-            "tf": 1,
-            "weight": 0.071429
+            "term": "vector",
+            "tf": 3,
+            "weight": 0.042254
           },
           {
-            "term": "specialized",
-            "tf": 1,
-            "weight": 0.071429
+            "term": "are",
+            "tf": 2,
+            "weight": 0.028169
+          },
+          {
+            "term": "original",
+            "tf": 2,
+            "weight": 0.028169
+          },
+          {
+            "term": "segment",
+            "tf": 2,
+            "weight": 0.028169
+          },
+          {
+            "term": "src",
+            "tf": 2,
+            "weight": 0.028169
           },
           {
             "term": "storage",
-            "tf": 1,
-            "weight": 0.071429
+            "tf": 2,
+            "weight": 0.028169
           },
           {
-            "term": "and",
-            "tf": 1,
-            "weight": 0.071429
+            "term": "https",
+            "tf": 2,
+            "weight": 0.028169
           },
           {
-            "term": "indexing",
+            "term": "github",
+            "tf": 2,
+            "weight": 0.028169
+          },
+          {
+            "term": "com",
+            "tf": 2,
+            "weight": 0.028169
+          },
+          {
+            "term": "blob",
+            "tf": 2,
+            "weight": 0.028169
+          },
+          {
+            "term": "48203e41",
+            "tf": 2,
+            "weight": 0.028169
+          },
+          {
+            "term": "architecture",
             "tf": 1,
-            "weight": 0.071429
+            "weight": 0.014085
+          },
+          {
+            "term": "key",
+            "tf": 1,
+            "weight": 0.014085
+          },
+          {
+            "term": "concept",
+            "tf": 1,
+            "weight": 0.014085
+          },
+          {
+            "term": "stored",
+            "tf": 1,
+            "weight": 0.014085
           }
         ],
-        "unique_terms": 14,
-        "total_terms": 14
+        "unique_terms": 39,
+        "total_terms": 71
       },
-      "modal_hint": "prose",
+      "modal_hint": "code",
       "content_flags": {
-        "has_code_block": false,
+        "has_code_block": true,
         "has_table": false,
         "has_list": false,
         "has_json": false,
         "has_formula": false
       },
       "search_keywords": [
-        "Vector Data Types",
-        "classes",
-        "data",
-        "each",
+        "Quantization Architecture",
+        "are",
+        "lib",
+        "original",
         "qdrant",
-        "supports",
-        "three",
-        "types",
+        "quantization",
+        "quantized",
+        "segment",
+        "src",
         "vector",
-        "vectors",
-        "with"
-      ],
-      "quality_fallback": true,
-      "quality_notes": "Promoted via relaxed thresholds"
+        "vectors"
+      ]
     },
     "advanced_scores": {
-      "semantic": 0.8,
-      "structural": 0.8999999999999999,
-      "retrieval_quality": 0.39,
-      "overall": 0.6966666666666667
+      "semantic": 0.7,
+      "structural": 0.7999999999999998,
+      "retrieval_quality": 0.5534146341463415,
+      "overall": 0.6844715447154471
     }
   },
   {
-    "text": "## Segment Vector Data Organization  Each `Segment` contains a `HashMap<VectorNameBuf, VectorData>` to support named vectors (multi-vector collections).",
+    "text": "### Storage Path Convention  Each vector name gets dedicated directories:  - Storage: `<segment>/vector_storage` or `<segment>/vector_storage-<name>` - Index: `<segment>/vector_index` or `<segment>/vector_index-<name>`  Helper functions in [lib/segment/src/segment\\_constructor/segment\\_constructor\\_base.rs80-97](https://github.com/qdrant/qdrant/blob/48203e41/lib/segment/src/segment_constructor/segment_constructor_base.rs#L80-L97):  - `get_vector_storage_path(segment_path, vector_name)` - `get_vector_index_path(segment_path, vector_name)`  **Sources:** [lib/segment/src/segment\\_constructor/segment\\_constructor\\_base.rs80-97](https://github.com/qdrant/qdrant/blob/48203e41/lib/segment/src/segment_constructor/segment_constructor_base.rs#L80-L97)  ---",
     "metadata": {
-      "chunk_id": "2a0595821471-0026",
+      "chunk_id": "2a0595821471-0028",
       "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_3-vector-storage-and-indexing.md",
       "filename": "_qdrant_qdrant_3-vector-storage-and-indexing.md",
       "file_extension": ".md",
-      "chunk_index": 26,
+      "chunk_index": 28,
       "document_level": 1,
       "parent_chunk_id": null,
       "child_chunk_ids": [],
       "section_path": [
-        "Segment Vector Data Organization"
+        "Storage Path Convention"
       ],
-      "heading_text": "Segment Vector Data Organization",
-      "token_count": 30,
-      "char_count": 152,
-      "start_char": 0,
-      "end_char": 152,
-      "semantic_score": 0.8,
+      "heading_text": "Storage Path Convention",
+      "token_count": 194,
+      "char_count": 756,
+      "start_char": 19097,
+      "end_char": 19853,
+      "semantic_score": 0.7,
       "structural_score": 0.8999999999999999,
-      "retrieval_quality": 0.39,
-      "chunking_strategy": "hierarchical_precise",
-      "content_type": "hierarchical_section",
-      "embedding_model": "nomic-ai/CodeRankEmbed",
-      "processing_timestamp": "2025-10-19T15:40:56.849672",
+      "retrieval_quality": 0.5445454545454546,
+      "chunking_strategy": "hierarchical_precise_structural",
+      "content_type": "list_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "processing_timestamp": "2025-10-20T04:38:45.948655",
       "document_id": "2a0595821471",
       "document_name": "_qdrant_qdrant_3-vector-storage-and-indexing",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_3-vector-storage-and-indexing.md",
       "source_filename": "_qdrant_qdrant_3-vector-storage-and-indexing.md",
       "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant",
       "relative_path": "Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_3-vector-storage-and-indexing.md",
-      "hierarchy_path": "Segment Vector Data Organization",
-      "chunk_hash": "a5c0a11c6f98c591",
-      "content_digest": "a5c0a11c6f98c591",
-      "chunk_length": 152,
+      "hierarchy_path": "Storage Path Convention",
+      "chunk_hash": "ca8871eb821df587",
+      "content_digest": "ca8871eb821df587",
+      "chunk_length": 756,
       "payload_version": "1.3",
       "collection_hints": [
         "qdrant_ecosystem"
@@ -546,93 +2150,129 @@
         "top_terms": [
           "segment",
           "vector",
-          "data",
-          "organization",
-          "each",
-          "contains",
-          "hashmap",
-          "vectornamebuf",
-          "vectordata",
-          "support",
-          "named",
-          "vectors",
-          "multi",
-          "collections"
+          "constructor",
+          "storage",
+          "path",
+          "name",
+          "index",
+          "lib",
+          "src",
+          "base",
+          "qdrant",
+          "rs80",
+          "https",
+          "github",
+          "com",
+          "blob",
+          "48203e41",
+          "l80",
+          "l97",
+          "get"
         ],
         "term_weights": [
           {
             "term": "segment",
-            "tf": 2,
-            "weight": 0.125
+            "tf": 18,
+            "weight": 0.1875
           },
           {
             "term": "vector",
+            "tf": 9,
+            "weight": 0.09375
+          },
+          {
+            "term": "constructor",
+            "tf": 8,
+            "weight": 0.083333
+          },
+          {
+            "term": "storage",
+            "tf": 5,
+            "weight": 0.052083
+          },
+          {
+            "term": "path",
+            "tf": 5,
+            "weight": 0.052083
+          },
+          {
+            "term": "name",
+            "tf": 5,
+            "weight": 0.052083
+          },
+          {
+            "term": "index",
+            "tf": 4,
+            "weight": 0.041667
+          },
+          {
+            "term": "lib",
+            "tf": 4,
+            "weight": 0.041667
+          },
+          {
+            "term": "src",
+            "tf": 4,
+            "weight": 0.041667
+          },
+          {
+            "term": "base",
+            "tf": 4,
+            "weight": 0.041667
+          },
+          {
+            "term": "qdrant",
+            "tf": 4,
+            "weight": 0.041667
+          },
+          {
+            "term": "rs80",
             "tf": 2,
-            "weight": 0.125
+            "weight": 0.020833
           },
           {
-            "term": "data",
-            "tf": 1,
-            "weight": 0.0625
+            "term": "https",
+            "tf": 2,
+            "weight": 0.020833
           },
           {
-            "term": "organization",
-            "tf": 1,
-            "weight": 0.0625
+            "term": "github",
+            "tf": 2,
+            "weight": 0.020833
           },
           {
-            "term": "each",
-            "tf": 1,
-            "weight": 0.0625
+            "term": "com",
+            "tf": 2,
+            "weight": 0.020833
           },
           {
-            "term": "contains",
-            "tf": 1,
-            "weight": 0.0625
+            "term": "blob",
+            "tf": 2,
+            "weight": 0.020833
           },
           {
-            "term": "hashmap",
-            "tf": 1,
-            "weight": 0.0625
+            "term": "48203e41",
+            "tf": 2,
+            "weight": 0.020833
           },
           {
-            "term": "vectornamebuf",
-            "tf": 1,
-            "weight": 0.0625
+            "term": "l80",
+            "tf": 2,
+            "weight": 0.020833
           },
           {
-            "term": "vectordata",
-            "tf": 1,
-            "weight": 0.0625
+            "term": "l97",
+            "tf": 2,
+            "weight": 0.020833
           },
           {
-            "term": "support",
-            "tf": 1,
-            "weight": 0.0625
-          },
-          {
-            "term": "named",
-            "tf": 1,
-            "weight": 0.0625
-          },
-          {
-            "term": "vectors",
-            "tf": 1,
-            "weight": 0.0625
-          },
-          {
-            "term": "multi",
-            "tf": 1,
-            "weight": 0.0625
-          },
-          {
-            "term": "collections",
-            "tf": 1,
-            "weight": 0.0625
+            "term": "get",
+            "tf": 2,
+            "weight": 0.020833
           }
         ],
-        "unique_terms": 14,
-        "total_terms": 16
+        "unique_terms": 28,
+        "total_terms": 96
       },
       "modal_hint": "prose",
       "content_flags": {
@@ -643,64 +2283,62 @@
         "has_formula": false
       },
       "search_keywords": [
-        "Segment Vector Data Organization",
-        "contains",
-        "data",
-        "each",
-        "hashmap",
-        "organization",
+        "Storage Path Convention",
+        "base",
+        "constructor",
+        "index",
+        "lib",
+        "name",
+        "path",
         "segment",
-        "support",
-        "vector",
-        "vectordata",
-        "vectornamebuf"
-      ],
-      "quality_fallback": true,
-      "quality_notes": "Promoted via relaxed thresholds"
+        "src",
+        "storage",
+        "vector"
+      ]
     },
     "advanced_scores": {
-      "semantic": 0.8,
+      "semantic": 0.7,
       "structural": 0.8999999999999999,
-      "retrieval_quality": 0.39,
-      "overall": 0.6966666666666667
+      "retrieval_quality": 0.5445454545454546,
+      "overall": 0.7148484848484848
     }
   },
   {
-    "text": "## Creating and Opening Vector Storage",
+    "text": "### Sparse Vector Storage Creation\n\nFor sparse vectors, the function `create_sparse_vector_storage()` in [lib/segment/src/segment\\_constructor/segment\\_constructor\\_base.rs410-434](https://github.com/qdrant/qdrant/blob/48203e41/lib/segment/src/segment_constructor/segment_constructor_base.rs#L410-L434) handles initialization:\n\n```\nmatch storage_type {\n    SparseVectorStorageType::OnDisk => {\n        // RocksDB-backed (requires feature flag)\n        open_simple_sparse_vector_storage(db, column, stopped)\n    }\n    SparseVectorStorageType::Mmap => {\n        // Memory-mapped\n        MmapSparseVectorStorage::open_or_create(path)\n    }\n}\n```\n\n**Sources:** [lib/segment/src/segment\\_constructor/segment\\_constructor\\_base.rs410-434](https://github.com/qdrant/qdrant/blob/48203e41/lib/segment/src/segment_constructor/segment_constructor_base.rs#L410-L434)",
     "metadata": {
-      "chunk_id": "2a0595821471-0029",
+      "chunk_id": "2a0595821471-0030",
       "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_3-vector-storage-and-indexing.md",
       "filename": "_qdrant_qdrant_3-vector-storage-and-indexing.md",
       "file_extension": ".md",
-      "chunk_index": 29,
+      "chunk_index": 30,
       "document_level": 1,
       "parent_chunk_id": null,
       "child_chunk_ids": [],
       "section_path": [
-        "Creating and Opening Vector Storage"
+        "Sparse Vector Storage Creation"
       ],
-      "heading_text": "Creating and Opening Vector Storage",
-      "token_count": 6,
-      "char_count": 38,
-      "start_char": 0,
-      "end_char": 38,
-      "semantic_score": 0.8,
-      "structural_score": 0.8999999999999999,
-      "retrieval_quality": 0.39,
-      "chunking_strategy": "hierarchical_precise",
-      "content_type": "hierarchical_section",
-      "embedding_model": "nomic-ai/CodeRankEmbed",
-      "processing_timestamp": "2025-10-19T15:40:56.850320",
+      "heading_text": "Sparse Vector Storage Creation",
+      "token_count": 206,
+      "char_count": 854,
+      "start_char": 19895,
+      "end_char": 20749,
+      "semantic_score": 0.7999999999999999,
+      "structural_score": 0.7999999999999998,
+      "retrieval_quality": 0.5257142857142857,
+      "chunking_strategy": "hierarchical_precise_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "processing_timestamp": "2025-10-20T04:38:45.948655",
       "document_id": "2a0595821471",
       "document_name": "_qdrant_qdrant_3-vector-storage-and-indexing",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_3-vector-storage-and-indexing.md",
       "source_filename": "_qdrant_qdrant_3-vector-storage-and-indexing.md",
       "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant",
       "relative_path": "Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_3-vector-storage-and-indexing.md",
-      "hierarchy_path": "Creating and Opening Vector Storage",
-      "chunk_hash": "9ef5fa2429011468",
-      "content_digest": "9ef5fa2429011468",
-      "chunk_length": 38,
+      "hierarchy_path": "Sparse Vector Storage Creation",
+      "chunk_hash": "7562222da783cee3",
+      "content_digest": "7562222da783cee3",
+      "chunk_length": 854,
       "payload_version": "1.3",
       "collection_hints": [
         "qdrant_ecosystem"
@@ -709,41 +2347,728 @@
         "version": "1.0",
         "weighting": "tf-normalized",
         "top_terms": [
-          "creating",
-          "and",
-          "opening",
+          "segment",
+          "constructor",
+          "sparse",
+          "storage",
+          "lib",
+          "src",
+          "base",
+          "qdrant",
           "vector",
-          "storage"
+          "create",
+          "rs410",
+          "434",
+          "https",
+          "github",
+          "com",
+          "blob",
+          "48203e41",
+          "l410",
+          "l434",
+          "sparsevectorstoragetype"
         ],
         "term_weights": [
           {
-            "term": "creating",
-            "tf": 1,
-            "weight": 0.2
+            "term": "segment",
+            "tf": 12,
+            "weight": 0.126316
           },
           {
-            "term": "and",
-            "tf": 1,
-            "weight": 0.2
+            "term": "constructor",
+            "tf": 8,
+            "weight": 0.084211
           },
           {
-            "term": "opening",
-            "tf": 1,
-            "weight": 0.2
-          },
-          {
-            "term": "vector",
-            "tf": 1,
-            "weight": 0.2
+            "term": "sparse",
+            "tf": 4,
+            "weight": 0.042105
           },
           {
             "term": "storage",
-            "tf": 1,
-            "weight": 0.2
+            "tf": 4,
+            "weight": 0.042105
+          },
+          {
+            "term": "lib",
+            "tf": 4,
+            "weight": 0.042105
+          },
+          {
+            "term": "src",
+            "tf": 4,
+            "weight": 0.042105
+          },
+          {
+            "term": "base",
+            "tf": 4,
+            "weight": 0.042105
+          },
+          {
+            "term": "qdrant",
+            "tf": 4,
+            "weight": 0.042105
+          },
+          {
+            "term": "vector",
+            "tf": 3,
+            "weight": 0.031579
+          },
+          {
+            "term": "create",
+            "tf": 2,
+            "weight": 0.021053
+          },
+          {
+            "term": "rs410",
+            "tf": 2,
+            "weight": 0.021053
+          },
+          {
+            "term": "434",
+            "tf": 2,
+            "weight": 0.021053
+          },
+          {
+            "term": "https",
+            "tf": 2,
+            "weight": 0.021053
+          },
+          {
+            "term": "github",
+            "tf": 2,
+            "weight": 0.021053
+          },
+          {
+            "term": "com",
+            "tf": 2,
+            "weight": 0.021053
+          },
+          {
+            "term": "blob",
+            "tf": 2,
+            "weight": 0.021053
+          },
+          {
+            "term": "48203e41",
+            "tf": 2,
+            "weight": 0.021053
+          },
+          {
+            "term": "l410",
+            "tf": 2,
+            "weight": 0.021053
+          },
+          {
+            "term": "l434",
+            "tf": 2,
+            "weight": 0.021053
+          },
+          {
+            "term": "sparsevectorstoragetype",
+            "tf": 2,
+            "weight": 0.021053
           }
         ],
-        "unique_terms": 5,
-        "total_terms": 5
+        "unique_terms": 45,
+        "total_terms": 95
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Sparse Vector Storage Creation",
+        "base",
+        "constructor",
+        "create",
+        "lib",
+        "qdrant",
+        "segment",
+        "sparse",
+        "src",
+        "storage",
+        "vector"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.7999999999999999,
+      "structural": 0.7999999999999998,
+      "retrieval_quality": 0.5257142857142857,
+      "overall": 0.7085714285714285
+    }
+  },
+  {
+    "text": "### Dense Vector Index Creation\n\nThe function `open_vector_index()` creates the index, while `build_vector_index()` in [lib/segment/src/segment\\_constructor/segment\\_constructor\\_base.rs320-351](https://github.com/qdrant/qdrant/blob/48203e41/lib/segment/src/segment_constructor/segment_constructor_base.rs#L320-L351) performs initial construction with optimization.\n\nFor HNSW indices, old indices from merged segments can be reused to speed up construction:\n\n```\n```\n\n**Sources:** [lib/segment/src/segment\\_constructor/segment\\_constructor\\_base.rs291-351](https://github.com/qdrant/qdrant/blob/48203e41/lib/segment/src/segment_constructor/segment_constructor_base.rs#L291-L351)\n\n---",
+    "metadata": {
+      "chunk_id": "2a0595821471-0031",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_3-vector-storage-and-indexing.md",
+      "filename": "_qdrant_qdrant_3-vector-storage-and-indexing.md",
+      "file_extension": ".md",
+      "chunk_index": 31,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Dense Vector Index Creation"
+      ],
+      "heading_text": "Dense Vector Index Creation",
+      "token_count": 165,
+      "char_count": 683,
+      "start_char": 20751,
+      "end_char": 21434,
+      "semantic_score": 0.7,
+      "structural_score": 0.7999999999999998,
+      "retrieval_quality": 0.575,
+      "chunking_strategy": "hierarchical_precise_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "processing_timestamp": "2025-10-20T04:38:45.949833",
+      "document_id": "2a0595821471",
+      "document_name": "_qdrant_qdrant_3-vector-storage-and-indexing",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_3-vector-storage-and-indexing.md",
+      "source_filename": "_qdrant_qdrant_3-vector-storage-and-indexing.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant",
+      "relative_path": "Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_3-vector-storage-and-indexing.md",
+      "hierarchy_path": "Dense Vector Index Creation",
+      "chunk_hash": "8113f23304085d4a",
+      "content_digest": "8113f23304085d4a",
+      "chunk_length": 683,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "segment",
+          "constructor",
+          "index",
+          "lib",
+          "src",
+          "base",
+          "qdrant",
+          "vector",
+          "the",
+          "351",
+          "https",
+          "github",
+          "com",
+          "blob",
+          "48203e41",
+          "l351",
+          "construction",
+          "indices",
+          "dense",
+          "creation"
+        ],
+        "term_weights": [
+          {
+            "term": "segment",
+            "tf": 12,
+            "weight": 0.136364
+          },
+          {
+            "term": "constructor",
+            "tf": 8,
+            "weight": 0.090909
+          },
+          {
+            "term": "index",
+            "tf": 4,
+            "weight": 0.045455
+          },
+          {
+            "term": "lib",
+            "tf": 4,
+            "weight": 0.045455
+          },
+          {
+            "term": "src",
+            "tf": 4,
+            "weight": 0.045455
+          },
+          {
+            "term": "base",
+            "tf": 4,
+            "weight": 0.045455
+          },
+          {
+            "term": "qdrant",
+            "tf": 4,
+            "weight": 0.045455
+          },
+          {
+            "term": "vector",
+            "tf": 3,
+            "weight": 0.034091
+          },
+          {
+            "term": "the",
+            "tf": 2,
+            "weight": 0.022727
+          },
+          {
+            "term": "351",
+            "tf": 2,
+            "weight": 0.022727
+          },
+          {
+            "term": "https",
+            "tf": 2,
+            "weight": 0.022727
+          },
+          {
+            "term": "github",
+            "tf": 2,
+            "weight": 0.022727
+          },
+          {
+            "term": "com",
+            "tf": 2,
+            "weight": 0.022727
+          },
+          {
+            "term": "blob",
+            "tf": 2,
+            "weight": 0.022727
+          },
+          {
+            "term": "48203e41",
+            "tf": 2,
+            "weight": 0.022727
+          },
+          {
+            "term": "l351",
+            "tf": 2,
+            "weight": 0.022727
+          },
+          {
+            "term": "construction",
+            "tf": 2,
+            "weight": 0.022727
+          },
+          {
+            "term": "indices",
+            "tf": 2,
+            "weight": 0.022727
+          },
+          {
+            "term": "dense",
+            "tf": 1,
+            "weight": 0.011364
+          },
+          {
+            "term": "creation",
+            "tf": 1,
+            "weight": 0.011364
+          }
+        ],
+        "unique_terms": 43,
+        "total_terms": 88
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "351",
+        "Dense Vector Index Creation",
+        "base",
+        "constructor",
+        "index",
+        "lib",
+        "qdrant",
+        "segment",
+        "src",
+        "the",
+        "vector"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.7999999999999998,
+      "retrieval_quality": 0.575,
+      "overall": 0.6916666666666665
+    }
+  },
+  {
+    "text": "### AccessPattern Types\n\n```\n```\n\nThis allows storage implementations to optimize based on access pattern (e.g., prefetching for sequential reads).\n\n**Sources:** [lib/segment/src/vector\\_storage/vector\\_storage\\_base.rs42-58](https://github.com/qdrant/qdrant/blob/48203e41/lib/segment/src/vector_storage/vector_storage_base.rs#L42-L58) [lib/segment/src/vector\\_storage/vector\\_storage\\_base.rs89-92](https://github.com/qdrant/qdrant/blob/48203e41/lib/segment/src/vector_storage/vector_storage_base.rs#L89-L92)\n\n---",
+    "metadata": {
+      "chunk_id": "2a0595821471-0033",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_3-vector-storage-and-indexing.md",
+      "filename": "_qdrant_qdrant_3-vector-storage-and-indexing.md",
+      "file_extension": ".md",
+      "chunk_index": 33,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "AccessPattern Types"
+      ],
+      "heading_text": "AccessPattern Types",
+      "token_count": 133,
+      "char_count": 514,
+      "start_char": 21543,
+      "end_char": 22057,
+      "semantic_score": 0.6,
+      "structural_score": 0.7999999999999998,
+      "retrieval_quality": 0.5775,
+      "chunking_strategy": "hierarchical_precise_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "processing_timestamp": "2025-10-20T04:38:45.949833",
+      "document_id": "2a0595821471",
+      "document_name": "_qdrant_qdrant_3-vector-storage-and-indexing",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_3-vector-storage-and-indexing.md",
+      "source_filename": "_qdrant_qdrant_3-vector-storage-and-indexing.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant",
+      "relative_path": "Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_3-vector-storage-and-indexing.md",
+      "hierarchy_path": "AccessPattern Types",
+      "chunk_hash": "b7f72e214e895c93",
+      "content_digest": "b7f72e214e895c93",
+      "chunk_length": 514,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "storage",
+          "vector",
+          "lib",
+          "segment",
+          "src",
+          "base",
+          "qdrant",
+          "https",
+          "github",
+          "com",
+          "blob",
+          "48203e41",
+          "accesspattern",
+          "types",
+          "this",
+          "allows",
+          "implementations",
+          "optimize",
+          "based",
+          "access"
+        ],
+        "term_weights": [
+          {
+            "term": "storage",
+            "tf": 9,
+            "weight": 0.134328
+          },
+          {
+            "term": "vector",
+            "tf": 8,
+            "weight": 0.119403
+          },
+          {
+            "term": "lib",
+            "tf": 4,
+            "weight": 0.059701
+          },
+          {
+            "term": "segment",
+            "tf": 4,
+            "weight": 0.059701
+          },
+          {
+            "term": "src",
+            "tf": 4,
+            "weight": 0.059701
+          },
+          {
+            "term": "base",
+            "tf": 4,
+            "weight": 0.059701
+          },
+          {
+            "term": "qdrant",
+            "tf": 4,
+            "weight": 0.059701
+          },
+          {
+            "term": "https",
+            "tf": 2,
+            "weight": 0.029851
+          },
+          {
+            "term": "github",
+            "tf": 2,
+            "weight": 0.029851
+          },
+          {
+            "term": "com",
+            "tf": 2,
+            "weight": 0.029851
+          },
+          {
+            "term": "blob",
+            "tf": 2,
+            "weight": 0.029851
+          },
+          {
+            "term": "48203e41",
+            "tf": 2,
+            "weight": 0.029851
+          },
+          {
+            "term": "accesspattern",
+            "tf": 1,
+            "weight": 0.014925
+          },
+          {
+            "term": "types",
+            "tf": 1,
+            "weight": 0.014925
+          },
+          {
+            "term": "this",
+            "tf": 1,
+            "weight": 0.014925
+          },
+          {
+            "term": "allows",
+            "tf": 1,
+            "weight": 0.014925
+          },
+          {
+            "term": "implementations",
+            "tf": 1,
+            "weight": 0.014925
+          },
+          {
+            "term": "optimize",
+            "tf": 1,
+            "weight": 0.014925
+          },
+          {
+            "term": "based",
+            "tf": 1,
+            "weight": 0.014925
+          },
+          {
+            "term": "access",
+            "tf": 1,
+            "weight": 0.014925
+          }
+        ],
+        "unique_terms": 32,
+        "total_terms": 67
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "AccessPattern Types",
+        "base",
+        "com",
+        "github",
+        "https",
+        "lib",
+        "qdrant",
+        "segment",
+        "src",
+        "storage",
+        "vector"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.6,
+      "structural": 0.7999999999999998,
+      "retrieval_quality": 0.5775,
+      "overall": 0.6591666666666667
+    }
+  },
+  {
+    "text": "### Segment Building Example  When constructing a new segment (e.g., during optimization), `SegmentBuilder` in [lib/segment/src/segment\\_constructor/segment\\_builder.rs58-74](https://github.com/qdrant/qdrant/blob/48203e41/lib/segment/src/segment_constructor/segment_builder.rs#L58-L74) coordinates storage and index creation:  1. Create ID tracker  2. Create payload storage  3. For each vector name:     - Create vector storage (via `open_vector_storage()`)    - Populate with data from source segments    - Create quantized vectors (if configured)    - Build vector index (with `build_vector_index()`)  **Sources:** [lib/segment/src/segment\\_constructor/segment\\_builder.rs58-167](https://github.com/qdrant/qdrant/blob/48203e41/lib/segment/src/segment_constructor/segment_builder.rs#L58-L167) [lib/segment/src/segment\\_constructor/segment\\_constructor\\_base.rs436-576](https://github.com/qdrant/qdrant/blob/48203e41/lib/segment/src/segment_constructor/segment_constructor_base.rs#L436-L576)",
+    "metadata": {
+      "chunk_id": "2a0595821471-0035",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_3-vector-storage-and-indexing.md",
+      "filename": "_qdrant_qdrant_3-vector-storage-and-indexing.md",
+      "file_extension": ".md",
+      "chunk_index": 35,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Segment Building Example"
+      ],
+      "heading_text": "Segment Building Example",
+      "token_count": 255,
+      "char_count": 992,
+      "start_char": 22094,
+      "end_char": 23086,
+      "semantic_score": 0.7,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.730983606557377,
+      "chunking_strategy": "hierarchical_precise_structural",
+      "content_type": "list_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "processing_timestamp": "2025-10-20T04:38:45.949833",
+      "document_id": "2a0595821471",
+      "document_name": "_qdrant_qdrant_3-vector-storage-and-indexing",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_3-vector-storage-and-indexing.md",
+      "source_filename": "_qdrant_qdrant_3-vector-storage-and-indexing.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant",
+      "relative_path": "Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_3-vector-storage-and-indexing.md",
+      "hierarchy_path": "Segment Building Example",
+      "chunk_hash": "f6656086c6f1893b",
+      "content_digest": "f6656086c6f1893b",
+      "chunk_length": 992,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "segment",
+          "constructor",
+          "lib",
+          "src",
+          "qdrant",
+          "vector",
+          "builder",
+          "storage",
+          "create",
+          "https",
+          "github",
+          "com",
+          "blob",
+          "48203e41",
+          "index",
+          "rs58",
+          "l58",
+          "with",
+          "build",
+          "base"
+        ],
+        "term_weights": [
+          {
+            "term": "segment",
+            "tf": 20,
+            "weight": 0.16
+          },
+          {
+            "term": "constructor",
+            "tf": 8,
+            "weight": 0.064
+          },
+          {
+            "term": "lib",
+            "tf": 6,
+            "weight": 0.048
+          },
+          {
+            "term": "src",
+            "tf": 6,
+            "weight": 0.048
+          },
+          {
+            "term": "qdrant",
+            "tf": 6,
+            "weight": 0.048
+          },
+          {
+            "term": "vector",
+            "tf": 5,
+            "weight": 0.04
+          },
+          {
+            "term": "builder",
+            "tf": 4,
+            "weight": 0.032
+          },
+          {
+            "term": "storage",
+            "tf": 4,
+            "weight": 0.032
+          },
+          {
+            "term": "create",
+            "tf": 4,
+            "weight": 0.032
+          },
+          {
+            "term": "https",
+            "tf": 3,
+            "weight": 0.024
+          },
+          {
+            "term": "github",
+            "tf": 3,
+            "weight": 0.024
+          },
+          {
+            "term": "com",
+            "tf": 3,
+            "weight": 0.024
+          },
+          {
+            "term": "blob",
+            "tf": 3,
+            "weight": 0.024
+          },
+          {
+            "term": "48203e41",
+            "tf": 3,
+            "weight": 0.024
+          },
+          {
+            "term": "index",
+            "tf": 3,
+            "weight": 0.024
+          },
+          {
+            "term": "rs58",
+            "tf": 2,
+            "weight": 0.016
+          },
+          {
+            "term": "l58",
+            "tf": 2,
+            "weight": 0.016
+          },
+          {
+            "term": "with",
+            "tf": 2,
+            "weight": 0.016
+          },
+          {
+            "term": "build",
+            "tf": 2,
+            "weight": 0.016
+          },
+          {
+            "term": "base",
+            "tf": 2,
+            "weight": 0.016
+          }
+        ],
+        "unique_terms": 54,
+        "total_terms": 125
       },
       "modal_hint": "prose",
       "content_flags": {
@@ -754,21 +3079,422 @@
         "has_formula": false
       },
       "search_keywords": [
-        "Creating and Opening Vector Storage",
-        "and",
-        "creating",
-        "opening",
+        "Segment Building Example",
+        "builder",
+        "constructor",
+        "create",
+        "https",
+        "lib",
+        "qdrant",
+        "segment",
+        "src",
         "storage",
         "vector"
-      ],
-      "quality_fallback": true,
-      "quality_notes": "Promoted via relaxed thresholds"
+      ]
     },
     "advanced_scores": {
-      "semantic": 0.8,
+      "semantic": 0.7,
       "structural": 0.8999999999999999,
-      "retrieval_quality": 0.39,
-      "overall": 0.6966666666666667
+      "retrieval_quality": 0.730983606557377,
+      "overall": 0.7769945355191257
+    }
+  },
+  {
+    "text": "## Summary\n\nQdrant's vector storage and indexing system provides:\n\n1. **Separation of Concerns:** Storage (persistence) and indexing (search) are independent layers\n2. **Multiple Storage Backends:** RocksDB (deprecated), Mmap, ChunkedMmap, InRamChunkedMmap\n3. **Multiple Index Types:** Plain (exact), HNSW (approximate), Sparse (inverted)\n4. **Vector Type Support:** Dense, Sparse, Multi-dense vectors\n5. **Data Type Flexibility:** Float32, Float16, Uint8 storage\n6. **Optional Quantization:** Compression layer for memory reduction\n7. **Per-Vector-Name Organization:** Named vectors with independent storage/index\n\nThe architecture allows flexible configuration for different scale and performance requirements while maintaining clean abstractions between components.\n\n**Sources:** [lib/segment/src/vector\\_storage/vector\\_storage\\_base.rs](https://github.com/qdrant/qdrant/blob/48203e41/lib/segment/src/vector_storage/vector_storage_base.rs)",
+    "metadata": {
+      "chunk_id": "2a0595821471-0037",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_3-vector-storage-and-indexing.md",
+      "filename": "_qdrant_qdrant_3-vector-storage-and-indexing.md",
+      "file_extension": ".md",
+      "chunk_index": 37,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Summary"
+      ],
+      "heading_text": "Summary",
+      "token_count": 216,
+      "char_count": 943,
+      "start_char": 23900,
+      "end_char": 24843,
+      "semantic_score": 0.7,
+      "structural_score": 0.7999999999999998,
+      "retrieval_quality": 0.5537362637362637,
+      "chunking_strategy": "hierarchical_precise_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "processing_timestamp": "2025-10-20T04:38:45.949833",
+      "document_id": "2a0595821471",
+      "document_name": "_qdrant_qdrant_3-vector-storage-and-indexing",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_3-vector-storage-and-indexing.md",
+      "source_filename": "_qdrant_qdrant_3-vector-storage-and-indexing.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant",
+      "relative_path": "Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_3-vector-storage-and-indexing.md",
+      "hierarchy_path": "Summary",
+      "chunk_hash": "76d3259aec61b86d",
+      "content_digest": "76d3259aec61b86d",
+      "chunk_length": 943,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "storage",
+          "vector",
+          "qdrant",
+          "and",
+          "indexing",
+          "independent",
+          "multiple",
+          "index",
+          "sparse",
+          "type",
+          "dense",
+          "vectors",
+          "for",
+          "lib",
+          "segment",
+          "src",
+          "base",
+          "summary",
+          "system",
+          "provides"
+        ],
+        "term_weights": [
+          {
+            "term": "storage",
+            "tf": 9,
+            "weight": 0.083333
+          },
+          {
+            "term": "vector",
+            "tf": 7,
+            "weight": 0.064815
+          },
+          {
+            "term": "qdrant",
+            "tf": 3,
+            "weight": 0.027778
+          },
+          {
+            "term": "and",
+            "tf": 3,
+            "weight": 0.027778
+          },
+          {
+            "term": "indexing",
+            "tf": 2,
+            "weight": 0.018519
+          },
+          {
+            "term": "independent",
+            "tf": 2,
+            "weight": 0.018519
+          },
+          {
+            "term": "multiple",
+            "tf": 2,
+            "weight": 0.018519
+          },
+          {
+            "term": "index",
+            "tf": 2,
+            "weight": 0.018519
+          },
+          {
+            "term": "sparse",
+            "tf": 2,
+            "weight": 0.018519
+          },
+          {
+            "term": "type",
+            "tf": 2,
+            "weight": 0.018519
+          },
+          {
+            "term": "dense",
+            "tf": 2,
+            "weight": 0.018519
+          },
+          {
+            "term": "vectors",
+            "tf": 2,
+            "weight": 0.018519
+          },
+          {
+            "term": "for",
+            "tf": 2,
+            "weight": 0.018519
+          },
+          {
+            "term": "lib",
+            "tf": 2,
+            "weight": 0.018519
+          },
+          {
+            "term": "segment",
+            "tf": 2,
+            "weight": 0.018519
+          },
+          {
+            "term": "src",
+            "tf": 2,
+            "weight": 0.018519
+          },
+          {
+            "term": "base",
+            "tf": 2,
+            "weight": 0.018519
+          },
+          {
+            "term": "summary",
+            "tf": 1,
+            "weight": 0.009259
+          },
+          {
+            "term": "system",
+            "tf": 1,
+            "weight": 0.009259
+          },
+          {
+            "term": "provides",
+            "tf": 1,
+            "weight": 0.009259
+          }
+        ],
+        "unique_terms": 77,
+        "total_terms": 108
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Summary",
+        "and",
+        "independent",
+        "index",
+        "indexing",
+        "multiple",
+        "qdrant",
+        "sparse",
+        "storage",
+        "type",
+        "vector"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.7999999999999998,
+      "retrieval_quality": 0.5537362637362637,
+      "overall": 0.6845787545787546
+    }
+  },
+  {
+    "text": "### On this page  - [Vector Storage and Indexing](#vector-storage-and-indexing.md) - [Purpose and Scope](#purpose-and-scope.md) - [Vector Storage and Indexing Architecture](#vector-storage-and-indexing-architecture.md) - [Core Abstractions Diagram](#core-abstractions-diagram.md) - [Key Traits](#key-traits.md) - [Vector Storage Backends](#vector-storage-backends.md) - [Storage Backend Types](#storage-backend-types.md) - [Storage Backend Selection](#storage-backend-selection.md) - [VectorStorageEnum Variants](#vectorstorageenum-variants.md) - [Dense Vector Storage Variants](#dense-vector-storage-variants.md) - [Sparse and Multi-Dense Variants](#sparse-and-multi-dense-variants.md) - [Vector Index Types](#vector-index-types.md) - [Index Type Comparison](#index-type-comparison.md) - [PlainVectorIndex](#plainvectorindex.md) - [HNSWIndex](#hnswindex.md) - [SparseVectorIndex](#sparsevectorindex.md) - [Index Selection in Code](#index-selection-in-code.md) - [Vector Data Types](#vector-data-types.md) - [Dense Vectors](#dense-vectors.md) - [Sparse Vectors](#sparse-vectors.md) - [Multi-Dense Vectors](#multi-dense-vectors.md) - [Storage Element Data Types](#storage-element-data-types.md) - [VectorStorageDatatype Options](#vectorstoragedatatype-options.md) - [Type Selection](#type-selection.md) - [Quantization Layer](#quantization-layer.md) - [Quantization Architecture](#quantization-architecture.md) - [Segment Vector Data Organization](#segment-vector-data-organization.md) - [VectorData Structure in Segment](#vectordata-structure-in-segment.md) - [Storage Path Convention](#storage-path-convention.md) - [Creating and Opening Vector Storage](#creating-and-opening-vector-storage.md) - [Sparse Vector Storage Creation](#sparse-vector-storage-creation.md) - [Dense Vector Index Creation](#dense-vector-index-creation.md) - [Access Patterns](#access-patterns.md) - [AccessPattern Types](#accesspattern-types.md) - [Storage and Index Coordination](#storage-and-index-coordination.md) - [Segment Building Example](#segment-building-example.md) - [Immutability and Appendability](#immutability-and-appendability.md) - [Summary](#summary.md)",
+    "metadata": {
+      "chunk_id": "2a0595821471-0039",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_3-vector-storage-and-indexing.md",
+      "filename": "_qdrant_qdrant_3-vector-storage-and-indexing.md",
+      "file_extension": ".md",
+      "chunk_index": 39,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "On this page"
+      ],
+      "heading_text": "On this page",
+      "token_count": 535,
+      "char_count": 2147,
+      "start_char": 25290,
+      "end_char": 27437,
+      "semantic_score": 0.6,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.656953642384106,
+      "chunking_strategy": "hierarchical_precise_structural",
+      "content_type": "list_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "processing_timestamp": "2025-10-20T04:38:45.949833",
+      "document_id": "2a0595821471",
+      "document_name": "_qdrant_qdrant_3-vector-storage-and-indexing",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_3-vector-storage-and-indexing.md",
+      "source_filename": "_qdrant_qdrant_3-vector-storage-and-indexing.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant",
+      "relative_path": "Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_3-vector-storage-and-indexing.md",
+      "hierarchy_path": "On this page",
+      "chunk_hash": "4d30e340dd1790a8",
+      "content_digest": "4d30e340dd1790a8",
+      "chunk_length": 2147,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "storage",
+          "vector",
+          "and",
+          "types",
+          "dense",
+          "index",
+          "selection",
+          "variants",
+          "sparse",
+          "data",
+          "vectors",
+          "segment",
+          "indexing",
+          "architecture",
+          "backend",
+          "multi",
+          "type",
+          "quantization",
+          "creation",
+          "purpose"
+        ],
+        "term_weights": [
+          {
+            "term": "storage",
+            "tf": 22,
+            "weight": 0.1
+          },
+          {
+            "term": "vector",
+            "tf": 20,
+            "weight": 0.090909
+          },
+          {
+            "term": "and",
+            "tf": 14,
+            "weight": 0.063636
+          },
+          {
+            "term": "types",
+            "tf": 10,
+            "weight": 0.045455
+          },
+          {
+            "term": "dense",
+            "tf": 10,
+            "weight": 0.045455
+          },
+          {
+            "term": "index",
+            "tf": 10,
+            "weight": 0.045455
+          },
+          {
+            "term": "selection",
+            "tf": 6,
+            "weight": 0.027273
+          },
+          {
+            "term": "variants",
+            "tf": 6,
+            "weight": 0.027273
+          },
+          {
+            "term": "sparse",
+            "tf": 6,
+            "weight": 0.027273
+          },
+          {
+            "term": "data",
+            "tf": 6,
+            "weight": 0.027273
+          },
+          {
+            "term": "vectors",
+            "tf": 6,
+            "weight": 0.027273
+          },
+          {
+            "term": "segment",
+            "tf": 6,
+            "weight": 0.027273
+          },
+          {
+            "term": "indexing",
+            "tf": 4,
+            "weight": 0.018182
+          },
+          {
+            "term": "architecture",
+            "tf": 4,
+            "weight": 0.018182
+          },
+          {
+            "term": "backend",
+            "tf": 4,
+            "weight": 0.018182
+          },
+          {
+            "term": "multi",
+            "tf": 4,
+            "weight": 0.018182
+          },
+          {
+            "term": "type",
+            "tf": 4,
+            "weight": 0.018182
+          },
+          {
+            "term": "quantization",
+            "tf": 4,
+            "weight": 0.018182
+          },
+          {
+            "term": "creation",
+            "tf": 4,
+            "weight": 0.018182
+          },
+          {
+            "term": "purpose",
+            "tf": 2,
+            "weight": 0.009091
+          }
+        ],
+        "unique_terms": 55,
+        "total_terms": 220
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "On this page",
+        "and",
+        "data",
+        "dense",
+        "index",
+        "selection",
+        "sparse",
+        "storage",
+        "types",
+        "variants",
+        "vector"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.6,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.656953642384106,
+      "overall": 0.7189845474613686
     }
   }
 ]

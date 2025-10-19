@@ -1,6 +1,1797 @@
 [
   {
-    "text": "## Multimodal Embeddings with LateInteractionMultimodalEmbedding  The `LateInteractionMultimodalEmbedding` class enables cross-modal retrieval through models that can embed both text and images in a compatible latent space. ``` ```",
+    "text": "# Core Embedding Classes\n\nRelevant source files\n\n- [NOTICE](https://github.com/qdrant/fastembed/blob/b785640b/NOTICE)\n- [README.md](https://github.com/qdrant/fastembed/blob/b785640b/README.md)\n- [docs/examples/FastEmbed\\_GPU.ipynb](https://github.com/qdrant/fastembed/blob/b785640b/docs/examples/FastEmbed_GPU.ipynb)\n- [docs/examples/Supported\\_Models.ipynb](https://github.com/qdrant/fastembed/blob/b785640b/docs/examples/Supported_Models.ipynb)\n- [fastembed/embedding.py](https://github.com/qdrant/fastembed/blob/b785640b/fastembed/embedding.py)\n- [fastembed/late\\_interaction\\_multimodal/\\_\\_init\\_\\_.py](https://github.com/qdrant/fastembed/blob/b785640b/fastembed/late_interaction_multimodal/__init__.py)\n\nThis page provides an overview of the main embedding classes in FastEmbed, which serve as primary interfaces for generating embeddings from different types of data. Each class is designed for a specific embedding strategy, offering a balance of simplicity and performance through ONNX Runtime integration.\n\nFor detailed information about how to use each class with specific examples, see [Usage Examples](qdrant/fastembed/7-usage-examples.md).",
+    "metadata": {
+      "chunk_id": "2bbf6cabf4b4-0000",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_fastembed\\_qdrant_fastembed_3-core-embedding-classes.md",
+      "filename": "_qdrant_fastembed_3-core-embedding-classes.md",
+      "file_extension": ".md",
+      "chunk_index": 0,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Core Embedding Classes"
+      ],
+      "heading_text": "Core Embedding Classes",
+      "token_count": 288,
+      "char_count": 1153,
+      "start_char": 2286,
+      "end_char": 3439,
+      "semantic_score": 0.6,
+      "structural_score": 0.9999999999999999,
+      "retrieval_quality": 0.729240506329114,
+      "chunking_strategy": "hierarchical_balanced_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "processing_timestamp": "2025-10-20T04:38:44.855408",
+      "document_id": "2bbf6cabf4b4",
+      "document_name": "_qdrant_fastembed_3-core-embedding-classes",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_fastembed\\_qdrant_fastembed_3-core-embedding-classes.md",
+      "source_filename": "_qdrant_fastembed_3-core-embedding-classes.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_fastembed",
+      "relative_path": "Docs\\qdrant_ecosystem\\qdrant_fastembed\\_qdrant_fastembed_3-core-embedding-classes.md",
+      "hierarchy_path": "Core Embedding Classes",
+      "chunk_hash": "5bc5b3f6e04ccc86",
+      "content_digest": "5bc5b3f6e04ccc86",
+      "chunk_length": 1153,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "fastembed",
+          "qdrant",
+          "examples",
+          "https",
+          "github",
+          "com",
+          "blob",
+          "b785640b",
+          "embedding",
+          "docs",
+          "ipynb",
+          "for",
+          "classes",
+          "notice",
+          "readme",
+          "gpu",
+          "supported",
+          "models",
+          "late",
+          "interaction"
+        ],
+        "term_weights": [
+          {
+            "term": "fastembed",
+            "tf": 14,
+            "weight": 0.1
+          },
+          {
+            "term": "qdrant",
+            "tf": 7,
+            "weight": 0.05
+          },
+          {
+            "term": "examples",
+            "tf": 7,
+            "weight": 0.05
+          },
+          {
+            "term": "https",
+            "tf": 6,
+            "weight": 0.042857
+          },
+          {
+            "term": "github",
+            "tf": 6,
+            "weight": 0.042857
+          },
+          {
+            "term": "com",
+            "tf": 6,
+            "weight": 0.042857
+          },
+          {
+            "term": "blob",
+            "tf": 6,
+            "weight": 0.042857
+          },
+          {
+            "term": "b785640b",
+            "tf": 6,
+            "weight": 0.042857
+          },
+          {
+            "term": "embedding",
+            "tf": 5,
+            "weight": 0.035714
+          },
+          {
+            "term": "docs",
+            "tf": 4,
+            "weight": 0.028571
+          },
+          {
+            "term": "ipynb",
+            "tf": 4,
+            "weight": 0.028571
+          },
+          {
+            "term": "for",
+            "tf": 3,
+            "weight": 0.021429
+          },
+          {
+            "term": "classes",
+            "tf": 2,
+            "weight": 0.014286
+          },
+          {
+            "term": "notice",
+            "tf": 2,
+            "weight": 0.014286
+          },
+          {
+            "term": "readme",
+            "tf": 2,
+            "weight": 0.014286
+          },
+          {
+            "term": "gpu",
+            "tf": 2,
+            "weight": 0.014286
+          },
+          {
+            "term": "supported",
+            "tf": 2,
+            "weight": 0.014286
+          },
+          {
+            "term": "models",
+            "tf": 2,
+            "weight": 0.014286
+          },
+          {
+            "term": "late",
+            "tf": 2,
+            "weight": 0.014286
+          },
+          {
+            "term": "interaction",
+            "tf": 2,
+            "weight": 0.014286
+          }
+        ],
+        "unique_terms": 64,
+        "total_terms": 140
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": true,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Core Embedding Classes",
+        "b785640b",
+        "blob",
+        "com",
+        "docs",
+        "embedding",
+        "examples",
+        "fastembed",
+        "github",
+        "https",
+        "qdrant"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.6,
+      "structural": 0.9999999999999999,
+      "retrieval_quality": 0.729240506329114,
+      "overall": 0.7764135021097046
+    }
+  },
+  {
+    "text": "## Class Hierarchy\n\nThe FastEmbed library is built around a hierarchical architecture of embedding classes, providing specialized functionality for different embedding strategies and data types.\n\n```\n```\n\nSources: [fastembed/embedding.py](https://github.com/qdrant/fastembed/blob/b785640b/fastembed/embedding.py)",
+    "metadata": {
+      "chunk_id": "2bbf6cabf4b4-0001",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_fastembed\\_qdrant_fastembed_3-core-embedding-classes.md",
+      "filename": "_qdrant_fastembed_3-core-embedding-classes.md",
+      "file_extension": ".md",
+      "chunk_index": 1,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Class Hierarchy"
+      ],
+      "heading_text": "Class Hierarchy",
+      "token_count": 63,
+      "char_count": 312,
+      "start_char": 3441,
+      "end_char": 3753,
+      "semantic_score": 0.7,
+      "structural_score": 0.7,
+      "retrieval_quality": 0.5693103448275862,
+      "chunking_strategy": "hierarchical_balanced_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "processing_timestamp": "2025-10-20T04:38:44.855408",
+      "document_id": "2bbf6cabf4b4",
+      "document_name": "_qdrant_fastembed_3-core-embedding-classes",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_fastembed\\_qdrant_fastembed_3-core-embedding-classes.md",
+      "source_filename": "_qdrant_fastembed_3-core-embedding-classes.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_fastembed",
+      "relative_path": "Docs\\qdrant_ecosystem\\qdrant_fastembed\\_qdrant_fastembed_3-core-embedding-classes.md",
+      "hierarchy_path": "Class Hierarchy",
+      "chunk_hash": "e579a5d5173e248e",
+      "content_digest": "e579a5d5173e248e",
+      "chunk_length": 312,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "fastembed",
+          "embedding",
+          "class",
+          "hierarchy",
+          "the",
+          "library",
+          "built",
+          "around",
+          "hierarchical",
+          "architecture",
+          "classes",
+          "providing",
+          "specialized",
+          "functionality",
+          "for",
+          "different",
+          "strategies",
+          "and",
+          "data",
+          "types"
+        ],
+        "term_weights": [
+          {
+            "term": "fastembed",
+            "tf": 4,
+            "weight": 0.121212
+          },
+          {
+            "term": "embedding",
+            "tf": 4,
+            "weight": 0.121212
+          },
+          {
+            "term": "class",
+            "tf": 1,
+            "weight": 0.030303
+          },
+          {
+            "term": "hierarchy",
+            "tf": 1,
+            "weight": 0.030303
+          },
+          {
+            "term": "the",
+            "tf": 1,
+            "weight": 0.030303
+          },
+          {
+            "term": "library",
+            "tf": 1,
+            "weight": 0.030303
+          },
+          {
+            "term": "built",
+            "tf": 1,
+            "weight": 0.030303
+          },
+          {
+            "term": "around",
+            "tf": 1,
+            "weight": 0.030303
+          },
+          {
+            "term": "hierarchical",
+            "tf": 1,
+            "weight": 0.030303
+          },
+          {
+            "term": "architecture",
+            "tf": 1,
+            "weight": 0.030303
+          },
+          {
+            "term": "classes",
+            "tf": 1,
+            "weight": 0.030303
+          },
+          {
+            "term": "providing",
+            "tf": 1,
+            "weight": 0.030303
+          },
+          {
+            "term": "specialized",
+            "tf": 1,
+            "weight": 0.030303
+          },
+          {
+            "term": "functionality",
+            "tf": 1,
+            "weight": 0.030303
+          },
+          {
+            "term": "for",
+            "tf": 1,
+            "weight": 0.030303
+          },
+          {
+            "term": "different",
+            "tf": 1,
+            "weight": 0.030303
+          },
+          {
+            "term": "strategies",
+            "tf": 1,
+            "weight": 0.030303
+          },
+          {
+            "term": "and",
+            "tf": 1,
+            "weight": 0.030303
+          },
+          {
+            "term": "data",
+            "tf": 1,
+            "weight": 0.030303
+          },
+          {
+            "term": "types",
+            "tf": 1,
+            "weight": 0.030303
+          }
+        ],
+        "unique_terms": 27,
+        "total_terms": 33
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Class Hierarchy",
+        "architecture",
+        "around",
+        "built",
+        "class",
+        "embedding",
+        "fastembed",
+        "hierarchical",
+        "hierarchy",
+        "library",
+        "the"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.7,
+      "retrieval_quality": 0.5693103448275862,
+      "overall": 0.6564367816091954
+    }
+  },
+  {
+    "text": "### Key Features  - Supports various embedding models with different dimensions and language capabilities - Automatically handles model downloading and caching - Provides parallel processing capabilities for handling large datasets - Supports GPU acceleration through ONNX Runtime",
+    "metadata": {
+      "chunk_id": "2bbf6cabf4b4-0004",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_fastembed\\_qdrant_fastembed_3-core-embedding-classes.md",
+      "filename": "_qdrant_fastembed_3-core-embedding-classes.md",
+      "file_extension": ".md",
+      "chunk_index": 4,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Key Features"
+      ],
+      "heading_text": "Key Features",
+      "token_count": 39,
+      "char_count": 280,
+      "start_char": 5220,
+      "end_char": 5500,
+      "semantic_score": 0.8,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5413513513513514,
+      "chunking_strategy": "hierarchical_balanced_structural",
+      "content_type": "list_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "processing_timestamp": "2025-10-20T04:38:44.855408",
+      "document_id": "2bbf6cabf4b4",
+      "document_name": "_qdrant_fastembed_3-core-embedding-classes",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_fastembed\\_qdrant_fastembed_3-core-embedding-classes.md",
+      "source_filename": "_qdrant_fastembed_3-core-embedding-classes.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_fastembed",
+      "relative_path": "Docs\\qdrant_ecosystem\\qdrant_fastembed\\_qdrant_fastembed_3-core-embedding-classes.md",
+      "hierarchy_path": "Key Features",
+      "chunk_hash": "da2a9fecd946ec9e",
+      "content_digest": "da2a9fecd946ec9e",
+      "chunk_length": 280,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "supports",
+          "and",
+          "capabilities",
+          "key",
+          "features",
+          "various",
+          "embedding",
+          "models",
+          "with",
+          "different",
+          "dimensions",
+          "language",
+          "automatically",
+          "handles",
+          "model",
+          "downloading",
+          "caching",
+          "provides",
+          "parallel",
+          "processing"
+        ],
+        "term_weights": [
+          {
+            "term": "supports",
+            "tf": 2,
+            "weight": 0.0625
+          },
+          {
+            "term": "and",
+            "tf": 2,
+            "weight": 0.0625
+          },
+          {
+            "term": "capabilities",
+            "tf": 2,
+            "weight": 0.0625
+          },
+          {
+            "term": "key",
+            "tf": 1,
+            "weight": 0.03125
+          },
+          {
+            "term": "features",
+            "tf": 1,
+            "weight": 0.03125
+          },
+          {
+            "term": "various",
+            "tf": 1,
+            "weight": 0.03125
+          },
+          {
+            "term": "embedding",
+            "tf": 1,
+            "weight": 0.03125
+          },
+          {
+            "term": "models",
+            "tf": 1,
+            "weight": 0.03125
+          },
+          {
+            "term": "with",
+            "tf": 1,
+            "weight": 0.03125
+          },
+          {
+            "term": "different",
+            "tf": 1,
+            "weight": 0.03125
+          },
+          {
+            "term": "dimensions",
+            "tf": 1,
+            "weight": 0.03125
+          },
+          {
+            "term": "language",
+            "tf": 1,
+            "weight": 0.03125
+          },
+          {
+            "term": "automatically",
+            "tf": 1,
+            "weight": 0.03125
+          },
+          {
+            "term": "handles",
+            "tf": 1,
+            "weight": 0.03125
+          },
+          {
+            "term": "model",
+            "tf": 1,
+            "weight": 0.03125
+          },
+          {
+            "term": "downloading",
+            "tf": 1,
+            "weight": 0.03125
+          },
+          {
+            "term": "caching",
+            "tf": 1,
+            "weight": 0.03125
+          },
+          {
+            "term": "provides",
+            "tf": 1,
+            "weight": 0.03125
+          },
+          {
+            "term": "parallel",
+            "tf": 1,
+            "weight": 0.03125
+          },
+          {
+            "term": "processing",
+            "tf": 1,
+            "weight": 0.03125
+          }
+        ],
+        "unique_terms": 29,
+        "total_terms": 32
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Key Features",
+        "and",
+        "capabilities",
+        "different",
+        "embedding",
+        "features",
+        "key",
+        "models",
+        "supports",
+        "various",
+        "with"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.8,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5413513513513514,
+      "overall": 0.7471171171171171
+    }
+  },
+  {
+    "text": "### Basic Usage Example\n\n```\n```\n\nFor detailed usage examples, see [Basic Text Embedding](qdrant/fastembed/7.1-basic-text-embedding.md).\n\nSources: [README.md29-47](https://github.com/qdrant/fastembed/blob/b785640b/README.md#L29-L47) [docs/examples/Supported\\_Models.ipynb56-129](https://github.com/qdrant/fastembed/blob/b785640b/docs/examples/Supported_Models.ipynb#L56-L129)",
+    "metadata": {
+      "chunk_id": "2bbf6cabf4b4-0005",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_fastembed\\_qdrant_fastembed_3-core-embedding-classes.md",
+      "filename": "_qdrant_fastembed_3-core-embedding-classes.md",
+      "file_extension": ".md",
+      "chunk_index": 5,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Basic Usage Example"
+      ],
+      "heading_text": "Basic Usage Example",
+      "token_count": 111,
+      "char_count": 375,
+      "start_char": 5502,
+      "end_char": 5877,
+      "semantic_score": 0.6,
+      "structural_score": 0.7,
+      "retrieval_quality": 0.7547058823529412,
+      "chunking_strategy": "hierarchical_balanced_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "processing_timestamp": "2025-10-20T04:38:44.855408",
+      "document_id": "2bbf6cabf4b4",
+      "document_name": "_qdrant_fastembed_3-core-embedding-classes",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_fastembed\\_qdrant_fastembed_3-core-embedding-classes.md",
+      "source_filename": "_qdrant_fastembed_3-core-embedding-classes.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_fastembed",
+      "relative_path": "Docs\\qdrant_ecosystem\\qdrant_fastembed\\_qdrant_fastembed_3-core-embedding-classes.md",
+      "hierarchy_path": "Basic Usage Example",
+      "chunk_hash": "bfb9767ac4640531",
+      "content_digest": "bfb9767ac4640531",
+      "chunk_length": 375,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "basic",
+          "examples",
+          "qdrant",
+          "fastembed",
+          "usage",
+          "text",
+          "embedding",
+          "readme",
+          "https",
+          "github",
+          "com",
+          "blob",
+          "b785640b",
+          "docs",
+          "supported",
+          "models",
+          "example",
+          "for",
+          "detailed",
+          "see"
+        ],
+        "term_weights": [
+          {
+            "term": "basic",
+            "tf": 3,
+            "weight": 0.061224
+          },
+          {
+            "term": "examples",
+            "tf": 3,
+            "weight": 0.061224
+          },
+          {
+            "term": "qdrant",
+            "tf": 3,
+            "weight": 0.061224
+          },
+          {
+            "term": "fastembed",
+            "tf": 3,
+            "weight": 0.061224
+          },
+          {
+            "term": "usage",
+            "tf": 2,
+            "weight": 0.040816
+          },
+          {
+            "term": "text",
+            "tf": 2,
+            "weight": 0.040816
+          },
+          {
+            "term": "embedding",
+            "tf": 2,
+            "weight": 0.040816
+          },
+          {
+            "term": "readme",
+            "tf": 2,
+            "weight": 0.040816
+          },
+          {
+            "term": "https",
+            "tf": 2,
+            "weight": 0.040816
+          },
+          {
+            "term": "github",
+            "tf": 2,
+            "weight": 0.040816
+          },
+          {
+            "term": "com",
+            "tf": 2,
+            "weight": 0.040816
+          },
+          {
+            "term": "blob",
+            "tf": 2,
+            "weight": 0.040816
+          },
+          {
+            "term": "b785640b",
+            "tf": 2,
+            "weight": 0.040816
+          },
+          {
+            "term": "docs",
+            "tf": 2,
+            "weight": 0.040816
+          },
+          {
+            "term": "supported",
+            "tf": 2,
+            "weight": 0.040816
+          },
+          {
+            "term": "models",
+            "tf": 2,
+            "weight": 0.040816
+          },
+          {
+            "term": "example",
+            "tf": 1,
+            "weight": 0.020408
+          },
+          {
+            "term": "for",
+            "tf": 1,
+            "weight": 0.020408
+          },
+          {
+            "term": "detailed",
+            "tf": 1,
+            "weight": 0.020408
+          },
+          {
+            "term": "see",
+            "tf": 1,
+            "weight": 0.020408
+          }
+        ],
+        "unique_terms": 29,
+        "total_terms": 49
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Basic Usage Example",
+        "basic",
+        "embedding",
+        "examples",
+        "fastembed",
+        "github",
+        "https",
+        "qdrant",
+        "readme",
+        "text",
+        "usage"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.6,
+      "structural": 0.7,
+      "retrieval_quality": 0.7547058823529412,
+      "overall": 0.6849019607843138
+    }
+  },
+  {
+    "text": "### Key Features  - Returns sparse embeddings as pairs of indices (token IDs) and values (weights) - Supports both neural sparse models (SPLADE) and statistical approaches (BM25) - Complements dense embeddings for hybrid search scenarios - Some models (BM25, BM42) require IDF statistics for optimal performance",
+    "metadata": {
+      "chunk_id": "2bbf6cabf4b4-0007",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_fastembed\\_qdrant_fastembed_3-core-embedding-classes.md",
+      "filename": "_qdrant_fastembed_3-core-embedding-classes.md",
+      "file_extension": ".md",
+      "chunk_index": 7,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Key Features"
+      ],
+      "heading_text": "Key Features",
+      "token_count": 64,
+      "char_count": 311,
+      "start_char": 6124,
+      "end_char": 6435,
+      "semantic_score": 0.8,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5378260869565217,
+      "chunking_strategy": "hierarchical_balanced_structural",
+      "content_type": "list_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "processing_timestamp": "2025-10-20T04:38:44.855408",
+      "document_id": "2bbf6cabf4b4",
+      "document_name": "_qdrant_fastembed_3-core-embedding-classes",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_fastembed\\_qdrant_fastembed_3-core-embedding-classes.md",
+      "source_filename": "_qdrant_fastembed_3-core-embedding-classes.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_fastembed",
+      "relative_path": "Docs\\qdrant_ecosystem\\qdrant_fastembed\\_qdrant_fastembed_3-core-embedding-classes.md",
+      "hierarchy_path": "Key Features",
+      "chunk_hash": "40bcd42d7fc8874c",
+      "content_digest": "40bcd42d7fc8874c",
+      "chunk_length": 311,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "sparse",
+          "embeddings",
+          "and",
+          "models",
+          "bm25",
+          "for",
+          "key",
+          "features",
+          "returns",
+          "pairs",
+          "indices",
+          "token",
+          "ids",
+          "values",
+          "weights",
+          "supports",
+          "both",
+          "neural",
+          "splade",
+          "statistical"
+        ],
+        "term_weights": [
+          {
+            "term": "sparse",
+            "tf": 2,
+            "weight": 0.051282
+          },
+          {
+            "term": "embeddings",
+            "tf": 2,
+            "weight": 0.051282
+          },
+          {
+            "term": "and",
+            "tf": 2,
+            "weight": 0.051282
+          },
+          {
+            "term": "models",
+            "tf": 2,
+            "weight": 0.051282
+          },
+          {
+            "term": "bm25",
+            "tf": 2,
+            "weight": 0.051282
+          },
+          {
+            "term": "for",
+            "tf": 2,
+            "weight": 0.051282
+          },
+          {
+            "term": "key",
+            "tf": 1,
+            "weight": 0.025641
+          },
+          {
+            "term": "features",
+            "tf": 1,
+            "weight": 0.025641
+          },
+          {
+            "term": "returns",
+            "tf": 1,
+            "weight": 0.025641
+          },
+          {
+            "term": "pairs",
+            "tf": 1,
+            "weight": 0.025641
+          },
+          {
+            "term": "indices",
+            "tf": 1,
+            "weight": 0.025641
+          },
+          {
+            "term": "token",
+            "tf": 1,
+            "weight": 0.025641
+          },
+          {
+            "term": "ids",
+            "tf": 1,
+            "weight": 0.025641
+          },
+          {
+            "term": "values",
+            "tf": 1,
+            "weight": 0.025641
+          },
+          {
+            "term": "weights",
+            "tf": 1,
+            "weight": 0.025641
+          },
+          {
+            "term": "supports",
+            "tf": 1,
+            "weight": 0.025641
+          },
+          {
+            "term": "both",
+            "tf": 1,
+            "weight": 0.025641
+          },
+          {
+            "term": "neural",
+            "tf": 1,
+            "weight": 0.025641
+          },
+          {
+            "term": "splade",
+            "tf": 1,
+            "weight": 0.025641
+          },
+          {
+            "term": "statistical",
+            "tf": 1,
+            "weight": 0.025641
+          }
+        ],
+        "unique_terms": 33,
+        "total_terms": 39
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Key Features",
+        "and",
+        "bm25",
+        "embeddings",
+        "features",
+        "for",
+        "key",
+        "models",
+        "pairs",
+        "returns",
+        "sparse"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.8,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5378260869565217,
+      "overall": 0.7459420289855072
+    }
+  },
+  {
+    "text": "### Basic Usage Example\n\n```\n```\n\nFor detailed usage examples, see [Sparse and Hybrid Search](qdrant/fastembed/7.2-sparse-and-hybrid-search.md).\n\nSources: [README.md85-99](https://github.com/qdrant/fastembed/blob/b785640b/README.md#L85-L99) [docs/examples/Supported\\_Models.ipynb370-413](https://github.com/qdrant/fastembed/blob/b785640b/docs/examples/Supported_Models.ipynb#L370-L413)",
+    "metadata": {
+      "chunk_id": "2bbf6cabf4b4-0008",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_fastembed\\_qdrant_fastembed_3-core-embedding-classes.md",
+      "filename": "_qdrant_fastembed_3-core-embedding-classes.md",
+      "file_extension": ".md",
+      "chunk_index": 8,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Basic Usage Example"
+      ],
+      "heading_text": "Basic Usage Example",
+      "token_count": 113,
+      "char_count": 385,
+      "start_char": 6437,
+      "end_char": 6822,
+      "semantic_score": 0.6,
+      "structural_score": 0.7,
+      "retrieval_quality": 0.7566666666666667,
+      "chunking_strategy": "hierarchical_balanced_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "processing_timestamp": "2025-10-20T04:38:44.855408",
+      "document_id": "2bbf6cabf4b4",
+      "document_name": "_qdrant_fastembed_3-core-embedding-classes",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_fastembed\\_qdrant_fastembed_3-core-embedding-classes.md",
+      "source_filename": "_qdrant_fastembed_3-core-embedding-classes.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_fastembed",
+      "relative_path": "Docs\\qdrant_ecosystem\\qdrant_fastembed\\_qdrant_fastembed_3-core-embedding-classes.md",
+      "hierarchy_path": "Basic Usage Example",
+      "chunk_hash": "419710a4dc8f9b83",
+      "content_digest": "419710a4dc8f9b83",
+      "chunk_length": 385,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "examples",
+          "qdrant",
+          "fastembed",
+          "usage",
+          "sparse",
+          "and",
+          "hybrid",
+          "search",
+          "readme",
+          "https",
+          "github",
+          "com",
+          "blob",
+          "b785640b",
+          "docs",
+          "supported",
+          "models",
+          "basic",
+          "example",
+          "for"
+        ],
+        "term_weights": [
+          {
+            "term": "examples",
+            "tf": 3,
+            "weight": 0.058824
+          },
+          {
+            "term": "qdrant",
+            "tf": 3,
+            "weight": 0.058824
+          },
+          {
+            "term": "fastembed",
+            "tf": 3,
+            "weight": 0.058824
+          },
+          {
+            "term": "usage",
+            "tf": 2,
+            "weight": 0.039216
+          },
+          {
+            "term": "sparse",
+            "tf": 2,
+            "weight": 0.039216
+          },
+          {
+            "term": "and",
+            "tf": 2,
+            "weight": 0.039216
+          },
+          {
+            "term": "hybrid",
+            "tf": 2,
+            "weight": 0.039216
+          },
+          {
+            "term": "search",
+            "tf": 2,
+            "weight": 0.039216
+          },
+          {
+            "term": "readme",
+            "tf": 2,
+            "weight": 0.039216
+          },
+          {
+            "term": "https",
+            "tf": 2,
+            "weight": 0.039216
+          },
+          {
+            "term": "github",
+            "tf": 2,
+            "weight": 0.039216
+          },
+          {
+            "term": "com",
+            "tf": 2,
+            "weight": 0.039216
+          },
+          {
+            "term": "blob",
+            "tf": 2,
+            "weight": 0.039216
+          },
+          {
+            "term": "b785640b",
+            "tf": 2,
+            "weight": 0.039216
+          },
+          {
+            "term": "docs",
+            "tf": 2,
+            "weight": 0.039216
+          },
+          {
+            "term": "supported",
+            "tf": 2,
+            "weight": 0.039216
+          },
+          {
+            "term": "models",
+            "tf": 2,
+            "weight": 0.039216
+          },
+          {
+            "term": "basic",
+            "tf": 1,
+            "weight": 0.019608
+          },
+          {
+            "term": "example",
+            "tf": 1,
+            "weight": 0.019608
+          },
+          {
+            "term": "for",
+            "tf": 1,
+            "weight": 0.019608
+          }
+        ],
+        "unique_terms": 31,
+        "total_terms": 51
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Basic Usage Example",
+        "and",
+        "examples",
+        "fastembed",
+        "https",
+        "hybrid",
+        "qdrant",
+        "readme",
+        "search",
+        "sparse",
+        "usage"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.6,
+      "structural": 0.7,
+      "retrieval_quality": 0.7566666666666667,
+      "overall": 0.6855555555555556
+    }
+  },
+  {
+    "text": "### Basic Usage Example\n\n```\n```\n\nFor detailed usage examples, see [ColBERT and Late Interaction](qdrant/fastembed/7.3-colbert-and-late-interaction.md).\n\nSources: [README.md117-136](https://github.com/qdrant/fastembed/blob/b785640b/README.md#L117-L136) [docs/examples/Supported\\_Models.ipynb492-600](https://github.com/qdrant/fastembed/blob/b785640b/docs/examples/Supported_Models.ipynb#L492-L600)",
+    "metadata": {
+      "chunk_id": "2bbf6cabf4b4-0011",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_fastembed\\_qdrant_fastembed_3-core-embedding-classes.md",
+      "filename": "_qdrant_fastembed_3-core-embedding-classes.md",
+      "file_extension": ".md",
+      "chunk_index": 11,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Basic Usage Example"
+      ],
+      "heading_text": "Basic Usage Example",
+      "token_count": 115,
+      "char_count": 397,
+      "start_char": 7365,
+      "end_char": 7762,
+      "semantic_score": 0.6,
+      "structural_score": 0.7,
+      "retrieval_quality": 0.7566666666666667,
+      "chunking_strategy": "hierarchical_balanced_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "processing_timestamp": "2025-10-20T04:38:44.858939",
+      "document_id": "2bbf6cabf4b4",
+      "document_name": "_qdrant_fastembed_3-core-embedding-classes",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_fastembed\\_qdrant_fastembed_3-core-embedding-classes.md",
+      "source_filename": "_qdrant_fastembed_3-core-embedding-classes.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_fastembed",
+      "relative_path": "Docs\\qdrant_ecosystem\\qdrant_fastembed\\_qdrant_fastembed_3-core-embedding-classes.md",
+      "hierarchy_path": "Basic Usage Example",
+      "chunk_hash": "3656fdba103d4d89",
+      "content_digest": "3656fdba103d4d89",
+      "chunk_length": 397,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "examples",
+          "qdrant",
+          "fastembed",
+          "usage",
+          "colbert",
+          "and",
+          "late",
+          "interaction",
+          "readme",
+          "https",
+          "github",
+          "com",
+          "blob",
+          "b785640b",
+          "docs",
+          "supported",
+          "models",
+          "basic",
+          "example",
+          "for"
+        ],
+        "term_weights": [
+          {
+            "term": "examples",
+            "tf": 3,
+            "weight": 0.057692
+          },
+          {
+            "term": "qdrant",
+            "tf": 3,
+            "weight": 0.057692
+          },
+          {
+            "term": "fastembed",
+            "tf": 3,
+            "weight": 0.057692
+          },
+          {
+            "term": "usage",
+            "tf": 2,
+            "weight": 0.038462
+          },
+          {
+            "term": "colbert",
+            "tf": 2,
+            "weight": 0.038462
+          },
+          {
+            "term": "and",
+            "tf": 2,
+            "weight": 0.038462
+          },
+          {
+            "term": "late",
+            "tf": 2,
+            "weight": 0.038462
+          },
+          {
+            "term": "interaction",
+            "tf": 2,
+            "weight": 0.038462
+          },
+          {
+            "term": "readme",
+            "tf": 2,
+            "weight": 0.038462
+          },
+          {
+            "term": "https",
+            "tf": 2,
+            "weight": 0.038462
+          },
+          {
+            "term": "github",
+            "tf": 2,
+            "weight": 0.038462
+          },
+          {
+            "term": "com",
+            "tf": 2,
+            "weight": 0.038462
+          },
+          {
+            "term": "blob",
+            "tf": 2,
+            "weight": 0.038462
+          },
+          {
+            "term": "b785640b",
+            "tf": 2,
+            "weight": 0.038462
+          },
+          {
+            "term": "docs",
+            "tf": 2,
+            "weight": 0.038462
+          },
+          {
+            "term": "supported",
+            "tf": 2,
+            "weight": 0.038462
+          },
+          {
+            "term": "models",
+            "tf": 2,
+            "weight": 0.038462
+          },
+          {
+            "term": "basic",
+            "tf": 1,
+            "weight": 0.019231
+          },
+          {
+            "term": "example",
+            "tf": 1,
+            "weight": 0.019231
+          },
+          {
+            "term": "for",
+            "tf": 1,
+            "weight": 0.019231
+          }
+        ],
+        "unique_terms": 32,
+        "total_terms": 52
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Basic Usage Example",
+        "and",
+        "colbert",
+        "examples",
+        "fastembed",
+        "https",
+        "interaction",
+        "late",
+        "qdrant",
+        "readme",
+        "usage"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.6,
+      "structural": 0.7,
+      "retrieval_quality": 0.7566666666666667,
+      "overall": 0.6855555555555556
+    }
+  },
+  {
+    "text": "### Key Features  - Supports loading images from file paths or PIL Image objects - Automatically handles image preprocessing (resizing, normalization) - Integrates with vision-language models like CLIP - Returns fixed-length vector representations of images",
+    "metadata": {
+      "chunk_id": "2bbf6cabf4b4-0013",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_fastembed\\_qdrant_fastembed_3-core-embedding-classes.md",
+      "filename": "_qdrant_fastembed_3-core-embedding-classes.md",
+      "file_extension": ".md",
+      "chunk_index": 13,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Key Features"
+      ],
+      "heading_text": "Key Features",
+      "token_count": 43,
+      "char_count": 257,
+      "start_char": 7945,
+      "end_char": 8202,
+      "semantic_score": 0.8,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5471428571428572,
+      "chunking_strategy": "hierarchical_balanced_structural",
+      "content_type": "list_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "processing_timestamp": "2025-10-20T04:38:44.858939",
+      "document_id": "2bbf6cabf4b4",
+      "document_name": "_qdrant_fastembed_3-core-embedding-classes",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_fastembed\\_qdrant_fastembed_3-core-embedding-classes.md",
+      "source_filename": "_qdrant_fastembed_3-core-embedding-classes.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_fastembed",
+      "relative_path": "Docs\\qdrant_ecosystem\\qdrant_fastembed\\_qdrant_fastembed_3-core-embedding-classes.md",
+      "hierarchy_path": "Key Features",
+      "chunk_hash": "4a60ec5731a2b68b",
+      "content_digest": "4a60ec5731a2b68b",
+      "chunk_length": 257,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "images",
+          "image",
+          "key",
+          "features",
+          "supports",
+          "loading",
+          "from",
+          "file",
+          "paths",
+          "pil",
+          "objects",
+          "automatically",
+          "handles",
+          "preprocessing",
+          "resizing",
+          "normalization",
+          "integrates",
+          "with",
+          "vision",
+          "language"
+        ],
+        "term_weights": [
+          {
+            "term": "images",
+            "tf": 2,
+            "weight": 0.066667
+          },
+          {
+            "term": "image",
+            "tf": 2,
+            "weight": 0.066667
+          },
+          {
+            "term": "key",
+            "tf": 1,
+            "weight": 0.033333
+          },
+          {
+            "term": "features",
+            "tf": 1,
+            "weight": 0.033333
+          },
+          {
+            "term": "supports",
+            "tf": 1,
+            "weight": 0.033333
+          },
+          {
+            "term": "loading",
+            "tf": 1,
+            "weight": 0.033333
+          },
+          {
+            "term": "from",
+            "tf": 1,
+            "weight": 0.033333
+          },
+          {
+            "term": "file",
+            "tf": 1,
+            "weight": 0.033333
+          },
+          {
+            "term": "paths",
+            "tf": 1,
+            "weight": 0.033333
+          },
+          {
+            "term": "pil",
+            "tf": 1,
+            "weight": 0.033333
+          },
+          {
+            "term": "objects",
+            "tf": 1,
+            "weight": 0.033333
+          },
+          {
+            "term": "automatically",
+            "tf": 1,
+            "weight": 0.033333
+          },
+          {
+            "term": "handles",
+            "tf": 1,
+            "weight": 0.033333
+          },
+          {
+            "term": "preprocessing",
+            "tf": 1,
+            "weight": 0.033333
+          },
+          {
+            "term": "resizing",
+            "tf": 1,
+            "weight": 0.033333
+          },
+          {
+            "term": "normalization",
+            "tf": 1,
+            "weight": 0.033333
+          },
+          {
+            "term": "integrates",
+            "tf": 1,
+            "weight": 0.033333
+          },
+          {
+            "term": "with",
+            "tf": 1,
+            "weight": 0.033333
+          },
+          {
+            "term": "vision",
+            "tf": 1,
+            "weight": 0.033333
+          },
+          {
+            "term": "language",
+            "tf": 1,
+            "weight": 0.033333
+          }
+        ],
+        "unique_terms": 28,
+        "total_terms": 30
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Key Features",
+        "features",
+        "file",
+        "from",
+        "image",
+        "images",
+        "key",
+        "loading",
+        "paths",
+        "pil",
+        "supports"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.8,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5471428571428572,
+      "overall": 0.7490476190476191
+    }
+  },
+  {
+    "text": "### Basic Usage Example\n\n```\n```\n\nFor detailed usage examples, see [Image Embedding](qdrant/fastembed/7.4-image-embedding.md).\n\nSources: [README.md138-155](https://github.com/qdrant/fastembed/blob/b785640b/README.md#L138-L155) [docs/examples/Supported\\_Models.ipynb603-714](https://github.com/qdrant/fastembed/blob/b785640b/docs/examples/Supported_Models.ipynb#L603-L714)",
+    "metadata": {
+      "chunk_id": "2bbf6cabf4b4-0014",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_fastembed\\_qdrant_fastembed_3-core-embedding-classes.md",
+      "filename": "_qdrant_fastembed_3-core-embedding-classes.md",
+      "file_extension": ".md",
+      "chunk_index": 14,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Basic Usage Example"
+      ],
+      "heading_text": "Basic Usage Example",
+      "token_count": 109,
+      "char_count": 371,
+      "start_char": 8204,
+      "end_char": 8575,
+      "semantic_score": 0.6,
+      "structural_score": 0.7,
+      "retrieval_quality": 0.7525000000000001,
+      "chunking_strategy": "hierarchical_balanced_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "processing_timestamp": "2025-10-20T04:38:44.858939",
+      "document_id": "2bbf6cabf4b4",
+      "document_name": "_qdrant_fastembed_3-core-embedding-classes",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_fastembed\\_qdrant_fastembed_3-core-embedding-classes.md",
+      "source_filename": "_qdrant_fastembed_3-core-embedding-classes.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_fastembed",
+      "relative_path": "Docs\\qdrant_ecosystem\\qdrant_fastembed\\_qdrant_fastembed_3-core-embedding-classes.md",
+      "hierarchy_path": "Basic Usage Example",
+      "chunk_hash": "381e20dd62ceae89",
+      "content_digest": "381e20dd62ceae89",
+      "chunk_length": 371,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "examples",
+          "qdrant",
+          "fastembed",
+          "usage",
+          "image",
+          "embedding",
+          "readme",
+          "https",
+          "github",
+          "com",
+          "blob",
+          "b785640b",
+          "docs",
+          "supported",
+          "models",
+          "basic",
+          "example",
+          "for",
+          "detailed",
+          "see"
+        ],
+        "term_weights": [
+          {
+            "term": "examples",
+            "tf": 3,
+            "weight": 0.0625
+          },
+          {
+            "term": "qdrant",
+            "tf": 3,
+            "weight": 0.0625
+          },
+          {
+            "term": "fastembed",
+            "tf": 3,
+            "weight": 0.0625
+          },
+          {
+            "term": "usage",
+            "tf": 2,
+            "weight": 0.041667
+          },
+          {
+            "term": "image",
+            "tf": 2,
+            "weight": 0.041667
+          },
+          {
+            "term": "embedding",
+            "tf": 2,
+            "weight": 0.041667
+          },
+          {
+            "term": "readme",
+            "tf": 2,
+            "weight": 0.041667
+          },
+          {
+            "term": "https",
+            "tf": 2,
+            "weight": 0.041667
+          },
+          {
+            "term": "github",
+            "tf": 2,
+            "weight": 0.041667
+          },
+          {
+            "term": "com",
+            "tf": 2,
+            "weight": 0.041667
+          },
+          {
+            "term": "blob",
+            "tf": 2,
+            "weight": 0.041667
+          },
+          {
+            "term": "b785640b",
+            "tf": 2,
+            "weight": 0.041667
+          },
+          {
+            "term": "docs",
+            "tf": 2,
+            "weight": 0.041667
+          },
+          {
+            "term": "supported",
+            "tf": 2,
+            "weight": 0.041667
+          },
+          {
+            "term": "models",
+            "tf": 2,
+            "weight": 0.041667
+          },
+          {
+            "term": "basic",
+            "tf": 1,
+            "weight": 0.020833
+          },
+          {
+            "term": "example",
+            "tf": 1,
+            "weight": 0.020833
+          },
+          {
+            "term": "for",
+            "tf": 1,
+            "weight": 0.020833
+          },
+          {
+            "term": "detailed",
+            "tf": 1,
+            "weight": 0.020833
+          },
+          {
+            "term": "see",
+            "tf": 1,
+            "weight": 0.020833
+          }
+        ],
+        "unique_terms": 30,
+        "total_terms": 48
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Basic Usage Example",
+        "com",
+        "embedding",
+        "examples",
+        "fastembed",
+        "github",
+        "https",
+        "image",
+        "qdrant",
+        "readme",
+        "usage"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.6,
+      "structural": 0.7,
+      "retrieval_quality": 0.7525000000000001,
+      "overall": 0.6841666666666666
+    }
+  },
+  {
+    "text": "## Multimodal Embeddings with LateInteractionMultimodalEmbedding\n\nThe `LateInteractionMultimodalEmbedding` class enables cross-modal retrieval through models that can embed both text and images in a compatible latent space.\n\n```\n```",
     "metadata": {
       "chunk_id": "2bbf6cabf4b4-0015",
       "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_fastembed\\_qdrant_fastembed_3-core-embedding-classes.md",
@@ -14,17 +1805,17 @@
         "Multimodal Embeddings with LateInteractionMultimodalEmbedding"
       ],
       "heading_text": "Multimodal Embeddings with LateInteractionMultimodalEmbedding",
-      "token_count": 47,
-      "char_count": 231,
-      "start_char": 0,
-      "end_char": 231,
+      "token_count": 48,
+      "char_count": 232,
+      "start_char": 8577,
+      "end_char": 8809,
       "semantic_score": 0.8,
-      "structural_score": 0.8999999999999999,
+      "structural_score": 0.7,
       "retrieval_quality": 0.5788888888888889,
-      "chunking_strategy": "hierarchical_balanced",
-      "content_type": "hierarchical_section",
-      "embedding_model": "nomic-ai/CodeRankEmbed",
-      "processing_timestamp": "2025-10-19T15:33:21.717515",
+      "chunking_strategy": "hierarchical_balanced_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "processing_timestamp": "2025-10-20T04:38:44.858939",
       "document_id": "2bbf6cabf4b4",
       "document_name": "_qdrant_fastembed_3-core-embedding-classes",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_fastembed\\_qdrant_fastembed_3-core-embedding-classes.md",
@@ -32,9 +1823,9 @@
       "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_fastembed",
       "relative_path": "Docs\\qdrant_ecosystem\\qdrant_fastembed\\_qdrant_fastembed_3-core-embedding-classes.md",
       "hierarchy_path": "Multimodal Embeddings with LateInteractionMultimodalEmbedding",
-      "chunk_hash": "98714278dfd81145",
-      "content_digest": "98714278dfd81145",
-      "chunk_length": 231,
+      "chunk_hash": "64940b51ec7c24d4",
+      "content_digest": "64940b51ec7c24d4",
+      "chunk_length": 232,
       "payload_version": "1.3",
       "collection_hints": [
         "qdrant_ecosystem"
@@ -189,612 +1980,13 @@
         "retrieval",
         "the",
         "with"
-      ],
-      "quality_fallback": true,
-      "quality_notes": "Promoted via relaxed thresholds"
+      ]
     },
     "advanced_scores": {
       "semantic": 0.8,
-      "structural": 0.8999999999999999,
+      "structural": 0.7,
       "retrieval_quality": 0.5788888888888889,
-      "overall": 0.7596296296296297
-    }
-  },
-  {
-    "text": "## GPU Acceleration  All the core embedding classes support GPU acceleration through ONNX Runtime's CUDA execution provider, which can significantly improve performance, especially for batch processing.",
-    "metadata": {
-      "chunk_id": "2bbf6cabf4b4-0021",
-      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_fastembed\\_qdrant_fastembed_3-core-embedding-classes.md",
-      "filename": "_qdrant_fastembed_3-core-embedding-classes.md",
-      "file_extension": ".md",
-      "chunk_index": 21,
-      "document_level": 1,
-      "parent_chunk_id": null,
-      "child_chunk_ids": [],
-      "section_path": [
-        "GPU Acceleration"
-      ],
-      "heading_text": "GPU Acceleration",
-      "token_count": 33,
-      "char_count": 202,
-      "start_char": 0,
-      "end_char": 202,
-      "semantic_score": 0.8,
-      "structural_score": 0.8999999999999999,
-      "retrieval_quality": 0.566923076923077,
-      "chunking_strategy": "hierarchical_balanced",
-      "content_type": "hierarchical_section",
-      "embedding_model": "nomic-ai/CodeRankEmbed",
-      "processing_timestamp": "2025-10-19T15:33:21.718535",
-      "document_id": "2bbf6cabf4b4",
-      "document_name": "_qdrant_fastembed_3-core-embedding-classes",
-      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_fastembed\\_qdrant_fastembed_3-core-embedding-classes.md",
-      "source_filename": "_qdrant_fastembed_3-core-embedding-classes.md",
-      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_fastembed",
-      "relative_path": "Docs\\qdrant_ecosystem\\qdrant_fastembed\\_qdrant_fastembed_3-core-embedding-classes.md",
-      "hierarchy_path": "GPU Acceleration",
-      "chunk_hash": "2c0a9bb4ce9c8f7c",
-      "content_digest": "2c0a9bb4ce9c8f7c",
-      "chunk_length": 202,
-      "payload_version": "1.3",
-      "collection_hints": [
-        "qdrant_ecosystem"
-      ],
-      "sparse_features": {
-        "version": "1.0",
-        "weighting": "tf-normalized",
-        "top_terms": [
-          "gpu",
-          "acceleration",
-          "all",
-          "the",
-          "core",
-          "embedding",
-          "classes",
-          "support",
-          "through",
-          "onnx",
-          "runtime",
-          "cuda",
-          "execution",
-          "provider",
-          "which",
-          "can",
-          "significantly",
-          "improve",
-          "performance",
-          "especially"
-        ],
-        "term_weights": [
-          {
-            "term": "gpu",
-            "tf": 2,
-            "weight": 0.08
-          },
-          {
-            "term": "acceleration",
-            "tf": 2,
-            "weight": 0.08
-          },
-          {
-            "term": "all",
-            "tf": 1,
-            "weight": 0.04
-          },
-          {
-            "term": "the",
-            "tf": 1,
-            "weight": 0.04
-          },
-          {
-            "term": "core",
-            "tf": 1,
-            "weight": 0.04
-          },
-          {
-            "term": "embedding",
-            "tf": 1,
-            "weight": 0.04
-          },
-          {
-            "term": "classes",
-            "tf": 1,
-            "weight": 0.04
-          },
-          {
-            "term": "support",
-            "tf": 1,
-            "weight": 0.04
-          },
-          {
-            "term": "through",
-            "tf": 1,
-            "weight": 0.04
-          },
-          {
-            "term": "onnx",
-            "tf": 1,
-            "weight": 0.04
-          },
-          {
-            "term": "runtime",
-            "tf": 1,
-            "weight": 0.04
-          },
-          {
-            "term": "cuda",
-            "tf": 1,
-            "weight": 0.04
-          },
-          {
-            "term": "execution",
-            "tf": 1,
-            "weight": 0.04
-          },
-          {
-            "term": "provider",
-            "tf": 1,
-            "weight": 0.04
-          },
-          {
-            "term": "which",
-            "tf": 1,
-            "weight": 0.04
-          },
-          {
-            "term": "can",
-            "tf": 1,
-            "weight": 0.04
-          },
-          {
-            "term": "significantly",
-            "tf": 1,
-            "weight": 0.04
-          },
-          {
-            "term": "improve",
-            "tf": 1,
-            "weight": 0.04
-          },
-          {
-            "term": "performance",
-            "tf": 1,
-            "weight": 0.04
-          },
-          {
-            "term": "especially",
-            "tf": 1,
-            "weight": 0.04
-          }
-        ],
-        "unique_terms": 23,
-        "total_terms": 25
-      },
-      "modal_hint": "prose",
-      "content_flags": {
-        "has_code_block": false,
-        "has_table": false,
-        "has_list": false,
-        "has_json": false,
-        "has_formula": false
-      },
-      "search_keywords": [
-        "GPU Acceleration",
-        "acceleration",
-        "all",
-        "classes",
-        "core",
-        "embedding",
-        "gpu",
-        "onnx",
-        "support",
-        "the",
-        "through"
-      ],
-      "quality_fallback": true,
-      "quality_notes": "Promoted via relaxed thresholds"
-    },
-    "advanced_scores": {
-      "semantic": 0.8,
-      "structural": 0.8999999999999999,
-      "retrieval_quality": 0.566923076923077,
-      "overall": 0.7556410256410256
-    }
-  },
-  {
-    "text": "### Key Features  - Returns relevance scores for query-document pairs instead of embeddings - Designed specifically for reranking results after initial retrieval - More accurate but computationally expensive compared to embedding similarity - Efficient implementation through ONNX Runtime",
-    "metadata": {
-      "chunk_id": "2bbf6cabf4b4-0019",
-      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_fastembed\\_qdrant_fastembed_3-core-embedding-classes.md",
-      "filename": "_qdrant_fastembed_3-core-embedding-classes.md",
-      "file_extension": ".md",
-      "chunk_index": 19,
-      "document_level": 1,
-      "parent_chunk_id": null,
-      "child_chunk_ids": [],
-      "section_path": [
-        "Key Features"
-      ],
-      "heading_text": "Key Features",
-      "token_count": 43,
-      "char_count": 288,
-      "start_char": 0,
-      "end_char": 288,
-      "semantic_score": 0.8,
-      "structural_score": 0.8999999999999999,
-      "retrieval_quality": 0.5584210526315789,
-      "chunking_strategy": "hierarchical_balanced",
-      "content_type": "hierarchical_section",
-      "embedding_model": "nomic-ai/CodeRankEmbed",
-      "processing_timestamp": "2025-10-19T15:33:21.718207",
-      "document_id": "2bbf6cabf4b4",
-      "document_name": "_qdrant_fastembed_3-core-embedding-classes",
-      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_fastembed\\_qdrant_fastembed_3-core-embedding-classes.md",
-      "source_filename": "_qdrant_fastembed_3-core-embedding-classes.md",
-      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_fastembed",
-      "relative_path": "Docs\\qdrant_ecosystem\\qdrant_fastembed\\_qdrant_fastembed_3-core-embedding-classes.md",
-      "hierarchy_path": "Key Features",
-      "chunk_hash": "3141b7d2f076e69c",
-      "content_digest": "3141b7d2f076e69c",
-      "chunk_length": 288,
-      "payload_version": "1.3",
-      "collection_hints": [
-        "qdrant_ecosystem"
-      ],
-      "sparse_features": {
-        "version": "1.0",
-        "weighting": "tf-normalized",
-        "top_terms": [
-          "for",
-          "key",
-          "features",
-          "returns",
-          "relevance",
-          "scores",
-          "query",
-          "document",
-          "pairs",
-          "instead",
-          "embeddings",
-          "designed",
-          "specifically",
-          "reranking",
-          "results",
-          "after",
-          "initial",
-          "retrieval",
-          "more",
-          "accurate"
-        ],
-        "term_weights": [
-          {
-            "term": "for",
-            "tf": 2,
-            "weight": 0.0625
-          },
-          {
-            "term": "key",
-            "tf": 1,
-            "weight": 0.03125
-          },
-          {
-            "term": "features",
-            "tf": 1,
-            "weight": 0.03125
-          },
-          {
-            "term": "returns",
-            "tf": 1,
-            "weight": 0.03125
-          },
-          {
-            "term": "relevance",
-            "tf": 1,
-            "weight": 0.03125
-          },
-          {
-            "term": "scores",
-            "tf": 1,
-            "weight": 0.03125
-          },
-          {
-            "term": "query",
-            "tf": 1,
-            "weight": 0.03125
-          },
-          {
-            "term": "document",
-            "tf": 1,
-            "weight": 0.03125
-          },
-          {
-            "term": "pairs",
-            "tf": 1,
-            "weight": 0.03125
-          },
-          {
-            "term": "instead",
-            "tf": 1,
-            "weight": 0.03125
-          },
-          {
-            "term": "embeddings",
-            "tf": 1,
-            "weight": 0.03125
-          },
-          {
-            "term": "designed",
-            "tf": 1,
-            "weight": 0.03125
-          },
-          {
-            "term": "specifically",
-            "tf": 1,
-            "weight": 0.03125
-          },
-          {
-            "term": "reranking",
-            "tf": 1,
-            "weight": 0.03125
-          },
-          {
-            "term": "results",
-            "tf": 1,
-            "weight": 0.03125
-          },
-          {
-            "term": "after",
-            "tf": 1,
-            "weight": 0.03125
-          },
-          {
-            "term": "initial",
-            "tf": 1,
-            "weight": 0.03125
-          },
-          {
-            "term": "retrieval",
-            "tf": 1,
-            "weight": 0.03125
-          },
-          {
-            "term": "more",
-            "tf": 1,
-            "weight": 0.03125
-          },
-          {
-            "term": "accurate",
-            "tf": 1,
-            "weight": 0.03125
-          }
-        ],
-        "unique_terms": 31,
-        "total_terms": 32
-      },
-      "modal_hint": "prose",
-      "content_flags": {
-        "has_code_block": false,
-        "has_table": false,
-        "has_list": false,
-        "has_json": false,
-        "has_formula": false
-      },
-      "search_keywords": [
-        "Key Features",
-        "document",
-        "features",
-        "for",
-        "instead",
-        "key",
-        "pairs",
-        "query",
-        "relevance",
-        "returns",
-        "scores"
-      ],
-      "quality_fallback": true,
-      "quality_notes": "Promoted via relaxed thresholds"
-    },
-    "advanced_scores": {
-      "semantic": 0.8,
-      "structural": 0.8999999999999999,
-      "retrieval_quality": 0.5584210526315789,
-      "overall": 0.7528070175438596
-    }
-  },
-  {
-    "text": "## Text Cross-Encoder with TextCrossEncoder  The `TextCrossEncoder` class implements cross-encoder models for reranking search results by directly scoring the relevance of query-document pairs. ``` ```",
-    "metadata": {
-      "chunk_id": "2bbf6cabf4b4-0018",
-      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_fastembed\\_qdrant_fastembed_3-core-embedding-classes.md",
-      "filename": "_qdrant_fastembed_3-core-embedding-classes.md",
-      "file_extension": ".md",
-      "chunk_index": 18,
-      "document_level": 1,
-      "parent_chunk_id": null,
-      "child_chunk_ids": [],
-      "section_path": [
-        "Text Cross-Encoder with TextCrossEncoder"
-      ],
-      "heading_text": "Text Cross-Encoder with TextCrossEncoder",
-      "token_count": 39,
-      "char_count": 201,
-      "start_char": 0,
-      "end_char": 201,
-      "semantic_score": 0.8,
-      "structural_score": 0.8999999999999999,
-      "retrieval_quality": 0.554,
-      "chunking_strategy": "hierarchical_balanced",
-      "content_type": "hierarchical_section",
-      "embedding_model": "nomic-ai/CodeRankEmbed",
-      "processing_timestamp": "2025-10-19T15:33:21.718075",
-      "document_id": "2bbf6cabf4b4",
-      "document_name": "_qdrant_fastembed_3-core-embedding-classes",
-      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_fastembed\\_qdrant_fastembed_3-core-embedding-classes.md",
-      "source_filename": "_qdrant_fastembed_3-core-embedding-classes.md",
-      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_fastembed",
-      "relative_path": "Docs\\qdrant_ecosystem\\qdrant_fastembed\\_qdrant_fastembed_3-core-embedding-classes.md",
-      "hierarchy_path": "Text Cross-Encoder with TextCrossEncoder",
-      "chunk_hash": "6a00c7a6fa106d19",
-      "content_digest": "6a00c7a6fa106d19",
-      "chunk_length": 201,
-      "payload_version": "1.3",
-      "collection_hints": [
-        "qdrant_ecosystem"
-      ],
-      "sparse_features": {
-        "version": "1.0",
-        "weighting": "tf-normalized",
-        "top_terms": [
-          "cross",
-          "encoder",
-          "textcrossencoder",
-          "the",
-          "text",
-          "with",
-          "class",
-          "implements",
-          "models",
-          "for",
-          "reranking",
-          "search",
-          "results",
-          "directly",
-          "scoring",
-          "relevance",
-          "query",
-          "document",
-          "pairs"
-        ],
-        "term_weights": [
-          {
-            "term": "cross",
-            "tf": 2,
-            "weight": 0.086957
-          },
-          {
-            "term": "encoder",
-            "tf": 2,
-            "weight": 0.086957
-          },
-          {
-            "term": "textcrossencoder",
-            "tf": 2,
-            "weight": 0.086957
-          },
-          {
-            "term": "the",
-            "tf": 2,
-            "weight": 0.086957
-          },
-          {
-            "term": "text",
-            "tf": 1,
-            "weight": 0.043478
-          },
-          {
-            "term": "with",
-            "tf": 1,
-            "weight": 0.043478
-          },
-          {
-            "term": "class",
-            "tf": 1,
-            "weight": 0.043478
-          },
-          {
-            "term": "implements",
-            "tf": 1,
-            "weight": 0.043478
-          },
-          {
-            "term": "models",
-            "tf": 1,
-            "weight": 0.043478
-          },
-          {
-            "term": "for",
-            "tf": 1,
-            "weight": 0.043478
-          },
-          {
-            "term": "reranking",
-            "tf": 1,
-            "weight": 0.043478
-          },
-          {
-            "term": "search",
-            "tf": 1,
-            "weight": 0.043478
-          },
-          {
-            "term": "results",
-            "tf": 1,
-            "weight": 0.043478
-          },
-          {
-            "term": "directly",
-            "tf": 1,
-            "weight": 0.043478
-          },
-          {
-            "term": "scoring",
-            "tf": 1,
-            "weight": 0.043478
-          },
-          {
-            "term": "relevance",
-            "tf": 1,
-            "weight": 0.043478
-          },
-          {
-            "term": "query",
-            "tf": 1,
-            "weight": 0.043478
-          },
-          {
-            "term": "document",
-            "tf": 1,
-            "weight": 0.043478
-          },
-          {
-            "term": "pairs",
-            "tf": 1,
-            "weight": 0.043478
-          }
-        ],
-        "unique_terms": 19,
-        "total_terms": 23
-      },
-      "modal_hint": "code",
-      "content_flags": {
-        "has_code_block": true,
-        "has_table": false,
-        "has_list": false,
-        "has_json": false,
-        "has_formula": false
-      },
-      "search_keywords": [
-        "Text Cross-Encoder with TextCrossEncoder",
-        "class",
-        "cross",
-        "encoder",
-        "for",
-        "implements",
-        "models",
-        "text",
-        "textcrossencoder",
-        "the",
-        "with"
-      ],
-      "quality_fallback": true,
-      "quality_notes": "Promoted via relaxed thresholds"
-    },
-    "advanced_scores": {
-      "semantic": 0.8,
-      "structural": 0.8999999999999999,
-      "retrieval_quality": 0.554,
-      "overall": 0.7513333333333333
+      "overall": 0.6929629629629629
     }
   },
   {
@@ -814,15 +2006,15 @@
       "heading_text": "Key Features",
       "token_count": 47,
       "char_count": 277,
-      "start_char": 0,
-      "end_char": 277,
+      "start_char": 8811,
+      "end_char": 9088,
       "semantic_score": 0.8,
       "structural_score": 0.8999999999999999,
       "retrieval_quality": 0.5534146341463415,
-      "chunking_strategy": "hierarchical_balanced",
-      "content_type": "hierarchical_section",
-      "embedding_model": "nomic-ai/CodeRankEmbed",
-      "processing_timestamp": "2025-10-19T15:33:21.717655",
+      "chunking_strategy": "hierarchical_balanced_structural",
+      "content_type": "list_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "processing_timestamp": "2025-10-20T04:38:44.859974",
       "document_id": "2bbf6cabf4b4",
       "document_name": "_qdrant_fastembed_3-core-embedding-classes",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_fastembed\\_qdrant_fastembed_3-core-embedding-classes.md",
@@ -987,15 +2179,1201 @@
         "supports",
         "text",
         "through"
-      ],
-      "quality_fallback": true,
-      "quality_notes": "Promoted via relaxed thresholds"
+      ]
     },
     "advanced_scores": {
       "semantic": 0.8,
       "structural": 0.8999999999999999,
       "retrieval_quality": 0.5534146341463415,
       "overall": 0.7511382113821138
+    }
+  },
+  {
+    "text": "### Basic Usage Example\n\n```\n```\n\nSources: [README.md157-176](https://github.com/qdrant/fastembed/blob/b785640b/README.md#L157-L176) [NOTICE16-19](https://github.com/qdrant/fastembed/blob/b785640b/NOTICE#L16-L19) [fastembed/late\\_interaction\\_multimodal/\\_\\_init\\_\\_.py1-5](https://github.com/qdrant/fastembed/blob/b785640b/fastembed/late_interaction_multimodal/__init__.py#L1-L5)",
+    "metadata": {
+      "chunk_id": "2bbf6cabf4b4-0017",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_fastembed\\_qdrant_fastembed_3-core-embedding-classes.md",
+      "filename": "_qdrant_fastembed_3-core-embedding-classes.md",
+      "file_extension": ".md",
+      "chunk_index": 17,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Basic Usage Example"
+      ],
+      "heading_text": "Basic Usage Example",
+      "token_count": 126,
+      "char_count": 380,
+      "start_char": 9090,
+      "end_char": 9470,
+      "semantic_score": 0.6,
+      "structural_score": 0.7,
+      "retrieval_quality": 0.56,
+      "chunking_strategy": "hierarchical_balanced_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "processing_timestamp": "2025-10-20T04:38:44.860096",
+      "document_id": "2bbf6cabf4b4",
+      "document_name": "_qdrant_fastembed_3-core-embedding-classes",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_fastembed\\_qdrant_fastembed_3-core-embedding-classes.md",
+      "source_filename": "_qdrant_fastembed_3-core-embedding-classes.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_fastembed",
+      "relative_path": "Docs\\qdrant_ecosystem\\qdrant_fastembed\\_qdrant_fastembed_3-core-embedding-classes.md",
+      "hierarchy_path": "Basic Usage Example",
+      "chunk_hash": "5c8c6b17392a61f4",
+      "content_digest": "5c8c6b17392a61f4",
+      "chunk_length": 380,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "fastembed",
+          "https",
+          "github",
+          "com",
+          "qdrant",
+          "blob",
+          "b785640b",
+          "readme",
+          "late",
+          "interaction",
+          "multimodal",
+          "init",
+          "basic",
+          "usage",
+          "example",
+          "sources",
+          "md157",
+          "176",
+          "l157",
+          "l176"
+        ],
+        "term_weights": [
+          {
+            "term": "fastembed",
+            "tf": 5,
+            "weight": 0.108696
+          },
+          {
+            "term": "https",
+            "tf": 3,
+            "weight": 0.065217
+          },
+          {
+            "term": "github",
+            "tf": 3,
+            "weight": 0.065217
+          },
+          {
+            "term": "com",
+            "tf": 3,
+            "weight": 0.065217
+          },
+          {
+            "term": "qdrant",
+            "tf": 3,
+            "weight": 0.065217
+          },
+          {
+            "term": "blob",
+            "tf": 3,
+            "weight": 0.065217
+          },
+          {
+            "term": "b785640b",
+            "tf": 3,
+            "weight": 0.065217
+          },
+          {
+            "term": "readme",
+            "tf": 2,
+            "weight": 0.043478
+          },
+          {
+            "term": "late",
+            "tf": 2,
+            "weight": 0.043478
+          },
+          {
+            "term": "interaction",
+            "tf": 2,
+            "weight": 0.043478
+          },
+          {
+            "term": "multimodal",
+            "tf": 2,
+            "weight": 0.043478
+          },
+          {
+            "term": "init",
+            "tf": 2,
+            "weight": 0.043478
+          },
+          {
+            "term": "basic",
+            "tf": 1,
+            "weight": 0.021739
+          },
+          {
+            "term": "usage",
+            "tf": 1,
+            "weight": 0.021739
+          },
+          {
+            "term": "example",
+            "tf": 1,
+            "weight": 0.021739
+          },
+          {
+            "term": "sources",
+            "tf": 1,
+            "weight": 0.021739
+          },
+          {
+            "term": "md157",
+            "tf": 1,
+            "weight": 0.021739
+          },
+          {
+            "term": "176",
+            "tf": 1,
+            "weight": 0.021739
+          },
+          {
+            "term": "l157",
+            "tf": 1,
+            "weight": 0.021739
+          },
+          {
+            "term": "l176",
+            "tf": 1,
+            "weight": 0.021739
+          }
+        ],
+        "unique_terms": 25,
+        "total_terms": 46
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Basic Usage Example",
+        "b785640b",
+        "blob",
+        "com",
+        "fastembed",
+        "github",
+        "https",
+        "interaction",
+        "late",
+        "qdrant",
+        "readme"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.6,
+      "structural": 0.7,
+      "retrieval_quality": 0.56,
+      "overall": 0.62
+    }
+  },
+  {
+    "text": "## Text Cross-Encoder with TextCrossEncoder\n\nThe `TextCrossEncoder` class implements cross-encoder models for reranking search results by directly scoring the relevance of query-document pairs.\n\n```\n```",
+    "metadata": {
+      "chunk_id": "2bbf6cabf4b4-0018",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_fastembed\\_qdrant_fastembed_3-core-embedding-classes.md",
+      "filename": "_qdrant_fastembed_3-core-embedding-classes.md",
+      "file_extension": ".md",
+      "chunk_index": 18,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Text Cross-Encoder with TextCrossEncoder"
+      ],
+      "heading_text": "Text Cross-Encoder with TextCrossEncoder",
+      "token_count": 40,
+      "char_count": 202,
+      "start_char": 9472,
+      "end_char": 9674,
+      "semantic_score": 0.8,
+      "structural_score": 0.7,
+      "retrieval_quality": 0.554,
+      "chunking_strategy": "hierarchical_balanced_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "processing_timestamp": "2025-10-20T04:38:44.860096",
+      "document_id": "2bbf6cabf4b4",
+      "document_name": "_qdrant_fastembed_3-core-embedding-classes",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_fastembed\\_qdrant_fastembed_3-core-embedding-classes.md",
+      "source_filename": "_qdrant_fastembed_3-core-embedding-classes.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_fastembed",
+      "relative_path": "Docs\\qdrant_ecosystem\\qdrant_fastembed\\_qdrant_fastembed_3-core-embedding-classes.md",
+      "hierarchy_path": "Text Cross-Encoder with TextCrossEncoder",
+      "chunk_hash": "a5f07cd6db9e0b3f",
+      "content_digest": "a5f07cd6db9e0b3f",
+      "chunk_length": 202,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "cross",
+          "encoder",
+          "textcrossencoder",
+          "the",
+          "text",
+          "with",
+          "class",
+          "implements",
+          "models",
+          "for",
+          "reranking",
+          "search",
+          "results",
+          "directly",
+          "scoring",
+          "relevance",
+          "query",
+          "document",
+          "pairs"
+        ],
+        "term_weights": [
+          {
+            "term": "cross",
+            "tf": 2,
+            "weight": 0.086957
+          },
+          {
+            "term": "encoder",
+            "tf": 2,
+            "weight": 0.086957
+          },
+          {
+            "term": "textcrossencoder",
+            "tf": 2,
+            "weight": 0.086957
+          },
+          {
+            "term": "the",
+            "tf": 2,
+            "weight": 0.086957
+          },
+          {
+            "term": "text",
+            "tf": 1,
+            "weight": 0.043478
+          },
+          {
+            "term": "with",
+            "tf": 1,
+            "weight": 0.043478
+          },
+          {
+            "term": "class",
+            "tf": 1,
+            "weight": 0.043478
+          },
+          {
+            "term": "implements",
+            "tf": 1,
+            "weight": 0.043478
+          },
+          {
+            "term": "models",
+            "tf": 1,
+            "weight": 0.043478
+          },
+          {
+            "term": "for",
+            "tf": 1,
+            "weight": 0.043478
+          },
+          {
+            "term": "reranking",
+            "tf": 1,
+            "weight": 0.043478
+          },
+          {
+            "term": "search",
+            "tf": 1,
+            "weight": 0.043478
+          },
+          {
+            "term": "results",
+            "tf": 1,
+            "weight": 0.043478
+          },
+          {
+            "term": "directly",
+            "tf": 1,
+            "weight": 0.043478
+          },
+          {
+            "term": "scoring",
+            "tf": 1,
+            "weight": 0.043478
+          },
+          {
+            "term": "relevance",
+            "tf": 1,
+            "weight": 0.043478
+          },
+          {
+            "term": "query",
+            "tf": 1,
+            "weight": 0.043478
+          },
+          {
+            "term": "document",
+            "tf": 1,
+            "weight": 0.043478
+          },
+          {
+            "term": "pairs",
+            "tf": 1,
+            "weight": 0.043478
+          }
+        ],
+        "unique_terms": 19,
+        "total_terms": 23
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Text Cross-Encoder with TextCrossEncoder",
+        "class",
+        "cross",
+        "encoder",
+        "for",
+        "implements",
+        "models",
+        "text",
+        "textcrossencoder",
+        "the",
+        "with"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.8,
+      "structural": 0.7,
+      "retrieval_quality": 0.554,
+      "overall": 0.6846666666666668
+    }
+  },
+  {
+    "text": "### Key Features  - Returns relevance scores for query-document pairs instead of embeddings - Designed specifically for reranking results after initial retrieval - More accurate but computationally expensive compared to embedding similarity - Efficient implementation through ONNX Runtime",
+    "metadata": {
+      "chunk_id": "2bbf6cabf4b4-0019",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_fastembed\\_qdrant_fastembed_3-core-embedding-classes.md",
+      "filename": "_qdrant_fastembed_3-core-embedding-classes.md",
+      "file_extension": ".md",
+      "chunk_index": 19,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Key Features"
+      ],
+      "heading_text": "Key Features",
+      "token_count": 43,
+      "char_count": 288,
+      "start_char": 9676,
+      "end_char": 9964,
+      "semantic_score": 0.8,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5584210526315789,
+      "chunking_strategy": "hierarchical_balanced_structural",
+      "content_type": "list_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "processing_timestamp": "2025-10-20T04:38:44.860096",
+      "document_id": "2bbf6cabf4b4",
+      "document_name": "_qdrant_fastembed_3-core-embedding-classes",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_fastembed\\_qdrant_fastembed_3-core-embedding-classes.md",
+      "source_filename": "_qdrant_fastembed_3-core-embedding-classes.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_fastembed",
+      "relative_path": "Docs\\qdrant_ecosystem\\qdrant_fastembed\\_qdrant_fastembed_3-core-embedding-classes.md",
+      "hierarchy_path": "Key Features",
+      "chunk_hash": "3141b7d2f076e69c",
+      "content_digest": "3141b7d2f076e69c",
+      "chunk_length": 288,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "for",
+          "key",
+          "features",
+          "returns",
+          "relevance",
+          "scores",
+          "query",
+          "document",
+          "pairs",
+          "instead",
+          "embeddings",
+          "designed",
+          "specifically",
+          "reranking",
+          "results",
+          "after",
+          "initial",
+          "retrieval",
+          "more",
+          "accurate"
+        ],
+        "term_weights": [
+          {
+            "term": "for",
+            "tf": 2,
+            "weight": 0.0625
+          },
+          {
+            "term": "key",
+            "tf": 1,
+            "weight": 0.03125
+          },
+          {
+            "term": "features",
+            "tf": 1,
+            "weight": 0.03125
+          },
+          {
+            "term": "returns",
+            "tf": 1,
+            "weight": 0.03125
+          },
+          {
+            "term": "relevance",
+            "tf": 1,
+            "weight": 0.03125
+          },
+          {
+            "term": "scores",
+            "tf": 1,
+            "weight": 0.03125
+          },
+          {
+            "term": "query",
+            "tf": 1,
+            "weight": 0.03125
+          },
+          {
+            "term": "document",
+            "tf": 1,
+            "weight": 0.03125
+          },
+          {
+            "term": "pairs",
+            "tf": 1,
+            "weight": 0.03125
+          },
+          {
+            "term": "instead",
+            "tf": 1,
+            "weight": 0.03125
+          },
+          {
+            "term": "embeddings",
+            "tf": 1,
+            "weight": 0.03125
+          },
+          {
+            "term": "designed",
+            "tf": 1,
+            "weight": 0.03125
+          },
+          {
+            "term": "specifically",
+            "tf": 1,
+            "weight": 0.03125
+          },
+          {
+            "term": "reranking",
+            "tf": 1,
+            "weight": 0.03125
+          },
+          {
+            "term": "results",
+            "tf": 1,
+            "weight": 0.03125
+          },
+          {
+            "term": "after",
+            "tf": 1,
+            "weight": 0.03125
+          },
+          {
+            "term": "initial",
+            "tf": 1,
+            "weight": 0.03125
+          },
+          {
+            "term": "retrieval",
+            "tf": 1,
+            "weight": 0.03125
+          },
+          {
+            "term": "more",
+            "tf": 1,
+            "weight": 0.03125
+          },
+          {
+            "term": "accurate",
+            "tf": 1,
+            "weight": 0.03125
+          }
+        ],
+        "unique_terms": 31,
+        "total_terms": 32
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Key Features",
+        "document",
+        "features",
+        "for",
+        "instead",
+        "key",
+        "pairs",
+        "query",
+        "relevance",
+        "returns",
+        "scores"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.8,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5584210526315789,
+      "overall": 0.7528070175438596
+    }
+  },
+  {
+    "text": "### Basic Usage Example\n\n```\n```\n\nSources: [README.md178-208](https://github.com/qdrant/fastembed/blob/b785640b/README.md#L178-L208) [docs/examples/Supported\\_Models.ipynb717-836](https://github.com/qdrant/fastembed/blob/b785640b/docs/examples/Supported_Models.ipynb#L717-L836)",
+    "metadata": {
+      "chunk_id": "2bbf6cabf4b4-0020",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_fastembed\\_qdrant_fastembed_3-core-embedding-classes.md",
+      "filename": "_qdrant_fastembed_3-core-embedding-classes.md",
+      "file_extension": ".md",
+      "chunk_index": 20,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Basic Usage Example"
+      ],
+      "heading_text": "Basic Usage Example",
+      "token_count": 84,
+      "char_count": 277,
+      "start_char": 9966,
+      "end_char": 10243,
+      "semantic_score": 0.6,
+      "structural_score": 0.7,
+      "retrieval_quality": 0.7566666666666667,
+      "chunking_strategy": "hierarchical_balanced_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "processing_timestamp": "2025-10-20T04:38:44.860096",
+      "document_id": "2bbf6cabf4b4",
+      "document_name": "_qdrant_fastembed_3-core-embedding-classes",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_fastembed\\_qdrant_fastembed_3-core-embedding-classes.md",
+      "source_filename": "_qdrant_fastembed_3-core-embedding-classes.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_fastembed",
+      "relative_path": "Docs\\qdrant_ecosystem\\qdrant_fastembed\\_qdrant_fastembed_3-core-embedding-classes.md",
+      "hierarchy_path": "Basic Usage Example",
+      "chunk_hash": "09b1cbde119ff63a",
+      "content_digest": "09b1cbde119ff63a",
+      "chunk_length": 277,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "readme",
+          "https",
+          "github",
+          "com",
+          "qdrant",
+          "fastembed",
+          "blob",
+          "b785640b",
+          "docs",
+          "examples",
+          "supported",
+          "models",
+          "basic",
+          "usage",
+          "example",
+          "sources",
+          "md178",
+          "208",
+          "l178",
+          "l208"
+        ],
+        "term_weights": [
+          {
+            "term": "readme",
+            "tf": 2,
+            "weight": 0.054054
+          },
+          {
+            "term": "https",
+            "tf": 2,
+            "weight": 0.054054
+          },
+          {
+            "term": "github",
+            "tf": 2,
+            "weight": 0.054054
+          },
+          {
+            "term": "com",
+            "tf": 2,
+            "weight": 0.054054
+          },
+          {
+            "term": "qdrant",
+            "tf": 2,
+            "weight": 0.054054
+          },
+          {
+            "term": "fastembed",
+            "tf": 2,
+            "weight": 0.054054
+          },
+          {
+            "term": "blob",
+            "tf": 2,
+            "weight": 0.054054
+          },
+          {
+            "term": "b785640b",
+            "tf": 2,
+            "weight": 0.054054
+          },
+          {
+            "term": "docs",
+            "tf": 2,
+            "weight": 0.054054
+          },
+          {
+            "term": "examples",
+            "tf": 2,
+            "weight": 0.054054
+          },
+          {
+            "term": "supported",
+            "tf": 2,
+            "weight": 0.054054
+          },
+          {
+            "term": "models",
+            "tf": 2,
+            "weight": 0.054054
+          },
+          {
+            "term": "basic",
+            "tf": 1,
+            "weight": 0.027027
+          },
+          {
+            "term": "usage",
+            "tf": 1,
+            "weight": 0.027027
+          },
+          {
+            "term": "example",
+            "tf": 1,
+            "weight": 0.027027
+          },
+          {
+            "term": "sources",
+            "tf": 1,
+            "weight": 0.027027
+          },
+          {
+            "term": "md178",
+            "tf": 1,
+            "weight": 0.027027
+          },
+          {
+            "term": "208",
+            "tf": 1,
+            "weight": 0.027027
+          },
+          {
+            "term": "l178",
+            "tf": 1,
+            "weight": 0.027027
+          },
+          {
+            "term": "l208",
+            "tf": 1,
+            "weight": 0.027027
+          }
+        ],
+        "unique_terms": 25,
+        "total_terms": 37
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Basic Usage Example",
+        "b785640b",
+        "blob",
+        "com",
+        "docs",
+        "examples",
+        "fastembed",
+        "github",
+        "https",
+        "qdrant",
+        "readme"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.6,
+      "structural": 0.7,
+      "retrieval_quality": 0.7566666666666667,
+      "overall": 0.6855555555555556
+    }
+  },
+  {
+    "text": "## GPU Acceleration\n\nAll the core embedding classes support GPU acceleration through ONNX Runtime's CUDA execution provider, which can significantly improve performance, especially for batch processing.",
+    "metadata": {
+      "chunk_id": "2bbf6cabf4b4-0021",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_fastembed\\_qdrant_fastembed_3-core-embedding-classes.md",
+      "filename": "_qdrant_fastembed_3-core-embedding-classes.md",
+      "file_extension": ".md",
+      "chunk_index": 21,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "GPU Acceleration"
+      ],
+      "heading_text": "GPU Acceleration",
+      "token_count": 33,
+      "char_count": 202,
+      "start_char": 10245,
+      "end_char": 10447,
+      "semantic_score": 0.8,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.566923076923077,
+      "chunking_strategy": "hierarchical_balanced_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "processing_timestamp": "2025-10-20T04:38:44.860096",
+      "document_id": "2bbf6cabf4b4",
+      "document_name": "_qdrant_fastembed_3-core-embedding-classes",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_fastembed\\_qdrant_fastembed_3-core-embedding-classes.md",
+      "source_filename": "_qdrant_fastembed_3-core-embedding-classes.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_fastembed",
+      "relative_path": "Docs\\qdrant_ecosystem\\qdrant_fastembed\\_qdrant_fastembed_3-core-embedding-classes.md",
+      "hierarchy_path": "GPU Acceleration",
+      "chunk_hash": "93d0e0d66b3f06f3",
+      "content_digest": "93d0e0d66b3f06f3",
+      "chunk_length": 202,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "gpu",
+          "acceleration",
+          "all",
+          "the",
+          "core",
+          "embedding",
+          "classes",
+          "support",
+          "through",
+          "onnx",
+          "runtime",
+          "cuda",
+          "execution",
+          "provider",
+          "which",
+          "can",
+          "significantly",
+          "improve",
+          "performance",
+          "especially"
+        ],
+        "term_weights": [
+          {
+            "term": "gpu",
+            "tf": 2,
+            "weight": 0.08
+          },
+          {
+            "term": "acceleration",
+            "tf": 2,
+            "weight": 0.08
+          },
+          {
+            "term": "all",
+            "tf": 1,
+            "weight": 0.04
+          },
+          {
+            "term": "the",
+            "tf": 1,
+            "weight": 0.04
+          },
+          {
+            "term": "core",
+            "tf": 1,
+            "weight": 0.04
+          },
+          {
+            "term": "embedding",
+            "tf": 1,
+            "weight": 0.04
+          },
+          {
+            "term": "classes",
+            "tf": 1,
+            "weight": 0.04
+          },
+          {
+            "term": "support",
+            "tf": 1,
+            "weight": 0.04
+          },
+          {
+            "term": "through",
+            "tf": 1,
+            "weight": 0.04
+          },
+          {
+            "term": "onnx",
+            "tf": 1,
+            "weight": 0.04
+          },
+          {
+            "term": "runtime",
+            "tf": 1,
+            "weight": 0.04
+          },
+          {
+            "term": "cuda",
+            "tf": 1,
+            "weight": 0.04
+          },
+          {
+            "term": "execution",
+            "tf": 1,
+            "weight": 0.04
+          },
+          {
+            "term": "provider",
+            "tf": 1,
+            "weight": 0.04
+          },
+          {
+            "term": "which",
+            "tf": 1,
+            "weight": 0.04
+          },
+          {
+            "term": "can",
+            "tf": 1,
+            "weight": 0.04
+          },
+          {
+            "term": "significantly",
+            "tf": 1,
+            "weight": 0.04
+          },
+          {
+            "term": "improve",
+            "tf": 1,
+            "weight": 0.04
+          },
+          {
+            "term": "performance",
+            "tf": 1,
+            "weight": 0.04
+          },
+          {
+            "term": "especially",
+            "tf": 1,
+            "weight": 0.04
+          }
+        ],
+        "unique_terms": 23,
+        "total_terms": 25
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "GPU Acceleration",
+        "acceleration",
+        "all",
+        "classes",
+        "core",
+        "embedding",
+        "gpu",
+        "onnx",
+        "support",
+        "the",
+        "through"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.8,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.566923076923077,
+      "overall": 0.7556410256410256
+    }
+  },
+  {
+    "text": "### Enabling GPU Support\n\nTo use GPU acceleration:\n\n1. Install the GPU-enabled version of FastEmbed:\n\n   ```\n   ```\n\n2. Specify the CUDA execution provider when initializing the embedding model:\n\n   ```\n   ```\n\nFor detailed GPU setup instructions and troubleshooting, see [FastEmbed GPU](qdrant/fastembed/8-performance-optimization.md).\n\nSources: [README.md210-230](https://github.com/qdrant/fastembed/blob/b785640b/README.md#L210-L230) [docs/examples/FastEmbed\\_GPU.ipynb1-42](https://github.com/qdrant/fastembed/blob/b785640b/docs/examples/FastEmbed_GPU.ipynb#L1-L42) [docs/examples/FastEmbed\\_GPU.ipynb90-108](https://github.com/qdrant/fastembed/blob/b785640b/docs/examples/FastEmbed_GPU.ipynb#L90-L108)\n\nDismiss\n\nRefresh this wiki\n\nEnter email to refresh",
+    "metadata": {
+      "chunk_id": "2bbf6cabf4b4-0022",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_fastembed\\_qdrant_fastembed_3-core-embedding-classes.md",
+      "filename": "_qdrant_fastembed_3-core-embedding-classes.md",
+      "file_extension": ".md",
+      "chunk_index": 22,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Enabling GPU Support"
+      ],
+      "heading_text": "Enabling GPU Support",
+      "token_count": 202,
+      "char_count": 758,
+      "start_char": 10449,
+      "end_char": 11207,
+      "semantic_score": 0.6,
+      "structural_score": 0.7,
+      "retrieval_quality": 0.738076923076923,
+      "chunking_strategy": "hierarchical_balanced_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "processing_timestamp": "2025-10-20T04:38:44.860096",
+      "document_id": "2bbf6cabf4b4",
+      "document_name": "_qdrant_fastembed_3-core-embedding-classes",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_fastembed\\_qdrant_fastembed_3-core-embedding-classes.md",
+      "source_filename": "_qdrant_fastembed_3-core-embedding-classes.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_fastembed",
+      "relative_path": "Docs\\qdrant_ecosystem\\qdrant_fastembed\\_qdrant_fastembed_3-core-embedding-classes.md",
+      "hierarchy_path": "Enabling GPU Support",
+      "chunk_hash": "cfc41a90379a764a",
+      "content_digest": "cfc41a90379a764a",
+      "chunk_length": 758,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "fastembed",
+          "gpu",
+          "qdrant",
+          "docs",
+          "examples",
+          "the",
+          "https",
+          "github",
+          "com",
+          "blob",
+          "b785640b",
+          "readme",
+          "ipynb",
+          "refresh",
+          "enabling",
+          "support",
+          "use",
+          "acceleration",
+          "install",
+          "enabled"
+        ],
+        "term_weights": [
+          {
+            "term": "fastembed",
+            "tf": 10,
+            "weight": 0.105263
+          },
+          {
+            "term": "gpu",
+            "tf": 9,
+            "weight": 0.094737
+          },
+          {
+            "term": "qdrant",
+            "tf": 4,
+            "weight": 0.042105
+          },
+          {
+            "term": "docs",
+            "tf": 4,
+            "weight": 0.042105
+          },
+          {
+            "term": "examples",
+            "tf": 4,
+            "weight": 0.042105
+          },
+          {
+            "term": "the",
+            "tf": 3,
+            "weight": 0.031579
+          },
+          {
+            "term": "https",
+            "tf": 3,
+            "weight": 0.031579
+          },
+          {
+            "term": "github",
+            "tf": 3,
+            "weight": 0.031579
+          },
+          {
+            "term": "com",
+            "tf": 3,
+            "weight": 0.031579
+          },
+          {
+            "term": "blob",
+            "tf": 3,
+            "weight": 0.031579
+          },
+          {
+            "term": "b785640b",
+            "tf": 3,
+            "weight": 0.031579
+          },
+          {
+            "term": "readme",
+            "tf": 2,
+            "weight": 0.021053
+          },
+          {
+            "term": "ipynb",
+            "tf": 2,
+            "weight": 0.021053
+          },
+          {
+            "term": "refresh",
+            "tf": 2,
+            "weight": 0.021053
+          },
+          {
+            "term": "enabling",
+            "tf": 1,
+            "weight": 0.010526
+          },
+          {
+            "term": "support",
+            "tf": 1,
+            "weight": 0.010526
+          },
+          {
+            "term": "use",
+            "tf": 1,
+            "weight": 0.010526
+          },
+          {
+            "term": "acceleration",
+            "tf": 1,
+            "weight": 0.010526
+          },
+          {
+            "term": "install",
+            "tf": 1,
+            "weight": 0.010526
+          },
+          {
+            "term": "enabled",
+            "tf": 1,
+            "weight": 0.010526
+          }
+        ],
+        "unique_terms": 54,
+        "total_terms": 95
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Enabling GPU Support",
+        "blob",
+        "com",
+        "docs",
+        "examples",
+        "fastembed",
+        "github",
+        "gpu",
+        "https",
+        "qdrant",
+        "the"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.6,
+      "structural": 0.7,
+      "retrieval_quality": 0.738076923076923,
+      "overall": 0.6793589743589742
     }
   }
 ]

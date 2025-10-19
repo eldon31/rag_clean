@@ -1,40 +1,40 @@
 [
   {
-    "text": "### Multi-Metric Evaluation  All similarity evaluators support evaluation with multiple similarity functions simultaneously, computing max metrics across functions: ```python",
+    "text": "### TripletEvaluator\n\nThe `TripletEvaluator` evaluates models using triplets of (anchor, positive, negative) sentences, ensuring that the anchor is more similar to the positive than to the negative example.\n\n```mermaid\ngraph TD\n    TE[\"TripletEvaluator\"]\n    \n    subgraph \"Triplet Input\"\n        ANC[\"anchors: List[str]\"]\n        POS[\"positives: List[str]\"]\n        NEG[\"negatives: List[str]\"]\n        MAR[\"margin: float | Dict[str, float]\"]\n    end\n    \n    subgraph \"Embedding Generation\"\n        EAANC[\"embed_inputs(model, anchors)\"]\n        EPOS[\"embed_inputs(model, positives)\"]\n        ENEG[\"embed_inputs(model, negatives)\"]\n    end\n    \n    subgraph \"Similarity Calculation\"\n        SIMPOS[\"similarity(anchor, positive)\"]\n        SIMNEG[\"similarity(anchor, negative)\"]\n    end\n    \n    subgraph \"Evaluation Logic\"\n        COMP[\"positive_scores > negative_scores + margin\"]\n        ACCUR[\"accuracy = mean(comparisons)\"]\n    end\n    \n    TE --> ANC\n    TE --> POS  \n    TE --> NEG\n    TE --> MAR\n    \n    ANC --> EAANC\n    POS --> EPOS\n    NEG --> ENEG\n    \n    EAANC --> SIMPOS\n    EPOS --> SIMPOS\n    EAANC --> SIMNEG\n    ENEG --> SIMNEG\n    \n    SIMPOS --> COMP\n    SIMNEG --> COMP\n    MAR --> COMP\n    COMP --> ACCUR\n```\n\n**Sources:** [sentence_transformers/evaluation/TripletEvaluator.py:26-271]()",
     "metadata": {
-      "chunk_id": "068d0058f209-0010",
+      "chunk_id": "068d0058f209-0003",
       "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers\\Semantic_Textual_Similarity.md",
       "filename": "Semantic_Textual_Similarity.md",
       "file_extension": ".md",
-      "chunk_index": 10,
+      "chunk_index": 3,
       "document_level": 1,
       "parent_chunk_id": null,
       "child_chunk_ids": [],
       "section_path": [
-        "Multi-Metric Evaluation"
+        "TripletEvaluator"
       ],
-      "heading_text": "Multi-Metric Evaluation",
-      "token_count": 26,
-      "char_count": 174,
-      "start_char": 0,
-      "end_char": 174,
-      "semantic_score": 0.8,
-      "structural_score": 0.8999999999999999,
-      "retrieval_quality": 0.5584210526315789,
-      "chunking_strategy": "hybrid_adaptive",
-      "content_type": "hierarchical_section",
-      "embedding_model": "nomic-ai/CodeRankEmbed",
-      "processing_timestamp": "2025-10-19T15:53:14.759905",
+      "heading_text": "TripletEvaluator",
+      "token_count": 330,
+      "char_count": 1308,
+      "start_char": 3583,
+      "end_char": 4891,
+      "semantic_score": 0.7999999999999999,
+      "structural_score": 0.7999999999999998,
+      "retrieval_quality": 0.6934,
+      "chunking_strategy": "hybrid_adaptive_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "processing_timestamp": "2025-10-20T04:38:47.505893",
       "document_id": "068d0058f209",
       "document_name": "Semantic_Textual_Similarity",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers\\Semantic_Textual_Similarity.md",
       "source_filename": "Semantic_Textual_Similarity.md",
       "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers",
       "relative_path": "Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers\\Semantic_Textual_Similarity.md",
-      "hierarchy_path": "Multi-Metric Evaluation",
-      "chunk_hash": "cd2d7410d15a5081",
-      "content_digest": "cd2d7410d15a5081",
-      "chunk_length": 174,
+      "hierarchy_path": "TripletEvaluator",
+      "chunk_hash": "53f57ff84b796d71",
+      "content_digest": "53f57ff84b796d71",
+      "chunk_length": 1308,
       "payload_version": "1.3",
       "collection_hints": [
         "qdrant_ecosystem"
@@ -43,107 +43,131 @@
         "version": "1.0",
         "weighting": "tf-normalized",
         "top_terms": [
-          "evaluation",
-          "similarity",
-          "functions",
-          "multi",
-          "metric",
-          "all",
-          "evaluators",
-          "support",
-          "with",
-          "multiple",
-          "simultaneously",
-          "computing",
-          "max",
-          "metrics",
-          "across",
-          "python"
+          "comp",
+          "tripletevaluator",
+          "the",
+          "anchor",
+          "positive",
+          "negative",
+          "subgraph",
+          "str",
+          "end",
+          "eaanc",
+          "simpos",
+          "simneg",
+          "anc",
+          "list",
+          "pos",
+          "neg",
+          "mar",
+          "embed",
+          "inputs",
+          "model"
         ],
         "term_weights": [
           {
-            "term": "evaluation",
-            "tf": 2,
-            "weight": 0.105263
+            "term": "comp",
+            "tf": 5,
+            "weight": 0.04
           },
           {
-            "term": "similarity",
-            "tf": 2,
-            "weight": 0.105263
+            "term": "tripletevaluator",
+            "tf": 4,
+            "weight": 0.032
           },
           {
-            "term": "functions",
-            "tf": 2,
-            "weight": 0.105263
+            "term": "the",
+            "tf": 4,
+            "weight": 0.032
           },
           {
-            "term": "multi",
-            "tf": 1,
-            "weight": 0.052632
+            "term": "anchor",
+            "tf": 4,
+            "weight": 0.032
           },
           {
-            "term": "metric",
-            "tf": 1,
-            "weight": 0.052632
+            "term": "positive",
+            "tf": 4,
+            "weight": 0.032
           },
           {
-            "term": "all",
-            "tf": 1,
-            "weight": 0.052632
+            "term": "negative",
+            "tf": 4,
+            "weight": 0.032
           },
           {
-            "term": "evaluators",
-            "tf": 1,
-            "weight": 0.052632
+            "term": "subgraph",
+            "tf": 4,
+            "weight": 0.032
           },
           {
-            "term": "support",
-            "tf": 1,
-            "weight": 0.052632
+            "term": "str",
+            "tf": 4,
+            "weight": 0.032
           },
           {
-            "term": "with",
-            "tf": 1,
-            "weight": 0.052632
+            "term": "end",
+            "tf": 4,
+            "weight": 0.032
           },
           {
-            "term": "multiple",
-            "tf": 1,
-            "weight": 0.052632
+            "term": "eaanc",
+            "tf": 4,
+            "weight": 0.032
           },
           {
-            "term": "simultaneously",
-            "tf": 1,
-            "weight": 0.052632
+            "term": "simpos",
+            "tf": 4,
+            "weight": 0.032
           },
           {
-            "term": "computing",
-            "tf": 1,
-            "weight": 0.052632
+            "term": "simneg",
+            "tf": 4,
+            "weight": 0.032
           },
           {
-            "term": "max",
-            "tf": 1,
-            "weight": 0.052632
+            "term": "anc",
+            "tf": 3,
+            "weight": 0.024
           },
           {
-            "term": "metrics",
-            "tf": 1,
-            "weight": 0.052632
+            "term": "list",
+            "tf": 3,
+            "weight": 0.024
           },
           {
-            "term": "across",
-            "tf": 1,
-            "weight": 0.052632
+            "term": "pos",
+            "tf": 3,
+            "weight": 0.024
           },
           {
-            "term": "python",
-            "tf": 1,
-            "weight": 0.052632
+            "term": "neg",
+            "tf": 3,
+            "weight": 0.024
+          },
+          {
+            "term": "mar",
+            "tf": 3,
+            "weight": 0.024
+          },
+          {
+            "term": "embed",
+            "tf": 3,
+            "weight": 0.024
+          },
+          {
+            "term": "inputs",
+            "tf": 3,
+            "weight": 0.024
+          },
+          {
+            "term": "model",
+            "tf": 3,
+            "weight": 0.024
           }
         ],
-        "unique_terms": 16,
-        "total_terms": 19
+        "unique_terms": 58,
+        "total_terms": 125
       },
       "modal_hint": "code",
       "content_flags": {
@@ -154,514 +178,24 @@
         "has_formula": false
       },
       "search_keywords": [
-        "Multi-Metric Evaluation",
-        "all",
-        "evaluation",
-        "evaluators",
-        "functions",
-        "metric",
-        "multi",
-        "multiple",
-        "similarity",
-        "support",
-        "with"
-      ],
-      "quality_fallback": true,
-      "quality_notes": "Promoted via relaxed thresholds"
-    },
-    "advanced_scores": {
-      "semantic": 0.8,
-      "structural": 0.8999999999999999,
-      "retrieval_quality": 0.5584210526315789,
-      "overall": 0.7528070175438596
-    }
-  },
-  {
-    "text": "## STS Benchmark Integration  The library includes extensive testing and evaluation capabilities for the STS (Semantic Textual Similarity) benchmark, a standard dataset for evaluating semantic similarity models.",
-    "metadata": {
-      "chunk_id": "068d0058f209-0005",
-      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers\\Semantic_Textual_Similarity.md",
-      "filename": "Semantic_Textual_Similarity.md",
-      "file_extension": ".md",
-      "chunk_index": 5,
-      "document_level": 1,
-      "parent_chunk_id": null,
-      "child_chunk_ids": [],
-      "section_path": [
-        "STS Benchmark Integration"
-      ],
-      "heading_text": "STS Benchmark Integration",
-      "token_count": 36,
-      "char_count": 211,
-      "start_char": 0,
-      "end_char": 211,
-      "semantic_score": 0.8,
-      "structural_score": 0.8999999999999999,
-      "retrieval_quality": 0.5566666666666666,
-      "chunking_strategy": "hybrid_adaptive",
-      "content_type": "hierarchical_section",
-      "embedding_model": "nomic-ai/CodeRankEmbed",
-      "processing_timestamp": "2025-10-19T15:53:14.757875",
-      "document_id": "068d0058f209",
-      "document_name": "Semantic_Textual_Similarity",
-      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers\\Semantic_Textual_Similarity.md",
-      "source_filename": "Semantic_Textual_Similarity.md",
-      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers",
-      "relative_path": "Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers\\Semantic_Textual_Similarity.md",
-      "hierarchy_path": "STS Benchmark Integration",
-      "chunk_hash": "739e1160f853be68",
-      "content_digest": "739e1160f853be68",
-      "chunk_length": 211,
-      "payload_version": "1.3",
-      "collection_hints": [
-        "qdrant_ecosystem"
-      ],
-      "sparse_features": {
-        "version": "1.0",
-        "weighting": "tf-normalized",
-        "top_terms": [
-          "sts",
-          "benchmark",
-          "the",
-          "for",
-          "semantic",
-          "similarity",
-          "integration",
-          "library",
-          "includes",
-          "extensive",
-          "testing",
-          "and",
-          "evaluation",
-          "capabilities",
-          "textual",
-          "standard",
-          "dataset",
-          "evaluating",
-          "models"
-        ],
-        "term_weights": [
-          {
-            "term": "sts",
-            "tf": 2,
-            "weight": 0.08
-          },
-          {
-            "term": "benchmark",
-            "tf": 2,
-            "weight": 0.08
-          },
-          {
-            "term": "the",
-            "tf": 2,
-            "weight": 0.08
-          },
-          {
-            "term": "for",
-            "tf": 2,
-            "weight": 0.08
-          },
-          {
-            "term": "semantic",
-            "tf": 2,
-            "weight": 0.08
-          },
-          {
-            "term": "similarity",
-            "tf": 2,
-            "weight": 0.08
-          },
-          {
-            "term": "integration",
-            "tf": 1,
-            "weight": 0.04
-          },
-          {
-            "term": "library",
-            "tf": 1,
-            "weight": 0.04
-          },
-          {
-            "term": "includes",
-            "tf": 1,
-            "weight": 0.04
-          },
-          {
-            "term": "extensive",
-            "tf": 1,
-            "weight": 0.04
-          },
-          {
-            "term": "testing",
-            "tf": 1,
-            "weight": 0.04
-          },
-          {
-            "term": "and",
-            "tf": 1,
-            "weight": 0.04
-          },
-          {
-            "term": "evaluation",
-            "tf": 1,
-            "weight": 0.04
-          },
-          {
-            "term": "capabilities",
-            "tf": 1,
-            "weight": 0.04
-          },
-          {
-            "term": "textual",
-            "tf": 1,
-            "weight": 0.04
-          },
-          {
-            "term": "standard",
-            "tf": 1,
-            "weight": 0.04
-          },
-          {
-            "term": "dataset",
-            "tf": 1,
-            "weight": 0.04
-          },
-          {
-            "term": "evaluating",
-            "tf": 1,
-            "weight": 0.04
-          },
-          {
-            "term": "models",
-            "tf": 1,
-            "weight": 0.04
-          }
-        ],
-        "unique_terms": 19,
-        "total_terms": 25
-      },
-      "modal_hint": "prose",
-      "content_flags": {
-        "has_code_block": false,
-        "has_table": false,
-        "has_list": false,
-        "has_json": false,
-        "has_formula": false
-      },
-      "search_keywords": [
-        "STS Benchmark Integration",
-        "benchmark",
-        "extensive",
-        "for",
-        "includes",
-        "integration",
-        "library",
-        "semantic",
-        "similarity",
-        "sts",
-        "the"
-      ],
-      "quality_fallback": true,
-      "quality_notes": "Promoted via relaxed thresholds"
-    },
-    "advanced_scores": {
-      "semantic": 0.8,
-      "structural": 0.8999999999999999,
-      "retrieval_quality": 0.5566666666666666,
-      "overall": 0.7522222222222222
-    }
-  },
-  {
-    "text": "## Advanced Evaluation Features",
-    "metadata": {
-      "chunk_id": "068d0058f209-0008",
-      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers\\Semantic_Textual_Similarity.md",
-      "filename": "Semantic_Textual_Similarity.md",
-      "file_extension": ".md",
-      "chunk_index": 8,
-      "document_level": 1,
-      "parent_chunk_id": null,
-      "child_chunk_ids": [],
-      "section_path": [
-        "Advanced Evaluation Features"
-      ],
-      "heading_text": "Advanced Evaluation Features",
-      "token_count": 4,
-      "char_count": 31,
-      "start_char": 0,
-      "end_char": 31,
-      "semantic_score": 0.8,
-      "structural_score": 0.8999999999999999,
-      "retrieval_quality": 0.39,
-      "chunking_strategy": "hybrid_adaptive",
-      "content_type": "hierarchical_section",
-      "embedding_model": "nomic-ai/CodeRankEmbed",
-      "processing_timestamp": "2025-10-19T15:53:14.759441",
-      "document_id": "068d0058f209",
-      "document_name": "Semantic_Textual_Similarity",
-      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers\\Semantic_Textual_Similarity.md",
-      "source_filename": "Semantic_Textual_Similarity.md",
-      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers",
-      "relative_path": "Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers\\Semantic_Textual_Similarity.md",
-      "hierarchy_path": "Advanced Evaluation Features",
-      "chunk_hash": "05e114724e2b293a",
-      "content_digest": "05e114724e2b293a",
-      "chunk_length": 31,
-      "payload_version": "1.3",
-      "collection_hints": [
-        "qdrant_ecosystem"
-      ],
-      "sparse_features": {
-        "version": "1.0",
-        "weighting": "tf-normalized",
-        "top_terms": [
-          "advanced",
-          "evaluation",
-          "features"
-        ],
-        "term_weights": [
-          {
-            "term": "advanced",
-            "tf": 1,
-            "weight": 0.333333
-          },
-          {
-            "term": "evaluation",
-            "tf": 1,
-            "weight": 0.333333
-          },
-          {
-            "term": "features",
-            "tf": 1,
-            "weight": 0.333333
-          }
-        ],
-        "unique_terms": 3,
-        "total_terms": 3
-      },
-      "modal_hint": "prose",
-      "content_flags": {
-        "has_code_block": false,
-        "has_table": false,
-        "has_list": false,
-        "has_json": false,
-        "has_formula": false
-      },
-      "search_keywords": [
-        "Advanced Evaluation Features",
-        "advanced",
-        "evaluation",
-        "features"
-      ],
-      "quality_fallback": true,
-      "quality_notes": "Promoted via relaxed thresholds"
-    },
-    "advanced_scores": {
-      "semantic": 0.8,
-      "structural": 0.8999999999999999,
-      "retrieval_quality": 0.39,
-      "overall": 0.6966666666666667
-    }
-  },
-  {
-    "text": "## Core Similarity Evaluators  The sentence-transformers library provides several specialized evaluators for measuring semantic textual similarity, each designed for different evaluation scenarios and data formats.",
-    "metadata": {
-      "chunk_id": "068d0058f209-0000",
-      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers\\Semantic_Textual_Similarity.md",
-      "filename": "Semantic_Textual_Similarity.md",
-      "file_extension": ".md",
-      "chunk_index": 0,
-      "document_level": 1,
-      "parent_chunk_id": null,
-      "child_chunk_ids": [],
-      "section_path": [
-        "Core Similarity Evaluators"
-      ],
-      "heading_text": "Core Similarity Evaluators",
-      "token_count": 33,
-      "char_count": 214,
-      "start_char": 0,
-      "end_char": 214,
-      "semantic_score": 0.8,
-      "structural_score": 0.8999999999999999,
-      "retrieval_quality": 0.366,
-      "chunking_strategy": "hybrid_adaptive",
-      "content_type": "hierarchical_section",
-      "embedding_model": "nomic-ai/CodeRankEmbed",
-      "processing_timestamp": "2025-10-19T15:53:14.753515",
-      "document_id": "068d0058f209",
-      "document_name": "Semantic_Textual_Similarity",
-      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers\\Semantic_Textual_Similarity.md",
-      "source_filename": "Semantic_Textual_Similarity.md",
-      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers",
-      "relative_path": "Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers\\Semantic_Textual_Similarity.md",
-      "hierarchy_path": "Core Similarity Evaluators",
-      "chunk_hash": "a69da013fd58e634",
-      "content_digest": "a69da013fd58e634",
-      "chunk_length": 214,
-      "payload_version": "1.3",
-      "collection_hints": [
-        "qdrant_ecosystem"
-      ],
-      "sparse_features": {
-        "version": "1.0",
-        "weighting": "tf-normalized",
-        "top_terms": [
-          "similarity",
-          "evaluators",
-          "for",
-          "core",
-          "the",
-          "sentence",
-          "transformers",
-          "library",
-          "provides",
-          "several",
-          "specialized",
-          "measuring",
-          "semantic",
-          "textual",
-          "each",
-          "designed",
-          "different",
-          "evaluation",
-          "scenarios",
-          "and"
-        ],
-        "term_weights": [
-          {
-            "term": "similarity",
-            "tf": 2,
-            "weight": 0.08
-          },
-          {
-            "term": "evaluators",
-            "tf": 2,
-            "weight": 0.08
-          },
-          {
-            "term": "for",
-            "tf": 2,
-            "weight": 0.08
-          },
-          {
-            "term": "core",
-            "tf": 1,
-            "weight": 0.04
-          },
-          {
-            "term": "the",
-            "tf": 1,
-            "weight": 0.04
-          },
-          {
-            "term": "sentence",
-            "tf": 1,
-            "weight": 0.04
-          },
-          {
-            "term": "transformers",
-            "tf": 1,
-            "weight": 0.04
-          },
-          {
-            "term": "library",
-            "tf": 1,
-            "weight": 0.04
-          },
-          {
-            "term": "provides",
-            "tf": 1,
-            "weight": 0.04
-          },
-          {
-            "term": "several",
-            "tf": 1,
-            "weight": 0.04
-          },
-          {
-            "term": "specialized",
-            "tf": 1,
-            "weight": 0.04
-          },
-          {
-            "term": "measuring",
-            "tf": 1,
-            "weight": 0.04
-          },
-          {
-            "term": "semantic",
-            "tf": 1,
-            "weight": 0.04
-          },
-          {
-            "term": "textual",
-            "tf": 1,
-            "weight": 0.04
-          },
-          {
-            "term": "each",
-            "tf": 1,
-            "weight": 0.04
-          },
-          {
-            "term": "designed",
-            "tf": 1,
-            "weight": 0.04
-          },
-          {
-            "term": "different",
-            "tf": 1,
-            "weight": 0.04
-          },
-          {
-            "term": "evaluation",
-            "tf": 1,
-            "weight": 0.04
-          },
-          {
-            "term": "scenarios",
-            "tf": 1,
-            "weight": 0.04
-          },
-          {
-            "term": "and",
-            "tf": 1,
-            "weight": 0.04
-          }
-        ],
-        "unique_terms": 22,
-        "total_terms": 25
-      },
-      "modal_hint": "prose",
-      "content_flags": {
-        "has_code_block": false,
-        "has_table": false,
-        "has_list": false,
-        "has_json": false,
-        "has_formula": false
-      },
-      "search_keywords": [
-        "Core Similarity Evaluators",
-        "core",
-        "evaluators",
-        "for",
-        "library",
-        "provides",
-        "sentence",
-        "several",
-        "similarity",
+        "TripletEvaluator",
+        "anchor",
+        "comp",
+        "eaanc",
+        "end",
+        "negative",
+        "positive",
+        "str",
+        "subgraph",
         "the",
-        "transformers"
-      ],
-      "quality_fallback": true,
-      "quality_notes": "Promoted via relaxed thresholds"
+        "tripletevaluator"
+      ]
     },
     "advanced_scores": {
-      "semantic": 0.8,
-      "structural": 0.8999999999999999,
-      "retrieval_quality": 0.366,
-      "overall": 0.6886666666666666
+      "semantic": 0.7999999999999999,
+      "structural": 0.7999999999999998,
+      "retrieval_quality": 0.6934,
+      "overall": 0.7644666666666665
     }
   },
   {
@@ -681,15 +215,15 @@
       "heading_text": "Similarity Functions and Metrics",
       "token_count": 399,
       "char_count": 1750,
-      "start_char": 0,
-      "end_char": 1750,
-      "semantic_score": 0.5928105711936951,
+      "start_char": 4893,
+      "end_char": 6643,
+      "semantic_score": 0.7999999999999999,
       "structural_score": 0.8999999999999999,
       "retrieval_quality": 0.5018428571428571,
-      "chunking_strategy": "hybrid_adaptive",
-      "content_type": "hierarchical_section",
-      "embedding_model": "nomic-ai/CodeRankEmbed",
-      "processing_timestamp": "2025-10-19T15:53:14.757458",
+      "chunking_strategy": "hybrid_adaptive_structural",
+      "content_type": "table_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "processing_timestamp": "2025-10-20T04:38:47.505893",
       "document_id": "068d0058f209",
       "document_name": "Semantic_Textual_Similarity",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers\\Semantic_Textual_Similarity.md",
@@ -854,15 +388,580 @@
         "sim",
         "similarity",
         "similarityfunction"
-      ],
-      "quality_fallback": true,
-      "quality_notes": "Promoted via relaxed thresholds"
+      ]
     },
     "advanced_scores": {
-      "semantic": 0.5928105711936951,
+      "semantic": 0.7999999999999999,
       "structural": 0.8999999999999999,
       "retrieval_quality": 0.5018428571428571,
-      "overall": 0.664884476112184
+      "overall": 0.733947619047619
+    }
+  },
+  {
+    "text": "## STS Benchmark Integration\n\nThe library includes extensive testing and evaluation capabilities for the STS (Semantic Textual Similarity) benchmark, a standard dataset for evaluating semantic similarity models.",
+    "metadata": {
+      "chunk_id": "068d0058f209-0005",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers\\Semantic_Textual_Similarity.md",
+      "filename": "Semantic_Textual_Similarity.md",
+      "file_extension": ".md",
+      "chunk_index": 5,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "STS Benchmark Integration"
+      ],
+      "heading_text": "STS Benchmark Integration",
+      "token_count": 36,
+      "char_count": 211,
+      "start_char": 6648,
+      "end_char": 6859,
+      "semantic_score": 0.8,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5566666666666666,
+      "chunking_strategy": "hybrid_adaptive_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "processing_timestamp": "2025-10-20T04:38:47.505893",
+      "document_id": "068d0058f209",
+      "document_name": "Semantic_Textual_Similarity",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers\\Semantic_Textual_Similarity.md",
+      "source_filename": "Semantic_Textual_Similarity.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers",
+      "relative_path": "Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers\\Semantic_Textual_Similarity.md",
+      "hierarchy_path": "STS Benchmark Integration",
+      "chunk_hash": "c5e98b28eaf63769",
+      "content_digest": "c5e98b28eaf63769",
+      "chunk_length": 211,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "sts",
+          "benchmark",
+          "the",
+          "for",
+          "semantic",
+          "similarity",
+          "integration",
+          "library",
+          "includes",
+          "extensive",
+          "testing",
+          "and",
+          "evaluation",
+          "capabilities",
+          "textual",
+          "standard",
+          "dataset",
+          "evaluating",
+          "models"
+        ],
+        "term_weights": [
+          {
+            "term": "sts",
+            "tf": 2,
+            "weight": 0.08
+          },
+          {
+            "term": "benchmark",
+            "tf": 2,
+            "weight": 0.08
+          },
+          {
+            "term": "the",
+            "tf": 2,
+            "weight": 0.08
+          },
+          {
+            "term": "for",
+            "tf": 2,
+            "weight": 0.08
+          },
+          {
+            "term": "semantic",
+            "tf": 2,
+            "weight": 0.08
+          },
+          {
+            "term": "similarity",
+            "tf": 2,
+            "weight": 0.08
+          },
+          {
+            "term": "integration",
+            "tf": 1,
+            "weight": 0.04
+          },
+          {
+            "term": "library",
+            "tf": 1,
+            "weight": 0.04
+          },
+          {
+            "term": "includes",
+            "tf": 1,
+            "weight": 0.04
+          },
+          {
+            "term": "extensive",
+            "tf": 1,
+            "weight": 0.04
+          },
+          {
+            "term": "testing",
+            "tf": 1,
+            "weight": 0.04
+          },
+          {
+            "term": "and",
+            "tf": 1,
+            "weight": 0.04
+          },
+          {
+            "term": "evaluation",
+            "tf": 1,
+            "weight": 0.04
+          },
+          {
+            "term": "capabilities",
+            "tf": 1,
+            "weight": 0.04
+          },
+          {
+            "term": "textual",
+            "tf": 1,
+            "weight": 0.04
+          },
+          {
+            "term": "standard",
+            "tf": 1,
+            "weight": 0.04
+          },
+          {
+            "term": "dataset",
+            "tf": 1,
+            "weight": 0.04
+          },
+          {
+            "term": "evaluating",
+            "tf": 1,
+            "weight": 0.04
+          },
+          {
+            "term": "models",
+            "tf": 1,
+            "weight": 0.04
+          }
+        ],
+        "unique_terms": 19,
+        "total_terms": 25
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "STS Benchmark Integration",
+        "benchmark",
+        "extensive",
+        "for",
+        "includes",
+        "integration",
+        "library",
+        "semantic",
+        "similarity",
+        "sts",
+        "the"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.8,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5566666666666666,
+      "overall": 0.7522222222222222
+    }
+  },
+  {
+    "text": "### STS Benchmark Testing Framework\n\n```mermaid\ngraph TD\n    subgraph \"STS Dataset Loading\"\n        STSDATA[\"stsbenchmark.tsv.gz\"]\n        DOWNLOAD[\"util.http_get()\"]\n        PARSE[\"csv.DictReader parsing\"]\n    end\n    \n    subgraph \"Data Processing\"\n        NORM[\"score normalization (0-5 → 0-1)\"]\n        SPLIT[\"train/test split\"]\n        INPUTEX[\"InputExample creation\"]\n    end\n    \n    subgraph \"Evaluation Pipeline\"\n        EVALCREATE[\"EmbeddingSimilarityEvaluator.from_input_examples()\"]\n        MODELEVAL[\"model.evaluate()\"]\n        SCORERET[\"primary_metric score\"]\n    end\n    \n    subgraph \"Pretrained Model Testing\"\n        MODLIST[\"pretrained model list\"]\n        PERFTEST[\"pretrained_model_score()\"]\n        ASSERT[\"performance assertions\"]\n    end\n    \n    STSDATA --> DOWNLOAD\n    DOWNLOAD --> PARSE\n    PARSE --> NORM\n    NORM --> SPLIT\n    SPLIT --> INPUTEX\n    \n    INPUTEX --> EVALCREATE\n    EVALCREATE --> MODELEVAL\n    MODELEVAL --> SCORERET\n    \n    MODLIST --> PERFTEST\n    PERFTEST --> EVALCREATE\n    SCORERET --> ASSERT\n```\n\n**Sources:** [tests/test_pretrained_stsb.py:18-49](), [tests/test_train_stsb.py:33-51]()",
+    "metadata": {
+      "chunk_id": "068d0058f209-0006",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers\\Semantic_Textual_Similarity.md",
+      "filename": "Semantic_Textual_Similarity.md",
+      "file_extension": ".md",
+      "chunk_index": 6,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "STS Benchmark Testing Framework"
+      ],
+      "heading_text": "STS Benchmark Testing Framework",
+      "token_count": 287,
+      "char_count": 1138,
+      "start_char": 6861,
+      "end_char": 7999,
+      "semantic_score": 0.7999999999999999,
+      "structural_score": 0.7999999999999998,
+      "retrieval_quality": 0.6958139534883722,
+      "chunking_strategy": "hybrid_adaptive_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "processing_timestamp": "2025-10-20T04:38:47.505893",
+      "document_id": "068d0058f209",
+      "document_name": "Semantic_Textual_Similarity",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers\\Semantic_Textual_Similarity.md",
+      "source_filename": "Semantic_Textual_Similarity.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers",
+      "relative_path": "Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers\\Semantic_Textual_Similarity.md",
+      "hierarchy_path": "STS Benchmark Testing Framework",
+      "chunk_hash": "d59ab54b758c1039",
+      "content_digest": "d59ab54b758c1039",
+      "chunk_length": 1138,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "subgraph",
+          "end",
+          "split",
+          "evalcreate",
+          "model",
+          "pretrained",
+          "download",
+          "parse",
+          "norm",
+          "score",
+          "test",
+          "inputex",
+          "modeleval",
+          "scoreret",
+          "perftest",
+          "sts",
+          "testing",
+          "stsdata",
+          "train",
+          "modlist"
+        ],
+        "term_weights": [
+          {
+            "term": "subgraph",
+            "tf": 4,
+            "weight": 0.040404
+          },
+          {
+            "term": "end",
+            "tf": 4,
+            "weight": 0.040404
+          },
+          {
+            "term": "split",
+            "tf": 4,
+            "weight": 0.040404
+          },
+          {
+            "term": "evalcreate",
+            "tf": 4,
+            "weight": 0.040404
+          },
+          {
+            "term": "model",
+            "tf": 4,
+            "weight": 0.040404
+          },
+          {
+            "term": "pretrained",
+            "tf": 4,
+            "weight": 0.040404
+          },
+          {
+            "term": "download",
+            "tf": 3,
+            "weight": 0.030303
+          },
+          {
+            "term": "parse",
+            "tf": 3,
+            "weight": 0.030303
+          },
+          {
+            "term": "norm",
+            "tf": 3,
+            "weight": 0.030303
+          },
+          {
+            "term": "score",
+            "tf": 3,
+            "weight": 0.030303
+          },
+          {
+            "term": "test",
+            "tf": 3,
+            "weight": 0.030303
+          },
+          {
+            "term": "inputex",
+            "tf": 3,
+            "weight": 0.030303
+          },
+          {
+            "term": "modeleval",
+            "tf": 3,
+            "weight": 0.030303
+          },
+          {
+            "term": "scoreret",
+            "tf": 3,
+            "weight": 0.030303
+          },
+          {
+            "term": "perftest",
+            "tf": 3,
+            "weight": 0.030303
+          },
+          {
+            "term": "sts",
+            "tf": 2,
+            "weight": 0.020202
+          },
+          {
+            "term": "testing",
+            "tf": 2,
+            "weight": 0.020202
+          },
+          {
+            "term": "stsdata",
+            "tf": 2,
+            "weight": 0.020202
+          },
+          {
+            "term": "train",
+            "tf": 2,
+            "weight": 0.020202
+          },
+          {
+            "term": "modlist",
+            "tf": 2,
+            "weight": 0.020202
+          }
+        ],
+        "unique_terms": 55,
+        "total_terms": 99
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "STS Benchmark Testing Framework",
+        "download",
+        "end",
+        "evalcreate",
+        "model",
+        "norm",
+        "parse",
+        "pretrained",
+        "score",
+        "split",
+        "subgraph"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.7999999999999999,
+      "structural": 0.7999999999999998,
+      "retrieval_quality": 0.6958139534883722,
+      "overall": 0.7652713178294572
+    }
+  },
+  {
+    "text": "### Multi-Metric Evaluation\n\nAll similarity evaluators support evaluation with multiple similarity functions simultaneously, computing max metrics across functions:\n\n```python",
+    "metadata": {
+      "chunk_id": "068d0058f209-0010",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers\\Semantic_Textual_Similarity.md",
+      "filename": "Semantic_Textual_Similarity.md",
+      "file_extension": ".md",
+      "chunk_index": 10,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Multi-Metric Evaluation"
+      ],
+      "heading_text": "Multi-Metric Evaluation",
+      "token_count": 26,
+      "char_count": 175,
+      "start_char": 9673,
+      "end_char": 9848,
+      "semantic_score": 0.8,
+      "structural_score": 0.7,
+      "retrieval_quality": 0.5584210526315789,
+      "chunking_strategy": "hybrid_adaptive_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "processing_timestamp": "2025-10-20T04:38:47.505893",
+      "document_id": "068d0058f209",
+      "document_name": "Semantic_Textual_Similarity",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers\\Semantic_Textual_Similarity.md",
+      "source_filename": "Semantic_Textual_Similarity.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers",
+      "relative_path": "Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers\\Semantic_Textual_Similarity.md",
+      "hierarchy_path": "Multi-Metric Evaluation",
+      "chunk_hash": "2efead343662ca55",
+      "content_digest": "2efead343662ca55",
+      "chunk_length": 175,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "evaluation",
+          "similarity",
+          "functions",
+          "multi",
+          "metric",
+          "all",
+          "evaluators",
+          "support",
+          "with",
+          "multiple",
+          "simultaneously",
+          "computing",
+          "max",
+          "metrics",
+          "across",
+          "python"
+        ],
+        "term_weights": [
+          {
+            "term": "evaluation",
+            "tf": 2,
+            "weight": 0.105263
+          },
+          {
+            "term": "similarity",
+            "tf": 2,
+            "weight": 0.105263
+          },
+          {
+            "term": "functions",
+            "tf": 2,
+            "weight": 0.105263
+          },
+          {
+            "term": "multi",
+            "tf": 1,
+            "weight": 0.052632
+          },
+          {
+            "term": "metric",
+            "tf": 1,
+            "weight": 0.052632
+          },
+          {
+            "term": "all",
+            "tf": 1,
+            "weight": 0.052632
+          },
+          {
+            "term": "evaluators",
+            "tf": 1,
+            "weight": 0.052632
+          },
+          {
+            "term": "support",
+            "tf": 1,
+            "weight": 0.052632
+          },
+          {
+            "term": "with",
+            "tf": 1,
+            "weight": 0.052632
+          },
+          {
+            "term": "multiple",
+            "tf": 1,
+            "weight": 0.052632
+          },
+          {
+            "term": "simultaneously",
+            "tf": 1,
+            "weight": 0.052632
+          },
+          {
+            "term": "computing",
+            "tf": 1,
+            "weight": 0.052632
+          },
+          {
+            "term": "max",
+            "tf": 1,
+            "weight": 0.052632
+          },
+          {
+            "term": "metrics",
+            "tf": 1,
+            "weight": 0.052632
+          },
+          {
+            "term": "across",
+            "tf": 1,
+            "weight": 0.052632
+          },
+          {
+            "term": "python",
+            "tf": 1,
+            "weight": 0.052632
+          }
+        ],
+        "unique_terms": 16,
+        "total_terms": 19
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Multi-Metric Evaluation",
+        "all",
+        "evaluation",
+        "evaluators",
+        "functions",
+        "metric",
+        "multi",
+        "multiple",
+        "similarity",
+        "support",
+        "with"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.8,
+      "structural": 0.7,
+      "retrieval_quality": 0.5584210526315789,
+      "overall": 0.686140350877193
     }
   }
 ]

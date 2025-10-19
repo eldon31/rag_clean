@@ -1,12 +1,609 @@
 [
   {
-    "text": "## Message Processing and Raft Loop  The consensus thread runs a continuous loop processing two types of messages:",
+    "text": "## Purpose and Scope  The Raft consensus protocol in Qdrant serves a specific role: **coordinating metadata operations** across the cluster. This includes:  - Collection creation, deletion, and configuration changes - Shard assignment and replica placement - Peer membership (adding/removing nodes) - Shard transfer coordination - Cluster metadata key-value storage  **What Raft does NOT handle:**  - Individual point operations (upserts, deletes) - these use optimistic replication with logical clocks - Search queries - these are routed directly to appropriate shards - Shard-level data replication - handled by `ShardReplicaSet` with write consistency factors  The consensus layer operates independently from data operations, allowing high throughput for vector operations while maintaining strong consistency for cluster topology changes. Sources: [src/consensus.rs1-150](https://github.com/qdrant/qdrant/blob/48203e41/src/consensus.rs#L1-L150) [lib/storage/src/content\\_manager/consensus\\_ops.rs20-207](https://github.com/qdrant/qdrant/blob/48203e41/lib/storage/src/content_manager/consensus_ops.rs#L20-L207)  ---",
     "metadata": {
-      "chunk_id": "1d0e58cf4483-0009",
+      "chunk_id": "1d0e58cf4483-0002",
       "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_7.1-raft-consensus-protocol.md",
       "filename": "_qdrant_qdrant_7.1-raft-consensus-protocol.md",
       "file_extension": ".md",
-      "chunk_index": 9,
+      "chunk_index": 2,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Purpose and Scope"
+      ],
+      "heading_text": "Purpose and Scope",
+      "token_count": 242,
+      "char_count": 1118,
+      "start_char": 5393,
+      "end_char": 6511,
+      "semantic_score": 0.7999999999999999,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5233333333333333,
+      "chunking_strategy": "hierarchical_precise_structural",
+      "content_type": "list_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "processing_timestamp": "2025-10-20T04:38:46.321630",
+      "document_id": "1d0e58cf4483",
+      "document_name": "_qdrant_qdrant_7.1-raft-consensus-protocol",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_7.1-raft-consensus-protocol.md",
+      "source_filename": "_qdrant_qdrant_7.1-raft-consensus-protocol.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant",
+      "relative_path": "Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_7.1-raft-consensus-protocol.md",
+      "hierarchy_path": "Purpose and Scope",
+      "chunk_hash": "da3cef2e941395c2",
+      "content_digest": "da3cef2e941395c2",
+      "chunk_length": 1118,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "consensus",
+          "qdrant",
+          "operations",
+          "src",
+          "and",
+          "the",
+          "cluster",
+          "shard",
+          "storage",
+          "raft",
+          "metadata",
+          "changes",
+          "these",
+          "replication",
+          "with",
+          "data",
+          "consistency",
+          "for",
+          "https",
+          "github"
+        ],
+        "term_weights": [
+          {
+            "term": "consensus",
+            "tf": 6,
+            "weight": 0.042857
+          },
+          {
+            "term": "qdrant",
+            "tf": 5,
+            "weight": 0.035714
+          },
+          {
+            "term": "operations",
+            "tf": 4,
+            "weight": 0.028571
+          },
+          {
+            "term": "src",
+            "tf": 4,
+            "weight": 0.028571
+          },
+          {
+            "term": "and",
+            "tf": 3,
+            "weight": 0.021429
+          },
+          {
+            "term": "the",
+            "tf": 3,
+            "weight": 0.021429
+          },
+          {
+            "term": "cluster",
+            "tf": 3,
+            "weight": 0.021429
+          },
+          {
+            "term": "shard",
+            "tf": 3,
+            "weight": 0.021429
+          },
+          {
+            "term": "storage",
+            "tf": 3,
+            "weight": 0.021429
+          },
+          {
+            "term": "raft",
+            "tf": 2,
+            "weight": 0.014286
+          },
+          {
+            "term": "metadata",
+            "tf": 2,
+            "weight": 0.014286
+          },
+          {
+            "term": "changes",
+            "tf": 2,
+            "weight": 0.014286
+          },
+          {
+            "term": "these",
+            "tf": 2,
+            "weight": 0.014286
+          },
+          {
+            "term": "replication",
+            "tf": 2,
+            "weight": 0.014286
+          },
+          {
+            "term": "with",
+            "tf": 2,
+            "weight": 0.014286
+          },
+          {
+            "term": "data",
+            "tf": 2,
+            "weight": 0.014286
+          },
+          {
+            "term": "consistency",
+            "tf": 2,
+            "weight": 0.014286
+          },
+          {
+            "term": "for",
+            "tf": 2,
+            "weight": 0.014286
+          },
+          {
+            "term": "https",
+            "tf": 2,
+            "weight": 0.014286
+          },
+          {
+            "term": "github",
+            "tf": 2,
+            "weight": 0.014286
+          }
+        ],
+        "unique_terms": 97,
+        "total_terms": 140
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Purpose and Scope",
+        "and",
+        "cluster",
+        "consensus",
+        "operations",
+        "qdrant",
+        "raft",
+        "shard",
+        "src",
+        "storage",
+        "the"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.7999999999999999,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5233333333333333,
+      "overall": 0.741111111111111
+    }
+  },
+  {
+    "text": "## Consensus Thread Lifecycle\n\nThe consensus thread is spawned during service initialization and runs independently from the main application logic:\n\n```\n```\n\n**Thread Initialization Steps:**\n\n1. **Load Persistent State** [src/main.rs273-278](https://github.com/qdrant/qdrant/blob/48203e41/src/main.rs#L273-L278) - `Persistent::load_or_init()` loads existing Raft state or initializes new state with optional peer\\_id\n2. **Create Consensus Instance** [src/consensus.rs174-283](https://github.com/qdrant/qdrant/blob/48203e41/src/consensus.rs#L174-L283) - `Consensus::new()` sets up Raft config, channels, and determines if initialization or recovery is needed\n3. **Bootstrap or Recover** [src/consensus.rs286-463](https://github.com/qdrant/qdrant/blob/48203e41/src/consensus.rs#L286-L463) - New deployments bootstrap from a peer or self-initialize; existing deployments recover by notifying peers of address changes\n4. **Apply Uncommitted Entries** [src/consensus.rs249-251](https://github.com/qdrant/qdrant/blob/48203e41/src/consensus.rs#L249-L251) - Before starting the loop, apply any committed but unapplied entries from previous shutdown\n5. **Start Main Loop** [src/consensus.rs465-546](https://github.com/qdrant/qdrant/blob/48203e41/src/consensus.rs#L465-L546) - Enter infinite loop processing Raft protocol",
+    "metadata": {
+      "chunk_id": "1d0e58cf4483-0004",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_7.1-raft-consensus-protocol.md",
+      "filename": "_qdrant_qdrant_7.1-raft-consensus-protocol.md",
+      "file_extension": ".md",
+      "chunk_index": 4,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Consensus Thread Lifecycle"
+      ],
+      "heading_text": "Consensus Thread Lifecycle",
+      "token_count": 346,
+      "char_count": 1312,
+      "start_char": 7778,
+      "end_char": 9090,
+      "semantic_score": 0.7,
+      "structural_score": 0.7999999999999998,
+      "retrieval_quality": 0.7371333333333333,
+      "chunking_strategy": "hierarchical_precise_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "processing_timestamp": "2025-10-20T04:38:46.323087",
+      "document_id": "1d0e58cf4483",
+      "document_name": "_qdrant_qdrant_7.1-raft-consensus-protocol",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_7.1-raft-consensus-protocol.md",
+      "source_filename": "_qdrant_qdrant_7.1-raft-consensus-protocol.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant",
+      "relative_path": "Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_7.1-raft-consensus-protocol.md",
+      "hierarchy_path": "Consensus Thread Lifecycle",
+      "chunk_hash": "eb441a00cc0f8468",
+      "content_digest": "eb441a00cc0f8468",
+      "chunk_length": 1312,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "consensus",
+          "src",
+          "qdrant",
+          "https",
+          "github",
+          "com",
+          "blob",
+          "48203e41",
+          "main",
+          "thread",
+          "the",
+          "initialization",
+          "from",
+          "state",
+          "raft",
+          "new",
+          "loop",
+          "and",
+          "load",
+          "persistent"
+        ],
+        "term_weights": [
+          {
+            "term": "consensus",
+            "tf": 12,
+            "weight": 0.071856
+          },
+          {
+            "term": "src",
+            "tf": 10,
+            "weight": 0.05988
+          },
+          {
+            "term": "qdrant",
+            "tf": 10,
+            "weight": 0.05988
+          },
+          {
+            "term": "https",
+            "tf": 5,
+            "weight": 0.02994
+          },
+          {
+            "term": "github",
+            "tf": 5,
+            "weight": 0.02994
+          },
+          {
+            "term": "com",
+            "tf": 5,
+            "weight": 0.02994
+          },
+          {
+            "term": "blob",
+            "tf": 5,
+            "weight": 0.02994
+          },
+          {
+            "term": "48203e41",
+            "tf": 5,
+            "weight": 0.02994
+          },
+          {
+            "term": "main",
+            "tf": 4,
+            "weight": 0.023952
+          },
+          {
+            "term": "thread",
+            "tf": 3,
+            "weight": 0.017964
+          },
+          {
+            "term": "the",
+            "tf": 3,
+            "weight": 0.017964
+          },
+          {
+            "term": "initialization",
+            "tf": 3,
+            "weight": 0.017964
+          },
+          {
+            "term": "from",
+            "tf": 3,
+            "weight": 0.017964
+          },
+          {
+            "term": "state",
+            "tf": 3,
+            "weight": 0.017964
+          },
+          {
+            "term": "raft",
+            "tf": 3,
+            "weight": 0.017964
+          },
+          {
+            "term": "new",
+            "tf": 3,
+            "weight": 0.017964
+          },
+          {
+            "term": "loop",
+            "tf": 3,
+            "weight": 0.017964
+          },
+          {
+            "term": "and",
+            "tf": 2,
+            "weight": 0.011976
+          },
+          {
+            "term": "load",
+            "tf": 2,
+            "weight": 0.011976
+          },
+          {
+            "term": "persistent",
+            "tf": 2,
+            "weight": 0.011976
+          }
+        ],
+        "unique_terms": 89,
+        "total_terms": 167
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "48203e41",
+        "Consensus Thread Lifecycle",
+        "blob",
+        "com",
+        "consensus",
+        "github",
+        "https",
+        "main",
+        "qdrant",
+        "src",
+        "thread"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.7999999999999998,
+      "retrieval_quality": 0.7371333333333333,
+      "overall": 0.745711111111111
+    }
+  },
+  {
+    "text": "## Operation Types and Flow  All operations that require cluster-wide consensus are modeled as `ConsensusOperations`: ``` ``` **Operation Processing Flow:** ``` ``` **Helper Methods for Common Operations:**  The `ConsensusOperations` enum provides factory methods for common patterns:  | Method                 | Purpose                   | Citation                                                                                                                                                               | | ---------------------- | ------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- | | `abort_transfer()`     | Abort a shard transfer    | [lib/storage/src/content\\_manager/consensus\\_ops.rs70-82](https://github.com/qdrant/qdrant/blob/48203e41/lib/storage/src/content_manager/consensus_ops.rs#L70-L82)     | | `finish_transfer()`    | Complete a shard transfer | [lib/storage/src/content\\_manager/consensus\\_ops.rs84-89](https://github.com/qdrant/qdrant/blob/48203e41/lib/storage/src/content_manager/consensus_ops.rs#L84-L89)     | | `set_replica_state()`  | Change replica state      | [lib/storage/src/content\\_manager/consensus\\_ops.rs105-122](https://github.com/qdrant/qdrant/blob/48203e41/lib/storage/src/content_manager/consensus_ops.rs#L105-L122) | | `initialize_replica()` | Mark replica as Active    | [lib/storage/src/content\\_manager/consensus\\_ops.rs151-163](https://github.com/qdrant/qdrant/blob/48203e41/lib/storage/src/content_manager/consensus_ops.rs#L151-L163) | | `start_transfer()`     | Begin shard transfer      | [lib/storage/src/content\\_manager/consensus\\_ops.rs165-170](https://github.com/qdrant/qdrant/blob/48203e41/lib/storage/src/content_manager/consensus_ops.rs#L165-L170) |  Sources: [lib/storage/src/content\\_manager/consensus\\_ops.rs38-207](https://github.com/qdrant/qdrant/blob/48203e41/lib/storage/src/content_manager/consensus_ops.rs#L38-L207) [src/consensus.rs627-696](https://github.com/qdrant/qdrant/blob/48203e41/src/consensus.rs#L627-L696)  ---",
+    "metadata": {
+      "chunk_id": "1d0e58cf4483-0006",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_7.1-raft-consensus-protocol.md",
+      "filename": "_qdrant_qdrant_7.1-raft-consensus-protocol.md",
+      "file_extension": ".md",
+      "chunk_index": 6,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Operation Types and Flow"
+      ],
+      "heading_text": "Operation Types and Flow",
+      "token_count": 482,
+      "char_count": 2134,
+      "start_char": 9297,
+      "end_char": 11431,
+      "semantic_score": 0.7,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5269529411764705,
+      "chunking_strategy": "hierarchical_precise_structural",
+      "content_type": "table_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "processing_timestamp": "2025-10-20T04:38:46.323087",
+      "document_id": "1d0e58cf4483",
+      "document_name": "_qdrant_qdrant_7.1-raft-consensus-protocol",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_7.1-raft-consensus-protocol.md",
+      "source_filename": "_qdrant_qdrant_7.1-raft-consensus-protocol.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant",
+      "relative_path": "Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_7.1-raft-consensus-protocol.md",
+      "hierarchy_path": "Operation Types and Flow",
+      "chunk_hash": "bc8f7576f923501c",
+      "content_digest": "bc8f7576f923501c",
+      "chunk_length": 2134,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "consensus",
+          "src",
+          "qdrant",
+          "lib",
+          "storage",
+          "content",
+          "manager",
+          "ops",
+          "https",
+          "github",
+          "com",
+          "blob",
+          "48203e41",
+          "transfer",
+          "replica",
+          "shard",
+          "operation",
+          "flow",
+          "operations",
+          "consensusoperations"
+        ],
+        "term_weights": [
+          {
+            "term": "consensus",
+            "tf": 15,
+            "weight": 0.066964
+          },
+          {
+            "term": "src",
+            "tf": 14,
+            "weight": 0.0625
+          },
+          {
+            "term": "qdrant",
+            "tf": 14,
+            "weight": 0.0625
+          },
+          {
+            "term": "lib",
+            "tf": 12,
+            "weight": 0.053571
+          },
+          {
+            "term": "storage",
+            "tf": 12,
+            "weight": 0.053571
+          },
+          {
+            "term": "content",
+            "tf": 12,
+            "weight": 0.053571
+          },
+          {
+            "term": "manager",
+            "tf": 12,
+            "weight": 0.053571
+          },
+          {
+            "term": "ops",
+            "tf": 12,
+            "weight": 0.053571
+          },
+          {
+            "term": "https",
+            "tf": 7,
+            "weight": 0.03125
+          },
+          {
+            "term": "github",
+            "tf": 7,
+            "weight": 0.03125
+          },
+          {
+            "term": "com",
+            "tf": 7,
+            "weight": 0.03125
+          },
+          {
+            "term": "blob",
+            "tf": 7,
+            "weight": 0.03125
+          },
+          {
+            "term": "48203e41",
+            "tf": 7,
+            "weight": 0.03125
+          },
+          {
+            "term": "transfer",
+            "tf": 6,
+            "weight": 0.026786
+          },
+          {
+            "term": "replica",
+            "tf": 4,
+            "weight": 0.017857
+          },
+          {
+            "term": "shard",
+            "tf": 3,
+            "weight": 0.013393
+          },
+          {
+            "term": "operation",
+            "tf": 2,
+            "weight": 0.008929
+          },
+          {
+            "term": "flow",
+            "tf": 2,
+            "weight": 0.008929
+          },
+          {
+            "term": "operations",
+            "tf": 2,
+            "weight": 0.008929
+          },
+          {
+            "term": "consensusoperations",
+            "tf": 2,
+            "weight": 0.008929
+          }
+        ],
+        "unique_terms": 80,
+        "total_terms": 224
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Operation Types and Flow",
+        "consensus",
+        "content",
+        "github",
+        "https",
+        "lib",
+        "manager",
+        "ops",
+        "qdrant",
+        "src",
+        "storage"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5269529411764705,
+      "overall": 0.7089843137254901
+    }
+  },
+  {
+    "text": "## Message Processing and Raft Loop\n\nThe consensus thread runs a continuous loop processing two types of messages:",
+    "metadata": {
+      "chunk_id": "1d0e58cf4483-0011",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_7.1-raft-consensus-protocol.md",
+      "filename": "_qdrant_qdrant_7.1-raft-consensus-protocol.md",
+      "file_extension": ".md",
+      "chunk_index": 11,
       "document_level": 1,
       "parent_chunk_id": null,
       "child_chunk_ids": [],
@@ -16,15 +613,15 @@
       "heading_text": "Message Processing and Raft Loop",
       "token_count": 21,
       "char_count": 114,
-      "start_char": 0,
-      "end_char": 114,
+      "start_char": 13093,
+      "end_char": 13207,
       "semantic_score": 0.8,
-      "structural_score": 0.8999999999999999,
+      "structural_score": 0.7,
       "retrieval_quality": 0.5566666666666666,
-      "chunking_strategy": "hierarchical_precise",
-      "content_type": "hierarchical_section",
-      "embedding_model": "nomic-ai/CodeRankEmbed",
-      "processing_timestamp": "2025-10-19T15:44:26.921865",
+      "chunking_strategy": "hierarchical_precise_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "processing_timestamp": "2025-10-20T04:38:46.323087",
       "document_id": "1d0e58cf4483",
       "document_name": "_qdrant_qdrant_7.1-raft-consensus-protocol",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_7.1-raft-consensus-protocol.md",
@@ -32,8 +629,8 @@
       "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant",
       "relative_path": "Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_7.1-raft-consensus-protocol.md",
       "hierarchy_path": "Message Processing and Raft Loop",
-      "chunk_hash": "a7eadc333b4d1595",
-      "content_digest": "a7eadc333b4d1595",
+      "chunk_hash": "26b0fbe0f8fe24bd",
+      "content_digest": "26b0fbe0f8fe24bd",
       "chunk_length": 114,
       "payload_version": "1.3",
       "collection_hints": [
@@ -147,53 +744,51 @@
         "runs",
         "the",
         "thread"
-      ],
-      "quality_fallback": true,
-      "quality_notes": "Promoted via relaxed thresholds"
+      ]
     },
     "advanced_scores": {
       "semantic": 0.8,
-      "structural": 0.8999999999999999,
+      "structural": 0.7,
       "retrieval_quality": 0.5566666666666666,
-      "overall": 0.7522222222222222
+      "overall": 0.6855555555555556
     }
   },
   {
-    "text": "## Bootstrapping and Peer Management",
+    "text": "### Main Loop Structure\n\nThe consensus loop in `start()` [src/consensus.rs465-546](https://github.com/qdrant/qdrant/blob/48203e41/src/consensus.rs#L465-L546) operates as follows:\n\n```\n```\n\n**Key Loop Features:**\n\n1. **Batching**: Processes up to 128 messages per iteration for efficiency [src/consensus.rs559](https://github.com/qdrant/qdrant/blob/48203e41/src/consensus.rs#L559-L559)\n2. **Tick Capping**: If Raft messages were received, caps reported ticks to prevent spurious elections [src/consensus.rs488-513](https://github.com/qdrant/qdrant/blob/48203e41/src/consensus.rs#L488-L513)\n3. **Early Break on Conf-Change**: Only one conf-change can be pending at a time [src/consensus.rs587-611](https://github.com/qdrant/qdrant/blob/48203e41/src/consensus.rs#L587-L611)\n4. **Idle Detection**: After 3 idle cycles with activity, syncs local state changes [src/consensus.rs541-544](https://github.com/qdrant/qdrant/blob/48203e41/src/consensus.rs#L541-L544)\n\nSources: [src/consensus.rs465-546](https://github.com/qdrant/qdrant/blob/48203e41/src/consensus.rs#L465-L546) [src/consensus.rs548-625](https://github.com/qdrant/qdrant/blob/48203e41/src/consensus.rs#L548-L625)\n\n---",
     "metadata": {
-      "chunk_id": "1d0e58cf4483-0006",
+      "chunk_id": "1d0e58cf4483-0013",
       "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_7.1-raft-consensus-protocol.md",
       "filename": "_qdrant_qdrant_7.1-raft-consensus-protocol.md",
       "file_extension": ".md",
-      "chunk_index": 6,
+      "chunk_index": 13,
       "document_level": 1,
       "parent_chunk_id": null,
       "child_chunk_ids": [],
       "section_path": [
-        "Bootstrapping and Peer Management"
+        "Main Loop Structure"
       ],
-      "heading_text": "Bootstrapping and Peer Management",
-      "token_count": 7,
-      "char_count": 36,
-      "start_char": 0,
-      "end_char": 36,
-      "semantic_score": 0.8,
-      "structural_score": 0.8999999999999999,
-      "retrieval_quality": 0.39,
-      "chunking_strategy": "hierarchical_precise",
-      "content_type": "hierarchical_section",
-      "embedding_model": "nomic-ai/CodeRankEmbed",
-      "processing_timestamp": "2025-10-19T15:44:26.920752",
+      "heading_text": "Main Loop Structure",
+      "token_count": 363,
+      "char_count": 1172,
+      "start_char": 13237,
+      "end_char": 14409,
+      "semantic_score": 0.6,
+      "structural_score": 0.7999999999999998,
+      "retrieval_quality": 0.5861151898734177,
+      "chunking_strategy": "hierarchical_precise_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "processing_timestamp": "2025-10-20T04:38:46.323087",
       "document_id": "1d0e58cf4483",
       "document_name": "_qdrant_qdrant_7.1-raft-consensus-protocol",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_7.1-raft-consensus-protocol.md",
       "source_filename": "_qdrant_qdrant_7.1-raft-consensus-protocol.md",
       "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant",
       "relative_path": "Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_7.1-raft-consensus-protocol.md",
-      "hierarchy_path": "Bootstrapping and Peer Management",
-      "chunk_hash": "8fae40f834783019",
-      "content_digest": "8fae40f834783019",
-      "chunk_length": 36,
+      "hierarchy_path": "Main Loop Structure",
+      "chunk_hash": "62b5157e01e78b34",
+      "content_digest": "62b5157e01e78b34",
+      "chunk_length": 1172,
       "payload_version": "1.3",
       "collection_hints": [
         "qdrant_ecosystem"
@@ -202,421 +797,131 @@
         "version": "1.0",
         "weighting": "tf-normalized",
         "top_terms": [
-          "bootstrapping",
-          "and",
-          "peer",
-          "management"
-        ],
-        "term_weights": [
-          {
-            "term": "bootstrapping",
-            "tf": 1,
-            "weight": 0.25
-          },
-          {
-            "term": "and",
-            "tf": 1,
-            "weight": 0.25
-          },
-          {
-            "term": "peer",
-            "tf": 1,
-            "weight": 0.25
-          },
-          {
-            "term": "management",
-            "tf": 1,
-            "weight": 0.25
-          }
-        ],
-        "unique_terms": 4,
-        "total_terms": 4
-      },
-      "modal_hint": "prose",
-      "content_flags": {
-        "has_code_block": false,
-        "has_table": false,
-        "has_list": false,
-        "has_json": false,
-        "has_formula": false
-      },
-      "search_keywords": [
-        "Bootstrapping and Peer Management",
-        "and",
-        "bootstrapping",
-        "management",
-        "peer"
-      ],
-      "quality_fallback": true,
-      "quality_notes": "Promoted via relaxed thresholds"
-    },
-    "advanced_scores": {
-      "semantic": 0.8,
-      "structural": 0.8999999999999999,
-      "retrieval_quality": 0.39,
-      "overall": 0.6966666666666667
-    }
-  },
-  {
-    "text": "## WAL and State Persistence",
-    "metadata": {
-      "chunk_id": "1d0e58cf4483-0014",
-      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_7.1-raft-consensus-protocol.md",
-      "filename": "_qdrant_qdrant_7.1-raft-consensus-protocol.md",
-      "file_extension": ".md",
-      "chunk_index": 14,
-      "document_level": 1,
-      "parent_chunk_id": null,
-      "child_chunk_ids": [],
-      "section_path": [
-        "WAL and State Persistence"
-      ],
-      "heading_text": "WAL and State Persistence",
-      "token_count": 5,
-      "char_count": 28,
-      "start_char": 0,
-      "end_char": 28,
-      "semantic_score": 0.8,
-      "structural_score": 0.8999999999999999,
-      "retrieval_quality": 0.39,
-      "chunking_strategy": "hierarchical_precise",
-      "content_type": "hierarchical_section",
-      "embedding_model": "nomic-ai/CodeRankEmbed",
-      "processing_timestamp": "2025-10-19T15:44:26.924479",
-      "document_id": "1d0e58cf4483",
-      "document_name": "_qdrant_qdrant_7.1-raft-consensus-protocol",
-      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_7.1-raft-consensus-protocol.md",
-      "source_filename": "_qdrant_qdrant_7.1-raft-consensus-protocol.md",
-      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant",
-      "relative_path": "Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_7.1-raft-consensus-protocol.md",
-      "hierarchy_path": "WAL and State Persistence",
-      "chunk_hash": "effd1bc584139ce2",
-      "content_digest": "effd1bc584139ce2",
-      "chunk_length": 28,
-      "payload_version": "1.3",
-      "collection_hints": [
-        "qdrant_ecosystem"
-      ],
-      "sparse_features": {
-        "version": "1.0",
-        "weighting": "tf-normalized",
-        "top_terms": [
-          "wal",
-          "and",
-          "state",
-          "persistence"
-        ],
-        "term_weights": [
-          {
-            "term": "wal",
-            "tf": 1,
-            "weight": 0.25
-          },
-          {
-            "term": "and",
-            "tf": 1,
-            "weight": 0.25
-          },
-          {
-            "term": "state",
-            "tf": 1,
-            "weight": 0.25
-          },
-          {
-            "term": "persistence",
-            "tf": 1,
-            "weight": 0.25
-          }
-        ],
-        "unique_terms": 4,
-        "total_terms": 4
-      },
-      "modal_hint": "prose",
-      "content_flags": {
-        "has_code_block": false,
-        "has_table": false,
-        "has_list": false,
-        "has_json": false,
-        "has_formula": false
-      },
-      "search_keywords": [
-        "WAL and State Persistence",
-        "and",
-        "persistence",
-        "state",
-        "wal"
-      ],
-      "quality_fallback": true,
-      "quality_notes": "Promoted via relaxed thresholds"
-    },
-    "advanced_scores": {
-      "semantic": 0.8,
-      "structural": 0.8999999999999999,
-      "retrieval_quality": 0.39,
-      "overall": 0.6966666666666667
-    }
-  },
-  {
-    "text": "## Monitoring and Health",
-    "metadata": {
-      "chunk_id": "1d0e58cf4483-0020",
-      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_7.1-raft-consensus-protocol.md",
-      "filename": "_qdrant_qdrant_7.1-raft-consensus-protocol.md",
-      "file_extension": ".md",
-      "chunk_index": 20,
-      "document_level": 1,
-      "parent_chunk_id": null,
-      "child_chunk_ids": [],
-      "section_path": [
-        "Monitoring and Health"
-      ],
-      "heading_text": "Monitoring and Health",
-      "token_count": 4,
-      "char_count": 24,
-      "start_char": 0,
-      "end_char": 24,
-      "semantic_score": 0.8,
-      "structural_score": 0.8999999999999999,
-      "retrieval_quality": 0.39,
-      "chunking_strategy": "hierarchical_precise",
-      "content_type": "hierarchical_section",
-      "embedding_model": "nomic-ai/CodeRankEmbed",
-      "processing_timestamp": "2025-10-19T15:44:26.928760",
-      "document_id": "1d0e58cf4483",
-      "document_name": "_qdrant_qdrant_7.1-raft-consensus-protocol",
-      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_7.1-raft-consensus-protocol.md",
-      "source_filename": "_qdrant_qdrant_7.1-raft-consensus-protocol.md",
-      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant",
-      "relative_path": "Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_7.1-raft-consensus-protocol.md",
-      "hierarchy_path": "Monitoring and Health",
-      "chunk_hash": "2f658b93a88d1488",
-      "content_digest": "2f658b93a88d1488",
-      "chunk_length": 24,
-      "payload_version": "1.3",
-      "collection_hints": [
-        "qdrant_ecosystem"
-      ],
-      "sparse_features": {
-        "version": "1.0",
-        "weighting": "tf-normalized",
-        "top_terms": [
-          "monitoring",
-          "and",
-          "health"
-        ],
-        "term_weights": [
-          {
-            "term": "monitoring",
-            "tf": 1,
-            "weight": 0.333333
-          },
-          {
-            "term": "and",
-            "tf": 1,
-            "weight": 0.333333
-          },
-          {
-            "term": "health",
-            "tf": 1,
-            "weight": 0.333333
-          }
-        ],
-        "unique_terms": 3,
-        "total_terms": 3
-      },
-      "modal_hint": "prose",
-      "content_flags": {
-        "has_code_block": false,
-        "has_table": false,
-        "has_list": false,
-        "has_json": false,
-        "has_formula": false
-      },
-      "search_keywords": [
-        "Monitoring and Health",
-        "and",
-        "health",
-        "monitoring"
-      ],
-      "quality_fallback": true,
-      "quality_notes": "Promoted via relaxed thresholds"
-    },
-    "advanced_scores": {
-      "semantic": 0.8,
-      "structural": 0.8999999999999999,
-      "retrieval_quality": 0.39,
-      "overall": 0.6966666666666667
-    }
-  },
-  {
-    "text": "### Cluster Status API  The `/cluster` endpoint returns consensus health information: ``` ``` **Key Metrics**:  - `term`: Current Raft term (increases with elections) - `commit`: Index of last committed operation - `pending_operations`: Uncommitted entries count - `role`: Follower, Candidate, Leader, or PreCandidate - `consensus_thread_status`: Working, Stopped, or StoppedWithErr",
-    "metadata": {
-      "chunk_id": "1d0e58cf4483-0021",
-      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_7.1-raft-consensus-protocol.md",
-      "filename": "_qdrant_qdrant_7.1-raft-consensus-protocol.md",
-      "file_extension": ".md",
-      "chunk_index": 21,
-      "document_level": 1,
-      "parent_chunk_id": null,
-      "child_chunk_ids": [],
-      "section_path": [
-        "Cluster Status API"
-      ],
-      "heading_text": "Cluster Status API",
-      "token_count": 85,
-      "char_count": 382,
-      "start_char": 0,
-      "end_char": 382,
-      "semantic_score": 0.8,
-      "structural_score": 0.8999999999999999,
-      "retrieval_quality": 0.35250000000000004,
-      "chunking_strategy": "hierarchical_precise",
-      "content_type": "hierarchical_section",
-      "embedding_model": "nomic-ai/CodeRankEmbed",
-      "processing_timestamp": "2025-10-19T15:44:26.928953",
-      "document_id": "1d0e58cf4483",
-      "document_name": "_qdrant_qdrant_7.1-raft-consensus-protocol",
-      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_7.1-raft-consensus-protocol.md",
-      "source_filename": "_qdrant_qdrant_7.1-raft-consensus-protocol.md",
-      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant",
-      "relative_path": "Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_7.1-raft-consensus-protocol.md",
-      "hierarchy_path": "Cluster Status API",
-      "chunk_hash": "e9d7123641d2ae3f",
-      "content_digest": "e9d7123641d2ae3f",
-      "chunk_length": 382,
-      "payload_version": "1.3",
-      "collection_hints": [
-        "qdrant_ecosystem"
-      ],
-      "sparse_features": {
-        "version": "1.0",
-        "weighting": "tf-normalized",
-        "top_terms": [
-          "cluster",
-          "status",
           "consensus",
-          "term",
-          "api",
-          "the",
-          "endpoint",
-          "returns",
-          "health",
-          "information",
-          "key",
-          "metrics",
-          "current",
-          "raft",
-          "increases",
-          "with",
-          "elections",
-          "commit",
-          "index",
-          "last"
+          "src",
+          "qdrant",
+          "https",
+          "github",
+          "com",
+          "blob",
+          "48203e41",
+          "loop",
+          "rs465",
+          "546",
+          "l465",
+          "l546",
+          "messages",
+          "l559",
+          "conf",
+          "change",
+          "idle",
+          "main",
+          "structure"
         ],
         "term_weights": [
-          {
-            "term": "cluster",
-            "tf": 2,
-            "weight": 0.05
-          },
-          {
-            "term": "status",
-            "tf": 2,
-            "weight": 0.05
-          },
           {
             "term": "consensus",
+            "tf": 15,
+            "weight": 0.09434
+          },
+          {
+            "term": "src",
+            "tf": 14,
+            "weight": 0.08805
+          },
+          {
+            "term": "qdrant",
+            "tf": 14,
+            "weight": 0.08805
+          },
+          {
+            "term": "https",
+            "tf": 7,
+            "weight": 0.044025
+          },
+          {
+            "term": "github",
+            "tf": 7,
+            "weight": 0.044025
+          },
+          {
+            "term": "com",
+            "tf": 7,
+            "weight": 0.044025
+          },
+          {
+            "term": "blob",
+            "tf": 7,
+            "weight": 0.044025
+          },
+          {
+            "term": "48203e41",
+            "tf": 7,
+            "weight": 0.044025
+          },
+          {
+            "term": "loop",
+            "tf": 3,
+            "weight": 0.018868
+          },
+          {
+            "term": "rs465",
             "tf": 2,
-            "weight": 0.05
+            "weight": 0.012579
           },
           {
-            "term": "term",
+            "term": "546",
             "tf": 2,
-            "weight": 0.05
+            "weight": 0.012579
           },
           {
-            "term": "api",
-            "tf": 1,
-            "weight": 0.025
+            "term": "l465",
+            "tf": 2,
+            "weight": 0.012579
           },
           {
-            "term": "the",
-            "tf": 1,
-            "weight": 0.025
+            "term": "l546",
+            "tf": 2,
+            "weight": 0.012579
           },
           {
-            "term": "endpoint",
-            "tf": 1,
-            "weight": 0.025
+            "term": "messages",
+            "tf": 2,
+            "weight": 0.012579
           },
           {
-            "term": "returns",
-            "tf": 1,
-            "weight": 0.025
+            "term": "l559",
+            "tf": 2,
+            "weight": 0.012579
           },
           {
-            "term": "health",
-            "tf": 1,
-            "weight": 0.025
+            "term": "conf",
+            "tf": 2,
+            "weight": 0.012579
           },
           {
-            "term": "information",
-            "tf": 1,
-            "weight": 0.025
+            "term": "change",
+            "tf": 2,
+            "weight": 0.012579
           },
           {
-            "term": "key",
-            "tf": 1,
-            "weight": 0.025
+            "term": "idle",
+            "tf": 2,
+            "weight": 0.012579
           },
           {
-            "term": "metrics",
+            "term": "main",
             "tf": 1,
-            "weight": 0.025
+            "weight": 0.006289
           },
           {
-            "term": "current",
+            "term": "structure",
             "tf": 1,
-            "weight": 0.025
-          },
-          {
-            "term": "raft",
-            "tf": 1,
-            "weight": 0.025
-          },
-          {
-            "term": "increases",
-            "tf": 1,
-            "weight": 0.025
-          },
-          {
-            "term": "with",
-            "tf": 1,
-            "weight": 0.025
-          },
-          {
-            "term": "elections",
-            "tf": 1,
-            "weight": 0.025
-          },
-          {
-            "term": "commit",
-            "tf": 1,
-            "weight": 0.025
-          },
-          {
-            "term": "index",
-            "tf": 1,
-            "weight": 0.025
-          },
-          {
-            "term": "last",
-            "tf": 1,
-            "weight": 0.025
+            "weight": 0.006289
           }
         ],
-        "unique_terms": 36,
-        "total_terms": 40
+        "unique_terms": 78,
+        "total_terms": 159
       },
       "modal_hint": "code",
       "content_flags": {
@@ -627,26 +932,820 @@
         "has_formula": false
       },
       "search_keywords": [
-        "Cluster Status API",
-        "api",
-        "cluster",
+        "48203e41",
+        "Main Loop Structure",
+        "blob",
+        "com",
         "consensus",
-        "endpoint",
-        "health",
-        "information",
-        "returns",
-        "status",
-        "term",
-        "the"
-      ],
-      "quality_fallback": true,
-      "quality_notes": "Promoted via relaxed thresholds"
+        "github",
+        "https",
+        "loop",
+        "qdrant",
+        "rs465",
+        "src"
+      ]
     },
     "advanced_scores": {
-      "semantic": 0.8,
+      "semantic": 0.6,
+      "structural": 0.7999999999999998,
+      "retrieval_quality": 0.5861151898734177,
+      "overall": 0.6620383966244726
+    }
+  },
+  {
+    "text": "## Sending Messages to Peers\n\nThe `RaftMessageBroker` handles sending Raft protocol messages to other peers:\n\n```\n```\n\n**Message Sending Process** [src/consensus.rs1135-1308](https://github.com/qdrant/qdrant/blob/48203e41/src/consensus.rs#L1135-L1308):\n\n1. **Batch Messages**: Groups messages by destination peer ID\n2. **Spawn Async Tasks**: Uses tokio runtime to send messages concurrently\n3. **Get gRPC Channel**: Retrieves connection from `TransportChannelPool`\n4. **Encode and Send**: Encodes Raft message as protobuf and sends via `RaftClient::send()`\n5. **Error Tracking**: Records failures in `message_send_failures` for monitoring\n\n**Message Batching Strategy**:\n\n- Messages are batched per peer to reduce task overhead\n- Each batch is sent in a single async task\n- Failures are logged but don't block the consensus loop\n\n**Special Handling for Snapshots** [src/consensus.rs1225-1261](https://github.com/qdrant/qdrant/blob/48203e41/src/consensus.rs#L1225-L1261):\n\n- Snapshot messages trigger `ConsensusOperations::RequestSnapshot` to be sent to self\n- This ensures snapshots are created in the consensus thread context\n- After creation, `report_snapshot()` notifies Raft of success/failure",
+    "metadata": {
+      "chunk_id": "1d0e58cf4483-0015",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_7.1-raft-consensus-protocol.md",
+      "filename": "_qdrant_qdrant_7.1-raft-consensus-protocol.md",
+      "file_extension": ".md",
+      "chunk_index": 15,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Sending Messages to Peers"
+      ],
+      "heading_text": "Sending Messages to Peers",
+      "token_count": 298,
+      "char_count": 1197,
+      "start_char": 15954,
+      "end_char": 17151,
+      "semantic_score": 0.7,
+      "structural_score": 0.7999999999999998,
+      "retrieval_quality": 0.5139130434782608,
+      "chunking_strategy": "hierarchical_precise_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "processing_timestamp": "2025-10-20T04:38:46.329705",
+      "document_id": "1d0e58cf4483",
+      "document_name": "_qdrant_qdrant_7.1-raft-consensus-protocol",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_7.1-raft-consensus-protocol.md",
+      "source_filename": "_qdrant_qdrant_7.1-raft-consensus-protocol.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant",
+      "relative_path": "Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_7.1-raft-consensus-protocol.md",
+      "hierarchy_path": "Sending Messages to Peers",
+      "chunk_hash": "800e03228286c97b",
+      "content_digest": "800e03228286c97b",
+      "chunk_length": 1197,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "messages",
+          "consensus",
+          "message",
+          "src",
+          "qdrant",
+          "send",
+          "sending",
+          "the",
+          "raft",
+          "failures",
+          "are",
+          "peers",
+          "https",
+          "github",
+          "com",
+          "blob",
+          "48203e41",
+          "batch",
+          "peer",
+          "async"
+        ],
+        "term_weights": [
+          {
+            "term": "messages",
+            "tf": 7,
+            "weight": 0.049296
+          },
+          {
+            "term": "consensus",
+            "tf": 6,
+            "weight": 0.042254
+          },
+          {
+            "term": "message",
+            "tf": 4,
+            "weight": 0.028169
+          },
+          {
+            "term": "src",
+            "tf": 4,
+            "weight": 0.028169
+          },
+          {
+            "term": "qdrant",
+            "tf": 4,
+            "weight": 0.028169
+          },
+          {
+            "term": "send",
+            "tf": 4,
+            "weight": 0.028169
+          },
+          {
+            "term": "sending",
+            "tf": 3,
+            "weight": 0.021127
+          },
+          {
+            "term": "the",
+            "tf": 3,
+            "weight": 0.021127
+          },
+          {
+            "term": "raft",
+            "tf": 3,
+            "weight": 0.021127
+          },
+          {
+            "term": "failures",
+            "tf": 3,
+            "weight": 0.021127
+          },
+          {
+            "term": "are",
+            "tf": 3,
+            "weight": 0.021127
+          },
+          {
+            "term": "peers",
+            "tf": 2,
+            "weight": 0.014085
+          },
+          {
+            "term": "https",
+            "tf": 2,
+            "weight": 0.014085
+          },
+          {
+            "term": "github",
+            "tf": 2,
+            "weight": 0.014085
+          },
+          {
+            "term": "com",
+            "tf": 2,
+            "weight": 0.014085
+          },
+          {
+            "term": "blob",
+            "tf": 2,
+            "weight": 0.014085
+          },
+          {
+            "term": "48203e41",
+            "tf": 2,
+            "weight": 0.014085
+          },
+          {
+            "term": "batch",
+            "tf": 2,
+            "weight": 0.014085
+          },
+          {
+            "term": "peer",
+            "tf": 2,
+            "weight": 0.014085
+          },
+          {
+            "term": "async",
+            "tf": 2,
+            "weight": 0.014085
+          }
+        ],
+        "unique_terms": 94,
+        "total_terms": 142
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": true,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Sending Messages to Peers",
+        "consensus",
+        "failures",
+        "message",
+        "messages",
+        "qdrant",
+        "raft",
+        "send",
+        "sending",
+        "src",
+        "the"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.7999999999999998,
+      "retrieval_quality": 0.5139130434782608,
+      "overall": 0.6713043478260868
+    }
+  },
+  {
+    "text": "## Configuration  The consensus configuration is specified in `ConsensusConfig`: ``` ``` **Configuration Parameters**:  | Parameter                | Default | Description                                                                         | | ------------------------ | ------- | ----------------------------------------------------------------------------------- | | `tick_period_ms`         | 100     | How often Raft ticks (in ms). Lower = faster election/heartbeat, higher CPU/network | | `bootstrap_timeout_sec`  | 15      | Timeout for initial peer bootstrap requests                                         | | `max_message_queue_size` | 100     | Backpressure limit for consensus operation channel                                  | | `message_timeout_ticks`  | 10      | (Unused in current implementation)                                                  | | `compact_wal_entries`    | 128     | Compact WAL after this many applied entries                                         |  **Derived Timeouts**:  - **Election Timeout**: `tick_period_ms * max_election_tick` (typically \\~2 seconds with default config) - **Heartbeat Interval**: `tick_period_ms * heartbeat_tick` (typically \\~1 second) - **Leader Established**: `tick_period_ms * max_election_tick` (\\~2 seconds)  **Important Tuning Notes** [config/config.yaml314-326](https://github.com/qdrant/qdrant/blob/48203e41/config/config.yaml#L314-L326):  > \"Setting this parameter to lower value will allow consensus to detect disconnected nodes earlier, but too frequent tick period may create significant network and CPU overhead. We encourage you NOT to change this parameter unless you know what you are doing.\"  Sources: [src/settings.rs111-139](https://github.com/qdrant/qdrant/blob/48203e41/src/settings.rs#L111-L139) [config/config.yaml314-326](https://github.com/qdrant/qdrant/blob/48203e41/config/config.yaml#L314-L326) [src/consensus.rs203-209](https://github.com/qdrant/qdrant/blob/48203e41/src/consensus.rs#L203-L209)  ---",
+    "metadata": {
+      "chunk_id": "1d0e58cf4483-0019",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_7.1-raft-consensus-protocol.md",
+      "filename": "_qdrant_qdrant_7.1-raft-consensus-protocol.md",
+      "file_extension": ".md",
+      "chunk_index": 19,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Configuration"
+      ],
+      "heading_text": "Configuration",
+      "token_count": 423,
+      "char_count": 1999,
+      "start_char": 18789,
+      "end_char": 20788,
+      "semantic_score": 0.7999999999999999,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.537244827586207,
+      "chunking_strategy": "hierarchical_precise_structural",
+      "content_type": "table_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "processing_timestamp": "2025-10-20T04:38:46.330220",
+      "document_id": "1d0e58cf4483",
+      "document_name": "_qdrant_qdrant_7.1-raft-consensus-protocol",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_7.1-raft-consensus-protocol.md",
+      "source_filename": "_qdrant_qdrant_7.1-raft-consensus-protocol.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant",
+      "relative_path": "Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_7.1-raft-consensus-protocol.md",
+      "hierarchy_path": "Configuration",
+      "chunk_hash": "6ac7030498af21ae",
+      "content_digest": "6ac7030498af21ae",
+      "chunk_length": 1999,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "config",
+          "tick",
+          "qdrant",
+          "consensus",
+          "period",
+          "election",
+          "timeout",
+          "https",
+          "github",
+          "com",
+          "blob",
+          "48203e41",
+          "src",
+          "configuration",
+          "parameter",
+          "heartbeat",
+          "max",
+          "this",
+          "you",
+          "default"
+        ],
+        "term_weights": [
+          {
+            "term": "config",
+            "tf": 9,
+            "weight": 0.046154
+          },
+          {
+            "term": "tick",
+            "tf": 8,
+            "weight": 0.041026
+          },
+          {
+            "term": "qdrant",
+            "tf": 8,
+            "weight": 0.041026
+          },
+          {
+            "term": "consensus",
+            "tf": 5,
+            "weight": 0.025641
+          },
+          {
+            "term": "period",
+            "tf": 5,
+            "weight": 0.025641
+          },
+          {
+            "term": "election",
+            "tf": 4,
+            "weight": 0.020513
+          },
+          {
+            "term": "timeout",
+            "tf": 4,
+            "weight": 0.020513
+          },
+          {
+            "term": "https",
+            "tf": 4,
+            "weight": 0.020513
+          },
+          {
+            "term": "github",
+            "tf": 4,
+            "weight": 0.020513
+          },
+          {
+            "term": "com",
+            "tf": 4,
+            "weight": 0.020513
+          },
+          {
+            "term": "blob",
+            "tf": 4,
+            "weight": 0.020513
+          },
+          {
+            "term": "48203e41",
+            "tf": 4,
+            "weight": 0.020513
+          },
+          {
+            "term": "src",
+            "tf": 4,
+            "weight": 0.020513
+          },
+          {
+            "term": "configuration",
+            "tf": 3,
+            "weight": 0.015385
+          },
+          {
+            "term": "parameter",
+            "tf": 3,
+            "weight": 0.015385
+          },
+          {
+            "term": "heartbeat",
+            "tf": 3,
+            "weight": 0.015385
+          },
+          {
+            "term": "max",
+            "tf": 3,
+            "weight": 0.015385
+          },
+          {
+            "term": "this",
+            "tf": 3,
+            "weight": 0.015385
+          },
+          {
+            "term": "you",
+            "tf": 3,
+            "weight": 0.015385
+          },
+          {
+            "term": "default",
+            "tf": 2,
+            "weight": 0.010256
+          }
+        ],
+        "unique_terms": 109,
+        "total_terms": 195
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Configuration",
+        "com",
+        "config",
+        "consensus",
+        "election",
+        "github",
+        "https",
+        "period",
+        "qdrant",
+        "tick",
+        "timeout"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.7999999999999999,
       "structural": 0.8999999999999999,
-      "retrieval_quality": 0.35250000000000004,
-      "overall": 0.6841666666666667
+      "retrieval_quality": 0.537244827586207,
+      "overall": 0.7457482758620689
+    }
+  },
+  {
+    "text": "## Internal gRPC API  The `RaftService` provides the gRPC API for inter-peer Raft communication: ``` ``` **RPC Methods**:  | Method                    | Request                 | Response   | Purpose                                   | | ------------------------- | ----------------------- | ---------- | ----------------------------------------- | | `send`                    | `RaftMessage` (encoded) | `()`       | Receive Raft protocol messages from peers | | `who_is`                  | `PeerId`                | `UriStr`   | Resolve peer ID to URI                    | | `add_peer_to_known`       | `{id, uri?, port?}`     | `AllPeers` | Bootstrap a new peer into cluster         | | `add_peer_as_participant` | `PeerId`                | `()`       | Deprecated, no-op for compatibility       |  **Bootstrap Peer Sequence** [src/tonic/api/raft\\_api.rs64-149](https://github.com/qdrant/qdrant/blob/48203e41/src/tonic/api/raft_api.rs#L64-L149):  1. New peer calls `add_peer_to_known` on bootstrap peer 2. Bootstrap peer proposes `ConsensusOperations::AddPeer` with `AddLearnerNode` 3. Operation replicates and commits via Raft 4. Bootstrap peer returns `AllPeers` with all current peer addresses plus `first_peer_id` 5. New peer stores peer addresses and sets initial conf state with `first_voter_id`  Sources: [src/tonic/api/raft\\_api.rs1-150](https://github.com/qdrant/qdrant/blob/48203e41/src/tonic/api/raft_api.rs#L1-L150) [src/tonic/mod.rs256-360](https://github.com/qdrant/qdrant/blob/48203e41/src/tonic/mod.rs#L256-L360)  ---",
+    "metadata": {
+      "chunk_id": "1d0e58cf4483-0020",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_7.1-raft-consensus-protocol.md",
+      "filename": "_qdrant_qdrant_7.1-raft-consensus-protocol.md",
+      "file_extension": ".md",
+      "chunk_index": 20,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Internal gRPC API"
+      ],
+      "heading_text": "Internal gRPC API",
+      "token_count": 402,
+      "char_count": 1536,
+      "start_char": 20792,
+      "end_char": 22328,
+      "semantic_score": 0.7,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5022326530612246,
+      "chunking_strategy": "hierarchical_precise_structural",
+      "content_type": "table_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "processing_timestamp": "2025-10-20T04:38:46.331757",
+      "document_id": "1d0e58cf4483",
+      "document_name": "_qdrant_qdrant_7.1-raft-consensus-protocol",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_7.1-raft-consensus-protocol.md",
+      "source_filename": "_qdrant_qdrant_7.1-raft-consensus-protocol.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant",
+      "relative_path": "Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_7.1-raft-consensus-protocol.md",
+      "hierarchy_path": "Internal gRPC API",
+      "chunk_hash": "b00333f14fe49ede",
+      "content_digest": "b00333f14fe49ede",
+      "chunk_length": 1536,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "peer",
+          "api",
+          "raft",
+          "src",
+          "tonic",
+          "qdrant",
+          "bootstrap",
+          "add",
+          "new",
+          "https",
+          "github",
+          "com",
+          "blob",
+          "48203e41",
+          "with",
+          "grpc",
+          "the",
+          "for",
+          "peerid",
+          "uri"
+        ],
+        "term_weights": [
+          {
+            "term": "peer",
+            "tf": 15,
+            "weight": 0.093168
+          },
+          {
+            "term": "api",
+            "tf": 10,
+            "weight": 0.062112
+          },
+          {
+            "term": "raft",
+            "tf": 7,
+            "weight": 0.043478
+          },
+          {
+            "term": "src",
+            "tf": 6,
+            "weight": 0.037267
+          },
+          {
+            "term": "tonic",
+            "tf": 6,
+            "weight": 0.037267
+          },
+          {
+            "term": "qdrant",
+            "tf": 6,
+            "weight": 0.037267
+          },
+          {
+            "term": "bootstrap",
+            "tf": 5,
+            "weight": 0.031056
+          },
+          {
+            "term": "add",
+            "tf": 3,
+            "weight": 0.018634
+          },
+          {
+            "term": "new",
+            "tf": 3,
+            "weight": 0.018634
+          },
+          {
+            "term": "https",
+            "tf": 3,
+            "weight": 0.018634
+          },
+          {
+            "term": "github",
+            "tf": 3,
+            "weight": 0.018634
+          },
+          {
+            "term": "com",
+            "tf": 3,
+            "weight": 0.018634
+          },
+          {
+            "term": "blob",
+            "tf": 3,
+            "weight": 0.018634
+          },
+          {
+            "term": "48203e41",
+            "tf": 3,
+            "weight": 0.018634
+          },
+          {
+            "term": "with",
+            "tf": 3,
+            "weight": 0.018634
+          },
+          {
+            "term": "grpc",
+            "tf": 2,
+            "weight": 0.012422
+          },
+          {
+            "term": "the",
+            "tf": 2,
+            "weight": 0.012422
+          },
+          {
+            "term": "for",
+            "tf": 2,
+            "weight": 0.012422
+          },
+          {
+            "term": "peerid",
+            "tf": 2,
+            "weight": 0.012422
+          },
+          {
+            "term": "uri",
+            "tf": 2,
+            "weight": 0.012422
+          }
+        ],
+        "unique_terms": 86,
+        "total_terms": 161
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Internal gRPC API",
+        "add",
+        "api",
+        "bootstrap",
+        "https",
+        "new",
+        "peer",
+        "qdrant",
+        "raft",
+        "src",
+        "tonic"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5022326530612246,
+      "overall": 0.7007442176870748
+    }
+  },
+  {
+    "text": "## High Priority Thread\n\nThe consensus thread attempts to run with high priority on Linux systems:\n\n```\n```\n\nThis is a best-effort optimization - it will likely fail without elevated permissions but gracefully continues. The reasoning is that consensus timing is critical for cluster stability:\n\n- Election timeouts depend on timely message processing\n- Heartbeat delays can trigger unnecessary leader elections\n- Higher priority reduces latency variance\n\nSources: [src/consensus.rs99-106](https://github.com/qdrant/qdrant/blob/48203e41/src/consensus.rs#L99-L106) [src/consensus.rs121-128](https://github.com/qdrant/qdrant/blob/48203e41/src/consensus.rs#L121-L128)\n\n---",
+    "metadata": {
+      "chunk_id": "1d0e58cf4483-0022",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_7.1-raft-consensus-protocol.md",
+      "filename": "_qdrant_qdrant_7.1-raft-consensus-protocol.md",
+      "file_extension": ".md",
+      "chunk_index": 22,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "High Priority Thread"
+      ],
+      "heading_text": "High Priority Thread",
+      "token_count": 156,
+      "char_count": 669,
+      "start_char": 23329,
+      "end_char": 23998,
+      "semantic_score": 0.7,
+      "structural_score": 0.7999999999999998,
+      "retrieval_quality": 0.5350704225352113,
+      "chunking_strategy": "hierarchical_precise_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "processing_timestamp": "2025-10-20T04:38:46.332790",
+      "document_id": "1d0e58cf4483",
+      "document_name": "_qdrant_qdrant_7.1-raft-consensus-protocol",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_7.1-raft-consensus-protocol.md",
+      "source_filename": "_qdrant_qdrant_7.1-raft-consensus-protocol.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant",
+      "relative_path": "Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_7.1-raft-consensus-protocol.md",
+      "hierarchy_path": "High Priority Thread",
+      "chunk_hash": "ff6fa5c26dc2281e",
+      "content_digest": "ff6fa5c26dc2281e",
+      "chunk_length": 669,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "consensus",
+          "src",
+          "qdrant",
+          "priority",
+          "high",
+          "thread",
+          "the",
+          "https",
+          "github",
+          "com",
+          "blob",
+          "48203e41",
+          "attempts",
+          "run",
+          "with",
+          "linux",
+          "systems",
+          "this",
+          "best",
+          "effort"
+        ],
+        "term_weights": [
+          {
+            "term": "consensus",
+            "tf": 6,
+            "weight": 0.071429
+          },
+          {
+            "term": "src",
+            "tf": 4,
+            "weight": 0.047619
+          },
+          {
+            "term": "qdrant",
+            "tf": 4,
+            "weight": 0.047619
+          },
+          {
+            "term": "priority",
+            "tf": 3,
+            "weight": 0.035714
+          },
+          {
+            "term": "high",
+            "tf": 2,
+            "weight": 0.02381
+          },
+          {
+            "term": "thread",
+            "tf": 2,
+            "weight": 0.02381
+          },
+          {
+            "term": "the",
+            "tf": 2,
+            "weight": 0.02381
+          },
+          {
+            "term": "https",
+            "tf": 2,
+            "weight": 0.02381
+          },
+          {
+            "term": "github",
+            "tf": 2,
+            "weight": 0.02381
+          },
+          {
+            "term": "com",
+            "tf": 2,
+            "weight": 0.02381
+          },
+          {
+            "term": "blob",
+            "tf": 2,
+            "weight": 0.02381
+          },
+          {
+            "term": "48203e41",
+            "tf": 2,
+            "weight": 0.02381
+          },
+          {
+            "term": "attempts",
+            "tf": 1,
+            "weight": 0.011905
+          },
+          {
+            "term": "run",
+            "tf": 1,
+            "weight": 0.011905
+          },
+          {
+            "term": "with",
+            "tf": 1,
+            "weight": 0.011905
+          },
+          {
+            "term": "linux",
+            "tf": 1,
+            "weight": 0.011905
+          },
+          {
+            "term": "systems",
+            "tf": 1,
+            "weight": 0.011905
+          },
+          {
+            "term": "this",
+            "tf": 1,
+            "weight": 0.011905
+          },
+          {
+            "term": "best",
+            "tf": 1,
+            "weight": 0.011905
+          },
+          {
+            "term": "effort",
+            "tf": 1,
+            "weight": 0.011905
+          }
+        ],
+        "unique_terms": 63,
+        "total_terms": 84
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": true,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "High Priority Thread",
+        "com",
+        "consensus",
+        "github",
+        "high",
+        "https",
+        "priority",
+        "qdrant",
+        "src",
+        "the",
+        "thread"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.7999999999999998,
+      "retrieval_quality": 0.5350704225352113,
+      "overall": 0.678356807511737
     }
   }
 ]

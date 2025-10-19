@@ -1,40 +1,40 @@
 [
   {
-    "text": "## Configuration and Feature Flags",
+    "text": "## Purpose and Scope\n\nThis document describes how Qdrant selects appropriate storage backends for payload indices and manages the lifecycle of these indices across different storage types. It covers the `IndexSelector` abstraction, storage backend determination logic, and the migration path from legacy RocksDB indices to newer storage implementations.\n\nFor information about the specific types of payload indices (numeric, keyword, full-text, etc.), see [Field Index Types](qdrant/qdrant/4.1-field-index-types.md). For details on how indices are used during query processing, see [Filtering and Scoring](qdrant/qdrant/5.2-filtering-and-scoring.md).\n\n---",
     "metadata": {
-      "chunk_id": "5dcf11447773-0023",
+      "chunk_id": "5dcf11447773-0001",
       "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_4.2-index-selection-and-storage-backends.md",
       "filename": "_qdrant_qdrant_4.2-index-selection-and-storage-backends.md",
       "file_extension": ".md",
-      "chunk_index": 23,
+      "chunk_index": 1,
       "document_level": 1,
       "parent_chunk_id": null,
       "child_chunk_ids": [],
       "section_path": [
-        "Configuration and Feature Flags"
+        "Purpose and Scope"
       ],
-      "heading_text": "Configuration and Feature Flags",
-      "token_count": 5,
-      "char_count": 34,
-      "start_char": 0,
-      "end_char": 34,
-      "semantic_score": 0.8,
-      "structural_score": 0.8999999999999999,
-      "retrieval_quality": 0.59,
-      "chunking_strategy": "hierarchical_balanced",
-      "content_type": "hierarchical_section",
-      "embedding_model": "nomic-ai/CodeRankEmbed",
-      "processing_timestamp": "2025-10-19T15:42:46.652531",
+      "heading_text": "Purpose and Scope",
+      "token_count": 137,
+      "char_count": 655,
+      "start_char": 4060,
+      "end_char": 4715,
+      "semantic_score": 0.7,
+      "structural_score": 0.7999999999999998,
+      "retrieval_quality": 0.5187499999999999,
+      "chunking_strategy": "hierarchical_balanced_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "processing_timestamp": "2025-10-20T04:38:46.128830",
       "document_id": "5dcf11447773",
       "document_name": "_qdrant_qdrant_4.2-index-selection-and-storage-backends",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_4.2-index-selection-and-storage-backends.md",
       "source_filename": "_qdrant_qdrant_4.2-index-selection-and-storage-backends.md",
       "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant",
       "relative_path": "Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_4.2-index-selection-and-storage-backends.md",
-      "hierarchy_path": "Configuration and Feature Flags",
-      "chunk_hash": "420dce69216fb1fb",
-      "content_digest": "420dce69216fb1fb",
-      "chunk_length": 34,
+      "hierarchy_path": "Purpose and Scope",
+      "chunk_hash": "ebb876d722c3cbaa",
+      "content_digest": "ebb876d722c3cbaa",
+      "chunk_length": 655,
       "payload_version": "1.3",
       "collection_hints": [
         "qdrant_ecosystem"
@@ -43,35 +43,131 @@
         "version": "1.0",
         "weighting": "tf-normalized",
         "top_terms": [
-          "configuration",
           "and",
-          "feature",
-          "flags"
+          "qdrant",
+          "indices",
+          "storage",
+          "the",
+          "types",
+          "for",
+          "how",
+          "payload",
+          "see",
+          "field",
+          "index",
+          "filtering",
+          "scoring",
+          "purpose",
+          "scope",
+          "this",
+          "document",
+          "describes",
+          "selects"
         ],
         "term_weights": [
           {
-            "term": "configuration",
-            "tf": 1,
-            "weight": 0.25
-          },
-          {
             "term": "and",
-            "tf": 1,
-            "weight": 0.25
+            "tf": 5,
+            "weight": 0.059524
           },
           {
-            "term": "feature",
-            "tf": 1,
-            "weight": 0.25
+            "term": "qdrant",
+            "tf": 5,
+            "weight": 0.059524
           },
           {
-            "term": "flags",
+            "term": "indices",
+            "tf": 5,
+            "weight": 0.059524
+          },
+          {
+            "term": "storage",
+            "tf": 4,
+            "weight": 0.047619
+          },
+          {
+            "term": "the",
+            "tf": 4,
+            "weight": 0.047619
+          },
+          {
+            "term": "types",
+            "tf": 4,
+            "weight": 0.047619
+          },
+          {
+            "term": "for",
+            "tf": 3,
+            "weight": 0.035714
+          },
+          {
+            "term": "how",
+            "tf": 2,
+            "weight": 0.02381
+          },
+          {
+            "term": "payload",
+            "tf": 2,
+            "weight": 0.02381
+          },
+          {
+            "term": "see",
+            "tf": 2,
+            "weight": 0.02381
+          },
+          {
+            "term": "field",
+            "tf": 2,
+            "weight": 0.02381
+          },
+          {
+            "term": "index",
+            "tf": 2,
+            "weight": 0.02381
+          },
+          {
+            "term": "filtering",
+            "tf": 2,
+            "weight": 0.02381
+          },
+          {
+            "term": "scoring",
+            "tf": 2,
+            "weight": 0.02381
+          },
+          {
+            "term": "purpose",
             "tf": 1,
-            "weight": 0.25
+            "weight": 0.011905
+          },
+          {
+            "term": "scope",
+            "tf": 1,
+            "weight": 0.011905
+          },
+          {
+            "term": "this",
+            "tf": 1,
+            "weight": 0.011905
+          },
+          {
+            "term": "document",
+            "tf": 1,
+            "weight": 0.011905
+          },
+          {
+            "term": "describes",
+            "tf": 1,
+            "weight": 0.011905
+          },
+          {
+            "term": "selects",
+            "tf": 1,
+            "weight": 0.011905
           }
         ],
-        "unique_terms": 4,
-        "total_terms": 4
+        "unique_terms": 54,
+        "total_terms": 84
       },
       "modal_hint": "prose",
       "content_flags": {
@@ -82,164 +178,62 @@
         "has_formula": false
       },
       "search_keywords": [
-        "Configuration and Feature Flags",
+        "Purpose and Scope",
         "and",
-        "configuration",
-        "feature",
-        "flags"
-      ],
-      "quality_fallback": true,
-      "quality_notes": "Promoted via relaxed thresholds"
+        "for",
+        "how",
+        "indices",
+        "payload",
+        "qdrant",
+        "see",
+        "storage",
+        "the",
+        "types"
+      ]
     },
     "advanced_scores": {
-      "semantic": 0.8,
-      "structural": 0.8999999999999999,
-      "retrieval_quality": 0.59,
-      "overall": 0.7633333333333333
+      "semantic": 0.7,
+      "structural": 0.7999999999999998,
+      "retrieval_quality": 0.5187499999999999,
+      "overall": 0.6729166666666666
     }
   },
   {
-    "text": "## StorageType Enum and Selection Logic",
+    "text": "### Selector Method in StructPayloadIndex\n\nThe `selector()` method maps `StorageType` to `IndexSelector`:\n\n```\n```\n\n**Sources:** [lib/segment/src/index/struct\\_payload\\_index.rs682-715](https://github.com/qdrant/qdrant/blob/48203e41/lib/segment/src/index/struct_payload_index.rs#L682-L715)\n\n---",
     "metadata": {
-      "chunk_id": "5dcf11447773-0003",
+      "chunk_id": "5dcf11447773-0008",
       "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_4.2-index-selection-and-storage-backends.md",
       "filename": "_qdrant_qdrant_4.2-index-selection-and-storage-backends.md",
       "file_extension": ".md",
-      "chunk_index": 3,
+      "chunk_index": 8,
       "document_level": 1,
       "parent_chunk_id": null,
       "child_chunk_ids": [],
       "section_path": [
-        "StorageType Enum and Selection Logic"
+        "Selector Method in StructPayloadIndex"
       ],
-      "heading_text": "StorageType Enum and Selection Logic",
-      "token_count": 7,
-      "char_count": 39,
-      "start_char": 0,
-      "end_char": 39,
-      "semantic_score": 0.8,
-      "structural_score": 0.8999999999999999,
-      "retrieval_quality": 0.39,
-      "chunking_strategy": "hierarchical_balanced",
-      "content_type": "hierarchical_section",
-      "embedding_model": "nomic-ai/CodeRankEmbed",
-      "processing_timestamp": "2025-10-19T15:42:46.648463",
+      "heading_text": "Selector Method in StructPayloadIndex",
+      "token_count": 81,
+      "char_count": 294,
+      "start_char": 7351,
+      "end_char": 7645,
+      "semantic_score": 0.7,
+      "structural_score": 0.7999999999999998,
+      "retrieval_quality": 0.5547058823529412,
+      "chunking_strategy": "hierarchical_balanced_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "processing_timestamp": "2025-10-20T04:38:46.129808",
       "document_id": "5dcf11447773",
       "document_name": "_qdrant_qdrant_4.2-index-selection-and-storage-backends",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_4.2-index-selection-and-storage-backends.md",
       "source_filename": "_qdrant_qdrant_4.2-index-selection-and-storage-backends.md",
       "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant",
       "relative_path": "Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_4.2-index-selection-and-storage-backends.md",
-      "hierarchy_path": "StorageType Enum and Selection Logic",
-      "chunk_hash": "e52b7e66faa39bab",
-      "content_digest": "e52b7e66faa39bab",
-      "chunk_length": 39,
-      "payload_version": "1.3",
-      "collection_hints": [
-        "qdrant_ecosystem"
-      ],
-      "sparse_features": {
-        "version": "1.0",
-        "weighting": "tf-normalized",
-        "top_terms": [
-          "storagetype",
-          "enum",
-          "and",
-          "selection",
-          "logic"
-        ],
-        "term_weights": [
-          {
-            "term": "storagetype",
-            "tf": 1,
-            "weight": 0.2
-          },
-          {
-            "term": "enum",
-            "tf": 1,
-            "weight": 0.2
-          },
-          {
-            "term": "and",
-            "tf": 1,
-            "weight": 0.2
-          },
-          {
-            "term": "selection",
-            "tf": 1,
-            "weight": 0.2
-          },
-          {
-            "term": "logic",
-            "tf": 1,
-            "weight": 0.2
-          }
-        ],
-        "unique_terms": 5,
-        "total_terms": 5
-      },
-      "modal_hint": "prose",
-      "content_flags": {
-        "has_code_block": false,
-        "has_table": false,
-        "has_list": false,
-        "has_json": false,
-        "has_formula": false
-      },
-      "search_keywords": [
-        "StorageType Enum and Selection Logic",
-        "and",
-        "enum",
-        "logic",
-        "selection",
-        "storagetype"
-      ],
-      "quality_fallback": true,
-      "quality_notes": "Promoted via relaxed thresholds"
-    },
-    "advanced_scores": {
-      "semantic": 0.8,
-      "structural": 0.8999999999999999,
-      "retrieval_quality": 0.39,
-      "overall": 0.6966666666666667
-    }
-  },
-  {
-    "text": "## Index Creation and Loading Flow",
-    "metadata": {
-      "chunk_id": "5dcf11447773-0009",
-      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_4.2-index-selection-and-storage-backends.md",
-      "filename": "_qdrant_qdrant_4.2-index-selection-and-storage-backends.md",
-      "file_extension": ".md",
-      "chunk_index": 9,
-      "document_level": 1,
-      "parent_chunk_id": null,
-      "child_chunk_ids": [],
-      "section_path": [
-        "Index Creation and Loading Flow"
-      ],
-      "heading_text": "Index Creation and Loading Flow",
-      "token_count": 6,
-      "char_count": 34,
-      "start_char": 0,
-      "end_char": 34,
-      "semantic_score": 0.8,
-      "structural_score": 0.8999999999999999,
-      "retrieval_quality": 0.39,
-      "chunking_strategy": "hierarchical_balanced",
-      "content_type": "hierarchical_section",
-      "embedding_model": "nomic-ai/CodeRankEmbed",
-      "processing_timestamp": "2025-10-19T15:42:46.649556",
-      "document_id": "5dcf11447773",
-      "document_name": "_qdrant_qdrant_4.2-index-selection-and-storage-backends",
-      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_4.2-index-selection-and-storage-backends.md",
-      "source_filename": "_qdrant_qdrant_4.2-index-selection-and-storage-backends.md",
-      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant",
-      "relative_path": "Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_4.2-index-selection-and-storage-backends.md",
-      "hierarchy_path": "Index Creation and Loading Flow",
-      "chunk_hash": "1ae9191fc6869bf5",
-      "content_digest": "1ae9191fc6869bf5",
-      "chunk_length": 34,
+      "hierarchy_path": "Selector Method in StructPayloadIndex",
+      "chunk_hash": "e9d41a728fd79247",
+      "content_digest": "e9d41a728fd79247",
+      "chunk_length": 294,
       "payload_version": "1.3",
       "collection_hints": [
         "qdrant_ecosystem"
@@ -249,69 +243,162 @@
         "weighting": "tf-normalized",
         "top_terms": [
           "index",
-          "creation",
-          "and",
-          "loading",
-          "flow"
+          "selector",
+          "method",
+          "lib",
+          "segment",
+          "src",
+          "struct",
+          "payload",
+          "qdrant",
+          "structpayloadindex",
+          "the",
+          "maps",
+          "storagetype",
+          "indexselector",
+          "sources",
+          "rs682",
+          "715",
+          "https",
+          "github",
+          "com"
         ],
         "term_weights": [
           {
             "term": "index",
-            "tf": 1,
-            "weight": 0.2
+            "tf": 4,
+            "weight": 0.114286
           },
           {
-            "term": "creation",
-            "tf": 1,
-            "weight": 0.2
+            "term": "selector",
+            "tf": 2,
+            "weight": 0.057143
           },
           {
-            "term": "and",
-            "tf": 1,
-            "weight": 0.2
+            "term": "method",
+            "tf": 2,
+            "weight": 0.057143
           },
           {
-            "term": "loading",
-            "tf": 1,
-            "weight": 0.2
+            "term": "lib",
+            "tf": 2,
+            "weight": 0.057143
           },
           {
-            "term": "flow",
+            "term": "segment",
+            "tf": 2,
+            "weight": 0.057143
+          },
+          {
+            "term": "src",
+            "tf": 2,
+            "weight": 0.057143
+          },
+          {
+            "term": "struct",
+            "tf": 2,
+            "weight": 0.057143
+          },
+          {
+            "term": "payload",
+            "tf": 2,
+            "weight": 0.057143
+          },
+          {
+            "term": "qdrant",
+            "tf": 2,
+            "weight": 0.057143
+          },
+          {
+            "term": "structpayloadindex",
             "tf": 1,
-            "weight": 0.2
+            "weight": 0.028571
+          },
+          {
+            "term": "the",
+            "tf": 1,
+            "weight": 0.028571
+          },
+          {
+            "term": "maps",
+            "tf": 1,
+            "weight": 0.028571
+          },
+          {
+            "term": "storagetype",
+            "tf": 1,
+            "weight": 0.028571
+          },
+          {
+            "term": "indexselector",
+            "tf": 1,
+            "weight": 0.028571
+          },
+          {
+            "term": "sources",
+            "tf": 1,
+            "weight": 0.028571
+          },
+          {
+            "term": "rs682",
+            "tf": 1,
+            "weight": 0.028571
+          },
+          {
+            "term": "715",
+            "tf": 1,
+            "weight": 0.028571
+          },
+          {
+            "term": "https",
+            "tf": 1,
+            "weight": 0.028571
+          },
+          {
+            "term": "github",
+            "tf": 1,
+            "weight": 0.028571
+          },
+          {
+            "term": "com",
+            "tf": 1,
+            "weight": 0.028571
           }
         ],
-        "unique_terms": 5,
-        "total_terms": 5
+        "unique_terms": 24,
+        "total_terms": 35
       },
-      "modal_hint": "prose",
+      "modal_hint": "code",
       "content_flags": {
-        "has_code_block": false,
+        "has_code_block": true,
         "has_table": false,
         "has_list": false,
         "has_json": false,
         "has_formula": false
       },
       "search_keywords": [
-        "Index Creation and Loading Flow",
-        "and",
-        "creation",
-        "flow",
+        "Selector Method in StructPayloadIndex",
         "index",
-        "loading"
-      ],
-      "quality_fallback": true,
-      "quality_notes": "Promoted via relaxed thresholds"
+        "lib",
+        "method",
+        "payload",
+        "qdrant",
+        "segment",
+        "selector",
+        "src",
+        "struct",
+        "structpayloadindex"
+      ]
     },
     "advanced_scores": {
-      "semantic": 0.8,
-      "structural": 0.8999999999999999,
-      "retrieval_quality": 0.39,
-      "overall": 0.6966666666666667
+      "semantic": 0.7,
+      "structural": 0.7999999999999998,
+      "retrieval_quality": 0.5547058823529412,
+      "overall": 0.6849019607843138
     }
   },
   {
-    "text": "## Backend-Specific Index Implementation  Each index type supports multiple backends through variant enums and builders. Here's how this works for numeric indices as an example:",
+    "text": "## Backend-Specific Index Implementation\n\nEach index type supports multiple backends through variant enums and builders. Here's how this works for numeric indices as an example:",
     "metadata": {
       "chunk_id": "5dcf11447773-0012",
       "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_4.2-index-selection-and-storage-backends.md",
@@ -327,15 +414,15 @@
       "heading_text": "Backend-Specific Index Implementation",
       "token_count": 32,
       "char_count": 177,
-      "start_char": 0,
-      "end_char": 177,
-      "semantic_score": 0.4080553650856018,
-      "structural_score": 0.8999999999999999,
+      "start_char": 8664,
+      "end_char": 8841,
+      "semantic_score": 0.7,
+      "structural_score": 0.7,
       "retrieval_quality": 0.7779999999999999,
-      "chunking_strategy": "hierarchical_balanced",
-      "content_type": "hierarchical_section",
-      "embedding_model": "nomic-ai/CodeRankEmbed",
-      "processing_timestamp": "2025-10-19T15:42:46.650209",
+      "chunking_strategy": "hierarchical_balanced_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "processing_timestamp": "2025-10-20T04:38:46.129808",
       "document_id": "5dcf11447773",
       "document_name": "_qdrant_qdrant_4.2-index-selection-and-storage-backends",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_4.2-index-selection-and-storage-backends.md",
@@ -343,8 +430,8 @@
       "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant",
       "relative_path": "Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_4.2-index-selection-and-storage-backends.md",
       "hierarchy_path": "Backend-Specific Index Implementation",
-      "chunk_hash": "debeed673974239a",
-      "content_digest": "debeed673974239a",
+      "chunk_hash": "07fd40de13089904",
+      "content_digest": "07fd40de13089904",
       "chunk_length": 177,
       "payload_version": "1.3",
       "collection_hints": [
@@ -500,53 +587,51 @@
         "supports",
         "through",
         "type"
-      ],
-      "quality_fallback": true,
-      "quality_notes": "Promoted via relaxed thresholds"
+      ]
     },
     "advanced_scores": {
-      "semantic": 0.4080553650856018,
-      "structural": 0.8999999999999999,
+      "semantic": 0.7,
+      "structural": 0.7,
       "retrieval_quality": 0.7779999999999999,
-      "overall": 0.6953517883618673
+      "overall": 0.726
     }
   },
   {
-    "text": "## File Layout and Directory Structure  Each index type uses a consistent directory naming scheme based on the field name and index type:",
+    "text": "### IndexSelector Backend Routing\n\nThe `IndexSelector` methods route to the appropriate builder based on the selector variant:\n\n```\n```\n\n**Sources:** [lib/segment/src/index/field\\_index/field\\_index\\_base.rs566-603](https://github.com/qdrant/qdrant/blob/48203e41/lib/segment/src/index/field_index/field_index_base.rs#L566-L603) [lib/segment/src/index/field\\_index/index\\_selector.rs381-411](https://github.com/qdrant/qdrant/blob/48203e41/lib/segment/src/index/field_index/index_selector.rs#L381-L411)",
     "metadata": {
-      "chunk_id": "5dcf11447773-0020",
+      "chunk_id": "5dcf11447773-0014",
       "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_4.2-index-selection-and-storage-backends.md",
       "filename": "_qdrant_qdrant_4.2-index-selection-and-storage-backends.md",
       "file_extension": ".md",
-      "chunk_index": 20,
+      "chunk_index": 14,
       "document_level": 1,
       "parent_chunk_id": null,
       "child_chunk_ids": [],
       "section_path": [
-        "File Layout and Directory Structure"
+        "IndexSelector Backend Routing"
       ],
-      "heading_text": "File Layout and Directory Structure",
-      "token_count": 25,
-      "char_count": 137,
-      "start_char": 0,
-      "end_char": 137,
-      "semantic_score": 0.8,
-      "structural_score": 0.8999999999999999,
-      "retrieval_quality": 0.3508695652173913,
-      "chunking_strategy": "hierarchical_balanced",
-      "content_type": "hierarchical_section",
-      "embedding_model": "nomic-ai/CodeRankEmbed",
-      "processing_timestamp": "2025-10-19T15:42:46.651766",
+      "heading_text": "IndexSelector Backend Routing",
+      "token_count": 137,
+      "char_count": 500,
+      "start_char": 8884,
+      "end_char": 9384,
+      "semantic_score": 0.7,
+      "structural_score": 0.7999999999999998,
+      "retrieval_quality": 0.5490909090909091,
+      "chunking_strategy": "hierarchical_balanced_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "processing_timestamp": "2025-10-20T04:38:46.129808",
       "document_id": "5dcf11447773",
       "document_name": "_qdrant_qdrant_4.2-index-selection-and-storage-backends",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_4.2-index-selection-and-storage-backends.md",
       "source_filename": "_qdrant_qdrant_4.2-index-selection-and-storage-backends.md",
       "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant",
       "relative_path": "Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_4.2-index-selection-and-storage-backends.md",
-      "hierarchy_path": "File Layout and Directory Structure",
-      "chunk_hash": "8c7dbc0c89f9797d",
-      "content_digest": "8c7dbc0c89f9797d",
-      "chunk_length": 137,
+      "hierarchy_path": "IndexSelector Backend Routing",
+      "chunk_hash": "61059e67188df877",
+      "content_digest": "61059e67188df877",
+      "chunk_length": 500,
       "payload_version": "1.3",
       "collection_hints": [
         "qdrant_ecosystem"
@@ -555,107 +640,632 @@
         "version": "1.0",
         "weighting": "tf-normalized",
         "top_terms": [
-          "and",
-          "directory",
           "index",
-          "type",
-          "file",
-          "layout",
-          "structure",
-          "each",
-          "uses",
-          "consistent",
-          "naming",
-          "scheme",
-          "based",
-          "the",
           "field",
-          "name"
+          "lib",
+          "segment",
+          "src",
+          "qdrant",
+          "the",
+          "selector",
+          "indexselector",
+          "base",
+          "https",
+          "github",
+          "com",
+          "blob",
+          "48203e41",
+          "backend",
+          "routing",
+          "methods",
+          "route",
+          "appropriate"
         ],
         "term_weights": [
           {
-            "term": "and",
-            "tf": 2,
-            "weight": 0.1
+            "term": "index",
+            "tf": 12,
+            "weight": 0.169014
           },
           {
-            "term": "directory",
-            "tf": 2,
-            "weight": 0.1
+            "term": "field",
+            "tf": 6,
+            "weight": 0.084507
           },
+          {
+            "term": "lib",
+            "tf": 4,
+            "weight": 0.056338
+          },
+          {
+            "term": "segment",
+            "tf": 4,
+            "weight": 0.056338
+          },
+          {
+            "term": "src",
+            "tf": 4,
+            "weight": 0.056338
+          },
+          {
+            "term": "qdrant",
+            "tf": 4,
+            "weight": 0.056338
+          },
+          {
+            "term": "the",
+            "tf": 3,
+            "weight": 0.042254
+          },
+          {
+            "term": "selector",
+            "tf": 3,
+            "weight": 0.042254
+          },
+          {
+            "term": "indexselector",
+            "tf": 2,
+            "weight": 0.028169
+          },
+          {
+            "term": "base",
+            "tf": 2,
+            "weight": 0.028169
+          },
+          {
+            "term": "https",
+            "tf": 2,
+            "weight": 0.028169
+          },
+          {
+            "term": "github",
+            "tf": 2,
+            "weight": 0.028169
+          },
+          {
+            "term": "com",
+            "tf": 2,
+            "weight": 0.028169
+          },
+          {
+            "term": "blob",
+            "tf": 2,
+            "weight": 0.028169
+          },
+          {
+            "term": "48203e41",
+            "tf": 2,
+            "weight": 0.028169
+          },
+          {
+            "term": "backend",
+            "tf": 1,
+            "weight": 0.014085
+          },
+          {
+            "term": "routing",
+            "tf": 1,
+            "weight": 0.014085
+          },
+          {
+            "term": "methods",
+            "tf": 1,
+            "weight": 0.014085
+          },
+          {
+            "term": "route",
+            "tf": 1,
+            "weight": 0.014085
+          },
+          {
+            "term": "appropriate",
+            "tf": 1,
+            "weight": 0.014085
+          }
+        ],
+        "unique_terms": 32,
+        "total_terms": 71
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "IndexSelector Backend Routing",
+        "base",
+        "field",
+        "index",
+        "indexselector",
+        "lib",
+        "qdrant",
+        "segment",
+        "selector",
+        "src",
+        "the"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.7999999999999998,
+      "retrieval_quality": 0.5490909090909091,
+      "overall": 0.683030303030303
+    }
+  },
+  {
+    "text": "### Full-Text Index Example\n\nThe `FullTextIndex` enum demonstrates backend support:\n\n```\n```\n\n**Sources:** [lib/segment/src/index/field\\_index/full\\_text\\_index/text\\_index.rs37-93](https://github.com/qdrant/qdrant/blob/48203e41/lib/segment/src/index/field_index/full_text_index/text_index.rs#L37-L93)\n\n---",
+    "metadata": {
+      "chunk_id": "5dcf11447773-0015",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_4.2-index-selection-and-storage-backends.md",
+      "filename": "_qdrant_qdrant_4.2-index-selection-and-storage-backends.md",
+      "file_extension": ".md",
+      "chunk_index": 15,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Full-Text Index Example"
+      ],
+      "heading_text": "Full-Text Index Example",
+      "token_count": 85,
+      "char_count": 306,
+      "start_char": 9386,
+      "end_char": 9692,
+      "semantic_score": 0.7,
+      "structural_score": 0.7999999999999998,
+      "retrieval_quality": 0.57,
+      "chunking_strategy": "hierarchical_balanced_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "processing_timestamp": "2025-10-20T04:38:46.129808",
+      "document_id": "5dcf11447773",
+      "document_name": "_qdrant_qdrant_4.2-index-selection-and-storage-backends",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_4.2-index-selection-and-storage-backends.md",
+      "source_filename": "_qdrant_qdrant_4.2-index-selection-and-storage-backends.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant",
+      "relative_path": "Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_4.2-index-selection-and-storage-backends.md",
+      "hierarchy_path": "Full-Text Index Example",
+      "chunk_hash": "26fd21f8cc3bd1d2",
+      "content_digest": "26fd21f8cc3bd1d2",
+      "chunk_length": 306,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "index",
+          "text",
+          "full",
+          "lib",
+          "segment",
+          "src",
+          "field",
+          "qdrant",
+          "example",
+          "the",
+          "fulltextindex",
+          "enum",
+          "demonstrates",
+          "backend",
+          "support",
+          "sources",
+          "rs37",
+          "https",
+          "github",
+          "com"
+        ],
+        "term_weights": [
           {
             "term": "index",
+            "tf": 9,
+            "weight": 0.209302
+          },
+          {
+            "term": "text",
+            "tf": 5,
+            "weight": 0.116279
+          },
+          {
+            "term": "full",
+            "tf": 3,
+            "weight": 0.069767
+          },
+          {
+            "term": "lib",
             "tf": 2,
-            "weight": 0.1
+            "weight": 0.046512
           },
           {
-            "term": "type",
+            "term": "segment",
             "tf": 2,
-            "weight": 0.1
+            "weight": 0.046512
           },
           {
-            "term": "file",
-            "tf": 1,
-            "weight": 0.05
+            "term": "src",
+            "tf": 2,
+            "weight": 0.046512
           },
           {
-            "term": "layout",
-            "tf": 1,
-            "weight": 0.05
+            "term": "field",
+            "tf": 2,
+            "weight": 0.046512
           },
           {
-            "term": "structure",
-            "tf": 1,
-            "weight": 0.05
+            "term": "qdrant",
+            "tf": 2,
+            "weight": 0.046512
           },
           {
-            "term": "each",
+            "term": "example",
             "tf": 1,
-            "weight": 0.05
-          },
-          {
-            "term": "uses",
-            "tf": 1,
-            "weight": 0.05
-          },
-          {
-            "term": "consistent",
-            "tf": 1,
-            "weight": 0.05
-          },
-          {
-            "term": "naming",
-            "tf": 1,
-            "weight": 0.05
-          },
-          {
-            "term": "scheme",
-            "tf": 1,
-            "weight": 0.05
-          },
-          {
-            "term": "based",
-            "tf": 1,
-            "weight": 0.05
+            "weight": 0.023256
           },
           {
             "term": "the",
             "tf": 1,
-            "weight": 0.05
+            "weight": 0.023256
           },
           {
-            "term": "field",
+            "term": "fulltextindex",
             "tf": 1,
-            "weight": 0.05
+            "weight": 0.023256
           },
           {
-            "term": "name",
+            "term": "enum",
             "tf": 1,
-            "weight": 0.05
+            "weight": 0.023256
+          },
+          {
+            "term": "demonstrates",
+            "tf": 1,
+            "weight": 0.023256
+          },
+          {
+            "term": "backend",
+            "tf": 1,
+            "weight": 0.023256
+          },
+          {
+            "term": "support",
+            "tf": 1,
+            "weight": 0.023256
+          },
+          {
+            "term": "sources",
+            "tf": 1,
+            "weight": 0.023256
+          },
+          {
+            "term": "rs37",
+            "tf": 1,
+            "weight": 0.023256
+          },
+          {
+            "term": "https",
+            "tf": 1,
+            "weight": 0.023256
+          },
+          {
+            "term": "github",
+            "tf": 1,
+            "weight": 0.023256
+          },
+          {
+            "term": "com",
+            "tf": 1,
+            "weight": 0.023256
           }
         ],
-        "unique_terms": 16,
-        "total_terms": 20
+        "unique_terms": 24,
+        "total_terms": 43
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Full-Text Index Example",
+        "example",
+        "field",
+        "full",
+        "index",
+        "lib",
+        "qdrant",
+        "segment",
+        "src",
+        "text",
+        "the"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.7999999999999998,
+      "retrieval_quality": 0.57,
+      "overall": 0.69
+    }
+  },
+  {
+    "text": "### Migration Trigger and Process\n\n```\n```\n\n**Sources:** [lib/segment/src/index/struct\\_payload\\_index.rs248-281](https://github.com/qdrant/qdrant/blob/48203e41/lib/segment/src/index/struct_payload_index.rs#L248-L281)",
+    "metadata": {
+      "chunk_id": "5dcf11447773-0017",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_4.2-index-selection-and-storage-backends.md",
+      "filename": "_qdrant_qdrant_4.2-index-selection-and-storage-backends.md",
+      "file_extension": ".md",
+      "chunk_index": 17,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Migration Trigger and Process"
+      ],
+      "heading_text": "Migration Trigger and Process",
+      "token_count": 62,
+      "char_count": 217,
+      "start_char": 9867,
+      "end_char": 10084,
+      "semantic_score": 0.6,
+      "structural_score": 0.7999999999999998,
+      "retrieval_quality": 0.5566666666666666,
+      "chunking_strategy": "hierarchical_balanced_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "processing_timestamp": "2025-10-20T04:38:46.129808",
+      "document_id": "5dcf11447773",
+      "document_name": "_qdrant_qdrant_4.2-index-selection-and-storage-backends",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_4.2-index-selection-and-storage-backends.md",
+      "source_filename": "_qdrant_qdrant_4.2-index-selection-and-storage-backends.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant",
+      "relative_path": "Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_4.2-index-selection-and-storage-backends.md",
+      "hierarchy_path": "Migration Trigger and Process",
+      "chunk_hash": "f87e6acbbe3269da",
+      "content_digest": "f87e6acbbe3269da",
+      "chunk_length": 217,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "index",
+          "lib",
+          "segment",
+          "src",
+          "struct",
+          "payload",
+          "qdrant",
+          "migration",
+          "trigger",
+          "and",
+          "process",
+          "sources",
+          "rs248",
+          "281",
+          "https",
+          "github",
+          "com",
+          "blob",
+          "48203e41",
+          "l248"
+        ],
+        "term_weights": [
+          {
+            "term": "index",
+            "tf": 4,
+            "weight": 0.133333
+          },
+          {
+            "term": "lib",
+            "tf": 2,
+            "weight": 0.066667
+          },
+          {
+            "term": "segment",
+            "tf": 2,
+            "weight": 0.066667
+          },
+          {
+            "term": "src",
+            "tf": 2,
+            "weight": 0.066667
+          },
+          {
+            "term": "struct",
+            "tf": 2,
+            "weight": 0.066667
+          },
+          {
+            "term": "payload",
+            "tf": 2,
+            "weight": 0.066667
+          },
+          {
+            "term": "qdrant",
+            "tf": 2,
+            "weight": 0.066667
+          },
+          {
+            "term": "migration",
+            "tf": 1,
+            "weight": 0.033333
+          },
+          {
+            "term": "trigger",
+            "tf": 1,
+            "weight": 0.033333
+          },
+          {
+            "term": "and",
+            "tf": 1,
+            "weight": 0.033333
+          },
+          {
+            "term": "process",
+            "tf": 1,
+            "weight": 0.033333
+          },
+          {
+            "term": "sources",
+            "tf": 1,
+            "weight": 0.033333
+          },
+          {
+            "term": "rs248",
+            "tf": 1,
+            "weight": 0.033333
+          },
+          {
+            "term": "281",
+            "tf": 1,
+            "weight": 0.033333
+          },
+          {
+            "term": "https",
+            "tf": 1,
+            "weight": 0.033333
+          },
+          {
+            "term": "github",
+            "tf": 1,
+            "weight": 0.033333
+          },
+          {
+            "term": "com",
+            "tf": 1,
+            "weight": 0.033333
+          },
+          {
+            "term": "blob",
+            "tf": 1,
+            "weight": 0.033333
+          },
+          {
+            "term": "48203e41",
+            "tf": 1,
+            "weight": 0.033333
+          },
+          {
+            "term": "l248",
+            "tf": 1,
+            "weight": 0.033333
+          }
+        ],
+        "unique_terms": 21,
+        "total_terms": 30
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Migration Trigger and Process",
+        "and",
+        "index",
+        "lib",
+        "migration",
+        "payload",
+        "qdrant",
+        "segment",
+        "src",
+        "struct",
+        "trigger"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.6,
+      "structural": 0.7999999999999998,
+      "retrieval_quality": 0.5566666666666666,
+      "overall": 0.6522222222222221
+    }
+  },
+  {
+    "text": "## Configuration and Feature Flags",
+    "metadata": {
+      "chunk_id": "5dcf11447773-0023",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_4.2-index-selection-and-storage-backends.md",
+      "filename": "_qdrant_qdrant_4.2-index-selection-and-storage-backends.md",
+      "file_extension": ".md",
+      "chunk_index": 23,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Configuration and Feature Flags"
+      ],
+      "heading_text": "Configuration and Feature Flags",
+      "token_count": 5,
+      "char_count": 34,
+      "start_char": 12458,
+      "end_char": 12492,
+      "semantic_score": 0.8,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.59,
+      "chunking_strategy": "hierarchical_balanced_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "processing_timestamp": "2025-10-20T04:38:46.134460",
+      "document_id": "5dcf11447773",
+      "document_name": "_qdrant_qdrant_4.2-index-selection-and-storage-backends",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_4.2-index-selection-and-storage-backends.md",
+      "source_filename": "_qdrant_qdrant_4.2-index-selection-and-storage-backends.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant",
+      "relative_path": "Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_4.2-index-selection-and-storage-backends.md",
+      "hierarchy_path": "Configuration and Feature Flags",
+      "chunk_hash": "420dce69216fb1fb",
+      "content_digest": "420dce69216fb1fb",
+      "chunk_length": 34,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "configuration",
+          "and",
+          "feature",
+          "flags"
+        ],
+        "term_weights": [
+          {
+            "term": "configuration",
+            "tf": 1,
+            "weight": 0.25
+          },
+          {
+            "term": "and",
+            "tf": 1,
+            "weight": 0.25
+          },
+          {
+            "term": "feature",
+            "tf": 1,
+            "weight": 0.25
+          },
+          {
+            "term": "flags",
+            "tf": 1,
+            "weight": 0.25
+          }
+        ],
+        "unique_terms": 4,
+        "total_terms": 4
       },
       "modal_hint": "prose",
       "content_flags": {
@@ -666,26 +1276,416 @@
         "has_formula": false
       },
       "search_keywords": [
-        "File Layout and Directory Structure",
+        "Configuration and Feature Flags",
         "and",
-        "consistent",
-        "directory",
-        "each",
-        "file",
-        "index",
-        "layout",
-        "structure",
-        "type",
-        "uses"
-      ],
-      "quality_fallback": true,
-      "quality_notes": "Promoted via relaxed thresholds"
+        "configuration",
+        "feature",
+        "flags"
+      ]
     },
     "advanced_scores": {
       "semantic": 0.8,
       "structural": 0.8999999999999999,
-      "retrieval_quality": 0.3508695652173913,
-      "overall": 0.683623188405797
+      "retrieval_quality": 0.59,
+      "overall": 0.7633333333333333
+    }
+  },
+  {
+    "text": "## Summary\n\nThe index selection and storage backend system in Qdrant provides:\n\n1. **Flexible Backend Selection**: Automatic choice between RocksDB, Mmap, and Gridstore based on segment mutability and configuration\n2. **Abstraction Layer**: `IndexSelector` pattern allows uniform index creation across backends\n3. **Type Persistence**: Full index type information (including backend) is saved in `PayloadConfig`\n4. **Migration Path**: Automatic migration from legacy RocksDB to modern backends\n5. **Per-Field Control**: Different fields can use different backends based on their storage requirements\n\nThe migration from RocksDB to Gridstore/Mmap is a key ongoing optimization, reducing storage overhead and improving performance for both mutable and immutable segments.\n\nDismiss\n\nRefresh this wiki\n\nEnter email to refresh",
+    "metadata": {
+      "chunk_id": "5dcf11447773-0026",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_4.2-index-selection-and-storage-backends.md",
+      "filename": "_qdrant_qdrant_4.2-index-selection-and-storage-backends.md",
+      "file_extension": ".md",
+      "chunk_index": 26,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Summary"
+      ],
+      "heading_text": "Summary",
+      "token_count": 161,
+      "char_count": 821,
+      "start_char": 13610,
+      "end_char": 14431,
+      "semantic_score": 0.7,
+      "structural_score": 0.7,
+      "retrieval_quality": 0.5239449541284403,
+      "chunking_strategy": "hierarchical_balanced_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "processing_timestamp": "2025-10-20T04:38:46.135495",
+      "document_id": "5dcf11447773",
+      "document_name": "_qdrant_qdrant_4.2-index-selection-and-storage-backends",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_4.2-index-selection-and-storage-backends.md",
+      "source_filename": "_qdrant_qdrant_4.2-index-selection-and-storage-backends.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant",
+      "relative_path": "Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_4.2-index-selection-and-storage-backends.md",
+      "hierarchy_path": "Summary",
+      "chunk_hash": "e14bba6e27bbdc9c",
+      "content_digest": "e14bba6e27bbdc9c",
+      "chunk_length": 821,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "and",
+          "index",
+          "storage",
+          "backend",
+          "rocksdb",
+          "backends",
+          "migration",
+          "the",
+          "selection",
+          "automatic",
+          "mmap",
+          "gridstore",
+          "based",
+          "type",
+          "from",
+          "different",
+          "refresh",
+          "summary",
+          "system",
+          "qdrant"
+        ],
+        "term_weights": [
+          {
+            "term": "and",
+            "tf": 5,
+            "weight": 0.052632
+          },
+          {
+            "term": "index",
+            "tf": 3,
+            "weight": 0.031579
+          },
+          {
+            "term": "storage",
+            "tf": 3,
+            "weight": 0.031579
+          },
+          {
+            "term": "backend",
+            "tf": 3,
+            "weight": 0.031579
+          },
+          {
+            "term": "rocksdb",
+            "tf": 3,
+            "weight": 0.031579
+          },
+          {
+            "term": "backends",
+            "tf": 3,
+            "weight": 0.031579
+          },
+          {
+            "term": "migration",
+            "tf": 3,
+            "weight": 0.031579
+          },
+          {
+            "term": "the",
+            "tf": 2,
+            "weight": 0.021053
+          },
+          {
+            "term": "selection",
+            "tf": 2,
+            "weight": 0.021053
+          },
+          {
+            "term": "automatic",
+            "tf": 2,
+            "weight": 0.021053
+          },
+          {
+            "term": "mmap",
+            "tf": 2,
+            "weight": 0.021053
+          },
+          {
+            "term": "gridstore",
+            "tf": 2,
+            "weight": 0.021053
+          },
+          {
+            "term": "based",
+            "tf": 2,
+            "weight": 0.021053
+          },
+          {
+            "term": "type",
+            "tf": 2,
+            "weight": 0.021053
+          },
+          {
+            "term": "from",
+            "tf": 2,
+            "weight": 0.021053
+          },
+          {
+            "term": "different",
+            "tf": 2,
+            "weight": 0.021053
+          },
+          {
+            "term": "refresh",
+            "tf": 2,
+            "weight": 0.021053
+          },
+          {
+            "term": "summary",
+            "tf": 1,
+            "weight": 0.010526
+          },
+          {
+            "term": "system",
+            "tf": 1,
+            "weight": 0.010526
+          },
+          {
+            "term": "qdrant",
+            "tf": 1,
+            "weight": 0.010526
+          }
+        ],
+        "unique_terms": 69,
+        "total_terms": 95
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Summary",
+        "and",
+        "automatic",
+        "backend",
+        "backends",
+        "index",
+        "migration",
+        "rocksdb",
+        "selection",
+        "storage",
+        "the"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.7,
+      "retrieval_quality": 0.5239449541284403,
+      "overall": 0.6413149847094801
+    }
+  },
+  {
+    "text": "### On this page  - [Index Selection and Storage Backends](#index-selection-and-storage-backends.md) - [Purpose and Scope](#purpose-and-scope.md) - [Storage Backend Overview](#storage-backend-overview.md) - [StorageType Enum and Selection Logic](#storagetype-enum-and-selection-logic.md) - [StorageType Variants](#storagetype-variants.md) - [Storage Selection in StructPayloadIndex::open](#storage-selection-in-structpayloadindexopen.md) - [IndexSelector Abstraction](#indexselector-abstraction.md) - [IndexSelector Variants](#indexselector-variants.md) - [Selector Method in StructPayloadIndex](#selector-method-in-structpayloadindex.md) - [Index Creation and Loading Flow](#index-creation-and-loading-flow.md) - [Creating New Indices](#creating-new-indices.md) - [Loading Existing Indices](#loading-existing-indices.md) - [Backend-Specific Index Implementation](#backend-specific-index-implementation.md) - [FieldIndexBuilder Variants](#fieldindexbuilder-variants.md) - [IndexSelector Backend Routing](#indexselector-backend-routing.md) - [Full-Text Index Example](#full-text-index-example.md) - [Storage Migration: RocksDB to Gridstore](#storage-migration-rocksdb-to-gridstore.md) - [Migration Trigger and Process](#migration-trigger-and-process.md) - [Migration Logic Details](#migration-logic-details.md) - [RocksDB Cleanup](#rocksdb-cleanup.md) - [File Layout and Directory Structure](#file-layout-and-directory-structure.md) - [Directory Naming Conventions](#directory-naming-conventions.md) - [FullPayloadIndexType Persistence](#fullpayloadindextype-persistence.md) - [Configuration and Feature Flags](#configuration-and-feature-flags.md) - [PayloadConfig Fields](#payloadconfig-fields.md) - [Feature Flags Controlling Backend Selection](#feature-flags-controlling-backend-selection.md) - [Summary](#summary.md)",
+    "metadata": {
+      "chunk_id": "5dcf11447773-0027",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_4.2-index-selection-and-storage-backends.md",
+      "filename": "_qdrant_qdrant_4.2-index-selection-and-storage-backends.md",
+      "file_extension": ".md",
+      "chunk_index": 27,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "On this page"
+      ],
+      "heading_text": "On this page",
+      "token_count": 427,
+      "char_count": 1819,
+      "start_char": 14433,
+      "end_char": 16252,
+      "semantic_score": 0.7,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.7146546218487395,
+      "chunking_strategy": "hierarchical_balanced_structural",
+      "content_type": "list_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "processing_timestamp": "2025-10-20T04:38:46.136628",
+      "document_id": "5dcf11447773",
+      "document_name": "_qdrant_qdrant_4.2-index-selection-and-storage-backends",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_4.2-index-selection-and-storage-backends.md",
+      "source_filename": "_qdrant_qdrant_4.2-index-selection-and-storage-backends.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant",
+      "relative_path": "Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_4.2-index-selection-and-storage-backends.md",
+      "hierarchy_path": "On this page",
+      "chunk_hash": "4042e2cb1d91ddb2",
+      "content_digest": "4042e2cb1d91ddb2",
+      "chunk_length": 1819,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "and",
+          "index",
+          "selection",
+          "storage",
+          "backend",
+          "variants",
+          "indexselector",
+          "migration",
+          "storagetype",
+          "logic",
+          "loading",
+          "indices",
+          "rocksdb",
+          "directory",
+          "feature",
+          "flags",
+          "structpayloadindex",
+          "backends",
+          "purpose",
+          "scope"
+        ],
+        "term_weights": [
+          {
+            "term": "and",
+            "tf": 14,
+            "weight": 0.079096
+          },
+          {
+            "term": "index",
+            "tf": 8,
+            "weight": 0.045198
+          },
+          {
+            "term": "selection",
+            "tf": 8,
+            "weight": 0.045198
+          },
+          {
+            "term": "storage",
+            "tf": 8,
+            "weight": 0.045198
+          },
+          {
+            "term": "backend",
+            "tf": 8,
+            "weight": 0.045198
+          },
+          {
+            "term": "variants",
+            "tf": 6,
+            "weight": 0.033898
+          },
+          {
+            "term": "indexselector",
+            "tf": 6,
+            "weight": 0.033898
+          },
+          {
+            "term": "migration",
+            "tf": 6,
+            "weight": 0.033898
+          },
+          {
+            "term": "storagetype",
+            "tf": 4,
+            "weight": 0.022599
+          },
+          {
+            "term": "logic",
+            "tf": 4,
+            "weight": 0.022599
+          },
+          {
+            "term": "loading",
+            "tf": 4,
+            "weight": 0.022599
+          },
+          {
+            "term": "indices",
+            "tf": 4,
+            "weight": 0.022599
+          },
+          {
+            "term": "rocksdb",
+            "tf": 4,
+            "weight": 0.022599
+          },
+          {
+            "term": "directory",
+            "tf": 4,
+            "weight": 0.022599
+          },
+          {
+            "term": "feature",
+            "tf": 4,
+            "weight": 0.022599
+          },
+          {
+            "term": "flags",
+            "tf": 4,
+            "weight": 0.022599
+          },
+          {
+            "term": "structpayloadindex",
+            "tf": 3,
+            "weight": 0.016949
+          },
+          {
+            "term": "backends",
+            "tf": 2,
+            "weight": 0.011299
+          },
+          {
+            "term": "purpose",
+            "tf": 2,
+            "weight": 0.011299
+          },
+          {
+            "term": "scope",
+            "tf": 2,
+            "weight": 0.011299
+          }
+        ],
+        "unique_terms": 58,
+        "total_terms": 177
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "On this page",
+        "and",
+        "backend",
+        "index",
+        "indexselector",
+        "logic",
+        "migration",
+        "selection",
+        "storage",
+        "storagetype",
+        "variants"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.7146546218487395,
+      "overall": 0.7715515406162465
     }
   }
 ]

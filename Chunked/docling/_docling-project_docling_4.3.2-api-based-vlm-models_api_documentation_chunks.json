@@ -1,6 +1,603 @@
 [
   {
-    "text": "## ApiVlmModel Implementation",
+    "text": "## Purpose and Scope\n\nThis page documents the API-based Vision Language Model (VLM) integration in Docling, which enables document processing using external VLM services via OpenAI-compatible HTTP APIs. API-based models connect to remote inference servers (e.g., Ollama, vLLM server, OpenAI) rather than loading models locally.\n\nFor locally-executed VLM models using Transformers, MLX, or vLLM frameworks, see [Inline VLM Models](docling-project/docling/4.3.1-inline-vlm-models.md). For the broader VLM system architecture and pipeline integration, see [Vision Language Models](docling-project/docling/4.3-vision-language-models.md).\n\nAPI-based models are configured through `ApiVlmOptions` and executed by the `ApiVlmModel` class, which provides threaded request handling, streaming support, and early-abort capabilities through custom stopping criteria.\n\n**Sources:** [docling/models/api\\_vlm\\_model.py1-102](https://github.com/docling-project/docling/blob/f7244a43/docling/models/api_vlm_model.py#L1-L102) [docling/datamodel/pipeline\\_options\\_vlm\\_model.py96-112](https://github.com/docling-project/docling/blob/f7244a43/docling/datamodel/pipeline_options_vlm_model.py#L96-L112)",
+    "metadata": {
+      "chunk_id": "f0eb3564da44-0001",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling\\_docling-project_docling_4.3.2-api-based-vlm-models.md",
+      "filename": "_docling-project_docling_4.3.2-api-based-vlm-models.md",
+      "file_extension": ".md",
+      "chunk_index": 1,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Purpose and Scope"
+      ],
+      "heading_text": "Purpose and Scope",
+      "token_count": 287,
+      "char_count": 1182,
+      "start_char": 6481,
+      "end_char": 7663,
+      "semantic_score": 0.7,
+      "structural_score": 0.7999999999999998,
+      "retrieval_quality": 0.5305940594059406,
+      "chunking_strategy": "hierarchical_precise_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "processing_timestamp": "2025-10-20T04:38:32.269340",
+      "document_id": "f0eb3564da44",
+      "document_name": "_docling-project_docling_4.3.2-api-based-vlm-models",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling\\_docling-project_docling_4.3.2-api-based-vlm-models.md",
+      "source_filename": "_docling-project_docling_4.3.2-api-based-vlm-models.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling",
+      "relative_path": "Docs\\docling\\_docling-project_docling_4.3.2-api-based-vlm-models.md",
+      "hierarchy_path": "Purpose and Scope",
+      "chunk_hash": "2dd70887a69c526a",
+      "content_digest": "2dd70887a69c526a",
+      "chunk_length": 1182,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "docling",
+          "vlm",
+          "models",
+          "api",
+          "model",
+          "and",
+          "project",
+          "the",
+          "based",
+          "vision",
+          "language",
+          "pipeline",
+          "integration",
+          "which",
+          "using",
+          "openai",
+          "vllm",
+          "locally",
+          "for",
+          "executed"
+        ],
+        "term_weights": [
+          {
+            "term": "docling",
+            "tf": 13,
+            "weight": 0.083333
+          },
+          {
+            "term": "vlm",
+            "tf": 10,
+            "weight": 0.064103
+          },
+          {
+            "term": "models",
+            "tf": 10,
+            "weight": 0.064103
+          },
+          {
+            "term": "api",
+            "tf": 5,
+            "weight": 0.032051
+          },
+          {
+            "term": "model",
+            "tf": 5,
+            "weight": 0.032051
+          },
+          {
+            "term": "and",
+            "tf": 4,
+            "weight": 0.025641
+          },
+          {
+            "term": "project",
+            "tf": 4,
+            "weight": 0.025641
+          },
+          {
+            "term": "the",
+            "tf": 3,
+            "weight": 0.019231
+          },
+          {
+            "term": "based",
+            "tf": 3,
+            "weight": 0.019231
+          },
+          {
+            "term": "vision",
+            "tf": 3,
+            "weight": 0.019231
+          },
+          {
+            "term": "language",
+            "tf": 3,
+            "weight": 0.019231
+          },
+          {
+            "term": "pipeline",
+            "tf": 3,
+            "weight": 0.019231
+          },
+          {
+            "term": "integration",
+            "tf": 2,
+            "weight": 0.012821
+          },
+          {
+            "term": "which",
+            "tf": 2,
+            "weight": 0.012821
+          },
+          {
+            "term": "using",
+            "tf": 2,
+            "weight": 0.012821
+          },
+          {
+            "term": "openai",
+            "tf": 2,
+            "weight": 0.012821
+          },
+          {
+            "term": "vllm",
+            "tf": 2,
+            "weight": 0.012821
+          },
+          {
+            "term": "locally",
+            "tf": 2,
+            "weight": 0.012821
+          },
+          {
+            "term": "for",
+            "tf": 2,
+            "weight": 0.012821
+          },
+          {
+            "term": "executed",
+            "tf": 2,
+            "weight": 0.012821
+          }
+        ],
+        "unique_terms": 84,
+        "total_terms": 156
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Purpose and Scope",
+        "and",
+        "api",
+        "based",
+        "docling",
+        "model",
+        "models",
+        "project",
+        "the",
+        "vision",
+        "vlm"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.7999999999999998,
+      "retrieval_quality": 0.5305940594059406,
+      "overall": 0.6768646864686468
+    }
+  },
+  {
+    "text": "## System Architecture\n\n```\n```\n\n**Diagram: API-Based VLM Model Architecture**\n\nThe architecture separates configuration (`ApiVlmOptions`), execution (`ApiVlmModel`), and HTTP communication (`api_image_request` functions). The `ThreadPoolExecutor` enables concurrent processing of page batches, while the streaming path supports early termination via `GenerationStopper` instances.\n\n**Sources:** [docling/models/api\\_vlm\\_model.py19-101](https://github.com/docling-project/docling/blob/f7244a43/docling/models/api_vlm_model.py#L19-L101) [docling/pipeline/vlm\\_pipeline.py66-73](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/vlm_pipeline.py#L66-L73)\n\n---",
+    "metadata": {
+      "chunk_id": "f0eb3564da44-0003",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling\\_docling-project_docling_4.3.2-api-based-vlm-models.md",
+      "filename": "_docling-project_docling_4.3.2-api-based-vlm-models.md",
+      "file_extension": ".md",
+      "chunk_index": 3,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "System Architecture"
+      ],
+      "heading_text": "System Architecture",
+      "token_count": 165,
+      "char_count": 681,
+      "start_char": 7670,
+      "end_char": 8351,
+      "semantic_score": 0.7,
+      "structural_score": 0.7999999999999998,
+      "retrieval_quality": 0.5627272727272727,
+      "chunking_strategy": "hierarchical_precise_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "processing_timestamp": "2025-10-20T04:38:32.270228",
+      "document_id": "f0eb3564da44",
+      "document_name": "_docling-project_docling_4.3.2-api-based-vlm-models",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling\\_docling-project_docling_4.3.2-api-based-vlm-models.md",
+      "source_filename": "_docling-project_docling_4.3.2-api-based-vlm-models.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling",
+      "relative_path": "Docs\\docling\\_docling-project_docling_4.3.2-api-based-vlm-models.md",
+      "hierarchy_path": "System Architecture",
+      "chunk_hash": "65a2c3deb8eec031",
+      "content_digest": "65a2c3deb8eec031",
+      "chunk_length": 681,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "docling",
+          "vlm",
+          "api",
+          "pipeline",
+          "architecture",
+          "model",
+          "the",
+          "models",
+          "https",
+          "github",
+          "com",
+          "project",
+          "blob",
+          "f7244a43",
+          "system",
+          "diagram",
+          "based",
+          "separates",
+          "configuration",
+          "apivlmoptions"
+        ],
+        "term_weights": [
+          {
+            "term": "docling",
+            "tf": 8,
+            "weight": 0.098765
+          },
+          {
+            "term": "vlm",
+            "tf": 5,
+            "weight": 0.061728
+          },
+          {
+            "term": "api",
+            "tf": 4,
+            "weight": 0.049383
+          },
+          {
+            "term": "pipeline",
+            "tf": 4,
+            "weight": 0.049383
+          },
+          {
+            "term": "architecture",
+            "tf": 3,
+            "weight": 0.037037
+          },
+          {
+            "term": "model",
+            "tf": 3,
+            "weight": 0.037037
+          },
+          {
+            "term": "the",
+            "tf": 3,
+            "weight": 0.037037
+          },
+          {
+            "term": "models",
+            "tf": 2,
+            "weight": 0.024691
+          },
+          {
+            "term": "https",
+            "tf": 2,
+            "weight": 0.024691
+          },
+          {
+            "term": "github",
+            "tf": 2,
+            "weight": 0.024691
+          },
+          {
+            "term": "com",
+            "tf": 2,
+            "weight": 0.024691
+          },
+          {
+            "term": "project",
+            "tf": 2,
+            "weight": 0.024691
+          },
+          {
+            "term": "blob",
+            "tf": 2,
+            "weight": 0.024691
+          },
+          {
+            "term": "f7244a43",
+            "tf": 2,
+            "weight": 0.024691
+          },
+          {
+            "term": "system",
+            "tf": 1,
+            "weight": 0.012346
+          },
+          {
+            "term": "diagram",
+            "tf": 1,
+            "weight": 0.012346
+          },
+          {
+            "term": "based",
+            "tf": 1,
+            "weight": 0.012346
+          },
+          {
+            "term": "separates",
+            "tf": 1,
+            "weight": 0.012346
+          },
+          {
+            "term": "configuration",
+            "tf": 1,
+            "weight": 0.012346
+          },
+          {
+            "term": "apivlmoptions",
+            "tf": 1,
+            "weight": 0.012346
+          }
+        ],
+        "unique_terms": 51,
+        "total_terms": 81
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "System Architecture",
+        "api",
+        "architecture",
+        "docling",
+        "github",
+        "https",
+        "model",
+        "models",
+        "pipeline",
+        "the",
+        "vlm"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.7999999999999998,
+      "retrieval_quality": 0.5627272727272727,
+      "overall": 0.6875757575757575
+    }
+  },
+  {
+    "text": "## Configuration: ApiVlmOptions  The `ApiVlmOptions` class defines all parameters for connecting to and configuring an external VLM API:  | Field                      | Type                           | Default                                      | Description                                      | | -------------------------- | ------------------------------ | -------------------------------------------- | ------------------------------------------------ | | `kind`                     | `Literal[\"api_model_options\"]` | `\"api_model_options\"`                        | Discriminator for option type                    | | `url`                      | `AnyUrl`                       | `http://localhost:11434/v1/chat/completions` | API endpoint URL (OpenAI-compatible)             | | `headers`                  | `Dict[str, str]`               | `{}`                                         | HTTP headers (e.g., authorization)               | | `params`                   | `Dict[str, Any]`               | `{}`                                         | Model-specific parameters (e.g., `model` name)   | | `timeout`                  | `float`                        | `60`                                         | Request timeout in seconds                       | | `concurrency`              | `int`                          | `1`                                          | Number of concurrent page requests               | | `response_format`          | `ResponseFormat`               | —                                            | Expected response format (DOCTAGS/Markdown/HTML) | | `prompt`                   | `str`                          | —                                            | User prompt template                             | | `scale`                    | `float`                        | `2.0`                                        | Image scaling factor                             | | `max_size`                 | `Optional[int]`                | `None`                                       | Maximum image dimension                          | | `temperature`              | `float`                        | `0.0`                                        | Generation temperature                           | | `stop_strings`             | `List[str]`                    | `[]`                                         | Stop string tokens                               | | `custom_stopping_criteria` | `List[GenerationStopper]`      | `[]`                                         | Early-abort logic instances                      |  **Key Configuration Patterns:** ``` ``` The `url` must point to an OpenAI-compatible `/v1/chat/completions` endpoint. The `params` dict is merged with runtime temperature settings and passed as the request body. The `concurrency` parameter controls the `ThreadPoolExecutor` worker count.",
+    "metadata": {
+      "chunk_id": "f0eb3564da44-0004",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling\\_docling-project_docling_4.3.2-api-based-vlm-models.md",
+      "filename": "_docling-project_docling_4.3.2-api-based-vlm-models.md",
+      "file_extension": ".md",
+      "chunk_index": 4,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Configuration: ApiVlmOptions"
+      ],
+      "heading_text": "Configuration: ApiVlmOptions",
+      "token_count": 464,
+      "char_count": 2856,
+      "start_char": 8353,
+      "end_char": 11209,
+      "semantic_score": 0.7999999999999999,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5077840707964602,
+      "chunking_strategy": "hierarchical_precise_structural",
+      "content_type": "table_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "processing_timestamp": "2025-10-20T04:38:32.271233",
+      "document_id": "f0eb3564da44",
+      "document_name": "_docling-project_docling_4.3.2-api-based-vlm-models",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling\\_docling-project_docling_4.3.2-api-based-vlm-models.md",
+      "source_filename": "_docling-project_docling_4.3.2-api-based-vlm-models.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling",
+      "relative_path": "Docs\\docling\\_docling-project_docling_4.3.2-api-based-vlm-models.md",
+      "hierarchy_path": "Configuration: ApiVlmOptions",
+      "chunk_hash": "acb38c2921515e4f",
+      "content_digest": "acb38c2921515e4f",
+      "chunk_length": 2856,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "the",
+          "str",
+          "api",
+          "model",
+          "url",
+          "dict",
+          "float",
+          "temperature",
+          "configuration",
+          "apivlmoptions",
+          "parameters",
+          "for",
+          "and",
+          "type",
+          "options",
+          "http",
+          "chat",
+          "completions",
+          "endpoint",
+          "openai"
+        ],
+        "term_weights": [
+          {
+            "term": "the",
+            "tf": 6,
+            "weight": 0.04
+          },
+          {
+            "term": "str",
+            "tf": 5,
+            "weight": 0.033333
+          },
+          {
+            "term": "api",
+            "tf": 4,
+            "weight": 0.026667
+          },
+          {
+            "term": "model",
+            "tf": 4,
+            "weight": 0.026667
+          },
+          {
+            "term": "url",
+            "tf": 3,
+            "weight": 0.02
+          },
+          {
+            "term": "dict",
+            "tf": 3,
+            "weight": 0.02
+          },
+          {
+            "term": "float",
+            "tf": 3,
+            "weight": 0.02
+          },
+          {
+            "term": "temperature",
+            "tf": 3,
+            "weight": 0.02
+          },
+          {
+            "term": "configuration",
+            "tf": 2,
+            "weight": 0.013333
+          },
+          {
+            "term": "apivlmoptions",
+            "tf": 2,
+            "weight": 0.013333
+          },
+          {
+            "term": "parameters",
+            "tf": 2,
+            "weight": 0.013333
+          },
+          {
+            "term": "for",
+            "tf": 2,
+            "weight": 0.013333
+          },
+          {
+            "term": "and",
+            "tf": 2,
+            "weight": 0.013333
+          },
+          {
+            "term": "type",
+            "tf": 2,
+            "weight": 0.013333
+          },
+          {
+            "term": "options",
+            "tf": 2,
+            "weight": 0.013333
+          },
+          {
+            "term": "http",
+            "tf": 2,
+            "weight": 0.013333
+          },
+          {
+            "term": "chat",
+            "tf": 2,
+            "weight": 0.013333
+          },
+          {
+            "term": "completions",
+            "tf": 2,
+            "weight": 0.013333
+          },
+          {
+            "term": "endpoint",
+            "tf": 2,
+            "weight": 0.013333
+          },
+          {
+            "term": "openai",
+            "tf": 2,
+            "weight": 0.013333
+          }
+        ],
+        "unique_terms": 102,
+        "total_terms": 150
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Configuration: ApiVlmOptions",
+        "api",
+        "apivlmoptions",
+        "configuration",
+        "dict",
+        "float",
+        "model",
+        "str",
+        "temperature",
+        "the",
+        "url"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.7999999999999999,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5077840707964602,
+      "overall": 0.73592802359882
+    }
+  },
+  {
+    "text": "## Request Flow Sequence\n\n```\n```\n\n**Diagram: API VLM Request Flow**\n\nThe `ApiVlmModel.__call__` method uses `ThreadPoolExecutor.map` to process pages concurrently. Each worker thread executes `_vlm_request`, which retrieves the page image, formats the prompt, and makes an HTTP request. If custom stopping criteria are configured, the streaming path (`api_image_request_streaming`) is used to enable early termination.\n\n**Sources:** [docling/models/api\\_vlm\\_model.py43-101](https://github.com/docling-project/docling/blob/f7244a43/docling/models/api_vlm_model.py#L43-L101)\n\n---",
     "metadata": {
       "chunk_id": "f0eb3564da44-0006",
       "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling\\_docling-project_docling_4.3.2-api-based-vlm-models.md",
@@ -11,20 +608,219 @@
       "parent_chunk_id": null,
       "child_chunk_ids": [],
       "section_path": [
+        "Request Flow Sequence"
+      ],
+      "heading_text": "Request Flow Sequence",
+      "token_count": 137,
+      "char_count": 579,
+      "start_char": 11559,
+      "end_char": 12138,
+      "semantic_score": 0.7,
+      "structural_score": 0.7999999999999998,
+      "retrieval_quality": 0.5584210526315789,
+      "chunking_strategy": "hierarchical_precise_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "processing_timestamp": "2025-10-20T04:38:32.272227",
+      "document_id": "f0eb3564da44",
+      "document_name": "_docling-project_docling_4.3.2-api-based-vlm-models",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling\\_docling-project_docling_4.3.2-api-based-vlm-models.md",
+      "source_filename": "_docling-project_docling_4.3.2-api-based-vlm-models.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling",
+      "relative_path": "Docs\\docling\\_docling-project_docling_4.3.2-api-based-vlm-models.md",
+      "hierarchy_path": "Request Flow Sequence",
+      "chunk_hash": "4ab9db81fa33c77d",
+      "content_digest": "4ab9db81fa33c77d",
+      "chunk_length": 579,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "request",
+          "api",
+          "vlm",
+          "the",
+          "docling",
+          "flow",
+          "image",
+          "streaming",
+          "models",
+          "model",
+          "sequence",
+          "diagram",
+          "apivlmmodel",
+          "call",
+          "method",
+          "uses",
+          "threadpoolexecutor",
+          "map",
+          "process",
+          "pages"
+        ],
+        "term_weights": [
+          {
+            "term": "request",
+            "tf": 5,
+            "weight": 0.066667
+          },
+          {
+            "term": "api",
+            "tf": 4,
+            "weight": 0.053333
+          },
+          {
+            "term": "vlm",
+            "tf": 4,
+            "weight": 0.053333
+          },
+          {
+            "term": "the",
+            "tf": 4,
+            "weight": 0.053333
+          },
+          {
+            "term": "docling",
+            "tf": 4,
+            "weight": 0.053333
+          },
+          {
+            "term": "flow",
+            "tf": 2,
+            "weight": 0.026667
+          },
+          {
+            "term": "image",
+            "tf": 2,
+            "weight": 0.026667
+          },
+          {
+            "term": "streaming",
+            "tf": 2,
+            "weight": 0.026667
+          },
+          {
+            "term": "models",
+            "tf": 2,
+            "weight": 0.026667
+          },
+          {
+            "term": "model",
+            "tf": 2,
+            "weight": 0.026667
+          },
+          {
+            "term": "sequence",
+            "tf": 1,
+            "weight": 0.013333
+          },
+          {
+            "term": "diagram",
+            "tf": 1,
+            "weight": 0.013333
+          },
+          {
+            "term": "apivlmmodel",
+            "tf": 1,
+            "weight": 0.013333
+          },
+          {
+            "term": "call",
+            "tf": 1,
+            "weight": 0.013333
+          },
+          {
+            "term": "method",
+            "tf": 1,
+            "weight": 0.013333
+          },
+          {
+            "term": "uses",
+            "tf": 1,
+            "weight": 0.013333
+          },
+          {
+            "term": "threadpoolexecutor",
+            "tf": 1,
+            "weight": 0.013333
+          },
+          {
+            "term": "map",
+            "tf": 1,
+            "weight": 0.013333
+          },
+          {
+            "term": "process",
+            "tf": 1,
+            "weight": 0.013333
+          },
+          {
+            "term": "pages",
+            "tf": 1,
+            "weight": 0.013333
+          }
+        ],
+        "unique_terms": 54,
+        "total_terms": 75
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Request Flow Sequence",
+        "api",
+        "docling",
+        "flow",
+        "image",
+        "model",
+        "models",
+        "request",
+        "streaming",
+        "the",
+        "vlm"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.7999999999999998,
+      "retrieval_quality": 0.5584210526315789,
+      "overall": 0.6861403508771929
+    }
+  },
+  {
+    "text": "## ApiVlmModel Implementation",
+    "metadata": {
+      "chunk_id": "f0eb3564da44-0007",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling\\_docling-project_docling_4.3.2-api-based-vlm-models.md",
+      "filename": "_docling-project_docling_4.3.2-api-based-vlm-models.md",
+      "file_extension": ".md",
+      "chunk_index": 7,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
         "ApiVlmModel Implementation"
       ],
       "heading_text": "ApiVlmModel Implementation",
       "token_count": 6,
       "char_count": 29,
-      "start_char": 0,
-      "end_char": 29,
+      "start_char": 12140,
+      "end_char": 12169,
       "semantic_score": 0.8,
       "structural_score": 0.8999999999999999,
       "retrieval_quality": 0.59,
-      "chunking_strategy": "hierarchical_precise",
-      "content_type": "hierarchical_section",
-      "embedding_model": "nomic-ai/CodeRankEmbed",
-      "processing_timestamp": "2025-10-19T14:45:28.967864",
+      "chunking_strategy": "hierarchical_precise_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "processing_timestamp": "2025-10-20T04:38:32.272227",
       "document_id": "f0eb3564da44",
       "document_name": "_docling-project_docling_4.3.2-api-based-vlm-models",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling\\_docling-project_docling_4.3.2-api-based-vlm-models.md",
@@ -73,9 +869,7 @@
         "ApiVlmModel Implementation",
         "apivlmmodel",
         "implementation"
-      ],
-      "quality_fallback": true,
-      "quality_notes": "Promoted via relaxed thresholds"
+      ]
     },
     "advanced_scores": {
       "semantic": 0.8,
@@ -85,41 +879,41 @@
     }
   },
   {
-    "text": "## Example: Custom Stopping Criteria",
+    "text": "### Class Structure\n\nThe `ApiVlmModel` class implements `BasePageModel` and orchestrates API-based inference:\n\n```\n```\n\n**Initialization Validation:**\n\nThe constructor enforces the `enable_remote_services` flag to prevent accidental external connections:\n\n```\n```\n\nThis safety check requires explicit opt-in at the pipeline level before API requests are allowed.\n\n**Sources:** [docling/models/api\\_vlm\\_model.py20-41](https://github.com/docling-project/docling/blob/f7244a43/docling/models/api_vlm_model.py#L20-L41)",
     "metadata": {
-      "chunk_id": "f0eb3564da44-0025",
+      "chunk_id": "f0eb3564da44-0008",
       "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling\\_docling-project_docling_4.3.2-api-based-vlm-models.md",
       "filename": "_docling-project_docling_4.3.2-api-based-vlm-models.md",
       "file_extension": ".md",
-      "chunk_index": 25,
+      "chunk_index": 8,
       "document_level": 1,
       "parent_chunk_id": null,
       "child_chunk_ids": [],
       "section_path": [
-        "Example: Custom Stopping Criteria"
+        "Class Structure"
       ],
-      "heading_text": "Example: Custom Stopping Criteria",
-      "token_count": 7,
-      "char_count": 36,
-      "start_char": 0,
-      "end_char": 36,
-      "semantic_score": 0.8,
-      "structural_score": 0.8999999999999999,
-      "retrieval_quality": 0.59,
-      "chunking_strategy": "hierarchical_precise",
-      "content_type": "hierarchical_section",
-      "embedding_model": "nomic-ai/CodeRankEmbed",
-      "processing_timestamp": "2025-10-19T14:45:28.972385",
+      "heading_text": "Class Structure",
+      "token_count": 119,
+      "char_count": 515,
+      "start_char": 12171,
+      "end_char": 12686,
+      "semantic_score": 0.7,
+      "structural_score": 0.7999999999999998,
+      "retrieval_quality": 0.5443478260869565,
+      "chunking_strategy": "hierarchical_precise_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "processing_timestamp": "2025-10-20T04:38:32.272227",
       "document_id": "f0eb3564da44",
       "document_name": "_docling-project_docling_4.3.2-api-based-vlm-models",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling\\_docling-project_docling_4.3.2-api-based-vlm-models.md",
       "source_filename": "_docling-project_docling_4.3.2-api-based-vlm-models.md",
       "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling",
       "relative_path": "Docs\\docling\\_docling-project_docling_4.3.2-api-based-vlm-models.md",
-      "hierarchy_path": "Example: Custom Stopping Criteria",
-      "chunk_hash": "9211d257b4670d44",
-      "content_digest": "9211d257b4670d44",
-      "chunk_length": 36,
+      "hierarchy_path": "Class Structure",
+      "chunk_hash": "b59ce29fe5c9ce21",
+      "content_digest": "b59ce29fe5c9ce21",
+      "chunk_length": 515,
       "payload_version": "1.3",
       "collection_hints": [
         "qdrant_ecosystem"
@@ -128,154 +922,368 @@
         "version": "1.0",
         "weighting": "tf-normalized",
         "top_terms": [
-          "example",
-          "custom",
-          "stopping",
-          "criteria"
+          "the",
+          "api",
+          "docling",
+          "class",
+          "models",
+          "vlm",
+          "model",
+          "structure",
+          "apivlmmodel",
+          "implements",
+          "basepagemodel",
+          "and",
+          "orchestrates",
+          "based",
+          "inference",
+          "initialization",
+          "validation",
+          "constructor",
+          "enforces",
+          "enable"
         ],
         "term_weights": [
           {
-            "term": "example",
-            "tf": 1,
-            "weight": 0.25
+            "term": "the",
+            "tf": 4,
+            "weight": 0.064516
           },
           {
-            "term": "custom",
+            "term": "api",
+            "tf": 4,
+            "weight": 0.064516
+          },
+          {
+            "term": "docling",
+            "tf": 4,
+            "weight": 0.064516
+          },
+          {
+            "term": "class",
+            "tf": 2,
+            "weight": 0.032258
+          },
+          {
+            "term": "models",
+            "tf": 2,
+            "weight": 0.032258
+          },
+          {
+            "term": "vlm",
+            "tf": 2,
+            "weight": 0.032258
+          },
+          {
+            "term": "model",
+            "tf": 2,
+            "weight": 0.032258
+          },
+          {
+            "term": "structure",
             "tf": 1,
-            "weight": 0.25
+            "weight": 0.016129
+          },
+          {
+            "term": "apivlmmodel",
+            "tf": 1,
+            "weight": 0.016129
+          },
+          {
+            "term": "implements",
+            "tf": 1,
+            "weight": 0.016129
+          },
+          {
+            "term": "basepagemodel",
+            "tf": 1,
+            "weight": 0.016129
+          },
+          {
+            "term": "and",
+            "tf": 1,
+            "weight": 0.016129
+          },
+          {
+            "term": "orchestrates",
+            "tf": 1,
+            "weight": 0.016129
+          },
+          {
+            "term": "based",
+            "tf": 1,
+            "weight": 0.016129
+          },
+          {
+            "term": "inference",
+            "tf": 1,
+            "weight": 0.016129
+          },
+          {
+            "term": "initialization",
+            "tf": 1,
+            "weight": 0.016129
+          },
+          {
+            "term": "validation",
+            "tf": 1,
+            "weight": 0.016129
+          },
+          {
+            "term": "constructor",
+            "tf": 1,
+            "weight": 0.016129
+          },
+          {
+            "term": "enforces",
+            "tf": 1,
+            "weight": 0.016129
+          },
+          {
+            "term": "enable",
+            "tf": 1,
+            "weight": 0.016129
+          }
+        ],
+        "unique_terms": 49,
+        "total_terms": 62
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Class Structure",
+        "api",
+        "apivlmmodel",
+        "class",
+        "docling",
+        "implements",
+        "model",
+        "models",
+        "structure",
+        "the",
+        "vlm"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.7999999999999998,
+      "retrieval_quality": 0.5443478260869565,
+      "overall": 0.6814492753623188
+    }
+  },
+  {
+    "text": "### Request Execution Pattern\n\nThe `_vlm_request` helper function processes a single page:\n\n1. **Validation:** Check `page._backend.is_valid()`\n2. **Image Extraction:** Call `page.get_image(scale, max_size)` and convert to RGB\n3. **Prompt Construction:** Use `vlm_options.build_prompt(page.parsed_page)`\n4. **Stopping Criteria Processing:** Instantiate any `GenerationStopper` classes\n5. **API Call:** Route to streaming or non-streaming based on `custom_stopping_criteria`\n6. **Response Decoding:** Apply `vlm_options.decode_response()`\n7. **Result Attachment:** Set `page.predictions.vlm_response`\n\n**Concurrency Control:**\n\n```\n```\n\nThe executor processes up to `concurrency` pages in parallel, with each thread making independent HTTP requests. This is essential for throughput when processing large documents.\n\n**Sources:** [docling/models/api\\_vlm\\_model.py43-101](https://github.com/docling-project/docling/blob/f7244a43/docling/models/api_vlm_model.py#L43-L101)\n\n---",
+    "metadata": {
+      "chunk_id": "f0eb3564da44-0009",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling\\_docling-project_docling_4.3.2-api-based-vlm-models.md",
+      "filename": "_docling-project_docling_4.3.2-api-based-vlm-models.md",
+      "file_extension": ".md",
+      "chunk_index": 9,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Request Execution Pattern"
+      ],
+      "heading_text": "Request Execution Pattern",
+      "token_count": 227,
+      "char_count": 974,
+      "start_char": 12688,
+      "end_char": 13662,
+      "semantic_score": 0.6,
+      "structural_score": 0.7999999999999998,
+      "retrieval_quality": 0.573695652173913,
+      "chunking_strategy": "hierarchical_precise_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "processing_timestamp": "2025-10-20T04:38:32.273229",
+      "document_id": "f0eb3564da44",
+      "document_name": "_docling-project_docling_4.3.2-api-based-vlm-models",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling\\_docling-project_docling_4.3.2-api-based-vlm-models.md",
+      "source_filename": "_docling-project_docling_4.3.2-api-based-vlm-models.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling",
+      "relative_path": "Docs\\docling\\_docling-project_docling_4.3.2-api-based-vlm-models.md",
+      "hierarchy_path": "Request Execution Pattern",
+      "chunk_hash": "2eb094b08df2caa3",
+      "content_digest": "2eb094b08df2caa3",
+      "chunk_length": 974,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "vlm",
+          "page",
+          "docling",
+          "api",
+          "response",
+          "request",
+          "the",
+          "processes",
+          "image",
+          "call",
+          "prompt",
+          "options",
+          "stopping",
+          "criteria",
+          "processing",
+          "streaming",
+          "concurrency",
+          "models",
+          "model",
+          "execution"
+        ],
+        "term_weights": [
+          {
+            "term": "vlm",
+            "tf": 6,
+            "weight": 0.052174
+          },
+          {
+            "term": "page",
+            "tf": 6,
+            "weight": 0.052174
+          },
+          {
+            "term": "docling",
+            "tf": 4,
+            "weight": 0.034783
+          },
+          {
+            "term": "api",
+            "tf": 3,
+            "weight": 0.026087
+          },
+          {
+            "term": "response",
+            "tf": 3,
+            "weight": 0.026087
+          },
+          {
+            "term": "request",
+            "tf": 2,
+            "weight": 0.017391
+          },
+          {
+            "term": "the",
+            "tf": 2,
+            "weight": 0.017391
+          },
+          {
+            "term": "processes",
+            "tf": 2,
+            "weight": 0.017391
+          },
+          {
+            "term": "image",
+            "tf": 2,
+            "weight": 0.017391
+          },
+          {
+            "term": "call",
+            "tf": 2,
+            "weight": 0.017391
+          },
+          {
+            "term": "prompt",
+            "tf": 2,
+            "weight": 0.017391
+          },
+          {
+            "term": "options",
+            "tf": 2,
+            "weight": 0.017391
           },
           {
             "term": "stopping",
-            "tf": 1,
-            "weight": 0.25
+            "tf": 2,
+            "weight": 0.017391
           },
           {
             "term": "criteria",
-            "tf": 1,
-            "weight": 0.25
-          }
-        ],
-        "unique_terms": 4,
-        "total_terms": 4
-      },
-      "modal_hint": "prose",
-      "content_flags": {
-        "has_code_block": false,
-        "has_table": false,
-        "has_list": false,
-        "has_json": false,
-        "has_formula": false
-      },
-      "search_keywords": [
-        "Example: Custom Stopping Criteria",
-        "criteria",
-        "custom",
-        "example",
-        "stopping"
-      ],
-      "quality_fallback": true,
-      "quality_notes": "Promoted via relaxed thresholds"
-    },
-    "advanced_scores": {
-      "semantic": 0.8,
-      "structural": 0.8999999999999999,
-      "retrieval_quality": 0.59,
-      "overall": 0.7633333333333333
-    }
-  },
-  {
-    "text": "## Performance Considerations",
-    "metadata": {
-      "chunk_id": "f0eb3564da44-0028",
-      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling\\_docling-project_docling_4.3.2-api-based-vlm-models.md",
-      "filename": "_docling-project_docling_4.3.2-api-based-vlm-models.md",
-      "file_extension": ".md",
-      "chunk_index": 28,
-      "document_level": 1,
-      "parent_chunk_id": null,
-      "child_chunk_ids": [],
-      "section_path": [
-        "Performance Considerations"
-      ],
-      "heading_text": "Performance Considerations",
-      "token_count": 4,
-      "char_count": 29,
-      "start_char": 0,
-      "end_char": 29,
-      "semantic_score": 0.8,
-      "structural_score": 0.8999999999999999,
-      "retrieval_quality": 0.59,
-      "chunking_strategy": "hierarchical_precise",
-      "content_type": "hierarchical_section",
-      "embedding_model": "nomic-ai/CodeRankEmbed",
-      "processing_timestamp": "2025-10-19T14:45:28.972793",
-      "document_id": "f0eb3564da44",
-      "document_name": "_docling-project_docling_4.3.2-api-based-vlm-models",
-      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling\\_docling-project_docling_4.3.2-api-based-vlm-models.md",
-      "source_filename": "_docling-project_docling_4.3.2-api-based-vlm-models.md",
-      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling",
-      "relative_path": "Docs\\docling\\_docling-project_docling_4.3.2-api-based-vlm-models.md",
-      "hierarchy_path": "Performance Considerations",
-      "chunk_hash": "f0c6f691b1d6938e",
-      "content_digest": "f0c6f691b1d6938e",
-      "chunk_length": 29,
-      "payload_version": "1.3",
-      "collection_hints": [
-        "qdrant_ecosystem"
-      ],
-      "sparse_features": {
-        "version": "1.0",
-        "weighting": "tf-normalized",
-        "top_terms": [
-          "performance",
-          "considerations"
-        ],
-        "term_weights": [
-          {
-            "term": "performance",
-            "tf": 1,
-            "weight": 0.5
+            "tf": 2,
+            "weight": 0.017391
           },
           {
-            "term": "considerations",
+            "term": "processing",
+            "tf": 2,
+            "weight": 0.017391
+          },
+          {
+            "term": "streaming",
+            "tf": 2,
+            "weight": 0.017391
+          },
+          {
+            "term": "concurrency",
+            "tf": 2,
+            "weight": 0.017391
+          },
+          {
+            "term": "models",
+            "tf": 2,
+            "weight": 0.017391
+          },
+          {
+            "term": "model",
+            "tf": 2,
+            "weight": 0.017391
+          },
+          {
+            "term": "execution",
             "tf": 1,
-            "weight": 0.5
+            "weight": 0.008696
           }
         ],
-        "unique_terms": 2,
-        "total_terms": 2
+        "unique_terms": 84,
+        "total_terms": 115
       },
-      "modal_hint": "prose",
+      "modal_hint": "code",
       "content_flags": {
-        "has_code_block": false,
+        "has_code_block": true,
         "has_table": false,
         "has_list": false,
         "has_json": false,
         "has_formula": false
       },
       "search_keywords": [
-        "Performance Considerations",
-        "considerations",
-        "performance"
-      ],
-      "quality_fallback": true,
-      "quality_notes": "Promoted via relaxed thresholds"
+        "Request Execution Pattern",
+        "api",
+        "call",
+        "docling",
+        "image",
+        "page",
+        "processes",
+        "request",
+        "response",
+        "the",
+        "vlm"
+      ]
     },
     "advanced_scores": {
-      "semantic": 0.8,
-      "structural": 0.8999999999999999,
-      "retrieval_quality": 0.59,
-      "overall": 0.7633333333333333
+      "semantic": 0.6,
+      "structural": 0.7999999999999998,
+      "retrieval_quality": 0.573695652173913,
+      "overall": 0.6578985507246377
     }
   },
   {
-    "text": "### Streaming Request Flow  When `custom_stopping_criteria` is non-empty, the model uses the streaming API path: ``` ```",
+    "text": "### Streaming Request Flow\n\nWhen `custom_stopping_criteria` is non-empty, the model uses the streaming API path:\n\n```\n```",
     "metadata": {
-      "chunk_id": "f0eb3564da44-0010",
+      "chunk_id": "f0eb3564da44-0011",
       "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling\\_docling-project_docling_4.3.2-api-based-vlm-models.md",
       "filename": "_docling-project_docling_4.3.2-api-based-vlm-models.md",
       "file_extension": ".md",
-      "chunk_index": 10,
+      "chunk_index": 11,
       "document_level": 1,
       "parent_chunk_id": null,
       "child_chunk_ids": [],
@@ -283,17 +1291,17 @@
         "Streaming Request Flow"
       ],
       "heading_text": "Streaming Request Flow",
-      "token_count": 26,
-      "char_count": 120,
-      "start_char": 0,
-      "end_char": 120,
+      "token_count": 27,
+      "char_count": 121,
+      "start_char": 13694,
+      "end_char": 13815,
       "semantic_score": 0.8,
-      "structural_score": 0.8999999999999999,
+      "structural_score": 0.7,
       "retrieval_quality": 0.5370588235294117,
-      "chunking_strategy": "hierarchical_precise",
-      "content_type": "hierarchical_section",
-      "embedding_model": "nomic-ai/CodeRankEmbed",
-      "processing_timestamp": "2025-10-19T14:45:28.968845",
+      "chunking_strategy": "hierarchical_precise_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "processing_timestamp": "2025-10-20T04:38:32.273229",
       "document_id": "f0eb3564da44",
       "document_name": "_docling-project_docling_4.3.2-api-based-vlm-models",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling\\_docling-project_docling_4.3.2-api-based-vlm-models.md",
@@ -301,9 +1309,9 @@
       "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling",
       "relative_path": "Docs\\docling\\_docling-project_docling_4.3.2-api-based-vlm-models.md",
       "hierarchy_path": "Streaming Request Flow",
-      "chunk_hash": "bb1d0a32b858f7ed",
-      "content_digest": "bb1d0a32b858f7ed",
-      "chunk_length": 120,
+      "chunk_hash": "adc6ef4ff9d51f60",
+      "content_digest": "adc6ef4ff9d51f60",
+      "chunk_length": 121,
       "payload_version": "1.3",
       "collection_hints": [
         "qdrant_ecosystem"
@@ -422,53 +1430,51 @@
         "streaming",
         "the",
         "when"
-      ],
-      "quality_fallback": true,
-      "quality_notes": "Promoted via relaxed thresholds"
+      ]
     },
     "advanced_scores": {
       "semantic": 0.8,
-      "structural": 0.8999999999999999,
+      "structural": 0.7,
       "retrieval_quality": 0.5370588235294117,
-      "overall": 0.7456862745098038
+      "overall": 0.6790196078431373
     }
   },
   {
-    "text": "## Streaming and Early Abort",
+    "text": "### GenerationStopper Interface\n\nThe `GenerationStopper` protocol enables custom early-abort logic:\n\n```\n```\n\nStreaming requests check `should_stop()` after each token chunk arrives. This allows stopping generation when:\n\n- A specific pattern is detected (e.g., closing XML tag)\n- A confidence threshold is crossed\n- A maximum content length is reached\n\n**Sources:** [docling/models/api\\_vlm\\_model.py63-97](https://github.com/docling-project/docling/blob/f7244a43/docling/models/api_vlm_model.py#L63-L97)\n\n---",
     "metadata": {
-      "chunk_id": "f0eb3564da44-0009",
+      "chunk_id": "f0eb3564da44-0012",
       "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling\\_docling-project_docling_4.3.2-api-based-vlm-models.md",
       "filename": "_docling-project_docling_4.3.2-api-based-vlm-models.md",
       "file_extension": ".md",
-      "chunk_index": 9,
+      "chunk_index": 12,
       "document_level": 1,
       "parent_chunk_id": null,
       "child_chunk_ids": [],
       "section_path": [
-        "Streaming and Early Abort"
+        "GenerationStopper Interface"
       ],
-      "heading_text": "Streaming and Early Abort",
-      "token_count": 5,
-      "char_count": 28,
-      "start_char": 0,
-      "end_char": 28,
-      "semantic_score": 0.8,
-      "structural_score": 0.8999999999999999,
-      "retrieval_quality": 0.39,
-      "chunking_strategy": "hierarchical_precise",
-      "content_type": "hierarchical_section",
-      "embedding_model": "nomic-ai/CodeRankEmbed",
-      "processing_timestamp": "2025-10-19T14:45:28.968765",
+      "heading_text": "GenerationStopper Interface",
+      "token_count": 120,
+      "char_count": 510,
+      "start_char": 13817,
+      "end_char": 14327,
+      "semantic_score": 0.7,
+      "structural_score": 0.7999999999999998,
+      "retrieval_quality": 0.5496153846153846,
+      "chunking_strategy": "hierarchical_precise_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "processing_timestamp": "2025-10-20T04:38:32.274353",
       "document_id": "f0eb3564da44",
       "document_name": "_docling-project_docling_4.3.2-api-based-vlm-models",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling\\_docling-project_docling_4.3.2-api-based-vlm-models.md",
       "source_filename": "_docling-project_docling_4.3.2-api-based-vlm-models.md",
       "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling",
       "relative_path": "Docs\\docling\\_docling-project_docling_4.3.2-api-based-vlm-models.md",
-      "hierarchy_path": "Streaming and Early Abort",
-      "chunk_hash": "041278ae6a92e7d2",
-      "content_digest": "041278ae6a92e7d2",
-      "chunk_length": 28,
+      "hierarchy_path": "GenerationStopper Interface",
+      "chunk_hash": "57badd08236117d0",
+      "content_digest": "57badd08236117d0",
+      "chunk_length": 510,
       "payload_version": "1.3",
       "collection_hints": [
         "qdrant_ecosystem"
@@ -477,29 +1483,1579 @@
         "version": "1.0",
         "weighting": "tf-normalized",
         "top_terms": [
-          "streaming",
-          "and",
+          "docling",
+          "generationstopper",
+          "models",
+          "api",
+          "vlm",
+          "model",
+          "interface",
+          "the",
+          "protocol",
+          "enables",
+          "custom",
           "early",
-          "abort"
+          "abort",
+          "logic",
+          "streaming",
+          "requests",
+          "check",
+          "should",
+          "stop",
+          "after"
         ],
         "term_weights": [
           {
-            "term": "streaming",
-            "tf": 1,
-            "weight": 0.25
+            "term": "docling",
+            "tf": 4,
+            "weight": 0.066667
           },
           {
-            "term": "and",
+            "term": "generationstopper",
+            "tf": 2,
+            "weight": 0.033333
+          },
+          {
+            "term": "models",
+            "tf": 2,
+            "weight": 0.033333
+          },
+          {
+            "term": "api",
+            "tf": 2,
+            "weight": 0.033333
+          },
+          {
+            "term": "vlm",
+            "tf": 2,
+            "weight": 0.033333
+          },
+          {
+            "term": "model",
+            "tf": 2,
+            "weight": 0.033333
+          },
+          {
+            "term": "interface",
             "tf": 1,
-            "weight": 0.25
+            "weight": 0.016667
+          },
+          {
+            "term": "the",
+            "tf": 1,
+            "weight": 0.016667
+          },
+          {
+            "term": "protocol",
+            "tf": 1,
+            "weight": 0.016667
+          },
+          {
+            "term": "enables",
+            "tf": 1,
+            "weight": 0.016667
+          },
+          {
+            "term": "custom",
+            "tf": 1,
+            "weight": 0.016667
           },
           {
             "term": "early",
             "tf": 1,
-            "weight": 0.25
+            "weight": 0.016667
           },
           {
             "term": "abort",
+            "tf": 1,
+            "weight": 0.016667
+          },
+          {
+            "term": "logic",
+            "tf": 1,
+            "weight": 0.016667
+          },
+          {
+            "term": "streaming",
+            "tf": 1,
+            "weight": 0.016667
+          },
+          {
+            "term": "requests",
+            "tf": 1,
+            "weight": 0.016667
+          },
+          {
+            "term": "check",
+            "tf": 1,
+            "weight": 0.016667
+          },
+          {
+            "term": "should",
+            "tf": 1,
+            "weight": 0.016667
+          },
+          {
+            "term": "stop",
+            "tf": 1,
+            "weight": 0.016667
+          },
+          {
+            "term": "after",
+            "tf": 1,
+            "weight": 0.016667
+          }
+        ],
+        "unique_terms": 52,
+        "total_terms": 60
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": true,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "GenerationStopper Interface",
+        "api",
+        "docling",
+        "enables",
+        "generationstopper",
+        "interface",
+        "model",
+        "models",
+        "protocol",
+        "the",
+        "vlm"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.7999999999999998,
+      "retrieval_quality": 0.5496153846153846,
+      "overall": 0.683205128205128
+    }
+  },
+  {
+    "text": "### VlmPipeline Instantiation\n\nThe `VlmPipeline` detects `ApiVlmOptions` and instantiates `ApiVlmModel`:\n\n```\n```\n\nThis is the sole model in the `build_pipe` list, as API-based inference is end-to-end (no separate OCR, layout, or table models).\n\n**Sources:** [docling/pipeline/vlm\\_pipeline.py66-73](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/vlm_pipeline.py#L66-L73)",
+    "metadata": {
+      "chunk_id": "f0eb3564da44-0014",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling\\_docling-project_docling_4.3.2-api-based-vlm-models.md",
+      "filename": "_docling-project_docling_4.3.2-api-based-vlm-models.md",
+      "file_extension": ".md",
+      "chunk_index": 14,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "VlmPipeline Instantiation"
+      ],
+      "heading_text": "VlmPipeline Instantiation",
+      "token_count": 112,
+      "char_count": 398,
+      "start_char": 14354,
+      "end_char": 14752,
+      "semantic_score": 0.7,
+      "structural_score": 0.7999999999999998,
+      "retrieval_quality": 0.5557142857142857,
+      "chunking_strategy": "hierarchical_precise_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "processing_timestamp": "2025-10-20T04:38:32.275117",
+      "document_id": "f0eb3564da44",
+      "document_name": "_docling-project_docling_4.3.2-api-based-vlm-models",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling\\_docling-project_docling_4.3.2-api-based-vlm-models.md",
+      "source_filename": "_docling-project_docling_4.3.2-api-based-vlm-models.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling",
+      "relative_path": "Docs\\docling\\_docling-project_docling_4.3.2-api-based-vlm-models.md",
+      "hierarchy_path": "VlmPipeline Instantiation",
+      "chunk_hash": "6a3ab4eacefa5117",
+      "content_digest": "6a3ab4eacefa5117",
+      "chunk_length": 398,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "docling",
+          "pipeline",
+          "the",
+          "vlmpipeline",
+          "end",
+          "vlm",
+          "instantiation",
+          "detects",
+          "apivlmoptions",
+          "and",
+          "instantiates",
+          "apivlmmodel",
+          "this",
+          "sole",
+          "model",
+          "build",
+          "pipe",
+          "list",
+          "api",
+          "based"
+        ],
+        "term_weights": [
+          {
+            "term": "docling",
+            "tf": 4,
+            "weight": 0.085106
+          },
+          {
+            "term": "pipeline",
+            "tf": 4,
+            "weight": 0.085106
+          },
+          {
+            "term": "the",
+            "tf": 3,
+            "weight": 0.06383
+          },
+          {
+            "term": "vlmpipeline",
+            "tf": 2,
+            "weight": 0.042553
+          },
+          {
+            "term": "end",
+            "tf": 2,
+            "weight": 0.042553
+          },
+          {
+            "term": "vlm",
+            "tf": 2,
+            "weight": 0.042553
+          },
+          {
+            "term": "instantiation",
+            "tf": 1,
+            "weight": 0.021277
+          },
+          {
+            "term": "detects",
+            "tf": 1,
+            "weight": 0.021277
+          },
+          {
+            "term": "apivlmoptions",
+            "tf": 1,
+            "weight": 0.021277
+          },
+          {
+            "term": "and",
+            "tf": 1,
+            "weight": 0.021277
+          },
+          {
+            "term": "instantiates",
+            "tf": 1,
+            "weight": 0.021277
+          },
+          {
+            "term": "apivlmmodel",
+            "tf": 1,
+            "weight": 0.021277
+          },
+          {
+            "term": "this",
+            "tf": 1,
+            "weight": 0.021277
+          },
+          {
+            "term": "sole",
+            "tf": 1,
+            "weight": 0.021277
+          },
+          {
+            "term": "model",
+            "tf": 1,
+            "weight": 0.021277
+          },
+          {
+            "term": "build",
+            "tf": 1,
+            "weight": 0.021277
+          },
+          {
+            "term": "pipe",
+            "tf": 1,
+            "weight": 0.021277
+          },
+          {
+            "term": "list",
+            "tf": 1,
+            "weight": 0.021277
+          },
+          {
+            "term": "api",
+            "tf": 1,
+            "weight": 0.021277
+          },
+          {
+            "term": "based",
+            "tf": 1,
+            "weight": 0.021277
+          }
+        ],
+        "unique_terms": 36,
+        "total_terms": 47
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "VlmPipeline Instantiation",
+        "and",
+        "apivlmoptions",
+        "detects",
+        "docling",
+        "end",
+        "instantiation",
+        "pipeline",
+        "the",
+        "vlm",
+        "vlmpipeline"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.7999999999999998,
+      "retrieval_quality": 0.5557142857142857,
+      "overall": 0.6852380952380952
+    }
+  },
+  {
+    "text": "### Page Processing\n\nThe pipeline's `initialize_page` method loads page backends, then `_apply_on_pages` iterates the `build_pipe`:\n\n```\n```\n\nFor `ApiVlmModel`, the `__call__` method internally uses the thread pool, so the outer iteration is straightforward. The model modifies `page.predictions.vlm_response` in-place and yields the updated pages.\n\n**Sources:** [docling/pipeline/base\\_pipeline.py189-195](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/base_pipeline.py#L189-L195)\n\n---",
+    "metadata": {
+      "chunk_id": "f0eb3564da44-0015",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling\\_docling-project_docling_4.3.2-api-based-vlm-models.md",
+      "filename": "_docling-project_docling_4.3.2-api-based-vlm-models.md",
+      "file_extension": ".md",
+      "chunk_index": 15,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Page Processing"
+      ],
+      "heading_text": "Page Processing",
+      "token_count": 126,
+      "char_count": 513,
+      "start_char": 14754,
+      "end_char": 15267,
+      "semantic_score": 0.7,
+      "structural_score": 0.7999999999999998,
+      "retrieval_quality": 0.5313043478260869,
+      "chunking_strategy": "hierarchical_precise_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "processing_timestamp": "2025-10-20T04:38:32.275117",
+      "document_id": "f0eb3564da44",
+      "document_name": "_docling-project_docling_4.3.2-api-based-vlm-models",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling\\_docling-project_docling_4.3.2-api-based-vlm-models.md",
+      "source_filename": "_docling-project_docling_4.3.2-api-based-vlm-models.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling",
+      "relative_path": "Docs\\docling\\_docling-project_docling_4.3.2-api-based-vlm-models.md",
+      "hierarchy_path": "Page Processing",
+      "chunk_hash": "67513f345b515b4e",
+      "content_digest": "67513f345b515b4e",
+      "chunk_length": 513,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "the",
+          "pipeline",
+          "page",
+          "docling",
+          "method",
+          "pages",
+          "base",
+          "processing",
+          "initialize",
+          "loads",
+          "backends",
+          "then",
+          "apply",
+          "iterates",
+          "build",
+          "pipe",
+          "for",
+          "apivlmmodel",
+          "call",
+          "internally"
+        ],
+        "term_weights": [
+          {
+            "term": "the",
+            "tf": 7,
+            "weight": 0.107692
+          },
+          {
+            "term": "pipeline",
+            "tf": 5,
+            "weight": 0.076923
+          },
+          {
+            "term": "page",
+            "tf": 4,
+            "weight": 0.061538
+          },
+          {
+            "term": "docling",
+            "tf": 4,
+            "weight": 0.061538
+          },
+          {
+            "term": "method",
+            "tf": 2,
+            "weight": 0.030769
+          },
+          {
+            "term": "pages",
+            "tf": 2,
+            "weight": 0.030769
+          },
+          {
+            "term": "base",
+            "tf": 2,
+            "weight": 0.030769
+          },
+          {
+            "term": "processing",
+            "tf": 1,
+            "weight": 0.015385
+          },
+          {
+            "term": "initialize",
+            "tf": 1,
+            "weight": 0.015385
+          },
+          {
+            "term": "loads",
+            "tf": 1,
+            "weight": 0.015385
+          },
+          {
+            "term": "backends",
+            "tf": 1,
+            "weight": 0.015385
+          },
+          {
+            "term": "then",
+            "tf": 1,
+            "weight": 0.015385
+          },
+          {
+            "term": "apply",
+            "tf": 1,
+            "weight": 0.015385
+          },
+          {
+            "term": "iterates",
+            "tf": 1,
+            "weight": 0.015385
+          },
+          {
+            "term": "build",
+            "tf": 1,
+            "weight": 0.015385
+          },
+          {
+            "term": "pipe",
+            "tf": 1,
+            "weight": 0.015385
+          },
+          {
+            "term": "for",
+            "tf": 1,
+            "weight": 0.015385
+          },
+          {
+            "term": "apivlmmodel",
+            "tf": 1,
+            "weight": 0.015385
+          },
+          {
+            "term": "call",
+            "tf": 1,
+            "weight": 0.015385
+          },
+          {
+            "term": "internally",
+            "tf": 1,
+            "weight": 0.015385
+          }
+        ],
+        "unique_terms": 46,
+        "total_terms": 65
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Page Processing",
+        "base",
+        "docling",
+        "initialize",
+        "loads",
+        "method",
+        "page",
+        "pages",
+        "pipeline",
+        "processing",
+        "the"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.7999999999999998,
+      "retrieval_quality": 0.5313043478260869,
+      "overall": 0.6771014492753622
+    }
+  },
+  {
+    "text": "## Predefined API Configurations\n\nThe `docling/datamodel/vlm_model_specs.py` module provides ready-to-use configurations:",
+    "metadata": {
+      "chunk_id": "f0eb3564da44-0016",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling\\_docling-project_docling_4.3.2-api-based-vlm-models.md",
+      "filename": "_docling-project_docling_4.3.2-api-based-vlm-models.md",
+      "file_extension": ".md",
+      "chunk_index": 16,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Predefined API Configurations"
+      ],
+      "heading_text": "Predefined API Configurations",
+      "token_count": 26,
+      "char_count": 121,
+      "start_char": 15269,
+      "end_char": 15390,
+      "semantic_score": 0.7,
+      "structural_score": 0.7,
+      "retrieval_quality": 0.59,
+      "chunking_strategy": "hierarchical_precise_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "processing_timestamp": "2025-10-20T04:38:32.275117",
+      "document_id": "f0eb3564da44",
+      "document_name": "_docling-project_docling_4.3.2-api-based-vlm-models",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling\\_docling-project_docling_4.3.2-api-based-vlm-models.md",
+      "source_filename": "_docling-project_docling_4.3.2-api-based-vlm-models.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling",
+      "relative_path": "Docs\\docling\\_docling-project_docling_4.3.2-api-based-vlm-models.md",
+      "hierarchy_path": "Predefined API Configurations",
+      "chunk_hash": "0211d20b55647c8d",
+      "content_digest": "0211d20b55647c8d",
+      "chunk_length": 121,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "configurations",
+          "predefined",
+          "api",
+          "the",
+          "docling",
+          "datamodel",
+          "vlm",
+          "model",
+          "specs",
+          "module",
+          "provides",
+          "ready",
+          "use"
+        ],
+        "term_weights": [
+          {
+            "term": "configurations",
+            "tf": 2,
+            "weight": 0.142857
+          },
+          {
+            "term": "predefined",
+            "tf": 1,
+            "weight": 0.071429
+          },
+          {
+            "term": "api",
+            "tf": 1,
+            "weight": 0.071429
+          },
+          {
+            "term": "the",
+            "tf": 1,
+            "weight": 0.071429
+          },
+          {
+            "term": "docling",
+            "tf": 1,
+            "weight": 0.071429
+          },
+          {
+            "term": "datamodel",
+            "tf": 1,
+            "weight": 0.071429
+          },
+          {
+            "term": "vlm",
+            "tf": 1,
+            "weight": 0.071429
+          },
+          {
+            "term": "model",
+            "tf": 1,
+            "weight": 0.071429
+          },
+          {
+            "term": "specs",
+            "tf": 1,
+            "weight": 0.071429
+          },
+          {
+            "term": "module",
+            "tf": 1,
+            "weight": 0.071429
+          },
+          {
+            "term": "provides",
+            "tf": 1,
+            "weight": 0.071429
+          },
+          {
+            "term": "ready",
+            "tf": 1,
+            "weight": 0.071429
+          },
+          {
+            "term": "use",
+            "tf": 1,
+            "weight": 0.071429
+          }
+        ],
+        "unique_terms": 13,
+        "total_terms": 14
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Predefined API Configurations",
+        "api",
+        "configurations",
+        "datamodel",
+        "docling",
+        "model",
+        "module",
+        "predefined",
+        "specs",
+        "the",
+        "vlm"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.7,
+      "retrieval_quality": 0.59,
+      "overall": 0.6633333333333332
+    }
+  },
+  {
+    "text": "### GRANITE\\_VISION\\_OLLAMA\n\n```\n```\n\nThis configuration targets a local Ollama server running the Granite Vision model. The `scale=1.0` uses original image resolution, and `timeout=120` allows longer processing for complex pages.\n\n**Usage Pattern:**\n\n```\n```\n\n**Sources:** [docling/datamodel/vlm\\_model\\_specs.py171-179](https://github.com/docling-project/docling/blob/f7244a43/docling/datamodel/vlm_model_specs.py#L171-L179)\n\n---",
+    "metadata": {
+      "chunk_id": "f0eb3564da44-0017",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling\\_docling-project_docling_4.3.2-api-based-vlm-models.md",
+      "filename": "_docling-project_docling_4.3.2-api-based-vlm-models.md",
+      "file_extension": ".md",
+      "chunk_index": 17,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "GRANITE\\_VISION\\_OLLAMA"
+      ],
+      "heading_text": "GRANITE\\_VISION\\_OLLAMA",
+      "token_count": 114,
+      "char_count": 431,
+      "start_char": 15392,
+      "end_char": 15823,
+      "semantic_score": 0.7,
+      "structural_score": 0.7999999999999998,
+      "retrieval_quality": 0.5575675675675675,
+      "chunking_strategy": "hierarchical_precise_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "processing_timestamp": "2025-10-20T04:38:32.276162",
+      "document_id": "f0eb3564da44",
+      "document_name": "_docling-project_docling_4.3.2-api-based-vlm-models",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling\\_docling-project_docling_4.3.2-api-based-vlm-models.md",
+      "source_filename": "_docling-project_docling_4.3.2-api-based-vlm-models.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling",
+      "relative_path": "Docs\\docling\\_docling-project_docling_4.3.2-api-based-vlm-models.md",
+      "hierarchy_path": "GRANITE\\_VISION\\_OLLAMA",
+      "chunk_hash": "1601d9a65e6424e7",
+      "content_digest": "1601d9a65e6424e7",
+      "chunk_length": 431,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "docling",
+          "model",
+          "granite",
+          "vision",
+          "ollama",
+          "the",
+          "datamodel",
+          "vlm",
+          "specs",
+          "this",
+          "configuration",
+          "targets",
+          "local",
+          "server",
+          "running",
+          "scale",
+          "uses",
+          "original",
+          "image",
+          "resolution"
+        ],
+        "term_weights": [
+          {
+            "term": "docling",
+            "tf": 4,
+            "weight": 0.074074
+          },
+          {
+            "term": "model",
+            "tf": 3,
+            "weight": 0.055556
+          },
+          {
+            "term": "granite",
+            "tf": 2,
+            "weight": 0.037037
+          },
+          {
+            "term": "vision",
+            "tf": 2,
+            "weight": 0.037037
+          },
+          {
+            "term": "ollama",
+            "tf": 2,
+            "weight": 0.037037
+          },
+          {
+            "term": "the",
+            "tf": 2,
+            "weight": 0.037037
+          },
+          {
+            "term": "datamodel",
+            "tf": 2,
+            "weight": 0.037037
+          },
+          {
+            "term": "vlm",
+            "tf": 2,
+            "weight": 0.037037
+          },
+          {
+            "term": "specs",
+            "tf": 2,
+            "weight": 0.037037
+          },
+          {
+            "term": "this",
+            "tf": 1,
+            "weight": 0.018519
+          },
+          {
+            "term": "configuration",
+            "tf": 1,
+            "weight": 0.018519
+          },
+          {
+            "term": "targets",
+            "tf": 1,
+            "weight": 0.018519
+          },
+          {
+            "term": "local",
+            "tf": 1,
+            "weight": 0.018519
+          },
+          {
+            "term": "server",
+            "tf": 1,
+            "weight": 0.018519
+          },
+          {
+            "term": "running",
+            "tf": 1,
+            "weight": 0.018519
+          },
+          {
+            "term": "scale",
+            "tf": 1,
+            "weight": 0.018519
+          },
+          {
+            "term": "uses",
+            "tf": 1,
+            "weight": 0.018519
+          },
+          {
+            "term": "original",
+            "tf": 1,
+            "weight": 0.018519
+          },
+          {
+            "term": "image",
+            "tf": 1,
+            "weight": 0.018519
+          },
+          {
+            "term": "resolution",
+            "tf": 1,
+            "weight": 0.018519
+          }
+        ],
+        "unique_terms": 42,
+        "total_terms": 54
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "GRANITE\\_VISION\\_OLLAMA",
+        "datamodel",
+        "docling",
+        "granite",
+        "model",
+        "ollama",
+        "specs",
+        "the",
+        "this",
+        "vision",
+        "vlm"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.7999999999999998,
+      "retrieval_quality": 0.5575675675675675,
+      "overall": 0.6858558558558557
+    }
+  },
+  {
+    "text": "### Response Parsing\n\n**Non-Streaming Response:**\n\n```\n```\n\nThe `api_image_request` function extracts `choices[0].message.content`.\n\n**Streaming Response:**\n\nServer-Sent Events (SSE) format:\n\n```\ndata: {\"choices\": [{\"delta\": {\"content\": \"# \"}}]}\n\ndata: {\"choices\": [{\"delta\": {\"content\": \"Document\"}}]}\n\ndata: [DONE]\n```\n\nThe `api_image_request_streaming` function accumulates chunks until a stopper triggers or the stream completes.\n\n**Sources:** [docling/models/api\\_vlm\\_model.py76-97](https://github.com/docling-project/docling/blob/f7244a43/docling/models/api_vlm_model.py#L76-L97)\n\n---",
+    "metadata": {
+      "chunk_id": "f0eb3564da44-0020",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling\\_docling-project_docling_4.3.2-api-based-vlm-models.md",
+      "filename": "_docling-project_docling_4.3.2-api-based-vlm-models.md",
+      "file_extension": ".md",
+      "chunk_index": 20,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Response Parsing"
+      ],
+      "heading_text": "Response Parsing",
+      "token_count": 157,
+      "char_count": 591,
+      "start_char": 16140,
+      "end_char": 16731,
+      "semantic_score": 0.7,
+      "structural_score": 0.7999999999999998,
+      "retrieval_quality": 0.5165306122448979,
+      "chunking_strategy": "hierarchical_precise_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "processing_timestamp": "2025-10-20T04:38:32.276162",
+      "document_id": "f0eb3564da44",
+      "document_name": "_docling-project_docling_4.3.2-api-based-vlm-models",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling\\_docling-project_docling_4.3.2-api-based-vlm-models.md",
+      "source_filename": "_docling-project_docling_4.3.2-api-based-vlm-models.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling",
+      "relative_path": "Docs\\docling\\_docling-project_docling_4.3.2-api-based-vlm-models.md",
+      "hierarchy_path": "Response Parsing",
+      "chunk_hash": "ef5b478a06dd7959",
+      "content_digest": "ef5b478a06dd7959",
+      "chunk_length": 591,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "api",
+          "docling",
+          "response",
+          "streaming",
+          "the",
+          "choices",
+          "content",
+          "data",
+          "image",
+          "request",
+          "function",
+          "delta",
+          "models",
+          "vlm",
+          "model",
+          "parsing",
+          "non",
+          "extracts",
+          "message",
+          "server"
+        ],
+        "term_weights": [
+          {
+            "term": "api",
+            "tf": 4,
+            "weight": 0.058824
+          },
+          {
+            "term": "docling",
+            "tf": 4,
+            "weight": 0.058824
+          },
+          {
+            "term": "response",
+            "tf": 3,
+            "weight": 0.044118
+          },
+          {
+            "term": "streaming",
+            "tf": 3,
+            "weight": 0.044118
+          },
+          {
+            "term": "the",
+            "tf": 3,
+            "weight": 0.044118
+          },
+          {
+            "term": "choices",
+            "tf": 3,
+            "weight": 0.044118
+          },
+          {
+            "term": "content",
+            "tf": 3,
+            "weight": 0.044118
+          },
+          {
+            "term": "data",
+            "tf": 3,
+            "weight": 0.044118
+          },
+          {
+            "term": "image",
+            "tf": 2,
+            "weight": 0.029412
+          },
+          {
+            "term": "request",
+            "tf": 2,
+            "weight": 0.029412
+          },
+          {
+            "term": "function",
+            "tf": 2,
+            "weight": 0.029412
+          },
+          {
+            "term": "delta",
+            "tf": 2,
+            "weight": 0.029412
+          },
+          {
+            "term": "models",
+            "tf": 2,
+            "weight": 0.029412
+          },
+          {
+            "term": "vlm",
+            "tf": 2,
+            "weight": 0.029412
+          },
+          {
+            "term": "model",
+            "tf": 2,
+            "weight": 0.029412
+          },
+          {
+            "term": "parsing",
+            "tf": 1,
+            "weight": 0.014706
+          },
+          {
+            "term": "non",
+            "tf": 1,
+            "weight": 0.014706
+          },
+          {
+            "term": "extracts",
+            "tf": 1,
+            "weight": 0.014706
+          },
+          {
+            "term": "message",
+            "tf": 1,
+            "weight": 0.014706
+          },
+          {
+            "term": "server",
+            "tf": 1,
+            "weight": 0.014706
+          }
+        ],
+        "unique_terms": 43,
+        "total_terms": 68
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Response Parsing",
+        "api",
+        "choices",
+        "content",
+        "data",
+        "docling",
+        "image",
+        "request",
+        "response",
+        "streaming",
+        "the"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.7999999999999998,
+      "retrieval_quality": 0.5165306122448979,
+      "overall": 0.6721768707482992
+    }
+  },
+  {
+    "text": "### Backend Validation\n\nBefore making API requests, the model validates the page backend:\n\n```\n```\n\nInvalid pages (e.g., corrupted PDFs) are returned unchanged, preventing unnecessary API calls.",
+    "metadata": {
+      "chunk_id": "f0eb3564da44-0023",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling\\_docling-project_docling_4.3.2-api-based-vlm-models.md",
+      "filename": "_docling-project_docling_4.3.2-api-based-vlm-models.md",
+      "file_extension": ".md",
+      "chunk_index": 23,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Backend Validation"
+      ],
+      "heading_text": "Backend Validation",
+      "token_count": 39,
+      "char_count": 194,
+      "start_char": 17000,
+      "end_char": 17194,
+      "semantic_score": 0.7,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5566666666666666,
+      "chunking_strategy": "hierarchical_precise_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "processing_timestamp": "2025-10-20T04:38:32.276162",
+      "document_id": "f0eb3564da44",
+      "document_name": "_docling-project_docling_4.3.2-api-based-vlm-models",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling\\_docling-project_docling_4.3.2-api-based-vlm-models.md",
+      "source_filename": "_docling-project_docling_4.3.2-api-based-vlm-models.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling",
+      "relative_path": "Docs\\docling\\_docling-project_docling_4.3.2-api-based-vlm-models.md",
+      "hierarchy_path": "Backend Validation",
+      "chunk_hash": "527ce37d401f816f",
+      "content_digest": "527ce37d401f816f",
+      "chunk_length": 194,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "backend",
+          "api",
+          "the",
+          "validation",
+          "before",
+          "making",
+          "requests",
+          "model",
+          "validates",
+          "page",
+          "invalid",
+          "pages",
+          "corrupted",
+          "pdfs",
+          "are",
+          "returned",
+          "unchanged",
+          "preventing",
+          "unnecessary",
+          "calls"
+        ],
+        "term_weights": [
+          {
+            "term": "backend",
+            "tf": 2,
+            "weight": 0.086957
+          },
+          {
+            "term": "api",
+            "tf": 2,
+            "weight": 0.086957
+          },
+          {
+            "term": "the",
+            "tf": 2,
+            "weight": 0.086957
+          },
+          {
+            "term": "validation",
+            "tf": 1,
+            "weight": 0.043478
+          },
+          {
+            "term": "before",
+            "tf": 1,
+            "weight": 0.043478
+          },
+          {
+            "term": "making",
+            "tf": 1,
+            "weight": 0.043478
+          },
+          {
+            "term": "requests",
+            "tf": 1,
+            "weight": 0.043478
+          },
+          {
+            "term": "model",
+            "tf": 1,
+            "weight": 0.043478
+          },
+          {
+            "term": "validates",
+            "tf": 1,
+            "weight": 0.043478
+          },
+          {
+            "term": "page",
+            "tf": 1,
+            "weight": 0.043478
+          },
+          {
+            "term": "invalid",
+            "tf": 1,
+            "weight": 0.043478
+          },
+          {
+            "term": "pages",
+            "tf": 1,
+            "weight": 0.043478
+          },
+          {
+            "term": "corrupted",
+            "tf": 1,
+            "weight": 0.043478
+          },
+          {
+            "term": "pdfs",
+            "tf": 1,
+            "weight": 0.043478
+          },
+          {
+            "term": "are",
+            "tf": 1,
+            "weight": 0.043478
+          },
+          {
+            "term": "returned",
+            "tf": 1,
+            "weight": 0.043478
+          },
+          {
+            "term": "unchanged",
+            "tf": 1,
+            "weight": 0.043478
+          },
+          {
+            "term": "preventing",
+            "tf": 1,
+            "weight": 0.043478
+          },
+          {
+            "term": "unnecessary",
+            "tf": 1,
+            "weight": 0.043478
+          },
+          {
+            "term": "calls",
+            "tf": 1,
+            "weight": 0.043478
+          }
+        ],
+        "unique_terms": 20,
+        "total_terms": 23
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Backend Validation",
+        "api",
+        "backend",
+        "before",
+        "making",
+        "model",
+        "page",
+        "requests",
+        "the",
+        "validates",
+        "validation"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5566666666666666,
+      "overall": 0.7188888888888888
+    }
+  },
+  {
+    "text": "### Remote Services Flag\n\nThe `enable_remote_services` flag provides a safety gate:\n\n```\n```\n\nThis prevents accidental API calls in environments where external connections are forbidden or should be audited.\n\n**Sources:** [docling/models/api\\_vlm\\_model.py28-49](https://github.com/docling-project/docling/blob/f7244a43/docling/models/api_vlm_model.py#L28-L49)\n\n---",
+    "metadata": {
+      "chunk_id": "f0eb3564da44-0024",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling\\_docling-project_docling_4.3.2-api-based-vlm-models.md",
+      "filename": "_docling-project_docling_4.3.2-api-based-vlm-models.md",
+      "file_extension": ".md",
+      "chunk_index": 24,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Remote Services Flag"
+      ],
+      "heading_text": "Remote Services Flag",
+      "token_count": 87,
+      "char_count": 365,
+      "start_char": 17196,
+      "end_char": 17561,
+      "semantic_score": 0.7,
+      "structural_score": 0.7999999999999998,
+      "retrieval_quality": 0.57125,
+      "chunking_strategy": "hierarchical_precise_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "processing_timestamp": "2025-10-20T04:38:32.276162",
+      "document_id": "f0eb3564da44",
+      "document_name": "_docling-project_docling_4.3.2-api-based-vlm-models",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling\\_docling-project_docling_4.3.2-api-based-vlm-models.md",
+      "source_filename": "_docling-project_docling_4.3.2-api-based-vlm-models.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling",
+      "relative_path": "Docs\\docling\\_docling-project_docling_4.3.2-api-based-vlm-models.md",
+      "hierarchy_path": "Remote Services Flag",
+      "chunk_hash": "76a80d5592c81575",
+      "content_digest": "76a80d5592c81575",
+      "chunk_length": 365,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "docling",
+          "api",
+          "remote",
+          "services",
+          "flag",
+          "models",
+          "vlm",
+          "model",
+          "the",
+          "enable",
+          "provides",
+          "safety",
+          "gate",
+          "this",
+          "prevents",
+          "accidental",
+          "calls",
+          "environments",
+          "where",
+          "external"
+        ],
+        "term_weights": [
+          {
+            "term": "docling",
+            "tf": 4,
+            "weight": 0.086957
+          },
+          {
+            "term": "api",
+            "tf": 3,
+            "weight": 0.065217
+          },
+          {
+            "term": "remote",
+            "tf": 2,
+            "weight": 0.043478
+          },
+          {
+            "term": "services",
+            "tf": 2,
+            "weight": 0.043478
+          },
+          {
+            "term": "flag",
+            "tf": 2,
+            "weight": 0.043478
+          },
+          {
+            "term": "models",
+            "tf": 2,
+            "weight": 0.043478
+          },
+          {
+            "term": "vlm",
+            "tf": 2,
+            "weight": 0.043478
+          },
+          {
+            "term": "model",
+            "tf": 2,
+            "weight": 0.043478
+          },
+          {
+            "term": "the",
+            "tf": 1,
+            "weight": 0.021739
+          },
+          {
+            "term": "enable",
+            "tf": 1,
+            "weight": 0.021739
+          },
+          {
+            "term": "provides",
+            "tf": 1,
+            "weight": 0.021739
+          },
+          {
+            "term": "safety",
+            "tf": 1,
+            "weight": 0.021739
+          },
+          {
+            "term": "gate",
+            "tf": 1,
+            "weight": 0.021739
+          },
+          {
+            "term": "this",
+            "tf": 1,
+            "weight": 0.021739
+          },
+          {
+            "term": "prevents",
+            "tf": 1,
+            "weight": 0.021739
+          },
+          {
+            "term": "accidental",
+            "tf": 1,
+            "weight": 0.021739
+          },
+          {
+            "term": "calls",
+            "tf": 1,
+            "weight": 0.021739
+          },
+          {
+            "term": "environments",
+            "tf": 1,
+            "weight": 0.021739
+          },
+          {
+            "term": "where",
+            "tf": 1,
+            "weight": 0.021739
+          },
+          {
+            "term": "external",
+            "tf": 1,
+            "weight": 0.021739
+          }
+        ],
+        "unique_terms": 35,
+        "total_terms": 46
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Remote Services Flag",
+        "api",
+        "docling",
+        "enable",
+        "flag",
+        "model",
+        "models",
+        "remote",
+        "services",
+        "the",
+        "vlm"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.7999999999999998,
+      "retrieval_quality": 0.57125,
+      "overall": 0.6904166666666667
+    }
+  },
+  {
+    "text": "## Example: Custom Stopping Criteria",
+    "metadata": {
+      "chunk_id": "f0eb3564da44-0026",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling\\_docling-project_docling_4.3.2-api-based-vlm-models.md",
+      "filename": "_docling-project_docling_4.3.2-api-based-vlm-models.md",
+      "file_extension": ".md",
+      "chunk_index": 26,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Example: Custom Stopping Criteria"
+      ],
+      "heading_text": "Example: Custom Stopping Criteria",
+      "token_count": 7,
+      "char_count": 36,
+      "start_char": 19530,
+      "end_char": 19566,
+      "semantic_score": 0.8,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.59,
+      "chunking_strategy": "hierarchical_precise_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "processing_timestamp": "2025-10-20T04:38:32.279220",
+      "document_id": "f0eb3564da44",
+      "document_name": "_docling-project_docling_4.3.2-api-based-vlm-models",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling\\_docling-project_docling_4.3.2-api-based-vlm-models.md",
+      "source_filename": "_docling-project_docling_4.3.2-api-based-vlm-models.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling",
+      "relative_path": "Docs\\docling\\_docling-project_docling_4.3.2-api-based-vlm-models.md",
+      "hierarchy_path": "Example: Custom Stopping Criteria",
+      "chunk_hash": "9211d257b4670d44",
+      "content_digest": "9211d257b4670d44",
+      "chunk_length": 36,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "example",
+          "custom",
+          "stopping",
+          "criteria"
+        ],
+        "term_weights": [
+          {
+            "term": "example",
+            "tf": 1,
+            "weight": 0.25
+          },
+          {
+            "term": "custom",
+            "tf": 1,
+            "weight": 0.25
+          },
+          {
+            "term": "stopping",
+            "tf": 1,
+            "weight": 0.25
+          },
+          {
+            "term": "criteria",
             "tf": 1,
             "weight": 0.25
           }
@@ -516,20 +3072,897 @@
         "has_formula": false
       },
       "search_keywords": [
-        "Streaming and Early Abort",
-        "abort",
-        "and",
-        "early",
-        "streaming"
-      ],
-      "quality_fallback": true,
-      "quality_notes": "Promoted via relaxed thresholds"
+        "Example: Custom Stopping Criteria",
+        "criteria",
+        "custom",
+        "example",
+        "stopping"
+      ]
     },
     "advanced_scores": {
       "semantic": 0.8,
       "structural": 0.8999999999999999,
-      "retrieval_quality": 0.39,
-      "overall": 0.6966666666666667
+      "retrieval_quality": 0.59,
+      "overall": 0.7633333333333333
+    }
+  },
+  {
+    "text": "### Configuration with Stopper\n\n```\n```\n\nWhen configured, the streaming API path is automatically selected, and generation terminates as soon as `</doctag>` appears in the output, saving tokens and reducing latency.\n\n**Sources:** [docling/models/api\\_vlm\\_model.py63-74](https://github.com/docling-project/docling/blob/f7244a43/docling/models/api_vlm_model.py#L63-L74) [docling/datamodel/pipeline\\_options\\_vlm\\_model.py110-112](https://github.com/docling-project/docling/blob/f7244a43/docling/datamodel/pipeline_options_vlm_model.py#L110-L112)\n\n---",
+    "metadata": {
+      "chunk_id": "f0eb3564da44-0028",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling\\_docling-project_docling_4.3.2-api-based-vlm-models.md",
+      "filename": "_docling-project_docling_4.3.2-api-based-vlm-models.md",
+      "file_extension": ".md",
+      "chunk_index": 28,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Configuration with Stopper"
+      ],
+      "heading_text": "Configuration with Stopper",
+      "token_count": 143,
+      "char_count": 549,
+      "start_char": 19615,
+      "end_char": 20164,
+      "semantic_score": 0.7,
+      "structural_score": 0.7999999999999998,
+      "retrieval_quality": 0.5557142857142857,
+      "chunking_strategy": "hierarchical_precise_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "processing_timestamp": "2025-10-20T04:38:32.279220",
+      "document_id": "f0eb3564da44",
+      "document_name": "_docling-project_docling_4.3.2-api-based-vlm-models",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling\\_docling-project_docling_4.3.2-api-based-vlm-models.md",
+      "source_filename": "_docling-project_docling_4.3.2-api-based-vlm-models.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling",
+      "relative_path": "Docs\\docling\\_docling-project_docling_4.3.2-api-based-vlm-models.md",
+      "hierarchy_path": "Configuration with Stopper",
+      "chunk_hash": "971694854b8d362b",
+      "content_digest": "971694854b8d362b",
+      "chunk_length": 549,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "docling",
+          "vlm",
+          "model",
+          "api",
+          "the",
+          "and",
+          "models",
+          "https",
+          "github",
+          "com",
+          "project",
+          "blob",
+          "f7244a43",
+          "datamodel",
+          "pipeline",
+          "options",
+          "configuration",
+          "with",
+          "stopper",
+          "when"
+        ],
+        "term_weights": [
+          {
+            "term": "docling",
+            "tf": 8,
+            "weight": 0.114286
+          },
+          {
+            "term": "vlm",
+            "tf": 4,
+            "weight": 0.057143
+          },
+          {
+            "term": "model",
+            "tf": 4,
+            "weight": 0.057143
+          },
+          {
+            "term": "api",
+            "tf": 3,
+            "weight": 0.042857
+          },
+          {
+            "term": "the",
+            "tf": 2,
+            "weight": 0.028571
+          },
+          {
+            "term": "and",
+            "tf": 2,
+            "weight": 0.028571
+          },
+          {
+            "term": "models",
+            "tf": 2,
+            "weight": 0.028571
+          },
+          {
+            "term": "https",
+            "tf": 2,
+            "weight": 0.028571
+          },
+          {
+            "term": "github",
+            "tf": 2,
+            "weight": 0.028571
+          },
+          {
+            "term": "com",
+            "tf": 2,
+            "weight": 0.028571
+          },
+          {
+            "term": "project",
+            "tf": 2,
+            "weight": 0.028571
+          },
+          {
+            "term": "blob",
+            "tf": 2,
+            "weight": 0.028571
+          },
+          {
+            "term": "f7244a43",
+            "tf": 2,
+            "weight": 0.028571
+          },
+          {
+            "term": "datamodel",
+            "tf": 2,
+            "weight": 0.028571
+          },
+          {
+            "term": "pipeline",
+            "tf": 2,
+            "weight": 0.028571
+          },
+          {
+            "term": "options",
+            "tf": 2,
+            "weight": 0.028571
+          },
+          {
+            "term": "configuration",
+            "tf": 1,
+            "weight": 0.014286
+          },
+          {
+            "term": "with",
+            "tf": 1,
+            "weight": 0.014286
+          },
+          {
+            "term": "stopper",
+            "tf": 1,
+            "weight": 0.014286
+          },
+          {
+            "term": "when",
+            "tf": 1,
+            "weight": 0.014286
+          }
+        ],
+        "unique_terms": 43,
+        "total_terms": 70
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Configuration with Stopper",
+        "and",
+        "api",
+        "com",
+        "docling",
+        "github",
+        "https",
+        "model",
+        "models",
+        "the",
+        "vlm"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.7999999999999998,
+      "retrieval_quality": 0.5557142857142857,
+      "overall": 0.6852380952380952
+    }
+  },
+  {
+    "text": "## Performance Considerations",
+    "metadata": {
+      "chunk_id": "f0eb3564da44-0029",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling\\_docling-project_docling_4.3.2-api-based-vlm-models.md",
+      "filename": "_docling-project_docling_4.3.2-api-based-vlm-models.md",
+      "file_extension": ".md",
+      "chunk_index": 29,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Performance Considerations"
+      ],
+      "heading_text": "Performance Considerations",
+      "token_count": 4,
+      "char_count": 29,
+      "start_char": 20166,
+      "end_char": 20195,
+      "semantic_score": 0.8,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.59,
+      "chunking_strategy": "hierarchical_precise_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "processing_timestamp": "2025-10-20T04:38:32.279220",
+      "document_id": "f0eb3564da44",
+      "document_name": "_docling-project_docling_4.3.2-api-based-vlm-models",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling\\_docling-project_docling_4.3.2-api-based-vlm-models.md",
+      "source_filename": "_docling-project_docling_4.3.2-api-based-vlm-models.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling",
+      "relative_path": "Docs\\docling\\_docling-project_docling_4.3.2-api-based-vlm-models.md",
+      "hierarchy_path": "Performance Considerations",
+      "chunk_hash": "f0c6f691b1d6938e",
+      "content_digest": "f0c6f691b1d6938e",
+      "chunk_length": 29,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "performance",
+          "considerations"
+        ],
+        "term_weights": [
+          {
+            "term": "performance",
+            "tf": 1,
+            "weight": 0.5
+          },
+          {
+            "term": "considerations",
+            "tf": 1,
+            "weight": 0.5
+          }
+        ],
+        "unique_terms": 2,
+        "total_terms": 2
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Performance Considerations",
+        "considerations",
+        "performance"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.8,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.59,
+      "overall": 0.7633333333333333
+    }
+  },
+  {
+    "text": "### Concurrency Tuning  The `concurrency` parameter controls parallel requests:  - **Low concurrency (1-2):** Sequential processing, minimal server load - **Medium concurrency (4-8):** Balanced throughput for typical documents - **High concurrency (16+):** Maximum speed for large batches, requires server capacity  Optimal settings depend on:  1. Server capacity (GPU count, batch size) 2. Network latency and bandwidth 3. Document complexity (larger images = longer inference)",
+    "metadata": {
+      "chunk_id": "f0eb3564da44-0030",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling\\_docling-project_docling_4.3.2-api-based-vlm-models.md",
+      "filename": "_docling-project_docling_4.3.2-api-based-vlm-models.md",
+      "file_extension": ".md",
+      "chunk_index": 30,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Concurrency Tuning"
+      ],
+      "heading_text": "Concurrency Tuning",
+      "token_count": 106,
+      "char_count": 478,
+      "start_char": 20197,
+      "end_char": 20675,
+      "semantic_score": 0.7,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5471428571428572,
+      "chunking_strategy": "hierarchical_precise_structural",
+      "content_type": "list_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "processing_timestamp": "2025-10-20T04:38:32.279220",
+      "document_id": "f0eb3564da44",
+      "document_name": "_docling-project_docling_4.3.2-api-based-vlm-models",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling\\_docling-project_docling_4.3.2-api-based-vlm-models.md",
+      "source_filename": "_docling-project_docling_4.3.2-api-based-vlm-models.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling",
+      "relative_path": "Docs\\docling\\_docling-project_docling_4.3.2-api-based-vlm-models.md",
+      "hierarchy_path": "Concurrency Tuning",
+      "chunk_hash": "d20635aa0bb7b6c5",
+      "content_digest": "d20635aa0bb7b6c5",
+      "chunk_length": 478,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "concurrency",
+          "server",
+          "for",
+          "capacity",
+          "tuning",
+          "the",
+          "parameter",
+          "controls",
+          "parallel",
+          "requests",
+          "low",
+          "sequential",
+          "processing",
+          "minimal",
+          "load",
+          "medium",
+          "balanced",
+          "throughput",
+          "typical",
+          "documents"
+        ],
+        "term_weights": [
+          {
+            "term": "concurrency",
+            "tf": 5,
+            "weight": 0.098039
+          },
+          {
+            "term": "server",
+            "tf": 3,
+            "weight": 0.058824
+          },
+          {
+            "term": "for",
+            "tf": 2,
+            "weight": 0.039216
+          },
+          {
+            "term": "capacity",
+            "tf": 2,
+            "weight": 0.039216
+          },
+          {
+            "term": "tuning",
+            "tf": 1,
+            "weight": 0.019608
+          },
+          {
+            "term": "the",
+            "tf": 1,
+            "weight": 0.019608
+          },
+          {
+            "term": "parameter",
+            "tf": 1,
+            "weight": 0.019608
+          },
+          {
+            "term": "controls",
+            "tf": 1,
+            "weight": 0.019608
+          },
+          {
+            "term": "parallel",
+            "tf": 1,
+            "weight": 0.019608
+          },
+          {
+            "term": "requests",
+            "tf": 1,
+            "weight": 0.019608
+          },
+          {
+            "term": "low",
+            "tf": 1,
+            "weight": 0.019608
+          },
+          {
+            "term": "sequential",
+            "tf": 1,
+            "weight": 0.019608
+          },
+          {
+            "term": "processing",
+            "tf": 1,
+            "weight": 0.019608
+          },
+          {
+            "term": "minimal",
+            "tf": 1,
+            "weight": 0.019608
+          },
+          {
+            "term": "load",
+            "tf": 1,
+            "weight": 0.019608
+          },
+          {
+            "term": "medium",
+            "tf": 1,
+            "weight": 0.019608
+          },
+          {
+            "term": "balanced",
+            "tf": 1,
+            "weight": 0.019608
+          },
+          {
+            "term": "throughput",
+            "tf": 1,
+            "weight": 0.019608
+          },
+          {
+            "term": "typical",
+            "tf": 1,
+            "weight": 0.019608
+          },
+          {
+            "term": "documents",
+            "tf": 1,
+            "weight": 0.019608
+          }
+        ],
+        "unique_terms": 43,
+        "total_terms": 51
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Concurrency Tuning",
+        "capacity",
+        "concurrency",
+        "controls",
+        "for",
+        "parallel",
+        "parameter",
+        "requests",
+        "server",
+        "the",
+        "tuning"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5471428571428572,
+      "overall": 0.7157142857142856
+    }
+  },
+  {
+    "text": "### Timeout Configuration  Appropriate timeout values vary by model and document type:  - **Simple text extraction:** 30-60 seconds - **Complex documents (tables, figures):** 120-300 seconds - **Large images (high resolution):** 300+ seconds  Insufficient timeouts cause false failures; excessive timeouts delay error detection. **Sources:** [docling/models/api\\_vlm\\_model.py36-101](https://github.com/docling-project/docling/blob/f7244a43/docling/models/api_vlm_model.py#L36-L101)  Dismiss  Refresh this wiki  This wiki was recently refreshed. Please wait 4 days to refresh again.",
+    "metadata": {
+      "chunk_id": "f0eb3564da44-0031",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling\\_docling-project_docling_4.3.2-api-based-vlm-models.md",
+      "filename": "_docling-project_docling_4.3.2-api-based-vlm-models.md",
+      "file_extension": ".md",
+      "chunk_index": 31,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Timeout Configuration"
+      ],
+      "heading_text": "Timeout Configuration",
+      "token_count": 139,
+      "char_count": 582,
+      "start_char": 20677,
+      "end_char": 21259,
+      "semantic_score": 0.7,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.545,
+      "chunking_strategy": "hierarchical_precise_structural",
+      "content_type": "list_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "processing_timestamp": "2025-10-20T04:38:32.279220",
+      "document_id": "f0eb3564da44",
+      "document_name": "_docling-project_docling_4.3.2-api-based-vlm-models",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling\\_docling-project_docling_4.3.2-api-based-vlm-models.md",
+      "source_filename": "_docling-project_docling_4.3.2-api-based-vlm-models.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling",
+      "relative_path": "Docs\\docling\\_docling-project_docling_4.3.2-api-based-vlm-models.md",
+      "hierarchy_path": "Timeout Configuration",
+      "chunk_hash": "bb67772893877b6a",
+      "content_digest": "bb67772893877b6a",
+      "chunk_length": 582,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "docling",
+          "model",
+          "seconds",
+          "timeout",
+          "300",
+          "timeouts",
+          "models",
+          "api",
+          "vlm",
+          "refresh",
+          "this",
+          "wiki",
+          "configuration",
+          "appropriate",
+          "values",
+          "vary",
+          "and",
+          "document",
+          "type",
+          "simple"
+        ],
+        "term_weights": [
+          {
+            "term": "docling",
+            "tf": 4,
+            "weight": 0.054054
+          },
+          {
+            "term": "model",
+            "tf": 3,
+            "weight": 0.040541
+          },
+          {
+            "term": "seconds",
+            "tf": 3,
+            "weight": 0.040541
+          },
+          {
+            "term": "timeout",
+            "tf": 2,
+            "weight": 0.027027
+          },
+          {
+            "term": "300",
+            "tf": 2,
+            "weight": 0.027027
+          },
+          {
+            "term": "timeouts",
+            "tf": 2,
+            "weight": 0.027027
+          },
+          {
+            "term": "models",
+            "tf": 2,
+            "weight": 0.027027
+          },
+          {
+            "term": "api",
+            "tf": 2,
+            "weight": 0.027027
+          },
+          {
+            "term": "vlm",
+            "tf": 2,
+            "weight": 0.027027
+          },
+          {
+            "term": "refresh",
+            "tf": 2,
+            "weight": 0.027027
+          },
+          {
+            "term": "this",
+            "tf": 2,
+            "weight": 0.027027
+          },
+          {
+            "term": "wiki",
+            "tf": 2,
+            "weight": 0.027027
+          },
+          {
+            "term": "configuration",
+            "tf": 1,
+            "weight": 0.013514
+          },
+          {
+            "term": "appropriate",
+            "tf": 1,
+            "weight": 0.013514
+          },
+          {
+            "term": "values",
+            "tf": 1,
+            "weight": 0.013514
+          },
+          {
+            "term": "vary",
+            "tf": 1,
+            "weight": 0.013514
+          },
+          {
+            "term": "and",
+            "tf": 1,
+            "weight": 0.013514
+          },
+          {
+            "term": "document",
+            "tf": 1,
+            "weight": 0.013514
+          },
+          {
+            "term": "type",
+            "tf": 1,
+            "weight": 0.013514
+          },
+          {
+            "term": "simple",
+            "tf": 1,
+            "weight": 0.013514
+          }
+        ],
+        "unique_terms": 58,
+        "total_terms": 74
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "300",
+        "Timeout Configuration",
+        "api",
+        "docling",
+        "model",
+        "models",
+        "refresh",
+        "seconds",
+        "timeout",
+        "timeouts",
+        "vlm"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.545,
+      "overall": 0.715
+    }
+  },
+  {
+    "text": "### On this page\n\n- [API-Based VLM Models](#api-based-vlm-models.md)\n- [Purpose and Scope](#purpose-and-scope.md)\n- [System Architecture](#system-architecture.md)\n- [Configuration: ApiVlmOptions](#configuration-apivlmoptions.md)\n- [Request Flow Sequence](#request-flow-sequence.md)\n- [ApiVlmModel Implementation](#apivlmmodel-implementation.md)\n- [Class Structure](#class-structure.md)\n- [Request Execution Pattern](#request-execution-pattern.md)\n- [Streaming and Early Abort](#streaming-and-early-abort.md)\n- [Streaming Request Flow](#streaming-request-flow.md)\n- [GenerationStopper Interface](#generationstopper-interface.md)\n- [Pipeline Integration](#pipeline-integration.md)\n- [VlmPipeline Instantiation](#vlmpipeline-instantiation.md)\n- [Page Processing](#page-processing.md)\n- [Predefined API Configurations](#predefined-api-configurations.md)\n- [GRANITE\\_VISION\\_OLLAMA](#granite_vision_ollama.md)\n- [API Request Format](#api-request-format.md)\n- [OpenAI Chat Completions Schema](#openai-chat-completions-schema.md)\n- [Response Parsing](#response-parsing.md)\n- [Error Handling and Timeout](#error-handling-and-timeout.md)\n- [Request-Level Timeouts](#request-level-timeouts.md)\n- [Backend Validation](#backend-validation.md)\n- [Remote Services Flag](#remote-services-flag.md)\n- [Comparison with Inline VLM Models](#comparison-with-inline-vlm-models.md)\n- [Example: Custom Stopping Criteria](#example-custom-stopping-criteria.md)",
+    "metadata": {
+      "chunk_id": "f0eb3564da44-0032",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling\\_docling-project_docling_4.3.2-api-based-vlm-models.md",
+      "filename": "_docling-project_docling_4.3.2-api-based-vlm-models.md",
+      "file_extension": ".md",
+      "chunk_index": 32,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "On this page"
+      ],
+      "heading_text": "On this page",
+      "token_count": 368,
+      "char_count": 1434,
+      "start_char": 21262,
+      "end_char": 22696,
+      "semantic_score": 0.6,
+      "structural_score": 0.7999999999999998,
+      "retrieval_quality": 0.7176164948453609,
+      "chunking_strategy": "hierarchical_precise_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "processing_timestamp": "2025-10-20T04:38:32.279220",
+      "document_id": "f0eb3564da44",
+      "document_name": "_docling-project_docling_4.3.2-api-based-vlm-models",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling\\_docling-project_docling_4.3.2-api-based-vlm-models.md",
+      "source_filename": "_docling-project_docling_4.3.2-api-based-vlm-models.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling",
+      "relative_path": "Docs\\docling\\_docling-project_docling_4.3.2-api-based-vlm-models.md",
+      "hierarchy_path": "On this page",
+      "chunk_hash": "d0fe6d44e337c014",
+      "content_digest": "d0fe6d44e337c014",
+      "chunk_length": 1434,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "request",
+          "api",
+          "and",
+          "vlm",
+          "models",
+          "flow",
+          "streaming",
+          "page",
+          "based",
+          "purpose",
+          "scope",
+          "system",
+          "architecture",
+          "configuration",
+          "apivlmoptions",
+          "sequence",
+          "apivlmmodel",
+          "implementation",
+          "class",
+          "structure"
+        ],
+        "term_weights": [
+          {
+            "term": "request",
+            "tf": 10,
+            "weight": 0.068493
+          },
+          {
+            "term": "api",
+            "tf": 6,
+            "weight": 0.041096
+          },
+          {
+            "term": "and",
+            "tf": 6,
+            "weight": 0.041096
+          },
+          {
+            "term": "vlm",
+            "tf": 4,
+            "weight": 0.027397
+          },
+          {
+            "term": "models",
+            "tf": 4,
+            "weight": 0.027397
+          },
+          {
+            "term": "flow",
+            "tf": 4,
+            "weight": 0.027397
+          },
+          {
+            "term": "streaming",
+            "tf": 4,
+            "weight": 0.027397
+          },
+          {
+            "term": "page",
+            "tf": 3,
+            "weight": 0.020548
+          },
+          {
+            "term": "based",
+            "tf": 2,
+            "weight": 0.013699
+          },
+          {
+            "term": "purpose",
+            "tf": 2,
+            "weight": 0.013699
+          },
+          {
+            "term": "scope",
+            "tf": 2,
+            "weight": 0.013699
+          },
+          {
+            "term": "system",
+            "tf": 2,
+            "weight": 0.013699
+          },
+          {
+            "term": "architecture",
+            "tf": 2,
+            "weight": 0.013699
+          },
+          {
+            "term": "configuration",
+            "tf": 2,
+            "weight": 0.013699
+          },
+          {
+            "term": "apivlmoptions",
+            "tf": 2,
+            "weight": 0.013699
+          },
+          {
+            "term": "sequence",
+            "tf": 2,
+            "weight": 0.013699
+          },
+          {
+            "term": "apivlmmodel",
+            "tf": 2,
+            "weight": 0.013699
+          },
+          {
+            "term": "implementation",
+            "tf": 2,
+            "weight": 0.013699
+          },
+          {
+            "term": "class",
+            "tf": 2,
+            "weight": 0.013699
+          },
+          {
+            "term": "structure",
+            "tf": 2,
+            "weight": 0.013699
+          }
+        ],
+        "unique_terms": 61,
+        "total_terms": 146
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": true,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "On this page",
+        "and",
+        "api",
+        "based",
+        "flow",
+        "models",
+        "page",
+        "purpose",
+        "request",
+        "streaming",
+        "vlm"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.6,
+      "structural": 0.7999999999999998,
+      "retrieval_quality": 0.7176164948453609,
+      "overall": 0.7058721649484537
     }
   }
 ]

@@ -1,6 +1,603 @@
 [
   {
-    "text": "## The Demonstration Dataset  The example in the notebook uses a PubMed dataset from Hugging Face to illustrate the migration process. The dataset is embedded using OpenAI's text-embedding-3-small model (1536 dimensions).",
+    "text": "# Data Migration from Pinecone  Relevant source files  - [llama\\_index\\_recency/.gitignore](https://github.com/qdrant/examples/blob/b3c4b28f/llama_index_recency/.gitignore) - [llama\\_index\\_recency/images/RankFocus.png](https://github.com/qdrant/examples/blob/b3c4b28f/llama_index_recency/images/RankFocus.png) - [llama\\_index\\_recency/images/RerankFocus.png](https://github.com/qdrant/examples/blob/b3c4b28f/llama_index_recency/images/RerankFocus.png) - [llama\\_index\\_recency/images/SetupFocus.png](https://github.com/qdrant/examples/blob/b3c4b28f/llama_index_recency/images/SetupFocus.png) - [llama\\_index\\_recency/pyproject.toml](https://github.com/qdrant/examples/blob/b3c4b28f/llama_index_recency/pyproject.toml)  This page provides a step-by-step guide for migrating vector embeddings and associated metadata from Pinecone to Qdrant. The guide uses Vector-io, a specialized library designed to simplify data migration between vector databases using a standardized Vector Dataset Format (VDF). Sources: [data-migration/from-pinecone-to-qdrant.ipynb8-16](https://github.com/qdrant/examples/blob/b3c4b28f/data-migration/from-pinecone-to-qdrant.ipynb#L8-L16)",
+    "metadata": {
+      "chunk_id": "549f18f50426-0000",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_examples\\_qdrant_examples_8.2-development-environment-setup.md",
+      "filename": "_qdrant_examples_8.2-development-environment-setup.md",
+      "file_extension": ".md",
+      "chunk_index": 0,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Data Migration from Pinecone"
+      ],
+      "heading_text": "Data Migration from Pinecone",
+      "token_count": 330,
+      "char_count": 1161,
+      "start_char": 2080,
+      "end_char": 3241,
+      "semantic_score": 0.6,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5278135593220339,
+      "chunking_strategy": "hierarchical_balanced_structural",
+      "content_type": "list_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "processing_timestamp": "2025-10-20T04:38:44.768720",
+      "document_id": "549f18f50426",
+      "document_name": "_qdrant_examples_8.2-development-environment-setup",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_examples\\_qdrant_examples_8.2-development-environment-setup.md",
+      "source_filename": "_qdrant_examples_8.2-development-environment-setup.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_examples",
+      "relative_path": "Docs\\qdrant_ecosystem\\qdrant_examples\\_qdrant_examples_8.2-development-environment-setup.md",
+      "hierarchy_path": "Data Migration from Pinecone",
+      "chunk_hash": "dccd7ed0ad0da864",
+      "content_digest": "dccd7ed0ad0da864",
+      "chunk_length": 1161,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "llama",
+          "index",
+          "recency",
+          "qdrant",
+          "https",
+          "github",
+          "com",
+          "examples",
+          "blob",
+          "b3c4b28f",
+          "images",
+          "png",
+          "data",
+          "migration",
+          "from",
+          "pinecone",
+          "vector",
+          "gitignore",
+          "rankfocus",
+          "rerankfocus"
+        ],
+        "term_weights": [
+          {
+            "term": "llama",
+            "tf": 10,
+            "weight": 0.065789
+          },
+          {
+            "term": "index",
+            "tf": 10,
+            "weight": 0.065789
+          },
+          {
+            "term": "recency",
+            "tf": 10,
+            "weight": 0.065789
+          },
+          {
+            "term": "qdrant",
+            "tf": 9,
+            "weight": 0.059211
+          },
+          {
+            "term": "https",
+            "tf": 6,
+            "weight": 0.039474
+          },
+          {
+            "term": "github",
+            "tf": 6,
+            "weight": 0.039474
+          },
+          {
+            "term": "com",
+            "tf": 6,
+            "weight": 0.039474
+          },
+          {
+            "term": "examples",
+            "tf": 6,
+            "weight": 0.039474
+          },
+          {
+            "term": "blob",
+            "tf": 6,
+            "weight": 0.039474
+          },
+          {
+            "term": "b3c4b28f",
+            "tf": 6,
+            "weight": 0.039474
+          },
+          {
+            "term": "images",
+            "tf": 6,
+            "weight": 0.039474
+          },
+          {
+            "term": "png",
+            "tf": 6,
+            "weight": 0.039474
+          },
+          {
+            "term": "data",
+            "tf": 4,
+            "weight": 0.026316
+          },
+          {
+            "term": "migration",
+            "tf": 4,
+            "weight": 0.026316
+          },
+          {
+            "term": "from",
+            "tf": 4,
+            "weight": 0.026316
+          },
+          {
+            "term": "pinecone",
+            "tf": 4,
+            "weight": 0.026316
+          },
+          {
+            "term": "vector",
+            "tf": 4,
+            "weight": 0.026316
+          },
+          {
+            "term": "gitignore",
+            "tf": 2,
+            "weight": 0.013158
+          },
+          {
+            "term": "rankfocus",
+            "tf": 2,
+            "weight": 0.013158
+          },
+          {
+            "term": "rerankfocus",
+            "tf": 2,
+            "weight": 0.013158
+          }
+        ],
+        "unique_terms": 54,
+        "total_terms": 152
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Data Migration from Pinecone",
+        "b3c4b28f",
+        "blob",
+        "com",
+        "examples",
+        "github",
+        "https",
+        "index",
+        "llama",
+        "qdrant",
+        "recency"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.6,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5278135593220339,
+      "overall": 0.6759378531073447
+    }
+  },
+  {
+    "text": "## Overview of the Migration Process\n\nMigrating from Pinecone to Qdrant involves three main steps:\n\n1. **Export** - Using Vector-io to export data from Pinecone into the VDF format\n2. **Transform** - Data is automatically standardized into the VDF format\n3. **Import** - Importing the VDF-formatted data into Qdrant\n\nThis migration pathway ensures data consistency regardless of differences between the source and destination databases.\n\n```\n```\n\nSources: [data-migration/from-pinecone-to-qdrant.ipynb8-16](https://github.com/qdrant/examples/blob/b3c4b28f/data-migration/from-pinecone-to-qdrant.ipynb#L8-L16) [data-migration/from-pinecone-to-qdrant.ipynb278-335](https://github.com/qdrant/examples/blob/b3c4b28f/data-migration/from-pinecone-to-qdrant.ipynb#L278-L335)",
+    "metadata": {
+      "chunk_id": "549f18f50426-0001",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_examples\\_qdrant_examples_8.2-development-environment-setup.md",
+      "filename": "_qdrant_examples_8.2-development-environment-setup.md",
+      "file_extension": ".md",
+      "chunk_index": 1,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Overview of the Migration Process"
+      ],
+      "heading_text": "Overview of the Migration Process",
+      "token_count": 210,
+      "char_count": 767,
+      "start_char": 3244,
+      "end_char": 4011,
+      "semantic_score": 0.7,
+      "structural_score": 0.7,
+      "retrieval_quality": 0.7030434782608695,
+      "chunking_strategy": "hierarchical_balanced_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "processing_timestamp": "2025-10-20T04:38:44.769586",
+      "document_id": "549f18f50426",
+      "document_name": "_qdrant_examples_8.2-development-environment-setup",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_examples\\_qdrant_examples_8.2-development-environment-setup.md",
+      "source_filename": "_qdrant_examples_8.2-development-environment-setup.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_examples",
+      "relative_path": "Docs\\qdrant_ecosystem\\qdrant_examples\\_qdrant_examples_8.2-development-environment-setup.md",
+      "hierarchy_path": "Overview of the Migration Process",
+      "chunk_hash": "0ef200e5bdbdefdb",
+      "content_digest": "0ef200e5bdbdefdb",
+      "chunk_length": 767,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "qdrant",
+          "data",
+          "migration",
+          "from",
+          "pinecone",
+          "the",
+          "into",
+          "vdf",
+          "export",
+          "format",
+          "https",
+          "github",
+          "com",
+          "examples",
+          "blob",
+          "b3c4b28f",
+          "ipynb",
+          "overview",
+          "process",
+          "migrating"
+        ],
+        "term_weights": [
+          {
+            "term": "qdrant",
+            "tf": 8,
+            "weight": 0.083333
+          },
+          {
+            "term": "data",
+            "tf": 8,
+            "weight": 0.083333
+          },
+          {
+            "term": "migration",
+            "tf": 6,
+            "weight": 0.0625
+          },
+          {
+            "term": "from",
+            "tf": 6,
+            "weight": 0.0625
+          },
+          {
+            "term": "pinecone",
+            "tf": 6,
+            "weight": 0.0625
+          },
+          {
+            "term": "the",
+            "tf": 5,
+            "weight": 0.052083
+          },
+          {
+            "term": "into",
+            "tf": 3,
+            "weight": 0.03125
+          },
+          {
+            "term": "vdf",
+            "tf": 3,
+            "weight": 0.03125
+          },
+          {
+            "term": "export",
+            "tf": 2,
+            "weight": 0.020833
+          },
+          {
+            "term": "format",
+            "tf": 2,
+            "weight": 0.020833
+          },
+          {
+            "term": "https",
+            "tf": 2,
+            "weight": 0.020833
+          },
+          {
+            "term": "github",
+            "tf": 2,
+            "weight": 0.020833
+          },
+          {
+            "term": "com",
+            "tf": 2,
+            "weight": 0.020833
+          },
+          {
+            "term": "examples",
+            "tf": 2,
+            "weight": 0.020833
+          },
+          {
+            "term": "blob",
+            "tf": 2,
+            "weight": 0.020833
+          },
+          {
+            "term": "b3c4b28f",
+            "tf": 2,
+            "weight": 0.020833
+          },
+          {
+            "term": "ipynb",
+            "tf": 2,
+            "weight": 0.020833
+          },
+          {
+            "term": "overview",
+            "tf": 1,
+            "weight": 0.010417
+          },
+          {
+            "term": "process",
+            "tf": 1,
+            "weight": 0.010417
+          },
+          {
+            "term": "migrating",
+            "tf": 1,
+            "weight": 0.010417
+          }
+        ],
+        "unique_terms": 50,
+        "total_terms": 96
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Overview of the Migration Process",
+        "data",
+        "export",
+        "format",
+        "from",
+        "into",
+        "migration",
+        "pinecone",
+        "qdrant",
+        "the",
+        "vdf"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.7,
+      "retrieval_quality": 0.7030434782608695,
+      "overall": 0.7010144927536232
+    }
+  },
+  {
+    "text": "## Prerequisites  Before starting the migration process, you need:  1. **API Keys and Access**:     - Pinecone API key    - Qdrant API key or host URL    - OpenAI API key (if you used OpenAI embeddings)  2. **Vector-io Installation**:    ``` pip install vdf-io    ``` 3. **Environment Setup**: Create a `.env` file with your credentials based on the `.env-example` template:  | Environment Variable     | Description                      | | ------------------------ | -------------------------------- | | QDRANT\\_COLLECTION\\_NAME | Target collection name in Qdrant | | QDRANT\\_HOST             | Qdrant host URL                  | | QDRANT\\_API\\_KEY         | Qdrant API key                   | | OPENAI\\_API\\_KEY         | OpenAI API key                   | | PINECONE\\_API\\_KEY       | Pinecone API key                 | | PINECONE\\_CLOUD          | Cloud provider (e.g., \"aws\")     | | PINECONE\\_REGION         | Region (e.g., \"us-east-1\")       |  Sources: [data-migration/.env-example1-11](https://github.com/qdrant/examples/blob/b3c4b28f/data-migration/.env-example#L1-L11) [data-migration/from-pinecone-to-qdrant.ipynb280-284](https://github.com/qdrant/examples/blob/b3c4b28f/data-migration/from-pinecone-to-qdrant.ipynb#L280-L284)",
+    "metadata": {
+      "chunk_id": "549f18f50426-0002",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_examples\\_qdrant_examples_8.2-development-environment-setup.md",
+      "filename": "_qdrant_examples_8.2-development-environment-setup.md",
+      "file_extension": ".md",
+      "chunk_index": 2,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Prerequisites"
+      ],
+      "heading_text": "Prerequisites",
+      "token_count": 333,
+      "char_count": 1239,
+      "start_char": 4013,
+      "end_char": 5252,
+      "semantic_score": 0.7,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.6779487804878049,
+      "chunking_strategy": "hierarchical_balanced_structural",
+      "content_type": "table_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "processing_timestamp": "2025-10-20T04:38:44.770428",
+      "document_id": "549f18f50426",
+      "document_name": "_qdrant_examples_8.2-development-environment-setup",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_examples\\_qdrant_examples_8.2-development-environment-setup.md",
+      "source_filename": "_qdrant_examples_8.2-development-environment-setup.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_examples",
+      "relative_path": "Docs\\qdrant_ecosystem\\qdrant_examples\\_qdrant_examples_8.2-development-environment-setup.md",
+      "hierarchy_path": "Prerequisites",
+      "chunk_hash": "fca4eadfdf5b0be0",
+      "content_digest": "fca4eadfdf5b0be0",
+      "chunk_length": 1239,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "qdrant",
+          "api",
+          "key",
+          "pinecone",
+          "migration",
+          "openai",
+          "env",
+          "data",
+          "host",
+          "the",
+          "you",
+          "url",
+          "environment",
+          "example",
+          "collection",
+          "name",
+          "cloud",
+          "region",
+          "https",
+          "github"
+        ],
+        "term_weights": [
+          {
+            "term": "qdrant",
+            "tf": 11,
+            "weight": 0.087302
+          },
+          {
+            "term": "api",
+            "tf": 10,
+            "weight": 0.079365
+          },
+          {
+            "term": "key",
+            "tf": 9,
+            "weight": 0.071429
+          },
+          {
+            "term": "pinecone",
+            "tf": 7,
+            "weight": 0.055556
+          },
+          {
+            "term": "migration",
+            "tf": 5,
+            "weight": 0.039683
+          },
+          {
+            "term": "openai",
+            "tf": 4,
+            "weight": 0.031746
+          },
+          {
+            "term": "env",
+            "tf": 4,
+            "weight": 0.031746
+          },
+          {
+            "term": "data",
+            "tf": 4,
+            "weight": 0.031746
+          },
+          {
+            "term": "host",
+            "tf": 3,
+            "weight": 0.02381
+          },
+          {
+            "term": "the",
+            "tf": 2,
+            "weight": 0.015873
+          },
+          {
+            "term": "you",
+            "tf": 2,
+            "weight": 0.015873
+          },
+          {
+            "term": "url",
+            "tf": 2,
+            "weight": 0.015873
+          },
+          {
+            "term": "environment",
+            "tf": 2,
+            "weight": 0.015873
+          },
+          {
+            "term": "example",
+            "tf": 2,
+            "weight": 0.015873
+          },
+          {
+            "term": "collection",
+            "tf": 2,
+            "weight": 0.015873
+          },
+          {
+            "term": "name",
+            "tf": 2,
+            "weight": 0.015873
+          },
+          {
+            "term": "cloud",
+            "tf": 2,
+            "weight": 0.015873
+          },
+          {
+            "term": "region",
+            "tf": 2,
+            "weight": 0.015873
+          },
+          {
+            "term": "https",
+            "tf": 2,
+            "weight": 0.015873
+          },
+          {
+            "term": "github",
+            "tf": 2,
+            "weight": 0.015873
+          }
+        ],
+        "unique_terms": 62,
+        "total_terms": 126
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Prerequisites",
+        "api",
+        "data",
+        "env",
+        "host",
+        "key",
+        "migration",
+        "openai",
+        "pinecone",
+        "qdrant",
+        "the"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.6779487804878049,
+      "overall": 0.7593162601626017
+    }
+  },
+  {
+    "text": "## The Demonstration Dataset\n\nThe example in the notebook uses a PubMed dataset from Hugging Face to illustrate the migration process. The dataset is embedded using OpenAI's text-embedding-3-small model (1536 dimensions).",
     "metadata": {
       "chunk_id": "549f18f50426-0003",
       "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_examples\\_qdrant_examples_8.2-development-environment-setup.md",
@@ -16,15 +613,15 @@
       "heading_text": "The Demonstration Dataset",
       "token_count": 45,
       "char_count": 221,
-      "start_char": 0,
-      "end_char": 221,
-      "semantic_score": 0.40342721343040466,
+      "start_char": 5259,
+      "end_char": 5480,
+      "semantic_score": 0.7,
       "structural_score": 0.8999999999999999,
       "retrieval_quality": 0.7319354838709676,
-      "chunking_strategy": "hierarchical_balanced",
-      "content_type": "hierarchical_section",
-      "embedding_model": "nomic-ai/CodeRankEmbed",
-      "processing_timestamp": "2025-10-19T15:32:51.992386",
+      "chunking_strategy": "hierarchical_balanced_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "processing_timestamp": "2025-10-20T04:38:44.770428",
       "document_id": "549f18f50426",
       "document_name": "_qdrant_examples_8.2-development-environment-setup",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_examples\\_qdrant_examples_8.2-development-environment-setup.md",
@@ -32,8 +629,8 @@
       "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_examples",
       "relative_path": "Docs\\qdrant_ecosystem\\qdrant_examples\\_qdrant_examples_8.2-development-environment-setup.md",
       "hierarchy_path": "The Demonstration Dataset",
-      "chunk_hash": "e82abd16030a6cf7",
-      "content_digest": "e82abd16030a6cf7",
+      "chunk_hash": "27b5532953e3c430",
+      "content_digest": "27b5532953e3c430",
       "chunk_length": 221,
       "payload_version": "1.3",
       "collection_hints": [
@@ -189,53 +786,847 @@
         "pubmed",
         "the",
         "uses"
-      ],
-      "quality_fallback": true,
-      "quality_notes": "Promoted via relaxed thresholds"
+      ]
     },
     "advanced_scores": {
-      "semantic": 0.40342721343040466,
+      "semantic": 0.7,
       "structural": 0.8999999999999999,
       "retrieval_quality": 0.7319354838709676,
-      "overall": 0.6784542324337908
+      "overall": 0.7773118279569892
     }
   },
   {
-    "text": "## Overview of the Migration Process  Migrating from Pinecone to Qdrant involves three main steps:  1. **Export** - Using Vector-io to export data from Pinecone into the VDF format 2. **Transform** - Data is automatically standardized into the VDF format 3. **Import** - Importing the VDF-formatted data into Qdrant  This migration pathway ensures data consistency regardless of differences between the source and destination databases. ``` ``` Sources: [data-migration/from-pinecone-to-qdrant.ipynb8-16](https://github.com/qdrant/examples/blob/b3c4b28f/data-migration/from-pinecone-to-qdrant.ipynb#L8-L16) [data-migration/from-pinecone-to-qdrant.ipynb278-335](https://github.com/qdrant/examples/blob/b3c4b28f/data-migration/from-pinecone-to-qdrant.ipynb#L278-L335)",
+    "text": "### Loading and Preparing Sample Data\n\nThe notebook demonstrates:\n\n1. Loading the PubMed dataset\n2. Creating embeddings using OpenAI's embedding model\n3. Storing the data in Pinecone\n\n```\n```\n\nSources: [data-migration/from-pinecone-to-qdrant.ipynb55-61](https://github.com/qdrant/examples/blob/b3c4b28f/data-migration/from-pinecone-to-qdrant.ipynb#L55-L61) [data-migration/from-pinecone-to-qdrant.ipynb163-270](https://github.com/qdrant/examples/blob/b3c4b28f/data-migration/from-pinecone-to-qdrant.ipynb#L163-L270)",
     "metadata": {
-      "chunk_id": "549f18f50426-0001",
+      "chunk_id": "549f18f50426-0004",
       "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_examples\\_qdrant_examples_8.2-development-environment-setup.md",
       "filename": "_qdrant_examples_8.2-development-environment-setup.md",
       "file_extension": ".md",
-      "chunk_index": 1,
+      "chunk_index": 4,
       "document_level": 1,
       "parent_chunk_id": null,
       "child_chunk_ids": [],
       "section_path": [
-        "Overview of the Migration Process"
+        "Loading and Preparing Sample Data"
       ],
-      "heading_text": "Overview of the Migration Process",
-      "token_count": 210,
-      "char_count": 765,
-      "start_char": 0,
-      "end_char": 765,
-      "semantic_score": 0.34026122093200684,
-      "structural_score": 0.8999999999999999,
-      "retrieval_quality": 0.7030434782608695,
-      "chunking_strategy": "hierarchical_balanced",
-      "content_type": "hierarchical_section",
-      "embedding_model": "nomic-ai/CodeRankEmbed",
-      "processing_timestamp": "2025-10-19T15:32:51.991166",
+      "heading_text": "Loading and Preparing Sample Data",
+      "token_count": 156,
+      "char_count": 515,
+      "start_char": 5482,
+      "end_char": 5997,
+      "semantic_score": 0.6,
+      "structural_score": 0.7,
+      "retrieval_quality": 0.7431249999999999,
+      "chunking_strategy": "hierarchical_balanced_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "processing_timestamp": "2025-10-20T04:38:44.771515",
       "document_id": "549f18f50426",
       "document_name": "_qdrant_examples_8.2-development-environment-setup",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_examples\\_qdrant_examples_8.2-development-environment-setup.md",
       "source_filename": "_qdrant_examples_8.2-development-environment-setup.md",
       "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_examples",
       "relative_path": "Docs\\qdrant_ecosystem\\qdrant_examples\\_qdrant_examples_8.2-development-environment-setup.md",
-      "hierarchy_path": "Overview of the Migration Process",
-      "chunk_hash": "420ad7dfc86a0183",
-      "content_digest": "420ad7dfc86a0183",
-      "chunk_length": 765,
+      "hierarchy_path": "Loading and Preparing Sample Data",
+      "chunk_hash": "7fd19dd9fa8447a5",
+      "content_digest": "7fd19dd9fa8447a5",
+      "chunk_length": 515,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "data",
+          "qdrant",
+          "pinecone",
+          "migration",
+          "from",
+          "the",
+          "loading",
+          "https",
+          "github",
+          "com",
+          "examples",
+          "blob",
+          "b3c4b28f",
+          "ipynb",
+          "and",
+          "preparing",
+          "sample",
+          "notebook",
+          "demonstrates",
+          "pubmed"
+        ],
+        "term_weights": [
+          {
+            "term": "data",
+            "tf": 6,
+            "weight": 0.090909
+          },
+          {
+            "term": "qdrant",
+            "tf": 6,
+            "weight": 0.090909
+          },
+          {
+            "term": "pinecone",
+            "tf": 5,
+            "weight": 0.075758
+          },
+          {
+            "term": "migration",
+            "tf": 4,
+            "weight": 0.060606
+          },
+          {
+            "term": "from",
+            "tf": 4,
+            "weight": 0.060606
+          },
+          {
+            "term": "the",
+            "tf": 3,
+            "weight": 0.045455
+          },
+          {
+            "term": "loading",
+            "tf": 2,
+            "weight": 0.030303
+          },
+          {
+            "term": "https",
+            "tf": 2,
+            "weight": 0.030303
+          },
+          {
+            "term": "github",
+            "tf": 2,
+            "weight": 0.030303
+          },
+          {
+            "term": "com",
+            "tf": 2,
+            "weight": 0.030303
+          },
+          {
+            "term": "examples",
+            "tf": 2,
+            "weight": 0.030303
+          },
+          {
+            "term": "blob",
+            "tf": 2,
+            "weight": 0.030303
+          },
+          {
+            "term": "b3c4b28f",
+            "tf": 2,
+            "weight": 0.030303
+          },
+          {
+            "term": "ipynb",
+            "tf": 2,
+            "weight": 0.030303
+          },
+          {
+            "term": "and",
+            "tf": 1,
+            "weight": 0.015152
+          },
+          {
+            "term": "preparing",
+            "tf": 1,
+            "weight": 0.015152
+          },
+          {
+            "term": "sample",
+            "tf": 1,
+            "weight": 0.015152
+          },
+          {
+            "term": "notebook",
+            "tf": 1,
+            "weight": 0.015152
+          },
+          {
+            "term": "demonstrates",
+            "tf": 1,
+            "weight": 0.015152
+          },
+          {
+            "term": "pubmed",
+            "tf": 1,
+            "weight": 0.015152
+          }
+        ],
+        "unique_terms": 36,
+        "total_terms": 66
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Loading and Preparing Sample Data",
+        "com",
+        "data",
+        "from",
+        "github",
+        "https",
+        "loading",
+        "migration",
+        "pinecone",
+        "qdrant",
+        "the"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.6,
+      "structural": 0.7,
+      "retrieval_quality": 0.7431249999999999,
+      "overall": 0.6810416666666667
+    }
+  },
+  {
+    "text": "## Step 1: Setting Up Pinecone\n\nThe notebook demonstrates creating a Pinecone index with appropriate dimensions and embedding model:\n\n1. Initialize Pinecone client with API key\n2. Create a serverless index with correct dimension (1536 for OpenAI's text-embedding-3-small model)\n3. Configure the OpenAI embedding function\n4. Load data and generate embeddings\n5. Upsert the embedding vectors and metadata to Pinecone\n\nThe code in the notebook sets up a Pinecone index named \"pubmed\" with a dimension of 1536 and a cosine similarity metric.\n\nSources: [data-migration/from-pinecone-to-qdrant.ipynb182-270](https://github.com/qdrant/examples/blob/b3c4b28f/data-migration/from-pinecone-to-qdrant.ipynb#L182-L270)",
+    "metadata": {
+      "chunk_id": "549f18f50426-0005",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_examples\\_qdrant_examples_8.2-development-environment-setup.md",
+      "filename": "_qdrant_examples_8.2-development-environment-setup.md",
+      "file_extension": ".md",
+      "chunk_index": 5,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Step 1: Setting Up Pinecone"
+      ],
+      "heading_text": "Step 1: Setting Up Pinecone",
+      "token_count": 176,
+      "char_count": 706,
+      "start_char": 5999,
+      "end_char": 6705,
+      "semantic_score": 0.7,
+      "structural_score": 0.7,
+      "retrieval_quality": 0.7007142857142857,
+      "chunking_strategy": "hierarchical_balanced_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "processing_timestamp": "2025-10-20T04:38:44.771515",
+      "document_id": "549f18f50426",
+      "document_name": "_qdrant_examples_8.2-development-environment-setup",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_examples\\_qdrant_examples_8.2-development-environment-setup.md",
+      "source_filename": "_qdrant_examples_8.2-development-environment-setup.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_examples",
+      "relative_path": "Docs\\qdrant_ecosystem\\qdrant_examples\\_qdrant_examples_8.2-development-environment-setup.md",
+      "hierarchy_path": "Step 1: Setting Up Pinecone",
+      "chunk_hash": "7a1e5f4d2eeaf83b",
+      "content_digest": "7a1e5f4d2eeaf83b",
+      "chunk_length": 706,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "pinecone",
+          "the",
+          "with",
+          "and",
+          "embedding",
+          "index",
+          "data",
+          "qdrant",
+          "notebook",
+          "model",
+          "dimension",
+          "1536",
+          "openai",
+          "migration",
+          "from",
+          "step",
+          "setting",
+          "demonstrates",
+          "creating",
+          "appropriate"
+        ],
+        "term_weights": [
+          {
+            "term": "pinecone",
+            "tf": 7,
+            "weight": 0.077778
+          },
+          {
+            "term": "the",
+            "tf": 5,
+            "weight": 0.055556
+          },
+          {
+            "term": "with",
+            "tf": 4,
+            "weight": 0.044444
+          },
+          {
+            "term": "and",
+            "tf": 4,
+            "weight": 0.044444
+          },
+          {
+            "term": "embedding",
+            "tf": 4,
+            "weight": 0.044444
+          },
+          {
+            "term": "index",
+            "tf": 3,
+            "weight": 0.033333
+          },
+          {
+            "term": "data",
+            "tf": 3,
+            "weight": 0.033333
+          },
+          {
+            "term": "qdrant",
+            "tf": 3,
+            "weight": 0.033333
+          },
+          {
+            "term": "notebook",
+            "tf": 2,
+            "weight": 0.022222
+          },
+          {
+            "term": "model",
+            "tf": 2,
+            "weight": 0.022222
+          },
+          {
+            "term": "dimension",
+            "tf": 2,
+            "weight": 0.022222
+          },
+          {
+            "term": "1536",
+            "tf": 2,
+            "weight": 0.022222
+          },
+          {
+            "term": "openai",
+            "tf": 2,
+            "weight": 0.022222
+          },
+          {
+            "term": "migration",
+            "tf": 2,
+            "weight": 0.022222
+          },
+          {
+            "term": "from",
+            "tf": 2,
+            "weight": 0.022222
+          },
+          {
+            "term": "step",
+            "tf": 1,
+            "weight": 0.011111
+          },
+          {
+            "term": "setting",
+            "tf": 1,
+            "weight": 0.011111
+          },
+          {
+            "term": "demonstrates",
+            "tf": 1,
+            "weight": 0.011111
+          },
+          {
+            "term": "creating",
+            "tf": 1,
+            "weight": 0.011111
+          },
+          {
+            "term": "appropriate",
+            "tf": 1,
+            "weight": 0.011111
+          }
+        ],
+        "unique_terms": 58,
+        "total_terms": 90
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Step 1: Setting Up Pinecone",
+        "and",
+        "data",
+        "embedding",
+        "index",
+        "model",
+        "notebook",
+        "pinecone",
+        "qdrant",
+        "the",
+        "with"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.7,
+      "retrieval_quality": 0.7007142857142857,
+      "overall": 0.7002380952380952
+    }
+  },
+  {
+    "text": "## Step 2: Exporting Data from Pinecone\n\nThe data export step uses the Vector-io command-line interface:\n\n```\nexport_vdf pinecone --serverless -c aws --region us-east-1 -i pubmed --namespace \"\"\n```\n\nThis command:\n\n- Specifies Pinecone as the source database\n- Indicates it's a serverless instance\n- Defines the cloud provider as AWS\n- Sets the region to us-east-1\n- Specifies the index name as \"pubmed\"\n- Targets the default namespace\n\nThe export process:\n\n1. Collects all points/vectors in the specified index\n2. Fetches all vectors with their metadata\n3. Exports them to a standardized Vector Dataset Format (VDF)\n4. Stores the result in a directory with a timestamped name (e.g., `vdf_20240510_001325_88ae5/`)\n\nThe output directory contains:\n\n- A metadata file (`VDF_META.json`) with information about the exported data\n- Parquet files containing the actual vector data and metadata\n\nSources: [data-migration/from-pinecone-to-qdrant.ipynb290-332](https://github.com/qdrant/examples/blob/b3c4b28f/data-migration/from-pinecone-to-qdrant.ipynb#L290-L332)",
+    "metadata": {
+      "chunk_id": "549f18f50426-0006",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_examples\\_qdrant_examples_8.2-development-environment-setup.md",
+      "filename": "_qdrant_examples_8.2-development-environment-setup.md",
+      "file_extension": ".md",
+      "chunk_index": 6,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Step 2: Exporting Data from Pinecone"
+      ],
+      "heading_text": "Step 2: Exporting Data from Pinecone",
+      "token_count": 274,
+      "char_count": 1054,
+      "start_char": 6707,
+      "end_char": 7761,
+      "semantic_score": 0.7,
+      "structural_score": 0.7999999999999998,
+      "retrieval_quality": 0.6870802919708029,
+      "chunking_strategy": "hierarchical_balanced_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "processing_timestamp": "2025-10-20T04:38:44.772649",
+      "document_id": "549f18f50426",
+      "document_name": "_qdrant_examples_8.2-development-environment-setup",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_examples\\_qdrant_examples_8.2-development-environment-setup.md",
+      "source_filename": "_qdrant_examples_8.2-development-environment-setup.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_examples",
+      "relative_path": "Docs\\qdrant_ecosystem\\qdrant_examples\\_qdrant_examples_8.2-development-environment-setup.md",
+      "hierarchy_path": "Step 2: Exporting Data from Pinecone",
+      "chunk_hash": "9e6219d583c88f2f",
+      "content_digest": "9e6219d583c88f2f",
+      "chunk_length": 1054,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "the",
+          "data",
+          "pinecone",
+          "vdf",
+          "from",
+          "export",
+          "vector",
+          "with",
+          "metadata",
+          "qdrant",
+          "step",
+          "command",
+          "serverless",
+          "aws",
+          "region",
+          "east",
+          "pubmed",
+          "namespace",
+          "specifies",
+          "index"
+        ],
+        "term_weights": [
+          {
+            "term": "the",
+            "tf": 13,
+            "weight": 0.097744
+          },
+          {
+            "term": "data",
+            "tf": 6,
+            "weight": 0.045113
+          },
+          {
+            "term": "pinecone",
+            "tf": 5,
+            "weight": 0.037594
+          },
+          {
+            "term": "vdf",
+            "tf": 4,
+            "weight": 0.030075
+          },
+          {
+            "term": "from",
+            "tf": 3,
+            "weight": 0.022556
+          },
+          {
+            "term": "export",
+            "tf": 3,
+            "weight": 0.022556
+          },
+          {
+            "term": "vector",
+            "tf": 3,
+            "weight": 0.022556
+          },
+          {
+            "term": "with",
+            "tf": 3,
+            "weight": 0.022556
+          },
+          {
+            "term": "metadata",
+            "tf": 3,
+            "weight": 0.022556
+          },
+          {
+            "term": "qdrant",
+            "tf": 3,
+            "weight": 0.022556
+          },
+          {
+            "term": "step",
+            "tf": 2,
+            "weight": 0.015038
+          },
+          {
+            "term": "command",
+            "tf": 2,
+            "weight": 0.015038
+          },
+          {
+            "term": "serverless",
+            "tf": 2,
+            "weight": 0.015038
+          },
+          {
+            "term": "aws",
+            "tf": 2,
+            "weight": 0.015038
+          },
+          {
+            "term": "region",
+            "tf": 2,
+            "weight": 0.015038
+          },
+          {
+            "term": "east",
+            "tf": 2,
+            "weight": 0.015038
+          },
+          {
+            "term": "pubmed",
+            "tf": 2,
+            "weight": 0.015038
+          },
+          {
+            "term": "namespace",
+            "tf": 2,
+            "weight": 0.015038
+          },
+          {
+            "term": "specifies",
+            "tf": 2,
+            "weight": 0.015038
+          },
+          {
+            "term": "index",
+            "tf": 2,
+            "weight": 0.015038
+          }
+        ],
+        "unique_terms": 82,
+        "total_terms": 133
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": true,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Step 2: Exporting Data from Pinecone",
+        "data",
+        "export",
+        "from",
+        "metadata",
+        "pinecone",
+        "qdrant",
+        "the",
+        "vdf",
+        "vector",
+        "with"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.7999999999999998,
+      "retrieval_quality": 0.6870802919708029,
+      "overall": 0.7290267639902676
+    }
+  },
+  {
+    "text": "## Step 3: Importing Data to Qdrant\n\nAfter exporting, use the Vector-io import command to transfer the data to Qdrant:\n\n```\nimport_vdf qdrant -u $QDRANT_HOST\n```\n\nWhen prompted, specify the directory containing the exported VDF data.\n\nThe import process:\n\n1. Reads the VDF metadata to understand the data structure\n2. Parses the vector data from the Parquet files\n3. Converts metadata to the appropriate format for Qdrant\n4. Creates a collection in Qdrant with matching parameters (if it doesn't exist)\n5. Uploads vectors in batches to Qdrant\n\nThe import tool will report:\n\n- Number of vectors processed\n- Number of vectors successfully imported\n- Time taken for the operation\n\nSources: [data-migration/from-pinecone-to-qdrant.ipynb342-360](https://github.com/qdrant/examples/blob/b3c4b28f/data-migration/from-pinecone-to-qdrant.ipynb#L342-L360)",
+    "metadata": {
+      "chunk_id": "549f18f50426-0007",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_examples\\_qdrant_examples_8.2-development-environment-setup.md",
+      "filename": "_qdrant_examples_8.2-development-environment-setup.md",
+      "file_extension": ".md",
+      "chunk_index": 7,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Step 3: Importing Data to Qdrant"
+      ],
+      "heading_text": "Step 3: Importing Data to Qdrant",
+      "token_count": 218,
+      "char_count": 845,
+      "start_char": 7763,
+      "end_char": 8608,
+      "semantic_score": 0.7,
+      "structural_score": 0.7999999999999998,
+      "retrieval_quality": 0.6927027027027027,
+      "chunking_strategy": "hierarchical_balanced_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "processing_timestamp": "2025-10-20T04:38:44.772649",
+      "document_id": "549f18f50426",
+      "document_name": "_qdrant_examples_8.2-development-environment-setup",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_examples\\_qdrant_examples_8.2-development-environment-setup.md",
+      "source_filename": "_qdrant_examples_8.2-development-environment-setup.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_examples",
+      "relative_path": "Docs\\qdrant_ecosystem\\qdrant_examples\\_qdrant_examples_8.2-development-environment-setup.md",
+      "hierarchy_path": "Step 3: Importing Data to Qdrant",
+      "chunk_hash": "06e127ab23176b7c",
+      "content_digest": "06e127ab23176b7c",
+      "chunk_length": 845,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "the",
+          "qdrant",
+          "data",
+          "import",
+          "vdf",
+          "from",
+          "vectors",
+          "vector",
+          "metadata",
+          "for",
+          "number",
+          "migration",
+          "pinecone",
+          "step",
+          "importing",
+          "after",
+          "exporting",
+          "use",
+          "command",
+          "transfer"
+        ],
+        "term_weights": [
+          {
+            "term": "the",
+            "tf": 12,
+            "weight": 0.111111
+          },
+          {
+            "term": "qdrant",
+            "tf": 10,
+            "weight": 0.092593
+          },
+          {
+            "term": "data",
+            "tf": 7,
+            "weight": 0.064815
+          },
+          {
+            "term": "import",
+            "tf": 4,
+            "weight": 0.037037
+          },
+          {
+            "term": "vdf",
+            "tf": 3,
+            "weight": 0.027778
+          },
+          {
+            "term": "from",
+            "tf": 3,
+            "weight": 0.027778
+          },
+          {
+            "term": "vectors",
+            "tf": 3,
+            "weight": 0.027778
+          },
+          {
+            "term": "vector",
+            "tf": 2,
+            "weight": 0.018519
+          },
+          {
+            "term": "metadata",
+            "tf": 2,
+            "weight": 0.018519
+          },
+          {
+            "term": "for",
+            "tf": 2,
+            "weight": 0.018519
+          },
+          {
+            "term": "number",
+            "tf": 2,
+            "weight": 0.018519
+          },
+          {
+            "term": "migration",
+            "tf": 2,
+            "weight": 0.018519
+          },
+          {
+            "term": "pinecone",
+            "tf": 2,
+            "weight": 0.018519
+          },
+          {
+            "term": "step",
+            "tf": 1,
+            "weight": 0.009259
+          },
+          {
+            "term": "importing",
+            "tf": 1,
+            "weight": 0.009259
+          },
+          {
+            "term": "after",
+            "tf": 1,
+            "weight": 0.009259
+          },
+          {
+            "term": "exporting",
+            "tf": 1,
+            "weight": 0.009259
+          },
+          {
+            "term": "use",
+            "tf": 1,
+            "weight": 0.009259
+          },
+          {
+            "term": "command",
+            "tf": 1,
+            "weight": 0.009259
+          },
+          {
+            "term": "transfer",
+            "tf": 1,
+            "weight": 0.009259
+          }
+        ],
+        "unique_terms": 67,
+        "total_terms": 108
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": true,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Step 3: Importing Data to Qdrant",
+        "data",
+        "for",
+        "from",
+        "import",
+        "metadata",
+        "qdrant",
+        "the",
+        "vdf",
+        "vector",
+        "vectors"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.7999999999999998,
+      "retrieval_quality": 0.6927027027027027,
+      "overall": 0.7309009009009008
+    }
+  },
+  {
+    "text": "## Data Flow and Transformation\n\nDuring the migration process, Vector-io handles the following transformations:\n\n```\n```\n\nThe Vector Dataset Format (VDF) serves as a standardized intermediate representation, ensuring compatibility between different vector database systems. Key transformation points include:\n\n1. **ID handling**: Ensuring consistent ID formats across systems\n2. **Vector dimensionality**: Maintaining the same dimensions (1536 in this example)\n3. **Metadata/payload conversion**: Converting between Pinecone's metadata and Qdrant's payload format\n4. **Index configuration**: Transferring similarity metrics and other settings\n\nSources: [data-migration/from-pinecone-to-qdrant.ipynb8-16](https://github.com/qdrant/examples/blob/b3c4b28f/data-migration/from-pinecone-to-qdrant.ipynb#L8-L16) [data-migration/from-pinecone-to-qdrant.ipynb290-360](https://github.com/qdrant/examples/blob/b3c4b28f/data-migration/from-pinecone-to-qdrant.ipynb#L290-L360)",
+    "metadata": {
+      "chunk_id": "549f18f50426-0008",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_examples\\_qdrant_examples_8.2-development-environment-setup.md",
+      "filename": "_qdrant_examples_8.2-development-environment-setup.md",
+      "file_extension": ".md",
+      "chunk_index": 8,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Data Flow and Transformation"
+      ],
+      "heading_text": "Data Flow and Transformation",
+      "token_count": 233,
+      "char_count": 964,
+      "start_char": 8610,
+      "end_char": 9574,
+      "semantic_score": 0.7,
+      "structural_score": 0.7,
+      "retrieval_quality": 0.7492592592592592,
+      "chunking_strategy": "hierarchical_balanced_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "processing_timestamp": "2025-10-20T04:38:44.772649",
+      "document_id": "549f18f50426",
+      "document_name": "_qdrant_examples_8.2-development-environment-setup",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_examples\\_qdrant_examples_8.2-development-environment-setup.md",
+      "source_filename": "_qdrant_examples_8.2-development-environment-setup.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_examples",
+      "relative_path": "Docs\\qdrant_ecosystem\\qdrant_examples\\_qdrant_examples_8.2-development-environment-setup.md",
+      "hierarchy_path": "Data Flow and Transformation",
+      "chunk_hash": "ee01fad40d0e803b",
+      "content_digest": "ee01fad40d0e803b",
+      "chunk_length": 964,
       "payload_version": "1.3",
       "collection_hints": [
         "qdrant_ecosystem"
@@ -247,128 +1638,128 @@
           "qdrant",
           "data",
           "migration",
-          "from",
           "pinecone",
           "the",
-          "into",
-          "vdf",
-          "export",
+          "vector",
+          "from",
+          "and",
+          "transformation",
           "format",
+          "ensuring",
+          "between",
+          "systems",
+          "metadata",
+          "payload",
           "https",
           "github",
           "com",
           "examples",
-          "blob",
-          "b3c4b28f",
-          "ipynb",
-          "overview",
-          "process",
-          "migrating"
+          "blob"
         ],
         "term_weights": [
           {
             "term": "qdrant",
-            "tf": 8,
-            "weight": 0.083333
+            "tf": 7,
+            "weight": 0.063636
           },
           {
             "term": "data",
-            "tf": 8,
-            "weight": 0.083333
+            "tf": 5,
+            "weight": 0.045455
           },
           {
             "term": "migration",
-            "tf": 6,
-            "weight": 0.0625
-          },
-          {
-            "term": "from",
-            "tf": 6,
-            "weight": 0.0625
+            "tf": 5,
+            "weight": 0.045455
           },
           {
             "term": "pinecone",
-            "tf": 6,
-            "weight": 0.0625
+            "tf": 5,
+            "weight": 0.045455
           },
           {
             "term": "the",
-            "tf": 5,
-            "weight": 0.052083
+            "tf": 4,
+            "weight": 0.036364
           },
           {
-            "term": "into",
+            "term": "vector",
+            "tf": 4,
+            "weight": 0.036364
+          },
+          {
+            "term": "from",
+            "tf": 4,
+            "weight": 0.036364
+          },
+          {
+            "term": "and",
             "tf": 3,
-            "weight": 0.03125
+            "weight": 0.027273
           },
           {
-            "term": "vdf",
-            "tf": 3,
-            "weight": 0.03125
-          },
-          {
-            "term": "export",
+            "term": "transformation",
             "tf": 2,
-            "weight": 0.020833
+            "weight": 0.018182
           },
           {
             "term": "format",
             "tf": 2,
-            "weight": 0.020833
+            "weight": 0.018182
+          },
+          {
+            "term": "ensuring",
+            "tf": 2,
+            "weight": 0.018182
+          },
+          {
+            "term": "between",
+            "tf": 2,
+            "weight": 0.018182
+          },
+          {
+            "term": "systems",
+            "tf": 2,
+            "weight": 0.018182
+          },
+          {
+            "term": "metadata",
+            "tf": 2,
+            "weight": 0.018182
+          },
+          {
+            "term": "payload",
+            "tf": 2,
+            "weight": 0.018182
           },
           {
             "term": "https",
             "tf": 2,
-            "weight": 0.020833
+            "weight": 0.018182
           },
           {
             "term": "github",
             "tf": 2,
-            "weight": 0.020833
+            "weight": 0.018182
           },
           {
             "term": "com",
             "tf": 2,
-            "weight": 0.020833
+            "weight": 0.018182
           },
           {
             "term": "examples",
             "tf": 2,
-            "weight": 0.020833
+            "weight": 0.018182
           },
           {
             "term": "blob",
             "tf": 2,
-            "weight": 0.020833
-          },
-          {
-            "term": "b3c4b28f",
-            "tf": 2,
-            "weight": 0.020833
-          },
-          {
-            "term": "ipynb",
-            "tf": 2,
-            "weight": 0.020833
-          },
-          {
-            "term": "overview",
-            "tf": 1,
-            "weight": 0.010417
-          },
-          {
-            "term": "process",
-            "tf": 1,
-            "weight": 0.010417
-          },
-          {
-            "term": "migrating",
-            "tf": 1,
-            "weight": 0.010417
+            "weight": 0.018182
           }
         ],
-        "unique_terms": 50,
-        "total_terms": 96
+        "unique_terms": 67,
+        "total_terms": 110
       },
       "modal_hint": "code",
       "content_flags": {
@@ -379,30 +1770,28 @@
         "has_formula": false
       },
       "search_keywords": [
-        "Overview of the Migration Process",
+        "Data Flow and Transformation",
+        "and",
         "data",
-        "export",
         "format",
         "from",
-        "into",
         "migration",
         "pinecone",
         "qdrant",
         "the",
-        "vdf"
-      ],
-      "quality_fallback": true,
-      "quality_notes": "Promoted via relaxed thresholds"
+        "transformation",
+        "vector"
+      ]
     },
     "advanced_scores": {
-      "semantic": 0.34026122093200684,
-      "structural": 0.8999999999999999,
-      "retrieval_quality": 0.7030434782608695,
-      "overall": 0.6477682330642921
+      "semantic": 0.7,
+      "structural": 0.7,
+      "retrieval_quality": 0.7492592592592592,
+      "overall": 0.7164197530864197
     }
   },
   {
-    "text": "## Verification and Validation  After completing the migration, it's important to verify that:  1. **Vector count matches**: The number of vectors in Qdrant should match the number exported from Pinecone 2. **Metadata integrity**: Sample checks to ensure metadata was correctly transferred 3. **Search functionality**: Test similar queries in both systems to compare results  The imported collection should be visible in the Qdrant dashboard where you can verify vector counts and test search functionality. Sources: [data-migration/from-pinecone-to-qdrant.ipynb362-366](https://github.com/qdrant/examples/blob/b3c4b28f/data-migration/from-pinecone-to-qdrant.ipynb#L362-L366)",
+    "text": "## Verification and Validation\n\nAfter completing the migration, it's important to verify that:\n\n1. **Vector count matches**: The number of vectors in Qdrant should match the number exported from Pinecone\n2. **Metadata integrity**: Sample checks to ensure metadata was correctly transferred\n3. **Search functionality**: Test similar queries in both systems to compare results\n\nThe imported collection should be visible in the Qdrant dashboard where you can verify vector counts and test search functionality.\n\nSources: [data-migration/from-pinecone-to-qdrant.ipynb362-366](https://github.com/qdrant/examples/blob/b3c4b28f/data-migration/from-pinecone-to-qdrant.ipynb#L362-L366)",
     "metadata": {
       "chunk_id": "549f18f50426-0009",
       "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_examples\\_qdrant_examples_8.2-development-environment-setup.md",
@@ -416,17 +1805,17 @@
         "Verification and Validation"
       ],
       "heading_text": "Verification and Validation",
-      "token_count": 154,
-      "char_count": 675,
-      "start_char": 0,
-      "end_char": 675,
-      "semantic_score": 0.27574554085731506,
-      "structural_score": 0.8999999999999999,
+      "token_count": 152,
+      "char_count": 676,
+      "start_char": 9576,
+      "end_char": 10252,
+      "semantic_score": 0.7,
+      "structural_score": 0.7,
       "retrieval_quality": 0.734,
-      "chunking_strategy": "hierarchical_balanced",
-      "content_type": "hierarchical_section",
-      "embedding_model": "nomic-ai/CodeRankEmbed",
-      "processing_timestamp": "2025-10-19T15:32:51.995409",
+      "chunking_strategy": "hierarchical_balanced_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "processing_timestamp": "2025-10-20T04:38:44.772649",
       "document_id": "549f18f50426",
       "document_name": "_qdrant_examples_8.2-development-environment-setup",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_examples\\_qdrant_examples_8.2-development-environment-setup.md",
@@ -434,9 +1823,9 @@
       "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_examples",
       "relative_path": "Docs\\qdrant_ecosystem\\qdrant_examples\\_qdrant_examples_8.2-development-environment-setup.md",
       "hierarchy_path": "Verification and Validation",
-      "chunk_hash": "cfa9bd4927f64db8",
-      "content_digest": "cfa9bd4927f64db8",
-      "chunk_length": 675,
+      "chunk_hash": "832de424881a998c",
+      "content_digest": "832de424881a998c",
+      "chunk_length": 676,
       "payload_version": "1.3",
       "collection_hints": [
         "qdrant_ecosystem"
@@ -591,15 +1980,809 @@
         "the",
         "vector",
         "verify"
-      ],
-      "quality_fallback": true,
-      "quality_notes": "Promoted via relaxed thresholds"
+      ]
     },
     "advanced_scores": {
-      "semantic": 0.27574554085731506,
-      "structural": 0.8999999999999999,
+      "semantic": 0.7,
+      "structural": 0.7,
       "retrieval_quality": 0.734,
-      "overall": 0.6365818469524384
+      "overall": 0.7113333333333333
+    }
+  },
+  {
+    "text": "## Best Practices and Considerations\n\nWhen migrating vector data from Pinecone to Qdrant, consider the following best practices:\n\n1. **Backup your data**: Always ensure you have a backup of your Pinecone data before migration\n2. **Test with a subset**: For large collections, consider testing the migration with a small subset first\n3. **Verify dimensions and metrics**: Ensure the dimension size and similarity metric match between systems\n4. **Choose appropriate batch size**: For large datasets, adjust the batch size during import to optimize performance\n5. **Plan for downtime**: Schedule migration during low-traffic periods\n6. **Post-migration testing**: Thoroughly test your application with the new Qdrant backend",
+    "metadata": {
+      "chunk_id": "549f18f50426-0010",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_examples\\_qdrant_examples_8.2-development-environment-setup.md",
+      "filename": "_qdrant_examples_8.2-development-environment-setup.md",
+      "file_extension": ".md",
+      "chunk_index": 10,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Best Practices and Considerations"
+      ],
+      "heading_text": "Best Practices and Considerations",
+      "token_count": 145,
+      "char_count": 722,
+      "start_char": 10254,
+      "end_char": 10976,
+      "semantic_score": 0.7,
+      "structural_score": 0.7,
+      "retrieval_quality": 0.715,
+      "chunking_strategy": "hierarchical_balanced_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "processing_timestamp": "2025-10-20T04:38:44.772649",
+      "document_id": "549f18f50426",
+      "document_name": "_qdrant_examples_8.2-development-environment-setup",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_examples\\_qdrant_examples_8.2-development-environment-setup.md",
+      "source_filename": "_qdrant_examples_8.2-development-environment-setup.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_examples",
+      "relative_path": "Docs\\qdrant_ecosystem\\qdrant_examples\\_qdrant_examples_8.2-development-environment-setup.md",
+      "hierarchy_path": "Best Practices and Considerations",
+      "chunk_hash": "f3553e64fd11ccc1",
+      "content_digest": "f3553e64fd11ccc1",
+      "chunk_length": 722,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "the",
+          "migration",
+          "and",
+          "data",
+          "your",
+          "with",
+          "for",
+          "size",
+          "best",
+          "practices",
+          "pinecone",
+          "qdrant",
+          "consider",
+          "backup",
+          "ensure",
+          "test",
+          "subset",
+          "large",
+          "testing",
+          "batch"
+        ],
+        "term_weights": [
+          {
+            "term": "the",
+            "tf": 5,
+            "weight": 0.053763
+          },
+          {
+            "term": "migration",
+            "tf": 4,
+            "weight": 0.043011
+          },
+          {
+            "term": "and",
+            "tf": 3,
+            "weight": 0.032258
+          },
+          {
+            "term": "data",
+            "tf": 3,
+            "weight": 0.032258
+          },
+          {
+            "term": "your",
+            "tf": 3,
+            "weight": 0.032258
+          },
+          {
+            "term": "with",
+            "tf": 3,
+            "weight": 0.032258
+          },
+          {
+            "term": "for",
+            "tf": 3,
+            "weight": 0.032258
+          },
+          {
+            "term": "size",
+            "tf": 3,
+            "weight": 0.032258
+          },
+          {
+            "term": "best",
+            "tf": 2,
+            "weight": 0.021505
+          },
+          {
+            "term": "practices",
+            "tf": 2,
+            "weight": 0.021505
+          },
+          {
+            "term": "pinecone",
+            "tf": 2,
+            "weight": 0.021505
+          },
+          {
+            "term": "qdrant",
+            "tf": 2,
+            "weight": 0.021505
+          },
+          {
+            "term": "consider",
+            "tf": 2,
+            "weight": 0.021505
+          },
+          {
+            "term": "backup",
+            "tf": 2,
+            "weight": 0.021505
+          },
+          {
+            "term": "ensure",
+            "tf": 2,
+            "weight": 0.021505
+          },
+          {
+            "term": "test",
+            "tf": 2,
+            "weight": 0.021505
+          },
+          {
+            "term": "subset",
+            "tf": 2,
+            "weight": 0.021505
+          },
+          {
+            "term": "large",
+            "tf": 2,
+            "weight": 0.021505
+          },
+          {
+            "term": "testing",
+            "tf": 2,
+            "weight": 0.021505
+          },
+          {
+            "term": "batch",
+            "tf": 2,
+            "weight": 0.021505
+          }
+        ],
+        "unique_terms": 61,
+        "total_terms": 93
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Best Practices and Considerations",
+        "and",
+        "best",
+        "data",
+        "for",
+        "migration",
+        "practices",
+        "size",
+        "the",
+        "with",
+        "your"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.7,
+      "retrieval_quality": 0.715,
+      "overall": 0.705
+    }
+  },
+  {
+    "text": "## Environment Variables  The configuration uses environment variables to manage credentials securely. The required variables include:  | Variable                 | Purpose                                        | | ------------------------ | ---------------------------------------------- | | QDRANT\\_COLLECTION\\_NAME | The name of the collection in Qdrant           | | QDRANT\\_HOST             | The URL endpoint for your Qdrant instance      | | QDRANT\\_API\\_KEY         | API key for authenticating with Qdrant         | | PINECONE\\_API\\_KEY       | API key for Pinecone access                    | | PINECONE\\_CLOUD          | Cloud provider for Pinecone (e.g., aws)        | | PINECONE\\_REGION         | Region for Pinecone (e.g., us-east-1)          | | OPENAI\\_API\\_KEY         | API key for OpenAI (if using their embeddings) |  Sources: [data-migration/.env-example1-11](https://github.com/qdrant/examples/blob/b3c4b28f/data-migration/.env-example#L1-L11)",
+    "metadata": {
+      "chunk_id": "549f18f50426-0011",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_examples\\_qdrant_examples_8.2-development-environment-setup.md",
+      "filename": "_qdrant_examples_8.2-development-environment-setup.md",
+      "file_extension": ".md",
+      "chunk_index": 11,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Environment Variables"
+      ],
+      "heading_text": "Environment Variables",
+      "token_count": 224,
+      "char_count": 966,
+      "start_char": 10978,
+      "end_char": 11944,
+      "semantic_score": 0.7999999999999999,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.6489999999999999,
+      "chunking_strategy": "hierarchical_balanced_structural",
+      "content_type": "table_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "processing_timestamp": "2025-10-20T04:38:44.772649",
+      "document_id": "549f18f50426",
+      "document_name": "_qdrant_examples_8.2-development-environment-setup",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_examples\\_qdrant_examples_8.2-development-environment-setup.md",
+      "source_filename": "_qdrant_examples_8.2-development-environment-setup.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_examples",
+      "relative_path": "Docs\\qdrant_ecosystem\\qdrant_examples\\_qdrant_examples_8.2-development-environment-setup.md",
+      "hierarchy_path": "Environment Variables",
+      "chunk_hash": "fc768d8b2559b796",
+      "content_digest": "fc768d8b2559b796",
+      "chunk_length": 966,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "qdrant",
+          "for",
+          "api",
+          "key",
+          "pinecone",
+          "the",
+          "variables",
+          "environment",
+          "collection",
+          "name",
+          "cloud",
+          "region",
+          "openai",
+          "data",
+          "migration",
+          "env",
+          "configuration",
+          "uses",
+          "manage",
+          "credentials"
+        ],
+        "term_weights": [
+          {
+            "term": "qdrant",
+            "tf": 7,
+            "weight": 0.077778
+          },
+          {
+            "term": "for",
+            "tf": 6,
+            "weight": 0.066667
+          },
+          {
+            "term": "api",
+            "tf": 6,
+            "weight": 0.066667
+          },
+          {
+            "term": "key",
+            "tf": 6,
+            "weight": 0.066667
+          },
+          {
+            "term": "pinecone",
+            "tf": 6,
+            "weight": 0.066667
+          },
+          {
+            "term": "the",
+            "tf": 5,
+            "weight": 0.055556
+          },
+          {
+            "term": "variables",
+            "tf": 3,
+            "weight": 0.033333
+          },
+          {
+            "term": "environment",
+            "tf": 2,
+            "weight": 0.022222
+          },
+          {
+            "term": "collection",
+            "tf": 2,
+            "weight": 0.022222
+          },
+          {
+            "term": "name",
+            "tf": 2,
+            "weight": 0.022222
+          },
+          {
+            "term": "cloud",
+            "tf": 2,
+            "weight": 0.022222
+          },
+          {
+            "term": "region",
+            "tf": 2,
+            "weight": 0.022222
+          },
+          {
+            "term": "openai",
+            "tf": 2,
+            "weight": 0.022222
+          },
+          {
+            "term": "data",
+            "tf": 2,
+            "weight": 0.022222
+          },
+          {
+            "term": "migration",
+            "tf": 2,
+            "weight": 0.022222
+          },
+          {
+            "term": "env",
+            "tf": 2,
+            "weight": 0.022222
+          },
+          {
+            "term": "configuration",
+            "tf": 1,
+            "weight": 0.011111
+          },
+          {
+            "term": "uses",
+            "tf": 1,
+            "weight": 0.011111
+          },
+          {
+            "term": "manage",
+            "tf": 1,
+            "weight": 0.011111
+          },
+          {
+            "term": "credentials",
+            "tf": 1,
+            "weight": 0.011111
+          }
+        ],
+        "unique_terms": 49,
+        "total_terms": 90
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Environment Variables",
+        "api",
+        "collection",
+        "environment",
+        "for",
+        "key",
+        "name",
+        "pinecone",
+        "qdrant",
+        "the",
+        "variables"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.7999999999999999,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.6489999999999999,
+      "overall": 0.7829999999999999
+    }
+  },
+  {
+    "text": "## Technical Details and Limitations\n\nWhen migrating between Pinecone and Qdrant, be aware of these technical considerations:\n\n1. **Similarity metrics**: Ensure you're using comparable similarity metrics (e.g., cosine, dot product, euclidean)\n2. **Vector dimensions**: The vector dimensions must match between source and destination\n3. **Custom metadata**: Complex metadata structures may require additional handling\n4. **Scale considerations**: Very large datasets might require splitting the migration into multiple operations\n5. **Network bandwidth**: For large datasets, ensure adequate network bandwidth between systems",
+    "metadata": {
+      "chunk_id": "549f18f50426-0012",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_examples\\_qdrant_examples_8.2-development-environment-setup.md",
+      "filename": "_qdrant_examples_8.2-development-environment-setup.md",
+      "file_extension": ".md",
+      "chunk_index": 12,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Technical Details and Limitations"
+      ],
+      "heading_text": "Technical Details and Limitations",
+      "token_count": 114,
+      "char_count": 624,
+      "start_char": 11946,
+      "end_char": 12570,
+      "semantic_score": 0.7,
+      "structural_score": 0.7,
+      "retrieval_quality": 0.5558227848101266,
+      "chunking_strategy": "hierarchical_balanced_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "processing_timestamp": "2025-10-20T04:38:44.772649",
+      "document_id": "549f18f50426",
+      "document_name": "_qdrant_examples_8.2-development-environment-setup",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_examples\\_qdrant_examples_8.2-development-environment-setup.md",
+      "source_filename": "_qdrant_examples_8.2-development-environment-setup.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_examples",
+      "relative_path": "Docs\\qdrant_ecosystem\\qdrant_examples\\_qdrant_examples_8.2-development-environment-setup.md",
+      "hierarchy_path": "Technical Details and Limitations",
+      "chunk_hash": "2c89d62c893a51c8",
+      "content_digest": "2c89d62c893a51c8",
+      "chunk_length": 624,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "and",
+          "between",
+          "technical",
+          "considerations",
+          "similarity",
+          "metrics",
+          "ensure",
+          "vector",
+          "dimensions",
+          "the",
+          "metadata",
+          "require",
+          "large",
+          "datasets",
+          "network",
+          "bandwidth",
+          "details",
+          "limitations",
+          "when",
+          "migrating"
+        ],
+        "term_weights": [
+          {
+            "term": "and",
+            "tf": 3,
+            "weight": 0.042857
+          },
+          {
+            "term": "between",
+            "tf": 3,
+            "weight": 0.042857
+          },
+          {
+            "term": "technical",
+            "tf": 2,
+            "weight": 0.028571
+          },
+          {
+            "term": "considerations",
+            "tf": 2,
+            "weight": 0.028571
+          },
+          {
+            "term": "similarity",
+            "tf": 2,
+            "weight": 0.028571
+          },
+          {
+            "term": "metrics",
+            "tf": 2,
+            "weight": 0.028571
+          },
+          {
+            "term": "ensure",
+            "tf": 2,
+            "weight": 0.028571
+          },
+          {
+            "term": "vector",
+            "tf": 2,
+            "weight": 0.028571
+          },
+          {
+            "term": "dimensions",
+            "tf": 2,
+            "weight": 0.028571
+          },
+          {
+            "term": "the",
+            "tf": 2,
+            "weight": 0.028571
+          },
+          {
+            "term": "metadata",
+            "tf": 2,
+            "weight": 0.028571
+          },
+          {
+            "term": "require",
+            "tf": 2,
+            "weight": 0.028571
+          },
+          {
+            "term": "large",
+            "tf": 2,
+            "weight": 0.028571
+          },
+          {
+            "term": "datasets",
+            "tf": 2,
+            "weight": 0.028571
+          },
+          {
+            "term": "network",
+            "tf": 2,
+            "weight": 0.028571
+          },
+          {
+            "term": "bandwidth",
+            "tf": 2,
+            "weight": 0.028571
+          },
+          {
+            "term": "details",
+            "tf": 1,
+            "weight": 0.014286
+          },
+          {
+            "term": "limitations",
+            "tf": 1,
+            "weight": 0.014286
+          },
+          {
+            "term": "when",
+            "tf": 1,
+            "weight": 0.014286
+          },
+          {
+            "term": "migrating",
+            "tf": 1,
+            "weight": 0.014286
+          }
+        ],
+        "unique_terms": 52,
+        "total_terms": 70
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Technical Details and Limitations",
+        "and",
+        "between",
+        "considerations",
+        "dimensions",
+        "ensure",
+        "metrics",
+        "similarity",
+        "technical",
+        "the",
+        "vector"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.7,
+      "retrieval_quality": 0.5558227848101266,
+      "overall": 0.6519409282700422
+    }
+  },
+  {
+    "text": "## Conclusion\n\nVector-io provides a streamlined solution for migrating vector data from Pinecone to Qdrant. The standardized VDF format ensures data integrity during the migration process, making it convenient to switch between vector database providers while preserving your vector embeddings and associated metadata.\n\nDismiss\n\nRefresh this wiki\n\nEnter email to refresh",
+    "metadata": {
+      "chunk_id": "549f18f50426-0013",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_examples\\_qdrant_examples_8.2-development-environment-setup.md",
+      "filename": "_qdrant_examples_8.2-development-environment-setup.md",
+      "file_extension": ".md",
+      "chunk_index": 13,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Conclusion"
+      ],
+      "heading_text": "Conclusion",
+      "token_count": 62,
+      "char_count": 370,
+      "start_char": 12572,
+      "end_char": 12942,
+      "semantic_score": 0.7999999999999999,
+      "structural_score": 0.7,
+      "retrieval_quality": 0.5488235294117647,
+      "chunking_strategy": "hierarchical_balanced_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "processing_timestamp": "2025-10-20T04:38:44.772649",
+      "document_id": "549f18f50426",
+      "document_name": "_qdrant_examples_8.2-development-environment-setup",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_examples\\_qdrant_examples_8.2-development-environment-setup.md",
+      "source_filename": "_qdrant_examples_8.2-development-environment-setup.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_examples",
+      "relative_path": "Docs\\qdrant_ecosystem\\qdrant_examples\\_qdrant_examples_8.2-development-environment-setup.md",
+      "hierarchy_path": "Conclusion",
+      "chunk_hash": "b4c4551aeb694dcb",
+      "content_digest": "b4c4551aeb694dcb",
+      "chunk_length": 370,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "vector",
+          "data",
+          "the",
+          "refresh",
+          "conclusion",
+          "provides",
+          "streamlined",
+          "solution",
+          "for",
+          "migrating",
+          "from",
+          "pinecone",
+          "qdrant",
+          "standardized",
+          "vdf",
+          "format",
+          "ensures",
+          "integrity",
+          "during",
+          "migration"
+        ],
+        "term_weights": [
+          {
+            "term": "vector",
+            "tf": 4,
+            "weight": 0.088889
+          },
+          {
+            "term": "data",
+            "tf": 2,
+            "weight": 0.044444
+          },
+          {
+            "term": "the",
+            "tf": 2,
+            "weight": 0.044444
+          },
+          {
+            "term": "refresh",
+            "tf": 2,
+            "weight": 0.044444
+          },
+          {
+            "term": "conclusion",
+            "tf": 1,
+            "weight": 0.022222
+          },
+          {
+            "term": "provides",
+            "tf": 1,
+            "weight": 0.022222
+          },
+          {
+            "term": "streamlined",
+            "tf": 1,
+            "weight": 0.022222
+          },
+          {
+            "term": "solution",
+            "tf": 1,
+            "weight": 0.022222
+          },
+          {
+            "term": "for",
+            "tf": 1,
+            "weight": 0.022222
+          },
+          {
+            "term": "migrating",
+            "tf": 1,
+            "weight": 0.022222
+          },
+          {
+            "term": "from",
+            "tf": 1,
+            "weight": 0.022222
+          },
+          {
+            "term": "pinecone",
+            "tf": 1,
+            "weight": 0.022222
+          },
+          {
+            "term": "qdrant",
+            "tf": 1,
+            "weight": 0.022222
+          },
+          {
+            "term": "standardized",
+            "tf": 1,
+            "weight": 0.022222
+          },
+          {
+            "term": "vdf",
+            "tf": 1,
+            "weight": 0.022222
+          },
+          {
+            "term": "format",
+            "tf": 1,
+            "weight": 0.022222
+          },
+          {
+            "term": "ensures",
+            "tf": 1,
+            "weight": 0.022222
+          },
+          {
+            "term": "integrity",
+            "tf": 1,
+            "weight": 0.022222
+          },
+          {
+            "term": "during",
+            "tf": 1,
+            "weight": 0.022222
+          },
+          {
+            "term": "migration",
+            "tf": 1,
+            "weight": 0.022222
+          }
+        ],
+        "unique_terms": 39,
+        "total_terms": 45
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Conclusion",
+        "conclusion",
+        "data",
+        "for",
+        "migrating",
+        "provides",
+        "refresh",
+        "solution",
+        "streamlined",
+        "the",
+        "vector"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.7999999999999999,
+      "structural": 0.7,
+      "retrieval_quality": 0.5488235294117647,
+      "overall": 0.6829411764705883
     }
   },
   {
@@ -619,15 +2802,15 @@
       "heading_text": "On this page",
       "token_count": 240,
       "char_count": 926,
-      "start_char": 0,
-      "end_char": 926,
-      "semantic_score": 0.3125033378601074,
+      "start_char": 12944,
+      "end_char": 13870,
+      "semantic_score": 0.7,
       "structural_score": 0.8999999999999999,
       "retrieval_quality": 0.6928169014084508,
-      "chunking_strategy": "hierarchical_balanced",
-      "content_type": "hierarchical_section",
-      "embedding_model": "nomic-ai/CodeRankEmbed",
-      "processing_timestamp": "2025-10-19T15:32:51.997461",
+      "chunking_strategy": "hierarchical_balanced_structural",
+      "content_type": "list_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "processing_timestamp": "2025-10-20T04:38:44.772649",
       "document_id": "549f18f50426",
       "document_name": "_qdrant_examples_8.2-development-environment-setup",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_examples\\_qdrant_examples_8.2-development-environment-setup.md",
@@ -792,216 +2975,13 @@
         "process",
         "step",
         "the"
-      ],
-      "quality_fallback": true,
-      "quality_notes": "Promoted via relaxed thresholds"
+      ]
     },
     "advanced_scores": {
-      "semantic": 0.3125033378601074,
+      "semantic": 0.7,
       "structural": 0.8999999999999999,
       "retrieval_quality": 0.6928169014084508,
-      "overall": 0.6351067464228527
-    }
-  },
-  {
-    "text": "## Step 1: Setting Up Pinecone  The notebook demonstrates creating a Pinecone index with appropriate dimensions and embedding model:  1. Initialize Pinecone client with API key 2. Create a serverless index with correct dimension (1536 for OpenAI's text-embedding-3-small model) 3. Configure the OpenAI embedding function 4. Load data and generate embeddings 5. Upsert the embedding vectors and metadata to Pinecone  The code in the notebook sets up a Pinecone index named \"pubmed\" with a dimension of 1536 and a cosine similarity metric. Sources: [data-migration/from-pinecone-to-qdrant.ipynb182-270](https://github.com/qdrant/examples/blob/b3c4b28f/data-migration/from-pinecone-to-qdrant.ipynb#L182-L270)",
-    "metadata": {
-      "chunk_id": "549f18f50426-0005",
-      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_examples\\_qdrant_examples_8.2-development-environment-setup.md",
-      "filename": "_qdrant_examples_8.2-development-environment-setup.md",
-      "file_extension": ".md",
-      "chunk_index": 5,
-      "document_level": 1,
-      "parent_chunk_id": null,
-      "child_chunk_ids": [],
-      "section_path": [
-        "Step 1: Setting Up Pinecone"
-      ],
-      "heading_text": "Step 1: Setting Up Pinecone",
-      "token_count": 179,
-      "char_count": 705,
-      "start_char": 0,
-      "end_char": 705,
-      "semantic_score": 0.2534373104572296,
-      "structural_score": 0.8999999999999999,
-      "retrieval_quality": 0.7007142857142857,
-      "chunking_strategy": "hierarchical_balanced",
-      "content_type": "hierarchical_section",
-      "embedding_model": "nomic-ai/CodeRankEmbed",
-      "processing_timestamp": "2025-10-19T15:32:51.993133",
-      "document_id": "549f18f50426",
-      "document_name": "_qdrant_examples_8.2-development-environment-setup",
-      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_examples\\_qdrant_examples_8.2-development-environment-setup.md",
-      "source_filename": "_qdrant_examples_8.2-development-environment-setup.md",
-      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_examples",
-      "relative_path": "Docs\\qdrant_ecosystem\\qdrant_examples\\_qdrant_examples_8.2-development-environment-setup.md",
-      "hierarchy_path": "Step 1: Setting Up Pinecone",
-      "chunk_hash": "2f296851ec34cdc0",
-      "content_digest": "2f296851ec34cdc0",
-      "chunk_length": 705,
-      "payload_version": "1.3",
-      "collection_hints": [
-        "qdrant_ecosystem"
-      ],
-      "sparse_features": {
-        "version": "1.0",
-        "weighting": "tf-normalized",
-        "top_terms": [
-          "pinecone",
-          "the",
-          "with",
-          "and",
-          "embedding",
-          "index",
-          "data",
-          "qdrant",
-          "notebook",
-          "model",
-          "dimension",
-          "1536",
-          "openai",
-          "migration",
-          "from",
-          "step",
-          "setting",
-          "demonstrates",
-          "creating",
-          "appropriate"
-        ],
-        "term_weights": [
-          {
-            "term": "pinecone",
-            "tf": 7,
-            "weight": 0.077778
-          },
-          {
-            "term": "the",
-            "tf": 5,
-            "weight": 0.055556
-          },
-          {
-            "term": "with",
-            "tf": 4,
-            "weight": 0.044444
-          },
-          {
-            "term": "and",
-            "tf": 4,
-            "weight": 0.044444
-          },
-          {
-            "term": "embedding",
-            "tf": 4,
-            "weight": 0.044444
-          },
-          {
-            "term": "index",
-            "tf": 3,
-            "weight": 0.033333
-          },
-          {
-            "term": "data",
-            "tf": 3,
-            "weight": 0.033333
-          },
-          {
-            "term": "qdrant",
-            "tf": 3,
-            "weight": 0.033333
-          },
-          {
-            "term": "notebook",
-            "tf": 2,
-            "weight": 0.022222
-          },
-          {
-            "term": "model",
-            "tf": 2,
-            "weight": 0.022222
-          },
-          {
-            "term": "dimension",
-            "tf": 2,
-            "weight": 0.022222
-          },
-          {
-            "term": "1536",
-            "tf": 2,
-            "weight": 0.022222
-          },
-          {
-            "term": "openai",
-            "tf": 2,
-            "weight": 0.022222
-          },
-          {
-            "term": "migration",
-            "tf": 2,
-            "weight": 0.022222
-          },
-          {
-            "term": "from",
-            "tf": 2,
-            "weight": 0.022222
-          },
-          {
-            "term": "step",
-            "tf": 1,
-            "weight": 0.011111
-          },
-          {
-            "term": "setting",
-            "tf": 1,
-            "weight": 0.011111
-          },
-          {
-            "term": "demonstrates",
-            "tf": 1,
-            "weight": 0.011111
-          },
-          {
-            "term": "creating",
-            "tf": 1,
-            "weight": 0.011111
-          },
-          {
-            "term": "appropriate",
-            "tf": 1,
-            "weight": 0.011111
-          }
-        ],
-        "unique_terms": 58,
-        "total_terms": 90
-      },
-      "modal_hint": "code",
-      "content_flags": {
-        "has_code_block": true,
-        "has_table": false,
-        "has_list": false,
-        "has_json": false,
-        "has_formula": false
-      },
-      "search_keywords": [
-        "Step 1: Setting Up Pinecone",
-        "and",
-        "data",
-        "embedding",
-        "index",
-        "model",
-        "notebook",
-        "pinecone",
-        "qdrant",
-        "the",
-        "with"
-      ],
-      "quality_fallback": true,
-      "quality_notes": "Promoted via relaxed thresholds"
-    },
-    "advanced_scores": {
-      "semantic": 0.2534373104572296,
-      "structural": 0.8999999999999999,
-      "retrieval_quality": 0.7007142857142857,
-      "overall": 0.6180505320571718
+      "overall": 0.7642723004694836
     }
   }
 ]

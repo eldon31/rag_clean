@@ -1,12 +1,410 @@
 [
   {
-    "text": "### Pydantic Models ``` ```",
+    "text": "## Core Concepts\n\nTypeAdapter wraps a Python type with Pydantic's validation and serialization functionality. It creates a core schema for the type, and uses this schema to validate input data and serialize output data.\n\n```\n```\n\nSources: [pydantic/type\\_adapter.py69-107](https://github.com/pydantic/pydantic/blob/76ef0b08/pydantic/type_adapter.py#L69-L107)\n\n- Container types (list, dict, tuple, etc.)\n- Pydantic models\n- dataclasses\n- TypedDict\n- Generic types\n- Custom types\n\n```\n```\n\nSources: [pydantic/type\\_adapter.py195-234](https://github.com/pydantic/pydantic/blob/76ef0b08/pydantic/type_adapter.py#L195-L234)\"] ValidateMethod --> |\"Input is invalid\"| ValidationError\\[\"ValidationError\"]\n\n```\n    subgraph \"Validation Parameters\"\n        Params[\"Parameters:\n        - strict\n        - context\n        - from_attributes\n        - by_alias\n        - by_name\n        - experimental_allow_partial\"]\n    end\n    \n    Params --> ValidateMethod\nend\n```\n\n```\n\nSources: <FileRef file-url=\"https://github.com/pydantic/pydantic/blob/76ef0b08/pydantic/type_adapter.py#L381-L430\" min=381 max=430 file-path=\"pydantic/type_adapter.py\">Hii</FileRef>\"]\n        end\n        \n        Params --> SerializeMethod\n    end\n```\n\nSources: [pydantic/type\\_adapter.py532-586](https://github.com/pydantic/pydantic/blob/76ef0b08/pydantic/type_adapter.py#L532-L586) schema = adapter.json\\_schema()\n\n```\n\nThe `json_schema` method has parameters to control schema generation:\n\n- `by_alias`: Whether to use alias names for field names\n- `ref_template`: The format string for generating $ref strings\n- `schema_generator`: The generator class for creating the schema\n- `mode`: The mode to use for schema generation (validation or serialization)\n\nSources: <FileRef file-url=\"https://github.com/pydantic/pydantic/blob/76ef0b08/pydantic/type_adapter.py#L647-L678\" min=647 max=678 file-path=\"pydantic/type_adapter.py\">Hii</FileRef>\"] --> |\"1. Initial creation\"| CS[\"Mock CoreSchema\"]\n        CS --> |\"2. Type needs resolution\"| RebuildMethod[\"rebuild()\"]\n        RebuildMethod --> |\"3. Resolves forward references\"| FinalCS[\"Final CoreSchema\"]\n        FinalCS --> VS[\"SchemaValidator\"]\n        FinalCS --> SS[\"SchemaSerializer\"]\n    end\n```",
     "metadata": {
-      "chunk_id": "2ed5888f146e-0005",
+      "chunk_id": "2ed5888f146e-0001",
       "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\pydantic\\_pydantic_pydantic_3.3-typeadapter.md",
       "filename": "_pydantic_pydantic_3.3-typeadapter.md",
       "file_extension": ".md",
-      "chunk_index": 5,
+      "chunk_index": 1,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Core Concepts"
+      ],
+      "heading_text": "Core Concepts",
+      "token_count": 575,
+      "char_count": 2211,
+      "start_char": 4353,
+      "end_char": 6564,
+      "semantic_score": 0.7,
+      "structural_score": 0.7999999999999998,
+      "retrieval_quality": 0.6902061855670103,
+      "chunking_strategy": "hybrid_adaptive_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "processing_timestamp": "2025-10-20T04:38:35.555606",
+      "document_id": "2ed5888f146e",
+      "document_name": "_pydantic_pydantic_3.3-typeadapter",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\pydantic\\_pydantic_pydantic_3.3-typeadapter.md",
+      "source_filename": "_pydantic_pydantic_3.3-typeadapter.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\pydantic",
+      "relative_path": "Docs\\pydantic\\_pydantic_pydantic_3.3-typeadapter.md",
+      "hierarchy_path": "Core Concepts",
+      "chunk_hash": "7384e622178dbf8c",
+      "content_digest": "7384e622178dbf8c",
+      "chunk_length": 2211,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "pydantic",
+          "type",
+          "adapter",
+          "schema",
+          "the",
+          "for",
+          "sources",
+          "https",
+          "github",
+          "com",
+          "blob",
+          "76ef0b08",
+          "end",
+          "fileref",
+          "file",
+          "validation",
+          "and",
+          "types",
+          "parameters",
+          "params"
+        ],
+        "term_weights": [
+          {
+            "term": "pydantic",
+            "tf": 22,
+            "weight": 0.089069
+          },
+          {
+            "term": "type",
+            "tf": 13,
+            "weight": 0.052632
+          },
+          {
+            "term": "adapter",
+            "tf": 11,
+            "weight": 0.044534
+          },
+          {
+            "term": "schema",
+            "tf": 9,
+            "weight": 0.036437
+          },
+          {
+            "term": "the",
+            "tf": 6,
+            "weight": 0.024291
+          },
+          {
+            "term": "for",
+            "tf": 5,
+            "weight": 0.020243
+          },
+          {
+            "term": "sources",
+            "tf": 5,
+            "weight": 0.020243
+          },
+          {
+            "term": "https",
+            "tf": 5,
+            "weight": 0.020243
+          },
+          {
+            "term": "github",
+            "tf": 5,
+            "weight": 0.020243
+          },
+          {
+            "term": "com",
+            "tf": 5,
+            "weight": 0.020243
+          },
+          {
+            "term": "blob",
+            "tf": 5,
+            "weight": 0.020243
+          },
+          {
+            "term": "76ef0b08",
+            "tf": 5,
+            "weight": 0.020243
+          },
+          {
+            "term": "end",
+            "tf": 5,
+            "weight": 0.020243
+          },
+          {
+            "term": "fileref",
+            "tf": 4,
+            "weight": 0.016194
+          },
+          {
+            "term": "file",
+            "tf": 4,
+            "weight": 0.016194
+          },
+          {
+            "term": "validation",
+            "tf": 3,
+            "weight": 0.012146
+          },
+          {
+            "term": "and",
+            "tf": 3,
+            "weight": 0.012146
+          },
+          {
+            "term": "types",
+            "tf": 3,
+            "weight": 0.012146
+          },
+          {
+            "term": "parameters",
+            "tf": 3,
+            "weight": 0.012146
+          },
+          {
+            "term": "params",
+            "tf": 3,
+            "weight": 0.012146
+          }
+        ],
+        "unique_terms": 119,
+        "total_terms": 247
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": true,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Core Concepts",
+        "adapter",
+        "com",
+        "for",
+        "github",
+        "https",
+        "pydantic",
+        "schema",
+        "sources",
+        "the",
+        "type"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.7999999999999998,
+      "retrieval_quality": 0.6902061855670103,
+      "overall": 0.7300687285223367
+    }
+  },
+  {
+    "text": "# This will fail due to strict validation\n\ntry: int\\_list\\_adapter.validate\\_python(\\[\"1\", \"2\"]) except Exception as e: print(f\"Validation failed: {e}\")\n\n```\n\nHowever, you cannot provide a configuration when the type you're using has its own config that cannot be overridden (e.g., `BaseModel`, `TypedDict`, and `dataclass`).\n\nSources: <FileRef file-url=\"https://github.com/pydantic/pydantic/blob/76ef0b08/pydantic/type_adapter.py#L198-L210\" min=198 max=210 file-path=\"pydantic/type_adapter.py\">Hii</FileRef>)",
+    "metadata": {
+      "chunk_id": "2ed5888f146e-0003",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\pydantic\\_pydantic_pydantic_3.3-typeadapter.md",
+      "filename": "_pydantic_pydantic_3.3-typeadapter.md",
+      "file_extension": ".md",
+      "chunk_index": 3,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "This will fail due to strict validation"
+      ],
+      "heading_text": "This will fail due to strict validation",
+      "token_count": 140,
+      "char_count": 509,
+      "start_char": 6799,
+      "end_char": 7308,
+      "semantic_score": 0.7,
+      "structural_score": 0.7,
+      "retrieval_quality": 0.5838775510204082,
+      "chunking_strategy": "hybrid_adaptive_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "processing_timestamp": "2025-10-20T04:38:35.556594",
+      "document_id": "2ed5888f146e",
+      "document_name": "_pydantic_pydantic_3.3-typeadapter",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\pydantic\\_pydantic_pydantic_3.3-typeadapter.md",
+      "source_filename": "_pydantic_pydantic_3.3-typeadapter.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\pydantic",
+      "relative_path": "Docs\\pydantic\\_pydantic_pydantic_3.3-typeadapter.md",
+      "hierarchy_path": "This will fail due to strict validation",
+      "chunk_hash": "aa4986cadd912928",
+      "content_digest": "aa4986cadd912928",
+      "chunk_length": 509,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "pydantic",
+          "adapter",
+          "type",
+          "validation",
+          "you",
+          "cannot",
+          "fileref",
+          "file",
+          "this",
+          "will",
+          "fail",
+          "due",
+          "strict",
+          "try",
+          "int",
+          "list",
+          "validate",
+          "python",
+          "except",
+          "exception"
+        ],
+        "term_weights": [
+          {
+            "term": "pydantic",
+            "tf": 4,
+            "weight": 0.061538
+          },
+          {
+            "term": "adapter",
+            "tf": 3,
+            "weight": 0.046154
+          },
+          {
+            "term": "type",
+            "tf": 3,
+            "weight": 0.046154
+          },
+          {
+            "term": "validation",
+            "tf": 2,
+            "weight": 0.030769
+          },
+          {
+            "term": "you",
+            "tf": 2,
+            "weight": 0.030769
+          },
+          {
+            "term": "cannot",
+            "tf": 2,
+            "weight": 0.030769
+          },
+          {
+            "term": "fileref",
+            "tf": 2,
+            "weight": 0.030769
+          },
+          {
+            "term": "file",
+            "tf": 2,
+            "weight": 0.030769
+          },
+          {
+            "term": "this",
+            "tf": 1,
+            "weight": 0.015385
+          },
+          {
+            "term": "will",
+            "tf": 1,
+            "weight": 0.015385
+          },
+          {
+            "term": "fail",
+            "tf": 1,
+            "weight": 0.015385
+          },
+          {
+            "term": "due",
+            "tf": 1,
+            "weight": 0.015385
+          },
+          {
+            "term": "strict",
+            "tf": 1,
+            "weight": 0.015385
+          },
+          {
+            "term": "try",
+            "tf": 1,
+            "weight": 0.015385
+          },
+          {
+            "term": "int",
+            "tf": 1,
+            "weight": 0.015385
+          },
+          {
+            "term": "list",
+            "tf": 1,
+            "weight": 0.015385
+          },
+          {
+            "term": "validate",
+            "tf": 1,
+            "weight": 0.015385
+          },
+          {
+            "term": "python",
+            "tf": 1,
+            "weight": 0.015385
+          },
+          {
+            "term": "except",
+            "tf": 1,
+            "weight": 0.015385
+          },
+          {
+            "term": "exception",
+            "tf": 1,
+            "weight": 0.015385
+          }
+        ],
+        "unique_terms": 53,
+        "total_terms": 65
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "This will fail due to strict validation",
+        "adapter",
+        "cannot",
+        "file",
+        "fileref",
+        "pydantic",
+        "this",
+        "type",
+        "validation",
+        "will",
+        "you"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.7,
+      "retrieval_quality": 0.5838775510204082,
+      "overall": 0.6612925170068027
+    }
+  },
+  {
+    "text": "### Pydantic Models\n\n```\n```",
+    "metadata": {
+      "chunk_id": "2ed5888f146e-0006",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\pydantic\\_pydantic_pydantic_3.3-typeadapter.md",
+      "filename": "_pydantic_pydantic_3.3-typeadapter.md",
+      "file_extension": ".md",
+      "chunk_index": 6,
       "document_level": 1,
       "parent_chunk_id": null,
       "child_chunk_ids": [],
@@ -14,17 +412,17 @@
         "Pydantic Models"
       ],
       "heading_text": "Pydantic Models",
-      "token_count": 7,
-      "char_count": 27,
-      "start_char": 0,
-      "end_char": 27,
+      "token_count": 9,
+      "char_count": 28,
+      "start_char": 7984,
+      "end_char": 8012,
       "semantic_score": 0.8,
-      "structural_score": 0.8999999999999999,
+      "structural_score": 0.7,
       "retrieval_quality": 0.53,
-      "chunking_strategy": "hybrid_adaptive",
-      "content_type": "hierarchical_section",
-      "embedding_model": "nomic-ai/CodeRankEmbed",
-      "processing_timestamp": "2025-10-19T15:01:51.545026",
+      "chunking_strategy": "hybrid_adaptive_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "processing_timestamp": "2025-10-20T04:38:35.557592",
       "document_id": "2ed5888f146e",
       "document_name": "_pydantic_pydantic_3.3-typeadapter",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\pydantic\\_pydantic_pydantic_3.3-typeadapter.md",
@@ -32,9 +430,9 @@
       "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\pydantic",
       "relative_path": "Docs\\pydantic\\_pydantic_pydantic_3.3-typeadapter.md",
       "hierarchy_path": "Pydantic Models",
-      "chunk_hash": "4037e74d8140ef36",
-      "content_digest": "4037e74d8140ef36",
-      "chunk_length": 27,
+      "chunk_hash": "06eb9bf8aea02193",
+      "content_digest": "06eb9bf8aea02193",
+      "chunk_length": 28,
       "payload_version": "1.3",
       "collection_hints": [
         "qdrant_ecosystem"
@@ -73,53 +471,51 @@
         "Pydantic Models",
         "models",
         "pydantic"
-      ],
-      "quality_fallback": true,
-      "quality_notes": "Promoted via relaxed thresholds"
+      ]
     },
     "advanced_scores": {
       "semantic": 0.8,
-      "structural": 0.8999999999999999,
+      "structural": 0.7,
       "retrieval_quality": 0.53,
-      "overall": 0.7433333333333333
+      "overall": 0.6766666666666667
     }
   },
   {
-    "text": "### Union Types ``` ```",
+    "text": "### Generic Types\n\n```\n```\n\nSources: [tests/test\\_type\\_adapter.py42-65](https://github.com/pydantic/pydantic/blob/76ef0b08/tests/test_type_adapter.py#L42-L65)\n\ntry: int\\_list\\_adapter.validate\\_python(\\[\"1\", \"not\\_an\\_int\"]) except ValidationError as e: print(f\"Validation errors: {e.errors()}\")\n\n```\n\nValidationError provides detailed information about what failed, where the error occurred, and why.\n\nSources: <FileRef file-url=\"https://github.com/pydantic/pydantic/blob/76ef0b08/tests/test_type_adapter.py#L194-L254\" min=194 max=254 file-path=\"tests/test_type_adapter.py\">Hii</FileRef> -> bool:\n    \"\"\"Returns whether the type has config.\"\"\"\n    type_ = _typing_extra.annotated_type(type_) or type_\n    try:\n        return issubclass(type_, BaseModel) or is_dataclass(type_) or is_typeddict(type_)\n    except TypeError:\n        # type is not a class\n        return False\n```\n\nSources: \\[pydantic/type\\_adapter.py:58-66]\\(",
     "metadata": {
-      "chunk_id": "2ed5888f146e-0008",
+      "chunk_id": "2ed5888f146e-0010",
       "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\pydantic\\_pydantic_pydantic_3.3-typeadapter.md",
       "filename": "_pydantic_pydantic_3.3-typeadapter.md",
       "file_extension": ".md",
-      "chunk_index": 8,
+      "chunk_index": 10,
       "document_level": 1,
       "parent_chunk_id": null,
       "child_chunk_ids": [],
       "section_path": [
-        "Union Types"
+        "Generic Types"
       ],
-      "heading_text": "Union Types",
-      "token_count": 5,
-      "char_count": 23,
-      "start_char": 0,
-      "end_char": 23,
-      "semantic_score": 0.8,
-      "structural_score": 0.8999999999999999,
-      "retrieval_quality": 0.32999999999999996,
-      "chunking_strategy": "hybrid_adaptive",
-      "content_type": "hierarchical_section",
-      "embedding_model": "nomic-ai/CodeRankEmbed",
-      "processing_timestamp": "2025-10-19T15:01:51.545340",
+      "heading_text": "Generic Types",
+      "token_count": 248,
+      "char_count": 925,
+      "start_char": 8090,
+      "end_char": 9015,
+      "semantic_score": 0.7,
+      "structural_score": 0.7,
+      "retrieval_quality": 0.5308450704225353,
+      "chunking_strategy": "hybrid_adaptive_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "processing_timestamp": "2025-10-20T04:38:35.559591",
       "document_id": "2ed5888f146e",
       "document_name": "_pydantic_pydantic_3.3-typeadapter",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\pydantic\\_pydantic_pydantic_3.3-typeadapter.md",
       "source_filename": "_pydantic_pydantic_3.3-typeadapter.md",
       "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\pydantic",
       "relative_path": "Docs\\pydantic\\_pydantic_pydantic_3.3-typeadapter.md",
-      "hierarchy_path": "Union Types",
-      "chunk_hash": "c4bfe8487e5f1cb2",
-      "content_digest": "c4bfe8487e5f1cb2",
-      "chunk_length": 23,
+      "hierarchy_path": "Generic Types",
+      "chunk_hash": "168499bf35ba9db2",
+      "content_digest": "168499bf35ba9db2",
+      "chunk_length": 925,
       "payload_version": "1.3",
       "collection_hints": [
         "qdrant_ecosystem"
@@ -128,162 +524,529 @@
         "version": "1.0",
         "weighting": "tf-normalized",
         "top_terms": [
-          "union",
-          "types"
-        ],
-        "term_weights": [
-          {
-            "term": "union",
-            "tf": 1,
-            "weight": 0.5
-          },
-          {
-            "term": "types",
-            "tf": 1,
-            "weight": 0.5
-          }
-        ],
-        "unique_terms": 2,
-        "total_terms": 2
-      },
-      "modal_hint": "code",
-      "content_flags": {
-        "has_code_block": true,
-        "has_table": false,
-        "has_list": false,
-        "has_json": false,
-        "has_formula": false
-      },
-      "search_keywords": [
-        "Union Types",
-        "types",
-        "union"
-      ],
-      "quality_fallback": true,
-      "quality_notes": "Promoted via relaxed thresholds"
-    },
-    "advanced_scores": {
-      "semantic": 0.8,
-      "structural": 0.8999999999999999,
-      "retrieval_quality": 0.32999999999999996,
-      "overall": 0.6766666666666666
-    }
-  },
-  {
-    "text": "### Container Types ```python list_adapter = TypeAdapter(list[int]) dict_adapter = TypeAdapter(dict[str, int]) tuple_adapter = TypeAdapter(tuple[str, int]) set_adapter = TypeAdapter(set[int]) ````",
-    "metadata": {
-      "chunk_id": "2ed5888f146e-0004",
-      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\pydantic\\_pydantic_pydantic_3.3-typeadapter.md",
-      "filename": "_pydantic_pydantic_3.3-typeadapter.md",
-      "file_extension": ".md",
-      "chunk_index": 4,
-      "document_level": 1,
-      "parent_chunk_id": null,
-      "child_chunk_ids": [],
-      "section_path": [
-        "Container Types"
-      ],
-      "heading_text": "Container Types",
-      "token_count": 43,
-      "char_count": 196,
-      "start_char": 0,
-      "end_char": 196,
-      "semantic_score": 0.8,
-      "structural_score": 0.8999999999999999,
-      "retrieval_quality": 0.3268421052631579,
-      "chunking_strategy": "hybrid_adaptive",
-      "content_type": "hierarchical_section",
-      "embedding_model": "nomic-ai/CodeRankEmbed",
-      "processing_timestamp": "2025-10-19T15:01:51.544806",
-      "document_id": "2ed5888f146e",
-      "document_name": "_pydantic_pydantic_3.3-typeadapter",
-      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\pydantic\\_pydantic_pydantic_3.3-typeadapter.md",
-      "source_filename": "_pydantic_pydantic_3.3-typeadapter.md",
-      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\pydantic",
-      "relative_path": "Docs\\pydantic\\_pydantic_pydantic_3.3-typeadapter.md",
-      "hierarchy_path": "Container Types",
-      "chunk_hash": "0b1cd6dd0c724f4e",
-      "content_digest": "0b1cd6dd0c724f4e",
-      "chunk_length": 196,
-      "payload_version": "1.3",
-      "collection_hints": [
-        "qdrant_ecosystem"
-      ],
-      "sparse_features": {
-        "version": "1.0",
-        "weighting": "tf-normalized",
-        "top_terms": [
+          "type",
           "adapter",
-          "typeadapter",
+          "pydantic",
+          "tests",
+          "test",
+          "sources",
+          "https",
+          "github",
+          "com",
+          "blob",
+          "76ef0b08",
+          "try",
           "int",
-          "list",
-          "dict",
-          "str",
-          "tuple",
-          "set",
-          "container",
-          "types",
-          "python"
+          "not",
+          "except",
+          "validationerror",
+          "errors",
+          "the",
+          "fileref",
+          "file"
         ],
         "term_weights": [
+          {
+            "term": "type",
+            "tf": 14,
+            "weight": 0.126126
+          },
           {
             "term": "adapter",
-            "tf": 4,
-            "weight": 0.16
+            "tf": 6,
+            "weight": 0.054054
           },
           {
-            "term": "typeadapter",
+            "term": "pydantic",
+            "tf": 5,
+            "weight": 0.045045
+          },
+          {
+            "term": "tests",
             "tf": 4,
-            "weight": 0.16
+            "weight": 0.036036
+          },
+          {
+            "term": "test",
+            "tf": 4,
+            "weight": 0.036036
+          },
+          {
+            "term": "sources",
+            "tf": 3,
+            "weight": 0.027027
+          },
+          {
+            "term": "https",
+            "tf": 2,
+            "weight": 0.018018
+          },
+          {
+            "term": "github",
+            "tf": 2,
+            "weight": 0.018018
+          },
+          {
+            "term": "com",
+            "tf": 2,
+            "weight": 0.018018
+          },
+          {
+            "term": "blob",
+            "tf": 2,
+            "weight": 0.018018
+          },
+          {
+            "term": "76ef0b08",
+            "tf": 2,
+            "weight": 0.018018
+          },
+          {
+            "term": "try",
+            "tf": 2,
+            "weight": 0.018018
           },
           {
             "term": "int",
-            "tf": 4,
-            "weight": 0.16
-          },
-          {
-            "term": "list",
             "tf": 2,
-            "weight": 0.08
+            "weight": 0.018018
           },
           {
-            "term": "dict",
+            "term": "not",
             "tf": 2,
-            "weight": 0.08
+            "weight": 0.018018
           },
           {
-            "term": "str",
+            "term": "except",
             "tf": 2,
-            "weight": 0.08
+            "weight": 0.018018
           },
           {
-            "term": "tuple",
+            "term": "validationerror",
             "tf": 2,
-            "weight": 0.08
+            "weight": 0.018018
           },
           {
-            "term": "set",
+            "term": "errors",
             "tf": 2,
-            "weight": 0.08
+            "weight": 0.018018
           },
           {
-            "term": "container",
-            "tf": 1,
-            "weight": 0.04
+            "term": "the",
+            "tf": 2,
+            "weight": 0.018018
+          },
+          {
+            "term": "fileref",
+            "tf": 2,
+            "weight": 0.018018
+          },
+          {
+            "term": "file",
+            "tf": 2,
+            "weight": 0.018018
+          }
+        ],
+        "unique_terms": 66,
+        "total_terms": 111
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Generic Types",
+        "adapter",
+        "blob",
+        "com",
+        "github",
+        "https",
+        "pydantic",
+        "sources",
+        "test",
+        "tests",
+        "type"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.7,
+      "retrieval_quality": 0.5308450704225353,
+      "overall": 0.6436150234741783
+    }
+  },
+  {
+    "text": "## Technical Implementation Details\n\nTypeAdapter uses a combination of:\n\n1. Core schema generation via `GenerateSchema`\n2. Validation via `SchemaValidator` or `PluggableSchemaValidator`\n3. Serialization via `SchemaSerializer`\n4. Namespace resolution for type resolution\n5. Mock objects for deferred building\n\nIt also has special handling for generic types, forward references, and namespace management to ensure types are correctly resolved.\n\nSources: \\[pydantic/type\\_adapter.py:246-316]\\(, \\[pydantic/\\_internal/\\_namespace\\_utils.py:143-293]\\(, \\[pydantic/\\_internal/\\_mock\\_val\\_ser.py:21-149]\\(",
+    "metadata": {
+      "chunk_id": "2ed5888f146e-0011",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\pydantic\\_pydantic_pydantic_3.3-typeadapter.md",
+      "filename": "_pydantic_pydantic_3.3-typeadapter.md",
+      "file_extension": ".md",
+      "chunk_index": 11,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Technical Implementation Details"
+      ],
+      "heading_text": "Technical Implementation Details",
+      "token_count": 145,
+      "char_count": 599,
+      "start_char": 9017,
+      "end_char": 9616,
+      "semantic_score": 0.6,
+      "structural_score": 0.7,
+      "retrieval_quality": 0.56,
+      "chunking_strategy": "hybrid_adaptive_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "processing_timestamp": "2025-10-20T04:38:35.560695",
+      "document_id": "2ed5888f146e",
+      "document_name": "_pydantic_pydantic_3.3-typeadapter",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\pydantic\\_pydantic_pydantic_3.3-typeadapter.md",
+      "source_filename": "_pydantic_pydantic_3.3-typeadapter.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\pydantic",
+      "relative_path": "Docs\\pydantic\\_pydantic_pydantic_3.3-typeadapter.md",
+      "hierarchy_path": "Technical Implementation Details",
+      "chunk_hash": "e543ffbd0d6c48af",
+      "content_digest": "e543ffbd0d6c48af",
+      "chunk_length": 599,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "via",
+          "namespace",
+          "for",
+          "pydantic",
+          "resolution",
+          "type",
+          "mock",
+          "types",
+          "internal",
+          "technical",
+          "implementation",
+          "details",
+          "typeadapter",
+          "uses",
+          "combination",
+          "core",
+          "schema",
+          "generation",
+          "generateschema",
+          "validation"
+        ],
+        "term_weights": [
+          {
+            "term": "via",
+            "tf": 3,
+            "weight": 0.047619
+          },
+          {
+            "term": "namespace",
+            "tf": 3,
+            "weight": 0.047619
+          },
+          {
+            "term": "for",
+            "tf": 3,
+            "weight": 0.047619
+          },
+          {
+            "term": "pydantic",
+            "tf": 3,
+            "weight": 0.047619
+          },
+          {
+            "term": "resolution",
+            "tf": 2,
+            "weight": 0.031746
+          },
+          {
+            "term": "type",
+            "tf": 2,
+            "weight": 0.031746
+          },
+          {
+            "term": "mock",
+            "tf": 2,
+            "weight": 0.031746
           },
           {
             "term": "types",
-            "tf": 1,
-            "weight": 0.04
+            "tf": 2,
+            "weight": 0.031746
           },
           {
-            "term": "python",
+            "term": "internal",
+            "tf": 2,
+            "weight": 0.031746
+          },
+          {
+            "term": "technical",
             "tf": 1,
-            "weight": 0.04
+            "weight": 0.015873
+          },
+          {
+            "term": "implementation",
+            "tf": 1,
+            "weight": 0.015873
+          },
+          {
+            "term": "details",
+            "tf": 1,
+            "weight": 0.015873
+          },
+          {
+            "term": "typeadapter",
+            "tf": 1,
+            "weight": 0.015873
+          },
+          {
+            "term": "uses",
+            "tf": 1,
+            "weight": 0.015873
+          },
+          {
+            "term": "combination",
+            "tf": 1,
+            "weight": 0.015873
+          },
+          {
+            "term": "core",
+            "tf": 1,
+            "weight": 0.015873
+          },
+          {
+            "term": "schema",
+            "tf": 1,
+            "weight": 0.015873
+          },
+          {
+            "term": "generation",
+            "tf": 1,
+            "weight": 0.015873
+          },
+          {
+            "term": "generateschema",
+            "tf": 1,
+            "weight": 0.015873
+          },
+          {
+            "term": "validation",
+            "tf": 1,
+            "weight": 0.015873
           }
         ],
-        "unique_terms": 11,
-        "total_terms": 25
+        "unique_terms": 50,
+        "total_terms": 63
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Technical Implementation Details",
+        "for",
+        "internal",
+        "mock",
+        "namespace",
+        "pydantic",
+        "resolution",
+        "technical",
+        "type",
+        "types",
+        "via"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.6,
+      "structural": 0.7,
+      "retrieval_quality": 0.56,
+      "overall": 0.62
+    }
+  },
+  {
+    "text": "## Summary\n\nTypeAdapter is a powerful component that brings Pydantic's validation and serialization capabilities to any Python type. It's particularly useful for:\n\n1. Validating simple types like integers and strings with Pydantic's conversion logic\n2. Validating complex types like lists and dictionaries with nested validation\n3. Working with non-model types like dataclasses and TypedDict\n4. Applying validation to arbitrary types in a consistent way\n5. Generating JSON schemas for arbitrary types\n6. Serializing instances of arbitrary types consistently\n\nBy wrapping a type in a TypeAdapter, you can leverage Pydantic's robust validation and serialization features without having to create a full model class.\n\n```\n```\n\nDismiss\n\nRefresh this wiki\n\nThis wiki was recently refreshed. Please wait 4 days to refresh again.",
+    "metadata": {
+      "chunk_id": "2ed5888f146e-0012",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\pydantic\\_pydantic_pydantic_3.3-typeadapter.md",
+      "filename": "_pydantic_pydantic_3.3-typeadapter.md",
+      "file_extension": ".md",
+      "chunk_index": 12,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Summary"
+      ],
+      "heading_text": "Summary",
+      "token_count": 162,
+      "char_count": 822,
+      "start_char": 9618,
+      "end_char": 10440,
+      "semantic_score": 0.7,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.505,
+      "chunking_strategy": "hybrid_adaptive_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "processing_timestamp": "2025-10-20T04:38:35.560695",
+      "document_id": "2ed5888f146e",
+      "document_name": "_pydantic_pydantic_3.3-typeadapter",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\pydantic\\_pydantic_pydantic_3.3-typeadapter.md",
+      "source_filename": "_pydantic_pydantic_3.3-typeadapter.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\pydantic",
+      "relative_path": "Docs\\pydantic\\_pydantic_pydantic_3.3-typeadapter.md",
+      "hierarchy_path": "Summary",
+      "chunk_hash": "91e67259ea8ec22b",
+      "content_digest": "91e67259ea8ec22b",
+      "chunk_length": 822,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "types",
+          "and",
+          "validation",
+          "pydantic",
+          "like",
+          "with",
+          "arbitrary",
+          "typeadapter",
+          "serialization",
+          "type",
+          "for",
+          "validating",
+          "model",
+          "refresh",
+          "this",
+          "wiki",
+          "summary",
+          "powerful",
+          "component",
+          "that"
+        ],
+        "term_weights": [
+          {
+            "term": "types",
+            "tf": 6,
+            "weight": 0.0625
+          },
+          {
+            "term": "and",
+            "tf": 5,
+            "weight": 0.052083
+          },
+          {
+            "term": "validation",
+            "tf": 4,
+            "weight": 0.041667
+          },
+          {
+            "term": "pydantic",
+            "tf": 3,
+            "weight": 0.03125
+          },
+          {
+            "term": "like",
+            "tf": 3,
+            "weight": 0.03125
+          },
+          {
+            "term": "with",
+            "tf": 3,
+            "weight": 0.03125
+          },
+          {
+            "term": "arbitrary",
+            "tf": 3,
+            "weight": 0.03125
+          },
+          {
+            "term": "typeadapter",
+            "tf": 2,
+            "weight": 0.020833
+          },
+          {
+            "term": "serialization",
+            "tf": 2,
+            "weight": 0.020833
+          },
+          {
+            "term": "type",
+            "tf": 2,
+            "weight": 0.020833
+          },
+          {
+            "term": "for",
+            "tf": 2,
+            "weight": 0.020833
+          },
+          {
+            "term": "validating",
+            "tf": 2,
+            "weight": 0.020833
+          },
+          {
+            "term": "model",
+            "tf": 2,
+            "weight": 0.020833
+          },
+          {
+            "term": "refresh",
+            "tf": 2,
+            "weight": 0.020833
+          },
+          {
+            "term": "this",
+            "tf": 2,
+            "weight": 0.020833
+          },
+          {
+            "term": "wiki",
+            "tf": 2,
+            "weight": 0.020833
+          },
+          {
+            "term": "summary",
+            "tf": 1,
+            "weight": 0.010417
+          },
+          {
+            "term": "powerful",
+            "tf": 1,
+            "weight": 0.010417
+          },
+          {
+            "term": "component",
+            "tf": 1,
+            "weight": 0.010417
+          },
+          {
+            "term": "that",
+            "tf": 1,
+            "weight": 0.010417
+          }
+        ],
+        "unique_terms": 67,
+        "total_terms": 96
       },
       "modal_hint": "code",
       "content_flags": {
@@ -294,182 +1057,24 @@
         "has_formula": false
       },
       "search_keywords": [
-        "Container Types",
-        "adapter",
-        "container",
-        "dict",
-        "int",
-        "list",
-        "set",
-        "str",
-        "tuple",
+        "Summary",
+        "and",
+        "arbitrary",
+        "like",
+        "pydantic",
+        "serialization",
+        "type",
         "typeadapter",
-        "types"
-      ],
-      "quality_fallback": true,
-      "quality_notes": "Promoted via relaxed thresholds"
+        "types",
+        "validation",
+        "with"
+      ]
     },
     "advanced_scores": {
-      "semantic": 0.8,
+      "semantic": 0.7,
       "structural": 0.8999999999999999,
-      "retrieval_quality": 0.3268421052631579,
-      "overall": 0.6756140350877193
-    }
-  },
-  {
-    "text": "### Dataclasses ``` ```",
-    "metadata": {
-      "chunk_id": "2ed5888f146e-0006",
-      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\pydantic\\_pydantic_pydantic_3.3-typeadapter.md",
-      "filename": "_pydantic_pydantic_3.3-typeadapter.md",
-      "file_extension": ".md",
-      "chunk_index": 6,
-      "document_level": 1,
-      "parent_chunk_id": null,
-      "child_chunk_ids": [],
-      "section_path": [
-        "Dataclasses"
-      ],
-      "heading_text": "Dataclasses",
-      "token_count": 5,
-      "char_count": 23,
-      "start_char": 0,
-      "end_char": 23,
-      "semantic_score": 0.8,
-      "structural_score": 0.8999999999999999,
-      "retrieval_quality": 0.31499999999999995,
-      "chunking_strategy": "hybrid_adaptive",
-      "content_type": "hierarchical_section",
-      "embedding_model": "nomic-ai/CodeRankEmbed",
-      "processing_timestamp": "2025-10-19T15:01:51.545139",
-      "document_id": "2ed5888f146e",
-      "document_name": "_pydantic_pydantic_3.3-typeadapter",
-      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\pydantic\\_pydantic_pydantic_3.3-typeadapter.md",
-      "source_filename": "_pydantic_pydantic_3.3-typeadapter.md",
-      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\pydantic",
-      "relative_path": "Docs\\pydantic\\_pydantic_pydantic_3.3-typeadapter.md",
-      "hierarchy_path": "Dataclasses",
-      "chunk_hash": "48a322df0cf52a37",
-      "content_digest": "48a322df0cf52a37",
-      "chunk_length": 23,
-      "payload_version": "1.3",
-      "collection_hints": [
-        "qdrant_ecosystem"
-      ],
-      "sparse_features": {
-        "version": "1.0",
-        "weighting": "tf-normalized",
-        "top_terms": [
-          "dataclasses"
-        ],
-        "term_weights": [
-          {
-            "term": "dataclasses",
-            "tf": 1,
-            "weight": 1.0
-          }
-        ],
-        "unique_terms": 1,
-        "total_terms": 1
-      },
-      "modal_hint": "code",
-      "content_flags": {
-        "has_code_block": true,
-        "has_table": false,
-        "has_list": false,
-        "has_json": false,
-        "has_formula": false
-      },
-      "search_keywords": [
-        "Dataclasses",
-        "dataclasses"
-      ],
-      "quality_fallback": true,
-      "quality_notes": "Promoted via relaxed thresholds"
-    },
-    "advanced_scores": {
-      "semantic": 0.8,
-      "structural": 0.8999999999999999,
-      "retrieval_quality": 0.31499999999999995,
-      "overall": 0.6716666666666665
-    }
-  },
-  {
-    "text": "### TypedDict ``` ```",
-    "metadata": {
-      "chunk_id": "2ed5888f146e-0007",
-      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\pydantic\\_pydantic_pydantic_3.3-typeadapter.md",
-      "filename": "_pydantic_pydantic_3.3-typeadapter.md",
-      "file_extension": ".md",
-      "chunk_index": 7,
-      "document_level": 1,
-      "parent_chunk_id": null,
-      "child_chunk_ids": [],
-      "section_path": [
-        "TypedDict"
-      ],
-      "heading_text": "TypedDict",
-      "token_count": 5,
-      "char_count": 21,
-      "start_char": 0,
-      "end_char": 21,
-      "semantic_score": 0.8,
-      "structural_score": 0.8999999999999999,
-      "retrieval_quality": 0.31499999999999995,
-      "chunking_strategy": "hybrid_adaptive",
-      "content_type": "hierarchical_section",
-      "embedding_model": "nomic-ai/CodeRankEmbed",
-      "processing_timestamp": "2025-10-19T15:01:51.545242",
-      "document_id": "2ed5888f146e",
-      "document_name": "_pydantic_pydantic_3.3-typeadapter",
-      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\pydantic\\_pydantic_pydantic_3.3-typeadapter.md",
-      "source_filename": "_pydantic_pydantic_3.3-typeadapter.md",
-      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\pydantic",
-      "relative_path": "Docs\\pydantic\\_pydantic_pydantic_3.3-typeadapter.md",
-      "hierarchy_path": "TypedDict",
-      "chunk_hash": "961ba86c30f83eb6",
-      "content_digest": "961ba86c30f83eb6",
-      "chunk_length": 21,
-      "payload_version": "1.3",
-      "collection_hints": [
-        "qdrant_ecosystem"
-      ],
-      "sparse_features": {
-        "version": "1.0",
-        "weighting": "tf-normalized",
-        "top_terms": [
-          "typeddict"
-        ],
-        "term_weights": [
-          {
-            "term": "typeddict",
-            "tf": 1,
-            "weight": 1.0
-          }
-        ],
-        "unique_terms": 1,
-        "total_terms": 1
-      },
-      "modal_hint": "code",
-      "content_flags": {
-        "has_code_block": true,
-        "has_table": false,
-        "has_list": false,
-        "has_json": false,
-        "has_formula": false
-      },
-      "search_keywords": [
-        "TypedDict",
-        "typeddict"
-      ],
-      "quality_fallback": true,
-      "quality_notes": "Promoted via relaxed thresholds"
-    },
-    "advanced_scores": {
-      "semantic": 0.8,
-      "structural": 0.8999999999999999,
-      "retrieval_quality": 0.31499999999999995,
-      "overall": 0.6716666666666665
+      "retrieval_quality": 0.505,
+      "overall": 0.7016666666666667
     }
   }
 ]

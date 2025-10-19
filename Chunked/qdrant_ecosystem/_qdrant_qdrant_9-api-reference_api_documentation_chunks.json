@@ -1,6 +1,603 @@
 [
   {
-    "text": "## API Response Structure  All API responses follow a consistent structure with metadata about request processing, hardware usage, and timing information.",
+    "text": "## API Architecture Overview\n\nQdrant exposes multiple API interfaces to support different client needs and deployment scenarios. The system provides both external-facing APIs for client applications and internal APIs for distributed cluster communication.\n\n```\n```\n\nSources: [docs/redoc/master/openapi.json1-50](https://github.com/qdrant/qdrant/blob/48203e41/docs/redoc/master/openapi.json#L1-L50) [lib/api/src/grpc/proto/points.proto1-30](https://github.com/qdrant/qdrant/blob/48203e41/lib/api/src/grpc/proto/points.proto#L1-L30) [lib/api/src/grpc/proto/qdrant\\_internal\\_service.proto1-20](https://github.com/qdrant/qdrant/blob/48203e41/lib/api/src/grpc/proto/qdrant_internal_service.proto#L1-L20) [src/tonic/api/points\\_api.rs34-45](https://github.com/qdrant/qdrant/blob/48203e41/src/tonic/api/points_api.rs#L34-L45)",
+    "metadata": {
+      "chunk_id": "bc941dd20a17-0001",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_9-api-reference.md",
+      "filename": "_qdrant_qdrant_9-api-reference.md",
+      "file_extension": ".md",
+      "chunk_index": 1,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "API Architecture Overview"
+      ],
+      "heading_text": "API Architecture Overview",
+      "token_count": 226,
+      "char_count": 819,
+      "start_char": 7396,
+      "end_char": 8215,
+      "semantic_score": 0.6,
+      "structural_score": 0.7,
+      "retrieval_quality": 0.545,
+      "chunking_strategy": "hierarchical_precise_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "processing_timestamp": "2025-10-20T04:38:46.391928",
+      "document_id": "bc941dd20a17",
+      "document_name": "_qdrant_qdrant_9-api-reference",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_9-api-reference.md",
+      "source_filename": "_qdrant_qdrant_9-api-reference.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant",
+      "relative_path": "Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_9-api-reference.md",
+      "hierarchy_path": "API Architecture Overview",
+      "chunk_hash": "d1fab4064ae52c9e",
+      "content_digest": "d1fab4064ae52c9e",
+      "chunk_length": 819,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "qdrant",
+          "api",
+          "src",
+          "proto",
+          "https",
+          "github",
+          "com",
+          "blob",
+          "48203e41",
+          "lib",
+          "grpc",
+          "points",
+          "internal",
+          "client",
+          "and",
+          "apis",
+          "for",
+          "docs",
+          "redoc",
+          "master"
+        ],
+        "term_weights": [
+          {
+            "term": "qdrant",
+            "tf": 11,
+            "weight": 0.092437
+          },
+          {
+            "term": "api",
+            "tf": 10,
+            "weight": 0.084034
+          },
+          {
+            "term": "src",
+            "tf": 6,
+            "weight": 0.05042
+          },
+          {
+            "term": "proto",
+            "tf": 6,
+            "weight": 0.05042
+          },
+          {
+            "term": "https",
+            "tf": 4,
+            "weight": 0.033613
+          },
+          {
+            "term": "github",
+            "tf": 4,
+            "weight": 0.033613
+          },
+          {
+            "term": "com",
+            "tf": 4,
+            "weight": 0.033613
+          },
+          {
+            "term": "blob",
+            "tf": 4,
+            "weight": 0.033613
+          },
+          {
+            "term": "48203e41",
+            "tf": 4,
+            "weight": 0.033613
+          },
+          {
+            "term": "lib",
+            "tf": 4,
+            "weight": 0.033613
+          },
+          {
+            "term": "grpc",
+            "tf": 4,
+            "weight": 0.033613
+          },
+          {
+            "term": "points",
+            "tf": 4,
+            "weight": 0.033613
+          },
+          {
+            "term": "internal",
+            "tf": 3,
+            "weight": 0.02521
+          },
+          {
+            "term": "client",
+            "tf": 2,
+            "weight": 0.016807
+          },
+          {
+            "term": "and",
+            "tf": 2,
+            "weight": 0.016807
+          },
+          {
+            "term": "apis",
+            "tf": 2,
+            "weight": 0.016807
+          },
+          {
+            "term": "for",
+            "tf": 2,
+            "weight": 0.016807
+          },
+          {
+            "term": "docs",
+            "tf": 2,
+            "weight": 0.016807
+          },
+          {
+            "term": "redoc",
+            "tf": 2,
+            "weight": 0.016807
+          },
+          {
+            "term": "master",
+            "tf": 2,
+            "weight": 0.016807
+          }
+        ],
+        "unique_terms": 53,
+        "total_terms": 119
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "48203e41",
+        "API Architecture Overview",
+        "api",
+        "blob",
+        "com",
+        "github",
+        "https",
+        "lib",
+        "proto",
+        "qdrant",
+        "src"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.6,
+      "structural": 0.7,
+      "retrieval_quality": 0.545,
+      "overall": 0.6149999999999999
+    }
+  },
+  {
+    "text": "## Service Organization\n\nThe API is organized into distinct services, each handling specific aspects of vector database operations. Each service is implemented in both REST and gRPC protocols with consistent functionality.\n\n```\n```\n\nSources: [lib/api/src/grpc/proto/collections\\_service.proto1-30](https://github.com/qdrant/qdrant/blob/48203e41/lib/api/src/grpc/proto/collections_service.proto#L1-L30) [lib/api/src/grpc/proto/points\\_service.proto1-30](https://github.com/qdrant/qdrant/blob/48203e41/lib/api/src/grpc/proto/points_service.proto#L1-L30) [lib/api/src/grpc/proto/snapshots\\_service.proto1-30](https://github.com/qdrant/qdrant/blob/48203e41/lib/api/src/grpc/proto/snapshots_service.proto#L1-L30) [docs/grpc/docs.md116-125](https://github.com/qdrant/qdrant/blob/48203e41/docs/grpc/docs.md#L116-L125)",
+    "metadata": {
+      "chunk_id": "bc941dd20a17-0002",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_9-api-reference.md",
+      "filename": "_qdrant_qdrant_9-api-reference.md",
+      "file_extension": ".md",
+      "chunk_index": 2,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Service Organization"
+      ],
+      "heading_text": "Service Organization",
+      "token_count": 217,
+      "char_count": 810,
+      "start_char": 8217,
+      "end_char": 9027,
+      "semantic_score": 0.6,
+      "structural_score": 0.7,
+      "retrieval_quality": 0.5584210526315789,
+      "chunking_strategy": "hierarchical_precise_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "processing_timestamp": "2025-10-20T04:38:46.393077",
+      "document_id": "bc941dd20a17",
+      "document_name": "_qdrant_qdrant_9-api-reference",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_9-api-reference.md",
+      "source_filename": "_qdrant_qdrant_9-api-reference.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant",
+      "relative_path": "Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_9-api-reference.md",
+      "hierarchy_path": "Service Organization",
+      "chunk_hash": "5e128547afd84d3d",
+      "content_digest": "5e128547afd84d3d",
+      "chunk_length": 810,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "grpc",
+          "proto",
+          "service",
+          "qdrant",
+          "api",
+          "lib",
+          "src",
+          "https",
+          "github",
+          "com",
+          "blob",
+          "48203e41",
+          "docs",
+          "proto1",
+          "l30",
+          "each",
+          "collections",
+          "points",
+          "snapshots",
+          "organization"
+        ],
+        "term_weights": [
+          {
+            "term": "grpc",
+            "tf": 9,
+            "weight": 0.077586
+          },
+          {
+            "term": "proto",
+            "tf": 9,
+            "weight": 0.077586
+          },
+          {
+            "term": "service",
+            "tf": 8,
+            "weight": 0.068966
+          },
+          {
+            "term": "qdrant",
+            "tf": 8,
+            "weight": 0.068966
+          },
+          {
+            "term": "api",
+            "tf": 7,
+            "weight": 0.060345
+          },
+          {
+            "term": "lib",
+            "tf": 6,
+            "weight": 0.051724
+          },
+          {
+            "term": "src",
+            "tf": 6,
+            "weight": 0.051724
+          },
+          {
+            "term": "https",
+            "tf": 4,
+            "weight": 0.034483
+          },
+          {
+            "term": "github",
+            "tf": 4,
+            "weight": 0.034483
+          },
+          {
+            "term": "com",
+            "tf": 4,
+            "weight": 0.034483
+          },
+          {
+            "term": "blob",
+            "tf": 4,
+            "weight": 0.034483
+          },
+          {
+            "term": "48203e41",
+            "tf": 4,
+            "weight": 0.034483
+          },
+          {
+            "term": "docs",
+            "tf": 4,
+            "weight": 0.034483
+          },
+          {
+            "term": "proto1",
+            "tf": 3,
+            "weight": 0.025862
+          },
+          {
+            "term": "l30",
+            "tf": 3,
+            "weight": 0.025862
+          },
+          {
+            "term": "each",
+            "tf": 2,
+            "weight": 0.017241
+          },
+          {
+            "term": "collections",
+            "tf": 2,
+            "weight": 0.017241
+          },
+          {
+            "term": "points",
+            "tf": 2,
+            "weight": 0.017241
+          },
+          {
+            "term": "snapshots",
+            "tf": 2,
+            "weight": 0.017241
+          },
+          {
+            "term": "organization",
+            "tf": 1,
+            "weight": 0.008621
+          }
+        ],
+        "unique_terms": 44,
+        "total_terms": 116
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Service Organization",
+        "api",
+        "com",
+        "github",
+        "grpc",
+        "https",
+        "lib",
+        "proto",
+        "qdrant",
+        "service",
+        "src"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.6,
+      "structural": 0.7,
+      "retrieval_quality": 0.5584210526315789,
+      "overall": 0.6194736842105263
+    }
+  },
+  {
+    "text": "## Request Processing Flow\n\nAll API requests follow a consistent processing pattern through the system's layered architecture, with different paths for read and write operations.\n\n```\n```\n\nSources: [src/tonic/api/points\\_api.rs61-85](https://github.com/qdrant/qdrant/blob/48203e41/src/tonic/api/points_api.rs#L61-L85) [src/actix/api/update\\_api.rs31-65](https://github.com/qdrant/qdrant/blob/48203e41/src/actix/api/update_api.rs#L31-L65) [storage/dispatcher.rs](https://github.com/qdrant/qdrant/blob/48203e41/storage/dispatcher.rs) [src/common/strict\\_mode.rs](https://github.com/qdrant/qdrant/blob/48203e41/src/common/strict_mode.rs) [storage/content\\_manager/toc/](https://github.com/qdrant/qdrant/blob/48203e41/storage/content_manager/toc/)",
+    "metadata": {
+      "chunk_id": "bc941dd20a17-0003",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_9-api-reference.md",
+      "filename": "_qdrant_qdrant_9-api-reference.md",
+      "file_extension": ".md",
+      "chunk_index": 3,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Request Processing Flow"
+      ],
+      "heading_text": "Request Processing Flow",
+      "token_count": 217,
+      "char_count": 743,
+      "start_char": 9029,
+      "end_char": 9772,
+      "semantic_score": 0.6,
+      "structural_score": 0.7,
+      "retrieval_quality": 0.5718181818181818,
+      "chunking_strategy": "hierarchical_precise_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "processing_timestamp": "2025-10-20T04:38:46.393845",
+      "document_id": "bc941dd20a17",
+      "document_name": "_qdrant_qdrant_9-api-reference",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_9-api-reference.md",
+      "source_filename": "_qdrant_qdrant_9-api-reference.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant",
+      "relative_path": "Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_9-api-reference.md",
+      "hierarchy_path": "Request Processing Flow",
+      "chunk_hash": "4a082138b1e697fa",
+      "content_digest": "4a082138b1e697fa",
+      "chunk_length": 743,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "qdrant",
+          "api",
+          "src",
+          "https",
+          "github",
+          "com",
+          "blob",
+          "48203e41",
+          "storage",
+          "processing",
+          "tonic",
+          "points",
+          "actix",
+          "update",
+          "dispatcher",
+          "common",
+          "strict",
+          "mode",
+          "content",
+          "manager"
+        ],
+        "term_weights": [
+          {
+            "term": "qdrant",
+            "tf": 10,
+            "weight": 0.095238
+          },
+          {
+            "term": "api",
+            "tf": 9,
+            "weight": 0.085714
+          },
+          {
+            "term": "src",
+            "tf": 6,
+            "weight": 0.057143
+          },
+          {
+            "term": "https",
+            "tf": 5,
+            "weight": 0.047619
+          },
+          {
+            "term": "github",
+            "tf": 5,
+            "weight": 0.047619
+          },
+          {
+            "term": "com",
+            "tf": 5,
+            "weight": 0.047619
+          },
+          {
+            "term": "blob",
+            "tf": 5,
+            "weight": 0.047619
+          },
+          {
+            "term": "48203e41",
+            "tf": 5,
+            "weight": 0.047619
+          },
+          {
+            "term": "storage",
+            "tf": 4,
+            "weight": 0.038095
+          },
+          {
+            "term": "processing",
+            "tf": 2,
+            "weight": 0.019048
+          },
+          {
+            "term": "tonic",
+            "tf": 2,
+            "weight": 0.019048
+          },
+          {
+            "term": "points",
+            "tf": 2,
+            "weight": 0.019048
+          },
+          {
+            "term": "actix",
+            "tf": 2,
+            "weight": 0.019048
+          },
+          {
+            "term": "update",
+            "tf": 2,
+            "weight": 0.019048
+          },
+          {
+            "term": "dispatcher",
+            "tf": 2,
+            "weight": 0.019048
+          },
+          {
+            "term": "common",
+            "tf": 2,
+            "weight": 0.019048
+          },
+          {
+            "term": "strict",
+            "tf": 2,
+            "weight": 0.019048
+          },
+          {
+            "term": "mode",
+            "tf": 2,
+            "weight": 0.019048
+          },
+          {
+            "term": "content",
+            "tf": 2,
+            "weight": 0.019048
+          },
+          {
+            "term": "manager",
+            "tf": 2,
+            "weight": 0.019048
+          }
+        ],
+        "unique_terms": 48,
+        "total_terms": 105
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "48203e41",
+        "Request Processing Flow",
+        "api",
+        "blob",
+        "com",
+        "github",
+        "https",
+        "processing",
+        "qdrant",
+        "src",
+        "storage"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.6,
+      "structural": 0.7,
+      "retrieval_quality": 0.5718181818181818,
+      "overall": 0.6239393939393939
+    }
+  },
+  {
+    "text": "## API Response Structure\n\nAll API responses follow a consistent structure with metadata about request processing, hardware usage, and timing information.",
     "metadata": {
       "chunk_id": "bc941dd20a17-0004",
       "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_9-api-reference.md",
@@ -16,15 +613,15 @@
       "heading_text": "API Response Structure",
       "token_count": 25,
       "char_count": 154,
-      "start_char": 0,
-      "end_char": 154,
+      "start_char": 9774,
+      "end_char": 9928,
       "semantic_score": 0.8,
       "structural_score": 0.8999999999999999,
       "retrieval_quality": 0.5614285714285714,
-      "chunking_strategy": "hierarchical_precise",
-      "content_type": "hierarchical_section",
-      "embedding_model": "nomic-ai/CodeRankEmbed",
-      "processing_timestamp": "2025-10-19T15:45:02.922779",
+      "chunking_strategy": "hierarchical_precise_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "processing_timestamp": "2025-10-20T04:38:46.393845",
       "document_id": "bc941dd20a17",
       "document_name": "_qdrant_qdrant_9-api-reference",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_9-api-reference.md",
@@ -32,8 +629,8 @@
       "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant",
       "relative_path": "Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_9-api-reference.md",
       "hierarchy_path": "API Response Structure",
-      "chunk_hash": "3cf4e650658c9186",
-      "content_digest": "3cf4e650658c9186",
+      "chunk_hash": "f6f5d360a3621f52",
+      "content_digest": "f6f5d360a3621f52",
       "chunk_length": 154,
       "payload_version": "1.3",
       "collection_hints": [
@@ -171,9 +768,7 @@
         "responses",
         "structure",
         "with"
-      ],
-      "quality_fallback": true,
-      "quality_notes": "Promoted via relaxed thresholds"
+      ]
     },
     "advanced_scores": {
       "semantic": 0.8,
@@ -183,7 +778,604 @@
     }
   },
   {
-    "text": "## Internal vs External APIs  The system distinguishes between external client-facing APIs and internal peer-to-peer communication APIs for distributed operations.",
+    "text": "### Hardware Usage Reporting\n\nThe system tracks detailed hardware usage for operations when enabled:\n\n```\n```\n\nSources: [lib/api/src/grpc/qdrant.rs180-290](https://github.com/qdrant/qdrant/blob/48203e41/lib/api/src/grpc/qdrant.rs#L180-L290) [lib/api/src/grpc/ops.rs5-50](https://github.com/qdrant/qdrant/blob/48203e41/lib/api/src/grpc/ops.rs#L5-L50) [docs/redoc/master/openapi.json276-307](https://github.com/qdrant/qdrant/blob/48203e41/docs/redoc/master/openapi.json#L276-L307)",
+    "metadata": {
+      "chunk_id": "bc941dd20a17-0006",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_9-api-reference.md",
+      "filename": "_qdrant_qdrant_9-api-reference.md",
+      "file_extension": ".md",
+      "chunk_index": 6,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Hardware Usage Reporting"
+      ],
+      "heading_text": "Hardware Usage Reporting",
+      "token_count": 147,
+      "char_count": 478,
+      "start_char": 10333,
+      "end_char": 10811,
+      "semantic_score": 0.6,
+      "structural_score": 0.7,
+      "retrieval_quality": 0.545,
+      "chunking_strategy": "hierarchical_precise_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "processing_timestamp": "2025-10-20T04:38:46.394706",
+      "document_id": "bc941dd20a17",
+      "document_name": "_qdrant_qdrant_9-api-reference",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_9-api-reference.md",
+      "source_filename": "_qdrant_qdrant_9-api-reference.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant",
+      "relative_path": "Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_9-api-reference.md",
+      "hierarchy_path": "Hardware Usage Reporting",
+      "chunk_hash": "fec29bfe4e12b679",
+      "content_digest": "fec29bfe4e12b679",
+      "chunk_length": 478,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "qdrant",
+          "lib",
+          "api",
+          "src",
+          "grpc",
+          "https",
+          "github",
+          "com",
+          "blob",
+          "48203e41",
+          "hardware",
+          "usage",
+          "ops",
+          "docs",
+          "redoc",
+          "master",
+          "openapi",
+          "reporting",
+          "the",
+          "system"
+        ],
+        "term_weights": [
+          {
+            "term": "qdrant",
+            "tf": 8,
+            "weight": 0.108108
+          },
+          {
+            "term": "lib",
+            "tf": 4,
+            "weight": 0.054054
+          },
+          {
+            "term": "api",
+            "tf": 4,
+            "weight": 0.054054
+          },
+          {
+            "term": "src",
+            "tf": 4,
+            "weight": 0.054054
+          },
+          {
+            "term": "grpc",
+            "tf": 4,
+            "weight": 0.054054
+          },
+          {
+            "term": "https",
+            "tf": 3,
+            "weight": 0.040541
+          },
+          {
+            "term": "github",
+            "tf": 3,
+            "weight": 0.040541
+          },
+          {
+            "term": "com",
+            "tf": 3,
+            "weight": 0.040541
+          },
+          {
+            "term": "blob",
+            "tf": 3,
+            "weight": 0.040541
+          },
+          {
+            "term": "48203e41",
+            "tf": 3,
+            "weight": 0.040541
+          },
+          {
+            "term": "hardware",
+            "tf": 2,
+            "weight": 0.027027
+          },
+          {
+            "term": "usage",
+            "tf": 2,
+            "weight": 0.027027
+          },
+          {
+            "term": "ops",
+            "tf": 2,
+            "weight": 0.027027
+          },
+          {
+            "term": "docs",
+            "tf": 2,
+            "weight": 0.027027
+          },
+          {
+            "term": "redoc",
+            "tf": 2,
+            "weight": 0.027027
+          },
+          {
+            "term": "master",
+            "tf": 2,
+            "weight": 0.027027
+          },
+          {
+            "term": "openapi",
+            "tf": 2,
+            "weight": 0.027027
+          },
+          {
+            "term": "reporting",
+            "tf": 1,
+            "weight": 0.013514
+          },
+          {
+            "term": "the",
+            "tf": 1,
+            "weight": 0.013514
+          },
+          {
+            "term": "system",
+            "tf": 1,
+            "weight": 0.013514
+          }
+        ],
+        "unique_terms": 38,
+        "total_terms": 74
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "48203e41",
+        "Hardware Usage Reporting",
+        "api",
+        "blob",
+        "com",
+        "github",
+        "grpc",
+        "https",
+        "lib",
+        "qdrant",
+        "src"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.6,
+      "structural": 0.7,
+      "retrieval_quality": 0.545,
+      "overall": 0.6149999999999999
+    }
+  },
+  {
+    "text": "### API Key Authentication  The system supports API key-based authentication through HTTP headers:  - **Header**: `api-key` - **Validation**: Keys are validated against configured access rules - **Scope**: Different keys can have different permissions (read-only, read-write, admin)  Sources: [src/actix/auth.rs](https://github.com/qdrant/qdrant/blob/48203e41/src/actix/auth.rs) [src/tonic/auth.rs](https://github.com/qdrant/qdrant/blob/48203e41/src/tonic/auth.rs) [storage/rbac/](https://github.com/qdrant/qdrant/blob/48203e41/storage/rbac/)",
+    "metadata": {
+      "chunk_id": "bc941dd20a17-0009",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_9-api-reference.md",
+      "filename": "_qdrant_qdrant_9-api-reference.md",
+      "file_extension": ".md",
+      "chunk_index": 9,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "API Key Authentication"
+      ],
+      "heading_text": "API Key Authentication",
+      "token_count": 146,
+      "char_count": 542,
+      "start_char": 11719,
+      "end_char": 12261,
+      "semantic_score": 0.7,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.545,
+      "chunking_strategy": "hierarchical_precise_structural",
+      "content_type": "list_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "processing_timestamp": "2025-10-20T04:38:46.395942",
+      "document_id": "bc941dd20a17",
+      "document_name": "_qdrant_qdrant_9-api-reference",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_9-api-reference.md",
+      "source_filename": "_qdrant_qdrant_9-api-reference.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant",
+      "relative_path": "Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_9-api-reference.md",
+      "hierarchy_path": "API Key Authentication",
+      "chunk_hash": "a473edf8b7e69511",
+      "content_digest": "a473edf8b7e69511",
+      "chunk_length": 542,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "qdrant",
+          "src",
+          "auth",
+          "api",
+          "key",
+          "https",
+          "github",
+          "com",
+          "blob",
+          "48203e41",
+          "authentication",
+          "keys",
+          "different",
+          "read",
+          "actix",
+          "tonic",
+          "storage",
+          "rbac",
+          "the",
+          "system"
+        ],
+        "term_weights": [
+          {
+            "term": "qdrant",
+            "tf": 6,
+            "weight": 0.081081
+          },
+          {
+            "term": "src",
+            "tf": 4,
+            "weight": 0.054054
+          },
+          {
+            "term": "auth",
+            "tf": 4,
+            "weight": 0.054054
+          },
+          {
+            "term": "api",
+            "tf": 3,
+            "weight": 0.040541
+          },
+          {
+            "term": "key",
+            "tf": 3,
+            "weight": 0.040541
+          },
+          {
+            "term": "https",
+            "tf": 3,
+            "weight": 0.040541
+          },
+          {
+            "term": "github",
+            "tf": 3,
+            "weight": 0.040541
+          },
+          {
+            "term": "com",
+            "tf": 3,
+            "weight": 0.040541
+          },
+          {
+            "term": "blob",
+            "tf": 3,
+            "weight": 0.040541
+          },
+          {
+            "term": "48203e41",
+            "tf": 3,
+            "weight": 0.040541
+          },
+          {
+            "term": "authentication",
+            "tf": 2,
+            "weight": 0.027027
+          },
+          {
+            "term": "keys",
+            "tf": 2,
+            "weight": 0.027027
+          },
+          {
+            "term": "different",
+            "tf": 2,
+            "weight": 0.027027
+          },
+          {
+            "term": "read",
+            "tf": 2,
+            "weight": 0.027027
+          },
+          {
+            "term": "actix",
+            "tf": 2,
+            "weight": 0.027027
+          },
+          {
+            "term": "tonic",
+            "tf": 2,
+            "weight": 0.027027
+          },
+          {
+            "term": "storage",
+            "tf": 2,
+            "weight": 0.027027
+          },
+          {
+            "term": "rbac",
+            "tf": 2,
+            "weight": 0.027027
+          },
+          {
+            "term": "the",
+            "tf": 1,
+            "weight": 0.013514
+          },
+          {
+            "term": "system",
+            "tf": 1,
+            "weight": 0.013514
+          }
+        ],
+        "unique_terms": 41,
+        "total_terms": 74
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "48203e41",
+        "API Key Authentication",
+        "api",
+        "auth",
+        "blob",
+        "com",
+        "github",
+        "https",
+        "key",
+        "qdrant",
+        "src"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.545,
+      "overall": 0.715
+    }
+  },
+  {
+    "text": "### Validation Implementation\n\nThe validation occurs at multiple levels:\n\n1. **Protocol Level**: Protobuf/JSON schema validation\n2. **Field Level**: Individual field constraints using `#[validate()]` annotations\n3. **Business Logic**: Custom validation functions for complex rules\n4. **Strict Mode**: Additional constraints when strict mode is enabled\n\nSources: [lib/api/src/grpc/qdrant.rs2-50](https://github.com/qdrant/qdrant/blob/48203e41/lib/api/src/grpc/qdrant.rs#L2-L50) [lib/segment/src/types.rs448-503](https://github.com/qdrant/qdrant/blob/48203e41/lib/segment/src/types.rs#L448-L503) [common/validation.rs](https://github.com/qdrant/qdrant/blob/48203e41/common/validation.rs) [src/common/strict\\_mode.rs](https://github.com/qdrant/qdrant/blob/48203e41/src/common/strict_mode.rs)",
+    "metadata": {
+      "chunk_id": "bc941dd20a17-0015",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_9-api-reference.md",
+      "filename": "_qdrant_qdrant_9-api-reference.md",
+      "file_extension": ".md",
+      "chunk_index": 15,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Validation Implementation"
+      ],
+      "heading_text": "Validation Implementation",
+      "token_count": 209,
+      "char_count": 788,
+      "start_char": 14229,
+      "end_char": 15017,
+      "semantic_score": 0.6,
+      "structural_score": 0.7,
+      "retrieval_quality": 0.55875,
+      "chunking_strategy": "hierarchical_precise_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "processing_timestamp": "2025-10-20T04:38:46.397813",
+      "document_id": "bc941dd20a17",
+      "document_name": "_qdrant_qdrant_9-api-reference",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_9-api-reference.md",
+      "source_filename": "_qdrant_qdrant_9-api-reference.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant",
+      "relative_path": "Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_9-api-reference.md",
+      "hierarchy_path": "Validation Implementation",
+      "chunk_hash": "7037a52080bb5e3f",
+      "content_digest": "7037a52080bb5e3f",
+      "chunk_length": 788,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "qdrant",
+          "validation",
+          "src",
+          "strict",
+          "mode",
+          "lib",
+          "https",
+          "github",
+          "com",
+          "blob",
+          "48203e41",
+          "common",
+          "level",
+          "field",
+          "constraints",
+          "api",
+          "grpc",
+          "segment",
+          "types",
+          "implementation"
+        ],
+        "term_weights": [
+          {
+            "term": "qdrant",
+            "tf": 10,
+            "weight": 0.098039
+          },
+          {
+            "term": "validation",
+            "tf": 6,
+            "weight": 0.058824
+          },
+          {
+            "term": "src",
+            "tf": 6,
+            "weight": 0.058824
+          },
+          {
+            "term": "strict",
+            "tf": 4,
+            "weight": 0.039216
+          },
+          {
+            "term": "mode",
+            "tf": 4,
+            "weight": 0.039216
+          },
+          {
+            "term": "lib",
+            "tf": 4,
+            "weight": 0.039216
+          },
+          {
+            "term": "https",
+            "tf": 4,
+            "weight": 0.039216
+          },
+          {
+            "term": "github",
+            "tf": 4,
+            "weight": 0.039216
+          },
+          {
+            "term": "com",
+            "tf": 4,
+            "weight": 0.039216
+          },
+          {
+            "term": "blob",
+            "tf": 4,
+            "weight": 0.039216
+          },
+          {
+            "term": "48203e41",
+            "tf": 4,
+            "weight": 0.039216
+          },
+          {
+            "term": "common",
+            "tf": 4,
+            "weight": 0.039216
+          },
+          {
+            "term": "level",
+            "tf": 2,
+            "weight": 0.019608
+          },
+          {
+            "term": "field",
+            "tf": 2,
+            "weight": 0.019608
+          },
+          {
+            "term": "constraints",
+            "tf": 2,
+            "weight": 0.019608
+          },
+          {
+            "term": "api",
+            "tf": 2,
+            "weight": 0.019608
+          },
+          {
+            "term": "grpc",
+            "tf": 2,
+            "weight": 0.019608
+          },
+          {
+            "term": "segment",
+            "tf": 2,
+            "weight": 0.019608
+          },
+          {
+            "term": "types",
+            "tf": 2,
+            "weight": 0.019608
+          },
+          {
+            "term": "implementation",
+            "tf": 1,
+            "weight": 0.009804
+          }
+        ],
+        "unique_terms": 49,
+        "total_terms": 102
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Validation Implementation",
+        "blob",
+        "com",
+        "github",
+        "https",
+        "lib",
+        "mode",
+        "qdrant",
+        "src",
+        "strict",
+        "validation"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.6,
+      "structural": 0.7,
+      "retrieval_quality": 0.55875,
+      "overall": 0.6195833333333333
+    }
+  },
+  {
+    "text": "## Internal vs External APIs\n\nThe system distinguishes between external client-facing APIs and internal peer-to-peer communication APIs for distributed operations.",
     "metadata": {
       "chunk_id": "bc941dd20a17-0016",
       "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_9-api-reference.md",
@@ -199,15 +1391,15 @@
       "heading_text": "Internal vs External APIs",
       "token_count": 26,
       "char_count": 163,
-      "start_char": 0,
-      "end_char": 163,
+      "start_char": 15019,
+      "end_char": 15182,
       "semantic_score": 0.8,
       "structural_score": 0.8999999999999999,
       "retrieval_quality": 0.53,
-      "chunking_strategy": "hierarchical_precise",
-      "content_type": "hierarchical_section",
-      "embedding_model": "nomic-ai/CodeRankEmbed",
-      "processing_timestamp": "2025-10-19T15:45:02.926113",
+      "chunking_strategy": "hierarchical_precise_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "processing_timestamp": "2025-10-20T04:38:46.397813",
       "document_id": "bc941dd20a17",
       "document_name": "_qdrant_qdrant_9-api-reference",
       "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_9-api-reference.md",
@@ -215,8 +1407,8 @@
       "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant",
       "relative_path": "Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_9-api-reference.md",
       "hierarchy_path": "Internal vs External APIs",
-      "chunk_hash": "8c719dbfd965df2b",
-      "content_digest": "8c719dbfd965df2b",
+      "chunk_hash": "3ce6b2215789d502",
+      "content_digest": "3ce6b2215789d502",
       "chunk_length": 163,
       "payload_version": "1.3",
       "collection_hints": [
@@ -342,600 +1534,13 @@
         "peer",
         "system",
         "the"
-      ],
-      "quality_fallback": true,
-      "quality_notes": "Promoted via relaxed thresholds"
+      ]
     },
     "advanced_scores": {
       "semantic": 0.8,
       "structural": 0.8999999999999999,
       "retrieval_quality": 0.53,
       "overall": 0.7433333333333333
-    }
-  },
-  {
-    "text": "### Standard Response Format  | Field    | Type   | Description                           | | -------- | ------ | ------------------------------------- | | `result` | Object | The actual response data              | | `status` | String | Operation status (\"ok\" or error)      | | `time`   | Number | Processing time in seconds            | | `usage`  | Object | Optional hardware and inference usage |",
-    "metadata": {
-      "chunk_id": "bc941dd20a17-0005",
-      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_9-api-reference.md",
-      "filename": "_qdrant_qdrant_9-api-reference.md",
-      "file_extension": ".md",
-      "chunk_index": 5,
-      "document_level": 1,
-      "parent_chunk_id": null,
-      "child_chunk_ids": [],
-      "section_path": [
-        "Standard Response Format"
-      ],
-      "heading_text": "Standard Response Format",
-      "token_count": 81,
-      "char_count": 401,
-      "start_char": 0,
-      "end_char": 401,
-      "semantic_score": 0.8,
-      "structural_score": 0.8999999999999999,
-      "retrieval_quality": 0.46499999999999997,
-      "chunking_strategy": "hierarchical_precise",
-      "content_type": "hierarchical_section",
-      "embedding_model": "nomic-ai/CodeRankEmbed",
-      "processing_timestamp": "2025-10-19T15:45:02.923005",
-      "document_id": "bc941dd20a17",
-      "document_name": "_qdrant_qdrant_9-api-reference",
-      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_9-api-reference.md",
-      "source_filename": "_qdrant_qdrant_9-api-reference.md",
-      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant",
-      "relative_path": "Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_9-api-reference.md",
-      "hierarchy_path": "Standard Response Format",
-      "chunk_hash": "61a6a26df5e1dc33",
-      "content_digest": "61a6a26df5e1dc33",
-      "chunk_length": 401,
-      "payload_version": "1.3",
-      "collection_hints": [
-        "qdrant_ecosystem"
-      ],
-      "sparse_features": {
-        "version": "1.0",
-        "weighting": "tf-normalized",
-        "top_terms": [
-          "response",
-          "object",
-          "status",
-          "time",
-          "usage",
-          "standard",
-          "format",
-          "field",
-          "type",
-          "description",
-          "result",
-          "the",
-          "actual",
-          "data",
-          "string",
-          "operation",
-          "error",
-          "number",
-          "processing",
-          "seconds"
-        ],
-        "term_weights": [
-          {
-            "term": "response",
-            "tf": 2,
-            "weight": 0.068966
-          },
-          {
-            "term": "object",
-            "tf": 2,
-            "weight": 0.068966
-          },
-          {
-            "term": "status",
-            "tf": 2,
-            "weight": 0.068966
-          },
-          {
-            "term": "time",
-            "tf": 2,
-            "weight": 0.068966
-          },
-          {
-            "term": "usage",
-            "tf": 2,
-            "weight": 0.068966
-          },
-          {
-            "term": "standard",
-            "tf": 1,
-            "weight": 0.034483
-          },
-          {
-            "term": "format",
-            "tf": 1,
-            "weight": 0.034483
-          },
-          {
-            "term": "field",
-            "tf": 1,
-            "weight": 0.034483
-          },
-          {
-            "term": "type",
-            "tf": 1,
-            "weight": 0.034483
-          },
-          {
-            "term": "description",
-            "tf": 1,
-            "weight": 0.034483
-          },
-          {
-            "term": "result",
-            "tf": 1,
-            "weight": 0.034483
-          },
-          {
-            "term": "the",
-            "tf": 1,
-            "weight": 0.034483
-          },
-          {
-            "term": "actual",
-            "tf": 1,
-            "weight": 0.034483
-          },
-          {
-            "term": "data",
-            "tf": 1,
-            "weight": 0.034483
-          },
-          {
-            "term": "string",
-            "tf": 1,
-            "weight": 0.034483
-          },
-          {
-            "term": "operation",
-            "tf": 1,
-            "weight": 0.034483
-          },
-          {
-            "term": "error",
-            "tf": 1,
-            "weight": 0.034483
-          },
-          {
-            "term": "number",
-            "tf": 1,
-            "weight": 0.034483
-          },
-          {
-            "term": "processing",
-            "tf": 1,
-            "weight": 0.034483
-          },
-          {
-            "term": "seconds",
-            "tf": 1,
-            "weight": 0.034483
-          }
-        ],
-        "unique_terms": 24,
-        "total_terms": 29
-      },
-      "modal_hint": "prose",
-      "content_flags": {
-        "has_code_block": false,
-        "has_table": false,
-        "has_list": false,
-        "has_json": false,
-        "has_formula": false
-      },
-      "search_keywords": [
-        "Standard Response Format",
-        "description",
-        "field",
-        "format",
-        "object",
-        "response",
-        "standard",
-        "status",
-        "time",
-        "type",
-        "usage"
-      ],
-      "quality_fallback": true,
-      "quality_notes": "Promoted via relaxed thresholds"
-    },
-    "advanced_scores": {
-      "semantic": 0.8,
-      "structural": 0.8999999999999999,
-      "retrieval_quality": 0.46499999999999997,
-      "overall": 0.7216666666666667
-    }
-  },
-  {
-    "text": "## Request Validation  All API requests undergo validation using the `validator` crate with custom validation rules specific to vector database operations.",
-    "metadata": {
-      "chunk_id": "bc941dd20a17-0013",
-      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_9-api-reference.md",
-      "filename": "_qdrant_qdrant_9-api-reference.md",
-      "file_extension": ".md",
-      "chunk_index": 13,
-      "document_level": 1,
-      "parent_chunk_id": null,
-      "child_chunk_ids": [],
-      "section_path": [
-        "Request Validation"
-      ],
-      "heading_text": "Request Validation",
-      "token_count": 25,
-      "char_count": 155,
-      "start_char": 0,
-      "end_char": 155,
-      "semantic_score": 0.8,
-      "structural_score": 0.8999999999999999,
-      "retrieval_quality": 0.36142857142857143,
-      "chunking_strategy": "hierarchical_precise",
-      "content_type": "hierarchical_section",
-      "embedding_model": "nomic-ai/CodeRankEmbed",
-      "processing_timestamp": "2025-10-19T15:45:02.925086",
-      "document_id": "bc941dd20a17",
-      "document_name": "_qdrant_qdrant_9-api-reference",
-      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_9-api-reference.md",
-      "source_filename": "_qdrant_qdrant_9-api-reference.md",
-      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant",
-      "relative_path": "Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_9-api-reference.md",
-      "hierarchy_path": "Request Validation",
-      "chunk_hash": "02ec3a2eb5e14d61",
-      "content_digest": "02ec3a2eb5e14d61",
-      "chunk_length": 155,
-      "payload_version": "1.3",
-      "collection_hints": [
-        "qdrant_ecosystem"
-      ],
-      "sparse_features": {
-        "version": "1.0",
-        "weighting": "tf-normalized",
-        "top_terms": [
-          "validation",
-          "request",
-          "all",
-          "api",
-          "requests",
-          "undergo",
-          "using",
-          "the",
-          "validator",
-          "crate",
-          "with",
-          "custom",
-          "rules",
-          "specific",
-          "vector",
-          "database",
-          "operations"
-        ],
-        "term_weights": [
-          {
-            "term": "validation",
-            "tf": 3,
-            "weight": 0.157895
-          },
-          {
-            "term": "request",
-            "tf": 1,
-            "weight": 0.052632
-          },
-          {
-            "term": "all",
-            "tf": 1,
-            "weight": 0.052632
-          },
-          {
-            "term": "api",
-            "tf": 1,
-            "weight": 0.052632
-          },
-          {
-            "term": "requests",
-            "tf": 1,
-            "weight": 0.052632
-          },
-          {
-            "term": "undergo",
-            "tf": 1,
-            "weight": 0.052632
-          },
-          {
-            "term": "using",
-            "tf": 1,
-            "weight": 0.052632
-          },
-          {
-            "term": "the",
-            "tf": 1,
-            "weight": 0.052632
-          },
-          {
-            "term": "validator",
-            "tf": 1,
-            "weight": 0.052632
-          },
-          {
-            "term": "crate",
-            "tf": 1,
-            "weight": 0.052632
-          },
-          {
-            "term": "with",
-            "tf": 1,
-            "weight": 0.052632
-          },
-          {
-            "term": "custom",
-            "tf": 1,
-            "weight": 0.052632
-          },
-          {
-            "term": "rules",
-            "tf": 1,
-            "weight": 0.052632
-          },
-          {
-            "term": "specific",
-            "tf": 1,
-            "weight": 0.052632
-          },
-          {
-            "term": "vector",
-            "tf": 1,
-            "weight": 0.052632
-          },
-          {
-            "term": "database",
-            "tf": 1,
-            "weight": 0.052632
-          },
-          {
-            "term": "operations",
-            "tf": 1,
-            "weight": 0.052632
-          }
-        ],
-        "unique_terms": 17,
-        "total_terms": 19
-      },
-      "modal_hint": "prose",
-      "content_flags": {
-        "has_code_block": false,
-        "has_table": false,
-        "has_list": false,
-        "has_json": false,
-        "has_formula": false
-      },
-      "search_keywords": [
-        "Request Validation",
-        "all",
-        "api",
-        "crate",
-        "request",
-        "requests",
-        "the",
-        "undergo",
-        "using",
-        "validation",
-        "validator"
-      ],
-      "quality_fallback": true,
-      "quality_notes": "Promoted via relaxed thresholds"
-    },
-    "advanced_scores": {
-      "semantic": 0.8,
-      "structural": 0.8999999999999999,
-      "retrieval_quality": 0.36142857142857143,
-      "overall": 0.6871428571428572
-    }
-  },
-  {
-    "text": "### External APIs  - **Purpose**: Client application integration - **Authentication**: API key or token-based - **Rate Limiting**: Configurable per-client limits - **Protocols**: REST HTTP/JSON and gRPC",
-    "metadata": {
-      "chunk_id": "bc941dd20a17-0017",
-      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_9-api-reference.md",
-      "filename": "_qdrant_qdrant_9-api-reference.md",
-      "file_extension": ".md",
-      "chunk_index": 17,
-      "document_level": 1,
-      "parent_chunk_id": null,
-      "child_chunk_ids": [],
-      "section_path": [
-        "External APIs"
-      ],
-      "heading_text": "External APIs",
-      "token_count": 43,
-      "char_count": 202,
-      "start_char": 0,
-      "end_char": 202,
-      "semantic_score": 0.8,
-      "structural_score": 0.8999999999999999,
-      "retrieval_quality": 0.3553846153846154,
-      "chunking_strategy": "hierarchical_precise",
-      "content_type": "hierarchical_section",
-      "embedding_model": "nomic-ai/CodeRankEmbed",
-      "processing_timestamp": "2025-10-19T15:45:02.926232",
-      "document_id": "bc941dd20a17",
-      "document_name": "_qdrant_qdrant_9-api-reference",
-      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_9-api-reference.md",
-      "source_filename": "_qdrant_qdrant_9-api-reference.md",
-      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\qdrant_ecosystem\\qdrant_qdrant",
-      "relative_path": "Docs\\qdrant_ecosystem\\qdrant_qdrant\\_qdrant_qdrant_9-api-reference.md",
-      "hierarchy_path": "External APIs",
-      "chunk_hash": "7ca7295cc1590556",
-      "content_digest": "7ca7295cc1590556",
-      "chunk_length": 202,
-      "payload_version": "1.3",
-      "collection_hints": [
-        "qdrant_ecosystem"
-      ],
-      "sparse_features": {
-        "version": "1.0",
-        "weighting": "tf-normalized",
-        "top_terms": [
-          "client",
-          "external",
-          "apis",
-          "purpose",
-          "application",
-          "integration",
-          "authentication",
-          "api",
-          "key",
-          "token",
-          "based",
-          "rate",
-          "limiting",
-          "configurable",
-          "per",
-          "limits",
-          "protocols",
-          "rest",
-          "http",
-          "json"
-        ],
-        "term_weights": [
-          {
-            "term": "client",
-            "tf": 2,
-            "weight": 0.086957
-          },
-          {
-            "term": "external",
-            "tf": 1,
-            "weight": 0.043478
-          },
-          {
-            "term": "apis",
-            "tf": 1,
-            "weight": 0.043478
-          },
-          {
-            "term": "purpose",
-            "tf": 1,
-            "weight": 0.043478
-          },
-          {
-            "term": "application",
-            "tf": 1,
-            "weight": 0.043478
-          },
-          {
-            "term": "integration",
-            "tf": 1,
-            "weight": 0.043478
-          },
-          {
-            "term": "authentication",
-            "tf": 1,
-            "weight": 0.043478
-          },
-          {
-            "term": "api",
-            "tf": 1,
-            "weight": 0.043478
-          },
-          {
-            "term": "key",
-            "tf": 1,
-            "weight": 0.043478
-          },
-          {
-            "term": "token",
-            "tf": 1,
-            "weight": 0.043478
-          },
-          {
-            "term": "based",
-            "tf": 1,
-            "weight": 0.043478
-          },
-          {
-            "term": "rate",
-            "tf": 1,
-            "weight": 0.043478
-          },
-          {
-            "term": "limiting",
-            "tf": 1,
-            "weight": 0.043478
-          },
-          {
-            "term": "configurable",
-            "tf": 1,
-            "weight": 0.043478
-          },
-          {
-            "term": "per",
-            "tf": 1,
-            "weight": 0.043478
-          },
-          {
-            "term": "limits",
-            "tf": 1,
-            "weight": 0.043478
-          },
-          {
-            "term": "protocols",
-            "tf": 1,
-            "weight": 0.043478
-          },
-          {
-            "term": "rest",
-            "tf": 1,
-            "weight": 0.043478
-          },
-          {
-            "term": "http",
-            "tf": 1,
-            "weight": 0.043478
-          },
-          {
-            "term": "json",
-            "tf": 1,
-            "weight": 0.043478
-          }
-        ],
-        "unique_terms": 22,
-        "total_terms": 23
-      },
-      "modal_hint": "prose",
-      "content_flags": {
-        "has_code_block": false,
-        "has_table": false,
-        "has_list": false,
-        "has_json": false,
-        "has_formula": false
-      },
-      "search_keywords": [
-        "External APIs",
-        "api",
-        "apis",
-        "application",
-        "authentication",
-        "client",
-        "external",
-        "integration",
-        "key",
-        "purpose",
-        "token"
-      ],
-      "quality_fallback": true,
-      "quality_notes": "Promoted via relaxed thresholds"
-    },
-    "advanced_scores": {
-      "semantic": 0.8,
-      "structural": 0.8999999999999999,
-      "retrieval_quality": 0.3553846153846154,
-      "overall": 0.6851282051282052
     }
   }
 ]
