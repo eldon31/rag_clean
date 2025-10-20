@@ -734,6 +734,7 @@ class UltimateKaggleEmbedderV4:
         self.companion_batch_sizes: Dict[str, int] = {}
         self.companion_device_map: Dict[str, str] = {}
         self.failed_ensemble_models: Set[str] = set()
+        self.ensemble_device_map: Dict[str, str] = {}
 
         # Telemetry & adaptive batching
         self.mitigation_events: List[Dict[str, Any]] = []
@@ -1042,6 +1043,19 @@ class UltimateKaggleEmbedderV4:
     def _select_sequential_device(self, model_name: str) -> str:
         if self.device != "cuda":
             return "cpu"
+
+        override = self.ensemble_device_map.get(model_name)
+        if override:
+            if override == "cpu":
+                return "cpu"
+            if override.startswith("cuda"):
+                try:
+                    index = int(override.split(":")[1]) if ":" in override else 0
+                except ValueError:
+                    override = ""
+                else:
+                    if index < self.device_count:
+                        return override
 
         if self.ensemble_config and self.ensemble_config.preferred_devices:
             candidates = self.ensemble_config.preferred_devices
@@ -1567,63 +1581,148 @@ class UltimateKaggleEmbedderV4:
                     continue
                 batch_hint = self._get_batch_hint_for_model(model_name)
                 target_device = self._select_sequential_device(model_name)
+                current_device = target_device
+                current_batch_hint = batch_hint
                 pass_start = time.time()
 
                 try:
                     if hasattr(model, "to"):
                         model = model.to(target_device)
                         self.models[model_name] = model
-
-                    self._record_mitigation(
-                        "ensemble_pass_started",
-                        model=model_name,
-                        device=target_device,
-                        batch_size=batch_hint,
-                    )
-
-                    self._log_gpu_memory(f"Sequential ensemble encode before {model_name} @ {target_device}")
-                    embeddings = self._call_encode(
-                        model,
-                        texts,
-                        batch_size=batch_hint,
-                        device=target_device,
-                    )
-                    embeddings = self._normalize_embedding_matrix(embeddings, model_name)
-                    self._log_gpu_memory(f"Sequential ensemble encode after {model_name} @ {target_device}")
-
-                    pass_duration = time.time() - pass_start
-                    self._record_mitigation(
-                        "ensemble_pass_completed",
-                        model=model_name,
-                        device=target_device,
-                        duration=pass_duration,
-                        batch_size=batch_hint,
-                    )
-
-                    all_embeddings.append(embeddings)
-                    successful_models.append(model_name)
-                    model_weights[model_name] = (
-                        self.ensemble_config.model_weights.get(model_name, 1.0)
-                        if self.ensemble_config.model_weights
-                        else 1.0
-                    )
-
-                    if target_device.startswith("cuda"):
-                        torch.cuda.synchronize()
-                        torch.cuda.empty_cache()
-
-                    if target_device.startswith("cuda") and model_name != self.model_name:
-                        try:
-                            if hasattr(model, "to"):
-                                model = model.to("cpu")
-                                self.models[model_name] = model
-                        except Exception as exc:
-                            logger.warning("Failed to move model %s to CPU post-pass: %s", model_name, exc)
-                        gc.collect()
-
                 except Exception as exc:
-                    logger.warning("Sequential ensemble pass failed for %s: %s", model_name, exc)
+                    logger.warning("Failed to move model %s to %s: %s", model_name, target_device, exc)
+                    self._record_mitigation(
+                        "ensemble_move_failed",
+                        model=model_name,
+                        device=target_device,
+                        error=str(exc)[:300],
+                    )
+                    base_model = self._unwrap_model(model)
+                    if hasattr(base_model, "to"):
+                        try:
+                            base_model = cast(Any, base_model.to("cpu"))
+                        except Exception as move_exc:
+                            logger.warning("CPU fallback conversion failed for %s: %s", model_name, move_exc)
+                        else:
+                            model = base_model
+                    current_device = "cpu"
+                    self.models[model_name] = model
+
+                self._record_mitigation(
+                    "ensemble_pass_started",
+                    model=model_name,
+                    device=current_device,
+                    batch_size=current_batch_hint,
+                )
+
+                success = False
+                retries = 0
+                max_retries = 3
+
+                while retries <= max_retries:
+                    try:
+                        self._log_gpu_memory(f"Sequential ensemble encode before {model_name} @ {current_device}")
+                        embeddings = self._call_encode(
+                            model,
+                            texts,
+                            batch_size=current_batch_hint,
+                            device=current_device,
+                        )
+                        embeddings = self._normalize_embedding_matrix(embeddings, model_name)
+                        self._log_gpu_memory(f"Sequential ensemble encode after {model_name} @ {current_device}")
+                        success = True
+                        break
+                    except RuntimeError as exc:
+                        message = str(exc)
+                        if "out of memory" in message.lower():
+                            self._record_mitigation(
+                                "ensemble_pass_oom",
+                                model=model_name,
+                                device=current_device,
+                                batch_size=current_batch_hint,
+                                retry=retries,
+                            )
+                            if torch.cuda.is_available() and current_device.startswith("cuda"):
+                                torch.cuda.empty_cache()
+                                gc.collect()
+                                if current_batch_hint > 1:
+                                    current_batch_hint = max(1, current_batch_hint // 2)
+                                    retries += 1
+                                    self._record_mitigation(
+                                        "ensemble_pass_batch_reduced",
+                                        model=model_name,
+                                        batch_size=current_batch_hint,
+                                    )
+                                    continue
+                                base_model = self._unwrap_model(model)
+                                if hasattr(base_model, "to"):
+                                    try:
+                                        base_model = cast(Any, base_model.to("cpu"))
+                                    except Exception as move_exc:
+                                        logger.warning("Failed to move model %s to CPU fallback: %s", model_name, move_exc)
+                                    else:
+                                        model = base_model
+                                        self.models[model_name] = model
+                                current_device = "cpu"
+                                retries += 1
+                                self._record_mitigation(
+                                    "ensemble_pass_cpu_fallback",
+                                    model=model_name,
+                                )
+                                continue
+                        self._record_mitigation(
+                            "ensemble_pass_failed",
+                            model=model_name,
+                            device=current_device,
+                            error=message[:500],
+                        )
+                        logger.warning("Sequential ensemble pass failed for %s: %s", model_name, message)
+                        break
+                    except Exception as exc:
+                        message = str(exc)
+                        self._record_mitigation(
+                            "ensemble_pass_failed",
+                            model=model_name,
+                            device=current_device,
+                            error=message[:500],
+                        )
+                        logger.warning("Sequential ensemble pass failed for %s: %s", model_name, message)
+                        break
+
+                if not success:
+                    self.failed_ensemble_models.add(model_name)
                     continue
+
+                pass_duration = time.time() - pass_start
+                self._record_mitigation(
+                    "ensemble_pass_completed",
+                    model=model_name,
+                    device=current_device,
+                    duration=pass_duration,
+                    batch_size=current_batch_hint,
+                )
+                self.ensemble_device_map[model_name] = current_device
+
+                all_embeddings.append(embeddings)
+                successful_models.append(model_name)
+                model_weights[model_name] = (
+                    self.ensemble_config.model_weights.get(model_name, 1.0)
+                    if self.ensemble_config.model_weights
+                    else 1.0
+                )
+
+                if current_device.startswith("cuda"):
+                    torch.cuda.synchronize()
+                    torch.cuda.empty_cache()
+
+                if current_device.startswith("cuda") and model_name != self.model_name:
+                    try:
+                        if hasattr(model, "to"):
+                            model = cast(Any, model.to("cpu"))
+                            self.models[model_name] = model
+                    except Exception as exc:
+                        logger.warning("Failed to move model %s to CPU post-pass: %s", model_name, exc)
+                    gc.collect()
 
         if not all_embeddings:
             logger.error(
