@@ -57,6 +57,7 @@ KAGGLE_DEFAULTS = {
     "model": "jina-code-embeddings-1.5b",  # Primary ensemble model
     "matryoshka_dim": 1024,  # Ensemble dimension (all models configured at 1024D)
     "enable_ensemble": True,  # Multi-model ensemble enabled by default
+    "ensemble_models": ["jina-code-embeddings-1.5b", "bge-m3"],
     "skip_existing": True,
     "summary": "embedding_summary.json",
     "zip_output": True,
@@ -170,6 +171,10 @@ def _parse_args(argv: List[str]) -> argparse.Namespace:
         action="store_true",
         default=KAGGLE_DEFAULTS["enable_ensemble"] if IS_KAGGLE else False,
         help="Enable ensemble mode (requires ensemble config in embedder).",
+    )
+    parser.add_argument(
+        "--ensemble-models",
+        help="Override default ensemble model order (comma-separated model keys).",
     )
     parser.add_argument(
         "--ensemble-mode",
@@ -328,6 +333,7 @@ def _run_for_collection(
     model_name: str,
     enable_ensemble: bool,
     ensemble_mode: str,
+    ensemble_models: Optional[List[str]],
     force_cpu: bool,
     sequential_data_parallel: bool,
     sequential_devices: Optional[List[str]],
@@ -358,6 +364,13 @@ def _run_for_collection(
     ensemble_config: Optional[EnsembleConfig] = None
     if effective_enable:
         ensemble_config = EnsembleConfig()
+        if ensemble_models:
+            normalized_models: List[str] = []
+            for candidate in ensemble_models:
+                if candidate and candidate not in normalized_models:
+                    normalized_models.append(candidate)
+            if normalized_models:
+                ensemble_config.ensemble_models = normalized_models
         ensemble_config.sequential_passes = sequential_requested
         ensemble_config.parallel_encoding = not sequential_requested
         ensemble_config.sequential_data_parallel = sequential_data_parallel
@@ -567,6 +580,23 @@ def main(argv: List[str]) -> int:
     if args.matryoshka_dim:
         print(f"✓ Matryoshka dimension: {args.matryoshka_dim}")
 
+    ensemble_models_override: Optional[List[str]] = None
+    if args.ensemble_models:
+        ensemble_models_override = [model.strip() for model in args.ensemble_models.split(",") if model.strip()]
+        if not ensemble_models_override:
+            ensemble_models_override = None
+    elif IS_KAGGLE:
+        default_roster = KAGGLE_DEFAULTS.get("ensemble_models")
+        if default_roster:
+            ensemble_models_override = list(default_roster)
+
+    if ensemble_models_override:
+        seen_models: List[str] = []
+        for model_key in ensemble_models_override:
+            if model_key and model_key not in seen_models:
+                seen_models.append(model_key)
+        ensemble_models_override = seen_models
+
     sequential_devices: Optional[List[str]] = None
     if args.sequential_devices:
         sequential_devices = [device.strip() for device in args.sequential_devices.split(",") if device.strip()]
@@ -650,6 +680,8 @@ def main(argv: List[str]) -> int:
         print(f"  Sequential data parallel: enabled")
     if sequential_devices:
         print(f"  Sequential device order: {', '.join(sequential_devices)}")
+    if args.enable_ensemble and ensemble_models_override:
+        print(f"  Ensemble roster: {', '.join(ensemble_models_override)}")
     
     # Display all available models in registry
     print(f"\nAvailable models in registry ({len(KAGGLE_OPTIMIZED_MODELS)} total):")
@@ -693,6 +725,7 @@ def main(argv: List[str]) -> int:
                 model_name=args.model,
                 enable_ensemble=args.enable_ensemble,
                 ensemble_mode=args.ensemble_mode,
+                ensemble_models=ensemble_models_override,
                 force_cpu=args.force_cpu,
                 sequential_data_parallel=args.sequential_data_parallel,
                 sequential_devices=sequential_devices,

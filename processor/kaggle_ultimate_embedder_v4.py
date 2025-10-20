@@ -305,7 +305,7 @@ class KaggleExportConfig:
 class EnsembleConfig:
     """Multi-model ensemble configuration"""
     # Ensemble models: Both support 1024D (Jina Code via Matryoshka, Jina V4 native)
-    ensemble_models: List[str] = field(default_factory=lambda: ["jina-code-embeddings-1.5b", "jina-embeddings-v4"])
+    ensemble_models: List[str] = field(default_factory=lambda: ["jina-code-embeddings-1.5b", "bge-m3"])
 
     # Ensemble weighting strategy
     weighting_strategy: str = "equal"  # equal, performance_based, adaptive
@@ -722,6 +722,7 @@ class UltimateKaggleEmbedderV4:
         self.companion_model_configs: Dict[str, ModelConfig] = {}
         self.companion_batch_sizes: Dict[str, int] = {}
         self.companion_device_map: Dict[str, str] = {}
+        self.failed_ensemble_models: Set[str] = set()
 
         # Telemetry & adaptive batching
         self.mitigation_events: List[Dict[str, Any]] = []
@@ -1000,13 +1001,17 @@ class UltimateKaggleEmbedderV4:
 
         return "cuda:0" if self.device_count > 0 else "cpu"
 
-    def _get_or_load_ensemble_model(self, model_name: str) -> Any:
+    def _get_or_load_ensemble_model(self, model_name: str) -> Optional[Any]:
         if model_name == self.model_name:
             return self._get_primary_model()
 
         cached = self.models.get(model_name)
         if cached is not None:
             return cached
+
+        if model_name in self.failed_ensemble_models:
+            logger.debug("Skipping previously failed ensemble model %s", model_name)
+            return None
 
         config = KAGGLE_OPTIMIZED_MODELS.get(model_name)
         if config is None:
@@ -1015,7 +1020,18 @@ class UltimateKaggleEmbedderV4:
         self._ensure_model_snapshot(config.hf_model_id)
         kwargs = self._build_sentence_transformer_kwargs(device="cpu")
         kwargs["trust_remote_code"] = config.trust_remote_code
-        model = SentenceTransformer(config.hf_model_id, **kwargs)
+        try:
+            model = SentenceTransformer(config.hf_model_id, **kwargs)
+        except Exception as exc:
+            self.failed_ensemble_models.add(model_name)
+            message = str(exc)
+            logger.warning("Failed to load ensemble model %s: %s", model_name, message)
+            self._record_mitigation(
+                "ensemble_model_load_failed",
+                model=model_name,
+                error=message[:500],
+            )
+            return None
 
         if self.gpu_config.precision == "fp16" and self.device == "cuda":
             model = model.half()
@@ -1444,6 +1460,7 @@ class UltimateKaggleEmbedderV4:
         sequential_mode = bool(self.ensemble_config.sequential_passes)
         model_weights: Dict[str, float] = {}
         all_embeddings: List[np.ndarray] = []
+        successful_models: List[str] = []
 
         ordered_models: List[str] = []
         seen: Set[str] = set()
@@ -1455,6 +1472,8 @@ class UltimateKaggleEmbedderV4:
         if not sequential_mode:
             for model_name in ordered_models:
                 model = self._get_or_load_ensemble_model(model_name)
+                if model is None:
+                    continue
                 batch_hint = self._get_batch_hint_for_model(model_name)
 
                 try:
@@ -1472,6 +1491,7 @@ class UltimateKaggleEmbedderV4:
                     continue
 
                 all_embeddings.append(embeddings)
+                successful_models.append(model_name)
                 model_weights[model_name] = (
                     self.ensemble_config.model_weights.get(model_name, 1.0)
                     if self.ensemble_config.model_weights
@@ -1481,6 +1501,8 @@ class UltimateKaggleEmbedderV4:
         else:
             for model_name in ordered_models:
                 model = self._get_or_load_ensemble_model(model_name)
+                if model is None:
+                    continue
                 batch_hint = self._get_batch_hint_for_model(model_name)
                 target_device = self._select_sequential_device(model_name)
                 pass_start = time.time()
@@ -1516,6 +1538,7 @@ class UltimateKaggleEmbedderV4:
                     )
 
                     all_embeddings.append(embeddings)
+                    successful_models.append(model_name)
                     model_weights[model_name] = (
                         self.ensemble_config.model_weights.get(model_name, 1.0)
                         if self.ensemble_config.model_weights
@@ -1554,7 +1577,7 @@ class UltimateKaggleEmbedderV4:
         if self.ensemble_config.aggregation_method == "weighted_average":
             total_weight = sum(model_weights.values()) or 1.0
             weighted_embeddings = []
-            for model_name, embeddings in zip(ordered_models, all_embeddings):
+            for model_name, embeddings in zip(successful_models, all_embeddings):
                 if model_name not in model_weights:
                     continue
                 weight = model_weights[model_name] / total_weight
