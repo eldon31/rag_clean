@@ -1,15 +1,16 @@
 #!/usr/bin/env python3
 """
-V5 Document Chunking Script - Simplified for Kaggle
+V5 Document Chunking Script - Ensemble-Ready for Kaggle
 
-Automatically chunks documents with sensible defaults.
+Automatically chunks documents with V5 ensemble configuration.
 Just run: python scripts/chunk_docs_v5.py
 
 Default behavior:
 - Input: /kaggle/working/rag_clean/Docs
 - Output: /kaggle/working/rag_clean/Chunked
-- Model: jina-code-embeddings-1.5b (1536D Matryoshka)
+- Model: jina-code-embeddings-1.5b (1024D ensemble dimension)
 - Sparse features: enabled
+- Ensemble-ready: All chunks sized for 1024D embeddings
 """
 
 import sys
@@ -19,7 +20,7 @@ from pathlib import Path
 project_root = Path(__file__).parent.parent
 sys.path.insert(0, str(project_root))
 
-from processor.enhanced_ultimate_chunker_v5 import EnhancedUltimateChunkerV5
+from processor.enhanced_ultimate_chunker_v5_unified import EnhancedUltimateChunkerV5Unified
 from processor.kaggle_ultimate_embedder_v4 import KAGGLE_OPTIMIZED_MODELS
 import logging
 
@@ -97,9 +98,10 @@ def main():
     model_config = KAGGLE_OPTIMIZED_MODELS[model_name]
     logger.info(f"\nModel Configuration:")
     logger.info(f"  Max Tokens: {model_config.max_tokens:,}")
-    logger.info(f"  Vector Dimension: {model_config.vector_dim}")
-    logger.info(f"  Matryoshka Support: {'Yes (1536D full dimension)' if model_name == 'jina-code-embeddings-1.5b' else 'Unknown'}")
+    logger.info(f"  Ensemble Dimension: {model_config.vector_dim}D (1024D for all ensemble models)")
+    logger.info(f"  Matryoshka: {'1536D→1024D' if model_name == 'jina-code-embeddings-1.5b' else '2048D→1024D' if model_name == 'jina-embeddings-v4' else 'Native 1024D'}")
     logger.info(f"  Chunk Size: {int(model_config.max_tokens * 0.8):,} tokens (80% safety margin)")
+    logger.info(f"  Ensemble Ready: ✓ All chunks compatible with multi-model embedding")
     
     # Initialize chunker with defaults
     logger.info("\n" + "="*80)
@@ -107,13 +109,19 @@ def main():
     logger.info("="*80)
     
     try:
-        chunker = EnhancedUltimateChunkerV5(
+        chunker = EnhancedUltimateChunkerV5Unified(
             target_model=model_name,
-            generate_sparse_features=True,  # Always enable for V5
+            use_tree_sitter=True,  # V5: AST-based code chunking
+            use_semchunk=True,      # V5: Semantic boundary detection
+            use_docling=False,      # V5: Disable Docling (not needed for most docs)
+            generate_sparse_features=True,
             extract_keywords=True,
             classify_content_type=True
         )
-        logger.info("✓ Chunker initialized successfully")
+        logger.info("✓ V5 Unified Chunker initialized successfully")
+        logger.info(f"  Tree-sitter: ✓ Enabled (AST-based code chunking)")
+        logger.info(f"  Semchunk: ✓ Enabled (semantic boundaries)")
+        logger.info(f"  Docling: ✗ Disabled (enable for PDF/Office files)")
         logger.info("="*80)
     except Exception as e:
         logger.error("="*80)

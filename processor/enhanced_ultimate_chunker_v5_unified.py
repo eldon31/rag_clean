@@ -75,7 +75,7 @@ logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
 
 DEFAULT_EMBEDDING_MODEL = "jina-code-embeddings-1.5b"
-DEFAULT_EMBEDDING_DIMENSION = 1536
+DEFAULT_EMBEDDING_DIMENSION = 1024  # V5: 1024D for ensemble compatibility
 
 
 @dataclass
@@ -334,7 +334,6 @@ class EnhancedUltimateChunkerV5Unified:
                 "model_hf_id": self.model_config.hf_model_id,
                 "model_max_tokens": self.model_config.max_tokens,
                 "model_vector_dim": self.model_config.vector_dim,
-                "matryoshka_dimension": 1536 if self.target_model == "jina-code-embeddings-1.5b" else None,
                 # Registry fields from V5_MODEL_CONFIGURATIONS
                 "recommended_batch_size": getattr(self.model_config, "recommended_batch_size", None),
                 "backend": getattr(self.model_config, "backend", "pytorch"),

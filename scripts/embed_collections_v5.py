@@ -48,13 +48,14 @@ KAGGLE_DEFAULTS = {
     "output_root": Path("/kaggle/working/Embeddings"),
     "collections": [
         "Qdrant",
-        "Sentence_Transformer", 
+        "Sentence_Transformer",
         "Docling",
         "FAST_DOCS",
         "pydantic",
     ],
-    "model": "jina-code-embeddings-1.5b",
-    "enable_ensemble": True,
+    "model": "jina-code-embeddings-1.5b",  # Primary ensemble model
+    "matryoshka_dim": 1024,  # Ensemble dimension (all models configured at 1024D)
+    "enable_ensemble": True,  # Multi-model ensemble enabled by default
     "skip_existing": True,
     "summary": "embedding_summary.json",
     "zip_output": True,
@@ -134,8 +135,8 @@ def _parse_args(argv: List[str]) -> argparse.Namespace:
     parser.add_argument(
         "--matryoshka-dim",
         type=int,
-        default=None,
-        help="Matryoshka dimension for truncating embeddings (e.g., 1536 for Jina models).",
+        default=KAGGLE_DEFAULTS.get("matryoshka_dim", 1024) if IS_KAGGLE else 1024,
+        help="Matryoshka dimension for truncating embeddings (default: 1024 for ensemble compatibility).",
     )
     return parser.parse_args(argv)
 

@@ -110,16 +110,17 @@ class ModelConfig:
     # Kaggle T4 specific optimizations
     recommended_batch_size: int = 32
     memory_efficient: bool = True
-    supports_flash_attention: bool = False
+    supports_flash_attention: bool = True  # ENABLED: Install with !pip install flash-attn --no-build-isolation
     
 # V5 Model Registry - Qdrant-Optimized Models ONLY
 # Based on notes/V5_MODEL_CONFIGURATIONS.md
 KAGGLE_OPTIMIZED_MODELS = {
     # PRIMARY: Code-optimized (Main model for code embedding)
+    # ENSEMBLE MODE: Using 1024D Matryoshka for compatibility
     "jina-code-embeddings-1.5b": ModelConfig(
         name="jina-code-embeddings-1.5b",
         hf_model_id="jinaai/jina-code-embeddings-1.5b",
-        vector_dim=1536,
+        vector_dim=1024,  # Ensemble dimension (native: 1536D, Matryoshka: 1024D)
         max_tokens=32768,
         query_prefix="Encode this code snippet for semantic retrieval: ",
         recommended_batch_size=16,
@@ -127,20 +128,22 @@ KAGGLE_OPTIMIZED_MODELS = {
     ),
     
     # SECONDARY: Multi-modal retrieval
+    # ENSEMBLE MODE: Native 1024D (perfect for ensemble)
     "bge-m3": ModelConfig(
         name="bge-m3",
         hf_model_id="BAAI/bge-m3",
-        vector_dim=1024,
+        vector_dim=1024,  # Native 1024D (ensemble-ready)
         max_tokens=8192,
         recommended_batch_size=32,
         memory_efficient=True
     ),
     
     # TERTIARY: Jina Embeddings V4 (Multi-vector + Matryoshka support)
+    # ENSEMBLE MODE: Using 1024D Matryoshka for compatibility
     "jina-embeddings-v4": ModelConfig(
         name="jina-embeddings-v4",
         hf_model_id="jinaai/jina-embeddings-v4",
-        vector_dim=2048,  # Full dimension (Matryoshka: 128-2048)
+        vector_dim=1024,  # Ensemble dimension (native: 2048D, Matryoshka: 1024D)
         max_tokens=32768,
         query_prefix="",
         recommended_batch_size=16,
@@ -287,8 +290,8 @@ class KaggleExportConfig:
 @dataclass
 class EnsembleConfig:
     """Multi-model ensemble configuration"""
-    # Ensemble models to use
-    ensemble_models: List[str] = field(default_factory=lambda: ["jina-code-embeddings-1.5b", "bge-m3"])
+    # Ensemble models: Both support 1024D (Jina Code via Matryoshka, Jina V4 native)
+    ensemble_models: List[str] = field(default_factory=lambda: ["jina-code-embeddings-1.5b", "jina-embeddings-v4"])
     
     # Ensemble weighting strategy
     weighting_strategy: str = "equal"  # equal, performance_based, adaptive
@@ -452,37 +455,28 @@ class UltimateKaggleEmbedderV4:
             # Default sparse models
             self.sparse_model_names = ["qdrant-bm25"]
         
-        # V5: Matryoshka dimension support with model-specific validation
-        self.matryoshka_dim = matryoshka_dim
-        if matryoshka_dim:
-            # Validate Matryoshka dimension
+        # V5 ENSEMBLE MODE: Default to registry dimension (1024D for ensemble models)
+        # matryoshka_dim parameter allows override if needed
+        self.matryoshka_dim = matryoshka_dim if matryoshka_dim else self.model_config.vector_dim
+        
+        # Validate if override is provided
+        if matryoshka_dim and matryoshka_dim != self.model_config.vector_dim:
             supported_dims = {128, 256, 512, 1024, 1536, 2048}
             if matryoshka_dim not in supported_dims:
                 logger.warning(
-                    f"Matryoshka dimension {matryoshka_dim} not in standard set {supported_dims}. "
-                    f"Will truncate embeddings to {matryoshka_dim}D."
+                    f"⚠️  Non-standard Matryoshka dimension: {matryoshka_dim}D "
+                    f"(registry default: {self.model_config.vector_dim}D)"
                 )
             if matryoshka_dim > self.model_config.vector_dim:
                 raise ValueError(
                     f"Matryoshka dimension ({matryoshka_dim}) cannot exceed "
-                    f"model dimension ({self.model_config.vector_dim})"
+                    f"registry dimension ({self.model_config.vector_dim})"
                 )
-            
-            # V5: Warn about model-specific Matryoshka support
-            confirmed_matryoshka_models = {
-                "jina-embeddings-v4",
-                "jina-code-embeddings-1.5b",
-            }
-            
-            if model_name not in confirmed_matryoshka_models:
-                logger.warning(
-                    f"⚠️  MATRYOSHKA WARNING: Model '{model_name}' does not have confirmed Matryoshka support. "
-                    f"Truncating from {self.model_config.vector_dim}D to {matryoshka_dim}D may significantly "
-                    f"degrade embedding quality. Confirmed Matryoshka models: {confirmed_matryoshka_models}. "
-                    f"Consider using matryoshka_dim=None for full {self.model_config.vector_dim}D embeddings."
-                )
-            
-            logger.info(f"Matryoshka dimension set to {matryoshka_dim}D (from {self.model_config.vector_dim}D)")
+        
+        logger.info(
+            f"Embedding dimension: {self.matryoshka_dim}D "
+            f"(registry: {self.model_config.vector_dim}D, ensemble-ready)"
+        )
         
         # Kaggle environment detection
         self.is_kaggle = '/kaggle' in os.getcwd() or os.path.exists('/kaggle')
