@@ -199,14 +199,14 @@ KAGGLE_OPTIMIZED_MODELS = {
     ),
     "jina-code-embeddings-1.5b": ModelConfig(
         name="jina-code-embeddings-1.5b",
-        hf_model_id="jina-code-embeddings-1.5b",
+        hf_model_id="jinaai/jina-code-embeddings-1.5b",
         vector_dim=1536,
-        max_tokens=8192,
+        max_tokens=32768,
         query_prefix="Encode this code snippet for semantic retrieval: ",
-        recommended_batch_size=32,
+        recommended_batch_size=16,
         memory_efficient=True,
-        requires_api=True,
-        api_endpoint="https://api.jina.ai/v1/embeddings",
+        requires_api=False,
+        api_endpoint=None,
     ),
     
     "bge-m3": ModelConfig(
@@ -280,13 +280,13 @@ KAGGLE_OPTIMIZED_MODELS = {
 
     "jina-embeddings-v4": ModelConfig(
         name="jina-embeddings-v4",
-        hf_model_id="jina-embeddings-v4",
+        hf_model_id="jinaai/jina-embeddings-v4",
         vector_dim=2048,
-        max_tokens=8192,
-        recommended_batch_size=32,
+        max_tokens=32768,
+        recommended_batch_size=16,
         memory_efficient=True,
-        requires_api=True,
-        api_endpoint="https://api.jina.ai/v1/embeddings"
+        requires_api=False,
+        api_endpoint=None
     )
 }
 
