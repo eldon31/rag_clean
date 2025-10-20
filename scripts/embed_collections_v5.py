@@ -241,9 +241,19 @@ def _run_for_collection(
     zip_output: bool,
     matryoshka_dim: int | None = None,
 ) -> Dict[str, object]:
+    print(f"\n{'─'*80}")
+    print(f"Initializing Embedder for Collection: {collection_dir.name}")
+    print(f"{'─'*80}")
+    
     export_config = _build_export_config(export_dir, collection_dir.name, model_name)
     gpu_config = KaggleGPUConfig()
-
+    
+    print(f"\n1. Creating embedder instance...")
+    print(f"   Primary model: {model_name}")
+    print(f"   Ensemble mode: {'ENABLED' if enable_ensemble else 'disabled'}")
+    if matryoshka_dim:
+        print(f"   Matryoshka dimension: {matryoshka_dim}")
+    
     embedder = UltimateKaggleEmbedderV4(
         model_name=model_name,
         gpu_config=gpu_config,
@@ -251,6 +261,7 @@ def _run_for_collection(
         enable_ensemble=enable_ensemble,
         matryoshka_dim=matryoshka_dim,  # V5: Support Matryoshka dimensions
     )
+    print(f"✓ Embedder instance created")
 
     primary_key = embedder.model_name
     expected_models: Set[str] = {primary_key}
@@ -259,7 +270,8 @@ def _run_for_collection(
     if embedder.companion_models:
         expected_models.update(embedder.companion_models.keys())
 
-    print("\nModel availability snapshot:")
+    print(f"\n2. Model Availability Check:")
+    print(f"   Expected models: {len(expected_models)}")
     model_lines = []
     missing_models: List[str] = []
     for name in sorted(expected_models):
@@ -270,19 +282,32 @@ def _run_for_collection(
         config = KAGGLE_OPTIMIZED_MODELS.get(name)
         hf_id = config.hf_model_id if config else "unknown"
         vector_dim = config.vector_dim if config else "?"
-        status = "✓ loaded" if model_obj is not None else "✗ missing"
-        model_lines.append(f"   - {name}: {status} ({hf_id}, {vector_dim}D)")
+        status = "✓ loaded" if model_obj is not None else "✗ MISSING"
+        model_lines.append(f"   - {name}: {status}")
+        model_lines.append(f"     └─ HF ID: {hf_id}")
+        model_lines.append(f"     └─ Dimension: {vector_dim}D")
         if model_obj is None:
             missing_models.append(name)
 
-    print(f"✓ Active embedding model: {primary_key}")
-    for line in model_lines:
-        print(line)
+    print(f"\n   ✓ PRIMARY MODEL: {primary_key}")
+    if config := KAGGLE_OPTIMIZED_MODELS.get(primary_key):
+        print(f"     └─ {config.hf_model_id} ({config.vector_dim}D)")
+        
+    if len(expected_models) > 1:
+        print(f"\n   Additional models ({len(expected_models) - 1}):")
+        for line in model_lines:
+            if primary_key not in line or "loaded" not in line:
+                print(line)
+    
     if missing_models:
-        print(f"⚠️  Missing models: {', '.join(missing_models)}")
+        print(f"\n   ⚠️  WARNING: {len(missing_models)} model(s) not loaded:")
+        for missing in missing_models:
+            print(f"     - {missing}")
+        print(f"   This may affect ensemble quality if ensemble mode is enabled.")
     else:
-        print("✓ All expected models are loaded for this collection")
-    print()
+        print(f"\n   ✓ All expected models loaded successfully")
+    
+    print(f"{'─'*80}\n")
 
     LOGGER.info(
         "Resolved embedder model=%s vector_dim=%s backend=%s matryoshka=%s",
@@ -291,6 +316,8 @@ def _run_for_collection(
         getattr(embedder, "embedding_backend", "<unknown>"),
         matryoshka_dim if matryoshka_dim else "disabled",
     )
+    
+    print(f"3. Loading chunks from {collection_dir.name}...")
 
     # V5: The embedder's load_chunks_from_processing() already handles recursive .rglob()
     # for *_chunks.json files, so it will work with the new structure
@@ -299,11 +326,14 @@ def _run_for_collection(
     
     if total_chunks == 0:
         LOGGER.warning("Collection %s has no chunks; skipping", collection_dir.name)
+        print(f"   ⚠️  No chunks found - skipping collection\n")
         return {
             "collection": collection_dir.name,
             "status": "skipped_no_chunks",
             "chunks": 0,
         }
+    
+    print(f"   ✓ Loaded {total_chunks:,} chunks")
 
     # Log V5-specific metadata from chunks
     if embedder.chunks_metadata:
@@ -314,10 +344,18 @@ def _run_for_collection(
             "within_token_limit": first_meta.get("within_token_limit"),
             "estimated_tokens": first_meta.get("estimated_tokens"),
         }
+        print(f"   V5 metadata: {v5_fields}")
         LOGGER.info(f"V5 Chunk Metadata: {v5_fields}")
-
+    
+    print(f"\n4. Generating embeddings...")
     perf = embedder.generate_embeddings_kaggle_optimized()
+    print(f"   ✓ Generated {perf.get('total_embeddings_generated', 0):,} embeddings")
+    print(f"   ✓ Speed: {perf.get('chunks_per_second', 0):.1f} chunks/sec")
+    print(f"   ✓ Time: {perf.get('processing_time_seconds', 0):.2f}s")
+    
+    print(f"\n5. Exporting embeddings...")
     exports = embedder.export_for_local_qdrant()
+    print(f"   ✓ Exported {len(exports)} file(s)")
     target_collection = embedder.get_target_collection_name()
 
     archive_path: Path | None = None
@@ -425,6 +463,43 @@ def main(argv: List[str]) -> int:
         chunk_count = len(list(col.rglob("*_chunks.json")))
         print(f"   - {col.name} ({chunk_count} chunk files)")
     print()
+    
+    # Display model configuration information
+    print(f"\nModel Configuration:")
+    print(f"{'='*80}")
+    print(f"Current embedding model: {args.model}")
+    
+    # Check if model is available in registry
+    if args.model in KAGGLE_OPTIMIZED_MODELS:
+        model_config = KAGGLE_OPTIMIZED_MODELS[args.model]
+        print(f"✓ Model found in registry")
+        print(f"  - HuggingFace ID: {model_config.hf_model_id}")
+        print(f"  - Vector dimension: {model_config.vector_dim}")
+        print(f"  - Max tokens: {model_config.max_tokens}")
+        print(f"  - Batch size (recommended): {model_config.recommended_batch_size}")
+        if args.matryoshka_dim:
+            print(f"  - Matryoshka dimension: {args.matryoshka_dim} (truncated from {model_config.vector_dim})")
+        print(f"  - Memory efficient: {model_config.memory_efficient}")
+        print(f"  - Flash attention: {model_config.supports_flash_attention}")
+    else:
+        print(f"⚠️  Model '{args.model}' not found in KAGGLE_OPTIMIZED_MODELS registry")
+        print(f"   Available models: {', '.join(KAGGLE_OPTIMIZED_MODELS.keys())}")
+    
+    # Display ensemble configuration if enabled
+    if args.enable_ensemble:
+        print(f"\n✓ Ensemble mode: ENABLED")
+        print(f"  Multi-model embedding will be used for enhanced quality")
+    else:
+        print(f"\n  Ensemble mode: disabled (single model)")
+    
+    # Display all available models in registry
+    print(f"\nAvailable models in registry ({len(KAGGLE_OPTIMIZED_MODELS)} total):")
+    for model_key, model_cfg in KAGGLE_OPTIMIZED_MODELS.items():
+        status = "✓ SELECTED" if model_key == args.model else "  available"
+        print(f"  {status} - {model_key}")
+        print(f"      {model_cfg.hf_model_id} ({model_cfg.vector_dim}D)")
+    
+    print(f"{'='*80}\n")
 
     run_summaries: List[Dict[str, object]] = []
     print(f"Starting to process {len(collections)} collection(s)...\n")

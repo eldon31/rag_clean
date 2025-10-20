@@ -417,6 +417,7 @@ class UltimateKaggleEmbedderV4:
         enable_sparse: bool = False,  # V5: Enable sparse embeddings
         sparse_models: Optional[List[str]] = None,  # V5: Sparse model names
         matryoshka_dim: Optional[int] = None,  # V5: Matryoshka dimension
+        local_files_only: bool = False,
     ):
         """Initialize Ultimate Kaggle Embedder V4"""
 
@@ -430,6 +431,10 @@ class UltimateKaggleEmbedderV4:
         self.model_config = KAGGLE_OPTIMIZED_MODELS[model_name]
         self.model_name = model_name
         logger.info(f"Selected model: {self.model_config.name} ({self.model_config.vector_dim}D)")
+        self.local_files_only = local_files_only
+        if self.local_files_only:
+            os.environ.setdefault("HF_HUB_OFFLINE", "1")
+            os.environ.setdefault("TRANSFORMERS_OFFLINE", "1")
 
         # Configuration
         self.gpu_config = gpu_config or KaggleGPUConfig()
@@ -2330,6 +2335,14 @@ class UltimateKaggleEmbedderV4:
         
         logger.info("Export complete; files ready for download:")
         for file_type, file_path in exported_files.items():
+            if file_type == "qdrant_collection":
+                logger.info("  %s: %s", file_type, file_path)
+                continue
+
+            if not os.path.exists(file_path):
+                logger.warning("  %s: expected export missing at %s", file_type, file_path)
+                continue
+
             file_size_mb = os.path.getsize(file_path) / 1024 / 1024
             logger.info(f"  {file_type}: {os.path.basename(file_path)} ({file_size_mb:.1f}MB)")
         
