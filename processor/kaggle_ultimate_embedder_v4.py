@@ -554,7 +554,34 @@ class UltimateKaggleEmbedderV4:
         self.monitor_thread = None
         self.monitoring_active = False
 
+        # Log model availability for debugging
+        logger.info("="*70)
+        logger.info("MODEL AVAILABILITY CHECK")
+        logger.info("="*70)
+        logger.info(f"Primary model loaded: {self.primary_model is not None}")
+        if self.primary_model:
+            model_type = type(self.primary_model).__name__
+            logger.info(f"  Model type: {model_type}")
+            logger.info(f"  Is DataParallel: {isinstance(self.primary_model, torch.nn.DataParallel)}")
+            if hasattr(self.primary_model, 'encode'):
+                logger.info(f"  ✓ Has encode() method")
+            elif hasattr(self.primary_model, 'module') and hasattr(self.primary_model.module, 'encode'):
+                logger.info(f"  ✓ Has encode() method via .module")
+            else:
+                logger.warning(f"  ✗ No encode() method found!")
+        
+        if self.companion_models:
+            logger.info(f"Companion models loaded: {len(self.companion_models)}")
+            for name, model in self.companion_models.items():
+                model_type = type(model).__name__
+                has_encode = hasattr(model, 'encode') or (hasattr(model, 'module') and hasattr(model.module, 'encode'))
+                logger.info(f"  {name}: {model_type}, encode={'✓' if has_encode else '✗'}")
+        else:
+            logger.info("No companion models loaded")
+        
+        logger.info("="*70)
         logger.info("Ultimate Kaggle Embedder V4 initialized successfully")
+        logger.info("="*70)
     
     def _get_primary_model(self) -> Any:
         """Return the primary encoder, ensuring it is initialized."""
@@ -782,6 +809,9 @@ class UltimateKaggleEmbedderV4:
         if not self.enable_ensemble or not self.ensemble_config:
             # Fallback to primary model
             primary_model = self._get_primary_model()
+            # Handle DataParallel wrapper
+            if isinstance(primary_model, torch.nn.DataParallel):
+                primary_model = primary_model.module
             return primary_model.encode(
                 texts,
                 convert_to_numpy=True,
@@ -797,7 +827,10 @@ class UltimateKaggleEmbedderV4:
             try:
                 logger.debug(f"Generating embeddings with {model_name}")
                 
-                embeddings = model.encode(
+                # Handle DataParallel wrapper
+                encode_model = model.module if isinstance(model, torch.nn.DataParallel) else model
+                
+                embeddings = encode_model.encode(
                     texts,
                     convert_to_numpy=True,
                     normalize_embeddings=True,
@@ -821,6 +854,9 @@ class UltimateKaggleEmbedderV4:
             logger.error("No ensemble models generated embeddings successfully - falling back to primary model")
             # Fallback to primary model only
             primary_model = self._get_primary_model()
+            # Handle DataParallel wrapper
+            if isinstance(primary_model, torch.nn.DataParallel):
+                primary_model = primary_model.module
             return primary_model.encode(
                 texts,
                 convert_to_numpy=True,
