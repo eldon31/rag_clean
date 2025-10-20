@@ -1078,6 +1078,49 @@ class UltimateKaggleEmbedderV4:
 
         return "cuda:0" if self.device_count > 0 else "cpu"
 
+    def _describe_batch_slice(self, batch_slice: Optional[slice]) -> Dict[str, Any]:
+        if batch_slice is None:
+            return {}
+
+        start = batch_slice.start if batch_slice.start is not None else 0
+        stop = batch_slice.stop if batch_slice.stop is not None else start
+        start = max(0, start)
+        stop = max(start, stop)
+        stop = min(stop, len(self.chunks_metadata))
+
+        if stop <= start:
+            return {}
+
+        samples: List[Dict[str, Any]] = []
+        for idx in range(start, min(stop, start + 5)):
+            source = ""
+            if idx < len(self.chunks_metadata):
+                metadata = self.chunks_metadata[idx] or {}
+                source = (
+                    metadata.get("source_path")
+                    or metadata.get("source_file")
+                    or metadata.get("filename")
+                    or metadata.get("document_id")
+                    or metadata.get("doc_id")
+                    or metadata.get("id")
+                )
+            if not source:
+                source = f"chunk_{idx}"
+            samples.append({"index": idx, "source": str(source)})
+
+        return {
+            "start": start,
+            "end": stop,
+            "count": stop - start,
+            "samples": samples,
+        }
+
+    @staticmethod
+    def _format_batch_slice_info(info: Dict[str, Any]) -> str:
+        if not info:
+            return "n/a"
+        return f"{info['start']}:{info['end']} ({info['count']} chunks)"
+
     def _get_or_load_ensemble_model(self, model_name: str) -> Optional[Any]:
         if model_name == self.model_name:
             return self._get_primary_model()
@@ -1512,9 +1555,9 @@ class UltimateKaggleEmbedderV4:
             except Exception as e:
                 logger.error(f"Failed to load ensemble model {model_name}: {e}")
     
-    def generate_ensemble_embeddings(self, texts: List[str]) -> np.ndarray:
+    def generate_ensemble_embeddings(self, texts: List[str], batch_slice: Optional[slice] = None) -> np.ndarray:
         """Generate embeddings using ensemble of models"""
-        
+
         if not self.enable_ensemble or not self.ensemble_config:
             logger.debug("Ensemble not enabled, using primary model only")
             primary_model = self._get_primary_model()
@@ -1536,6 +1579,17 @@ class UltimateKaggleEmbedderV4:
             return result
 
         sequential_mode = bool(self.ensemble_config.sequential_passes)
+        slice_info = self._describe_batch_slice(batch_slice)
+        slice_summary = self._format_batch_slice_info(slice_info)
+        base_slice_mitigation: Dict[str, Any] = {}
+        if slice_info:
+            base_slice_mitigation = {
+                "chunk_start": slice_info["start"],
+                "chunk_end": slice_info["end"],
+                "chunk_count": slice_info["count"],
+                "chunk_samples": slice_info["samples"],
+            }
+
         model_weights: Dict[str, float] = {}
         all_embeddings: List[np.ndarray] = []
         successful_models: List[str] = []
@@ -1556,7 +1610,7 @@ class UltimateKaggleEmbedderV4:
 
                 try:
                     logger.debug("[ENSEMBLE] Parallel encode with %s", model_name)
-                    self._log_gpu_memory(f"Ensemble encode before {model_name}")
+                    self._log_gpu_memory(f"Ensemble encode before {model_name} | chunks={slice_summary}")
                     embeddings = self._call_encode(
                         model,
                         texts,
@@ -1564,7 +1618,7 @@ class UltimateKaggleEmbedderV4:
                         device=self.device,
                     )
                     embeddings = self._normalize_embedding_matrix(embeddings, model_name)
-                    self._log_gpu_memory(f"Ensemble encode after {model_name}")
+                    self._log_gpu_memory(f"Ensemble encode after {model_name} | chunks={slice_summary}")
                 except Exception as exc:
                     logger.warning("Failed to generate embeddings with %s: %s", model_name, exc)
                     continue
@@ -1582,12 +1636,14 @@ class UltimateKaggleEmbedderV4:
                 model = self._get_or_load_ensemble_model(model_name)
                 if model is None:
                     continue
+
                 batch_hint = self._get_batch_hint_for_model(model_name)
                 target_device = self._select_sequential_device(model_name)
                 current_device = target_device
                 current_batch_hint = batch_hint
                 pass_start = time.time()
                 embeddings: Optional[np.ndarray] = None
+                mitigation_payload = dict(base_slice_mitigation)
 
                 try:
                     if hasattr(model, "to"):
@@ -1600,6 +1656,7 @@ class UltimateKaggleEmbedderV4:
                         model=model_name,
                         device=target_device,
                         error=str(exc)[:300],
+                        **mitigation_payload,
                     )
                     base_model = self._unwrap_model(model)
                     if hasattr(base_model, "to"):
@@ -1612,11 +1669,25 @@ class UltimateKaggleEmbedderV4:
                     current_device = "cpu"
                     self.models[model_name] = model
 
+                logger.info(
+                    "[ENSEMBLE] %s pass starting | device=%s | batch_hint=%d | chunks=%s",
+                    model_name,
+                    current_device,
+                    current_batch_hint,
+                    slice_summary,
+                )
+                if slice_info.get("samples"):
+                    sample_summary = ", ".join(
+                        f"{sample['index']}:{sample['source']}" for sample in slice_info["samples"]
+                    )
+                    logger.debug("[ENSEMBLE] %s chunk samples: %s", model_name, sample_summary)
+
                 self._record_mitigation(
                     "ensemble_pass_started",
                     model=model_name,
                     device=current_device,
                     batch_size=current_batch_hint,
+                    **mitigation_payload,
                 )
 
                 success = False
@@ -1625,7 +1696,9 @@ class UltimateKaggleEmbedderV4:
 
                 while retries <= max_retries:
                     try:
-                        self._log_gpu_memory(f"Sequential ensemble encode before {model_name} @ {current_device}")
+                        self._log_gpu_memory(
+                            f"Sequential ensemble encode before {model_name} @ {current_device} | chunks={slice_summary}"
+                        )
                         embeddings = self._call_encode(
                             model,
                             texts,
@@ -1633,7 +1706,9 @@ class UltimateKaggleEmbedderV4:
                             device=current_device,
                         )
                         embeddings = self._normalize_embedding_matrix(embeddings, model_name)
-                        self._log_gpu_memory(f"Sequential ensemble encode after {model_name} @ {current_device}")
+                        self._log_gpu_memory(
+                            f"Sequential ensemble encode after {model_name} @ {current_device} | chunks={slice_summary}"
+                        )
                         success = True
                         break
                     except RuntimeError as exc:
@@ -1645,6 +1720,15 @@ class UltimateKaggleEmbedderV4:
                                 device=current_device,
                                 batch_size=current_batch_hint,
                                 retry=retries,
+                                **mitigation_payload,
+                            )
+                            logger.warning(
+                                "[ENSEMBLE] OOM during %s pass @ %s | batch=%d | chunks=%s | retry=%d",
+                                model_name,
+                                current_device,
+                                current_batch_hint,
+                                slice_summary,
+                                retries,
                             )
                             if torch.cuda.is_available() and current_device.startswith("cuda"):
                                 torch.cuda.empty_cache()
@@ -1656,6 +1740,13 @@ class UltimateKaggleEmbedderV4:
                                         "ensemble_pass_batch_reduced",
                                         model=model_name,
                                         batch_size=current_batch_hint,
+                                        **mitigation_payload,
+                                    )
+                                    logger.info(
+                                        "[ENSEMBLE] %s batch reduced to %d for chunks=%s",
+                                        model_name,
+                                        current_batch_hint,
+                                        slice_summary,
                                     )
                                     continue
                                 base_model = self._unwrap_model(model)
@@ -1672,6 +1763,12 @@ class UltimateKaggleEmbedderV4:
                                 self._record_mitigation(
                                     "ensemble_pass_cpu_fallback",
                                     model=model_name,
+                                    **mitigation_payload,
+                                )
+                                logger.info(
+                                    "[ENSEMBLE] %s falling back to CPU for chunks=%s",
+                                    model_name,
+                                    slice_summary,
                                 )
                                 continue
                         self._record_mitigation(
@@ -1679,6 +1776,7 @@ class UltimateKaggleEmbedderV4:
                             model=model_name,
                             device=current_device,
                             error=message[:500],
+                            **mitigation_payload,
                         )
                         logger.warning("Sequential ensemble pass failed for %s: %s", model_name, message)
                         break
@@ -1689,12 +1787,19 @@ class UltimateKaggleEmbedderV4:
                             model=model_name,
                             device=current_device,
                             error=message[:500],
+                            **mitigation_payload,
                         )
                         logger.warning("Sequential ensemble pass failed for %s: %s", model_name, message)
                         break
 
                 if not success or embeddings is None:
                     self.failed_ensemble_models.add(model_name)
+                    logger.error(
+                        "[ENSEMBLE] %s pass aborted | device=%s | chunks=%s",
+                        model_name,
+                        current_device,
+                        slice_summary,
+                    )
                     continue
 
                 pass_duration = time.time() - pass_start
@@ -1704,8 +1809,17 @@ class UltimateKaggleEmbedderV4:
                     device=current_device,
                     duration=pass_duration,
                     batch_size=current_batch_hint,
+                    **mitigation_payload,
                 )
                 self.ensemble_device_map[model_name] = current_device
+
+                logger.info(
+                    "[ENSEMBLE] %s pass completed | device=%s | duration=%.2fs | chunks=%s",
+                    model_name,
+                    current_device,
+                    pass_duration,
+                    slice_summary,
+                )
 
                 all_embeddings.append(embeddings)
                 successful_models.append(model_name)
