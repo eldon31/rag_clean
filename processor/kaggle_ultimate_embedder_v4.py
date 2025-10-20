@@ -964,6 +964,54 @@ class UltimateKaggleEmbedderV4:
             device=device,
         )
 
+    def _normalize_embedding_matrix(self, matrix: Any, model_name: str) -> np.ndarray:
+        """Ensure embedding outputs are 2D float32 arrays with consistent dimensions."""
+
+        arr = np.asarray(matrix)
+
+        if arr.ndim == 0:
+            arr = arr.reshape(1, 1)
+
+        if arr.dtype == object:
+            rows: List[np.ndarray] = []
+            dims: List[int] = []
+            for row in arr:
+                row_array = np.asarray(row, dtype=np.float32).reshape(-1)
+                dims.append(row_array.size)
+                rows.append(row_array)
+
+            if not rows:
+                return np.empty((0, 0), dtype=np.float32)
+
+            min_dim = min(dims)
+            max_dim = max(dims)
+            if max_dim != min_dim:
+                self._record_mitigation(
+                    "embedding_dim_normalized",
+                    model=model_name,
+                    min_dim=min_dim,
+                    max_dim=max_dim,
+                    sample_dims=dims[:5],
+                )
+            trimmed = [row[:min_dim] for row in rows]
+            arr = np.stack(trimmed, axis=0).astype(np.float32, copy=False)
+        else:
+            if arr.ndim > 2:
+                original_shape = arr.shape
+                arr = arr.reshape(arr.shape[0], -1)
+                self._record_mitigation(
+                    "embedding_tensor_flattened",
+                    model=model_name,
+                    original_shape=list(original_shape),
+                    flattened_shape=list(arr.shape),
+                )
+            if arr.ndim == 1:
+                arr = arr.reshape(1, -1)
+            if arr.dtype != np.float32:
+                arr = arr.astype(np.float32, copy=False)
+
+        return arr
+
     def _get_batch_hint_for_model(self, model_name: str) -> int:
         if model_name == self.model_name:
             model_config = self.model_config
@@ -1450,6 +1498,7 @@ class UltimateKaggleEmbedderV4:
                 batch_size=primary_batch,
                 device=self.device,
             )
+            result = self._normalize_embedding_matrix(result, self.model_name)
             self._log_gpu_memory("Primary encode (non-ensemble) - after")
 
             if self.device == "cuda":
@@ -1485,6 +1534,7 @@ class UltimateKaggleEmbedderV4:
                         batch_size=batch_hint,
                         device=self.device,
                     )
+                    embeddings = self._normalize_embedding_matrix(embeddings, model_name)
                     self._log_gpu_memory(f"Ensemble encode after {model_name}")
                 except Exception as exc:
                     logger.warning("Failed to generate embeddings with %s: %s", model_name, exc)
@@ -1526,6 +1576,7 @@ class UltimateKaggleEmbedderV4:
                         batch_size=batch_hint,
                         device=target_device,
                     )
+                    embeddings = self._normalize_embedding_matrix(embeddings, model_name)
                     self._log_gpu_memory(f"Sequential ensemble encode after {model_name} @ {target_device}")
 
                     pass_duration = time.time() - pass_start
@@ -1567,31 +1618,63 @@ class UltimateKaggleEmbedderV4:
                 "No ensemble models generated embeddings successfully - falling back to primary model"
             )
             primary_model = self._get_primary_model()
-            return self._call_encode(
+            fallback_embeddings = self._call_encode(
                 primary_model,
                 texts,
                 batch_size=self._get_batch_hint_for_model(self.model_name),
                 device=self.device,
             )
+            return self._normalize_embedding_matrix(fallback_embeddings, self.model_name)
 
-        if self.ensemble_config.aggregation_method == "weighted_average":
-            total_weight = sum(model_weights.values()) or 1.0
-            weighted_embeddings = []
-            for model_name, embeddings in zip(successful_models, all_embeddings):
-                if model_name not in model_weights:
-                    continue
-                weight = model_weights[model_name] / total_weight
-                weighted_embeddings.append(embeddings * weight)
-            final_embeddings = np.sum(weighted_embeddings, axis=0)
+        row_counts = [emb.shape[0] for emb in all_embeddings]
+        min_rows = min(row_counts)
+        if max(row_counts) != min_rows:
+            self._record_mitigation(
+                "ensemble_row_mismatch",
+                models=successful_models,
+                row_counts=row_counts[:5],
+                min_rows=min_rows,
+            )
+        trimmed_rows = [emb[:min_rows] for emb in all_embeddings]
 
-        elif self.ensemble_config.aggregation_method == "max_pooling":
-            final_embeddings = np.maximum.reduce(all_embeddings)
+        if min_rows == 0:
+            if self.ensemble_config.aggregation_method == "concat":
+                total_dim = sum(emb.shape[1] for emb in trimmed_rows)
+                return np.empty((0, total_dim), dtype=np.float32)
+            base_dim = trimmed_rows[0].shape[1] if trimmed_rows else 0
+            return np.empty((0, base_dim), dtype=np.float32)
 
-        elif self.ensemble_config.aggregation_method == "concat":
-            final_embeddings = np.concatenate(all_embeddings, axis=1)
+        final_embeddings: np.ndarray
 
+        if self.ensemble_config.aggregation_method == "concat":
+            final_embeddings = np.concatenate(trimmed_rows, axis=1)
         else:
-            final_embeddings = np.mean(all_embeddings, axis=0)
+            dims = [emb.shape[1] for emb in trimmed_rows]
+            min_dim = min(dims)
+            if max(dims) != min_dim:
+                self._record_mitigation(
+                    "ensemble_dim_mismatch",
+                    models=successful_models,
+                    min_dim=min_dim,
+                    max_dim=max(dims),
+                    sample_dims=dims[:5],
+                )
+            aligned = [emb[:, :min_dim] for emb in trimmed_rows]
+            stacked = np.stack(aligned, axis=0)
+
+            method = self.ensemble_config.aggregation_method
+            if method == "weighted_average":
+                weights = np.array([model_weights.get(name, 1.0) for name in successful_models], dtype=np.float32)
+                weight_sum = float(weights.sum())
+                if not np.isfinite(weight_sum) or weight_sum <= 0:
+                    weights = np.ones_like(weights) / len(weights)
+                else:
+                    weights = weights / weight_sum
+                final_embeddings = np.tensordot(weights, stacked, axes=(0, 0))
+            elif method == "max_pooling":
+                final_embeddings = stacked.max(axis=0)
+            else:
+                final_embeddings = stacked.mean(axis=0)
 
         final_embeddings = normalize(final_embeddings, norm="l2", axis=1)
         return final_embeddings
@@ -2558,9 +2641,17 @@ class UltimateKaggleEmbedderV4:
                                     batch_size=primary_batch,
                                     device=self.device,
                                 )
+                                batch_embeddings = self._normalize_embedding_matrix(
+                                    batch_embeddings,
+                                    self.model_name,
+                                )
                             else:
                                 logger.debug(f"Batch {executed_batches + 1}: Using backend")
                                 batch_embeddings = self._encode_with_backend(batch_texts, primary_batch)
+                                batch_embeddings = self._normalize_embedding_matrix(
+                                    batch_embeddings,
+                                    self.model_name,
+                                )
 
                             temp_outputs: Dict[str, np.ndarray] = {}
                             for companion_name in active_companion_names:
@@ -2569,11 +2660,15 @@ class UltimateKaggleEmbedderV4:
                                     continue
                                 comp_batch_size = self.companion_batch_sizes.get(companion_name, primary_batch)
                                 companion_device = self.companion_device_map.get(companion_name, self.device)
-                                temp_outputs[companion_name] = self._call_encode(
+                                companion_matrix = self._call_encode(
                                     companion_model,
                                     batch_texts,
                                     batch_size=comp_batch_size,
                                     device=companion_device,
+                                )
+                                temp_outputs[companion_name] = self._normalize_embedding_matrix(
+                                    companion_matrix,
+                                    companion_name,
                                 )
                                 companion_devices_used.add(companion_device)
 
