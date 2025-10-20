@@ -79,7 +79,7 @@ class EnhancedUltimateChunkerV3:
 
     def __init__(
         self,
-    embedding_model: str = DEFAULT_EMBEDDING_MODEL,
+        embedding_model: str = DEFAULT_EMBEDDING_MODEL,
         embedding_dimension: int = DEFAULT_EMBEDDING_DIMENSION,
         tokenizer_name: str = "cl100k_base",
         quality_thresholds: Optional[Dict[str, float]] = None,
