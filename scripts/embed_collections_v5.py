@@ -57,7 +57,7 @@ KAGGLE_DEFAULTS = {
     "model": "jina-code-embeddings-1.5b",  # Primary ensemble model
     "matryoshka_dim": 1024,  # Ensemble dimension (all models configured at 1024D)
     "enable_ensemble": True,  # Multi-model ensemble enabled by default
-    "ensemble_models": ["jina-code-embeddings-1.5b", "bge-m3"],
+    "ensemble_models": ["jina-code-embeddings-1.5b", "bge-m3", "qwen3-embedding-0.6b"],
     "skip_existing": True,
     "summary": "embedding_summary.json",
     "zip_output": True,
