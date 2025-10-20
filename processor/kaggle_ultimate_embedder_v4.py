@@ -818,7 +818,15 @@ class UltimateKaggleEmbedderV4:
                 logger.warning(f"Failed to generate embeddings with {model_name}: {e}")
         
         if not all_embeddings:
-            raise RuntimeError("No ensemble models generated embeddings successfully")
+            logger.error("No ensemble models generated embeddings successfully - falling back to primary model")
+            # Fallback to primary model only
+            primary_model = self._get_primary_model()
+            return primary_model.encode(
+                texts,
+                convert_to_numpy=True,
+                normalize_embeddings=True,
+                device=self.device
+            )
         
         # Aggregate embeddings
         if self.ensemble_config.aggregation_method == "weighted_average":
