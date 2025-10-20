@@ -1584,6 +1584,7 @@ class UltimateKaggleEmbedderV4:
                 current_device = target_device
                 current_batch_hint = batch_hint
                 pass_start = time.time()
+                embeddings: Optional[np.ndarray] = None
 
                 try:
                     if hasattr(model, "to"):
@@ -1689,7 +1690,7 @@ class UltimateKaggleEmbedderV4:
                         logger.warning("Sequential ensemble pass failed for %s: %s", model_name, message)
                         break
 
-                if not success:
+                if not success or embeddings is None:
                     self.failed_ensemble_models.add(model_name)
                     continue
 
