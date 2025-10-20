@@ -808,11 +808,18 @@ class UltimateKaggleEmbedderV4:
         
         if not self.enable_ensemble or not self.ensemble_config:
             # Fallback to primary model
+            logger.debug("Ensemble not enabled, using primary model only")
             primary_model = self._get_primary_model()
+            
+            # Log model type before unwrapping
+            logger.debug(f"Primary model type: {type(primary_model).__name__}")
+            logger.debug(f"Is DataParallel: {isinstance(primary_model, torch.nn.DataParallel)}")
+            
             # Handle DataParallel wrapper
-            if isinstance(primary_model, torch.nn.DataParallel):
-                primary_model = primary_model.module
-            return primary_model.encode(
+            encode_model = primary_model.module if isinstance(primary_model, torch.nn.DataParallel) else primary_model
+            logger.debug(f"Encode model type after unwrap: {type(encode_model).__name__}")
+            
+            return encode_model.encode(
                 texts,
                 convert_to_numpy=True,
                 normalize_embeddings=True,
@@ -855,9 +862,8 @@ class UltimateKaggleEmbedderV4:
             # Fallback to primary model only
             primary_model = self._get_primary_model()
             # Handle DataParallel wrapper
-            if isinstance(primary_model, torch.nn.DataParallel):
-                primary_model = primary_model.module
-            return primary_model.encode(
+            encode_model = primary_model.module if isinstance(primary_model, torch.nn.DataParallel) else primary_model
+            return encode_model.encode(
                 texts,
                 convert_to_numpy=True,
                 normalize_embeddings=True,
@@ -1786,13 +1792,21 @@ class UltimateKaggleEmbedderV4:
                 with autocast_ctx:
                     if self.enable_ensemble:
                         # Use ensemble of models
+                        logger.debug(f"Batch {batch_num}: Using ensemble mode")
                         batch_embeddings = self.generate_ensemble_embeddings(batch_texts)
                     elif self.primary_model is not None:
                         # Standard SentenceTransformer (unwrap DataParallel if needed)
+                        logger.debug(f"Batch {batch_num}: Using primary model")
                         primary_model = self._get_primary_model()
+                        
+                        # Log before unwrapping
+                        logger.debug(f"Primary model type: {type(primary_model).__name__}")
+                        
                         encode_model = primary_model.module if isinstance(primary_model, torch.nn.DataParallel) else primary_model
+                        logger.debug(f"Encode model type: {type(encode_model).__name__}")
                         
                         if hasattr(encode_model, 'encode'):
+                            logger.debug("Using encode() method")
                             batch_embeddings = encode_model.encode(
                                 batch_texts,
                                 batch_size=optimal_batch,
@@ -1803,9 +1817,11 @@ class UltimateKaggleEmbedderV4:
                             )
                         else:
                             # ONNX or other backend
+                            logger.debug("Using backend encoding")
                             batch_embeddings = self._encode_with_backend(batch_texts, optimal_batch)
                     else:
                         # ONNX or other backend
+                        logger.debug(f"Batch {batch_num}: Using backend")
                         batch_embeddings = self._encode_with_backend(batch_texts, optimal_batch)
 
                     for companion_name, companion_model in self.companion_models.items():
