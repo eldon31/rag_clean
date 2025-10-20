@@ -272,11 +272,20 @@ def main(argv: List[str]) -> int:
             print(f"  - GPU {i}: {torch.cuda.get_device_name(i)}")
     print()
 
+    print("Parsing command-line arguments...")
     args = _parse_args(argv)
+    print(f"✓ Arguments parsed")
+    
     chunks_root = Path(args.chunks_root).resolve()
     output_root = Path(args.output_root).resolve()
+    print(f"✓ Chunks root: {chunks_root}")
+    print(f"✓ Output root: {output_root}")
+    
+    print(f"Creating output directory...")
     output_root.mkdir(parents=True, exist_ok=True)
+    print(f"✓ Output directory ready")
 
+    print(f"\nResolving collections to process...")
     requested_collections = args.collections
     if requested_collections is None and IS_KAGGLE:
         requested_collections = KAGGLE_DEFAULTS["collections"]
@@ -297,15 +306,39 @@ def main(argv: List[str]) -> int:
                 LOGGER.warning("Failed to reuse collection names from %s", summary_file)
                 requested_collections = None
 
-    collections = _discover_collections(chunks_root, requested_collections)
+    print(f"Requested collections: {requested_collections}")
+    print(f"Discovering collections in {chunks_root}...")
+    
+    try:
+        collections = _discover_collections(chunks_root, requested_collections)
+        print(f"✓ Collection discovery complete")
+    except Exception as e:
+        print(f"✗ Collection discovery failed: {e}")
+        import traceback
+        traceback.print_exc()
+        return 1
+    
     if not collections:
         LOGGER.error("No collections found under %s", chunks_root)
+        print(f"✗ No collections found!")
+        print(f"   Chunks root exists: {chunks_root.exists()}")
+        if chunks_root.exists():
+            print(f"   Contents: {list(chunks_root.iterdir())[:10]}")
         return 1
 
     LOGGER.info("Found %d collection(s) to embed", len(collections))
+    print(f"✓ Found {len(collections)} collection(s):")
+    for col in collections:
+        print(f"   - {col.name}")
+    print()
 
     run_summaries: List[Dict[str, object]] = []
-    for collection_dir in collections:
+    print(f"Starting to process {len(collections)} collection(s)...\n")
+    
+    for idx, collection_dir in enumerate(collections, 1):
+        print(f"\n{'='*80}")
+        print(f"COLLECTION {idx}/{len(collections)}: {collection_dir.name}")
+        print(f"{'='*80}")
         LOGGER.info("Processing collection %s", collection_dir)
         export_dir = output_root / collection_dir.name
         if args.skip_existing and _have_existing_exports(export_dir):
@@ -318,6 +351,7 @@ def main(argv: List[str]) -> int:
             continue
 
         try:
+            print(f"Initializing embedder for {collection_dir.name}...")
             summary = _run_for_collection(
                 collection_dir=collection_dir,
                 export_dir=export_dir,
@@ -325,9 +359,14 @@ def main(argv: List[str]) -> int:
                 enable_ensemble=args.enable_ensemble,
                 zip_output=args.zip_output,
             )
+            print(f"✓ Collection {collection_dir.name} completed successfully")
             run_summaries.append(summary)
         except Exception as exc:  # pragma: no cover - defensive logging
+            print(f"✗ FAILED: Collection {collection_dir.name}")
+            print(f"   Error: {exc}")
             LOGGER.exception("Embedding failed for %s", collection_dir.name)
+            import traceback
+            traceback.print_exc()
             run_summaries.append({
                 "collection": collection_dir.name,
                 "status": "failed",
