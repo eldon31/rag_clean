@@ -921,7 +921,9 @@ class UltimateKaggleEmbedderV4:
         
         # Step 1: Generate query embedding
         primary_model = self._get_primary_model()
-        query_embedding = primary_model.encode(
+        # Handle DataParallel wrapper
+        encode_model = primary_model.module if isinstance(primary_model, torch.nn.DataParallel) else primary_model
+        query_embedding = encode_model.encode(
             [query],
             convert_to_numpy=True,
             normalize_embeddings=True,
@@ -982,7 +984,9 @@ class UltimateKaggleEmbedderV4:
         """Fallback search using only embedding similarity"""
         
         primary_model = self._get_primary_model()
-        query_embedding = primary_model.encode(
+        # Handle DataParallel wrapper
+        encode_model = primary_model.module if isinstance(primary_model, torch.nn.DataParallel) else primary_model
+        query_embedding = encode_model.encode(
             [query],
             convert_to_numpy=True,
             normalize_embeddings=True,
@@ -1783,24 +1787,32 @@ class UltimateKaggleEmbedderV4:
                     if self.enable_ensemble:
                         # Use ensemble of models
                         batch_embeddings = self.generate_ensemble_embeddings(batch_texts)
-                    elif self.primary_model is not None and hasattr(self.primary_model, 'encode'):
-                        # Standard SentenceTransformer
+                    elif self.primary_model is not None:
+                        # Standard SentenceTransformer (unwrap DataParallel if needed)
                         primary_model = self._get_primary_model()
-                        batch_embeddings = primary_model.encode(
-                            batch_texts,
-                            batch_size=optimal_batch,
-                            show_progress_bar=False,  # Reduce log spam
-                            convert_to_numpy=True,
-                            normalize_embeddings=True,
-                            device=self.device
-                        )
+                        encode_model = primary_model.module if isinstance(primary_model, torch.nn.DataParallel) else primary_model
+                        
+                        if hasattr(encode_model, 'encode'):
+                            batch_embeddings = encode_model.encode(
+                                batch_texts,
+                                batch_size=optimal_batch,
+                                show_progress_bar=False,  # Reduce log spam
+                                convert_to_numpy=True,
+                                normalize_embeddings=True,
+                                device=self.device
+                            )
+                        else:
+                            # ONNX or other backend
+                            batch_embeddings = self._encode_with_backend(batch_texts, optimal_batch)
                     else:
                         # ONNX or other backend
                         batch_embeddings = self._encode_with_backend(batch_texts, optimal_batch)
 
                     for companion_name, companion_model in self.companion_models.items():
                         comp_batch_size = self.companion_batch_sizes.get(companion_name, optimal_batch)
-                        companion_outputs[companion_name] = companion_model.encode(
+                        # Handle DataParallel wrapper
+                        encode_companion = companion_model.module if isinstance(companion_model, torch.nn.DataParallel) else companion_model
+                        companion_outputs[companion_name] = encode_companion.encode(
                             batch_texts,
                             batch_size=comp_batch_size,
                             show_progress_bar=False,
@@ -1965,11 +1977,14 @@ class UltimateKaggleEmbedderV4:
             raise RuntimeError("No backend model loaded")
         
         # Check if model has encode method (ONNX models from optimum)
-        if hasattr(self.primary_model, 'encode'):
+        # Handle DataParallel wrapper if present
+        encode_model = self.primary_model.module if isinstance(self.primary_model, torch.nn.DataParallel) else self.primary_model
+        
+        if hasattr(encode_model, 'encode'):
             try:
                 logger.debug(f"Encoding {len(texts)} texts with ONNX backend (batch_size={batch_size})")
                 
-                embeddings = self.primary_model.encode(
+                embeddings = encode_model.encode(
                     texts,
                     batch_size=batch_size,
                     show_progress_bar=False,
