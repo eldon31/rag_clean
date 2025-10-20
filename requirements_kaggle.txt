@@ -1,0 +1,26 @@
+# Ultimate Kaggle Embedder V4 Requirements
+# Protobuf compatibility fix for TensorFlow/ONNX/Optimum
+
+# CRITICAL: Protobuf version must be < 4.0 to avoid MessageFactory.GetPrototype errors
+protobuf>=3.20.0,<4.0.0
+
+# Core ML Libraries
+sentence-transformers>=2.2.0
+torch>=2.0.0
+numpy>=1.21.0
+scikit-learn>=1.0.0
+faiss-cpu>=1.7.0  # Use faiss-gpu if GPU available
+
+# Optional: ONNX Runtime (for backend optimization)
+onnxruntime-gpu>=1.15.0  # Use onnxruntime for CPU-only
+optimum[onnxruntime]>=1.12.0
+
+# Utilities
+requests>=2.28.0
+psutil>=5.9.0
+tqdm>=4.65.0
+
+# Note: Install only ONE version of optimum to avoid conflicts
+# If you see "Multiple distributions found for package optimum", run:
+#   pip uninstall optimum optimum-onnx -y
+#   pip install optimum[onnxruntime]

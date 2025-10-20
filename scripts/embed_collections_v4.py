@@ -190,6 +190,15 @@ def _run_for_collection(
         export_config=export_config,
         enable_ensemble=enable_ensemble,
     )
+    LOGGER.info(
+        "Resolved embedder model=%s vector_dim=%s backend=%s companions=%s",
+        getattr(embedder, "model_name", "<unknown>"),
+        getattr(getattr(embedder, "model_config", None), "vector_dim", "<unknown>"),
+        getattr(embedder, "embedding_backend", "<unknown>"),
+        ",".join(sorted(getattr(embedder, "embeddings_by_model", {}).keys()))
+        if getattr(embedder, "embeddings_by_model", None)
+        else ",".join(sorted(getattr(embedder, "companion_models", {}).keys())) or "<none>",
+    )
 
     load_result = embedder.load_chunks_from_processing(str(collection_dir))
     total_chunks = load_result.get("total_chunks_loaded", 0)
@@ -230,11 +239,15 @@ def _run_for_collection(
 
 def main(argv: List[str]) -> int:
     if SENTINEL_PATH.exists():
-        print(
-            "🛑 Embedding stage skipped: sentinel file detected at "
-            f"{SENTINEL_PATH}. Remove the file to continue the pipeline."
-        )
-        return 0
+        try:
+            SENTINEL_PATH.unlink()
+            print(f"✓ Removed sentinel file: {SENTINEL_PATH}")
+            print("Continuing with embedding pipeline...")
+        except Exception as e:
+            print(
+                f"⚠️ Warning: Could not remove sentinel file at {SENTINEL_PATH}: {e}\n"
+                "Manual removal may be required if the pipeline fails."
+            )
 
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
 

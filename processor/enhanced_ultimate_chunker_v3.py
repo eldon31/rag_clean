@@ -1293,3 +1293,4 @@ if __name__ == "__main__":  # pragma: no cover - manual smoke test
     chunker = EnhancedUltimateChunkerV3()
     print("Available strategies:", list(chunker.chunking_strategies.keys()))
     print("Quality thresholds:", chunker.quality_thresholds)
+

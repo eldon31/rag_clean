@@ -22,6 +22,16 @@ PERFORMANCE TARGET:
 """
 
 import os
+import sys
+
+# ============================================================================
+# CRITICAL: Set environment variables BEFORE any other imports
+# ============================================================================
+
+# Fix protobuf compatibility issues (protobuf 4.x vs 3.x API breaking changes)
+# This must be set before importing TensorFlow, ONNX, or any library that uses protobuf
+os.environ.setdefault("PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION", "python")
+
 
 # Force JAX/TensorFlow to remain on CPU so Kaggle doesn't crash when both stacks register CUDA plugins.
 os.environ.setdefault("JAX_PLATFORMS", "cpu")
@@ -535,6 +545,8 @@ class UltimateKaggleEmbedderV4:
         
         self.model_config = KAGGLE_OPTIMIZED_MODELS[model_name]
         self.model_name = model_name
+        logger.info(f"Selected model: {self.model_config.name} ({self.model_config.vector_dim}D)")
+        logger.info(f"Embedding backend: {self.embedding_backend}")
         logger.info(f"Selected model: {self.model_config.name} ({self.model_config.vector_dim}D)")
 
         # Configuration
