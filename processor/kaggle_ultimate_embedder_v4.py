@@ -41,6 +41,7 @@ os.environ.setdefault("XLA_PYTHON_CLIENT_PREALLOCATE", "false")
 
 import json
 import logging
+import math
 import numpy as np
 import pickle
 import torch
@@ -48,7 +49,7 @@ import gc
 import warnings
 from contextlib import nullcontext
 from pathlib import Path
-from typing import Dict, List, Any, Optional, Tuple, Union, Set
+from typing import Dict, List, Any, Optional, Tuple, Union, Set, Type, cast
 from datetime import datetime
 from collections import defaultdict, Counter
 import time
@@ -58,7 +59,11 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 import threading
 import hashlib
 from functools import lru_cache
+import math
 import textwrap
+
+from huggingface_hub import LocalEntryNotFoundError, snapshot_download
+LocalEntryNotFoundErrorType = cast(Type[Exception], LocalEntryNotFoundError)
 
 # Core ML libraries
 from sentence_transformers import SentenceTransformer, CrossEncoder
@@ -292,17 +297,22 @@ class EnsembleConfig:
     """Multi-model ensemble configuration"""
     # Ensemble models: Both support 1024D (Jina Code via Matryoshka, Jina V4 native)
     ensemble_models: List[str] = field(default_factory=lambda: ["jina-code-embeddings-1.5b", "jina-embeddings-v4"])
-    
+
     # Ensemble weighting strategy
     weighting_strategy: str = "equal"  # equal, performance_based, adaptive
     model_weights: Optional[Dict[str, float]] = None
-    
+
     # Ensemble aggregation
     aggregation_method: str = "weighted_average"  # weighted_average, max_pooling, concat
-    
+
     # Performance optimization
     parallel_encoding: bool = True
     memory_efficient: bool = True
+
+    # Sequential execution toggles
+    sequential_passes: bool = False
+    sequential_data_parallel: bool = True
+    preferred_devices: Optional[List[str]] = None
 
 @dataclass
 class RerankingConfig:
@@ -386,6 +396,153 @@ class AdvancedTextCache:
             "memory_mb": len(str(self.cache).encode('utf-8')) / 1024 / 1024
         }
 
+
+@dataclass
+class GPUMemorySnapshot:
+    """Point-in-time view of GPU memory usage."""
+
+    device_id: int
+    total_bytes: int
+    free_bytes: int
+    allocated_bytes: int
+    reserved_bytes: int
+    timestamp: float = field(default_factory=time.time)
+
+    @property
+    def used_bytes(self) -> int:
+        return self.total_bytes - self.free_bytes
+
+    @property
+    def utilization_ratio(self) -> float:
+        return self.used_bytes / max(1, self.total_bytes)
+
+    @property
+    def free_gb(self) -> float:
+        return self.free_bytes / (1024 ** 3)
+
+    @property
+    def total_gb(self) -> float:
+        return self.total_bytes / (1024 ** 3)
+
+    def to_dict(self, soft_limit_bytes: Optional[int] = None) -> Dict[str, Any]:
+        payload: Dict[str, Any] = {
+            "device_id": self.device_id,
+            "total_gb": round(self.total_gb, 2),
+            "free_gb": round(self.free_gb, 2),
+            "allocated_gb": round(self.allocated_bytes / (1024 ** 3), 2),
+            "reserved_gb": round(self.reserved_bytes / (1024 ** 3), 2),
+            "utilization": round(self.utilization_ratio, 3),
+            "timestamp": self.timestamp,
+        }
+        if soft_limit_bytes is not None:
+            payload["below_soft_limit"] = self.allocated_bytes >= soft_limit_bytes
+        return payload
+
+
+class AdaptiveBatchController:
+    """Heuristics for adjusting batch sizes during embedding generation."""
+
+    def __init__(
+        self,
+        primary_batch: int,
+        device_count: int,
+        gpu0_soft_limit_bytes: int,
+        companion_enabled: bool,
+    ) -> None:
+        self.device_count = max(1, device_count)
+        self.gpu0_soft_limit_bytes = max(0, gpu0_soft_limit_bytes)
+        self.primary_batch = max(1, primary_batch)
+        self.companion_enabled = companion_enabled
+        self._oom_events = 0
+        self._updates = 0
+        self.total_batch = self._calculate_total_batch()
+
+    def _calculate_total_batch(self) -> int:
+        multiplier = max(1, self.device_count)
+        return max(1, self.primary_batch * multiplier)
+
+    def _apply_reduction(self, factor: float) -> bool:
+        new_batch = max(1, int(self.primary_batch * factor))
+        if new_batch < self.primary_batch:
+            self.primary_batch = new_batch
+            self.total_batch = self._calculate_total_batch()
+            self._updates += 1
+            return True
+        return False
+
+    def register_oom(self, companion_active: bool) -> Optional[Dict[str, Any]]:
+        """Handle CUDA out-of-memory by shrinking batch sizes or disabling companions."""
+
+        self._oom_events += 1
+
+        if self.primary_batch > 1:
+            self.primary_batch = max(1, self.primary_batch // 2)
+            self.total_batch = self._calculate_total_batch()
+            return {
+                "type": "adaptive_batch_reduce_after_oom",
+                "primary_batch": self.primary_batch,
+                "total_batch": self.total_batch,
+                "oom_events": self._oom_events,
+                "companion_disabled": False,
+            }
+
+        if companion_active and self.companion_enabled:
+            self.companion_enabled = False
+            self.total_batch = self._calculate_total_batch()
+            return {
+                "type": "adaptive_companion_disabled_after_oom",
+                "primary_batch": self.primary_batch,
+                "total_batch": self.total_batch,
+                "oom_events": self._oom_events,
+                "companion_disabled": True,
+            }
+
+        return None
+
+    def register_snapshot(self, snapshots: Dict[int, GPUMemorySnapshot]) -> Optional[Dict[str, Any]]:
+        """Adjust batch sizes when telemetry indicates memory pressure."""
+
+        if not snapshots:
+            return None
+
+        primary_snapshot = snapshots.get(0)
+        if primary_snapshot is None:
+            return None
+
+        free_threshold = max(0, primary_snapshot.total_bytes - self.gpu0_soft_limit_bytes)
+        low_memory = (
+            primary_snapshot.allocated_bytes >= self.gpu0_soft_limit_bytes
+            or primary_snapshot.free_bytes <= free_threshold
+        )
+
+        if low_memory:
+            if self._apply_reduction(0.75):
+                return {
+                    "type": "adaptive_batch_reduce_after_snapshot",
+                    "primary_batch": self.primary_batch,
+                    "total_batch": self.total_batch,
+                    "reserved_bytes": primary_snapshot.reserved_bytes,
+                    "allocated_bytes": primary_snapshot.allocated_bytes,
+                    "free_bytes": primary_snapshot.free_bytes,
+                    "companion_disabled": False,
+                }
+
+            if self.companion_enabled:
+                self.companion_enabled = False
+                self.total_batch = self._calculate_total_batch()
+                return {
+                    "type": "adaptive_companion_disabled_after_snapshot",
+                    "primary_batch": self.primary_batch,
+                    "total_batch": self.total_batch,
+                    "reserved_bytes": primary_snapshot.reserved_bytes,
+                    "allocated_bytes": primary_snapshot.allocated_bytes,
+                    "free_bytes": primary_snapshot.free_bytes,
+                    "companion_disabled": True,
+                }
+
+        return None
+
+
 class UltimateKaggleEmbedderV4:
     """
     Ultimate Kaggle Embedder V4 - Split Architecture Optimized
@@ -418,6 +575,10 @@ class UltimateKaggleEmbedderV4:
         sparse_models: Optional[List[str]] = None,  # V5: Sparse model names
         matryoshka_dim: Optional[int] = None,  # V5: Matryoshka dimension
         local_files_only: bool = False,
+        force_cpu: bool = False,
+        hf_cache_dir: Optional[Union[str, Path]] = None,
+        refresh_cache: bool = False,
+        gpu0_soft_limit_gb: float = 12.0,
     ):
         """Initialize Ultimate Kaggle Embedder V4"""
 
@@ -431,7 +592,20 @@ class UltimateKaggleEmbedderV4:
         self.model_config = KAGGLE_OPTIMIZED_MODELS[model_name]
         self.model_name = model_name
         logger.info(f"Selected model: {self.model_config.name} ({self.model_config.vector_dim}D)")
-        self.local_files_only = local_files_only
+
+        self.local_files_only = local_files_only or os.environ.get("HF_HUB_OFFLINE") == "1"
+        self.force_cpu = bool(force_cpu or os.environ.get("EMBEDDER_FORCE_CPU") == "1")
+        self.force_cache_refresh = bool(refresh_cache or os.environ.get("EMBEDDER_REFRESH_CACHE") == "1")
+        self.gpu0_soft_limit_bytes = int(max(1.0, gpu0_soft_limit_gb) * (1024 ** 3))
+
+        default_cache_root = Path(os.environ.get("HF_HOME", "~/.cache/huggingface")).expanduser()
+        specified_cache_root = Path(hf_cache_dir).expanduser() if hf_cache_dir else default_cache_root
+        self.hf_cache_root = specified_cache_root
+        self.hf_cache_root.mkdir(parents=True, exist_ok=True)
+        os.environ.setdefault("HF_HOME", str(self.hf_cache_root))
+        self.hf_cache_dir = self.hf_cache_root / "hub"
+        self.hf_cache_dir.mkdir(parents=True, exist_ok=True)
+
         if self.local_files_only:
             os.environ.setdefault("HF_HUB_OFFLINE", "1")
             os.environ.setdefault("TRANSFORMERS_OFFLINE", "1")
@@ -497,6 +671,10 @@ class UltimateKaggleEmbedderV4:
         
         # GPU setup with CPU fallback for local runs
         self.device_count = torch.cuda.device_count()
+        if self.force_cpu:
+            logger.warning("Force CPU flag set; overriding GPU detection")
+            self.device_count = 0
+
         if self.device_count == 0:
             logger.warning(
                 "No GPU detected; falling back to CPU mode. Embedding will be significantly slower."
@@ -534,6 +712,53 @@ class UltimateKaggleEmbedderV4:
         self.companion_models: Dict[str, SentenceTransformer] = {}
         self.companion_model_configs: Dict[str, ModelConfig] = {}
         self.companion_batch_sizes: Dict[str, int] = {}
+        self.companion_device_map: Dict[str, str] = {}
+
+        # Telemetry & adaptive batching
+        self.mitigation_events: List[Dict[str, Any]] = []
+        self.cache_events: List[Dict[str, Any]] = []
+        self.adaptive_controller: Optional[AdaptiveBatchController] = None
+        self.gpu_snapshot_history: List[Dict[str, Any]] = []
+        self.latest_gpu_snapshots: Dict[int, GPUMemorySnapshot] = {}
+        self.gradient_checkpoint_evaluated: bool = False
+
+        # Sequential ensemble preferences
+        self.sequential_device_order: List[str] = []
+        if self.device == "cuda":
+            if self.device_count > 1:
+                self.sequential_device_order = [f"cuda:{idx}" for idx in range(self.device_count - 1, -1, -1)]
+            else:
+                self.sequential_device_order = ["cuda:0"]
+        self.sequential_device_order.append("cpu")
+
+        sequential_env = os.environ.get("EMBEDDER_SEQUENTIAL_ENSEMBLE")
+        if sequential_env is not None:
+            sequential_enabled = sequential_env.strip().lower() in {"1", "true", "yes", "on"}
+            if sequential_enabled and not self.ensemble_config:
+                self.enable_ensemble = True
+                self.ensemble_config = EnsembleConfig(sequential_passes=True)
+            elif self.ensemble_config:
+                self.ensemble_config.sequential_passes = sequential_enabled
+
+        if self.ensemble_config:
+            device_override = os.environ.get("EMBEDDER_SEQUENTIAL_DEVICES")
+            if device_override:
+                preferred = [d.strip() for d in device_override.split(",") if d.strip()]
+                if preferred:
+                    self.ensemble_config.preferred_devices = preferred
+            if self.ensemble_config.preferred_devices:
+                unique_order: List[str] = []
+                for device_candidate in self.ensemble_config.preferred_devices:
+                    if device_candidate and device_candidate not in unique_order:
+                        unique_order.append(device_candidate)
+                for fallback in self.sequential_device_order:
+                    if fallback not in unique_order:
+                        unique_order.append(fallback)
+                self.sequential_device_order = unique_order
+
+        sequential_dp_env = os.environ.get("EMBEDDER_SEQUENTIAL_DATA_PARALLEL")
+        if sequential_dp_env and self.ensemble_config:
+            self.ensemble_config.sequential_data_parallel = sequential_dp_env.strip().lower() in {"1", "true", "yes", "on"}
 
         self._initialize_embedding_models()
         self._initialize_companion_models()
@@ -588,17 +813,305 @@ class UltimateKaggleEmbedderV4:
         logger.info("Ultimate Kaggle Embedder V4 initialized successfully")
         logger.info("="*70)
     
-    def _get_primary_model(self) -> Any:
-        """Return the primary encoder, ensuring it is initialized."""
-        if self.primary_model is None:
-            raise RuntimeError("Primary embedding model is not initialized")
-        return self.primary_model
+    def _get_primary_model(self) -> SentenceTransformer:
+        """Return the primary SentenceTransformer model, ensuring it is loaded."""
+
+        if self.primary_model is not None:
+            return self.primary_model
+
+        if self.models:
+            fallback = self.models.get(self.model_name) or next(iter(self.models.values()))
+            self.primary_model = cast(SentenceTransformer, fallback)
+            logger.debug("Primary model fallback resolved to %s", type(fallback).__name__)
+            return self.primary_model
+
+        raise RuntimeError("Primary embedding model is not initialized")
 
     def _require_embeddings(self) -> np.ndarray:
         """Return embeddings array, raising if it has not been generated."""
         if self.embeddings is None:
             raise RuntimeError("Embeddings have not been generated yet")
         return self.embeddings
+
+    def _record_mitigation(self, event_type: str, **details: Any) -> None:
+        """Track mitigation events for telemetry and diagnostics."""
+
+        record = {"type": event_type, "timestamp": time.time(), **details}
+        self.mitigation_events.append(record)
+        logger.info("Mitigation event captured: %s", record)
+
+    def _ensure_model_snapshot(self, repo_id: str) -> Path:
+        """Ensure the Hugging Face snapshot for a model is cached locally."""
+
+        repo_cache_dir = self.hf_cache_dir / f"models--{repo_id.replace('/', '--')}"
+        if repo_cache_dir.exists() and not self.force_cache_refresh:
+            snapshot_root = next(repo_cache_dir.glob("snapshots/*"), repo_cache_dir)
+            event = {
+                "model_id": repo_id,
+                "path": str(snapshot_root),
+                "status": "cache_hit",
+            }
+            self.cache_events.append(event)
+            logger.debug("Cache hit for %s at %s", repo_id, snapshot_root)
+            return snapshot_root
+
+        try:
+            snapshot_path = snapshot_download(
+                repo_id=repo_id,
+                cache_dir=str(self.hf_cache_dir),
+                local_files_only=self.local_files_only,
+                resume_download=not self.force_cache_refresh,
+                force_download=self.force_cache_refresh and not self.local_files_only,
+            )
+        except Exception as exc:  # pragma: no cover - defensive logging
+            if isinstance(exc, LocalEntryNotFoundErrorType):
+                message = (
+                    f"Model {repo_id} not present in local cache and offline mode is enabled."
+                )
+                logger.error(message)
+                raise FileNotFoundError(message) from exc
+
+            logger.error("Snapshot download failed for %s: %s", repo_id, exc)
+            raise
+
+        event = {
+            "model_id": repo_id,
+            "path": snapshot_path,
+            "status": "downloaded" if not self.force_cache_refresh else "refreshed",
+        }
+        self.cache_events.append(event)
+        logger.info("Cache ready for %s -> %s", repo_id, snapshot_path)
+        return Path(snapshot_path)
+
+    def _build_sentence_transformer_kwargs(
+        self,
+        device: Optional[str] = None,
+        **overrides: Any,
+    ) -> Dict[str, Any]:
+        """Construct keyword arguments for SentenceTransformer initialization."""
+
+        kwargs: Dict[str, Any] = {
+            "device": device or self.device,
+            "cache_folder": str(self.hf_cache_dir),
+        }
+        if self.local_files_only:
+            kwargs["local_files_only"] = True
+        kwargs.update(overrides)
+        return kwargs
+
+    def _unwrap_model(self, model: Any) -> Any:
+        """Unwrap DataParallel/compiled wrappers to expose encode()."""
+
+        current = model
+        visited: Set[int] = set()
+
+        while True:
+            visited.add(id(current))
+            if hasattr(current, "encode") and callable(getattr(current, "encode")):
+                return current
+
+            candidate = None
+            if hasattr(current, "module") and id(getattr(current, "module")) not in visited:
+                candidate = getattr(current, "module")
+            elif hasattr(current, "_orig_mod") and id(getattr(current, "_orig_mod")) not in visited:
+                candidate = getattr(current, "_orig_mod")
+            elif hasattr(current, "model") and id(getattr(current, "model")) not in visited:
+                candidate = getattr(current, "model")
+            elif hasattr(current, "_model") and id(getattr(current, "_model")) not in visited:
+                candidate = getattr(current, "_model")
+
+            if candidate is None:
+                return current
+
+            current = candidate
+    
+    def _call_encode(
+        self,
+        model: Any,
+        texts: List[str],
+        batch_size: int,
+        device: str,
+    ) -> np.ndarray:
+        """Invoke encode() against SentenceTransformer or compatible wrappers."""
+
+        encode_callable = getattr(model, "encode", None)
+        if encode_callable is None and hasattr(model, "module"):
+            encode_callable = getattr(model.module, "encode", None)
+
+        if encode_callable is None:
+            base_model = self._unwrap_model(model)
+            encode_callable = getattr(base_model, "encode", None)
+
+        if encode_callable is None:
+            raise AttributeError(f"Model {type(model).__name__} does not expose encode()")
+
+        return encode_callable(
+            texts,
+            batch_size=batch_size,
+            show_progress_bar=False,
+            convert_to_numpy=True,
+            normalize_embeddings=True,
+            device=device,
+        )
+
+    def _get_batch_hint_for_model(self, model_name: str) -> int:
+        if model_name == self.model_name:
+            model_config = self.model_config
+        else:
+            model_config = KAGGLE_OPTIMIZED_MODELS.get(model_name, None)
+
+        if model_config is not None:
+            hint = self.gpu_config.get_optimal_batch_size(model_config)
+        else:
+            hint = self.gpu_config.base_batch_size
+
+        if self.device == "cpu":
+            hint = max(1, min(hint, 8))
+        return max(1, hint)
+
+    def _select_sequential_device(self, model_name: str) -> str:
+        if self.device != "cuda":
+            return "cpu"
+
+        if self.ensemble_config and self.ensemble_config.preferred_devices:
+            candidates = self.ensemble_config.preferred_devices
+        else:
+            candidates = self.sequential_device_order
+
+        for candidate in candidates:
+            if candidate.startswith("cuda"):
+                try:
+                    index = int(candidate.split(":")[1]) if ":" in candidate else 0
+                except ValueError:
+                    continue
+                if index < self.device_count:
+                    return candidate
+            elif candidate == "cpu":
+                return "cpu"
+
+        return "cuda:0" if self.device_count > 0 else "cpu"
+
+    def _get_or_load_ensemble_model(self, model_name: str) -> Any:
+        if model_name == self.model_name:
+            return self._get_primary_model()
+
+        cached = self.models.get(model_name)
+        if cached is not None:
+            return cached
+
+        config = KAGGLE_OPTIMIZED_MODELS.get(model_name)
+        if config is None:
+            raise KeyError(f"Unknown ensemble model '{model_name}'")
+
+        self._ensure_model_snapshot(config.hf_model_id)
+        kwargs = self._build_sentence_transformer_kwargs(device="cpu")
+        kwargs["trust_remote_code"] = config.trust_remote_code
+        model = SentenceTransformer(config.hf_model_id, **kwargs)
+
+        if self.gpu_config.precision == "fp16" and self.device == "cuda":
+            model = model.half()
+
+        if (
+            self.ensemble_config
+            and self.ensemble_config.sequential_data_parallel
+            and self.device == "cuda"
+            and self.device_count > 1
+            and not isinstance(model, torch.nn.DataParallel)
+        ):
+            try:
+                model = torch.nn.DataParallel(model)
+                self._record_mitigation("ensemble_data_parallel_wrapped", model=model_name)
+            except Exception as exc:
+                logger.warning("Failed to wrap %s with DataParallel: %s", model_name, exc)
+
+        self.models[model_name] = model
+        return model
+
+    def _record_gpu_snapshot(self, snapshots: Dict[int, GPUMemorySnapshot]) -> None:
+        if not snapshots:
+            return
+
+        limit_gb = self.gpu0_soft_limit_bytes / (1024 ** 3)
+        snapshot_payload = {
+            "timestamp": time.time(),
+            "soft_limit_gb": round(limit_gb, 2),
+            "devices": {device: snap.to_dict(self.gpu0_soft_limit_bytes if device == 0 else None) for device, snap in snapshots.items()},
+        }
+        snapshot_payload["low_memory_devices"] = [
+            device
+            for device, snap in snapshots.items()
+            if (device == 0 and snap.allocated_bytes >= self.gpu0_soft_limit_bytes)
+        ]
+
+        self.gpu_snapshot_history.append(snapshot_payload)
+        # Keep last 50 snapshots to bound memory usage
+        if len(self.gpu_snapshot_history) > 50:
+            self.gpu_snapshot_history = self.gpu_snapshot_history[-50:]
+
+        self.latest_gpu_snapshots = snapshots
+
+    def _deactivate_companions(self, target_names: Optional[List[str]] = None) -> None:
+        names = target_names or list(self.companion_models.keys())
+        for companion_name in names:
+            model = self.companion_models.get(companion_name)
+            if model is None:
+                continue
+            device = self.companion_device_map.get(companion_name)
+            if device and device.startswith("cuda"):
+                try:
+                    model = model.to("cpu") if hasattr(model, "to") else model
+                    self.companion_models[companion_name] = model
+                    self.companion_device_map[companion_name] = "cpu"
+                    torch.cuda.empty_cache()
+                    self._record_mitigation("companion_cpu_fallback", companion=companion_name)
+                except Exception as exc:
+                    logger.warning("Failed to move companion %s to CPU: %s", companion_name, exc)
+        gc.collect()
+
+    def _summarize_gpu_history(self) -> Dict[str, Any]:
+        if not self.gpu_snapshot_history:
+            return {}
+
+        latest = self.gpu_snapshot_history[-1]
+        peak_alloc_gb = 0.0
+        peak_device = None
+        for device_id, snapshot in latest["devices"].items():
+            allocated = snapshot.get("allocated_gb", 0.0)
+            if allocated > peak_alloc_gb:
+                peak_alloc_gb = allocated
+                peak_device = device_id
+
+        return {
+            "latest": latest,
+            "peak_device": peak_device,
+            "peak_allocated_gb": round(peak_alloc_gb, 2),
+            "events_recorded": len(self.gpu_snapshot_history),
+        }
+
+    def _maybe_enable_transformer_checkpointing(self, model: SentenceTransformer) -> None:
+        """Enable gradient checkpointing when supported and requested."""
+
+        if not self.gpu_config.gradient_checkpointing:
+            return
+
+        target = None
+        if hasattr(model, "model"):
+            target = model.model
+        elif hasattr(model, "_model"):
+            target = model._model
+
+        if target is None:
+            return
+
+        try:
+            if hasattr(target, "gradient_checkpointing_enable"):
+                target.gradient_checkpointing_enable()  # type: ignore[attr-defined]
+                self._record_mitigation(
+                    "gradient_checkpointing_enabled",
+                    model=getattr(model, "name_or_path", self.model_name),
+                )
+        except Exception as exc:  # pragma: no cover - defensive logging
+            logger.debug("Gradient checkpointing enable failed: %s", exc)
 
     def _log_gpu_memory(self, label: str, level: int = logging.INFO) -> None:
         """Emit per-device CUDA memory statistics for diagnostics."""
@@ -621,6 +1134,35 @@ class UltimateKaggleEmbedderV4:
 
         logger.log(level, f"[GPU-MEM] {label}: " + " | ".join(stats))
 
+    def _collect_gpu_snapshots(self) -> Dict[int, GPUMemorySnapshot]:
+        """Capture current GPU memory telemetry for adaptive batching."""
+
+        if self.device != "cuda" or not torch.cuda.is_available():
+            return {}
+
+        snapshots: Dict[int, GPUMemorySnapshot] = {}
+
+        for device_id in range(self.device_count):
+            try:
+                free_bytes, total_bytes = torch.cuda.mem_get_info(device_id)
+            except RuntimeError:
+                total_bytes = torch.cuda.get_device_properties(device_id).total_memory
+                free_bytes = max(0, total_bytes - torch.cuda.memory_allocated(device_id))
+
+            allocated_bytes = torch.cuda.memory_allocated(device_id)
+            reserved_bytes = torch.cuda.memory_reserved(device_id)
+
+            snapshots[device_id] = GPUMemorySnapshot(
+                device_id=device_id,
+                total_bytes=int(total_bytes),
+                free_bytes=int(free_bytes),
+                allocated_bytes=int(allocated_bytes),
+                reserved_bytes=int(reserved_bytes),
+            )
+
+        self._record_gpu_snapshot(snapshots)
+        return snapshots
+
     def _get_model_primary_dtype(self, model: Any) -> Optional[torch.dtype]:
         """Return dtype of the first parameter of a torch model, if available."""
         if not hasattr(model, "parameters"):
@@ -631,53 +1173,6 @@ class UltimateKaggleEmbedderV4:
             return None
         return getattr(first_param, "dtype", None)
         
-    def _unwrap_model(self, model: Any) -> Any:
-        """
-        Unwrap torch.compile and DataParallel wrappers to get the base model.
-        
-        This handles the nested wrapper structure:
-        torch.compile(DataParallel(SentenceTransformer)) -> SentenceTransformer
-        
-        Args:
-            model: Potentially wrapped model
-            
-        Returns:
-            Base model with encode() method
-        """
-        original_type = type(model).__name__
-        wrapper_layers = []
-        
-        # First unwrap torch.compile if present (has _orig_mod attribute)
-        if hasattr(model, '_orig_mod'):
-            wrapper_layers.append("torch.compile")
-            logger.info(f"🔧 Unwrapping torch.compile wrapper (type: {type(model).__name__})")
-            model = model._orig_mod
-            logger.info(f"   → After torch.compile unwrap: {type(model).__name__}")
-        
-        # Then unwrap DataParallel if present
-        if isinstance(model, torch.nn.DataParallel):
-            wrapper_layers.append("DataParallel")
-            logger.info(f"🔧 Unwrapping DataParallel wrapper")
-            logger.info(f"   → DataParallel devices: {model.device_ids if hasattr(model, 'device_ids') else 'unknown'}")
-            model = model.module
-            logger.info(f"   → After DataParallel unwrap: {type(model).__name__}")
-        
-        final_type = type(model).__name__
-        
-        # Verify the unwrapped model has encode method
-        has_encode = hasattr(model, 'encode')
-        logger.info(f"✅ Model unwrapping complete:")
-        logger.info(f"   → Original: {original_type}")
-        logger.info(f"   → Wrappers removed: {wrapper_layers if wrapper_layers else ['None']}")
-        logger.info(f"   → Final: {final_type}")
-        logger.info(f"   → Has encode(): {has_encode}")
-        
-        if not has_encode:
-            logger.error(f"❌ WARNING: Unwrapped model ({final_type}) does not have encode() method!")
-            logger.error(f"   Available methods: {[m for m in dir(model) if not m.startswith('_')][:10]}")
-        
-        return model
-
     def _initialize_embedding_models(self):
         """Initialize embedding models with advanced optimization"""
 
@@ -688,10 +1183,8 @@ class UltimateKaggleEmbedderV4:
         logger.info(f"Optimal batch size: {optimal_batch}")
 
         # Model loading configuration
-        model_kwargs = {
-            "trust_remote_code": self.model_config.trust_remote_code,
-            "device": self.device
-        }
+        model_kwargs = self._build_sentence_transformer_kwargs()
+        model_kwargs["trust_remote_code"] = self.model_config.trust_remote_code
         
         # Precision optimization for T4
         if self.gpu_config.precision == "fp16" and self.device == "cuda":
@@ -714,6 +1207,12 @@ class UltimateKaggleEmbedderV4:
             except Exception as e:
                 logger.debug(f"Flash Attention check failed: {e}")
         
+        # Ensure model artifacts are available locally
+        try:
+            self._ensure_model_snapshot(self.model_config.hf_model_id)
+        except Exception as exc:
+            logger.warning("Snapshot preparation failed for %s: %s", self.model_config.hf_model_id, exc)
+
         # Backend optimization
         if self.gpu_config.backend == "onnx" and ONNX_AVAILABLE:
             logger.info("Attempting ONNX backend optimization...")
@@ -725,6 +1224,9 @@ class UltimateKaggleEmbedderV4:
                 self.primary_model = self._load_pytorch_model(model_kwargs, optimal_batch)
         else:
             self.primary_model = self._load_pytorch_model(model_kwargs, optimal_batch)
+
+        if isinstance(self.primary_model, SentenceTransformer):
+            self._maybe_enable_transformer_checkpointing(self.primary_model)
         
         # Store for ensemble if needed
         self.models[self.model_name] = self.primary_model
@@ -759,25 +1261,47 @@ class UltimateKaggleEmbedderV4:
 
             try:
                 logger.info("Loading companion dense model: %s (%sD)", config.hf_model_id, config.vector_dim)
+
+                target_device = "cpu"
+                if self.device == "cuda":
+                    if self.device_count > 1:
+                        target_device = "cuda:1"
+                        self.companion_device_map[companion_name] = target_device
+                        self._record_mitigation("companion_gpu_routed", companion=companion_name, device=target_device)
+                    else:
+                        target_device = "cuda:0"
+                        self.companion_device_map[companion_name] = target_device
+                        self._record_mitigation("companion_gpu_shared", companion=companion_name, device=target_device)
+                else:
+                    self.companion_device_map[companion_name] = target_device
+                    self._record_mitigation("companion_cpu_fallback", companion=companion_name)
+
+                self._ensure_model_snapshot(config.hf_model_id)
+                companion_kwargs = self._build_sentence_transformer_kwargs(device=target_device)
+                companion_kwargs["trust_remote_code"] = config.trust_remote_code
+
                 model = SentenceTransformer(
                     config.hf_model_id,
-                    trust_remote_code=config.trust_remote_code,
-                    device=self.device,
+                    **companion_kwargs,
                 )
 
-                if self.gpu_config.precision == "fp16" and self.device == "cuda":
+                if self.gpu_config.precision == "fp16" and target_device.startswith("cuda"):
                     model = model.half()
+
+                if self.gpu_config.gradient_checkpointing:
+                    self._maybe_enable_transformer_checkpointing(model)
 
                 self.companion_models[companion_name] = model
                 self.companion_model_configs[companion_name] = config
                 batch_size = self.gpu_config.get_optimal_batch_size(config)
-                if self.device == "cpu":
-                    batch_size = max(1, min(batch_size, 8))
+                if target_device == "cpu":
+                    batch_size = max(1, min(batch_size, 4))
                 self.companion_batch_sizes[companion_name] = batch_size
                 self.models.setdefault(companion_name, model)
-                logger.info("Companion model %s ready (batch size %s)", companion_name, batch_size)
+                logger.info("Companion model %s ready (batch size %s, device %s)", companion_name, batch_size, target_device)
             except Exception as exc:
                 logger.error("Failed to load companion model %s: %s", companion_name, exc)
+                self._record_mitigation("companion_missing", companion=companion_name, error=str(exc))
 
         if self.device == "cuda" and self.companion_models:
             torch.cuda.empty_cache()
@@ -890,129 +1414,154 @@ class UltimateKaggleEmbedderV4:
         """Generate embeddings using ensemble of models"""
         
         if not self.enable_ensemble or not self.ensemble_config:
-            # Fallback to primary model
             logger.debug("Ensemble not enabled, using primary model only")
             primary_model = self._get_primary_model()
-            
-            # Unwrap all wrappers (torch.compile + DataParallel)
-            encode_model = self._unwrap_model(primary_model)
-            logger.debug(f"Unwrapped model type: {type(encode_model).__name__}")
-            
-            dtype_info = self._get_model_primary_dtype(encode_model)
-            if dtype_info is not None:
-                logger.info(f"[ENCODE] Primary model dtype: {dtype_info}")
-            
-            primary_batch = self.gpu_config.get_optimal_batch_size(self.model_config)
-            logger.info(f"[ENCODE] Primary batch size hint: {primary_batch}")
-            
+            primary_batch = self._get_batch_hint_for_model(self.model_name)
+
             self._log_gpu_memory("Primary encode (non-ensemble) - before")
-            result = encode_model.encode(
+            result = self._call_encode(
+                primary_model,
                 texts,
-                convert_to_numpy=True,
-                normalize_embeddings=True,
+                batch_size=primary_batch,
                 device=self.device,
-                batch_size=primary_batch
             )
             self._log_gpu_memory("Primary encode (non-ensemble) - after")
-            
+
             if self.device == "cuda":
                 torch.cuda.empty_cache()
-            
+
             return result
-        
-        all_embeddings = []
-        model_weights = {}
-        
-        # Get embeddings from each model
-        for model_name, model in self.models.items():
-            try:
-                logger.debug(f"Generating embeddings with {model_name}")
-                
-                # Unwrap all wrappers (torch.compile + DataParallel)
-                encode_model = self._unwrap_model(model)
-                
-                model_config = (
-                    self.model_config if model_name == self.model_name
-                    else KAGGLE_OPTIMIZED_MODELS.get(model_name)
-                )
-                suggested_batch = (
-                    self.gpu_config.get_optimal_batch_size(model_config)
-                    if model_config is not None else None
-                )
-                dtype_info = self._get_model_primary_dtype(encode_model)
 
-                logger.info(
-                    "[ENSEMBLE] %s | texts=%d | suggested_batch=%s | dtype=%s",
-                    model_name,
-                    len(texts),
-                    suggested_batch if suggested_batch is not None else "unknown",
-                    dtype_info if dtype_info is not None else "n/a",
-                )
+        sequential_mode = bool(self.ensemble_config.sequential_passes)
+        model_weights: Dict[str, float] = {}
+        all_embeddings: List[np.ndarray] = []
 
-                self._log_gpu_memory(f"Ensemble encode before {model_name}")
-                
-                embeddings = encode_model.encode(
-                    texts,
-                    convert_to_numpy=True,
-                    normalize_embeddings=True,
-                    device=self.device
-                )
+        ordered_models: List[str] = []
+        seen: Set[str] = set()
+        for candidate in [self.model_name, *self.ensemble_config.ensemble_models]:
+            if candidate not in seen:
+                ordered_models.append(candidate)
+                seen.add(candidate)
 
-                self._log_gpu_memory(f"Ensemble encode after {model_name}")
-                
+        if not sequential_mode:
+            for model_name in ordered_models:
+                model = self._get_or_load_ensemble_model(model_name)
+                batch_hint = self._get_batch_hint_for_model(model_name)
+
+                try:
+                    logger.debug("[ENSEMBLE] Parallel encode with %s", model_name)
+                    self._log_gpu_memory(f"Ensemble encode before {model_name}")
+                    embeddings = self._call_encode(
+                        model,
+                        texts,
+                        batch_size=batch_hint,
+                        device=self.device,
+                    )
+                    self._log_gpu_memory(f"Ensemble encode after {model_name}")
+                except Exception as exc:
+                    logger.warning("Failed to generate embeddings with %s: %s", model_name, exc)
+                    continue
+
                 all_embeddings.append(embeddings)
-                
-                # Set weights
-                if self.ensemble_config.model_weights:
-                    weight = self.ensemble_config.model_weights.get(model_name, 1.0)
-                else:
-                    weight = 1.0
-                
-                model_weights[model_name] = weight
-                
-            except Exception as e:
-                logger.warning(f"Failed to generate embeddings with {model_name}: {e}")
-        
-        if not all_embeddings:
-            logger.error("No ensemble models generated embeddings successfully - falling back to primary model")
-            # Fallback to primary model only
-            primary_model = self._get_primary_model()
-            # Unwrap all wrappers (torch.compile + DataParallel)
-            encode_model = self._unwrap_model(primary_model)
-            return encode_model.encode(
-                texts,
-                convert_to_numpy=True,
-                normalize_embeddings=True,
-                device=self.device
-            )
-        
-        # Aggregate embeddings
-        if self.ensemble_config.aggregation_method == "weighted_average":
-            # Weighted average of embeddings
-            total_weight = sum(model_weights.values())
-            weighted_embeddings = []
-            
-            for i, (model_name, embeddings) in enumerate(zip(self.models.keys(), all_embeddings)):
-                weight = model_weights.get(model_name, 1.0) / total_weight
-                weighted_embeddings.append(embeddings * weight)
-            
-            final_embeddings = np.sum(weighted_embeddings, axis=0)
-            
-        elif self.ensemble_config.aggregation_method == "max_pooling":
-            # Max pooling across models
-            final_embeddings = np.maximum.reduce(all_embeddings)
-            
-        elif self.ensemble_config.aggregation_method == "concat":
-            # Concatenate embeddings
-            final_embeddings = np.concatenate(all_embeddings, axis=1)
-            
+                model_weights[model_name] = (
+                    self.ensemble_config.model_weights.get(model_name, 1.0)
+                    if self.ensemble_config.model_weights
+                    else 1.0
+                )
+
         else:
-            # Default to simple average
+            for model_name in ordered_models:
+                model = self._get_or_load_ensemble_model(model_name)
+                batch_hint = self._get_batch_hint_for_model(model_name)
+                target_device = self._select_sequential_device(model_name)
+                pass_start = time.time()
+
+                try:
+                    if hasattr(model, "to"):
+                        model = model.to(target_device)
+                        self.models[model_name] = model
+
+                    self._record_mitigation(
+                        "ensemble_pass_started",
+                        model=model_name,
+                        device=target_device,
+                        batch_size=batch_hint,
+                    )
+
+                    self._log_gpu_memory(f"Sequential ensemble encode before {model_name} @ {target_device}")
+                    embeddings = self._call_encode(
+                        model,
+                        texts,
+                        batch_size=batch_hint,
+                        device=target_device,
+                    )
+                    self._log_gpu_memory(f"Sequential ensemble encode after {model_name} @ {target_device}")
+
+                    pass_duration = time.time() - pass_start
+                    self._record_mitigation(
+                        "ensemble_pass_completed",
+                        model=model_name,
+                        device=target_device,
+                        duration=pass_duration,
+                        batch_size=batch_hint,
+                    )
+
+                    all_embeddings.append(embeddings)
+                    model_weights[model_name] = (
+                        self.ensemble_config.model_weights.get(model_name, 1.0)
+                        if self.ensemble_config.model_weights
+                        else 1.0
+                    )
+
+                    if target_device.startswith("cuda"):
+                        torch.cuda.synchronize()
+                        torch.cuda.empty_cache()
+
+                    if target_device.startswith("cuda") and model_name != self.model_name:
+                        try:
+                            if hasattr(model, "to"):
+                                model = model.to("cpu")
+                                self.models[model_name] = model
+                        except Exception as exc:
+                            logger.warning("Failed to move model %s to CPU post-pass: %s", model_name, exc)
+                        gc.collect()
+
+                except Exception as exc:
+                    logger.warning("Sequential ensemble pass failed for %s: %s", model_name, exc)
+                    continue
+
+        if not all_embeddings:
+            logger.error(
+                "No ensemble models generated embeddings successfully - falling back to primary model"
+            )
+            primary_model = self._get_primary_model()
+            return self._call_encode(
+                primary_model,
+                texts,
+                batch_size=self._get_batch_hint_for_model(self.model_name),
+                device=self.device,
+            )
+
+        if self.ensemble_config.aggregation_method == "weighted_average":
+            total_weight = sum(model_weights.values()) or 1.0
+            weighted_embeddings = []
+            for model_name, embeddings in zip(ordered_models, all_embeddings):
+                if model_name not in model_weights:
+                    continue
+                weight = model_weights[model_name] / total_weight
+                weighted_embeddings.append(embeddings * weight)
+            final_embeddings = np.sum(weighted_embeddings, axis=0)
+
+        elif self.ensemble_config.aggregation_method == "max_pooling":
+            final_embeddings = np.maximum.reduce(all_embeddings)
+
+        elif self.ensemble_config.aggregation_method == "concat":
+            final_embeddings = np.concatenate(all_embeddings, axis=1)
+
+        else:
             final_embeddings = np.mean(all_embeddings, axis=0)
-        
-        # Normalize final embeddings
-        final_embeddings = normalize(final_embeddings, norm='l2', axis=1)
-        
+
+        final_embeddings = normalize(final_embeddings, norm="l2", axis=1)
         return final_embeddings
     
     def search_with_reranking(
@@ -1171,10 +1720,13 @@ class UltimateKaggleEmbedderV4:
                 model = torch.compile(model, mode="reduce-overhead")
                 logger.info(f"   → Model after compile type: {type(model).__name__}")
                 logger.info(f"   → Compiled model has encode(): {hasattr(model, 'encode')}")
-                logger.info(f"   → Compiled model has _orig_mod: {hasattr(model, '_orig_mod')}")
-                if hasattr(model, '_orig_mod'):
-                    logger.info(f"   → _orig_mod type: {type(model._orig_mod).__name__}")
-                    logger.info(f"   → _orig_mod has encode(): {hasattr(model._orig_mod, 'encode')}")
+                has_orig_mod = hasattr(model, '_orig_mod')
+                logger.info(f"   → Compiled model has _orig_mod: {has_orig_mod}")
+                if has_orig_mod:
+                    orig_mod: Any = getattr(model, '_orig_mod', None)
+                    orig_type = type(orig_mod).__name__ if orig_mod is not None else 'unknown'
+                    logger.info(f"   → _orig_mod type: {orig_type}")
+                    logger.info(f"   → _orig_mod has encode(): {hasattr(orig_mod, 'encode')}")
                 logger.info("✅ PyTorch 2.0 compilation enabled")
             except Exception as e:
                 logger.warning(f"PyTorch compilation failed: {e}")
@@ -1861,6 +2413,16 @@ class UltimateKaggleEmbedderV4:
         self.multivectors_by_model = {}
         self.multivector_dimensions = {}
         self.multivector_comparators = {}
+        self.mitigation_events.clear()
+        self.processing_stats.clear()
+
+        if self.gpu_config.gradient_checkpointing and not self.gradient_checkpoint_evaluated:
+            self._record_mitigation(
+                "gradient_checkpointing_active",
+                model=self.model_name,
+                enabled=True,
+            )
+            self.gradient_checkpoint_evaluated = True
         
         # Start monitoring
         if enable_monitoring:
@@ -1869,113 +2431,163 @@ class UltimateKaggleEmbedderV4:
         start_time = time.time()
         
         # Dynamic batch size optimization
-        optimal_batch = self.gpu_config.get_optimal_batch_size(self.model_config)
+        initial_primary_batch = self.gpu_config.get_optimal_batch_size(self.model_config)
         if self.device == "cpu":
-            optimal_batch = max(1, min(optimal_batch, 8))
-        total_batch_size = optimal_batch * self.device_count if self.device_count > 1 else optimal_batch
+            initial_primary_batch = max(1, min(initial_primary_batch, 8))
+        base_total_batch_size = initial_primary_batch * self.device_count if self.device_count > 1 else initial_primary_batch
 
         batch_unit = "per GPU" if self.device == "cuda" else "per device"
-        logger.info(f"Optimal batch size: {total_batch_size} ({optimal_batch} {batch_unit})")
-        
-        # Process in optimized batches
-        all_embeddings = []
-        total_batches = (total_chunks + total_batch_size - 1) // total_batch_size
+        logger.info(f"Initial primary batch size: {initial_primary_batch} ({batch_unit}), total {base_total_batch_size}")
 
+        controller: Optional[AdaptiveBatchController] = None
+        if self.device == "cuda":
+            controller = AdaptiveBatchController(
+                primary_batch=initial_primary_batch,
+                device_count=self.device_count,
+                gpu0_soft_limit_bytes=self.gpu0_soft_limit_bytes,
+                companion_enabled=bool(self.companion_models),
+            )
+            self.adaptive_controller = controller
+            logger.info(
+                "Adaptive batch controller enabled (GPU0 soft limit %.2f GB)",
+                self.gpu0_soft_limit_bytes / (1024 ** 3),
+            )
+        else:
+            self.adaptive_controller = None
+
+        # Process in optimized batches
+        all_embeddings: List[np.ndarray] = []
         companion_batches: Dict[str, List[np.ndarray]] = {
             name: [] for name in self.companion_models
         }
         companion_adjustments: Dict[str, int] = {
             name: 0 for name in self.companion_models
         }
-        
+        active_companion_names: List[str] = list(self.companion_models.keys())
         dimension_adjustments = 0
+        executed_batches = 0
+        batch_index = 0
 
         try:
-            for batch_idx in range(0, total_chunks, total_batch_size):
+            while batch_index < total_chunks:
                 batch_start = time.time()
-                
-                # Get batch
-                batch_end = min(batch_idx + total_batch_size, total_chunks)
-                batch_texts = self.chunk_texts[batch_idx:batch_end]
-                batch_num = (batch_idx // total_batch_size) + 1
-                
-                logger.info(f"Processing batch {batch_num}/{total_batches} ({len(batch_texts)} chunks)")
-                
-                # GPU memory management
-                if self.device == "cuda" and batch_num % 5 == 0:
-                    torch.cuda.empty_cache()
-                    gc.collect()
-                
-                # Generate embeddings with T4 optimization (or CPU fallback)
                 companion_outputs: Dict[str, np.ndarray] = {}
+                batch_embeddings: Optional[np.ndarray] = None
+                companion_devices_used: Set[str] = set()
 
-                autocast_ctx = (
+                while True:
+                    if controller:
+                        primary_batch = controller.primary_batch
+                        current_total_batch = max(1, controller.total_batch)
+                    else:
+                        primary_batch = initial_primary_batch
+                        current_total_batch = max(1, base_total_batch_size)
+
+                    batch_end = min(batch_index + current_total_batch, total_chunks)
+                    batch_texts = self.chunk_texts[batch_index:batch_end]
+
+                    if not batch_texts:
+                        break
+
+                    if controller and self.device == "cuda":
+                        snapshots = self._collect_gpu_snapshots()
+                        mitigation = controller.register_snapshot(snapshots)
+                        if mitigation:
+                            event_type = mitigation.pop("type", "adaptive_action")
+                            self._record_mitigation(event_type, **mitigation)
+                            if mitigation.get("companion_disabled"):
+                                active_companion_names = []
+                                self._deactivate_companions()
+                            torch.cuda.empty_cache()
+                            gc.collect()
+                            continue
+
+                    autocast_ctx = (
                         torch.autocast(
                             device_type="cuda",
-                            enabled=self.gpu_config.enable_mixed_precision
+                            enabled=self.gpu_config.enable_mixed_precision,
                         )
                         if self.device == "cuda"
                         else nullcontext()
                     )
 
-                with autocast_ctx:
-                    if self.enable_ensemble:
-                        # Use ensemble of models
-                        logger.debug(f"Batch {batch_num}: Using ensemble mode")
-                        batch_embeddings = self.generate_ensemble_embeddings(batch_texts)
-                    elif self.primary_model is not None:
-                        # Standard SentenceTransformer (unwrap DataParallel if needed)
-                        logger.debug(f"Batch {batch_num}: Using primary model")
-                        primary_model = self._get_primary_model()
-                        
-                        # Log before unwrapping
-                        logger.debug(f"Primary model type: {type(primary_model).__name__}")
-                        
-                        # Unwrap all wrappers (torch.compile + DataParallel)
-                        encode_model = self._unwrap_model(primary_model)
-                        logger.debug(f"Unwrapped model type: {type(encode_model).__name__}")
-                        
-                        if hasattr(encode_model, 'encode'):
-                            logger.debug("Using encode() method")
-                            batch_embeddings = encode_model.encode(
-                                batch_texts,
-                                batch_size=optimal_batch,
-                                show_progress_bar=False,  # Reduce log spam
-                                convert_to_numpy=True,
-                                normalize_embeddings=True,
-                                device=self.device
-                            )
-                        else:
-                            # ONNX or other backend
-                            logger.debug("Using backend encoding")
-                            batch_embeddings = self._encode_with_backend(batch_texts, optimal_batch)
-                    else:
-                        # ONNX or other backend
-                        logger.debug(f"Batch {batch_num}: Using backend")
-                        batch_embeddings = self._encode_with_backend(batch_texts, optimal_batch)
+                    try:
+                        with autocast_ctx:
+                            if self.enable_ensemble:
+                                logger.debug(f"Batch {executed_batches + 1}: Using ensemble mode")
+                                batch_embeddings = self.generate_ensemble_embeddings(batch_texts)
+                            elif self.primary_model is not None:
+                                logger.debug(f"Batch {executed_batches + 1}: Using primary model")
+                                primary_model = self._get_primary_model()
+                                logger.debug(f"Primary model type: {type(primary_model).__name__}")
+                                batch_embeddings = self._call_encode(
+                                    primary_model,
+                                    batch_texts,
+                                    batch_size=primary_batch,
+                                    device=self.device,
+                                )
+                            else:
+                                logger.debug(f"Batch {executed_batches + 1}: Using backend")
+                                batch_embeddings = self._encode_with_backend(batch_texts, primary_batch)
 
-                    for companion_name, companion_model in self.companion_models.items():
-                        comp_batch_size = self.companion_batch_sizes.get(companion_name, optimal_batch)
-                        # Unwrap all wrappers (torch.compile + DataParallel)
-                        encode_companion = self._unwrap_model(companion_model)
-                        companion_outputs[companion_name] = encode_companion.encode(
-                            batch_texts,
-                            batch_size=comp_batch_size,
-                            show_progress_bar=False,
-                            convert_to_numpy=True,
-                            normalize_embeddings=True,
-                            device=self.device,
-                        )
+                            temp_outputs: Dict[str, np.ndarray] = {}
+                            for companion_name in active_companion_names:
+                                companion_model = self.companion_models.get(companion_name)
+                                if companion_model is None:
+                                    continue
+                                comp_batch_size = self.companion_batch_sizes.get(companion_name, primary_batch)
+                                companion_device = self.companion_device_map.get(companion_name, self.device)
+                                temp_outputs[companion_name] = self._call_encode(
+                                    companion_model,
+                                    batch_texts,
+                                    batch_size=comp_batch_size,
+                                    device=companion_device,
+                                )
+                                companion_devices_used.add(companion_device)
+
+                            companion_outputs = temp_outputs
+
+                        break
+                    except RuntimeError as exc:
+                        if (
+                            self.device == "cuda"
+                            and controller
+                            and "out of memory" in str(exc).lower()
+                        ):
+                            mitigation = controller.register_oom(companion_active=bool(active_companion_names))
+                            if mitigation:
+                                event_type = mitigation.pop("type", "adaptive_oom")
+                                self._record_mitigation(event_type, **mitigation)
+                                if mitigation.get("companion_disabled"):
+                                    active_companion_names = []
+                                    self._deactivate_companions()
+                                torch.cuda.empty_cache()
+                                gc.collect()
+                                continue
+                        raise
+
+                if not batch_texts:
+                    break
+
+                if batch_embeddings is None:
+                    logger.debug("No embeddings produced for current batch; retrying next batch")
+                    continue
+
+                executed_batches += 1
+                progress = (batch_end / total_chunks) * 100
+                remaining_chunks = max(0, total_chunks - batch_end)
+                est_remaining_batches = math.ceil(remaining_chunks / max(1, current_total_batch))
 
                 batch_embeddings, adjusted = self._ensure_embedding_dimension(batch_embeddings)
                 if adjusted:
                     dimension_adjustments += 1
-                
-                # V5: Apply Matryoshka truncation if configured
+
                 if self.matryoshka_dim and batch_embeddings.shape[1] > self.matryoshka_dim:
                     batch_embeddings = batch_embeddings[:, :self.matryoshka_dim]
-                    logger.debug(f"Applied Matryoshka truncation: {batch_embeddings.shape[1]}D -> {self.matryoshka_dim}D")
-                
+                    logger.debug(
+                        f"Applied Matryoshka truncation: {batch_embeddings.shape[1]}D -> {self.matryoshka_dim}D"
+                    )
+
                 all_embeddings.append(batch_embeddings)
 
                 for companion_name, companion_matrix in companion_outputs.items():
@@ -1988,25 +2600,38 @@ class UltimateKaggleEmbedderV4:
                     )
                     if adjusted_companion:
                         companion_adjustments[companion_name] += 1
-                    
-                    # V5: Apply Matryoshka truncation to companion models if configured
+
                     if self.matryoshka_dim and companion_matrix.shape[1] > self.matryoshka_dim:
                         companion_matrix = companion_matrix[:, :self.matryoshka_dim]
-                        logger.debug(f"Applied Matryoshka truncation to {companion_name}: {companion_matrix.shape[1]}D -> {self.matryoshka_dim}D")
-                    
+                        logger.debug(
+                            f"Applied Matryoshka truncation to {companion_name}: {companion_matrix.shape[1]}D -> {self.matryoshka_dim}D"
+                        )
+
                     companion_batches[companion_name].append(companion_matrix)
-                
-                # Batch statistics
+
                 batch_time = time.time() - batch_start
-                chunks_per_second = len(batch_texts) / batch_time
-                progress = (batch_end / total_chunks) * 100
-                
-                logger.info(f"Batch {batch_num}: {chunks_per_second:.1f} chunks/sec, Progress: {progress:.1f}%")
-                
-                # Save intermediate results for long processes
-                if save_intermediate and batch_num % 10 == 0:
-                    self._save_intermediate_results(all_embeddings, batch_num)
-            
+                chunks_per_second = len(batch_texts) / batch_time if batch_time > 0 else 0.0
+                logger.info(
+                    "Batch %s: %.1f chunks/sec, Progress: %.1f%%, Remaining batches ≈ %s",
+                    executed_batches,
+                    chunks_per_second,
+                    progress,
+                    est_remaining_batches,
+                )
+
+                if save_intermediate and executed_batches % 10 == 0:
+                    self._save_intermediate_results(all_embeddings, executed_batches)
+
+                if self.device == "cuda":
+                    torch.cuda.synchronize()
+                for companion_device in companion_devices_used:
+                    if isinstance(companion_device, str) and companion_device.startswith("cuda"):
+                        with torch.cuda.device(companion_device):
+                            torch.cuda.synchronize()
+                            torch.cuda.empty_cache()
+
+                batch_index = batch_end
+
             # Combine all embeddings
             self.embeddings = np.vstack(all_embeddings)
 
@@ -2058,14 +2683,18 @@ class UltimateKaggleEmbedderV4:
             companion_memory_mb[companion_name] = companion_array.nbytes / 1024 / 1024
             companion_dimensions[companion_name] = companion_array.shape[1]
         
+        final_primary_batch = controller.primary_batch if controller else initial_primary_batch
+        final_total_batch_size = controller.total_batch if controller else base_total_batch_size
+
         results = {
             "total_embeddings_generated": len(embeddings),
             "embedding_dimension": embeddings.shape[1],
             "processing_time_seconds": total_time,
             "chunks_per_second": chunks_per_second,
             "gpu_count": self.device_count,
-            "optimal_batch_size": optimal_batch,
-            "total_batches": total_batches,
+            "optimal_batch_size": final_primary_batch,
+            "effective_total_batch_size": final_total_batch_size,
+            "total_batches": executed_batches,
             "model_used": self.model_name,
             "backend": self.gpu_config.backend,
             "precision": self.gpu_config.precision,
@@ -2073,7 +2702,10 @@ class UltimateKaggleEmbedderV4:
             "memory_per_chunk_kb": memory_per_chunk_kb,
             "kaggle_optimized": True,
             "performance_stats": dict(self.processing_stats),
-            "dimension_adjustments": dimension_adjustments
+            "dimension_adjustments": dimension_adjustments,
+            "mitigation_events": list(self.mitigation_events),
+            "gpu_snapshot_summary": self._summarize_gpu_history(),
+            "cache_events": list(self.cache_events),
         }
 
         if self.multivectors_by_model:
@@ -2098,6 +2730,15 @@ class UltimateKaggleEmbedderV4:
                     "dimension_adjustments": companion_adjustments.get(name, 0),
                 }
                 for name in companion_memory_mb
+            }
+
+        if controller:
+            results["adaptive_controller"] = {
+                "primary_batch": controller.primary_batch,
+                "total_batch": controller.total_batch,
+                "oom_events": controller._oom_events,
+                "updates": controller._updates,
+                "companions_enabled": controller.companion_enabled,
             }
 
         logger.info("Kaggle embedding generation complete")
@@ -2175,23 +2816,30 @@ class UltimateKaggleEmbedderV4:
                         outputs = self.primary_model.forward(**inputs)
                     else:
                         outputs = self.primary_model(**inputs)
-                    
-                    # Extract embeddings (usually from last_hidden_state)
-                    if hasattr(outputs, 'last_hidden_state'):
-                        # Mean pooling
-                        attention_mask = inputs['attention_mask']
-                        token_embeddings = outputs.last_hidden_state
+
+                    token_embeddings = None
+                    if isinstance(outputs, dict):
+                        token_embeddings = outputs.get("last_hidden_state")
+                    elif hasattr(outputs, "last_hidden_state"):
+                        token_embeddings = getattr(outputs, "last_hidden_state")
+
+                    if token_embeddings is not None:
+                        attention_mask = inputs["attention_mask"]
+                        token_embeddings = torch.as_tensor(token_embeddings)
                         input_mask_expanded = attention_mask.unsqueeze(-1).expand(token_embeddings.size()).float()
-                        embeddings = torch.sum(token_embeddings * input_mask_expanded, 1) / torch.clamp(input_mask_expanded.sum(1), min=1e-9)
+                        embeddings_tensor = torch.sum(token_embeddings * input_mask_expanded, dim=1) / torch.clamp(
+                            input_mask_expanded.sum(dim=1), min=1e-9
+                        )
                     else:
-                        # Fallback: use first output
-                        embeddings = outputs[0] if isinstance(outputs, tuple) else outputs
-                    
-                    # Normalize
-                    embeddings = torch.nn.functional.normalize(embeddings, p=2, dim=1)
+                        candidate = outputs[0] if isinstance(outputs, tuple) else outputs
+                        embeddings_tensor = torch.as_tensor(candidate)
+
+                    embeddings_tensor = torch.nn.functional.normalize(embeddings_tensor, p=2, dim=1)
                     
                     # Convert to numpy
-                    batch_embeddings = embeddings.detach().cpu().numpy().astype(np.float32)
+                    batch_embeddings = (
+                        embeddings_tensor.detach().cpu().numpy().astype(np.float32)
+                    )
                     all_embeddings.append(batch_embeddings)
                 
                 final_embeddings = np.vstack(all_embeddings)
