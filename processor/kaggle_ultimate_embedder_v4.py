@@ -594,7 +594,38 @@ class UltimateKaggleEmbedderV4:
         if self.embeddings is None:
             raise RuntimeError("Embeddings have not been generated yet")
         return self.embeddings
-    
+
+    def _log_gpu_memory(self, label: str, level: int = logging.INFO) -> None:
+        """Emit per-device CUDA memory statistics for diagnostics."""
+        if not torch.cuda.is_available() or not logger.isEnabledFor(level):
+            return
+
+        stats: List[str] = []
+        for device_id in range(self.device_count):
+            try:
+                allocated = torch.cuda.memory_allocated(device_id) / 1e9
+                reserved = torch.cuda.memory_reserved(device_id) / 1e9
+                free_bytes, total_bytes = torch.cuda.mem_get_info(device_id)
+                free = free_bytes / 1e9
+                total = total_bytes / 1e9
+                stats.append(
+                    f"GPU{device_id}: alloc={allocated:.2f}GB reserved={reserved:.2f}GB free={free:.2f}GB/{total:.2f}GB"
+                )
+            except RuntimeError as exc:
+                stats.append(f"GPU{device_id}: mem stats unavailable ({exc})")
+
+        logger.log(level, f"[GPU-MEM] {label}: " + " | ".join(stats))
+
+    def _get_model_primary_dtype(self, model: Any) -> Optional[torch.dtype]:
+        """Return dtype of the first parameter of a torch model, if available."""
+        if not hasattr(model, "parameters"):
+            return None
+        try:
+            first_param = next(model.parameters())
+        except (StopIteration, TypeError):
+            return None
+        return getattr(first_param, "dtype", None)
+        
     def _unwrap_model(self, model: Any) -> Any:
         """
         Unwrap torch.compile and DataParallel wrappers to get the base model.
@@ -862,12 +893,27 @@ class UltimateKaggleEmbedderV4:
             encode_model = self._unwrap_model(primary_model)
             logger.debug(f"Unwrapped model type: {type(encode_model).__name__}")
             
-            return encode_model.encode(
+            dtype_info = self._get_model_primary_dtype(encode_model)
+            if dtype_info is not None:
+                logger.info(f"[ENCODE] Primary model dtype: {dtype_info}")
+            
+            primary_batch = self.gpu_config.get_optimal_batch_size(self.model_config)
+            logger.info(f"[ENCODE] Primary batch size hint: {primary_batch}")
+            
+            self._log_gpu_memory("Primary encode (non-ensemble) - before")
+            result = encode_model.encode(
                 texts,
                 convert_to_numpy=True,
                 normalize_embeddings=True,
-                device=self.device
+                device=self.device,
+                batch_size=primary_batch
             )
+            self._log_gpu_memory("Primary encode (non-ensemble) - after")
+            
+            if self.device == "cuda":
+                torch.cuda.empty_cache()
+            
+            return result
         
         all_embeddings = []
         model_weights = {}
@@ -880,12 +926,34 @@ class UltimateKaggleEmbedderV4:
                 # Unwrap all wrappers (torch.compile + DataParallel)
                 encode_model = self._unwrap_model(model)
                 
+                model_config = (
+                    self.model_config if model_name == self.model_name
+                    else KAGGLE_OPTIMIZED_MODELS.get(model_name)
+                )
+                suggested_batch = (
+                    self.gpu_config.get_optimal_batch_size(model_config)
+                    if model_config is not None else None
+                )
+                dtype_info = self._get_model_primary_dtype(encode_model)
+
+                logger.info(
+                    "[ENSEMBLE] %s | texts=%d | suggested_batch=%s | dtype=%s",
+                    model_name,
+                    len(texts),
+                    suggested_batch if suggested_batch is not None else "unknown",
+                    dtype_info if dtype_info is not None else "n/a",
+                )
+
+                self._log_gpu_memory(f"Ensemble encode before {model_name}")
+                
                 embeddings = encode_model.encode(
                     texts,
                     convert_to_numpy=True,
                     normalize_embeddings=True,
                     device=self.device
                 )
+
+                self._log_gpu_memory(f"Ensemble encode after {model_name}")
                 
                 all_embeddings.append(embeddings)
                 
