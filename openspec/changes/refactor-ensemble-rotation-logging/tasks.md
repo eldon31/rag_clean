@@ -7,5 +7,5 @@
 
 ## 2. Validation
 - [x] 2.1 Add unit tests covering sequential ensemble rotation with three models, asserting telemetry order, batch coverage from index 0, and failure handling when a pass is forced to error.
-- [ ] 2.2 Update or add summary serialization tests to confirm the new rotation telemetry field is emitted and compatible with existing consumers.
-- [ ] 2.3 Run an end-to-end dry run (CPU acceptable) with three ensemble models, verifying logs and summary telemetry reflect every model on every processed batch.
+- [ ] 2.2 Write summary serialization coverage that asserts `rotation_events`, `ensemble_rotation_limit`, and overflow metadata persist in the run summary payload.
+- [ ] 2.3 Run an end-to-end dry run (CPU acceptable) with three ensemble models, capturing the enhanced batch-source logs and verifying summary telemetry reflects every model on every processed batch.

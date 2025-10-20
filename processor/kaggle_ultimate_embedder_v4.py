@@ -1164,6 +1164,49 @@ class UltimateKaggleEmbedderV4:
             return "n/a"
         return f"{info['start']}:{info['end']} ({info['count']} chunks)"
 
+    def _summarize_batch_sources(
+        self,
+        start_index: int,
+        end_index: int,
+        limit: int = 6,
+    ) -> str:
+        """Return a human-readable summary of chunk sources for the current batch."""
+
+        if start_index >= end_index:
+            return ""
+
+        counts: Counter[str] = Counter()
+        for idx in range(start_index, end_index):
+            if idx >= len(self.chunks_metadata):
+                source_name = f"chunk_{idx}"
+            else:
+                metadata = self.chunks_metadata[idx] or {}
+                source_name = (
+                    metadata.get("source_path")
+                    or metadata.get("source_file")
+                    or metadata.get("filename")
+                    or metadata.get("document_name")
+                    or f"chunk_{idx}"
+                )
+            counts[str(Path(source_name).name)] += 1
+
+        if not counts:
+            return ""
+
+        ordered = counts.most_common(limit)
+        summary_parts = [f"{name} ({count})" for name, count in ordered]
+        if len(counts) > limit:
+            summary_parts.append(f"… +{len(counts) - limit} more")
+
+        return ", ".join(summary_parts)
+
+    def _log_batch_sources(self, batch_number: int, start_index: int, end_index: int) -> None:
+        """Emit a log entry describing which files contributed to a batch."""
+
+        summary = self._summarize_batch_sources(start_index, end_index)
+        if summary:
+            logger.info("Batch %d sources: %s", batch_number, summary)
+
     def _get_or_load_ensemble_model(self, model_name: str) -> Optional[Any]:
         if model_name == self.model_name:
             return self._get_primary_model()
@@ -3026,6 +3069,7 @@ class UltimateKaggleEmbedderV4:
                     logger.debug("No embeddings produced for current batch; retrying next batch")
                     continue
 
+                self._log_batch_sources(executed_batches + 1, batch_index, batch_end)
                 executed_batches += 1
                 progress = (batch_end / total_chunks) * 100
                 remaining_chunks = max(0, total_chunks - batch_end)
