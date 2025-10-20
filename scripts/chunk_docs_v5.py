@@ -27,14 +27,17 @@ import logging
 print(f"[LOG_DIAG] root level before basicConfig: {logging.getLogger().level}")
 print(f"[LOG_DIAG] handlers before basicConfig: {logging.getLogger().handlers}")
 
-# Configure logging with more detail
+# Configure logging with more detail (force reconfiguration to stdout)
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
     handlers=[
-        logging.StreamHandler()
-    ]
+        logging.StreamHandler(sys.stdout)
+    ],
+    force=True
 )
+print(f"[LOG_DIAG] root level after basicConfig: {logging.getLogger().level}")
+print(f"[LOG_DIAG] handlers after basicConfig: {logging.getLogger().handlers}")
 logger = logging.getLogger(__name__)
 
 # Suppress TensorFlow/CUDA warnings that clutter output
