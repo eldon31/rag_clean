@@ -59,7 +59,6 @@ import threading
 import hashlib
 from functools import lru_cache
 import textwrap
-import requests
 
 # Core ML libraries
 from sentence_transformers import SentenceTransformer, CrossEncoder
@@ -94,81 +93,11 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 
-class JinaEmbeddingsClient:
-    """Lightweight client for Jina embedding API."""
-
-    def __init__(
-        self,
-        api_key: str,
-        model_name: str = "jina-embeddings-v4",
-        endpoint: str = "https://api.jina.ai/v1/embeddings",
-        timeout: int = 60,
-        max_retries: int = 3,
-        backoff_factor: float = 1.5,
-    ) -> None:
-        if not api_key:
-            raise ValueError("JINA_API_KEY is required for jina-embeddings-v4")
-
-        self.api_key = api_key
-        self.model_name = model_name
-        self.endpoint = endpoint
-        self.timeout = timeout
-        self.max_retries = max(1, max_retries)
-        self.backoff_factor = max(0.5, backoff_factor)
-
-        self.session = requests.Session()
-        self.session.headers.update({
-            "Authorization": f"Bearer {self.api_key}",
-            "Content-Type": "application/json",
-            "Accept": "application/json",
-        })
-
-    def embed(
-        self,
-        texts: List[str],
-        *,
-        late_chunking: bool = True,
-        return_multivector: bool = True,
-        truncate: Optional[int] = None,
-    ) -> List[Dict[str, Any]]:
-        payload: Dict[str, Any] = {
-            "model": self.model_name,
-            "input": texts,
-            "late_chunking": late_chunking,
-        }
-        if return_multivector:
-            payload["return_multivector"] = True
-        if truncate is not None:
-            payload["truncate"] = truncate
-
-        attempt = 0
-        while True:
-            try:
-                response = self.session.post(self.endpoint, json=payload, timeout=self.timeout)
-                if response.status_code == 200:
-                    data = response.json()
-                    return data.get("data", [])
-
-                error_message = response.text
-                logger.warning(
-                    "Jina embeddings request failed (%s): %s", response.status_code, error_message
-                )
-            except requests.RequestException as exc:
-                logger.warning("Jina embeddings request error: %s", exc)
-
-            attempt += 1
-            if attempt >= self.max_retries:
-                raise RuntimeError("Exceeded retries when calling Jina embeddings API")
-
-            sleep_seconds = self.backoff_factor ** attempt
-            logger.info("Retrying Jina embeddings request in %.1fs", sleep_seconds)
-            time.sleep(sleep_seconds)
-
 # ============================================================================
 # SOTA MODEL CONFIGURATIONS (Kaggle T4 x2 Optimized)
 # ============================================================================
 
-@dataclass 
+@dataclass
 class ModelConfig:
     """Kaggle T4 x2 optimized model configurations"""
     name: str
@@ -182,8 +111,6 @@ class ModelConfig:
     recommended_batch_size: int = 32
     memory_efficient: bool = True
     supports_flash_attention: bool = False
-    requires_api: bool = False
-    api_endpoint: Optional[str] = None
     
 # Kaggle T4 x2 Optimized Models (15.83GB VRAM each)
 KAGGLE_OPTIMIZED_MODELS = {
@@ -204,9 +131,7 @@ KAGGLE_OPTIMIZED_MODELS = {
         max_tokens=32768,
         query_prefix="Encode this code snippet for semantic retrieval: ",
         recommended_batch_size=16,
-        memory_efficient=True,
-        requires_api=False,
-        api_endpoint=None,
+        memory_efficient=True
     ),
     
     "bge-m3": ModelConfig(
@@ -284,22 +209,55 @@ KAGGLE_OPTIMIZED_MODELS = {
         vector_dim=2048,
         max_tokens=32768,
         recommended_batch_size=16,
-        memory_efficient=True,
-        requires_api=False,
-        api_endpoint=None
+        memory_efficient=True
+    ),
+    
+    # Qdrant-optimized models (V5)
+    "qdrant-minilm-onnx": ModelConfig(
+        name="qdrant-minilm-onnx",
+        hf_model_id="Qdrant/all-MiniLM-L6-v2-onnx",
+        vector_dim=384,
+        max_tokens=256,
+        recommended_batch_size=128,  # Large batch for tiny model
+        memory_efficient=True
     )
+}
+
+# SPARSE EMBEDDING MODELS (V5)
+SPARSE_MODELS = {
+    # Qdrant BM25 model (term frequency-based)
+    "qdrant-bm25": {
+        "name": "qdrant-bm25",
+        "hf_model_id": "Qdrant/bm25",
+        "type": "bm25",
+        "description": "BM25-style term frequency sparse vectors",
+        "recommended_batch_size": 64
+    },
+    
+    # Qdrant attention-based sparse model
+    "qdrant-minilm-attention": {
+        "name": "qdrant-minilm-attention",
+        "hf_model_id": "Qdrant/all_miniLM_L6_v2_with_attentions",
+        "type": "attention",
+        "description": "Attention-based sparse vectors from MiniLM",
+        "recommended_batch_size": 64
+    }
 }
 
 # CROSSENCODER RERANKING MODELS (Production Ready)
 RERANKING_MODELS = {
+    # Primary: Jina Reranker V3 (0.6B params, 131K token context, 256D output)
+    "jina-reranker-v3": "jinaai/jina-reranker-v3",  # Default: Best quality, long context
+    
     # Fast and efficient rerankers for T4 x2
     "ms-marco-v2": "cross-encoder/ms-marco-MiniLM-L-6-v2",  # Fast, good quality
     "ms-marco-v3": "cross-encoder/ms-marco-MiniLM-L-12-v2", # Better quality
     "sbert-distil": "cross-encoder/stsb-distilroberta-base", # General purpose
     "msmarco-distil": "cross-encoder/ms-marco-TinyBERT-L-2-v2", # Ultra fast
+    
     # Advanced rerankers
     "bge-reranker-v2": "BAAI/bge-reranker-v2-m3",  # State-of-the-art
-    "jina-reranker": "jinaai/jina-reranker-v1-turbo-en"  # Fast multilingual
+    "jina-reranker-v1": "jinaai/jina-reranker-v1-turbo-en"  # Fast multilingual
 }
 
 @dataclass
@@ -410,8 +368,8 @@ class EnsembleConfig:
 @dataclass
 class RerankingConfig:
     """CrossEncoder reranking configuration"""
-    # Reranking model
-    model_name: str = "ms-marco-v2"  # Default reranker
+    # Reranking model (Jina V3: 0.6B params, 131K context, 256D output)
+    model_name: str = "jina-reranker-v3"  # Default: Best quality, long context
     enable_reranking: bool = False
     
     # Reranking parameters
@@ -533,6 +491,9 @@ class UltimateKaggleEmbedderV4:
         ensemble_config: Optional[EnsembleConfig] = None,
         reranking_config: Optional[RerankingConfig] = None,
         companion_dense_models: Optional[List[str]] = None,
+        enable_sparse: bool = False,  # V5: Enable sparse embeddings
+        sparse_models: Optional[List[str]] = None,  # V5: Sparse model names
+        matryoshka_dim: Optional[int] = None,  # V5: Matryoshka dimension
     ):
         """Initialize Ultimate Kaggle Embedder V4"""
 
@@ -558,11 +519,50 @@ class UltimateKaggleEmbedderV4:
         self._target_collection_cache: Optional[str] = None
 
         self.embedding_backend: str = "local"
-        self.api_client: Optional[JinaEmbeddingsClient] = None
         self.multivectors_by_model: Dict[str, List[List[List[float]]]] = {}
         self.multivector_dimensions: Dict[str, int] = {}
         self.multivector_comparators: Dict[str, str] = {}
         self.primary_vector_name: str = self.model_name
+        
+        # V5: Sparse embedding support
+        self.enable_sparse = enable_sparse
+        self.sparse_models: Dict[str, Any] = {}
+        self.sparse_model_names: List[str] = sparse_models or []
+        if self.enable_sparse and not self.sparse_model_names:
+            # Default sparse models
+            self.sparse_model_names = ["qdrant-bm25"]
+        
+        # V5: Matryoshka dimension support with model-specific validation
+        self.matryoshka_dim = matryoshka_dim
+        if matryoshka_dim:
+            # Validate Matryoshka dimension
+            supported_dims = {128, 256, 512, 1024, 1536, 2048}
+            if matryoshka_dim not in supported_dims:
+                logger.warning(
+                    f"Matryoshka dimension {matryoshka_dim} not in standard set {supported_dims}. "
+                    f"Will truncate embeddings to {matryoshka_dim}D."
+                )
+            if matryoshka_dim > self.model_config.vector_dim:
+                raise ValueError(
+                    f"Matryoshka dimension ({matryoshka_dim}) cannot exceed "
+                    f"model dimension ({self.model_config.vector_dim})"
+                )
+            
+            # V5: Warn about model-specific Matryoshka support
+            confirmed_matryoshka_models = {
+                "jina-embeddings-v4",
+                "jina-code-embeddings-1.5b",
+            }
+            
+            if model_name not in confirmed_matryoshka_models:
+                logger.warning(
+                    f"⚠️  MATRYOSHKA WARNING: Model '{model_name}' does not have confirmed Matryoshka support. "
+                    f"Truncating from {self.model_config.vector_dim}D to {matryoshka_dim}D may significantly "
+                    f"degrade embedding quality. Confirmed Matryoshka models: {confirmed_matryoshka_models}. "
+                    f"Consider using matryoshka_dim=None for full {self.model_config.vector_dim}D embeddings."
+                )
+            
+            logger.info(f"Matryoshka dimension set to {matryoshka_dim}D (from {self.model_config.vector_dim}D)")
         
         # Kaggle environment detection
         self.is_kaggle = '/kaggle' in os.getcwd() or os.path.exists('/kaggle')
@@ -621,6 +621,10 @@ class UltimateKaggleEmbedderV4:
         self._initialize_embedding_models()
         self._initialize_companion_models()
         
+        # V5: Initialize sparse models if enabled
+        if self.enable_sparse:
+            self._initialize_sparse_models()
+        
         # Initialize reranker if enabled
         if self.reranking_config.enable_reranking:
             self._initialize_reranking_model()
@@ -654,22 +658,6 @@ class UltimateKaggleEmbedderV4:
 
     def _initialize_embedding_models(self):
         """Initialize embedding models with advanced optimization"""
-
-        if self.model_config.requires_api:
-            if self.model_name.startswith("jina"):
-                api_key = os.environ.get("JINA_API_KEY") or "jina_f92dfe592c06499b9b90b377e615c933VCBNZ_E029kaEcNPykc-oKsn9_v2"
-                endpoint = self.model_config.api_endpoint or "https://api.jina.ai/v1/embeddings"
-                self.embedding_backend = "jina_api"
-                self.api_client = JinaEmbeddingsClient(
-                    api_key=api_key or "",
-                    model_name=self.model_config.hf_model_id,
-                    endpoint=endpoint,
-                )
-                self.primary_model = None
-                self.models[self.model_name] = "jina_api_client"
-                logger.info("Using Jina embeddings API backend; local model load skipped")
-                return
-            raise ValueError(f"API-backed model {self.model_name} is not supported")
 
         logger.info(f"Loading embedding model: {self.model_config.hf_model_id}")
 
@@ -764,6 +752,50 @@ class UltimateKaggleEmbedderV4:
 
         if self.device == "cuda" and self.companion_models:
             torch.cuda.empty_cache()
+    
+    def _initialize_sparse_models(self) -> None:
+        """
+        Initialize sparse embedding models (V5 feature).
+        
+        Sparse models generate BM25-style or attention-based sparse vectors
+        for hybrid search in Qdrant.
+        """
+        
+        if not self.sparse_model_names:
+            logger.info("No sparse models specified")
+            return
+        
+        logger.info(f"Loading sparse models: {self.sparse_model_names}")
+        
+        for sparse_name in self.sparse_model_names:
+            if sparse_name not in SPARSE_MODELS:
+                logger.warning(f"Unknown sparse model: {sparse_name}, skipping")
+                continue
+            
+            sparse_config = SPARSE_MODELS[sparse_name]
+            
+            try:
+                logger.info(f"Loading sparse model: {sparse_config['hf_model_id']}")
+                
+                # Load sparse model using SentenceTransformer
+                # Note: Actual implementation depends on model type
+                sparse_model = SentenceTransformer(
+                    sparse_config["hf_model_id"],
+                    trust_remote_code=True,
+                    device=self.device
+                )
+                
+                self.sparse_models[sparse_name] = sparse_model
+                logger.info(f"✓ Sparse model {sparse_name} loaded successfully")
+                
+            except Exception as e:
+                logger.error(f"Failed to load sparse model {sparse_name}: {e}")
+        
+        if self.sparse_models:
+            logger.info(f"Loaded {len(self.sparse_models)} sparse models")
+        else:
+            logger.warning("No sparse models loaded successfully")
+            self.enable_sparse = False
 
     def _initialize_reranking_model(self):
         """Initialize CrossEncoder for reranking"""
@@ -1738,11 +1770,7 @@ class UltimateKaggleEmbedderV4:
         optimal_batch = self.gpu_config.get_optimal_batch_size(self.model_config)
         if self.device == "cpu":
             optimal_batch = max(1, min(optimal_batch, 8))
-        if self.embedding_backend == "jina_api":
-            optimal_batch = max(1, min(optimal_batch, 16))
-            total_batch_size = optimal_batch
-        else:
-            total_batch_size = optimal_batch * self.device_count if self.device_count > 1 else optimal_batch
+        total_batch_size = optimal_batch * self.device_count if self.device_count > 1 else optimal_batch
 
         batch_unit = "per GPU" if self.device == "cuda" else "per device"
         logger.info(f"Optimal batch size: {total_batch_size} ({optimal_batch} {batch_unit})")
@@ -1759,10 +1787,6 @@ class UltimateKaggleEmbedderV4:
         }
         
         dimension_adjustments = 0
-        jina_multivectors: List[List[List[float]]] = []
-        jina_multivector_channel: Optional[str] = None
-        if self.embedding_backend == "jina_api":
-            jina_multivector_channel = f"{self.model_name}_late_interaction"
 
         try:
             for batch_idx in range(0, total_chunks, total_batch_size):
@@ -1782,12 +1806,8 @@ class UltimateKaggleEmbedderV4:
                 
                 # Generate embeddings with T4 optimization (or CPU fallback)
                 companion_outputs: Dict[str, np.ndarray] = {}
-                batch_multivectors: Optional[List[List[List[float]]]] = None
 
-                if self.embedding_backend == "jina_api":
-                    batch_embeddings, batch_multivectors = self._encode_with_jina_api(batch_texts)
-                else:
-                    autocast_ctx = (
+                autocast_ctx = (
                         torch.autocast(
                             device_type="cuda",
                             enabled=self.gpu_config.enable_mixed_precision
@@ -1796,44 +1816,46 @@ class UltimateKaggleEmbedderV4:
                         else nullcontext()
                     )
 
-                    with autocast_ctx:
-                        if self.enable_ensemble:
-                            # Use ensemble of models
-                            batch_embeddings = self.generate_ensemble_embeddings(batch_texts)
-                        elif self.primary_model is not None and hasattr(self.primary_model, 'encode'):
-                            # Standard SentenceTransformer
-                            primary_model = self._get_primary_model()
-                            batch_embeddings = primary_model.encode(
-                                batch_texts,
-                                batch_size=optimal_batch,
-                                show_progress_bar=False,  # Reduce log spam
-                                convert_to_numpy=True,
-                                normalize_embeddings=True,
-                                device=self.device
-                            )
-                        else:
-                            # ONNX or other backend
-                            batch_embeddings = self._encode_with_backend(batch_texts, optimal_batch)
+                with autocast_ctx:
+                    if self.enable_ensemble:
+                        # Use ensemble of models
+                        batch_embeddings = self.generate_ensemble_embeddings(batch_texts)
+                    elif self.primary_model is not None and hasattr(self.primary_model, 'encode'):
+                        # Standard SentenceTransformer
+                        primary_model = self._get_primary_model()
+                        batch_embeddings = primary_model.encode(
+                            batch_texts,
+                            batch_size=optimal_batch,
+                            show_progress_bar=False,  # Reduce log spam
+                            convert_to_numpy=True,
+                            normalize_embeddings=True,
+                            device=self.device
+                        )
+                    else:
+                        # ONNX or other backend
+                        batch_embeddings = self._encode_with_backend(batch_texts, optimal_batch)
 
-                        for companion_name, companion_model in self.companion_models.items():
-                            comp_batch_size = self.companion_batch_sizes.get(companion_name, optimal_batch)
-                            companion_outputs[companion_name] = companion_model.encode(
-                                batch_texts,
-                                batch_size=comp_batch_size,
-                                show_progress_bar=False,
-                                convert_to_numpy=True,
-                                normalize_embeddings=True,
-                                device=self.device,
-                            )
+                    for companion_name, companion_model in self.companion_models.items():
+                        comp_batch_size = self.companion_batch_sizes.get(companion_name, optimal_batch)
+                        companion_outputs[companion_name] = companion_model.encode(
+                            batch_texts,
+                            batch_size=comp_batch_size,
+                            show_progress_bar=False,
+                            convert_to_numpy=True,
+                            normalize_embeddings=True,
+                            device=self.device,
+                        )
 
                 batch_embeddings, adjusted = self._ensure_embedding_dimension(batch_embeddings)
                 if adjusted:
                     dimension_adjustments += 1
                 
+                # V5: Apply Matryoshka truncation if configured
+                if self.matryoshka_dim and batch_embeddings.shape[1] > self.matryoshka_dim:
+                    batch_embeddings = batch_embeddings[:, :self.matryoshka_dim]
+                    logger.debug(f"Applied Matryoshka truncation: {batch_embeddings.shape[1]}D -> {self.matryoshka_dim}D")
+                
                 all_embeddings.append(batch_embeddings)
-
-                if batch_multivectors is not None:
-                    jina_multivectors.extend(batch_multivectors)
 
                 for companion_name, companion_matrix in companion_outputs.items():
                     config = self.companion_model_configs.get(companion_name)
@@ -1845,6 +1867,12 @@ class UltimateKaggleEmbedderV4:
                     )
                     if adjusted_companion:
                         companion_adjustments[companion_name] += 1
+                    
+                    # V5: Apply Matryoshka truncation to companion models if configured
+                    if self.matryoshka_dim and companion_matrix.shape[1] > self.matryoshka_dim:
+                        companion_matrix = companion_matrix[:, :self.matryoshka_dim]
+                        logger.debug(f"Applied Matryoshka truncation to {companion_name}: {companion_matrix.shape[1]}D -> {self.matryoshka_dim}D")
+                    
                     companion_batches[companion_name].append(companion_matrix)
                 
                 # Batch statistics
@@ -1861,10 +1889,13 @@ class UltimateKaggleEmbedderV4:
             # Combine all embeddings
             self.embeddings = np.vstack(all_embeddings)
 
-            if self.embeddings.shape[1] != self.model_config.vector_dim:
+            # V5: Check against either Matryoshka dimension or full model dimension
+            expected_dim = self.matryoshka_dim if self.matryoshka_dim else self.model_config.vector_dim
+            if self.embeddings.shape[1] != expected_dim:
                 raise ValueError(
-                    f"Embedding dimension mismatch after aggregation: expected {self.model_config.vector_dim}, "
-                    f"got {self.embeddings.shape[1]}"
+                    f"Embedding dimension mismatch after aggregation: expected {expected_dim}D "
+                    f"(Matryoshka: {self.matryoshka_dim}, Model: {self.model_config.vector_dim}), "
+                    f"got {self.embeddings.shape[1]}D"
                 )
 
             if self.export_config.compress_embeddings:
@@ -1880,23 +1911,6 @@ class UltimateKaggleEmbedderV4:
                 if self.export_config.compress_embeddings:
                     companion_full = companion_full.astype(np.float32)
                 self.embeddings_by_model[companion_name] = companion_full
-
-            if self.embedding_backend == "jina_api" and jina_multivector_channel:
-                if len(jina_multivectors) != total_chunks:
-                    logger.warning(
-                        "Jina multivector count mismatch (expected %s, got %s)",
-                        total_chunks,
-                        len(jina_multivectors),
-                    )
-                else:
-                    self.multivectors_by_model[jina_multivector_channel] = jina_multivectors
-                    representative = next(
-                        (vectors for vectors in jina_multivectors if vectors),
-                        None,
-                    )
-                    if representative:
-                        self.multivector_dimensions[jina_multivector_channel] = len(representative[0])
-                    self.multivector_comparators[jina_multivector_channel] = "max_sim"
             
         except Exception as e:
             logger.error(f"Embedding generation failed: {e}")
@@ -1981,64 +1995,6 @@ class UltimateKaggleEmbedderV4:
 
         return results
     
-    def _encode_with_jina_api(
-        self,
-        texts: List[str],
-    ) -> Tuple[np.ndarray, List[List[List[float]]]]:
-        """Request embeddings from the Jina API, including multivector outputs."""
-
-        if self.api_client is None:
-            raise RuntimeError("Jina API client is not initialized")
-
-        response = self.api_client.embed(
-            texts,
-            late_chunking=True,
-            return_multivector=True,
-        )
-
-        if len(response) != len(texts):
-            raise RuntimeError(
-                f"Jina API returned {len(response)} results for {len(texts)} inputs"
-            )
-
-        dense_vectors: List[List[float]] = []
-        multivectors: List[List[List[float]]] = []
-
-        for idx, item in enumerate(response):
-            embedding = item.get("embedding")
-            if embedding is None and isinstance(item.get("data"), dict):
-                embedding = item["data"].get("embedding")
-
-            if embedding is None:
-                raise RuntimeError(f"Jina response missing embedding for item {idx}")
-
-            dense_vectors.append(np.asarray(embedding, dtype=np.float32).tolist())
-
-            chunk_vectors: List[List[float]] = []
-            embedded_chunks = item.get("embedded_chunks") or item.get("multivector") or item.get("multivectors")
-
-            if isinstance(embedded_chunks, list):
-                for chunk in embedded_chunks:
-                    if isinstance(chunk, dict):
-                        chunk_embedding = (
-                            chunk.get("embedding")
-                            or chunk.get("vector")
-                            or (chunk.get("values") if isinstance(chunk.get("values"), list) else None)
-                        )
-                        if chunk_embedding is None and isinstance(chunk.get("embeddings"), list):
-                            inner = chunk["embeddings"][0]
-                            if isinstance(inner, list):
-                                chunk_embedding = inner
-                        if isinstance(chunk_embedding, list):
-                            chunk_vectors.append(np.asarray(chunk_embedding, dtype=np.float32).tolist())
-                    elif isinstance(chunk, list):
-                        chunk_vectors.append(np.asarray(chunk, dtype=np.float32).tolist())
-
-            multivectors.append(chunk_vectors)
-
-        dense_array = np.asarray(dense_vectors, dtype=np.float32)
-        return dense_array, multivectors
-
     def _encode_with_backend(self, texts: List[str], batch_size: int) -> np.ndarray:
         """Encode with alternative backend (ONNX, etc.)"""
         # Placeholder for backend-specific encoding
