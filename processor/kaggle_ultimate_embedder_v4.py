@@ -1044,6 +1044,9 @@ class UltimateKaggleEmbedderV4:
         if self.device != "cuda":
             return "cpu"
 
+        if model_name == self.model_name:
+            return "cuda:0" if self.device_count > 0 else "cpu"
+
         override = self.ensemble_device_map.get(model_name)
         if override:
             if override == "cpu":
