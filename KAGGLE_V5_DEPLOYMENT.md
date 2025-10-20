@@ -1,4 +1,7 @@
-# Kaggle V5 Deployment Guide
+# Kaggle V5 Deployment Guide - Updated with Flash Attention 2
+
+**Last Updated**: 2025-01-20
+**Changes**: Upgraded to `sentence-transformers>=3.0.0` and `flash-attn>=2.5.0` for 3x faster inference
 
 **Deployment Architecture:**
 - **GPU Processing (Kaggle):** Chunking + Embedding generation

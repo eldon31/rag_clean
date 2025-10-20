@@ -589,13 +589,20 @@ class UltimateKaggleEmbedderV4:
             logger.info("Using FP16 precision for T4 optimization")
         
         # Flash Attention for supported models
-        if (self.model_config.supports_flash_attention and 
+        # NOTE: Flash Attention 2 requires sentence-transformers >= 3.0.0 and flash-attn package
+        # However, attn_implementation is NOT a SentenceTransformer parameter - it's for the underlying model
+        # sentence-transformers 3.0+ will automatically use Flash Attention if available
+        if (self.model_config.supports_flash_attention and
             self.gpu_config.enable_memory_efficient_attention):
             try:
-                model_kwargs["attn_implementation"] = "flash_attention_2"
-                logger.info("Flash Attention 2 enabled")
+                import sentence_transformers
+                st_version = tuple(map(int, sentence_transformers.__version__.split('.')[:2]))
+                if st_version >= (3, 0):
+                    logger.info("Flash Attention 2 will be used automatically (sentence-transformers >= 3.0)")
+                else:
+                    logger.info(f"Flash Attention requires sentence-transformers >= 3.0.0 (current: {sentence_transformers.__version__})")
             except Exception as e:
-                logger.warning(f"Flash Attention not available: {e}")
+                logger.debug(f"Flash Attention check failed: {e}")
         
         # Backend optimization
         if self.gpu_config.backend == "onnx" and ONNX_AVAILABLE:
