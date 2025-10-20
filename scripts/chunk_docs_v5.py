@@ -23,12 +23,27 @@ from processor.enhanced_ultimate_chunker_v5 import EnhancedUltimateChunkerV5
 from processor.kaggle_ultimate_embedder_v4 import KAGGLE_OPTIMIZED_MODELS
 import logging
 
-# Configure logging
+# Configure logging with more detail
 logging.basicConfig(
     level=logging.INFO,
-    format='%(asctime)s - %(levelname)s - %(message)s'
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+    handlers=[
+        logging.StreamHandler()
+    ]
 )
 logger = logging.getLogger(__name__)
+
+# Suppress TensorFlow/CUDA warnings that clutter output
+import warnings
+warnings.filterwarnings('ignore', category=UserWarning)
+warnings.filterwarnings('ignore', message='.*CUDA.*')
+warnings.filterwarnings('ignore', message='.*cuFFT.*')
+warnings.filterwarnings('ignore', message='.*cuDNN.*')
+warnings.filterwarnings('ignore', message='.*cuBLAS.*')
+
+# Set TensorFlow logging level
+import os
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'  # Suppress TF warnings
 
 
 def main():
@@ -80,7 +95,10 @@ def main():
     logger.info(f"  Chunk Size: {int(model_config.max_tokens * 0.8):,} tokens (80% safety margin)")
     
     # Initialize chunker with defaults
-    logger.info("\nInitializing V5 Chunker...")
+    logger.info("\n" + "="*80)
+    logger.info("INITIALIZING V5 CHUNKER")
+    logger.info("="*80)
+    
     try:
         chunker = EnhancedUltimateChunkerV5(
             target_model=model_name,
@@ -88,9 +106,20 @@ def main():
             extract_keywords=True,
             classify_content_type=True
         )
-        logger.info("✓ Chunker initialized")
+        logger.info("✓ Chunker initialized successfully")
+        logger.info("="*80)
     except Exception as e:
-        logger.error(f"Failed to initialize chunker: {e}")
+        logger.error("="*80)
+        logger.error("CHUNKER INITIALIZATION FAILED")
+        logger.error("="*80)
+        logger.error(f"Error Type: {type(e).__name__}")
+        logger.error(f"Error Message: {str(e)}")
+        
+        # Print full traceback for debugging
+        import traceback
+        logger.error("\nFull Traceback:")
+        logger.error(traceback.format_exc())
+        logger.error("="*80)
         sys.exit(1)
     
     # Collect all files recursively
@@ -105,11 +134,28 @@ def main():
         sys.exit(0)
     
     # Process documents
-    logger.info("\nChunking documents...")
-    results = chunker.chunk_documents(
-        file_paths=[str(f) for f in doc_files],
-        output_dir=output_dir
-    )
+    logger.info("\n" + "="*80)
+    logger.info("PROCESSING DOCUMENTS")
+    logger.info("="*80)
+    
+    try:
+        results = chunker.chunk_documents(
+            file_paths=[str(f) for f in doc_files],
+            output_dir=output_dir
+        )
+    except Exception as e:
+        logger.error("="*80)
+        logger.error("CHUNKING FAILED")
+        logger.error("="*80)
+        logger.error(f"Error Type: {type(e).__name__}")
+        logger.error(f"Error Message: {str(e)}")
+        
+        # Print full traceback for debugging
+        import traceback
+        logger.error("\nFull Traceback:")
+        logger.error(traceback.format_exc())
+        logger.error("="*80)
+        sys.exit(1)
     
     # Summary
     logger.info("\n" + "="*80)
@@ -119,12 +165,43 @@ def main():
     logger.info(f"Output Directory: {output_dir}")
     
     # Validate
-    validation = chunker.validate_chunks(results)
-    if validation.get('validation_passed', True):
-        logger.info("✓ All chunks within token limits")
-    else:
-        logger.warning(f"⚠️  {validation['invalid_chunks']} chunks exceed token limit")
+    logger.info("\n" + "="*80)
+    logger.info("VALIDATING CHUNKS")
+    logger.info("="*80)
     
+    try:
+        validation = chunker.validate_chunks(results)
+        
+        if validation.get('validation_passed', True):
+            logger.info("✓ All chunks within token limits")
+            logger.info(f"  Valid chunks: {validation.get('valid_chunks', 0)}")
+        else:
+            logger.warning(f"⚠️  Validation Issues Detected:")
+            logger.warning(f"  Invalid chunks: {validation.get('invalid_chunks', 0)}")
+            logger.warning(f"  Model max tokens: {validation.get('model_max_tokens', 'N/A')}")
+            
+            # Show first few problematic chunks
+            problematic = validation.get('oversized_chunk_details', [])
+            if problematic:
+                logger.warning(f"\n  First {len(problematic)} oversized chunks:")
+                for detail in problematic[:5]:
+                    logger.warning(f"    Chunk {detail.get('chunk_index')}: "
+                                 f"{detail.get('estimated_tokens')} tokens "
+                                 f"(overflow: {detail.get('overflow')})")
+    except Exception as e:
+        logger.error("="*80)
+        logger.error("VALIDATION FAILED")
+        logger.error("="*80)
+        logger.error(f"Error Type: {type(e).__name__}")
+        logger.error(f"Error Message: {str(e)}")
+        
+        import traceback
+        logger.error("\nFull Traceback:")
+        logger.error(traceback.format_exc())
+        logger.error("="*80)
+    
+    logger.info("="*80)
+    logger.info("CHUNKING COMPLETE - All operations finished successfully")
     logger.info("="*80)
 
 
