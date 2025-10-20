@@ -546,8 +546,6 @@ class UltimateKaggleEmbedderV4:
         self.model_config = KAGGLE_OPTIMIZED_MODELS[model_name]
         self.model_name = model_name
         logger.info(f"Selected model: {self.model_config.name} ({self.model_config.vector_dim}D)")
-        logger.info(f"Embedding backend: {self.embedding_backend}")
-        logger.info(f"Selected model: {self.model_config.name} ({self.model_config.vector_dim}D)")
 
         # Configuration
         self.gpu_config = gpu_config or KaggleGPUConfig()
