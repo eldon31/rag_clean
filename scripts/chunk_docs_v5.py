@@ -23,6 +23,10 @@ from processor.enhanced_ultimate_chunker_v5 import EnhancedUltimateChunkerV5
 from processor.kaggle_ultimate_embedder_v4 import KAGGLE_OPTIMIZED_MODELS
 import logging
 
+# Diagnose existing logging configuration before reconfiguring
+print(f"[LOG_DIAG] root level before basicConfig: {logging.getLogger().level}")
+print(f"[LOG_DIAG] handlers before basicConfig: {logging.getLogger().handlers}")
+
 # Configure logging with more detail
 logging.basicConfig(
     level=logging.INFO,
