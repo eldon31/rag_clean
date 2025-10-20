@@ -941,6 +941,7 @@ class UltimateKaggleEmbedderV4:
         texts: List[str],
         batch_size: int,
         device: str,
+        show_progress: bool = True,
     ) -> np.ndarray:
         """Invoke encode() against SentenceTransformer or compatible wrappers."""
 
@@ -958,7 +959,7 @@ class UltimateKaggleEmbedderV4:
         return encode_callable(
             texts,
             batch_size=batch_size,
-            show_progress_bar=False,
+            show_progress_bar=show_progress,
             convert_to_numpy=True,
             normalize_embeddings=True,
             device=device,
