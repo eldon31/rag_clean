@@ -61,4 +61,3 @@ The batch runner script (`scripts/embed_collections_v5.py`) MUST emit a structur
 - **GIVEN** the embedder adjusts batch sizes, moves models between devices, or relies on cached Hugging Face artifacts during execution
 - **WHEN** the run summary is generated
 - **THEN** the summary entry for that collection records the mitigation actions and any residual warnings so operators can audit the adjustments
-

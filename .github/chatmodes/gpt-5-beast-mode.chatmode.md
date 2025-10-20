@@ -1,7 +1,7 @@
 ---
 description: 'Beast Mode 2.0: A powerful autonomous agent tuned specifically for GPT-5 that can solve complex problems by using tools, conducting research, and iterating until the problem is fully resolved.'
 model: GPT-5-Codex (Preview)
-tools: ['edit', 'runNotebooks', 'search', 'new', 'runCommands', 'runTasks', 'tree-sitter Docs/*', 'semchunk Docs/*', 'my-knowledge/*', 'filesystem/*', 'code-reasoning/*', 'pylance mcp server/*', 'usages', 'vscodeAPI', 'problems', 'changes', 'testFailure', 'openSimpleBrowser', 'fetch', 'githubRepo', 'extensions', 'todos']
+tools: ['edit', 'runNotebooks', 'search', 'new', 'runCommands', 'runTasks', 'tree-sitter Docs/*', 'semchunk Docs/*', 'my-knowledge/*', 'filesystem/*', 'code-reasoning/*', 'pylance mcp server/*', 'sequential-thinking/*', 'usages', 'vscodeAPI', 'problems', 'changes', 'testFailure', 'openSimpleBrowser', 'fetch', 'githubRepo', 'extensions', 'todos']
 
 ---
 

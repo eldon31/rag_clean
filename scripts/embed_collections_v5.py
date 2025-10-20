@@ -103,6 +103,7 @@ class CollectionRunResult:
     mitigation_events: Optional[List[Dict[str, Any]]] = None
     gpu_snapshot_summary: Optional[Dict[str, Any]] = None
     cache_events: Optional[List[Dict[str, Any]]] = None
+    rotation_events: Optional[List[Dict[str, Any]]] = None
 
     def to_dict(self) -> Dict[str, Any]:
         payload: Dict[str, Any] = {
@@ -127,6 +128,8 @@ class CollectionRunResult:
             payload["gpu_snapshot_summary"] = self.gpu_snapshot_summary
         if self.cache_events is not None:
             payload["cache_events"] = self.cache_events
+        if self.rotation_events is not None:
+            payload["rotation_events"] = self.rotation_events
         if self.error is not None:
             payload["error"] = self.error
             if self.skip_reason is not None:
@@ -503,6 +506,34 @@ def _run_for_collection(
     cache_events = perf.get("cache_events") or []
     if cache_events:
         print(f"   ✓ Cache events: {len(cache_events)} recorded")
+    rotation_events = perf.get("ensemble_rotation") or []
+    rotation_limit = perf.get("ensemble_rotation_limit")
+    rotation_overflow = perf.get("ensemble_rotation_overflow", 0)
+    if rotation_events:
+        print(f"   ✓ Ensemble rotation telemetry: {len(rotation_events)} pass entries")
+        preview_count = min(6, len(rotation_events))
+        for event in rotation_events[:preview_count]:
+            batch_id = event.get("batch_index")
+            model_key = event.get("model")
+            status = event.get("status")
+            device = event.get("device")
+            duration = event.get("duration_seconds")
+            duration_str = f"{duration:.2f}s" if isinstance(duration, (int, float)) else "n/a"
+            print(f"     - batch={batch_id} model={model_key} status={status} device={device} duration={duration_str}")
+        if len(rotation_events) > preview_count:
+            remaining = len(rotation_events) - preview_count
+            print(f"     … {remaining} additional rotation events suppressed for brevity")
+        LOGGER.info("Ensemble rotation telemetry captured: %d entries", len(rotation_events))
+    if rotation_overflow:
+        limit_display = rotation_limit if rotation_limit is not None else "unknown"
+        print(
+            f"     … truncated {rotation_overflow} rotation event(s) beyond limit {limit_display}"
+        )
+        LOGGER.warning(
+            "Rotation telemetry truncated after %s entries; %d event(s) discarded",
+            limit_display,
+            rotation_overflow,
+        )
     
     print(f"\n5. Exporting embeddings...")
     exports = embedder.export_for_local_qdrant()
@@ -532,6 +563,7 @@ def _run_for_collection(
         mitigation_events=mitigation_events or None,
         gpu_snapshot_summary=gpu_snapshot_summary,
         cache_events=cache_events or None,
+        rotation_events=rotation_events or None,
     )
 
     del embedder

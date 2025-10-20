@@ -58,10 +58,10 @@ Track these steps as TODOs and complete them one by one.
 
 ### Stage 3: Archiving Changes
 After deployment, create separate PR to:
-- Move `changes/[name]/` → `changes/archive/YYYY-MM-DD-[name]/`
+- Move `changes/[name]/` → `changes/archive/YYYY-MM-DD-[name]/`; archived folders MUST live under `openspec/changes/archive/` and the original `changes/[name]/` directory SHOULD be completely removed so `openspec list` shows no active entry.
 - Update `specs/` if capabilities changed
-- Use `openspec archive [change] --skip-specs --yes` for tooling-only changes
-- Run `openspec validate --strict` to confirm the archived change passes checks
+- Prefer the CLI helper: `openspec archive [change] --yes` (add `--skip-specs` only when you intentionally avoid touching live specs); the command handles the move and prevents stale copies from lingering in `changes/`.
+- Run `openspec validate --strict --changes` (or `--specs`) to confirm the archived change passes checks and that only live specs remain; add `--no-interactive` when automating.
 
 ## Before Any Task
 

@@ -739,6 +739,22 @@ class UltimateKaggleEmbedderV4:
         # Telemetry & adaptive batching
         self.mitigation_events: List[Dict[str, Any]] = []
         self.cache_events: List[Dict[str, Any]] = []
+        self.rotation_events: List[Dict[str, Any]] = []
+        self._rotation_sample_limit: int = 5
+        self._rotation_payload_limit: int = 500
+        limit_override = os.environ.get("EMBEDDER_ROTATION_LIMIT")
+        if limit_override:
+            try:
+                candidate = int(limit_override)
+                if candidate > 0:
+                    self._rotation_payload_limit = candidate
+            except ValueError:
+                logger.warning(
+                    "Invalid EMBEDDER_ROTATION_LIMIT=%s, falling back to default %d",
+                    limit_override,
+                    self._rotation_payload_limit,
+                )
+        self._rotation_overflow_count: int = 0
         self.adaptive_controller: Optional[AdaptiveBatchController] = None
         self.gpu_snapshot_history: List[Dict[str, Any]] = []
         self.latest_gpu_snapshots: Dict[int, GPUMemorySnapshot] = {}
@@ -861,6 +877,33 @@ class UltimateKaggleEmbedderV4:
         record = {"type": event_type, "timestamp": time.time(), **details}
         self.mitigation_events.append(record)
         logger.info("Mitigation event captured: %s", record)
+
+    def _record_rotation_event(self, event: Dict[str, Any]) -> None:
+        """Capture per-batch ensemble rotation telemetry with bounded detail."""
+
+        samples = event.get("chunk_samples")
+        if isinstance(samples, list) and len(samples) > self._rotation_sample_limit:
+            event["chunk_samples"] = samples[: self._rotation_sample_limit]
+
+        event.setdefault("timestamp", time.time())
+        if len(self.rotation_events) >= self._rotation_payload_limit:
+            self._rotation_overflow_count += 1
+            if event.get("status") != "completed":
+                for idx in range(len(self.rotation_events) - 1, -1, -1):
+                    if self.rotation_events[idx].get("status") == "completed":
+                        self.rotation_events[idx] = event
+                        break
+                else:
+                    self.rotation_events[-1] = event
+            logger.debug(
+                "Rotation telemetry overflow; limit=%d, discarded=%d", 
+                self._rotation_payload_limit,
+                self._rotation_overflow_count,
+            )
+            return
+
+        self.rotation_events.append(event)
+        logger.debug("Rotation telemetry captured: %s", event)
 
     def _ensure_model_snapshot(self, repo_id: str) -> Path:
         """Ensure the Hugging Face snapshot for a model is cached locally."""
@@ -1555,7 +1598,12 @@ class UltimateKaggleEmbedderV4:
             except Exception as e:
                 logger.error(f"Failed to load ensemble model {model_name}: {e}")
     
-    def generate_ensemble_embeddings(self, texts: List[str], batch_slice: Optional[slice] = None) -> np.ndarray:
+    def generate_ensemble_embeddings(
+        self,
+        texts: List[str],
+        batch_slice: Optional[slice] = None,
+        batch_index: Optional[int] = None,
+    ) -> np.ndarray:
         """Generate embeddings using ensemble of models"""
 
         if not self.enable_ensemble or not self.ensemble_config:
@@ -1632,10 +1680,33 @@ class UltimateKaggleEmbedderV4:
                 )
 
         else:
+            chunk_start = slice_info.get("start") if slice_info else None
+            chunk_end = slice_info.get("end") if slice_info else None
+            chunk_count = slice_info.get("count") if slice_info else len(texts)
+            chunk_samples = slice_info.get("samples") if slice_info else []
+
             for model_name in ordered_models:
                 model = self._get_or_load_ensemble_model(model_name)
+
+                base_rotation_event: Dict[str, Any] = {
+                    "batch_index": batch_index,
+                    "model": model_name,
+                    "aggregation_weight": (
+                        self.ensemble_config.model_weights.get(model_name, 1.0)
+                        if self.ensemble_config and self.ensemble_config.model_weights
+                        else 1.0
+                    ),
+                    "chunk_start": chunk_start,
+                    "chunk_end": chunk_end,
+                    "chunk_count": chunk_count,
+                    "chunk_samples": [dict(sample) for sample in chunk_samples] if chunk_samples else [],
+                }
+
                 if model is None:
-                    continue
+                    self._record_rotation_event({**base_rotation_event, "status": "missing_model"})
+                    raise RuntimeError(
+                        f"Sequential ensemble model '{model_name}' is unavailable; rotation cannot continue"
+                    )
 
                 batch_hint = self._get_batch_hint_for_model(model_name)
                 target_device = self._select_sequential_device(model_name)
@@ -1794,13 +1865,23 @@ class UltimateKaggleEmbedderV4:
 
                 if not success or embeddings is None:
                     self.failed_ensemble_models.add(model_name)
+                    failure_event = {
+                        **base_rotation_event,
+                        "status": "failed",
+                        "device": current_device,
+                        "batch_size": current_batch_hint,
+                        "retries": retries,
+                    }
+                    self._record_rotation_event(failure_event)
                     logger.error(
                         "[ENSEMBLE] %s pass aborted | device=%s | chunks=%s",
                         model_name,
                         current_device,
                         slice_summary,
                     )
-                    continue
+                    raise RuntimeError(
+                        f"Sequential ensemble model '{model_name}' failed to encode batch {batch_index}"
+                    )
 
                 pass_duration = time.time() - pass_start
                 self._record_mitigation(
@@ -1820,6 +1901,16 @@ class UltimateKaggleEmbedderV4:
                     pass_duration,
                     slice_summary,
                 )
+
+                completed_event = {
+                    **base_rotation_event,
+                    "status": "completed",
+                    "device": current_device,
+                    "batch_size": current_batch_hint,
+                    "duration_seconds": pass_duration,
+                    "retries": retries,
+                }
+                self._record_rotation_event(completed_event)
 
                 all_embeddings.append(embeddings)
                 successful_models.append(model_name)
@@ -2758,6 +2849,7 @@ class UltimateKaggleEmbedderV4:
         self.multivector_dimensions = {}
         self.multivector_comparators = {}
         self.mitigation_events.clear()
+        self.rotation_events.clear()
         self.processing_stats.clear()
 
         if self.gpu_config.gradient_checkpointing and not self.gradient_checkpoint_evaluated:
@@ -2856,10 +2948,15 @@ class UltimateKaggleEmbedderV4:
                     )
 
                     try:
+                        batch_slice = slice(batch_index, batch_end)
                         with autocast_ctx:
                             if self.enable_ensemble:
                                 logger.debug(f"Batch {executed_batches + 1}: Using ensemble mode")
-                                batch_embeddings = self.generate_ensemble_embeddings(batch_texts)
+                                batch_embeddings = self.generate_ensemble_embeddings(
+                                    batch_texts,
+                                    batch_slice=batch_slice,
+                                    batch_index=executed_batches,
+                                )
                             elif self.primary_model is not None:
                                 logger.debug(f"Batch {executed_batches + 1}: Using primary model")
                                 primary_model = self._get_primary_model()
@@ -3060,9 +3157,14 @@ class UltimateKaggleEmbedderV4:
             "performance_stats": dict(self.processing_stats),
             "dimension_adjustments": dimension_adjustments,
             "mitigation_events": list(self.mitigation_events),
+            "ensemble_rotation": list(self.rotation_events),
+            "ensemble_rotation_limit": self._rotation_payload_limit,
             "gpu_snapshot_summary": self._summarize_gpu_history(),
             "cache_events": list(self.cache_events),
         }
+
+        if self._rotation_overflow_count:
+            results["ensemble_rotation_overflow"] = self._rotation_overflow_count
 
         if self.multivectors_by_model:
             multivector_stats: Dict[str, Dict[str, Any]] = {}
