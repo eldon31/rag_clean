@@ -1,0 +1,2661 @@
+[
+  {
+    "text": "## Purpose and Scope\n\nThis page covers:\n\n- How FastAPI supports both synchronous and asynchronous code\n- When to use `async def` vs regular `def` functions\n- How FastAPI handles different function types internally\n- Performance considerations for I/O-bound vs CPU-bound operations",
+    "metadata": {
+      "chunk_id": "40e4083889b4-0001",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\fastapi_fastapi\\_fastapi_fastapi_4.1-asynchronous-support.md",
+      "filename": "_fastapi_fastapi_4.1-asynchronous-support.md",
+      "file_extension": ".md",
+      "chunk_index": 1,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Purpose and Scope"
+      ],
+      "heading_text": "Purpose and Scope",
+      "token_count": 56,
+      "char_count": 280,
+      "start_char": 4016,
+      "end_char": 4296,
+      "semantic_score": 0.8,
+      "structural_score": 0.7999999999999998,
+      "retrieval_quality": 0.54,
+      "chunking_strategy": "hierarchical_precise_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T09:13:48.116629",
+      "document_id": "40e4083889b4",
+      "document_name": "_fastapi_fastapi_4.1-asynchronous-support",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\fastapi_fastapi\\_fastapi_fastapi_4.1-asynchronous-support.md",
+      "source_filename": "_fastapi_fastapi_4.1-asynchronous-support.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\fastapi_fastapi",
+      "relative_path": "Docs\\FAST_DOCS\\fastapi_fastapi\\_fastapi_fastapi_4.1-asynchronous-support.md",
+      "hierarchy_path": "Purpose and Scope",
+      "chunk_hash": "c10cf5b7a82b9ec6",
+      "content_digest": "c10cf5b7a82b9ec6",
+      "chunk_length": 280,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "and",
+          "how",
+          "fastapi",
+          "def",
+          "bound",
+          "purpose",
+          "scope",
+          "this",
+          "page",
+          "covers",
+          "supports",
+          "both",
+          "synchronous",
+          "asynchronous",
+          "code",
+          "when",
+          "use",
+          "async",
+          "regular",
+          "functions"
+        ],
+        "term_weights": [
+          {
+            "term": "and",
+            "tf": 2,
+            "weight": 0.057143
+          },
+          {
+            "term": "how",
+            "tf": 2,
+            "weight": 0.057143
+          },
+          {
+            "term": "fastapi",
+            "tf": 2,
+            "weight": 0.057143
+          },
+          {
+            "term": "def",
+            "tf": 2,
+            "weight": 0.057143
+          },
+          {
+            "term": "bound",
+            "tf": 2,
+            "weight": 0.057143
+          },
+          {
+            "term": "purpose",
+            "tf": 1,
+            "weight": 0.028571
+          },
+          {
+            "term": "scope",
+            "tf": 1,
+            "weight": 0.028571
+          },
+          {
+            "term": "this",
+            "tf": 1,
+            "weight": 0.028571
+          },
+          {
+            "term": "page",
+            "tf": 1,
+            "weight": 0.028571
+          },
+          {
+            "term": "covers",
+            "tf": 1,
+            "weight": 0.028571
+          },
+          {
+            "term": "supports",
+            "tf": 1,
+            "weight": 0.028571
+          },
+          {
+            "term": "both",
+            "tf": 1,
+            "weight": 0.028571
+          },
+          {
+            "term": "synchronous",
+            "tf": 1,
+            "weight": 0.028571
+          },
+          {
+            "term": "asynchronous",
+            "tf": 1,
+            "weight": 0.028571
+          },
+          {
+            "term": "code",
+            "tf": 1,
+            "weight": 0.028571
+          },
+          {
+            "term": "when",
+            "tf": 1,
+            "weight": 0.028571
+          },
+          {
+            "term": "use",
+            "tf": 1,
+            "weight": 0.028571
+          },
+          {
+            "term": "async",
+            "tf": 1,
+            "weight": 0.028571
+          },
+          {
+            "term": "regular",
+            "tf": 1,
+            "weight": 0.028571
+          },
+          {
+            "term": "functions",
+            "tf": 1,
+            "weight": 0.028571
+          }
+        ],
+        "unique_terms": 30,
+        "total_terms": 35
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": true,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Purpose and Scope",
+        "and",
+        "bound",
+        "covers",
+        "def",
+        "fastapi",
+        "how",
+        "page",
+        "purpose",
+        "scope",
+        "this"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.8,
+      "structural": 0.7999999999999998,
+      "retrieval_quality": 0.54,
+      "overall": 0.7133333333333333
+    }
+  },
+  {
+    "text": "### Request Processing Flow\n\n```\n```\n\nSources: \\[docs/en/docs/async.md:1-55], \\[docs/en/docs/async.md:366-372], \\[docs/en/docs/async.md:415-423]",
+    "metadata": {
+      "chunk_id": "40e4083889b4-0004",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\fastapi_fastapi\\_fastapi_fastapi_4.1-asynchronous-support.md",
+      "filename": "_fastapi_fastapi_4.1-asynchronous-support.md",
+      "file_extension": ".md",
+      "chunk_index": 4,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Request Processing Flow"
+      ],
+      "heading_text": "Request Processing Flow",
+      "token_count": 50,
+      "char_count": 144,
+      "start_char": 4684,
+      "end_char": 4828,
+      "semantic_score": 0.6,
+      "structural_score": 0.7,
+      "retrieval_quality": 0.56,
+      "chunking_strategy": "hierarchical_precise_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T09:13:48.117522",
+      "document_id": "40e4083889b4",
+      "document_name": "_fastapi_fastapi_4.1-asynchronous-support",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\fastapi_fastapi\\_fastapi_fastapi_4.1-asynchronous-support.md",
+      "source_filename": "_fastapi_fastapi_4.1-asynchronous-support.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\fastapi_fastapi",
+      "relative_path": "Docs\\FAST_DOCS\\fastapi_fastapi\\_fastapi_fastapi_4.1-asynchronous-support.md",
+      "hierarchy_path": "Request Processing Flow",
+      "chunk_hash": "ce16640f3bd2c20d",
+      "content_digest": "ce16640f3bd2c20d",
+      "chunk_length": 144,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "docs",
+          "async",
+          "request",
+          "processing",
+          "flow",
+          "sources",
+          "366",
+          "372",
+          "415",
+          "423"
+        ],
+        "term_weights": [
+          {
+            "term": "docs",
+            "tf": 6,
+            "weight": 0.352941
+          },
+          {
+            "term": "async",
+            "tf": 3,
+            "weight": 0.176471
+          },
+          {
+            "term": "request",
+            "tf": 1,
+            "weight": 0.058824
+          },
+          {
+            "term": "processing",
+            "tf": 1,
+            "weight": 0.058824
+          },
+          {
+            "term": "flow",
+            "tf": 1,
+            "weight": 0.058824
+          },
+          {
+            "term": "sources",
+            "tf": 1,
+            "weight": 0.058824
+          },
+          {
+            "term": "366",
+            "tf": 1,
+            "weight": 0.058824
+          },
+          {
+            "term": "372",
+            "tf": 1,
+            "weight": 0.058824
+          },
+          {
+            "term": "415",
+            "tf": 1,
+            "weight": 0.058824
+          },
+          {
+            "term": "423",
+            "tf": 1,
+            "weight": 0.058824
+          }
+        ],
+        "unique_terms": 10,
+        "total_terms": 17
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "366",
+        "372",
+        "415",
+        "423",
+        "Request Processing Flow",
+        "async",
+        "docs",
+        "flow",
+        "processing",
+        "request",
+        "sources"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.6,
+      "structural": 0.7,
+      "retrieval_quality": 0.56,
+      "overall": 0.62
+    }
+  },
+  {
+    "text": "## When to Use Async Functions  The decision to use `async def` or regular `def` for your path operation functions depends on what your function does:  | Use `async def` when...                    | Use `def` when...                                     | | ------------------------------------------ | ----------------------------------------------------- | | Calling other async functions with `await` | Using synchronous libraries (most database libraries) | | Making async network calls                 | Performing CPU-intensive operations                   | | Using async database drivers               | Not making any I/O operations                         | | Not doing CPU-intensive work               | Not sure what to use                                  |  FastAPI will handle both types correctly, but following these guidelines allows for performance optimizations. ``` ``` Sources: \\[docs/en/docs/async.md:5-55]",
+    "metadata": {
+      "chunk_id": "40e4083889b4-0005",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\fastapi_fastapi\\_fastapi_fastapi_4.1-asynchronous-support.md",
+      "filename": "_fastapi_fastapi_4.1-asynchronous-support.md",
+      "file_extension": ".md",
+      "chunk_index": 5,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "When to Use Async Functions"
+      ],
+      "heading_text": "When to Use Async Functions",
+      "token_count": 155,
+      "char_count": 928,
+      "start_char": 4830,
+      "end_char": 5758,
+      "semantic_score": 0.7999999999999999,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.6705555555555555,
+      "chunking_strategy": "hierarchical_precise_structural",
+      "content_type": "table_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T09:13:48.118116",
+      "document_id": "40e4083889b4",
+      "document_name": "_fastapi_fastapi_4.1-asynchronous-support",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\fastapi_fastapi\\_fastapi_fastapi_4.1-asynchronous-support.md",
+      "source_filename": "_fastapi_fastapi_4.1-asynchronous-support.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\fastapi_fastapi",
+      "relative_path": "Docs\\FAST_DOCS\\fastapi_fastapi\\_fastapi_fastapi_4.1-asynchronous-support.md",
+      "hierarchy_path": "When to Use Async Functions",
+      "chunk_hash": "6dded4f2f41c8603",
+      "content_digest": "6dded4f2f41c8603",
+      "chunk_length": 928,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "async",
+          "use",
+          "def",
+          "when",
+          "functions",
+          "not",
+          "for",
+          "your",
+          "what",
+          "using",
+          "libraries",
+          "database",
+          "making",
+          "cpu",
+          "intensive",
+          "operations",
+          "docs",
+          "the",
+          "decision",
+          "regular"
+        ],
+        "term_weights": [
+          {
+            "term": "async",
+            "tf": 7,
+            "weight": 0.084337
+          },
+          {
+            "term": "use",
+            "tf": 5,
+            "weight": 0.060241
+          },
+          {
+            "term": "def",
+            "tf": 4,
+            "weight": 0.048193
+          },
+          {
+            "term": "when",
+            "tf": 3,
+            "weight": 0.036145
+          },
+          {
+            "term": "functions",
+            "tf": 3,
+            "weight": 0.036145
+          },
+          {
+            "term": "not",
+            "tf": 3,
+            "weight": 0.036145
+          },
+          {
+            "term": "for",
+            "tf": 2,
+            "weight": 0.024096
+          },
+          {
+            "term": "your",
+            "tf": 2,
+            "weight": 0.024096
+          },
+          {
+            "term": "what",
+            "tf": 2,
+            "weight": 0.024096
+          },
+          {
+            "term": "using",
+            "tf": 2,
+            "weight": 0.024096
+          },
+          {
+            "term": "libraries",
+            "tf": 2,
+            "weight": 0.024096
+          },
+          {
+            "term": "database",
+            "tf": 2,
+            "weight": 0.024096
+          },
+          {
+            "term": "making",
+            "tf": 2,
+            "weight": 0.024096
+          },
+          {
+            "term": "cpu",
+            "tf": 2,
+            "weight": 0.024096
+          },
+          {
+            "term": "intensive",
+            "tf": 2,
+            "weight": 0.024096
+          },
+          {
+            "term": "operations",
+            "tf": 2,
+            "weight": 0.024096
+          },
+          {
+            "term": "docs",
+            "tf": 2,
+            "weight": 0.024096
+          },
+          {
+            "term": "the",
+            "tf": 1,
+            "weight": 0.012048
+          },
+          {
+            "term": "decision",
+            "tf": 1,
+            "weight": 0.012048
+          },
+          {
+            "term": "regular",
+            "tf": 1,
+            "weight": 0.012048
+          }
+        ],
+        "unique_terms": 53,
+        "total_terms": 83
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "When to Use Async Functions",
+        "async",
+        "def",
+        "for",
+        "functions",
+        "not",
+        "use",
+        "using",
+        "what",
+        "when",
+        "your"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.7999999999999999,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.6705555555555555,
+      "overall": 0.7901851851851851
+    }
+  },
+  {
+    "text": "## How FastAPI Handles Async and Sync Functions",
+    "metadata": {
+      "chunk_id": "40e4083889b4-0006",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\fastapi_fastapi\\_fastapi_fastapi_4.1-asynchronous-support.md",
+      "filename": "_fastapi_fastapi_4.1-asynchronous-support.md",
+      "file_extension": ".md",
+      "chunk_index": 6,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "How FastAPI Handles Async and Sync Functions"
+      ],
+      "heading_text": "How FastAPI Handles Async and Sync Functions",
+      "token_count": 9,
+      "char_count": 47,
+      "start_char": 5762,
+      "end_char": 5809,
+      "semantic_score": 0.8,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.59,
+      "chunking_strategy": "hierarchical_precise_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T09:13:48.118493",
+      "document_id": "40e4083889b4",
+      "document_name": "_fastapi_fastapi_4.1-asynchronous-support",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\fastapi_fastapi\\_fastapi_fastapi_4.1-asynchronous-support.md",
+      "source_filename": "_fastapi_fastapi_4.1-asynchronous-support.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\fastapi_fastapi",
+      "relative_path": "Docs\\FAST_DOCS\\fastapi_fastapi\\_fastapi_fastapi_4.1-asynchronous-support.md",
+      "hierarchy_path": "How FastAPI Handles Async and Sync Functions",
+      "chunk_hash": "de9f021d19154646",
+      "content_digest": "de9f021d19154646",
+      "chunk_length": 47,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "how",
+          "fastapi",
+          "handles",
+          "async",
+          "and",
+          "sync",
+          "functions"
+        ],
+        "term_weights": [
+          {
+            "term": "how",
+            "tf": 1,
+            "weight": 0.142857
+          },
+          {
+            "term": "fastapi",
+            "tf": 1,
+            "weight": 0.142857
+          },
+          {
+            "term": "handles",
+            "tf": 1,
+            "weight": 0.142857
+          },
+          {
+            "term": "async",
+            "tf": 1,
+            "weight": 0.142857
+          },
+          {
+            "term": "and",
+            "tf": 1,
+            "weight": 0.142857
+          },
+          {
+            "term": "sync",
+            "tf": 1,
+            "weight": 0.142857
+          },
+          {
+            "term": "functions",
+            "tf": 1,
+            "weight": 0.142857
+          }
+        ],
+        "unique_terms": 7,
+        "total_terms": 7
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "How FastAPI Handles Async and Sync Functions",
+        "and",
+        "async",
+        "fastapi",
+        "functions",
+        "handles",
+        "how",
+        "sync"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.8,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.59,
+      "overall": 0.7633333333333333
+    }
+  },
+  {
+    "text": "### Path Operation Function Execution\n\nFastAPI's handling of path operation functions depends on their declaration:\n\n```\n```\n\n**For `async def` path operations:**\n\n- FastAPI calls the function directly using `await`\n- Execution remains in the main event loop\n- Can use `await` for other async operations\n- Example: [docs/en/docs/async.md17-22](https://github.com/fastapi/fastapi/blob/3e2dbf91/docs/en/docs/async.md#L17-L22)\n\n**For `def` path operations:**\n\n- FastAPI wraps the call in `run_in_threadpool()`\n- Execution moves to an external thread\n- Cannot use `await` inside the function\n- Example: [docs/en/docs/async.md34-39](https://github.com/fastapi/fastapi/blob/3e2dbf91/docs/en/docs/async.md#L34-L39)",
+    "metadata": {
+      "chunk_id": "40e4083889b4-0007",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\fastapi_fastapi\\_fastapi_fastapi_4.1-asynchronous-support.md",
+      "filename": "_fastapi_fastapi_4.1-asynchronous-support.md",
+      "file_extension": ".md",
+      "chunk_index": 7,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Path Operation Function Execution"
+      ],
+      "heading_text": "Path Operation Function Execution",
+      "token_count": 189,
+      "char_count": 707,
+      "start_char": 5811,
+      "end_char": 6518,
+      "semantic_score": 0.7,
+      "structural_score": 0.7999999999999998,
+      "retrieval_quality": 0.6848051948051949,
+      "chunking_strategy": "hierarchical_precise_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T09:13:48.119015",
+      "document_id": "40e4083889b4",
+      "document_name": "_fastapi_fastapi_4.1-asynchronous-support",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\fastapi_fastapi\\_fastapi_fastapi_4.1-asynchronous-support.md",
+      "source_filename": "_fastapi_fastapi_4.1-asynchronous-support.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\fastapi_fastapi",
+      "relative_path": "Docs\\FAST_DOCS\\fastapi_fastapi\\_fastapi_fastapi_4.1-asynchronous-support.md",
+      "hierarchy_path": "Path Operation Function Execution",
+      "chunk_hash": "45efd5256c14293f",
+      "content_digest": "45efd5256c14293f",
+      "chunk_length": 707,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "docs",
+          "fastapi",
+          "async",
+          "path",
+          "the",
+          "function",
+          "execution",
+          "for",
+          "operations",
+          "await",
+          "operation",
+          "def",
+          "use",
+          "example",
+          "https",
+          "github",
+          "com",
+          "blob",
+          "3e2dbf91",
+          "handling"
+        ],
+        "term_weights": [
+          {
+            "term": "docs",
+            "tf": 8,
+            "weight": 0.087912
+          },
+          {
+            "term": "fastapi",
+            "tf": 7,
+            "weight": 0.076923
+          },
+          {
+            "term": "async",
+            "tf": 6,
+            "weight": 0.065934
+          },
+          {
+            "term": "path",
+            "tf": 4,
+            "weight": 0.043956
+          },
+          {
+            "term": "the",
+            "tf": 4,
+            "weight": 0.043956
+          },
+          {
+            "term": "function",
+            "tf": 3,
+            "weight": 0.032967
+          },
+          {
+            "term": "execution",
+            "tf": 3,
+            "weight": 0.032967
+          },
+          {
+            "term": "for",
+            "tf": 3,
+            "weight": 0.032967
+          },
+          {
+            "term": "operations",
+            "tf": 3,
+            "weight": 0.032967
+          },
+          {
+            "term": "await",
+            "tf": 3,
+            "weight": 0.032967
+          },
+          {
+            "term": "operation",
+            "tf": 2,
+            "weight": 0.021978
+          },
+          {
+            "term": "def",
+            "tf": 2,
+            "weight": 0.021978
+          },
+          {
+            "term": "use",
+            "tf": 2,
+            "weight": 0.021978
+          },
+          {
+            "term": "example",
+            "tf": 2,
+            "weight": 0.021978
+          },
+          {
+            "term": "https",
+            "tf": 2,
+            "weight": 0.021978
+          },
+          {
+            "term": "github",
+            "tf": 2,
+            "weight": 0.021978
+          },
+          {
+            "term": "com",
+            "tf": 2,
+            "weight": 0.021978
+          },
+          {
+            "term": "blob",
+            "tf": 2,
+            "weight": 0.021978
+          },
+          {
+            "term": "3e2dbf91",
+            "tf": 2,
+            "weight": 0.021978
+          },
+          {
+            "term": "handling",
+            "tf": 1,
+            "weight": 0.010989
+          }
+        ],
+        "unique_terms": 48,
+        "total_terms": 91
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": true,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Path Operation Function Execution",
+        "async",
+        "await",
+        "docs",
+        "execution",
+        "fastapi",
+        "for",
+        "function",
+        "operations",
+        "path",
+        "the"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.7999999999999998,
+      "retrieval_quality": 0.6848051948051949,
+      "overall": 0.7282683982683982
+    }
+  },
+  {
+    "text": "## Concurrency vs Parallelism\n\nFastAPI's asynchronous support is based on concurrency, which is different from parallelism:\n\n```\n```\n\n- **Concurrency**: Handling multiple tasks by switching between them when waiting occurs\n- **Parallelism**: Executing multiple tasks simultaneously on different processors\n\nFastAPI excels at concurrency, which is ideal for web applications that spend most of their time waiting for I/O operations.\n\nSources: \\[docs/en/docs/async.md:96-261]",
+    "metadata": {
+      "chunk_id": "40e4083889b4-0009",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\fastapi_fastapi\\_fastapi_fastapi_4.1-asynchronous-support.md",
+      "filename": "_fastapi_fastapi_4.1-asynchronous-support.md",
+      "file_extension": ".md",
+      "chunk_index": 9,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Concurrency vs Parallelism"
+      ],
+      "heading_text": "Concurrency vs Parallelism",
+      "token_count": 97,
+      "char_count": 473,
+      "start_char": 7144,
+      "end_char": 7617,
+      "semantic_score": 0.7999999999999999,
+      "structural_score": 0.7999999999999998,
+      "retrieval_quality": 0.5309836065573771,
+      "chunking_strategy": "hierarchical_precise_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T09:13:48.120186",
+      "document_id": "40e4083889b4",
+      "document_name": "_fastapi_fastapi_4.1-asynchronous-support",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\fastapi_fastapi\\_fastapi_fastapi_4.1-asynchronous-support.md",
+      "source_filename": "_fastapi_fastapi_4.1-asynchronous-support.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\fastapi_fastapi",
+      "relative_path": "Docs\\FAST_DOCS\\fastapi_fastapi\\_fastapi_fastapi_4.1-asynchronous-support.md",
+      "hierarchy_path": "Concurrency vs Parallelism",
+      "chunk_hash": "2692a3ce78091377",
+      "content_digest": "2692a3ce78091377",
+      "chunk_length": 473,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "concurrency",
+          "parallelism",
+          "fastapi",
+          "which",
+          "different",
+          "multiple",
+          "tasks",
+          "waiting",
+          "for",
+          "docs",
+          "asynchronous",
+          "support",
+          "based",
+          "from",
+          "handling",
+          "switching",
+          "between",
+          "them",
+          "when",
+          "occurs"
+        ],
+        "term_weights": [
+          {
+            "term": "concurrency",
+            "tf": 4,
+            "weight": 0.081633
+          },
+          {
+            "term": "parallelism",
+            "tf": 3,
+            "weight": 0.061224
+          },
+          {
+            "term": "fastapi",
+            "tf": 2,
+            "weight": 0.040816
+          },
+          {
+            "term": "which",
+            "tf": 2,
+            "weight": 0.040816
+          },
+          {
+            "term": "different",
+            "tf": 2,
+            "weight": 0.040816
+          },
+          {
+            "term": "multiple",
+            "tf": 2,
+            "weight": 0.040816
+          },
+          {
+            "term": "tasks",
+            "tf": 2,
+            "weight": 0.040816
+          },
+          {
+            "term": "waiting",
+            "tf": 2,
+            "weight": 0.040816
+          },
+          {
+            "term": "for",
+            "tf": 2,
+            "weight": 0.040816
+          },
+          {
+            "term": "docs",
+            "tf": 2,
+            "weight": 0.040816
+          },
+          {
+            "term": "asynchronous",
+            "tf": 1,
+            "weight": 0.020408
+          },
+          {
+            "term": "support",
+            "tf": 1,
+            "weight": 0.020408
+          },
+          {
+            "term": "based",
+            "tf": 1,
+            "weight": 0.020408
+          },
+          {
+            "term": "from",
+            "tf": 1,
+            "weight": 0.020408
+          },
+          {
+            "term": "handling",
+            "tf": 1,
+            "weight": 0.020408
+          },
+          {
+            "term": "switching",
+            "tf": 1,
+            "weight": 0.020408
+          },
+          {
+            "term": "between",
+            "tf": 1,
+            "weight": 0.020408
+          },
+          {
+            "term": "them",
+            "tf": 1,
+            "weight": 0.020408
+          },
+          {
+            "term": "when",
+            "tf": 1,
+            "weight": 0.020408
+          },
+          {
+            "term": "occurs",
+            "tf": 1,
+            "weight": 0.020408
+          }
+        ],
+        "unique_terms": 36,
+        "total_terms": 49
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": true,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Concurrency vs Parallelism",
+        "concurrency",
+        "different",
+        "docs",
+        "fastapi",
+        "for",
+        "multiple",
+        "parallelism",
+        "tasks",
+        "waiting",
+        "which"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.7999999999999999,
+      "structural": 0.7999999999999998,
+      "retrieval_quality": 0.5309836065573771,
+      "overall": 0.7103278688524589
+    }
+  },
+  {
+    "text": "## Technical Implementation Details\n\nFastAPI's asynchronous capabilities are built on a carefully designed stack that provides compatibility and performance:",
+    "metadata": {
+      "chunk_id": "40e4083889b4-0011",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\fastapi_fastapi\\_fastapi_fastapi_4.1-asynchronous-support.md",
+      "filename": "_fastapi_fastapi_4.1-asynchronous-support.md",
+      "file_extension": ".md",
+      "chunk_index": 11,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Technical Implementation Details"
+      ],
+      "heading_text": "Technical Implementation Details",
+      "token_count": 23,
+      "char_count": 157,
+      "start_char": 8388,
+      "end_char": 8545,
+      "semantic_score": 0.8,
+      "structural_score": 0.7,
+      "retrieval_quality": 0.59,
+      "chunking_strategy": "hierarchical_precise_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T09:13:48.121255",
+      "document_id": "40e4083889b4",
+      "document_name": "_fastapi_fastapi_4.1-asynchronous-support",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\fastapi_fastapi\\_fastapi_fastapi_4.1-asynchronous-support.md",
+      "source_filename": "_fastapi_fastapi_4.1-asynchronous-support.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\fastapi_fastapi",
+      "relative_path": "Docs\\FAST_DOCS\\fastapi_fastapi\\_fastapi_fastapi_4.1-asynchronous-support.md",
+      "hierarchy_path": "Technical Implementation Details",
+      "chunk_hash": "e2f0d105f55a97bb",
+      "content_digest": "e2f0d105f55a97bb",
+      "chunk_length": 157,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "technical",
+          "implementation",
+          "details",
+          "fastapi",
+          "asynchronous",
+          "capabilities",
+          "are",
+          "built",
+          "carefully",
+          "designed",
+          "stack",
+          "that",
+          "provides",
+          "compatibility",
+          "and",
+          "performance"
+        ],
+        "term_weights": [
+          {
+            "term": "technical",
+            "tf": 1,
+            "weight": 0.0625
+          },
+          {
+            "term": "implementation",
+            "tf": 1,
+            "weight": 0.0625
+          },
+          {
+            "term": "details",
+            "tf": 1,
+            "weight": 0.0625
+          },
+          {
+            "term": "fastapi",
+            "tf": 1,
+            "weight": 0.0625
+          },
+          {
+            "term": "asynchronous",
+            "tf": 1,
+            "weight": 0.0625
+          },
+          {
+            "term": "capabilities",
+            "tf": 1,
+            "weight": 0.0625
+          },
+          {
+            "term": "are",
+            "tf": 1,
+            "weight": 0.0625
+          },
+          {
+            "term": "built",
+            "tf": 1,
+            "weight": 0.0625
+          },
+          {
+            "term": "carefully",
+            "tf": 1,
+            "weight": 0.0625
+          },
+          {
+            "term": "designed",
+            "tf": 1,
+            "weight": 0.0625
+          },
+          {
+            "term": "stack",
+            "tf": 1,
+            "weight": 0.0625
+          },
+          {
+            "term": "that",
+            "tf": 1,
+            "weight": 0.0625
+          },
+          {
+            "term": "provides",
+            "tf": 1,
+            "weight": 0.0625
+          },
+          {
+            "term": "compatibility",
+            "tf": 1,
+            "weight": 0.0625
+          },
+          {
+            "term": "and",
+            "tf": 1,
+            "weight": 0.0625
+          },
+          {
+            "term": "performance",
+            "tf": 1,
+            "weight": 0.0625
+          }
+        ],
+        "unique_terms": 16,
+        "total_terms": 16
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Technical Implementation Details",
+        "are",
+        "asynchronous",
+        "built",
+        "capabilities",
+        "carefully",
+        "designed",
+        "details",
+        "fastapi",
+        "implementation",
+        "technical"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.8,
+      "structural": 0.7,
+      "retrieval_quality": 0.59,
+      "overall": 0.6966666666666667
+    }
+  },
+  {
+    "text": "### Coroutine and ThreadPool Management\n\nFastAPI uses different execution strategies based on function signatures:\n\n```\n```",
+    "metadata": {
+      "chunk_id": "40e4083889b4-0013",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\fastapi_fastapi\\_fastapi_fastapi_4.1-asynchronous-support.md",
+      "filename": "_fastapi_fastapi_4.1-asynchronous-support.md",
+      "file_extension": ".md",
+      "chunk_index": 13,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Coroutine and ThreadPool Management"
+      ],
+      "heading_text": "Coroutine and ThreadPool Management",
+      "token_count": 20,
+      "char_count": 123,
+      "start_char": 8586,
+      "end_char": 8709,
+      "semantic_score": 0.8,
+      "structural_score": 0.7,
+      "retrieval_quality": 0.57125,
+      "chunking_strategy": "hierarchical_precise_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T09:13:48.121617",
+      "document_id": "40e4083889b4",
+      "document_name": "_fastapi_fastapi_4.1-asynchronous-support",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\fastapi_fastapi\\_fastapi_fastapi_4.1-asynchronous-support.md",
+      "source_filename": "_fastapi_fastapi_4.1-asynchronous-support.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\fastapi_fastapi",
+      "relative_path": "Docs\\FAST_DOCS\\fastapi_fastapi\\_fastapi_fastapi_4.1-asynchronous-support.md",
+      "hierarchy_path": "Coroutine and ThreadPool Management",
+      "chunk_hash": "083e7873b0d37ea3",
+      "content_digest": "083e7873b0d37ea3",
+      "chunk_length": 123,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "coroutine",
+          "and",
+          "threadpool",
+          "management",
+          "fastapi",
+          "uses",
+          "different",
+          "execution",
+          "strategies",
+          "based",
+          "function",
+          "signatures"
+        ],
+        "term_weights": [
+          {
+            "term": "coroutine",
+            "tf": 1,
+            "weight": 0.083333
+          },
+          {
+            "term": "and",
+            "tf": 1,
+            "weight": 0.083333
+          },
+          {
+            "term": "threadpool",
+            "tf": 1,
+            "weight": 0.083333
+          },
+          {
+            "term": "management",
+            "tf": 1,
+            "weight": 0.083333
+          },
+          {
+            "term": "fastapi",
+            "tf": 1,
+            "weight": 0.083333
+          },
+          {
+            "term": "uses",
+            "tf": 1,
+            "weight": 0.083333
+          },
+          {
+            "term": "different",
+            "tf": 1,
+            "weight": 0.083333
+          },
+          {
+            "term": "execution",
+            "tf": 1,
+            "weight": 0.083333
+          },
+          {
+            "term": "strategies",
+            "tf": 1,
+            "weight": 0.083333
+          },
+          {
+            "term": "based",
+            "tf": 1,
+            "weight": 0.083333
+          },
+          {
+            "term": "function",
+            "tf": 1,
+            "weight": 0.083333
+          },
+          {
+            "term": "signatures",
+            "tf": 1,
+            "weight": 0.083333
+          }
+        ],
+        "unique_terms": 12,
+        "total_terms": 12
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Coroutine and ThreadPool Management",
+        "and",
+        "based",
+        "coroutine",
+        "different",
+        "execution",
+        "fastapi",
+        "management",
+        "strategies",
+        "threadpool",
+        "uses"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.8,
+      "structural": 0.7,
+      "retrieval_quality": 0.57125,
+      "overall": 0.6904166666666667
+    }
+  },
+  {
+    "text": "### AnyIO Integration\n\nFastAPI leverages AnyIO's structured concurrency features:\n\n- Compatible with both `asyncio` and `trio` backends\n- Provides unified async abstraction layer\n- Enables advanced concurrency patterns\n- Supports context managers and cancellation\n\nThe `run_in_threadpool()` function prevents blocking the main event loop when executing synchronous code, ensuring the server remains responsive to other requests.\n\nSources: \\[docs/en/docs/async.md:366-372], \\[docs/en/docs/async.md:415-423], \\[docs/en/docs/async.md:418-420]",
+    "metadata": {
+      "chunk_id": "40e4083889b4-0014",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\fastapi_fastapi\\_fastapi_fastapi_4.1-asynchronous-support.md",
+      "filename": "_fastapi_fastapi_4.1-asynchronous-support.md",
+      "file_extension": ".md",
+      "chunk_index": 14,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "AnyIO Integration"
+      ],
+      "heading_text": "AnyIO Integration",
+      "token_count": 121,
+      "char_count": 539,
+      "start_char": 8711,
+      "end_char": 9250,
+      "semantic_score": 0.7,
+      "structural_score": 0.7999999999999998,
+      "retrieval_quality": 0.5544067796610169,
+      "chunking_strategy": "hierarchical_precise_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T09:13:48.122089",
+      "document_id": "40e4083889b4",
+      "document_name": "_fastapi_fastapi_4.1-asynchronous-support",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\fastapi_fastapi\\_fastapi_fastapi_4.1-asynchronous-support.md",
+      "source_filename": "_fastapi_fastapi_4.1-asynchronous-support.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\fastapi_fastapi",
+      "relative_path": "Docs\\FAST_DOCS\\fastapi_fastapi\\_fastapi_fastapi_4.1-asynchronous-support.md",
+      "hierarchy_path": "AnyIO Integration",
+      "chunk_hash": "6f898a5428616cd8",
+      "content_digest": "6f898a5428616cd8",
+      "chunk_length": 539,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "docs",
+          "async",
+          "the",
+          "anyio",
+          "concurrency",
+          "and",
+          "integration",
+          "fastapi",
+          "leverages",
+          "structured",
+          "features",
+          "compatible",
+          "with",
+          "both",
+          "asyncio",
+          "trio",
+          "backends",
+          "provides",
+          "unified",
+          "abstraction"
+        ],
+        "term_weights": [
+          {
+            "term": "docs",
+            "tf": 6,
+            "weight": 0.090909
+          },
+          {
+            "term": "async",
+            "tf": 4,
+            "weight": 0.060606
+          },
+          {
+            "term": "the",
+            "tf": 3,
+            "weight": 0.045455
+          },
+          {
+            "term": "anyio",
+            "tf": 2,
+            "weight": 0.030303
+          },
+          {
+            "term": "concurrency",
+            "tf": 2,
+            "weight": 0.030303
+          },
+          {
+            "term": "and",
+            "tf": 2,
+            "weight": 0.030303
+          },
+          {
+            "term": "integration",
+            "tf": 1,
+            "weight": 0.015152
+          },
+          {
+            "term": "fastapi",
+            "tf": 1,
+            "weight": 0.015152
+          },
+          {
+            "term": "leverages",
+            "tf": 1,
+            "weight": 0.015152
+          },
+          {
+            "term": "structured",
+            "tf": 1,
+            "weight": 0.015152
+          },
+          {
+            "term": "features",
+            "tf": 1,
+            "weight": 0.015152
+          },
+          {
+            "term": "compatible",
+            "tf": 1,
+            "weight": 0.015152
+          },
+          {
+            "term": "with",
+            "tf": 1,
+            "weight": 0.015152
+          },
+          {
+            "term": "both",
+            "tf": 1,
+            "weight": 0.015152
+          },
+          {
+            "term": "asyncio",
+            "tf": 1,
+            "weight": 0.015152
+          },
+          {
+            "term": "trio",
+            "tf": 1,
+            "weight": 0.015152
+          },
+          {
+            "term": "backends",
+            "tf": 1,
+            "weight": 0.015152
+          },
+          {
+            "term": "provides",
+            "tf": 1,
+            "weight": 0.015152
+          },
+          {
+            "term": "unified",
+            "tf": 1,
+            "weight": 0.015152
+          },
+          {
+            "term": "abstraction",
+            "tf": 1,
+            "weight": 0.015152
+          }
+        ],
+        "unique_terms": 53,
+        "total_terms": 66
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": true,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "AnyIO Integration",
+        "and",
+        "anyio",
+        "async",
+        "concurrency",
+        "docs",
+        "fastapi",
+        "integration",
+        "leverages",
+        "structured",
+        "the"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.7999999999999998,
+      "retrieval_quality": 0.5544067796610169,
+      "overall": 0.6848022598870056
+    }
+  },
+  {
+    "text": "## Performance Considerations\n\nChoosing the right function type directly impacts FastAPI application performance:",
+    "metadata": {
+      "chunk_id": "40e4083889b4-0015",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\fastapi_fastapi\\_fastapi_fastapi_4.1-asynchronous-support.md",
+      "filename": "_fastapi_fastapi_4.1-asynchronous-support.md",
+      "file_extension": ".md",
+      "chunk_index": 15,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Performance Considerations"
+      ],
+      "heading_text": "Performance Considerations",
+      "token_count": 17,
+      "char_count": 113,
+      "start_char": 9252,
+      "end_char": 9365,
+      "semantic_score": 0.8,
+      "structural_score": 0.7,
+      "retrieval_quality": 0.59,
+      "chunking_strategy": "hierarchical_precise_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T09:13:48.122258",
+      "document_id": "40e4083889b4",
+      "document_name": "_fastapi_fastapi_4.1-asynchronous-support",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\fastapi_fastapi\\_fastapi_fastapi_4.1-asynchronous-support.md",
+      "source_filename": "_fastapi_fastapi_4.1-asynchronous-support.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\fastapi_fastapi",
+      "relative_path": "Docs\\FAST_DOCS\\fastapi_fastapi\\_fastapi_fastapi_4.1-asynchronous-support.md",
+      "hierarchy_path": "Performance Considerations",
+      "chunk_hash": "067fd5ef182b8827",
+      "content_digest": "067fd5ef182b8827",
+      "chunk_length": 113,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "performance",
+          "considerations",
+          "choosing",
+          "the",
+          "right",
+          "function",
+          "type",
+          "directly",
+          "impacts",
+          "fastapi",
+          "application"
+        ],
+        "term_weights": [
+          {
+            "term": "performance",
+            "tf": 2,
+            "weight": 0.166667
+          },
+          {
+            "term": "considerations",
+            "tf": 1,
+            "weight": 0.083333
+          },
+          {
+            "term": "choosing",
+            "tf": 1,
+            "weight": 0.083333
+          },
+          {
+            "term": "the",
+            "tf": 1,
+            "weight": 0.083333
+          },
+          {
+            "term": "right",
+            "tf": 1,
+            "weight": 0.083333
+          },
+          {
+            "term": "function",
+            "tf": 1,
+            "weight": 0.083333
+          },
+          {
+            "term": "type",
+            "tf": 1,
+            "weight": 0.083333
+          },
+          {
+            "term": "directly",
+            "tf": 1,
+            "weight": 0.083333
+          },
+          {
+            "term": "impacts",
+            "tf": 1,
+            "weight": 0.083333
+          },
+          {
+            "term": "fastapi",
+            "tf": 1,
+            "weight": 0.083333
+          },
+          {
+            "term": "application",
+            "tf": 1,
+            "weight": 0.083333
+          }
+        ],
+        "unique_terms": 11,
+        "total_terms": 12
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Performance Considerations",
+        "choosing",
+        "considerations",
+        "directly",
+        "fastapi",
+        "function",
+        "impacts",
+        "performance",
+        "right",
+        "the",
+        "type"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.8,
+      "structural": 0.7,
+      "retrieval_quality": 0.59,
+      "overall": 0.6966666666666667
+    }
+  },
+  {
+    "text": "### ThreadPool Behavior\n\nWhen FastAPI encounters a `def` function, it automatically:\n\n```\n```",
+    "metadata": {
+      "chunk_id": "40e4083889b4-0017",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\fastapi_fastapi\\_fastapi_fastapi_4.1-asynchronous-support.md",
+      "filename": "_fastapi_fastapi_4.1-asynchronous-support.md",
+      "file_extension": ".md",
+      "chunk_index": 17,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "ThreadPool Behavior"
+      ],
+      "heading_text": "ThreadPool Behavior",
+      "token_count": 20,
+      "char_count": 93,
+      "start_char": 10542,
+      "end_char": 10635,
+      "semantic_score": 0.8,
+      "structural_score": 0.7,
+      "retrieval_quality": 0.566923076923077,
+      "chunking_strategy": "hierarchical_precise_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T09:13:48.123764",
+      "document_id": "40e4083889b4",
+      "document_name": "_fastapi_fastapi_4.1-asynchronous-support",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\fastapi_fastapi\\_fastapi_fastapi_4.1-asynchronous-support.md",
+      "source_filename": "_fastapi_fastapi_4.1-asynchronous-support.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\fastapi_fastapi",
+      "relative_path": "Docs\\FAST_DOCS\\fastapi_fastapi\\_fastapi_fastapi_4.1-asynchronous-support.md",
+      "hierarchy_path": "ThreadPool Behavior",
+      "chunk_hash": "1b6f73bebb119a3e",
+      "content_digest": "1b6f73bebb119a3e",
+      "chunk_length": 93,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "threadpool",
+          "behavior",
+          "when",
+          "fastapi",
+          "encounters",
+          "def",
+          "function",
+          "automatically"
+        ],
+        "term_weights": [
+          {
+            "term": "threadpool",
+            "tf": 1,
+            "weight": 0.125
+          },
+          {
+            "term": "behavior",
+            "tf": 1,
+            "weight": 0.125
+          },
+          {
+            "term": "when",
+            "tf": 1,
+            "weight": 0.125
+          },
+          {
+            "term": "fastapi",
+            "tf": 1,
+            "weight": 0.125
+          },
+          {
+            "term": "encounters",
+            "tf": 1,
+            "weight": 0.125
+          },
+          {
+            "term": "def",
+            "tf": 1,
+            "weight": 0.125
+          },
+          {
+            "term": "function",
+            "tf": 1,
+            "weight": 0.125
+          },
+          {
+            "term": "automatically",
+            "tf": 1,
+            "weight": 0.125
+          }
+        ],
+        "unique_terms": 8,
+        "total_terms": 8
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "ThreadPool Behavior",
+        "automatically",
+        "behavior",
+        "def",
+        "encounters",
+        "fastapi",
+        "function",
+        "threadpool",
+        "when"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.8,
+      "structural": 0.7,
+      "retrieval_quality": 0.566923076923077,
+      "overall": 0.688974358974359
+    }
+  },
+  {
+    "text": "### FastAPI-Specific Optimizations\n\nUnlike some other async frameworks, FastAPI optimizations include:\n\n- **Automatic threadpool management**: No need to manually configure thread pools\n- **Smart function detection**: Analyzes function signatures at startup\n- **Mixed execution support**: Seamlessly combines async and sync dependencies\n- **Zero-copy where possible**: Minimal overhead for async operations\n\nFor compute-only operations (no I/O), `async def` performs better in FastAPI due to reduced threadpool overhead - approximately 100 nanoseconds saved per call compared to other frameworks.\n\nSources: \\[docs/en/docs/async.md:415-423], \\[docs/en/docs/async.md:418-420]",
+    "metadata": {
+      "chunk_id": "40e4083889b4-0018",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\fastapi_fastapi\\_fastapi_fastapi_4.1-asynchronous-support.md",
+      "filename": "_fastapi_fastapi_4.1-asynchronous-support.md",
+      "file_extension": ".md",
+      "chunk_index": 18,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "FastAPI-Specific Optimizations"
+      ],
+      "heading_text": "FastAPI-Specific Optimizations",
+      "token_count": 140,
+      "char_count": 673,
+      "start_char": 10637,
+      "end_char": 11310,
+      "semantic_score": 0.7999999999999999,
+      "structural_score": 0.7999999999999998,
+      "retrieval_quality": 0.53,
+      "chunking_strategy": "hierarchical_precise_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T09:13:48.124314",
+      "document_id": "40e4083889b4",
+      "document_name": "_fastapi_fastapi_4.1-asynchronous-support",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\fastapi_fastapi\\_fastapi_fastapi_4.1-asynchronous-support.md",
+      "source_filename": "_fastapi_fastapi_4.1-asynchronous-support.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\fastapi_fastapi",
+      "relative_path": "Docs\\FAST_DOCS\\fastapi_fastapi\\_fastapi_fastapi_4.1-asynchronous-support.md",
+      "hierarchy_path": "FastAPI-Specific Optimizations",
+      "chunk_hash": "f14ea22ee0c0eaad",
+      "content_digest": "f14ea22ee0c0eaad",
+      "chunk_length": 673,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "async",
+          "docs",
+          "fastapi",
+          "optimizations",
+          "other",
+          "frameworks",
+          "threadpool",
+          "function",
+          "overhead",
+          "for",
+          "operations",
+          "specific",
+          "unlike",
+          "some",
+          "include",
+          "automatic",
+          "management",
+          "need",
+          "manually",
+          "configure"
+        ],
+        "term_weights": [
+          {
+            "term": "async",
+            "tf": 6,
+            "weight": 0.077922
+          },
+          {
+            "term": "docs",
+            "tf": 4,
+            "weight": 0.051948
+          },
+          {
+            "term": "fastapi",
+            "tf": 3,
+            "weight": 0.038961
+          },
+          {
+            "term": "optimizations",
+            "tf": 2,
+            "weight": 0.025974
+          },
+          {
+            "term": "other",
+            "tf": 2,
+            "weight": 0.025974
+          },
+          {
+            "term": "frameworks",
+            "tf": 2,
+            "weight": 0.025974
+          },
+          {
+            "term": "threadpool",
+            "tf": 2,
+            "weight": 0.025974
+          },
+          {
+            "term": "function",
+            "tf": 2,
+            "weight": 0.025974
+          },
+          {
+            "term": "overhead",
+            "tf": 2,
+            "weight": 0.025974
+          },
+          {
+            "term": "for",
+            "tf": 2,
+            "weight": 0.025974
+          },
+          {
+            "term": "operations",
+            "tf": 2,
+            "weight": 0.025974
+          },
+          {
+            "term": "specific",
+            "tf": 1,
+            "weight": 0.012987
+          },
+          {
+            "term": "unlike",
+            "tf": 1,
+            "weight": 0.012987
+          },
+          {
+            "term": "some",
+            "tf": 1,
+            "weight": 0.012987
+          },
+          {
+            "term": "include",
+            "tf": 1,
+            "weight": 0.012987
+          },
+          {
+            "term": "automatic",
+            "tf": 1,
+            "weight": 0.012987
+          },
+          {
+            "term": "management",
+            "tf": 1,
+            "weight": 0.012987
+          },
+          {
+            "term": "need",
+            "tf": 1,
+            "weight": 0.012987
+          },
+          {
+            "term": "manually",
+            "tf": 1,
+            "weight": 0.012987
+          },
+          {
+            "term": "configure",
+            "tf": 1,
+            "weight": 0.012987
+          }
+        ],
+        "unique_terms": 59,
+        "total_terms": 77
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": true,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "FastAPI-Specific Optimizations",
+        "async",
+        "docs",
+        "fastapi",
+        "for",
+        "frameworks",
+        "function",
+        "optimizations",
+        "other",
+        "overhead",
+        "threadpool"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.7999999999999999,
+      "structural": 0.7999999999999998,
+      "retrieval_quality": 0.53,
+      "overall": 0.71
+    }
+  },
+  {
+    "text": "## Writing Your Own Async Code\n\nIf you need to write custom asynchronous code beyond FastAPI's built-in functionality, you can use:\n\n1. **AnyIO**: The library that powers Starlette and FastAPI\n2. **Asyncer**: A thin layer on top of AnyIO with improved type annotations\n3. **Standard asyncio**: Python's built-in asynchronous library\n\nThese tools can help you implement more advanced concurrency patterns in your FastAPI applications.\n\nSources: \\[docs/en/docs/async.md:366-372]",
+    "metadata": {
+      "chunk_id": "40e4083889b4-0019",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\fastapi_fastapi\\_fastapi_fastapi_4.1-asynchronous-support.md",
+      "filename": "_fastapi_fastapi_4.1-asynchronous-support.md",
+      "file_extension": ".md",
+      "chunk_index": 19,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Writing Your Own Async Code"
+      ],
+      "heading_text": "Writing Your Own Async Code",
+      "token_count": 106,
+      "char_count": 476,
+      "start_char": 11312,
+      "end_char": 11788,
+      "semantic_score": 0.7,
+      "structural_score": 0.7,
+      "retrieval_quality": 0.5490909090909091,
+      "chunking_strategy": "hierarchical_precise_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T09:13:48.124857",
+      "document_id": "40e4083889b4",
+      "document_name": "_fastapi_fastapi_4.1-asynchronous-support",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\fastapi_fastapi\\_fastapi_fastapi_4.1-asynchronous-support.md",
+      "source_filename": "_fastapi_fastapi_4.1-asynchronous-support.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\fastapi_fastapi",
+      "relative_path": "Docs\\FAST_DOCS\\fastapi_fastapi\\_fastapi_fastapi_4.1-asynchronous-support.md",
+      "hierarchy_path": "Writing Your Own Async Code",
+      "chunk_hash": "dce74896008ae9ba",
+      "content_digest": "dce74896008ae9ba",
+      "chunk_length": 476,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "you",
+          "fastapi",
+          "your",
+          "async",
+          "code",
+          "asynchronous",
+          "built",
+          "can",
+          "anyio",
+          "library",
+          "docs",
+          "writing",
+          "own",
+          "need",
+          "write",
+          "custom",
+          "beyond",
+          "functionality",
+          "use",
+          "the"
+        ],
+        "term_weights": [
+          {
+            "term": "you",
+            "tf": 3,
+            "weight": 0.05
+          },
+          {
+            "term": "fastapi",
+            "tf": 3,
+            "weight": 0.05
+          },
+          {
+            "term": "your",
+            "tf": 2,
+            "weight": 0.033333
+          },
+          {
+            "term": "async",
+            "tf": 2,
+            "weight": 0.033333
+          },
+          {
+            "term": "code",
+            "tf": 2,
+            "weight": 0.033333
+          },
+          {
+            "term": "asynchronous",
+            "tf": 2,
+            "weight": 0.033333
+          },
+          {
+            "term": "built",
+            "tf": 2,
+            "weight": 0.033333
+          },
+          {
+            "term": "can",
+            "tf": 2,
+            "weight": 0.033333
+          },
+          {
+            "term": "anyio",
+            "tf": 2,
+            "weight": 0.033333
+          },
+          {
+            "term": "library",
+            "tf": 2,
+            "weight": 0.033333
+          },
+          {
+            "term": "docs",
+            "tf": 2,
+            "weight": 0.033333
+          },
+          {
+            "term": "writing",
+            "tf": 1,
+            "weight": 0.016667
+          },
+          {
+            "term": "own",
+            "tf": 1,
+            "weight": 0.016667
+          },
+          {
+            "term": "need",
+            "tf": 1,
+            "weight": 0.016667
+          },
+          {
+            "term": "write",
+            "tf": 1,
+            "weight": 0.016667
+          },
+          {
+            "term": "custom",
+            "tf": 1,
+            "weight": 0.016667
+          },
+          {
+            "term": "beyond",
+            "tf": 1,
+            "weight": 0.016667
+          },
+          {
+            "term": "functionality",
+            "tf": 1,
+            "weight": 0.016667
+          },
+          {
+            "term": "use",
+            "tf": 1,
+            "weight": 0.016667
+          },
+          {
+            "term": "the",
+            "tf": 1,
+            "weight": 0.016667
+          }
+        ],
+        "unique_terms": 47,
+        "total_terms": 60
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Writing Your Own Async Code",
+        "anyio",
+        "async",
+        "asynchronous",
+        "built",
+        "can",
+        "code",
+        "fastapi",
+        "library",
+        "you",
+        "your"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.7,
+      "retrieval_quality": 0.5490909090909091,
+      "overall": 0.6496969696969697
+    }
+  },
+  {
+    "text": "## Conclusion\n\nFastAPI's support for both synchronous and asynchronous code provides flexibility while maintaining high performance. By understanding when to use each approach, you can optimize your application for different types of operations.\n\nRemember:\n\n- Use `async def` when working with other async code or I/O-bound operations\n- Use regular `def` when working with synchronous libraries or CPU-bound tasks\n- FastAPI will handle both correctly, but following these guidelines allows for better performance\n\nThe asynchronous capabilities of FastAPI, powered by Starlette and AnyIO, contribute significantly to its impressive performance compared to other Python web frameworks.\n\nSources: \\[docs/en/docs/async.md:394-403]\n\nDismiss\n\nRefresh this wiki\n\nEnter email to refresh",
+    "metadata": {
+      "chunk_id": "40e4083889b4-0020",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\fastapi_fastapi\\_fastapi_fastapi_4.1-asynchronous-support.md",
+      "filename": "_fastapi_fastapi_4.1-asynchronous-support.md",
+      "file_extension": ".md",
+      "chunk_index": 20,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Conclusion"
+      ],
+      "heading_text": "Conclusion",
+      "token_count": 145,
+      "char_count": 778,
+      "start_char": 11790,
+      "end_char": 12568,
+      "semantic_score": 0.7999999999999999,
+      "structural_score": 0.7999999999999998,
+      "retrieval_quality": 0.7214285714285714,
+      "chunking_strategy": "hierarchical_precise_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T09:13:48.125659",
+      "document_id": "40e4083889b4",
+      "document_name": "_fastapi_fastapi_4.1-asynchronous-support",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\fastapi_fastapi\\_fastapi_fastapi_4.1-asynchronous-support.md",
+      "source_filename": "_fastapi_fastapi_4.1-asynchronous-support.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\fastapi_fastapi",
+      "relative_path": "Docs\\FAST_DOCS\\fastapi_fastapi\\_fastapi_fastapi_4.1-asynchronous-support.md",
+      "hierarchy_path": "Conclusion",
+      "chunk_hash": "3e3e254f12603282",
+      "content_digest": "3e3e254f12603282",
+      "chunk_length": 778,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "fastapi",
+          "for",
+          "performance",
+          "when",
+          "use",
+          "async",
+          "both",
+          "synchronous",
+          "and",
+          "asynchronous",
+          "code",
+          "operations",
+          "def",
+          "working",
+          "with",
+          "other",
+          "bound",
+          "docs",
+          "refresh",
+          "conclusion"
+        ],
+        "term_weights": [
+          {
+            "term": "fastapi",
+            "tf": 3,
+            "weight": 0.03125
+          },
+          {
+            "term": "for",
+            "tf": 3,
+            "weight": 0.03125
+          },
+          {
+            "term": "performance",
+            "tf": 3,
+            "weight": 0.03125
+          },
+          {
+            "term": "when",
+            "tf": 3,
+            "weight": 0.03125
+          },
+          {
+            "term": "use",
+            "tf": 3,
+            "weight": 0.03125
+          },
+          {
+            "term": "async",
+            "tf": 3,
+            "weight": 0.03125
+          },
+          {
+            "term": "both",
+            "tf": 2,
+            "weight": 0.020833
+          },
+          {
+            "term": "synchronous",
+            "tf": 2,
+            "weight": 0.020833
+          },
+          {
+            "term": "and",
+            "tf": 2,
+            "weight": 0.020833
+          },
+          {
+            "term": "asynchronous",
+            "tf": 2,
+            "weight": 0.020833
+          },
+          {
+            "term": "code",
+            "tf": 2,
+            "weight": 0.020833
+          },
+          {
+            "term": "operations",
+            "tf": 2,
+            "weight": 0.020833
+          },
+          {
+            "term": "def",
+            "tf": 2,
+            "weight": 0.020833
+          },
+          {
+            "term": "working",
+            "tf": 2,
+            "weight": 0.020833
+          },
+          {
+            "term": "with",
+            "tf": 2,
+            "weight": 0.020833
+          },
+          {
+            "term": "other",
+            "tf": 2,
+            "weight": 0.020833
+          },
+          {
+            "term": "bound",
+            "tf": 2,
+            "weight": 0.020833
+          },
+          {
+            "term": "docs",
+            "tf": 2,
+            "weight": 0.020833
+          },
+          {
+            "term": "refresh",
+            "tf": 2,
+            "weight": 0.020833
+          },
+          {
+            "term": "conclusion",
+            "tf": 1,
+            "weight": 0.010417
+          }
+        ],
+        "unique_terms": 71,
+        "total_terms": 96
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": true,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Conclusion",
+        "and",
+        "async",
+        "asynchronous",
+        "both",
+        "fastapi",
+        "for",
+        "performance",
+        "synchronous",
+        "use",
+        "when"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.7999999999999999,
+      "structural": 0.7999999999999998,
+      "retrieval_quality": 0.7214285714285714,
+      "overall": 0.7738095238095237
+    }
+  },
+  {
+    "text": "### On this page\n\n- [Asynchronous Support](#asynchronous-support.md)\n- [Purpose and Scope](#purpose-and-scope.md)\n- [Overview of Asynchronous Support in FastAPI](#overview-of-asynchronous-support-in-fastapi.md)\n- [FastAPI Async Architecture](#fastapi-async-architecture.md)\n- [Request Processing Flow](#request-processing-flow.md)\n- [When to Use Async Functions](#when-to-use-async-functions.md)\n- [How FastAPI Handles Async and Sync Functions](#how-fastapi-handles-async-and-sync-functions.md)\n- [Path Operation Function Execution](#path-operation-function-execution.md)\n- [Dependencies and Sub-dependencies](#dependencies-and-sub-dependencies.md)\n- [Concurrency vs Parallelism](#concurrency-vs-parallelism.md)\n- [I/O-Bound vs CPU-Bound Operations](#io-bound-vs-cpu-bound-operations.md)\n- [Technical Implementation Details](#technical-implementation-details.md)\n- [Async Stack Architecture](#async-stack-architecture.md)\n- [Coroutine and ThreadPool Management](#coroutine-and-threadpool-management.md)\n- [AnyIO Integration](#anyio-integration.md)\n- [Performance Considerations](#performance-considerations.md)\n- [Performance Matrix](#performance-matrix.md)\n- [ThreadPool Behavior](#threadpool-behavior.md)\n- [FastAPI-Specific Optimizations](#fastapi-specific-optimizations.md)\n- [Writing Your Own Async Code](#writing-your-own-async-code.md)\n- [Conclusion](#conclusion.md)",
+    "metadata": {
+      "chunk_id": "40e4083889b4-0021",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\fastapi_fastapi\\_fastapi_fastapi_4.1-asynchronous-support.md",
+      "filename": "_fastapi_fastapi_4.1-asynchronous-support.md",
+      "file_extension": ".md",
+      "chunk_index": 21,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "On this page"
+      ],
+      "heading_text": "On this page",
+      "token_count": 328,
+      "char_count": 1373,
+      "start_char": 12570,
+      "end_char": 13943,
+      "semantic_score": 0.7,
+      "structural_score": 0.7999999999999998,
+      "retrieval_quality": 0.5090382978723405,
+      "chunking_strategy": "hierarchical_precise_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T09:13:48.127450",
+      "document_id": "40e4083889b4",
+      "document_name": "_fastapi_fastapi_4.1-asynchronous-support",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\fastapi_fastapi\\_fastapi_fastapi_4.1-asynchronous-support.md",
+      "source_filename": "_fastapi_fastapi_4.1-asynchronous-support.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\fastapi_fastapi",
+      "relative_path": "Docs\\FAST_DOCS\\fastapi_fastapi\\_fastapi_fastapi_4.1-asynchronous-support.md",
+      "hierarchy_path": "On this page",
+      "chunk_hash": "ca908ff4abcd1b18",
+      "content_digest": "ca908ff4abcd1b18",
+      "chunk_length": 1373,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "async",
+          "and",
+          "fastapi",
+          "asynchronous",
+          "support",
+          "architecture",
+          "functions",
+          "dependencies",
+          "bound",
+          "threadpool",
+          "performance",
+          "purpose",
+          "scope",
+          "overview",
+          "request",
+          "processing",
+          "flow",
+          "when",
+          "use",
+          "how"
+        ],
+        "term_weights": [
+          {
+            "term": "async",
+            "tf": 10,
+            "weight": 0.073529
+          },
+          {
+            "term": "and",
+            "tf": 8,
+            "weight": 0.058824
+          },
+          {
+            "term": "fastapi",
+            "tf": 8,
+            "weight": 0.058824
+          },
+          {
+            "term": "asynchronous",
+            "tf": 4,
+            "weight": 0.029412
+          },
+          {
+            "term": "support",
+            "tf": 4,
+            "weight": 0.029412
+          },
+          {
+            "term": "architecture",
+            "tf": 4,
+            "weight": 0.029412
+          },
+          {
+            "term": "functions",
+            "tf": 4,
+            "weight": 0.029412
+          },
+          {
+            "term": "dependencies",
+            "tf": 4,
+            "weight": 0.029412
+          },
+          {
+            "term": "bound",
+            "tf": 4,
+            "weight": 0.029412
+          },
+          {
+            "term": "threadpool",
+            "tf": 4,
+            "weight": 0.029412
+          },
+          {
+            "term": "performance",
+            "tf": 4,
+            "weight": 0.029412
+          },
+          {
+            "term": "purpose",
+            "tf": 2,
+            "weight": 0.014706
+          },
+          {
+            "term": "scope",
+            "tf": 2,
+            "weight": 0.014706
+          },
+          {
+            "term": "overview",
+            "tf": 2,
+            "weight": 0.014706
+          },
+          {
+            "term": "request",
+            "tf": 2,
+            "weight": 0.014706
+          },
+          {
+            "term": "processing",
+            "tf": 2,
+            "weight": 0.014706
+          },
+          {
+            "term": "flow",
+            "tf": 2,
+            "weight": 0.014706
+          },
+          {
+            "term": "when",
+            "tf": 2,
+            "weight": 0.014706
+          },
+          {
+            "term": "use",
+            "tf": 2,
+            "weight": 0.014706
+          },
+          {
+            "term": "how",
+            "tf": 2,
+            "weight": 0.014706
+          }
+        ],
+        "unique_terms": 51,
+        "total_terms": 136
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": true,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "On this page",
+        "and",
+        "architecture",
+        "async",
+        "asynchronous",
+        "bound",
+        "dependencies",
+        "fastapi",
+        "functions",
+        "support",
+        "threadpool"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.7999999999999998,
+      "retrieval_quality": 0.5090382978723405,
+      "overall": 0.6696794326241134
+    }
+  }
+]

@@ -1,0 +1,1128 @@
+[
+  {
+    "text": "## CLIPModel Architecture\n\nThe `CLIPModel` class provides the core functionality for multimodal applications by implementing the CLIP architecture within the sentence-transformers framework.\n\n**CLIPModel Component Architecture**\n```mermaid\ngraph TB\n    subgraph Input[\"Input Processing\"]\n        IMG[\"PIL.Image objects\"]\n        TXT[\"Text strings\"]\n    end\n    \n    subgraph CLIPModel[\"CLIPModel Class\"]\n        PROC[\"CLIPProcessor\"]\n        VMODEL[\"model.vision_model\"]\n        TMODEL[\"model.text_model\"]\n        VPROJ[\"model.visual_projection\"]\n        TPROJ[\"model.text_projection\"]\n    end\n    \n    subgraph Processing[\"tokenize() Method\"]\n        IMGPROC[\"image_processor\"]\n        TXTPROC[\"tokenizer\"]\n        INFO[\"image_text_info tracking\"]\n    end\n    \n    subgraph Output[\"forward() Output\"]\n        VEMB[\"Image embeddings\"]\n        TEMB[\"Text embeddings\"]\n        UNIFIED[\"sentence_embedding tensor\"]\n    end\n    \n    IMG --> Processing\n    TXT --> Processing\n    Processing --> CLIPModel\n    CLIPModel --> Output\n```\n\nThe `CLIPModel` class inherits from `InputModule` and wraps `transformers.CLIPModel` and `transformers.CLIPProcessor` components. It implements the `tokenize()` and `forward()` methods required by the sentence-transformers module system.\n\nSources: [sentence_transformers/models/CLIPModel.py:15-26](), [sentence_transformers/models/CLIPModel.py:70-92]()",
+    "metadata": {
+      "chunk_id": "6d9da76e6f9d-0000",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers\\Multimodal_Applications.md",
+      "filename": "Multimodal_Applications.md",
+      "file_extension": ".md",
+      "chunk_index": 0,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "CLIPModel Architecture"
+      ],
+      "heading_text": "CLIPModel Architecture",
+      "token_count": 312,
+      "char_count": 1382,
+      "start_char": 726,
+      "end_char": 2108,
+      "semantic_score": 0.7,
+      "structural_score": 0.7999999999999998,
+      "retrieval_quality": 0.5157153846153847,
+      "chunking_strategy": "hierarchical_balanced_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T09:14:17.997751",
+      "document_id": "6d9da76e6f9d",
+      "document_name": "Multimodal_Applications",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers\\Multimodal_Applications.md",
+      "source_filename": "Multimodal_Applications.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers",
+      "relative_path": "Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers\\Multimodal_Applications.md",
+      "hierarchy_path": "CLIPModel Architecture",
+      "chunk_hash": "7f263f6654883352",
+      "content_digest": "7f263f6654883352",
+      "chunk_length": 1382,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "clipmodel",
+          "the",
+          "transformers",
+          "model",
+          "sentence",
+          "processing",
+          "text",
+          "subgraph",
+          "image",
+          "end",
+          "architecture",
+          "class",
+          "output",
+          "and",
+          "input",
+          "img",
+          "txt",
+          "clipprocessor",
+          "projection",
+          "tokenize"
+        ],
+        "term_weights": [
+          {
+            "term": "clipmodel",
+            "tf": 11,
+            "weight": 0.08209
+          },
+          {
+            "term": "the",
+            "tf": 7,
+            "weight": 0.052239
+          },
+          {
+            "term": "transformers",
+            "tf": 6,
+            "weight": 0.044776
+          },
+          {
+            "term": "model",
+            "tf": 6,
+            "weight": 0.044776
+          },
+          {
+            "term": "sentence",
+            "tf": 5,
+            "weight": 0.037313
+          },
+          {
+            "term": "processing",
+            "tf": 5,
+            "weight": 0.037313
+          },
+          {
+            "term": "text",
+            "tf": 5,
+            "weight": 0.037313
+          },
+          {
+            "term": "subgraph",
+            "tf": 4,
+            "weight": 0.029851
+          },
+          {
+            "term": "image",
+            "tf": 4,
+            "weight": 0.029851
+          },
+          {
+            "term": "end",
+            "tf": 4,
+            "weight": 0.029851
+          },
+          {
+            "term": "architecture",
+            "tf": 3,
+            "weight": 0.022388
+          },
+          {
+            "term": "class",
+            "tf": 3,
+            "weight": 0.022388
+          },
+          {
+            "term": "output",
+            "tf": 3,
+            "weight": 0.022388
+          },
+          {
+            "term": "and",
+            "tf": 3,
+            "weight": 0.022388
+          },
+          {
+            "term": "input",
+            "tf": 2,
+            "weight": 0.014925
+          },
+          {
+            "term": "img",
+            "tf": 2,
+            "weight": 0.014925
+          },
+          {
+            "term": "txt",
+            "tf": 2,
+            "weight": 0.014925
+          },
+          {
+            "term": "clipprocessor",
+            "tf": 2,
+            "weight": 0.014925
+          },
+          {
+            "term": "projection",
+            "tf": 2,
+            "weight": 0.014925
+          },
+          {
+            "term": "tokenize",
+            "tf": 2,
+            "weight": 0.014925
+          }
+        ],
+        "unique_terms": 69,
+        "total_terms": 134
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "CLIPModel Architecture",
+        "clipmodel",
+        "end",
+        "image",
+        "model",
+        "processing",
+        "sentence",
+        "subgraph",
+        "text",
+        "the",
+        "transformers"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.7999999999999998,
+      "retrieval_quality": 0.5157153846153847,
+      "overall": 0.6719051282051282
+    }
+  },
+  {
+    "text": "## Input Processing and Tokenization\n\nThe CLIP model handles mixed input types through its `tokenize` method, which can process both PIL Images and text strings in the same batch.\n\n```mermaid\ngraph LR\n    subgraph InputBatch[\"Mixed Input Batch\"]\n        IMG1[\"PIL.Image\"]\n        TXT1[\"'A dog in snow'\"]\n        IMG2[\"PIL.Image\"] \n        TXT2[\"'A cat on table'\"]\n    end\n    \n    subgraph Tokenization[\"tokenize() Method\"]\n        CLASSIFY[\"Classify Input Types\"]\n        IMGPROC[\"Image Processing\"]\n        TXTPROC[\"Text Tokenization\"]\n        MERGE[\"Merge Features\"]\n    end\n    \n    subgraph Features[\"Feature Tensors\"]\n        PIXELS[\"pixel_values\"]\n        TOKENS[\"input_ids\"]\n        MASK[\"attention_mask\"]\n        INFO[\"image_text_info\"]\n    end\n    \n    InputBatch --> CLASSIFY\n    CLASSIFY --> IMGPROC\n    CLASSIFY --> TXTPROC\n    IMGPROC --> PIXELS\n    TXTPROC --> TOKENS\n    TXTPROC --> MASK\n    CLASSIFY --> INFO\n    MERGE --> Features\n```\n\nThe `image_text_info` list tracks which inputs are images (0) versus text (1), enabling proper routing during the forward pass.\n\nSources: [sentence_transformers/models/CLIPModel.py:70-92]()",
+    "metadata": {
+      "chunk_id": "6d9da76e6f9d-0001",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers\\Multimodal_Applications.md",
+      "filename": "Multimodal_Applications.md",
+      "file_extension": ".md",
+      "chunk_index": 1,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Input Processing and Tokenization"
+      ],
+      "heading_text": "Input Processing and Tokenization",
+      "token_count": 284,
+      "char_count": 1143,
+      "start_char": 2110,
+      "end_char": 3253,
+      "semantic_score": 0.7999999999999999,
+      "structural_score": 0.7,
+      "retrieval_quality": 0.5163157894736842,
+      "chunking_strategy": "hierarchical_balanced_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T09:14:17.998369",
+      "document_id": "6d9da76e6f9d",
+      "document_name": "Multimodal_Applications",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers\\Multimodal_Applications.md",
+      "source_filename": "Multimodal_Applications.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers",
+      "relative_path": "Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers\\Multimodal_Applications.md",
+      "hierarchy_path": "Input Processing and Tokenization",
+      "chunk_hash": "e35552692a0bc053",
+      "content_digest": "e35552692a0bc053",
+      "chunk_length": 1143,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "classify",
+          "input",
+          "text",
+          "image",
+          "the",
+          "txtproc",
+          "info",
+          "tokenization",
+          "pil",
+          "subgraph",
+          "end",
+          "imgproc",
+          "merge",
+          "features",
+          "mask",
+          "processing",
+          "and",
+          "mixed",
+          "types",
+          "tokenize"
+        ],
+        "term_weights": [
+          {
+            "term": "classify",
+            "tf": 6,
+            "weight": 0.04878
+          },
+          {
+            "term": "input",
+            "tf": 5,
+            "weight": 0.04065
+          },
+          {
+            "term": "text",
+            "tf": 5,
+            "weight": 0.04065
+          },
+          {
+            "term": "image",
+            "tf": 5,
+            "weight": 0.04065
+          },
+          {
+            "term": "the",
+            "tf": 4,
+            "weight": 0.03252
+          },
+          {
+            "term": "txtproc",
+            "tf": 4,
+            "weight": 0.03252
+          },
+          {
+            "term": "info",
+            "tf": 4,
+            "weight": 0.03252
+          },
+          {
+            "term": "tokenization",
+            "tf": 3,
+            "weight": 0.02439
+          },
+          {
+            "term": "pil",
+            "tf": 3,
+            "weight": 0.02439
+          },
+          {
+            "term": "subgraph",
+            "tf": 3,
+            "weight": 0.02439
+          },
+          {
+            "term": "end",
+            "tf": 3,
+            "weight": 0.02439
+          },
+          {
+            "term": "imgproc",
+            "tf": 3,
+            "weight": 0.02439
+          },
+          {
+            "term": "merge",
+            "tf": 3,
+            "weight": 0.02439
+          },
+          {
+            "term": "features",
+            "tf": 3,
+            "weight": 0.02439
+          },
+          {
+            "term": "mask",
+            "tf": 3,
+            "weight": 0.02439
+          },
+          {
+            "term": "processing",
+            "tf": 2,
+            "weight": 0.01626
+          },
+          {
+            "term": "and",
+            "tf": 2,
+            "weight": 0.01626
+          },
+          {
+            "term": "mixed",
+            "tf": 2,
+            "weight": 0.01626
+          },
+          {
+            "term": "types",
+            "tf": 2,
+            "weight": 0.01626
+          },
+          {
+            "term": "tokenize",
+            "tf": 2,
+            "weight": 0.01626
+          }
+        ],
+        "unique_terms": 69,
+        "total_terms": 123
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Input Processing and Tokenization",
+        "classify",
+        "image",
+        "info",
+        "input",
+        "pil",
+        "subgraph",
+        "text",
+        "the",
+        "tokenization",
+        "txtproc"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.7999999999999999,
+      "structural": 0.7,
+      "retrieval_quality": 0.5163157894736842,
+      "overall": 0.6721052631578948
+    }
+  },
+  {
+    "text": "### Basic Image-Text Similarity\n\n```python\nfrom sentence_transformers import SentenceTransformer\nfrom PIL import Image\n\nmodel = SentenceTransformer('clip-ViT-B-32')",
+    "metadata": {
+      "chunk_id": "6d9da76e6f9d-0004",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers\\Multimodal_Applications.md",
+      "filename": "Multimodal_Applications.md",
+      "file_extension": ".md",
+      "chunk_index": 4,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Basic Image-Text Similarity"
+      ],
+      "heading_text": "Basic Image-Text Similarity",
+      "token_count": 36,
+      "char_count": 164,
+      "start_char": 4584,
+      "end_char": 4748,
+      "semantic_score": 0.8,
+      "structural_score": 0.7,
+      "retrieval_quality": 0.5525,
+      "chunking_strategy": "hierarchical_balanced_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T09:14:17.999133",
+      "document_id": "6d9da76e6f9d",
+      "document_name": "Multimodal_Applications",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers\\Multimodal_Applications.md",
+      "source_filename": "Multimodal_Applications.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers",
+      "relative_path": "Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers\\Multimodal_Applications.md",
+      "hierarchy_path": "Basic Image-Text Similarity",
+      "chunk_hash": "c84e4f1da5cb4995",
+      "content_digest": "c84e4f1da5cb4995",
+      "chunk_length": 164,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "image",
+          "from",
+          "import",
+          "sentencetransformer",
+          "basic",
+          "text",
+          "similarity",
+          "python",
+          "sentence",
+          "transformers",
+          "pil",
+          "model",
+          "clip",
+          "vit"
+        ],
+        "term_weights": [
+          {
+            "term": "image",
+            "tf": 2,
+            "weight": 0.111111
+          },
+          {
+            "term": "from",
+            "tf": 2,
+            "weight": 0.111111
+          },
+          {
+            "term": "import",
+            "tf": 2,
+            "weight": 0.111111
+          },
+          {
+            "term": "sentencetransformer",
+            "tf": 2,
+            "weight": 0.111111
+          },
+          {
+            "term": "basic",
+            "tf": 1,
+            "weight": 0.055556
+          },
+          {
+            "term": "text",
+            "tf": 1,
+            "weight": 0.055556
+          },
+          {
+            "term": "similarity",
+            "tf": 1,
+            "weight": 0.055556
+          },
+          {
+            "term": "python",
+            "tf": 1,
+            "weight": 0.055556
+          },
+          {
+            "term": "sentence",
+            "tf": 1,
+            "weight": 0.055556
+          },
+          {
+            "term": "transformers",
+            "tf": 1,
+            "weight": 0.055556
+          },
+          {
+            "term": "pil",
+            "tf": 1,
+            "weight": 0.055556
+          },
+          {
+            "term": "model",
+            "tf": 1,
+            "weight": 0.055556
+          },
+          {
+            "term": "clip",
+            "tf": 1,
+            "weight": 0.055556
+          },
+          {
+            "term": "vit",
+            "tf": 1,
+            "weight": 0.055556
+          }
+        ],
+        "unique_terms": 14,
+        "total_terms": 18
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Basic Image-Text Similarity",
+        "basic",
+        "from",
+        "image",
+        "import",
+        "python",
+        "sentence",
+        "sentencetransformer",
+        "similarity",
+        "text",
+        "transformers"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.8,
+      "structural": 0.7,
+      "retrieval_quality": 0.5525,
+      "overall": 0.6841666666666667
+    }
+  },
+  {
+    "text": "# Encode image\nimage = Image.open('path/to/image.jpg')\nimg_embedding = model.encode(image)",
+    "metadata": {
+      "chunk_id": "6d9da76e6f9d-0005",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers\\Multimodal_Applications.md",
+      "filename": "Multimodal_Applications.md",
+      "file_extension": ".md",
+      "chunk_index": 5,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Encode image"
+      ],
+      "heading_text": "Encode image",
+      "token_count": 21,
+      "char_count": 90,
+      "start_char": 4750,
+      "end_char": 4840,
+      "semantic_score": 0.6,
+      "structural_score": 0.7,
+      "retrieval_quality": 0.5233333333333333,
+      "chunking_strategy": "hierarchical_balanced_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T09:14:17.999212",
+      "document_id": "6d9da76e6f9d",
+      "document_name": "Multimodal_Applications",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers\\Multimodal_Applications.md",
+      "source_filename": "Multimodal_Applications.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers",
+      "relative_path": "Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers\\Multimodal_Applications.md",
+      "hierarchy_path": "Encode image",
+      "chunk_hash": "47b2fc68cb4bde70",
+      "content_digest": "47b2fc68cb4bde70",
+      "chunk_length": 90,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "image",
+          "encode",
+          "open",
+          "path",
+          "jpg",
+          "img",
+          "embedding",
+          "model"
+        ],
+        "term_weights": [
+          {
+            "term": "image",
+            "tf": 5,
+            "weight": 0.384615
+          },
+          {
+            "term": "encode",
+            "tf": 2,
+            "weight": 0.153846
+          },
+          {
+            "term": "open",
+            "tf": 1,
+            "weight": 0.076923
+          },
+          {
+            "term": "path",
+            "tf": 1,
+            "weight": 0.076923
+          },
+          {
+            "term": "jpg",
+            "tf": 1,
+            "weight": 0.076923
+          },
+          {
+            "term": "img",
+            "tf": 1,
+            "weight": 0.076923
+          },
+          {
+            "term": "embedding",
+            "tf": 1,
+            "weight": 0.076923
+          },
+          {
+            "term": "model",
+            "tf": 1,
+            "weight": 0.076923
+          }
+        ],
+        "unique_terms": 8,
+        "total_terms": 13
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Encode image",
+        "embedding",
+        "encode",
+        "image",
+        "img",
+        "jpg",
+        "model",
+        "open",
+        "path"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.6,
+      "structural": 0.7,
+      "retrieval_quality": 0.5233333333333333,
+      "overall": 0.6077777777777778
+    }
+  },
+  {
+    "text": "# Encode text descriptions  \ntexts = [\"A dog in the snow\", \"A cat on a table\"]\ntext_embeddings = model.encode(texts)",
+    "metadata": {
+      "chunk_id": "6d9da76e6f9d-0006",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers\\Multimodal_Applications.md",
+      "filename": "Multimodal_Applications.md",
+      "file_extension": ".md",
+      "chunk_index": 6,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Encode text descriptions"
+      ],
+      "heading_text": "Encode text descriptions",
+      "token_count": 29,
+      "char_count": 116,
+      "start_char": 4842,
+      "end_char": 4958,
+      "semantic_score": 0.6,
+      "structural_score": 0.7,
+      "retrieval_quality": 0.5742105263157895,
+      "chunking_strategy": "hierarchical_balanced_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T09:14:17.999300",
+      "document_id": "6d9da76e6f9d",
+      "document_name": "Multimodal_Applications",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers\\Multimodal_Applications.md",
+      "source_filename": "Multimodal_Applications.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers",
+      "relative_path": "Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers\\Multimodal_Applications.md",
+      "hierarchy_path": "Encode text descriptions",
+      "chunk_hash": "bf655f8084fb1e04",
+      "content_digest": "bf655f8084fb1e04",
+      "chunk_length": 116,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "encode",
+          "text",
+          "texts",
+          "descriptions",
+          "dog",
+          "the",
+          "snow",
+          "cat",
+          "table",
+          "embeddings",
+          "model"
+        ],
+        "term_weights": [
+          {
+            "term": "encode",
+            "tf": 2,
+            "weight": 0.142857
+          },
+          {
+            "term": "text",
+            "tf": 2,
+            "weight": 0.142857
+          },
+          {
+            "term": "texts",
+            "tf": 2,
+            "weight": 0.142857
+          },
+          {
+            "term": "descriptions",
+            "tf": 1,
+            "weight": 0.071429
+          },
+          {
+            "term": "dog",
+            "tf": 1,
+            "weight": 0.071429
+          },
+          {
+            "term": "the",
+            "tf": 1,
+            "weight": 0.071429
+          },
+          {
+            "term": "snow",
+            "tf": 1,
+            "weight": 0.071429
+          },
+          {
+            "term": "cat",
+            "tf": 1,
+            "weight": 0.071429
+          },
+          {
+            "term": "table",
+            "tf": 1,
+            "weight": 0.071429
+          },
+          {
+            "term": "embeddings",
+            "tf": 1,
+            "weight": 0.071429
+          },
+          {
+            "term": "model",
+            "tf": 1,
+            "weight": 0.071429
+          }
+        ],
+        "unique_terms": 11,
+        "total_terms": 14
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Encode text descriptions",
+        "cat",
+        "descriptions",
+        "dog",
+        "embeddings",
+        "encode",
+        "snow",
+        "table",
+        "text",
+        "texts",
+        "the"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.6,
+      "structural": 0.7,
+      "retrieval_quality": 0.5742105263157895,
+      "overall": 0.6247368421052631
+    }
+  },
+  {
+    "text": "# Compute similarities\nsimilarities = model.similarity(img_embedding, text_embeddings)\n```",
+    "metadata": {
+      "chunk_id": "6d9da76e6f9d-0007",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers\\Multimodal_Applications.md",
+      "filename": "Multimodal_Applications.md",
+      "file_extension": ".md",
+      "chunk_index": 7,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Compute similarities"
+      ],
+      "heading_text": "Compute similarities",
+      "token_count": 17,
+      "char_count": 90,
+      "start_char": 4960,
+      "end_char": 5050,
+      "semantic_score": 0.6,
+      "structural_score": 0.7,
+      "retrieval_quality": 0.5525,
+      "chunking_strategy": "hierarchical_balanced_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T09:14:17.999367",
+      "document_id": "6d9da76e6f9d",
+      "document_name": "Multimodal_Applications",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers\\Multimodal_Applications.md",
+      "source_filename": "Multimodal_Applications.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers",
+      "relative_path": "Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers\\Multimodal_Applications.md",
+      "hierarchy_path": "Compute similarities",
+      "chunk_hash": "f165b345f7d66e00",
+      "content_digest": "f165b345f7d66e00",
+      "chunk_length": 90,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "similarities",
+          "compute",
+          "model",
+          "similarity",
+          "img",
+          "embedding",
+          "text",
+          "embeddings"
+        ],
+        "term_weights": [
+          {
+            "term": "similarities",
+            "tf": 2,
+            "weight": 0.222222
+          },
+          {
+            "term": "compute",
+            "tf": 1,
+            "weight": 0.111111
+          },
+          {
+            "term": "model",
+            "tf": 1,
+            "weight": 0.111111
+          },
+          {
+            "term": "similarity",
+            "tf": 1,
+            "weight": 0.111111
+          },
+          {
+            "term": "img",
+            "tf": 1,
+            "weight": 0.111111
+          },
+          {
+            "term": "embedding",
+            "tf": 1,
+            "weight": 0.111111
+          },
+          {
+            "term": "text",
+            "tf": 1,
+            "weight": 0.111111
+          },
+          {
+            "term": "embeddings",
+            "tf": 1,
+            "weight": 0.111111
+          }
+        ],
+        "unique_terms": 8,
+        "total_terms": 9
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Compute similarities",
+        "compute",
+        "embedding",
+        "embeddings",
+        "img",
+        "model",
+        "similarities",
+        "similarity",
+        "text"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.6,
+      "structural": 0.7,
+      "retrieval_quality": 0.5525,
+      "overall": 0.6174999999999999
+    }
+  },
+  {
+    "text": "### Mixed Batch Processing\n\nThe CLIP model can process images and text in the same batch call:\n\n```python",
+    "metadata": {
+      "chunk_id": "6d9da76e6f9d-0008",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers\\Multimodal_Applications.md",
+      "filename": "Multimodal_Applications.md",
+      "file_extension": ".md",
+      "chunk_index": 8,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Mixed Batch Processing"
+      ],
+      "heading_text": "Mixed Batch Processing",
+      "token_count": 22,
+      "char_count": 105,
+      "start_char": 5052,
+      "end_char": 5157,
+      "semantic_score": 0.8,
+      "structural_score": 0.7,
+      "retrieval_quality": 0.5566666666666666,
+      "chunking_strategy": "hierarchical_balanced_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T09:14:17.999433",
+      "document_id": "6d9da76e6f9d",
+      "document_name": "Multimodal_Applications",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers\\Multimodal_Applications.md",
+      "source_filename": "Multimodal_Applications.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers",
+      "relative_path": "Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers\\Multimodal_Applications.md",
+      "hierarchy_path": "Mixed Batch Processing",
+      "chunk_hash": "9ebb9bd6c5afb06f",
+      "content_digest": "9ebb9bd6c5afb06f",
+      "chunk_length": 105,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "batch",
+          "the",
+          "mixed",
+          "processing",
+          "clip",
+          "model",
+          "can",
+          "process",
+          "images",
+          "and",
+          "text",
+          "same",
+          "call",
+          "python"
+        ],
+        "term_weights": [
+          {
+            "term": "batch",
+            "tf": 2,
+            "weight": 0.125
+          },
+          {
+            "term": "the",
+            "tf": 2,
+            "weight": 0.125
+          },
+          {
+            "term": "mixed",
+            "tf": 1,
+            "weight": 0.0625
+          },
+          {
+            "term": "processing",
+            "tf": 1,
+            "weight": 0.0625
+          },
+          {
+            "term": "clip",
+            "tf": 1,
+            "weight": 0.0625
+          },
+          {
+            "term": "model",
+            "tf": 1,
+            "weight": 0.0625
+          },
+          {
+            "term": "can",
+            "tf": 1,
+            "weight": 0.0625
+          },
+          {
+            "term": "process",
+            "tf": 1,
+            "weight": 0.0625
+          },
+          {
+            "term": "images",
+            "tf": 1,
+            "weight": 0.0625
+          },
+          {
+            "term": "and",
+            "tf": 1,
+            "weight": 0.0625
+          },
+          {
+            "term": "text",
+            "tf": 1,
+            "weight": 0.0625
+          },
+          {
+            "term": "same",
+            "tf": 1,
+            "weight": 0.0625
+          },
+          {
+            "term": "call",
+            "tf": 1,
+            "weight": 0.0625
+          },
+          {
+            "term": "python",
+            "tf": 1,
+            "weight": 0.0625
+          }
+        ],
+        "unique_terms": 14,
+        "total_terms": 16
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Mixed Batch Processing",
+        "and",
+        "batch",
+        "can",
+        "clip",
+        "images",
+        "mixed",
+        "model",
+        "process",
+        "processing",
+        "the"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.8,
+      "structural": 0.7,
+      "retrieval_quality": 0.5566666666666666,
+      "overall": 0.6855555555555556
+    }
+  }
+]

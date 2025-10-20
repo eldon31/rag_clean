@@ -1,0 +1,2202 @@
+[
+  {
+    "text": "## Transport Architecture Overview\n\nThe MCP client framework provides three primary transport implementations, each designed for different deployment scenarios and communication patterns.\n\n```\n```\n\nSources: [src/mcp/client/streamable\\_http.py1-514](https://github.com/modelcontextprotocol/python-sdk/blob/146d7efb/src/mcp/client/streamable_http.py#L1-L514) [src/mcp/client/sse.py1-145](https://github.com/modelcontextprotocol/python-sdk/blob/146d7efb/src/mcp/client/sse.py#L1-L145) [src/mcp/client/stdio/\\_\\_init\\_\\_.py1-279](https://github.com/modelcontextprotocol/python-sdk/blob/146d7efb/src/mcp/client/stdio/__init__.py#L1-L279)",
+    "metadata": {
+      "chunk_id": "4bb84e0a10a4-0001",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_3.2-client-transports.md",
+      "filename": "_modelcontextprotocol_python-sdk_3.2-client-transports.md",
+      "file_extension": ".md",
+      "chunk_index": 1,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Transport Architecture Overview"
+      ],
+      "heading_text": "Transport Architecture Overview",
+      "token_count": 167,
+      "char_count": 632,
+      "start_char": 5287,
+      "end_char": 5919,
+      "semantic_score": 0.6,
+      "structural_score": 0.7,
+      "retrieval_quality": 0.5685714285714286,
+      "chunking_strategy": "hybrid_adaptive_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T09:13:51.004330",
+      "document_id": "4bb84e0a10a4",
+      "document_name": "_modelcontextprotocol_python-sdk_3.2-client-transports",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_3.2-client-transports.md",
+      "source_filename": "_modelcontextprotocol_python-sdk_3.2-client-transports.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk",
+      "relative_path": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_3.2-client-transports.md",
+      "hierarchy_path": "Transport Architecture Overview",
+      "chunk_hash": "11695a9c1daeceae",
+      "content_digest": "11695a9c1daeceae",
+      "chunk_length": 632,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "mcp",
+          "client",
+          "src",
+          "py1",
+          "https",
+          "github",
+          "com",
+          "modelcontextprotocol",
+          "python",
+          "sdk",
+          "blob",
+          "146d7efb",
+          "transport",
+          "streamable",
+          "http",
+          "sse",
+          "stdio",
+          "init",
+          "architecture",
+          "overview"
+        ],
+        "term_weights": [
+          {
+            "term": "mcp",
+            "tf": 7,
+            "weight": 0.084337
+          },
+          {
+            "term": "client",
+            "tf": 7,
+            "weight": 0.084337
+          },
+          {
+            "term": "src",
+            "tf": 6,
+            "weight": 0.072289
+          },
+          {
+            "term": "py1",
+            "tf": 3,
+            "weight": 0.036145
+          },
+          {
+            "term": "https",
+            "tf": 3,
+            "weight": 0.036145
+          },
+          {
+            "term": "github",
+            "tf": 3,
+            "weight": 0.036145
+          },
+          {
+            "term": "com",
+            "tf": 3,
+            "weight": 0.036145
+          },
+          {
+            "term": "modelcontextprotocol",
+            "tf": 3,
+            "weight": 0.036145
+          },
+          {
+            "term": "python",
+            "tf": 3,
+            "weight": 0.036145
+          },
+          {
+            "term": "sdk",
+            "tf": 3,
+            "weight": 0.036145
+          },
+          {
+            "term": "blob",
+            "tf": 3,
+            "weight": 0.036145
+          },
+          {
+            "term": "146d7efb",
+            "tf": 3,
+            "weight": 0.036145
+          },
+          {
+            "term": "transport",
+            "tf": 2,
+            "weight": 0.024096
+          },
+          {
+            "term": "streamable",
+            "tf": 2,
+            "weight": 0.024096
+          },
+          {
+            "term": "http",
+            "tf": 2,
+            "weight": 0.024096
+          },
+          {
+            "term": "sse",
+            "tf": 2,
+            "weight": 0.024096
+          },
+          {
+            "term": "stdio",
+            "tf": 2,
+            "weight": 0.024096
+          },
+          {
+            "term": "init",
+            "tf": 2,
+            "weight": 0.024096
+          },
+          {
+            "term": "architecture",
+            "tf": 1,
+            "weight": 0.012048
+          },
+          {
+            "term": "overview",
+            "tf": 1,
+            "weight": 0.012048
+          }
+        ],
+        "unique_terms": 42,
+        "total_terms": 83
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Transport Architecture Overview",
+        "client",
+        "com",
+        "github",
+        "https",
+        "mcp",
+        "modelcontextprotocol",
+        "py1",
+        "python",
+        "sdk",
+        "src"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.6,
+      "structural": 0.7,
+      "retrieval_quality": 0.5685714285714286,
+      "overall": 0.6228571428571428
+    }
+  },
+  {
+    "text": "### Message Flow Architecture\n\n```\n```\n\nSources: [src/mcp/client/streamable\\_http.py366-422](https://github.com/modelcontextprotocol/python-sdk/blob/146d7efb/src/mcp/client/streamable_http.py#L366-L422) [src/mcp/client/streamable\\_http.py192-219](https://github.com/modelcontextprotocol/python-sdk/blob/146d7efb/src/mcp/client/streamable_http.py#L192-L219) [src/mcp/client/streamable\\_http.py254-295](https://github.com/modelcontextprotocol/python-sdk/blob/146d7efb/src/mcp/client/streamable_http.py#L254-L295)",
+    "metadata": {
+      "chunk_id": "4bb84e0a10a4-0004",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_3.2-client-transports.md",
+      "filename": "_modelcontextprotocol_python-sdk_3.2-client-transports.md",
+      "file_extension": ".md",
+      "chunk_index": 4,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Message Flow Architecture"
+      ],
+      "heading_text": "Message Flow Architecture",
+      "token_count": 143,
+      "char_count": 510,
+      "start_char": 7382,
+      "end_char": 7892,
+      "semantic_score": 0.6,
+      "structural_score": 0.7,
+      "retrieval_quality": 0.56,
+      "chunking_strategy": "hybrid_adaptive_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T09:13:51.007103",
+      "document_id": "4bb84e0a10a4",
+      "document_name": "_modelcontextprotocol_python-sdk_3.2-client-transports",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_3.2-client-transports.md",
+      "source_filename": "_modelcontextprotocol_python-sdk_3.2-client-transports.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk",
+      "relative_path": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_3.2-client-transports.md",
+      "hierarchy_path": "Message Flow Architecture",
+      "chunk_hash": "f5aba078d10b7281",
+      "content_digest": "f5aba078d10b7281",
+      "chunk_length": 510,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "src",
+          "mcp",
+          "client",
+          "streamable",
+          "http",
+          "https",
+          "github",
+          "com",
+          "modelcontextprotocol",
+          "python",
+          "sdk",
+          "blob",
+          "146d7efb",
+          "message",
+          "flow",
+          "architecture",
+          "sources",
+          "py366",
+          "422",
+          "l366"
+        ],
+        "term_weights": [
+          {
+            "term": "src",
+            "tf": 6,
+            "weight": 0.085714
+          },
+          {
+            "term": "mcp",
+            "tf": 6,
+            "weight": 0.085714
+          },
+          {
+            "term": "client",
+            "tf": 6,
+            "weight": 0.085714
+          },
+          {
+            "term": "streamable",
+            "tf": 6,
+            "weight": 0.085714
+          },
+          {
+            "term": "http",
+            "tf": 6,
+            "weight": 0.085714
+          },
+          {
+            "term": "https",
+            "tf": 3,
+            "weight": 0.042857
+          },
+          {
+            "term": "github",
+            "tf": 3,
+            "weight": 0.042857
+          },
+          {
+            "term": "com",
+            "tf": 3,
+            "weight": 0.042857
+          },
+          {
+            "term": "modelcontextprotocol",
+            "tf": 3,
+            "weight": 0.042857
+          },
+          {
+            "term": "python",
+            "tf": 3,
+            "weight": 0.042857
+          },
+          {
+            "term": "sdk",
+            "tf": 3,
+            "weight": 0.042857
+          },
+          {
+            "term": "blob",
+            "tf": 3,
+            "weight": 0.042857
+          },
+          {
+            "term": "146d7efb",
+            "tf": 3,
+            "weight": 0.042857
+          },
+          {
+            "term": "message",
+            "tf": 1,
+            "weight": 0.014286
+          },
+          {
+            "term": "flow",
+            "tf": 1,
+            "weight": 0.014286
+          },
+          {
+            "term": "architecture",
+            "tf": 1,
+            "weight": 0.014286
+          },
+          {
+            "term": "sources",
+            "tf": 1,
+            "weight": 0.014286
+          },
+          {
+            "term": "py366",
+            "tf": 1,
+            "weight": 0.014286
+          },
+          {
+            "term": "422",
+            "tf": 1,
+            "weight": 0.014286
+          },
+          {
+            "term": "l366",
+            "tf": 1,
+            "weight": 0.014286
+          }
+        ],
+        "unique_terms": 29,
+        "total_terms": 70
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Message Flow Architecture",
+        "client",
+        "com",
+        "github",
+        "http",
+        "https",
+        "mcp",
+        "modelcontextprotocol",
+        "python",
+        "src",
+        "streamable"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.6,
+      "structural": 0.7,
+      "retrieval_quality": 0.56,
+      "overall": 0.62
+    }
+  },
+  {
+    "text": "### Session Management  The StreamableHTTP transport implements sophisticated session management with resumption support:  - **Session ID Extraction**: Automatically extracts session IDs from response headers [src/mcp/client/streamable\\_http.py126-135](https://github.com/modelcontextprotocol/python-sdk/blob/146d7efb/src/mcp/client/streamable_http.py#L126-L135) - **Protocol Version Negotiation**: Parses and stores protocol version from initialization responses [src/mcp/client/streamable\\_http.py136-150](https://github.com/modelcontextprotocol/python-sdk/blob/146d7efb/src/mcp/client/streamable_http.py#L136-L150) - **Request Header Preparation**: Adds session ID and protocol version to subsequent requests [src/mcp/client/streamable\\_http.py109-117](https://github.com/modelcontextprotocol/python-sdk/blob/146d7efb/src/mcp/client/streamable_http.py#L109-L117) - **Session Termination**: Sends DELETE requests to clean up server resources [src/mcp/client/streamable\\_http.py423-438](https://github.com/modelcontextprotocol/python-sdk/blob/146d7efb/src/mcp/client/streamable_http.py#L423-L438)",
+    "metadata": {
+      "chunk_id": "4bb84e0a10a4-0005",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_3.2-client-transports.md",
+      "filename": "_modelcontextprotocol_python-sdk_3.2-client-transports.md",
+      "file_extension": ".md",
+      "chunk_index": 5,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Session Management"
+      ],
+      "heading_text": "Session Management",
+      "token_count": 252,
+      "char_count": 1097,
+      "start_char": 7894,
+      "end_char": 8991,
+      "semantic_score": 0.7,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.515,
+      "chunking_strategy": "hybrid_adaptive_structural",
+      "content_type": "list_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T09:13:51.008174",
+      "document_id": "4bb84e0a10a4",
+      "document_name": "_modelcontextprotocol_python-sdk_3.2-client-transports",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_3.2-client-transports.md",
+      "source_filename": "_modelcontextprotocol_python-sdk_3.2-client-transports.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk",
+      "relative_path": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_3.2-client-transports.md",
+      "hierarchy_path": "Session Management",
+      "chunk_hash": "9b84735812ded766",
+      "content_digest": "9b84735812ded766",
+      "chunk_length": 1097,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "src",
+          "mcp",
+          "client",
+          "streamable",
+          "http",
+          "session",
+          "https",
+          "github",
+          "com",
+          "modelcontextprotocol",
+          "python",
+          "sdk",
+          "blob",
+          "146d7efb",
+          "protocol",
+          "version",
+          "management",
+          "from",
+          "and",
+          "requests"
+        ],
+        "term_weights": [
+          {
+            "term": "src",
+            "tf": 8,
+            "weight": 0.057971
+          },
+          {
+            "term": "mcp",
+            "tf": 8,
+            "weight": 0.057971
+          },
+          {
+            "term": "client",
+            "tf": 8,
+            "weight": 0.057971
+          },
+          {
+            "term": "streamable",
+            "tf": 8,
+            "weight": 0.057971
+          },
+          {
+            "term": "http",
+            "tf": 8,
+            "weight": 0.057971
+          },
+          {
+            "term": "session",
+            "tf": 6,
+            "weight": 0.043478
+          },
+          {
+            "term": "https",
+            "tf": 4,
+            "weight": 0.028986
+          },
+          {
+            "term": "github",
+            "tf": 4,
+            "weight": 0.028986
+          },
+          {
+            "term": "com",
+            "tf": 4,
+            "weight": 0.028986
+          },
+          {
+            "term": "modelcontextprotocol",
+            "tf": 4,
+            "weight": 0.028986
+          },
+          {
+            "term": "python",
+            "tf": 4,
+            "weight": 0.028986
+          },
+          {
+            "term": "sdk",
+            "tf": 4,
+            "weight": 0.028986
+          },
+          {
+            "term": "blob",
+            "tf": 4,
+            "weight": 0.028986
+          },
+          {
+            "term": "146d7efb",
+            "tf": 4,
+            "weight": 0.028986
+          },
+          {
+            "term": "protocol",
+            "tf": 3,
+            "weight": 0.021739
+          },
+          {
+            "term": "version",
+            "tf": 3,
+            "weight": 0.021739
+          },
+          {
+            "term": "management",
+            "tf": 2,
+            "weight": 0.014493
+          },
+          {
+            "term": "from",
+            "tf": 2,
+            "weight": 0.014493
+          },
+          {
+            "term": "and",
+            "tf": 2,
+            "weight": 0.014493
+          },
+          {
+            "term": "requests",
+            "tf": 2,
+            "weight": 0.014493
+          }
+        ],
+        "unique_terms": 66,
+        "total_terms": 138
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Session Management",
+        "client",
+        "com",
+        "github",
+        "http",
+        "https",
+        "mcp",
+        "modelcontextprotocol",
+        "session",
+        "src",
+        "streamable"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.515,
+      "overall": 0.705
+    }
+  },
+  {
+    "text": "### Resumption Capabilities\n\nThe transport supports resumption of interrupted sessions using resumption tokens:\n\n```\n```\n\nSources: [src/mcp/client/streamable\\_http.py220-253](https://github.com/modelcontextprotocol/python-sdk/blob/146d7efb/src/mcp/client/streamable_http.py#L220-L253) [src/mcp/client/streamable\\_http.py151-191](https://github.com/modelcontextprotocol/python-sdk/blob/146d7efb/src/mcp/client/streamable_http.py#L151-L191)",
+    "metadata": {
+      "chunk_id": "4bb84e0a10a4-0006",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_3.2-client-transports.md",
+      "filename": "_modelcontextprotocol_python-sdk_3.2-client-transports.md",
+      "file_extension": ".md",
+      "chunk_index": 6,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Resumption Capabilities"
+      ],
+      "heading_text": "Resumption Capabilities",
+      "token_count": 113,
+      "char_count": 438,
+      "start_char": 8993,
+      "end_char": 9431,
+      "semantic_score": 0.7,
+      "structural_score": 0.7,
+      "retrieval_quality": 0.54,
+      "chunking_strategy": "hybrid_adaptive_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T09:13:51.009094",
+      "document_id": "4bb84e0a10a4",
+      "document_name": "_modelcontextprotocol_python-sdk_3.2-client-transports",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_3.2-client-transports.md",
+      "source_filename": "_modelcontextprotocol_python-sdk_3.2-client-transports.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk",
+      "relative_path": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_3.2-client-transports.md",
+      "hierarchy_path": "Resumption Capabilities",
+      "chunk_hash": "6cdab603e1b18e77",
+      "content_digest": "6cdab603e1b18e77",
+      "chunk_length": 438,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "src",
+          "mcp",
+          "client",
+          "streamable",
+          "http",
+          "resumption",
+          "https",
+          "github",
+          "com",
+          "modelcontextprotocol",
+          "python",
+          "sdk",
+          "blob",
+          "146d7efb",
+          "capabilities",
+          "the",
+          "transport",
+          "supports",
+          "interrupted",
+          "sessions"
+        ],
+        "term_weights": [
+          {
+            "term": "src",
+            "tf": 4,
+            "weight": 0.071429
+          },
+          {
+            "term": "mcp",
+            "tf": 4,
+            "weight": 0.071429
+          },
+          {
+            "term": "client",
+            "tf": 4,
+            "weight": 0.071429
+          },
+          {
+            "term": "streamable",
+            "tf": 4,
+            "weight": 0.071429
+          },
+          {
+            "term": "http",
+            "tf": 4,
+            "weight": 0.071429
+          },
+          {
+            "term": "resumption",
+            "tf": 3,
+            "weight": 0.053571
+          },
+          {
+            "term": "https",
+            "tf": 2,
+            "weight": 0.035714
+          },
+          {
+            "term": "github",
+            "tf": 2,
+            "weight": 0.035714
+          },
+          {
+            "term": "com",
+            "tf": 2,
+            "weight": 0.035714
+          },
+          {
+            "term": "modelcontextprotocol",
+            "tf": 2,
+            "weight": 0.035714
+          },
+          {
+            "term": "python",
+            "tf": 2,
+            "weight": 0.035714
+          },
+          {
+            "term": "sdk",
+            "tf": 2,
+            "weight": 0.035714
+          },
+          {
+            "term": "blob",
+            "tf": 2,
+            "weight": 0.035714
+          },
+          {
+            "term": "146d7efb",
+            "tf": 2,
+            "weight": 0.035714
+          },
+          {
+            "term": "capabilities",
+            "tf": 1,
+            "weight": 0.017857
+          },
+          {
+            "term": "the",
+            "tf": 1,
+            "weight": 0.017857
+          },
+          {
+            "term": "transport",
+            "tf": 1,
+            "weight": 0.017857
+          },
+          {
+            "term": "supports",
+            "tf": 1,
+            "weight": 0.017857
+          },
+          {
+            "term": "interrupted",
+            "tf": 1,
+            "weight": 0.017857
+          },
+          {
+            "term": "sessions",
+            "tf": 1,
+            "weight": 0.017857
+          }
+        ],
+        "unique_terms": 31,
+        "total_terms": 56
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Resumption Capabilities",
+        "client",
+        "com",
+        "github",
+        "http",
+        "https",
+        "mcp",
+        "modelcontextprotocol",
+        "resumption",
+        "src",
+        "streamable"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.7,
+      "retrieval_quality": 0.54,
+      "overall": 0.6466666666666666
+    }
+  },
+  {
+    "text": "### Architecture\n\n```\n```\n\nSources: [src/mcp/client/sse.py24-145](https://github.com/modelcontextprotocol/python-sdk/blob/146d7efb/src/mcp/client/sse.py#L24-L145) [src/mcp/client/sse.py68-113](https://github.com/modelcontextprotocol/python-sdk/blob/146d7efb/src/mcp/client/sse.py#L68-L113) [src/mcp/client/sse.py114-133](https://github.com/modelcontextprotocol/python-sdk/blob/146d7efb/src/mcp/client/sse.py#L114-L133)",
+    "metadata": {
+      "chunk_id": "4bb84e0a10a4-0008",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_3.2-client-transports.md",
+      "filename": "_modelcontextprotocol_python-sdk_3.2-client-transports.md",
+      "file_extension": ".md",
+      "chunk_index": 8,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Architecture"
+      ],
+      "heading_text": "Architecture",
+      "token_count": 132,
+      "char_count": 418,
+      "start_char": 9633,
+      "end_char": 10051,
+      "semantic_score": 0.6,
+      "structural_score": 0.7,
+      "retrieval_quality": 0.5525,
+      "chunking_strategy": "hybrid_adaptive_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T09:13:51.009968",
+      "document_id": "4bb84e0a10a4",
+      "document_name": "_modelcontextprotocol_python-sdk_3.2-client-transports",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_3.2-client-transports.md",
+      "source_filename": "_modelcontextprotocol_python-sdk_3.2-client-transports.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk",
+      "relative_path": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_3.2-client-transports.md",
+      "hierarchy_path": "Architecture",
+      "chunk_hash": "949f25873120a902",
+      "content_digest": "949f25873120a902",
+      "chunk_length": 418,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "src",
+          "mcp",
+          "client",
+          "sse",
+          "https",
+          "github",
+          "com",
+          "modelcontextprotocol",
+          "python",
+          "sdk",
+          "blob",
+          "146d7efb",
+          "architecture",
+          "sources",
+          "py24",
+          "145",
+          "l24",
+          "l145",
+          "py68",
+          "113"
+        ],
+        "term_weights": [
+          {
+            "term": "src",
+            "tf": 6,
+            "weight": 0.096774
+          },
+          {
+            "term": "mcp",
+            "tf": 6,
+            "weight": 0.096774
+          },
+          {
+            "term": "client",
+            "tf": 6,
+            "weight": 0.096774
+          },
+          {
+            "term": "sse",
+            "tf": 6,
+            "weight": 0.096774
+          },
+          {
+            "term": "https",
+            "tf": 3,
+            "weight": 0.048387
+          },
+          {
+            "term": "github",
+            "tf": 3,
+            "weight": 0.048387
+          },
+          {
+            "term": "com",
+            "tf": 3,
+            "weight": 0.048387
+          },
+          {
+            "term": "modelcontextprotocol",
+            "tf": 3,
+            "weight": 0.048387
+          },
+          {
+            "term": "python",
+            "tf": 3,
+            "weight": 0.048387
+          },
+          {
+            "term": "sdk",
+            "tf": 3,
+            "weight": 0.048387
+          },
+          {
+            "term": "blob",
+            "tf": 3,
+            "weight": 0.048387
+          },
+          {
+            "term": "146d7efb",
+            "tf": 3,
+            "weight": 0.048387
+          },
+          {
+            "term": "architecture",
+            "tf": 1,
+            "weight": 0.016129
+          },
+          {
+            "term": "sources",
+            "tf": 1,
+            "weight": 0.016129
+          },
+          {
+            "term": "py24",
+            "tf": 1,
+            "weight": 0.016129
+          },
+          {
+            "term": "145",
+            "tf": 1,
+            "weight": 0.016129
+          },
+          {
+            "term": "l24",
+            "tf": 1,
+            "weight": 0.016129
+          },
+          {
+            "term": "l145",
+            "tf": 1,
+            "weight": 0.016129
+          },
+          {
+            "term": "py68",
+            "tf": 1,
+            "weight": 0.016129
+          },
+          {
+            "term": "113",
+            "tf": 1,
+            "weight": 0.016129
+          }
+        ],
+        "unique_terms": 26,
+        "total_terms": 62
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Architecture",
+        "client",
+        "com",
+        "github",
+        "https",
+        "mcp",
+        "modelcontextprotocol",
+        "python",
+        "sdk",
+        "src",
+        "sse"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.6,
+      "structural": 0.7,
+      "retrieval_quality": 0.5525,
+      "overall": 0.6174999999999999
+    }
+  },
+  {
+    "text": "### Endpoint Discovery\n\nThe SSE transport implements a discovery mechanism where the server provides the POST endpoint URL via SSE events:\n\n1. **Initial Connection**: Client connects to SSE endpoint via GET request [src/mcp/client/sse.py60-67](https://github.com/modelcontextprotocol/python-sdk/blob/146d7efb/src/mcp/client/sse.py#L60-L67)\n2. **Endpoint Event**: Server sends `endpoint` event with POST URL [src/mcp/client/sse.py75-92](https://github.com/modelcontextprotocol/python-sdk/blob/146d7efb/src/mcp/client/sse.py#L75-L92)\n3. **Security Validation**: Client validates endpoint origin matches connection origin [src/mcp/client/sse.py79-90](https://github.com/modelcontextprotocol/python-sdk/blob/146d7efb/src/mcp/client/sse.py#L79-L90)\n4. **Post Writer Activation**: POST writer task starts with discovered endpoint [src/mcp/client/sse.py134-136](https://github.com/modelcontextprotocol/python-sdk/blob/146d7efb/src/mcp/client/sse.py#L134-L136)",
+    "metadata": {
+      "chunk_id": "4bb84e0a10a4-0009",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_3.2-client-transports.md",
+      "filename": "_modelcontextprotocol_python-sdk_3.2-client-transports.md",
+      "file_extension": ".md",
+      "chunk_index": 9,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Endpoint Discovery"
+      ],
+      "heading_text": "Endpoint Discovery",
+      "token_count": 243,
+      "char_count": 952,
+      "start_char": 10053,
+      "end_char": 11005,
+      "semantic_score": 0.6,
+      "structural_score": 0.7,
+      "retrieval_quality": 0.5094029850746269,
+      "chunking_strategy": "hybrid_adaptive_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T09:13:51.010947",
+      "document_id": "4bb84e0a10a4",
+      "document_name": "_modelcontextprotocol_python-sdk_3.2-client-transports",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_3.2-client-transports.md",
+      "source_filename": "_modelcontextprotocol_python-sdk_3.2-client-transports.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk",
+      "relative_path": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_3.2-client-transports.md",
+      "hierarchy_path": "Endpoint Discovery",
+      "chunk_hash": "d385e55052b9da02",
+      "content_digest": "d385e55052b9da02",
+      "chunk_length": 952,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "sse",
+          "client",
+          "src",
+          "mcp",
+          "endpoint",
+          "post",
+          "https",
+          "github",
+          "com",
+          "modelcontextprotocol",
+          "python",
+          "sdk",
+          "blob",
+          "146d7efb",
+          "the",
+          "discovery",
+          "server",
+          "url",
+          "via",
+          "connection"
+        ],
+        "term_weights": [
+          {
+            "term": "sse",
+            "tf": 11,
+            "weight": 0.082707
+          },
+          {
+            "term": "client",
+            "tf": 10,
+            "weight": 0.075188
+          },
+          {
+            "term": "src",
+            "tf": 8,
+            "weight": 0.06015
+          },
+          {
+            "term": "mcp",
+            "tf": 8,
+            "weight": 0.06015
+          },
+          {
+            "term": "endpoint",
+            "tf": 7,
+            "weight": 0.052632
+          },
+          {
+            "term": "post",
+            "tf": 4,
+            "weight": 0.030075
+          },
+          {
+            "term": "https",
+            "tf": 4,
+            "weight": 0.030075
+          },
+          {
+            "term": "github",
+            "tf": 4,
+            "weight": 0.030075
+          },
+          {
+            "term": "com",
+            "tf": 4,
+            "weight": 0.030075
+          },
+          {
+            "term": "modelcontextprotocol",
+            "tf": 4,
+            "weight": 0.030075
+          },
+          {
+            "term": "python",
+            "tf": 4,
+            "weight": 0.030075
+          },
+          {
+            "term": "sdk",
+            "tf": 4,
+            "weight": 0.030075
+          },
+          {
+            "term": "blob",
+            "tf": 4,
+            "weight": 0.030075
+          },
+          {
+            "term": "146d7efb",
+            "tf": 4,
+            "weight": 0.030075
+          },
+          {
+            "term": "the",
+            "tf": 3,
+            "weight": 0.022556
+          },
+          {
+            "term": "discovery",
+            "tf": 2,
+            "weight": 0.015038
+          },
+          {
+            "term": "server",
+            "tf": 2,
+            "weight": 0.015038
+          },
+          {
+            "term": "url",
+            "tf": 2,
+            "weight": 0.015038
+          },
+          {
+            "term": "via",
+            "tf": 2,
+            "weight": 0.015038
+          },
+          {
+            "term": "connection",
+            "tf": 2,
+            "weight": 0.015038
+          }
+        ],
+        "unique_terms": 56,
+        "total_terms": 133
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Endpoint Discovery",
+        "client",
+        "com",
+        "endpoint",
+        "github",
+        "https",
+        "mcp",
+        "modelcontextprotocol",
+        "post",
+        "src",
+        "sse"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.6,
+      "structural": 0.7,
+      "retrieval_quality": 0.5094029850746269,
+      "overall": 0.6031343283582089
+    }
+  },
+  {
+    "text": "## STDIO Transport\n\nThe `stdio_client` manages communication with MCP servers running as separate processes, using standard input/output streams for JSON-RPC message exchange.",
+    "metadata": {
+      "chunk_id": "4bb84e0a10a4-0010",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_3.2-client-transports.md",
+      "filename": "_modelcontextprotocol_python-sdk_3.2-client-transports.md",
+      "file_extension": ".md",
+      "chunk_index": 10,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "STDIO Transport"
+      ],
+      "heading_text": "STDIO Transport",
+      "token_count": 32,
+      "char_count": 175,
+      "start_char": 11007,
+      "end_char": 11182,
+      "semantic_score": 0.8,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.59,
+      "chunking_strategy": "hybrid_adaptive_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T09:13:51.011241",
+      "document_id": "4bb84e0a10a4",
+      "document_name": "_modelcontextprotocol_python-sdk_3.2-client-transports",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_3.2-client-transports.md",
+      "source_filename": "_modelcontextprotocol_python-sdk_3.2-client-transports.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk",
+      "relative_path": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_3.2-client-transports.md",
+      "hierarchy_path": "STDIO Transport",
+      "chunk_hash": "60585b66a2b0d796",
+      "content_digest": "60585b66a2b0d796",
+      "chunk_length": 175,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "stdio",
+          "transport",
+          "the",
+          "client",
+          "manages",
+          "communication",
+          "with",
+          "mcp",
+          "servers",
+          "running",
+          "separate",
+          "processes",
+          "using",
+          "standard",
+          "input",
+          "output",
+          "streams",
+          "for",
+          "json",
+          "rpc"
+        ],
+        "term_weights": [
+          {
+            "term": "stdio",
+            "tf": 2,
+            "weight": 0.086957
+          },
+          {
+            "term": "transport",
+            "tf": 1,
+            "weight": 0.043478
+          },
+          {
+            "term": "the",
+            "tf": 1,
+            "weight": 0.043478
+          },
+          {
+            "term": "client",
+            "tf": 1,
+            "weight": 0.043478
+          },
+          {
+            "term": "manages",
+            "tf": 1,
+            "weight": 0.043478
+          },
+          {
+            "term": "communication",
+            "tf": 1,
+            "weight": 0.043478
+          },
+          {
+            "term": "with",
+            "tf": 1,
+            "weight": 0.043478
+          },
+          {
+            "term": "mcp",
+            "tf": 1,
+            "weight": 0.043478
+          },
+          {
+            "term": "servers",
+            "tf": 1,
+            "weight": 0.043478
+          },
+          {
+            "term": "running",
+            "tf": 1,
+            "weight": 0.043478
+          },
+          {
+            "term": "separate",
+            "tf": 1,
+            "weight": 0.043478
+          },
+          {
+            "term": "processes",
+            "tf": 1,
+            "weight": 0.043478
+          },
+          {
+            "term": "using",
+            "tf": 1,
+            "weight": 0.043478
+          },
+          {
+            "term": "standard",
+            "tf": 1,
+            "weight": 0.043478
+          },
+          {
+            "term": "input",
+            "tf": 1,
+            "weight": 0.043478
+          },
+          {
+            "term": "output",
+            "tf": 1,
+            "weight": 0.043478
+          },
+          {
+            "term": "streams",
+            "tf": 1,
+            "weight": 0.043478
+          },
+          {
+            "term": "for",
+            "tf": 1,
+            "weight": 0.043478
+          },
+          {
+            "term": "json",
+            "tf": 1,
+            "weight": 0.043478
+          },
+          {
+            "term": "rpc",
+            "tf": 1,
+            "weight": 0.043478
+          }
+        ],
+        "unique_terms": 22,
+        "total_terms": 23
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "STDIO Transport",
+        "client",
+        "communication",
+        "manages",
+        "mcp",
+        "running",
+        "servers",
+        "stdio",
+        "the",
+        "transport",
+        "with"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.8,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.59,
+      "overall": 0.7633333333333333
+    }
+  },
+  {
+    "text": "### Process Lifecycle\n\n```\n```\n\nSources: [src/mcp/client/stdio/\\_\\_init\\_\\_.py106-217](https://github.com/modelcontextprotocol/python-sdk/blob/146d7efb/src/mcp/client/stdio/__init__.py#L106-L217) [src/mcp/client/stdio/\\_\\_init\\_\\_.py235-279](https://github.com/modelcontextprotocol/python-sdk/blob/146d7efb/src/mcp/client/stdio/__init__.py#L235-L279) [src/mcp/client/stdio/\\_\\_init\\_\\_.py139-165](https://github.com/modelcontextprotocol/python-sdk/blob/146d7efb/src/mcp/client/stdio/__init__.py#L139-L165)",
+    "metadata": {
+      "chunk_id": "4bb84e0a10a4-0011",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_3.2-client-transports.md",
+      "filename": "_modelcontextprotocol_python-sdk_3.2-client-transports.md",
+      "file_extension": ".md",
+      "chunk_index": 11,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Process Lifecycle"
+      ],
+      "heading_text": "Process Lifecycle",
+      "token_count": 163,
+      "char_count": 505,
+      "start_char": 11184,
+      "end_char": 11689,
+      "semantic_score": 0.6,
+      "structural_score": 0.7,
+      "retrieval_quality": 0.5566666666666666,
+      "chunking_strategy": "hybrid_adaptive_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T09:13:51.011834",
+      "document_id": "4bb84e0a10a4",
+      "document_name": "_modelcontextprotocol_python-sdk_3.2-client-transports",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_3.2-client-transports.md",
+      "source_filename": "_modelcontextprotocol_python-sdk_3.2-client-transports.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk",
+      "relative_path": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_3.2-client-transports.md",
+      "hierarchy_path": "Process Lifecycle",
+      "chunk_hash": "36e333e069c4d4bf",
+      "content_digest": "36e333e069c4d4bf",
+      "chunk_length": 505,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "src",
+          "mcp",
+          "client",
+          "stdio",
+          "init",
+          "https",
+          "github",
+          "com",
+          "modelcontextprotocol",
+          "python",
+          "sdk",
+          "blob",
+          "146d7efb",
+          "process",
+          "lifecycle",
+          "sources",
+          "py106",
+          "217",
+          "l106",
+          "l217"
+        ],
+        "term_weights": [
+          {
+            "term": "src",
+            "tf": 6,
+            "weight": 0.086957
+          },
+          {
+            "term": "mcp",
+            "tf": 6,
+            "weight": 0.086957
+          },
+          {
+            "term": "client",
+            "tf": 6,
+            "weight": 0.086957
+          },
+          {
+            "term": "stdio",
+            "tf": 6,
+            "weight": 0.086957
+          },
+          {
+            "term": "init",
+            "tf": 6,
+            "weight": 0.086957
+          },
+          {
+            "term": "https",
+            "tf": 3,
+            "weight": 0.043478
+          },
+          {
+            "term": "github",
+            "tf": 3,
+            "weight": 0.043478
+          },
+          {
+            "term": "com",
+            "tf": 3,
+            "weight": 0.043478
+          },
+          {
+            "term": "modelcontextprotocol",
+            "tf": 3,
+            "weight": 0.043478
+          },
+          {
+            "term": "python",
+            "tf": 3,
+            "weight": 0.043478
+          },
+          {
+            "term": "sdk",
+            "tf": 3,
+            "weight": 0.043478
+          },
+          {
+            "term": "blob",
+            "tf": 3,
+            "weight": 0.043478
+          },
+          {
+            "term": "146d7efb",
+            "tf": 3,
+            "weight": 0.043478
+          },
+          {
+            "term": "process",
+            "tf": 1,
+            "weight": 0.014493
+          },
+          {
+            "term": "lifecycle",
+            "tf": 1,
+            "weight": 0.014493
+          },
+          {
+            "term": "sources",
+            "tf": 1,
+            "weight": 0.014493
+          },
+          {
+            "term": "py106",
+            "tf": 1,
+            "weight": 0.014493
+          },
+          {
+            "term": "217",
+            "tf": 1,
+            "weight": 0.014493
+          },
+          {
+            "term": "l106",
+            "tf": 1,
+            "weight": 0.014493
+          },
+          {
+            "term": "l217",
+            "tf": 1,
+            "weight": 0.014493
+          }
+        ],
+        "unique_terms": 28,
+        "total_terms": 69
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Process Lifecycle",
+        "client",
+        "com",
+        "github",
+        "https",
+        "init",
+        "mcp",
+        "modelcontextprotocol",
+        "python",
+        "src",
+        "stdio"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.6,
+      "structural": 0.7,
+      "retrieval_quality": 0.5566666666666666,
+      "overall": 0.6188888888888888
+    }
+  },
+  {
+    "text": "### Message Processing  The transport handles JSON-RPC message processing with robust error handling:  - **Line-based Parsing**: Buffers input and splits on newlines [src/mcp/client/stdio/\\_\\_init\\_\\_.py144-153](https://github.com/modelcontextprotocol/python-sdk/blob/146d7efb/src/mcp/client/stdio/__init__.py#L144-L153) - **JSON Validation**: Validates each line as JSON-RPC message [src/mcp/client/stdio/\\_\\_init\\_\\_.py154-162](https://github.com/modelcontextprotocol/python-sdk/blob/146d7efb/src/mcp/client/stdio/__init__.py#L154-L162) - **Encoding Support**: Configurable text encoding and error handling [src/mcp/client/stdio/\\_\\_init\\_\\_.py89-103](https://github.com/modelcontextprotocol/python-sdk/blob/146d7efb/src/mcp/client/stdio/__init__.py#L89-L103)",
+    "metadata": {
+      "chunk_id": "4bb84e0a10a4-0013",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_3.2-client-transports.md",
+      "filename": "_modelcontextprotocol_python-sdk_3.2-client-transports.md",
+      "file_extension": ".md",
+      "chunk_index": 13,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Message Processing"
+      ],
+      "heading_text": "Message Processing",
+      "token_count": 210,
+      "char_count": 761,
+      "start_char": 12554,
+      "end_char": 13315,
+      "semantic_score": 0.7,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5341860465116279,
+      "chunking_strategy": "hybrid_adaptive_structural",
+      "content_type": "list_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T09:13:51.013716",
+      "document_id": "4bb84e0a10a4",
+      "document_name": "_modelcontextprotocol_python-sdk_3.2-client-transports",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_3.2-client-transports.md",
+      "source_filename": "_modelcontextprotocol_python-sdk_3.2-client-transports.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk",
+      "relative_path": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_3.2-client-transports.md",
+      "hierarchy_path": "Message Processing",
+      "chunk_hash": "de48af0d8321c9ac",
+      "content_digest": "de48af0d8321c9ac",
+      "chunk_length": 761,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "src",
+          "mcp",
+          "client",
+          "stdio",
+          "init",
+          "message",
+          "json",
+          "https",
+          "github",
+          "com",
+          "modelcontextprotocol",
+          "python",
+          "sdk",
+          "blob",
+          "146d7efb",
+          "processing",
+          "rpc",
+          "error",
+          "handling",
+          "line"
+        ],
+        "term_weights": [
+          {
+            "term": "src",
+            "tf": 6,
+            "weight": 0.058252
+          },
+          {
+            "term": "mcp",
+            "tf": 6,
+            "weight": 0.058252
+          },
+          {
+            "term": "client",
+            "tf": 6,
+            "weight": 0.058252
+          },
+          {
+            "term": "stdio",
+            "tf": 6,
+            "weight": 0.058252
+          },
+          {
+            "term": "init",
+            "tf": 6,
+            "weight": 0.058252
+          },
+          {
+            "term": "message",
+            "tf": 3,
+            "weight": 0.029126
+          },
+          {
+            "term": "json",
+            "tf": 3,
+            "weight": 0.029126
+          },
+          {
+            "term": "https",
+            "tf": 3,
+            "weight": 0.029126
+          },
+          {
+            "term": "github",
+            "tf": 3,
+            "weight": 0.029126
+          },
+          {
+            "term": "com",
+            "tf": 3,
+            "weight": 0.029126
+          },
+          {
+            "term": "modelcontextprotocol",
+            "tf": 3,
+            "weight": 0.029126
+          },
+          {
+            "term": "python",
+            "tf": 3,
+            "weight": 0.029126
+          },
+          {
+            "term": "sdk",
+            "tf": 3,
+            "weight": 0.029126
+          },
+          {
+            "term": "blob",
+            "tf": 3,
+            "weight": 0.029126
+          },
+          {
+            "term": "146d7efb",
+            "tf": 3,
+            "weight": 0.029126
+          },
+          {
+            "term": "processing",
+            "tf": 2,
+            "weight": 0.019417
+          },
+          {
+            "term": "rpc",
+            "tf": 2,
+            "weight": 0.019417
+          },
+          {
+            "term": "error",
+            "tf": 2,
+            "weight": 0.019417
+          },
+          {
+            "term": "handling",
+            "tf": 2,
+            "weight": 0.019417
+          },
+          {
+            "term": "line",
+            "tf": 2,
+            "weight": 0.019417
+          }
+        ],
+        "unique_terms": 51,
+        "total_terms": 103
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Message Processing",
+        "client",
+        "com",
+        "github",
+        "https",
+        "init",
+        "json",
+        "mcp",
+        "message",
+        "src",
+        "stdio"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5341860465116279,
+      "overall": 0.7113953488372093
+    }
+  },
+  {
+    "text": "### Integration with ClientSession\n\nAll client transports follow the same interface pattern for integration with `ClientSession`:\n\n```\n```\n\nSources: [src/mcp/client/streamable\\_http.py453-459](https://github.com/modelcontextprotocol/python-sdk/blob/146d7efb/src/mcp/client/streamable_http.py#L453-L459) [src/mcp/client/sse.py45-49](https://github.com/modelcontextprotocol/python-sdk/blob/146d7efb/src/mcp/client/sse.py#L45-L49) [src/mcp/client/stdio/\\_\\_init\\_\\_.py111-115](https://github.com/modelcontextprotocol/python-sdk/blob/146d7efb/src/mcp/client/stdio/__init__.py#L111-L115)",
+    "metadata": {
+      "chunk_id": "4bb84e0a10a4-0016",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_3.2-client-transports.md",
+      "filename": "_modelcontextprotocol_python-sdk_3.2-client-transports.md",
+      "file_extension": ".md",
+      "chunk_index": 16,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Integration with ClientSession"
+      ],
+      "heading_text": "Integration with ClientSession",
+      "token_count": 164,
+      "char_count": 582,
+      "start_char": 14067,
+      "end_char": 14649,
+      "semantic_score": 0.6,
+      "structural_score": 0.7,
+      "retrieval_quality": 0.5490909090909091,
+      "chunking_strategy": "hybrid_adaptive_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T09:13:51.015764",
+      "document_id": "4bb84e0a10a4",
+      "document_name": "_modelcontextprotocol_python-sdk_3.2-client-transports",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_3.2-client-transports.md",
+      "source_filename": "_modelcontextprotocol_python-sdk_3.2-client-transports.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk",
+      "relative_path": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_3.2-client-transports.md",
+      "hierarchy_path": "Integration with ClientSession",
+      "chunk_hash": "8500722341b96b0f",
+      "content_digest": "8500722341b96b0f",
+      "chunk_length": 582,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "client",
+          "src",
+          "mcp",
+          "https",
+          "github",
+          "com",
+          "modelcontextprotocol",
+          "python",
+          "sdk",
+          "blob",
+          "146d7efb",
+          "integration",
+          "with",
+          "clientsession",
+          "streamable",
+          "http",
+          "sse",
+          "stdio",
+          "init",
+          "all"
+        ],
+        "term_weights": [
+          {
+            "term": "client",
+            "tf": 7,
+            "weight": 0.088608
+          },
+          {
+            "term": "src",
+            "tf": 6,
+            "weight": 0.075949
+          },
+          {
+            "term": "mcp",
+            "tf": 6,
+            "weight": 0.075949
+          },
+          {
+            "term": "https",
+            "tf": 3,
+            "weight": 0.037975
+          },
+          {
+            "term": "github",
+            "tf": 3,
+            "weight": 0.037975
+          },
+          {
+            "term": "com",
+            "tf": 3,
+            "weight": 0.037975
+          },
+          {
+            "term": "modelcontextprotocol",
+            "tf": 3,
+            "weight": 0.037975
+          },
+          {
+            "term": "python",
+            "tf": 3,
+            "weight": 0.037975
+          },
+          {
+            "term": "sdk",
+            "tf": 3,
+            "weight": 0.037975
+          },
+          {
+            "term": "blob",
+            "tf": 3,
+            "weight": 0.037975
+          },
+          {
+            "term": "146d7efb",
+            "tf": 3,
+            "weight": 0.037975
+          },
+          {
+            "term": "integration",
+            "tf": 2,
+            "weight": 0.025316
+          },
+          {
+            "term": "with",
+            "tf": 2,
+            "weight": 0.025316
+          },
+          {
+            "term": "clientsession",
+            "tf": 2,
+            "weight": 0.025316
+          },
+          {
+            "term": "streamable",
+            "tf": 2,
+            "weight": 0.025316
+          },
+          {
+            "term": "http",
+            "tf": 2,
+            "weight": 0.025316
+          },
+          {
+            "term": "sse",
+            "tf": 2,
+            "weight": 0.025316
+          },
+          {
+            "term": "stdio",
+            "tf": 2,
+            "weight": 0.025316
+          },
+          {
+            "term": "init",
+            "tf": 2,
+            "weight": 0.025316
+          },
+          {
+            "term": "all",
+            "tf": 1,
+            "weight": 0.012658
+          }
+        ],
+        "unique_terms": 39,
+        "total_terms": 79
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Integration with ClientSession",
+        "blob",
+        "client",
+        "com",
+        "github",
+        "https",
+        "mcp",
+        "modelcontextprotocol",
+        "python",
+        "sdk",
+        "src"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.6,
+      "structural": 0.7,
+      "retrieval_quality": 0.5490909090909091,
+      "overall": 0.6163636363636363
+    }
+  },
+  {
+    "text": "### Connection Error Patterns  Each transport implements specific error handling strategies:  - **StreamableHTTP**: HTTP status code handling, session termination on 404, resumption error recovery [src/mcp/client/streamable\\_http.py266-277](https://github.com/modelcontextprotocol/python-sdk/blob/146d7efb/src/mcp/client/streamable_http.py#L266-L277) - **SSE**: Connection error recovery, origin validation errors [src/mcp/client/sse.py108-110](https://github.com/modelcontextprotocol/python-sdk/blob/146d7efb/src/mcp/client/sse.py#L108-L110) - **STDIO**: Process creation failures, graceful shutdown with timeout escalation [src/mcp/client/stdio/\\_\\_init\\_\\_.py191-217](https://github.com/modelcontextprotocol/python-sdk/blob/146d7efb/src/mcp/client/stdio/__init__.py#L191-L217)",
+    "metadata": {
+      "chunk_id": "4bb84e0a10a4-0018",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_3.2-client-transports.md",
+      "filename": "_modelcontextprotocol_python-sdk_3.2-client-transports.md",
+      "file_extension": ".md",
+      "chunk_index": 18,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Connection Error Patterns"
+      ],
+      "heading_text": "Connection Error Patterns",
+      "token_count": 197,
+      "char_count": 779,
+      "start_char": 14685,
+      "end_char": 15464,
+      "semantic_score": 0.7,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.55,
+      "chunking_strategy": "hybrid_adaptive_structural",
+      "content_type": "list_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T09:13:51.016677",
+      "document_id": "4bb84e0a10a4",
+      "document_name": "_modelcontextprotocol_python-sdk_3.2-client-transports",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_3.2-client-transports.md",
+      "source_filename": "_modelcontextprotocol_python-sdk_3.2-client-transports.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk",
+      "relative_path": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_3.2-client-transports.md",
+      "hierarchy_path": "Connection Error Patterns",
+      "chunk_hash": "b0b88d7575c11a63",
+      "content_digest": "b0b88d7575c11a63",
+      "chunk_length": 779,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "src",
+          "mcp",
+          "client",
+          "error",
+          "http",
+          "https",
+          "github",
+          "com",
+          "modelcontextprotocol",
+          "python",
+          "sdk",
+          "blob",
+          "146d7efb",
+          "sse",
+          "stdio",
+          "connection",
+          "handling",
+          "recovery",
+          "streamable",
+          "init"
+        ],
+        "term_weights": [
+          {
+            "term": "src",
+            "tf": 6,
+            "weight": 0.059406
+          },
+          {
+            "term": "mcp",
+            "tf": 6,
+            "weight": 0.059406
+          },
+          {
+            "term": "client",
+            "tf": 6,
+            "weight": 0.059406
+          },
+          {
+            "term": "error",
+            "tf": 4,
+            "weight": 0.039604
+          },
+          {
+            "term": "http",
+            "tf": 3,
+            "weight": 0.029703
+          },
+          {
+            "term": "https",
+            "tf": 3,
+            "weight": 0.029703
+          },
+          {
+            "term": "github",
+            "tf": 3,
+            "weight": 0.029703
+          },
+          {
+            "term": "com",
+            "tf": 3,
+            "weight": 0.029703
+          },
+          {
+            "term": "modelcontextprotocol",
+            "tf": 3,
+            "weight": 0.029703
+          },
+          {
+            "term": "python",
+            "tf": 3,
+            "weight": 0.029703
+          },
+          {
+            "term": "sdk",
+            "tf": 3,
+            "weight": 0.029703
+          },
+          {
+            "term": "blob",
+            "tf": 3,
+            "weight": 0.029703
+          },
+          {
+            "term": "146d7efb",
+            "tf": 3,
+            "weight": 0.029703
+          },
+          {
+            "term": "sse",
+            "tf": 3,
+            "weight": 0.029703
+          },
+          {
+            "term": "stdio",
+            "tf": 3,
+            "weight": 0.029703
+          },
+          {
+            "term": "connection",
+            "tf": 2,
+            "weight": 0.019802
+          },
+          {
+            "term": "handling",
+            "tf": 2,
+            "weight": 0.019802
+          },
+          {
+            "term": "recovery",
+            "tf": 2,
+            "weight": 0.019802
+          },
+          {
+            "term": "streamable",
+            "tf": 2,
+            "weight": 0.019802
+          },
+          {
+            "term": "init",
+            "tf": 2,
+            "weight": 0.019802
+          }
+        ],
+        "unique_terms": 56,
+        "total_terms": 101
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Connection Error Patterns",
+        "client",
+        "com",
+        "error",
+        "github",
+        "http",
+        "https",
+        "mcp",
+        "modelcontextprotocol",
+        "python",
+        "src"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.55,
+      "overall": 0.7166666666666667
+    }
+  }
+]

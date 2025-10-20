@@ -1,0 +1,1965 @@
+[
+  {
+    "text": "## Architecture Overview\n\nThe retrieve & rerank architecture consists of two sequential stages that process user queries against a document corpus:\n\n```mermaid\ngraph TB\n    subgraph \"Input\"\n        Query[\"User Query\"]\n        Corpus[\"Document Corpus\"]\n    end\n    \n    subgraph \"Stage 1: Retrieval\"\n        ST[\"SentenceTransformer<br/>(Bi-Encoder)\"]\n        QueryEmb[\"Query Embedding\"]\n        DocEmbs[\"Document Embeddings<br/>(Pre-computed)\"]\n        VectorSearch[\"Vector Similarity Search\"]\n        TopK[\"Top-K Candidates<br/>(e.g., k=100)\"]\n    end\n    \n    subgraph \"Stage 2: Reranking\" \n        CE[\"CrossEncoder\"]\n        Pairs[\"Query-Document Pairs\"]\n        Scores[\"Relevance Scores\"]\n        FinalRank[\"Final Ranking<br/>(e.g., top-10)\"]\n    end\n    \n    Query --> ST\n    ST --> QueryEmb\n    Corpus --> DocEmbs\n    QueryEmb --> VectorSearch\n    DocEmbs --> VectorSearch\n    VectorSearch --> TopK\n    \n    Query --> Pairs\n    TopK --> Pairs\n    Pairs --> CE\n    CE --> Scores\n    Scores --> FinalRank\n```\n\n**Two-Stage Retrieve & Rerank Pipeline**\n\nThis architecture optimizes the trade-off between efficiency and quality. The `SentenceTransformer` handles the computationally expensive task of searching through millions of documents efficiently, while the `CrossEncoder` provides more accurate scoring for a smaller set of candidates.\n\nSources: [docs/pretrained-models/msmarco-v3.md:54-58](), [docs/cross_encoder/pretrained_models.md:44](), [docs/pretrained-models/ce-msmarco.md:36-48]()",
+    "metadata": {
+      "chunk_id": "c06781fb8af0-0000",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers\\Retrieve__Rerank_Architecture.md",
+      "filename": "Retrieve__Rerank_Architecture.md",
+      "file_extension": ".md",
+      "chunk_index": 0,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Architecture Overview"
+      ],
+      "heading_text": "Architecture Overview",
+      "token_count": 367,
+      "char_count": 1495,
+      "start_char": 511,
+      "end_char": 2006,
+      "semantic_score": 0.7999999999999999,
+      "structural_score": 0.7999999999999998,
+      "retrieval_quality": 0.5259273381294964,
+      "chunking_strategy": "hierarchical_balanced_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T09:14:18.241598",
+      "document_id": "c06781fb8af0",
+      "document_name": "Retrieve__Rerank_Architecture",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers\\Retrieve__Rerank_Architecture.md",
+      "source_filename": "Retrieve__Rerank_Architecture.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers",
+      "relative_path": "Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers\\Retrieve__Rerank_Architecture.md",
+      "hierarchy_path": "Architecture Overview",
+      "chunk_hash": "50e881d2c97ac2f9",
+      "content_digest": "50e881d2c97ac2f9",
+      "chunk_length": 1495,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "query",
+          "the",
+          "pairs",
+          "document",
+          "corpus",
+          "vectorsearch",
+          "scores",
+          "architecture",
+          "subgraph",
+          "end",
+          "stage",
+          "queryemb",
+          "docembs",
+          "topk",
+          "docs",
+          "pretrained",
+          "models",
+          "retrieve",
+          "rerank",
+          "two"
+        ],
+        "term_weights": [
+          {
+            "term": "query",
+            "tf": 6,
+            "weight": 0.044118
+          },
+          {
+            "term": "the",
+            "tf": 5,
+            "weight": 0.036765
+          },
+          {
+            "term": "pairs",
+            "tf": 5,
+            "weight": 0.036765
+          },
+          {
+            "term": "document",
+            "tf": 4,
+            "weight": 0.029412
+          },
+          {
+            "term": "corpus",
+            "tf": 4,
+            "weight": 0.029412
+          },
+          {
+            "term": "vectorsearch",
+            "tf": 4,
+            "weight": 0.029412
+          },
+          {
+            "term": "scores",
+            "tf": 4,
+            "weight": 0.029412
+          },
+          {
+            "term": "architecture",
+            "tf": 3,
+            "weight": 0.022059
+          },
+          {
+            "term": "subgraph",
+            "tf": 3,
+            "weight": 0.022059
+          },
+          {
+            "term": "end",
+            "tf": 3,
+            "weight": 0.022059
+          },
+          {
+            "term": "stage",
+            "tf": 3,
+            "weight": 0.022059
+          },
+          {
+            "term": "queryemb",
+            "tf": 3,
+            "weight": 0.022059
+          },
+          {
+            "term": "docembs",
+            "tf": 3,
+            "weight": 0.022059
+          },
+          {
+            "term": "topk",
+            "tf": 3,
+            "weight": 0.022059
+          },
+          {
+            "term": "docs",
+            "tf": 3,
+            "weight": 0.022059
+          },
+          {
+            "term": "pretrained",
+            "tf": 3,
+            "weight": 0.022059
+          },
+          {
+            "term": "models",
+            "tf": 3,
+            "weight": 0.022059
+          },
+          {
+            "term": "retrieve",
+            "tf": 2,
+            "weight": 0.014706
+          },
+          {
+            "term": "rerank",
+            "tf": 2,
+            "weight": 0.014706
+          },
+          {
+            "term": "two",
+            "tf": 2,
+            "weight": 0.014706
+          }
+        ],
+        "unique_terms": 80,
+        "total_terms": 136
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Architecture Overview",
+        "architecture",
+        "corpus",
+        "document",
+        "end",
+        "pairs",
+        "query",
+        "scores",
+        "subgraph",
+        "the",
+        "vectorsearch"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.7999999999999999,
+      "structural": 0.7999999999999998,
+      "retrieval_quality": 0.5259273381294964,
+      "overall": 0.7086424460431653
+    }
+  },
+  {
+    "text": "## Retrieval Stage: SentenceTransformer\n\nThe first stage uses a `SentenceTransformer` model to encode queries and documents into dense vector embeddings. This bi-encoder approach processes queries and documents independently, enabling efficient pre-computation and fast similarity search.\n\n```mermaid\ngraph LR\n    subgraph \"SentenceTransformer Models\"\n        MiniLM[\"msmarco-MiniLM-L6-v3\"]\n        DistilBERT[\"msmarco-distilbert-base-v3\"] \n        RoBERTa[\"msmarco-roberta-base-v3\"]\n    end\n    \n    subgraph \"Encoding Process\"\n        QueryEncode[\"model.encode(query)\"]\n        DocEncode[\"model.encode(documents)\"]\n        CosineSim[\"util.cos_sim()\"]\n        DotProduct[\"util.dot_score()\"]\n    end\n    \n    subgraph \"Similarity Functions\"\n        CosineModels[\"Cosine Similarity Models\"]\n        DotProdModels[\"Dot Product Models\"]\n    end\n    \n    MiniLM --> CosineModels\n    DistilBERT --> CosineModels\n    RoBERTa --> CosineModels\n    \n    CosineModels --> CosineSim\n    DotProdModels --> DotProduct\n    \n    QueryEncode --> CosineSim\n    DocEncode --> CosineSim\n```\n\n**SentenceTransformer Retrieval Components**",
+    "metadata": {
+      "chunk_id": "c06781fb8af0-0001",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers\\Retrieve__Rerank_Architecture.md",
+      "filename": "Retrieve__Rerank_Architecture.md",
+      "file_extension": ".md",
+      "chunk_index": 1,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Retrieval Stage: SentenceTransformer"
+      ],
+      "heading_text": "Retrieval Stage: SentenceTransformer",
+      "token_count": 260,
+      "char_count": 1117,
+      "start_char": 2008,
+      "end_char": 3125,
+      "semantic_score": 0.7999999999999999,
+      "structural_score": 0.7999999999999998,
+      "retrieval_quality": 0.515,
+      "chunking_strategy": "hierarchical_balanced_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T09:14:18.242124",
+      "document_id": "c06781fb8af0",
+      "document_name": "Retrieve__Rerank_Architecture",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers\\Retrieve__Rerank_Architecture.md",
+      "source_filename": "Retrieve__Rerank_Architecture.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers",
+      "relative_path": "Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers\\Retrieve__Rerank_Architecture.md",
+      "hierarchy_path": "Retrieval Stage: SentenceTransformer",
+      "chunk_hash": "a8d2075ce51376e9",
+      "content_digest": "a8d2075ce51376e9",
+      "chunk_length": 1117,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "cosinemodels",
+          "sentencetransformer",
+          "cosinesim",
+          "model",
+          "encode",
+          "and",
+          "documents",
+          "similarity",
+          "subgraph",
+          "models",
+          "minilm",
+          "msmarco",
+          "distilbert",
+          "roberta",
+          "end",
+          "retrieval",
+          "stage",
+          "queries",
+          "base",
+          "queryencode"
+        ],
+        "term_weights": [
+          {
+            "term": "cosinemodels",
+            "tf": 5,
+            "weight": 0.050505
+          },
+          {
+            "term": "sentencetransformer",
+            "tf": 4,
+            "weight": 0.040404
+          },
+          {
+            "term": "cosinesim",
+            "tf": 4,
+            "weight": 0.040404
+          },
+          {
+            "term": "model",
+            "tf": 3,
+            "weight": 0.030303
+          },
+          {
+            "term": "encode",
+            "tf": 3,
+            "weight": 0.030303
+          },
+          {
+            "term": "and",
+            "tf": 3,
+            "weight": 0.030303
+          },
+          {
+            "term": "documents",
+            "tf": 3,
+            "weight": 0.030303
+          },
+          {
+            "term": "similarity",
+            "tf": 3,
+            "weight": 0.030303
+          },
+          {
+            "term": "subgraph",
+            "tf": 3,
+            "weight": 0.030303
+          },
+          {
+            "term": "models",
+            "tf": 3,
+            "weight": 0.030303
+          },
+          {
+            "term": "minilm",
+            "tf": 3,
+            "weight": 0.030303
+          },
+          {
+            "term": "msmarco",
+            "tf": 3,
+            "weight": 0.030303
+          },
+          {
+            "term": "distilbert",
+            "tf": 3,
+            "weight": 0.030303
+          },
+          {
+            "term": "roberta",
+            "tf": 3,
+            "weight": 0.030303
+          },
+          {
+            "term": "end",
+            "tf": 3,
+            "weight": 0.030303
+          },
+          {
+            "term": "retrieval",
+            "tf": 2,
+            "weight": 0.020202
+          },
+          {
+            "term": "stage",
+            "tf": 2,
+            "weight": 0.020202
+          },
+          {
+            "term": "queries",
+            "tf": 2,
+            "weight": 0.020202
+          },
+          {
+            "term": "base",
+            "tf": 2,
+            "weight": 0.020202
+          },
+          {
+            "term": "queryencode",
+            "tf": 2,
+            "weight": 0.020202
+          }
+        ],
+        "unique_terms": 55,
+        "total_terms": 99
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Retrieval Stage: SentenceTransformer",
+        "and",
+        "cosinemodels",
+        "cosinesim",
+        "documents",
+        "encode",
+        "model",
+        "models",
+        "sentencetransformer",
+        "similarity",
+        "subgraph"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.7999999999999999,
+      "structural": 0.7999999999999998,
+      "retrieval_quality": 0.515,
+      "overall": 0.705
+    }
+  },
+  {
+    "text": "## Reranking Stage: CrossEncoder\n\nThe second stage uses a `CrossEncoder` model to perform joint encoding of query-document pairs, producing more accurate relevance scores for the top-k candidates from the retrieval stage.\n\n```mermaid\ngraph TB\n    subgraph \"CrossEncoder Models\"\n        TinyBERT[\"cross-encoder/ms-marco-TinyBERT-L2-v2\"]\n        MiniLMSmall[\"cross-encoder/ms-marco-MiniLM-L2-v2\"]\n        MiniLMBase[\"cross-encoder/ms-marco-MiniLM-L6-v2\"]\n        Electra[\"cross-encoder/ms-marco-electra-base\"]\n    end\n    \n    subgraph \"Reranking Process\"\n        Pairs[\"(query, document) pairs\"]\n        CrossEncode[\"model.predict(pairs)\"]\n        Sigmoid[\"torch.nn.Sigmoid()\"]\n        RelevanceScores[\"Relevance Scores 0-1\"]\n        Ranking[\"Final Ranking\"]\n    end\n    \n    subgraph \"Performance Metrics\"\n        Speed[\"Processing Speed<br/>(docs/sec)\"]\n        Quality[\"Ranking Quality<br/>(NDCG@10)\"]\n    end\n    \n    TinyBERT --> Speed\n    MiniLMBase --> Quality\n    \n    Pairs --> CrossEncode\n    CrossEncode --> Sigmoid\n    Sigmoid --> RelevanceScores\n    RelevanceScores --> Ranking\n```\n\n**CrossEncoder Reranking Pipeline**",
+    "metadata": {
+      "chunk_id": "c06781fb8af0-0003",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers\\Retrieve__Rerank_Architecture.md",
+      "filename": "Retrieve__Rerank_Architecture.md",
+      "file_extension": ".md",
+      "chunk_index": 3,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Reranking Stage: CrossEncoder"
+      ],
+      "heading_text": "Reranking Stage: CrossEncoder",
+      "token_count": 284,
+      "char_count": 1130,
+      "start_char": 3863,
+      "end_char": 4993,
+      "semantic_score": 0.7999999999999999,
+      "structural_score": 0.7999999999999998,
+      "retrieval_quality": 0.5341860465116279,
+      "chunking_strategy": "hierarchical_balanced_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T09:14:18.243172",
+      "document_id": "c06781fb8af0",
+      "document_name": "Retrieve__Rerank_Architecture",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers\\Retrieve__Rerank_Architecture.md",
+      "source_filename": "Retrieve__Rerank_Architecture.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers",
+      "relative_path": "Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers\\Retrieve__Rerank_Architecture.md",
+      "hierarchy_path": "Reranking Stage: CrossEncoder",
+      "chunk_hash": "82ab2d43c401d010",
+      "content_digest": "82ab2d43c401d010",
+      "chunk_length": 1130,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "pairs",
+          "crossencoder",
+          "cross",
+          "encoder",
+          "marco",
+          "sigmoid",
+          "ranking",
+          "reranking",
+          "stage",
+          "the",
+          "subgraph",
+          "tinybert",
+          "end",
+          "crossencode",
+          "relevancescores",
+          "speed",
+          "quality",
+          "model",
+          "query",
+          "document"
+        ],
+        "term_weights": [
+          {
+            "term": "pairs",
+            "tf": 5,
+            "weight": 0.048077
+          },
+          {
+            "term": "crossencoder",
+            "tf": 4,
+            "weight": 0.038462
+          },
+          {
+            "term": "cross",
+            "tf": 4,
+            "weight": 0.038462
+          },
+          {
+            "term": "encoder",
+            "tf": 4,
+            "weight": 0.038462
+          },
+          {
+            "term": "marco",
+            "tf": 4,
+            "weight": 0.038462
+          },
+          {
+            "term": "sigmoid",
+            "tf": 4,
+            "weight": 0.038462
+          },
+          {
+            "term": "ranking",
+            "tf": 4,
+            "weight": 0.038462
+          },
+          {
+            "term": "reranking",
+            "tf": 3,
+            "weight": 0.028846
+          },
+          {
+            "term": "stage",
+            "tf": 3,
+            "weight": 0.028846
+          },
+          {
+            "term": "the",
+            "tf": 3,
+            "weight": 0.028846
+          },
+          {
+            "term": "subgraph",
+            "tf": 3,
+            "weight": 0.028846
+          },
+          {
+            "term": "tinybert",
+            "tf": 3,
+            "weight": 0.028846
+          },
+          {
+            "term": "end",
+            "tf": 3,
+            "weight": 0.028846
+          },
+          {
+            "term": "crossencode",
+            "tf": 3,
+            "weight": 0.028846
+          },
+          {
+            "term": "relevancescores",
+            "tf": 3,
+            "weight": 0.028846
+          },
+          {
+            "term": "speed",
+            "tf": 3,
+            "weight": 0.028846
+          },
+          {
+            "term": "quality",
+            "tf": 3,
+            "weight": 0.028846
+          },
+          {
+            "term": "model",
+            "tf": 2,
+            "weight": 0.019231
+          },
+          {
+            "term": "query",
+            "tf": 2,
+            "weight": 0.019231
+          },
+          {
+            "term": "document",
+            "tf": 2,
+            "weight": 0.019231
+          }
+        ],
+        "unique_terms": 54,
+        "total_terms": 104
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Reranking Stage: CrossEncoder",
+        "cross",
+        "crossencoder",
+        "encoder",
+        "marco",
+        "pairs",
+        "ranking",
+        "reranking",
+        "sigmoid",
+        "stage",
+        "the"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.7999999999999999,
+      "structural": 0.7999999999999998,
+      "retrieval_quality": 0.5341860465116279,
+      "overall": 0.7113953488372092
+    }
+  },
+  {
+    "text": "## Training Data Integration\n\nThe MSMARCO v3 models demonstrate how retrieve & rerank architectures are used during training to improve model quality:\n\n```mermaid\ngraph TD\n    subgraph \"Training Pipeline\"\n        V2Models[\"MSMARCO v2 Models\"]\n        BiEncoder[\"Bi-Encoder Retrieval\"]\n        CrossEncoderScore[\"Cross-Encoder Scoring\"]\n        HardNegatives[\"Hard Negatives\"]\n        V3Training[\"V3 Model Training\"]\n    end\n    \n    subgraph \"Hard Negative Mining\"\n        HighBiScore[\"High Bi-Encoder Score\"]\n        LowCrossScore[\"Low Cross-Encoder Score\"]\n        SaveNegative[\"Save as Hard Negative\"]\n    end\n    \n    V2Models --> BiEncoder\n    BiEncoder --> CrossEncoderScore\n    CrossEncoderScore --> HighBiScore\n    CrossEncoderScore --> LowCrossScore\n    HighBiScore --> SaveNegative\n    LowCrossScore --> SaveNegative\n    SaveNegative --> HardNegatives\n    HardNegatives --> V3Training\n```\n\n**Hard Negative Mining in MSMARCO v3 Training**\n\nThis process identifies passages that receive high scores from the bi-encoder but low scores from the (more accurate) cross-encoder, creating challenging training examples that improve model quality.\n\nSources: [docs/pretrained-models/msmarco-v3.md:53-58]()",
+    "metadata": {
+      "chunk_id": "c06781fb8af0-0005",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers\\Retrieve__Rerank_Architecture.md",
+      "filename": "Retrieve__Rerank_Architecture.md",
+      "file_extension": ".md",
+      "chunk_index": 5,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Training Data Integration"
+      ],
+      "heading_text": "Training Data Integration",
+      "token_count": 274,
+      "char_count": 1205,
+      "start_char": 5718,
+      "end_char": 6923,
+      "semantic_score": 0.7999999999999999,
+      "structural_score": 0.7999999999999998,
+      "retrieval_quality": 0.7079487179487179,
+      "chunking_strategy": "hierarchical_balanced_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T09:14:18.244280",
+      "document_id": "c06781fb8af0",
+      "document_name": "Retrieve__Rerank_Architecture",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers\\Retrieve__Rerank_Architecture.md",
+      "source_filename": "Retrieve__Rerank_Architecture.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers",
+      "relative_path": "Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers\\Retrieve__Rerank_Architecture.md",
+      "hierarchy_path": "Training Data Integration",
+      "chunk_hash": "fbc48f9954d6880f",
+      "content_digest": "fbc48f9954d6880f",
+      "chunk_length": 1205,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "training",
+          "encoder",
+          "msmarco",
+          "crossencoderscore",
+          "hard",
+          "savenegative",
+          "the",
+          "models",
+          "model",
+          "biencoder",
+          "cross",
+          "hardnegatives",
+          "negative",
+          "highbiscore",
+          "lowcrossscore",
+          "improve",
+          "quality",
+          "subgraph",
+          "v2models",
+          "v3training"
+        ],
+        "term_weights": [
+          {
+            "term": "training",
+            "tf": 6,
+            "weight": 0.053571
+          },
+          {
+            "term": "encoder",
+            "tf": 6,
+            "weight": 0.053571
+          },
+          {
+            "term": "msmarco",
+            "tf": 4,
+            "weight": 0.035714
+          },
+          {
+            "term": "crossencoderscore",
+            "tf": 4,
+            "weight": 0.035714
+          },
+          {
+            "term": "hard",
+            "tf": 4,
+            "weight": 0.035714
+          },
+          {
+            "term": "savenegative",
+            "tf": 4,
+            "weight": 0.035714
+          },
+          {
+            "term": "the",
+            "tf": 3,
+            "weight": 0.026786
+          },
+          {
+            "term": "models",
+            "tf": 3,
+            "weight": 0.026786
+          },
+          {
+            "term": "model",
+            "tf": 3,
+            "weight": 0.026786
+          },
+          {
+            "term": "biencoder",
+            "tf": 3,
+            "weight": 0.026786
+          },
+          {
+            "term": "cross",
+            "tf": 3,
+            "weight": 0.026786
+          },
+          {
+            "term": "hardnegatives",
+            "tf": 3,
+            "weight": 0.026786
+          },
+          {
+            "term": "negative",
+            "tf": 3,
+            "weight": 0.026786
+          },
+          {
+            "term": "highbiscore",
+            "tf": 3,
+            "weight": 0.026786
+          },
+          {
+            "term": "lowcrossscore",
+            "tf": 3,
+            "weight": 0.026786
+          },
+          {
+            "term": "improve",
+            "tf": 2,
+            "weight": 0.017857
+          },
+          {
+            "term": "quality",
+            "tf": 2,
+            "weight": 0.017857
+          },
+          {
+            "term": "subgraph",
+            "tf": 2,
+            "weight": 0.017857
+          },
+          {
+            "term": "v2models",
+            "tf": 2,
+            "weight": 0.017857
+          },
+          {
+            "term": "v3training",
+            "tf": 2,
+            "weight": 0.017857
+          }
+        ],
+        "unique_terms": 59,
+        "total_terms": 112
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Training Data Integration",
+        "biencoder",
+        "crossencoderscore",
+        "encoder",
+        "hard",
+        "model",
+        "models",
+        "msmarco",
+        "savenegative",
+        "the",
+        "training"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.7999999999999999,
+      "structural": 0.7999999999999998,
+      "retrieval_quality": 0.7079487179487179,
+      "overall": 0.7693162393162392
+    }
+  },
+  {
+    "text": "## Performance Characteristics\n\nThe retrieve & rerank architecture provides several performance advantages:",
+    "metadata": {
+      "chunk_id": "c06781fb8af0-0006",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers\\Retrieve__Rerank_Architecture.md",
+      "filename": "Retrieve__Rerank_Architecture.md",
+      "file_extension": ".md",
+      "chunk_index": 6,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Performance Characteristics"
+      ],
+      "heading_text": "Performance Characteristics",
+      "token_count": 15,
+      "char_count": 107,
+      "start_char": 6925,
+      "end_char": 7032,
+      "semantic_score": 0.8,
+      "structural_score": 0.7,
+      "retrieval_quality": 0.565,
+      "chunking_strategy": "hierarchical_balanced_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T09:14:18.244378",
+      "document_id": "c06781fb8af0",
+      "document_name": "Retrieve__Rerank_Architecture",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers\\Retrieve__Rerank_Architecture.md",
+      "source_filename": "Retrieve__Rerank_Architecture.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers",
+      "relative_path": "Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers\\Retrieve__Rerank_Architecture.md",
+      "hierarchy_path": "Performance Characteristics",
+      "chunk_hash": "4d545b6fc8ca3b56",
+      "content_digest": "4d545b6fc8ca3b56",
+      "chunk_length": 107,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "performance",
+          "characteristics",
+          "the",
+          "retrieve",
+          "rerank",
+          "architecture",
+          "provides",
+          "several",
+          "advantages"
+        ],
+        "term_weights": [
+          {
+            "term": "performance",
+            "tf": 2,
+            "weight": 0.2
+          },
+          {
+            "term": "characteristics",
+            "tf": 1,
+            "weight": 0.1
+          },
+          {
+            "term": "the",
+            "tf": 1,
+            "weight": 0.1
+          },
+          {
+            "term": "retrieve",
+            "tf": 1,
+            "weight": 0.1
+          },
+          {
+            "term": "rerank",
+            "tf": 1,
+            "weight": 0.1
+          },
+          {
+            "term": "architecture",
+            "tf": 1,
+            "weight": 0.1
+          },
+          {
+            "term": "provides",
+            "tf": 1,
+            "weight": 0.1
+          },
+          {
+            "term": "several",
+            "tf": 1,
+            "weight": 0.1
+          },
+          {
+            "term": "advantages",
+            "tf": 1,
+            "weight": 0.1
+          }
+        ],
+        "unique_terms": 9,
+        "total_terms": 10
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Performance Characteristics",
+        "advantages",
+        "architecture",
+        "characteristics",
+        "performance",
+        "provides",
+        "rerank",
+        "retrieve",
+        "several",
+        "the"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.8,
+      "structural": 0.7,
+      "retrieval_quality": 0.565,
+      "overall": 0.6883333333333334
+    }
+  },
+  {
+    "text": "### Computational Efficiency - **Pre-computation**: Document embeddings are computed once and stored - **Fast Retrieval**: Vector similarity search scales to millions of documents   - **Selective Reranking**: Only top-k candidates require expensive cross-encoder processing",
+    "metadata": {
+      "chunk_id": "c06781fb8af0-0007",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers\\Retrieve__Rerank_Architecture.md",
+      "filename": "Retrieve__Rerank_Architecture.md",
+      "file_extension": ".md",
+      "chunk_index": 7,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Computational Efficiency"
+      ],
+      "heading_text": "Computational Efficiency",
+      "token_count": 48,
+      "char_count": 273,
+      "start_char": 7034,
+      "end_char": 7307,
+      "semantic_score": 0.8,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5718181818181818,
+      "chunking_strategy": "hierarchical_balanced_structural",
+      "content_type": "list_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T09:14:18.244496",
+      "document_id": "c06781fb8af0",
+      "document_name": "Retrieve__Rerank_Architecture",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers\\Retrieve__Rerank_Architecture.md",
+      "source_filename": "Retrieve__Rerank_Architecture.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers",
+      "relative_path": "Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers\\Retrieve__Rerank_Architecture.md",
+      "hierarchy_path": "Computational Efficiency",
+      "chunk_hash": "5a7675ead8773f63",
+      "content_digest": "5a7675ead8773f63",
+      "chunk_length": 273,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "computational",
+          "efficiency",
+          "pre",
+          "computation",
+          "document",
+          "embeddings",
+          "are",
+          "computed",
+          "once",
+          "and",
+          "stored",
+          "fast",
+          "retrieval",
+          "vector",
+          "similarity",
+          "search",
+          "scales",
+          "millions",
+          "documents",
+          "selective"
+        ],
+        "term_weights": [
+          {
+            "term": "computational",
+            "tf": 1,
+            "weight": 0.034483
+          },
+          {
+            "term": "efficiency",
+            "tf": 1,
+            "weight": 0.034483
+          },
+          {
+            "term": "pre",
+            "tf": 1,
+            "weight": 0.034483
+          },
+          {
+            "term": "computation",
+            "tf": 1,
+            "weight": 0.034483
+          },
+          {
+            "term": "document",
+            "tf": 1,
+            "weight": 0.034483
+          },
+          {
+            "term": "embeddings",
+            "tf": 1,
+            "weight": 0.034483
+          },
+          {
+            "term": "are",
+            "tf": 1,
+            "weight": 0.034483
+          },
+          {
+            "term": "computed",
+            "tf": 1,
+            "weight": 0.034483
+          },
+          {
+            "term": "once",
+            "tf": 1,
+            "weight": 0.034483
+          },
+          {
+            "term": "and",
+            "tf": 1,
+            "weight": 0.034483
+          },
+          {
+            "term": "stored",
+            "tf": 1,
+            "weight": 0.034483
+          },
+          {
+            "term": "fast",
+            "tf": 1,
+            "weight": 0.034483
+          },
+          {
+            "term": "retrieval",
+            "tf": 1,
+            "weight": 0.034483
+          },
+          {
+            "term": "vector",
+            "tf": 1,
+            "weight": 0.034483
+          },
+          {
+            "term": "similarity",
+            "tf": 1,
+            "weight": 0.034483
+          },
+          {
+            "term": "search",
+            "tf": 1,
+            "weight": 0.034483
+          },
+          {
+            "term": "scales",
+            "tf": 1,
+            "weight": 0.034483
+          },
+          {
+            "term": "millions",
+            "tf": 1,
+            "weight": 0.034483
+          },
+          {
+            "term": "documents",
+            "tf": 1,
+            "weight": 0.034483
+          },
+          {
+            "term": "selective",
+            "tf": 1,
+            "weight": 0.034483
+          }
+        ],
+        "unique_terms": 29,
+        "total_terms": 29
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Computational Efficiency",
+        "and",
+        "are",
+        "computation",
+        "computational",
+        "computed",
+        "document",
+        "efficiency",
+        "embeddings",
+        "once",
+        "pre"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.8,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5718181818181818,
+      "overall": 0.7572727272727272
+    }
+  },
+  {
+    "text": "### Typical Configuration - **Retrieval**: Return top-100 to top-1000 candidates - **Reranking**: Score and return top-10 to top-20 final results - **Latency**: ~10-50ms for retrieval + ~50-200ms for reranking  Sources: [docs/pretrained-models/msmarco-v3.md:27-50](), [docs/cross_encoder/pretrained_models.md:35-43]()",
+    "metadata": {
+      "chunk_id": "c06781fb8af0-0009",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers\\Retrieve__Rerank_Architecture.md",
+      "filename": "Retrieve__Rerank_Architecture.md",
+      "file_extension": ".md",
+      "chunk_index": 9,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Typical Configuration"
+      ],
+      "heading_text": "Typical Configuration",
+      "token_count": 93,
+      "char_count": 317,
+      "start_char": 7601,
+      "end_char": 7918,
+      "semantic_score": 0.7,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.543125,
+      "chunking_strategy": "hierarchical_balanced_structural",
+      "content_type": "list_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T09:14:18.244862",
+      "document_id": "c06781fb8af0",
+      "document_name": "Retrieve__Rerank_Architecture",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers\\Retrieve__Rerank_Architecture.md",
+      "source_filename": "Retrieve__Rerank_Architecture.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers",
+      "relative_path": "Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers\\Retrieve__Rerank_Architecture.md",
+      "hierarchy_path": "Typical Configuration",
+      "chunk_hash": "c158b5cd3983e3eb",
+      "content_digest": "c158b5cd3983e3eb",
+      "chunk_length": 317,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "top",
+          "retrieval",
+          "return",
+          "reranking",
+          "for",
+          "docs",
+          "pretrained",
+          "models",
+          "typical",
+          "configuration",
+          "100",
+          "1000",
+          "candidates",
+          "score",
+          "and",
+          "final",
+          "results",
+          "latency",
+          "50ms",
+          "200ms"
+        ],
+        "term_weights": [
+          {
+            "term": "top",
+            "tf": 4,
+            "weight": 0.117647
+          },
+          {
+            "term": "retrieval",
+            "tf": 2,
+            "weight": 0.058824
+          },
+          {
+            "term": "return",
+            "tf": 2,
+            "weight": 0.058824
+          },
+          {
+            "term": "reranking",
+            "tf": 2,
+            "weight": 0.058824
+          },
+          {
+            "term": "for",
+            "tf": 2,
+            "weight": 0.058824
+          },
+          {
+            "term": "docs",
+            "tf": 2,
+            "weight": 0.058824
+          },
+          {
+            "term": "pretrained",
+            "tf": 2,
+            "weight": 0.058824
+          },
+          {
+            "term": "models",
+            "tf": 2,
+            "weight": 0.058824
+          },
+          {
+            "term": "typical",
+            "tf": 1,
+            "weight": 0.029412
+          },
+          {
+            "term": "configuration",
+            "tf": 1,
+            "weight": 0.029412
+          },
+          {
+            "term": "100",
+            "tf": 1,
+            "weight": 0.029412
+          },
+          {
+            "term": "1000",
+            "tf": 1,
+            "weight": 0.029412
+          },
+          {
+            "term": "candidates",
+            "tf": 1,
+            "weight": 0.029412
+          },
+          {
+            "term": "score",
+            "tf": 1,
+            "weight": 0.029412
+          },
+          {
+            "term": "and",
+            "tf": 1,
+            "weight": 0.029412
+          },
+          {
+            "term": "final",
+            "tf": 1,
+            "weight": 0.029412
+          },
+          {
+            "term": "results",
+            "tf": 1,
+            "weight": 0.029412
+          },
+          {
+            "term": "latency",
+            "tf": 1,
+            "weight": 0.029412
+          },
+          {
+            "term": "50ms",
+            "tf": 1,
+            "weight": 0.029412
+          },
+          {
+            "term": "200ms",
+            "tf": 1,
+            "weight": 0.029412
+          }
+        ],
+        "unique_terms": 24,
+        "total_terms": 34
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Typical Configuration",
+        "configuration",
+        "docs",
+        "for",
+        "models",
+        "pretrained",
+        "reranking",
+        "retrieval",
+        "return",
+        "top",
+        "typical"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.543125,
+      "overall": 0.714375
+    }
+  },
+  {
+    "text": "## Implementation Considerations",
+    "metadata": {
+      "chunk_id": "c06781fb8af0-0010",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers\\Retrieve__Rerank_Architecture.md",
+      "filename": "Retrieve__Rerank_Architecture.md",
+      "file_extension": ".md",
+      "chunk_index": 10,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Implementation Considerations"
+      ],
+      "heading_text": "Implementation Considerations",
+      "token_count": 4,
+      "char_count": 32,
+      "start_char": 7920,
+      "end_char": 7952,
+      "semantic_score": 0.8,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.59,
+      "chunking_strategy": "hierarchical_balanced_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T09:14:18.245003",
+      "document_id": "c06781fb8af0",
+      "document_name": "Retrieve__Rerank_Architecture",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers\\Retrieve__Rerank_Architecture.md",
+      "source_filename": "Retrieve__Rerank_Architecture.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers",
+      "relative_path": "Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers\\Retrieve__Rerank_Architecture.md",
+      "hierarchy_path": "Implementation Considerations",
+      "chunk_hash": "878d7ae089dde382",
+      "content_digest": "878d7ae089dde382",
+      "chunk_length": 32,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "implementation",
+          "considerations"
+        ],
+        "term_weights": [
+          {
+            "term": "implementation",
+            "tf": 1,
+            "weight": 0.5
+          },
+          {
+            "term": "considerations",
+            "tf": 1,
+            "weight": 0.5
+          }
+        ],
+        "unique_terms": 2,
+        "total_terms": 2
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Implementation Considerations",
+        "considerations",
+        "implementation"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.8,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.59,
+      "overall": 0.7633333333333333
+    }
+  },
+  {
+    "text": "### Model Compatibility\nBoth retrieval and reranking models should be trained on similar datasets (e.g., MSMARCO) to ensure consistent relevance understanding.",
+    "metadata": {
+      "chunk_id": "c06781fb8af0-0011",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers\\Retrieve__Rerank_Architecture.md",
+      "filename": "Retrieve__Rerank_Architecture.md",
+      "file_extension": ".md",
+      "chunk_index": 11,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Model Compatibility"
+      ],
+      "heading_text": "Model Compatibility",
+      "token_count": 30,
+      "char_count": 159,
+      "start_char": 7954,
+      "end_char": 8113,
+      "semantic_score": 0.7,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.59,
+      "chunking_strategy": "hierarchical_balanced_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T09:14:18.245106",
+      "document_id": "c06781fb8af0",
+      "document_name": "Retrieve__Rerank_Architecture",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers\\Retrieve__Rerank_Architecture.md",
+      "source_filename": "Retrieve__Rerank_Architecture.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers",
+      "relative_path": "Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers\\Retrieve__Rerank_Architecture.md",
+      "hierarchy_path": "Model Compatibility",
+      "chunk_hash": "76812a713bfaf649",
+      "content_digest": "76812a713bfaf649",
+      "chunk_length": 159,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "model",
+          "compatibility",
+          "both",
+          "retrieval",
+          "and",
+          "reranking",
+          "models",
+          "should",
+          "trained",
+          "similar",
+          "datasets",
+          "msmarco",
+          "ensure",
+          "consistent",
+          "relevance",
+          "understanding"
+        ],
+        "term_weights": [
+          {
+            "term": "model",
+            "tf": 1,
+            "weight": 0.0625
+          },
+          {
+            "term": "compatibility",
+            "tf": 1,
+            "weight": 0.0625
+          },
+          {
+            "term": "both",
+            "tf": 1,
+            "weight": 0.0625
+          },
+          {
+            "term": "retrieval",
+            "tf": 1,
+            "weight": 0.0625
+          },
+          {
+            "term": "and",
+            "tf": 1,
+            "weight": 0.0625
+          },
+          {
+            "term": "reranking",
+            "tf": 1,
+            "weight": 0.0625
+          },
+          {
+            "term": "models",
+            "tf": 1,
+            "weight": 0.0625
+          },
+          {
+            "term": "should",
+            "tf": 1,
+            "weight": 0.0625
+          },
+          {
+            "term": "trained",
+            "tf": 1,
+            "weight": 0.0625
+          },
+          {
+            "term": "similar",
+            "tf": 1,
+            "weight": 0.0625
+          },
+          {
+            "term": "datasets",
+            "tf": 1,
+            "weight": 0.0625
+          },
+          {
+            "term": "msmarco",
+            "tf": 1,
+            "weight": 0.0625
+          },
+          {
+            "term": "ensure",
+            "tf": 1,
+            "weight": 0.0625
+          },
+          {
+            "term": "consistent",
+            "tf": 1,
+            "weight": 0.0625
+          },
+          {
+            "term": "relevance",
+            "tf": 1,
+            "weight": 0.0625
+          },
+          {
+            "term": "understanding",
+            "tf": 1,
+            "weight": 0.0625
+          }
+        ],
+        "unique_terms": 16,
+        "total_terms": 16
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Model Compatibility",
+        "and",
+        "both",
+        "compatibility",
+        "model",
+        "models",
+        "reranking",
+        "retrieval",
+        "should",
+        "similar",
+        "trained"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.59,
+      "overall": 0.73
+    }
+  },
+  {
+    "text": "### Activation Functions\nCrossEncoder models may require specific activation functions: `activation_fn=torch.nn.Sigmoid()` ensures scores are normalized between 0 and 1.",
+    "metadata": {
+      "chunk_id": "c06781fb8af0-0012",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers\\Retrieve__Rerank_Architecture.md",
+      "filename": "Retrieve__Rerank_Architecture.md",
+      "file_extension": ".md",
+      "chunk_index": 12,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Activation Functions"
+      ],
+      "heading_text": "Activation Functions",
+      "token_count": 32,
+      "char_count": 169,
+      "start_char": 8115,
+      "end_char": 8284,
+      "semantic_score": 0.7,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5742105263157895,
+      "chunking_strategy": "hierarchical_balanced_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T09:14:18.245211",
+      "document_id": "c06781fb8af0",
+      "document_name": "Retrieve__Rerank_Architecture",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers\\Retrieve__Rerank_Architecture.md",
+      "source_filename": "Retrieve__Rerank_Architecture.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers",
+      "relative_path": "Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers\\Retrieve__Rerank_Architecture.md",
+      "hierarchy_path": "Activation Functions",
+      "chunk_hash": "f64223f6ac5300a6",
+      "content_digest": "f64223f6ac5300a6",
+      "chunk_length": 169,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "activation",
+          "functions",
+          "crossencoder",
+          "models",
+          "may",
+          "require",
+          "specific",
+          "torch",
+          "sigmoid",
+          "ensures",
+          "scores",
+          "are",
+          "normalized",
+          "between",
+          "and"
+        ],
+        "term_weights": [
+          {
+            "term": "activation",
+            "tf": 3,
+            "weight": 0.166667
+          },
+          {
+            "term": "functions",
+            "tf": 2,
+            "weight": 0.111111
+          },
+          {
+            "term": "crossencoder",
+            "tf": 1,
+            "weight": 0.055556
+          },
+          {
+            "term": "models",
+            "tf": 1,
+            "weight": 0.055556
+          },
+          {
+            "term": "may",
+            "tf": 1,
+            "weight": 0.055556
+          },
+          {
+            "term": "require",
+            "tf": 1,
+            "weight": 0.055556
+          },
+          {
+            "term": "specific",
+            "tf": 1,
+            "weight": 0.055556
+          },
+          {
+            "term": "torch",
+            "tf": 1,
+            "weight": 0.055556
+          },
+          {
+            "term": "sigmoid",
+            "tf": 1,
+            "weight": 0.055556
+          },
+          {
+            "term": "ensures",
+            "tf": 1,
+            "weight": 0.055556
+          },
+          {
+            "term": "scores",
+            "tf": 1,
+            "weight": 0.055556
+          },
+          {
+            "term": "are",
+            "tf": 1,
+            "weight": 0.055556
+          },
+          {
+            "term": "normalized",
+            "tf": 1,
+            "weight": 0.055556
+          },
+          {
+            "term": "between",
+            "tf": 1,
+            "weight": 0.055556
+          },
+          {
+            "term": "and",
+            "tf": 1,
+            "weight": 0.055556
+          }
+        ],
+        "unique_terms": 15,
+        "total_terms": 18
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Activation Functions",
+        "activation",
+        "crossencoder",
+        "ensures",
+        "functions",
+        "may",
+        "models",
+        "require",
+        "sigmoid",
+        "specific",
+        "torch"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5742105263157895,
+      "overall": 0.7247368421052632
+    }
+  },
+  {
+    "text": "### Similarity Functions\nEnsure consistency between training and inference similarity functions (cosine vs. dot product) for optimal performance.\n\nSources: [docs/cross_encoder/pretrained_models.md:17-33](), [docs/pretrained-models/msmarco-v3.md:46-47]()",
+    "metadata": {
+      "chunk_id": "c06781fb8af0-0013",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers\\Retrieve__Rerank_Architecture.md",
+      "filename": "Retrieve__Rerank_Architecture.md",
+      "file_extension": ".md",
+      "chunk_index": 13,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Similarity Functions"
+      ],
+      "heading_text": "Similarity Functions",
+      "token_count": 59,
+      "char_count": 253,
+      "start_char": 8286,
+      "end_char": 8539,
+      "semantic_score": 0.6,
+      "structural_score": 0.7,
+      "retrieval_quality": 0.5614285714285714,
+      "chunking_strategy": "hierarchical_balanced_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T09:14:18.245364",
+      "document_id": "c06781fb8af0",
+      "document_name": "Retrieve__Rerank_Architecture",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers\\Retrieve__Rerank_Architecture.md",
+      "source_filename": "Retrieve__Rerank_Architecture.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers",
+      "relative_path": "Docs\\sentence_transformers_docs\\UKPLab\\sentence-transformers\\Retrieve__Rerank_Architecture.md",
+      "hierarchy_path": "Similarity Functions",
+      "chunk_hash": "c18ba44b2ebecbfb",
+      "content_digest": "c18ba44b2ebecbfb",
+      "chunk_length": 253,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "similarity",
+          "functions",
+          "docs",
+          "pretrained",
+          "models",
+          "ensure",
+          "consistency",
+          "between",
+          "training",
+          "and",
+          "inference",
+          "cosine",
+          "dot",
+          "product",
+          "for",
+          "optimal",
+          "performance",
+          "sources",
+          "cross",
+          "encoder"
+        ],
+        "term_weights": [
+          {
+            "term": "similarity",
+            "tf": 2,
+            "weight": 0.076923
+          },
+          {
+            "term": "functions",
+            "tf": 2,
+            "weight": 0.076923
+          },
+          {
+            "term": "docs",
+            "tf": 2,
+            "weight": 0.076923
+          },
+          {
+            "term": "pretrained",
+            "tf": 2,
+            "weight": 0.076923
+          },
+          {
+            "term": "models",
+            "tf": 2,
+            "weight": 0.076923
+          },
+          {
+            "term": "ensure",
+            "tf": 1,
+            "weight": 0.038462
+          },
+          {
+            "term": "consistency",
+            "tf": 1,
+            "weight": 0.038462
+          },
+          {
+            "term": "between",
+            "tf": 1,
+            "weight": 0.038462
+          },
+          {
+            "term": "training",
+            "tf": 1,
+            "weight": 0.038462
+          },
+          {
+            "term": "and",
+            "tf": 1,
+            "weight": 0.038462
+          },
+          {
+            "term": "inference",
+            "tf": 1,
+            "weight": 0.038462
+          },
+          {
+            "term": "cosine",
+            "tf": 1,
+            "weight": 0.038462
+          },
+          {
+            "term": "dot",
+            "tf": 1,
+            "weight": 0.038462
+          },
+          {
+            "term": "product",
+            "tf": 1,
+            "weight": 0.038462
+          },
+          {
+            "term": "for",
+            "tf": 1,
+            "weight": 0.038462
+          },
+          {
+            "term": "optimal",
+            "tf": 1,
+            "weight": 0.038462
+          },
+          {
+            "term": "performance",
+            "tf": 1,
+            "weight": 0.038462
+          },
+          {
+            "term": "sources",
+            "tf": 1,
+            "weight": 0.038462
+          },
+          {
+            "term": "cross",
+            "tf": 1,
+            "weight": 0.038462
+          },
+          {
+            "term": "encoder",
+            "tf": 1,
+            "weight": 0.038462
+          }
+        ],
+        "unique_terms": 21,
+        "total_terms": 26
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Similarity Functions",
+        "and",
+        "between",
+        "consistency",
+        "docs",
+        "ensure",
+        "functions",
+        "models",
+        "pretrained",
+        "similarity",
+        "training"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.6,
+      "structural": 0.7,
+      "retrieval_quality": 0.5614285714285714,
+      "overall": 0.6204761904761904
+    }
+  }
+]

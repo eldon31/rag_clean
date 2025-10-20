@@ -1,0 +1,4966 @@
+[
+  {
+    "text": "## Purpose and Scope\n\nThis page documents Docling's configuration system, explaining how options are structured, cascaded, and applied throughout the document conversion process. It covers the options hierarchy (`PipelineOptions`, `PdfPipelineOptions`, `VlmPipelineOptions`, etc.), configuration sources (CLI arguments, environment variables, programmatic API), and how options control pipeline behavior and model initialization.\n\nFor information about specific pipeline implementations, see [Processing Pipelines](docling-project/docling/5-processing-pipelines.md). For details on model configuration and plugin discovery, see [AI/ML Models](docling-project/docling/4-aiml-models.md).\n\n---",
+    "metadata": {
+      "chunk_id": "13c9127fcc51-0001",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling\\_docling-project_docling_2.3-configuration-and-pipeline-options.md",
+      "filename": "_docling-project_docling_2.3-configuration-and-pipeline-options.md",
+      "file_extension": ".md",
+      "chunk_index": 1,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Purpose and Scope"
+      ],
+      "heading_text": "Purpose and Scope",
+      "token_count": 132,
+      "char_count": 690,
+      "start_char": 6002,
+      "end_char": 6692,
+      "semantic_score": 0.7999999999999999,
+      "structural_score": 0.7999999999999998,
+      "retrieval_quality": 0.53,
+      "chunking_strategy": "hierarchical_balanced_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T09:13:44.564359",
+      "document_id": "13c9127fcc51",
+      "document_name": "_docling-project_docling_2.3-configuration-and-pipeline-options",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling\\_docling-project_docling_2.3-configuration-and-pipeline-options.md",
+      "source_filename": "_docling-project_docling_2.3-configuration-and-pipeline-options.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling",
+      "relative_path": "Docs\\Docling\\_docling-project_docling_2.3-configuration-and-pipeline-options.md",
+      "hierarchy_path": "Purpose and Scope",
+      "chunk_hash": "c07b6ec6bbbc9c64",
+      "content_digest": "c07b6ec6bbbc9c64",
+      "chunk_length": 690,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "and",
+          "docling",
+          "configuration",
+          "options",
+          "how",
+          "the",
+          "pipeline",
+          "model",
+          "for",
+          "see",
+          "processing",
+          "pipelines",
+          "project",
+          "models",
+          "purpose",
+          "scope",
+          "this",
+          "page",
+          "documents",
+          "system"
+        ],
+        "term_weights": [
+          {
+            "term": "and",
+            "tf": 5,
+            "weight": 0.066667
+          },
+          {
+            "term": "docling",
+            "tf": 5,
+            "weight": 0.066667
+          },
+          {
+            "term": "configuration",
+            "tf": 3,
+            "weight": 0.04
+          },
+          {
+            "term": "options",
+            "tf": 3,
+            "weight": 0.04
+          },
+          {
+            "term": "how",
+            "tf": 2,
+            "weight": 0.026667
+          },
+          {
+            "term": "the",
+            "tf": 2,
+            "weight": 0.026667
+          },
+          {
+            "term": "pipeline",
+            "tf": 2,
+            "weight": 0.026667
+          },
+          {
+            "term": "model",
+            "tf": 2,
+            "weight": 0.026667
+          },
+          {
+            "term": "for",
+            "tf": 2,
+            "weight": 0.026667
+          },
+          {
+            "term": "see",
+            "tf": 2,
+            "weight": 0.026667
+          },
+          {
+            "term": "processing",
+            "tf": 2,
+            "weight": 0.026667
+          },
+          {
+            "term": "pipelines",
+            "tf": 2,
+            "weight": 0.026667
+          },
+          {
+            "term": "project",
+            "tf": 2,
+            "weight": 0.026667
+          },
+          {
+            "term": "models",
+            "tf": 2,
+            "weight": 0.026667
+          },
+          {
+            "term": "purpose",
+            "tf": 1,
+            "weight": 0.013333
+          },
+          {
+            "term": "scope",
+            "tf": 1,
+            "weight": 0.013333
+          },
+          {
+            "term": "this",
+            "tf": 1,
+            "weight": 0.013333
+          },
+          {
+            "term": "page",
+            "tf": 1,
+            "weight": 0.013333
+          },
+          {
+            "term": "documents",
+            "tf": 1,
+            "weight": 0.013333
+          },
+          {
+            "term": "system",
+            "tf": 1,
+            "weight": 0.013333
+          }
+        ],
+        "unique_terms": 53,
+        "total_terms": 75
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Purpose and Scope",
+        "and",
+        "configuration",
+        "docling",
+        "for",
+        "how",
+        "model",
+        "options",
+        "pipeline",
+        "see",
+        "the"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.7999999999999999,
+      "structural": 0.7999999999999998,
+      "retrieval_quality": 0.53,
+      "overall": 0.71
+    }
+  },
+  {
+    "text": "## Options Architecture Overview\n\nDocling uses a hierarchical options system built on Pydantic models, providing type safety, validation, and serialization. Options flow from configuration sources (CLI, environment variables, or code) through the `DocumentConverter` to pipelines and finally to individual models.\n\n```\n```\n\n**Sources:** [docling/datamodel/pipeline\\_options.py1-384](https://github.com/docling-project/docling/blob/f7244a43/docling/datamodel/pipeline_options.py#L1-L384) [docling/document\\_converter.py62-181](https://github.com/docling-project/docling/blob/f7244a43/docling/document_converter.py#L62-L181)\n\n---",
+    "metadata": {
+      "chunk_id": "13c9127fcc51-0002",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling\\_docling-project_docling_2.3-configuration-and-pipeline-options.md",
+      "filename": "_docling-project_docling_2.3-configuration-and-pipeline-options.md",
+      "file_extension": ".md",
+      "chunk_index": 2,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Options Architecture Overview"
+      ],
+      "heading_text": "Options Architecture Overview",
+      "token_count": 144,
+      "char_count": 627,
+      "start_char": 6694,
+      "end_char": 7321,
+      "semantic_score": 0.7,
+      "structural_score": 0.7999999999999998,
+      "retrieval_quality": 0.557391304347826,
+      "chunking_strategy": "hierarchical_balanced_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T09:13:44.564875",
+      "document_id": "13c9127fcc51",
+      "document_name": "_docling-project_docling_2.3-configuration-and-pipeline-options",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling\\_docling-project_docling_2.3-configuration-and-pipeline-options.md",
+      "source_filename": "_docling-project_docling_2.3-configuration-and-pipeline-options.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling",
+      "relative_path": "Docs\\Docling\\_docling-project_docling_2.3-configuration-and-pipeline-options.md",
+      "hierarchy_path": "Options Architecture Overview",
+      "chunk_hash": "494114bcd593ea65",
+      "content_digest": "494114bcd593ea65",
+      "chunk_length": 627,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "docling",
+          "options",
+          "models",
+          "and",
+          "sources",
+          "datamodel",
+          "pipeline",
+          "https",
+          "github",
+          "com",
+          "project",
+          "blob",
+          "f7244a43",
+          "document",
+          "converter",
+          "architecture",
+          "overview",
+          "uses",
+          "hierarchical",
+          "system"
+        ],
+        "term_weights": [
+          {
+            "term": "docling",
+            "tf": 9,
+            "weight": 0.125
+          },
+          {
+            "term": "options",
+            "tf": 5,
+            "weight": 0.069444
+          },
+          {
+            "term": "models",
+            "tf": 2,
+            "weight": 0.027778
+          },
+          {
+            "term": "and",
+            "tf": 2,
+            "weight": 0.027778
+          },
+          {
+            "term": "sources",
+            "tf": 2,
+            "weight": 0.027778
+          },
+          {
+            "term": "datamodel",
+            "tf": 2,
+            "weight": 0.027778
+          },
+          {
+            "term": "pipeline",
+            "tf": 2,
+            "weight": 0.027778
+          },
+          {
+            "term": "https",
+            "tf": 2,
+            "weight": 0.027778
+          },
+          {
+            "term": "github",
+            "tf": 2,
+            "weight": 0.027778
+          },
+          {
+            "term": "com",
+            "tf": 2,
+            "weight": 0.027778
+          },
+          {
+            "term": "project",
+            "tf": 2,
+            "weight": 0.027778
+          },
+          {
+            "term": "blob",
+            "tf": 2,
+            "weight": 0.027778
+          },
+          {
+            "term": "f7244a43",
+            "tf": 2,
+            "weight": 0.027778
+          },
+          {
+            "term": "document",
+            "tf": 2,
+            "weight": 0.027778
+          },
+          {
+            "term": "converter",
+            "tf": 2,
+            "weight": 0.027778
+          },
+          {
+            "term": "architecture",
+            "tf": 1,
+            "weight": 0.013889
+          },
+          {
+            "term": "overview",
+            "tf": 1,
+            "weight": 0.013889
+          },
+          {
+            "term": "uses",
+            "tf": 1,
+            "weight": 0.013889
+          },
+          {
+            "term": "hierarchical",
+            "tf": 1,
+            "weight": 0.013889
+          },
+          {
+            "term": "system",
+            "tf": 1,
+            "weight": 0.013889
+          }
+        ],
+        "unique_terms": 47,
+        "total_terms": 72
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Options Architecture Overview",
+        "and",
+        "com",
+        "datamodel",
+        "docling",
+        "github",
+        "https",
+        "models",
+        "options",
+        "pipeline",
+        "sources"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.7999999999999998,
+      "retrieval_quality": 0.557391304347826,
+      "overall": 0.6857971014492753
+    }
+  },
+  {
+    "text": "### BaseOptions\n\nAll options classes inherit from `BaseOptions`, which provides a common `kind` field used for factory-based selection (e.g., OCR engine selection).\n\n```\n```\n\n**Sources:** [docling/datamodel/pipeline\\_options.py49-52](https://github.com/docling-project/docling/blob/f7244a43/docling/datamodel/pipeline_options.py#L49-L52)",
+    "metadata": {
+      "chunk_id": "13c9127fcc51-0004",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling\\_docling-project_docling_2.3-configuration-and-pipeline-options.md",
+      "filename": "_docling-project_docling_2.3-configuration-and-pipeline-options.md",
+      "file_extension": ".md",
+      "chunk_index": 4,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "BaseOptions"
+      ],
+      "heading_text": "BaseOptions",
+      "token_count": 84,
+      "char_count": 337,
+      "start_char": 7348,
+      "end_char": 7685,
+      "semantic_score": 0.6,
+      "structural_score": 0.7999999999999998,
+      "retrieval_quality": 0.5784615384615385,
+      "chunking_strategy": "hierarchical_balanced_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T09:13:44.565438",
+      "document_id": "13c9127fcc51",
+      "document_name": "_docling-project_docling_2.3-configuration-and-pipeline-options",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling\\_docling-project_docling_2.3-configuration-and-pipeline-options.md",
+      "source_filename": "_docling-project_docling_2.3-configuration-and-pipeline-options.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling",
+      "relative_path": "Docs\\Docling\\_docling-project_docling_2.3-configuration-and-pipeline-options.md",
+      "hierarchy_path": "BaseOptions",
+      "chunk_hash": "a1a1169c60c789c9",
+      "content_digest": "a1a1169c60c789c9",
+      "chunk_length": 337,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "docling",
+          "options",
+          "baseoptions",
+          "selection",
+          "datamodel",
+          "pipeline",
+          "all",
+          "classes",
+          "inherit",
+          "from",
+          "which",
+          "provides",
+          "common",
+          "kind",
+          "field",
+          "used",
+          "for",
+          "factory",
+          "based",
+          "ocr"
+        ],
+        "term_weights": [
+          {
+            "term": "docling",
+            "tf": 4,
+            "weight": 0.1
+          },
+          {
+            "term": "options",
+            "tf": 3,
+            "weight": 0.075
+          },
+          {
+            "term": "baseoptions",
+            "tf": 2,
+            "weight": 0.05
+          },
+          {
+            "term": "selection",
+            "tf": 2,
+            "weight": 0.05
+          },
+          {
+            "term": "datamodel",
+            "tf": 2,
+            "weight": 0.05
+          },
+          {
+            "term": "pipeline",
+            "tf": 2,
+            "weight": 0.05
+          },
+          {
+            "term": "all",
+            "tf": 1,
+            "weight": 0.025
+          },
+          {
+            "term": "classes",
+            "tf": 1,
+            "weight": 0.025
+          },
+          {
+            "term": "inherit",
+            "tf": 1,
+            "weight": 0.025
+          },
+          {
+            "term": "from",
+            "tf": 1,
+            "weight": 0.025
+          },
+          {
+            "term": "which",
+            "tf": 1,
+            "weight": 0.025
+          },
+          {
+            "term": "provides",
+            "tf": 1,
+            "weight": 0.025
+          },
+          {
+            "term": "common",
+            "tf": 1,
+            "weight": 0.025
+          },
+          {
+            "term": "kind",
+            "tf": 1,
+            "weight": 0.025
+          },
+          {
+            "term": "field",
+            "tf": 1,
+            "weight": 0.025
+          },
+          {
+            "term": "used",
+            "tf": 1,
+            "weight": 0.025
+          },
+          {
+            "term": "for",
+            "tf": 1,
+            "weight": 0.025
+          },
+          {
+            "term": "factory",
+            "tf": 1,
+            "weight": 0.025
+          },
+          {
+            "term": "based",
+            "tf": 1,
+            "weight": 0.025
+          },
+          {
+            "term": "ocr",
+            "tf": 1,
+            "weight": 0.025
+          }
+        ],
+        "unique_terms": 31,
+        "total_terms": 40
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "BaseOptions",
+        "all",
+        "baseoptions",
+        "classes",
+        "datamodel",
+        "docling",
+        "from",
+        "inherit",
+        "options",
+        "pipeline",
+        "selection"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.6,
+      "structural": 0.7999999999999998,
+      "retrieval_quality": 0.5784615384615385,
+      "overall": 0.6594871794871794
+    }
+  },
+  {
+    "text": "### ConvertPipelineOptions\n\nExtends `PipelineOptions` with enrichment capabilities used by `SimplePipeline` and its descendants:\n\n```\n```\n\n**Sources:** [docling/datamodel/pipeline\\_options.py283-292](https://github.com/docling-project/docling/blob/f7244a43/docling/datamodel/pipeline_options.py#L283-L292)",
+    "metadata": {
+      "chunk_id": "13c9127fcc51-0006",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling\\_docling-project_docling_2.3-configuration-and-pipeline-options.md",
+      "filename": "_docling-project_docling_2.3-configuration-and-pipeline-options.md",
+      "file_extension": ".md",
+      "chunk_index": 6,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "ConvertPipelineOptions"
+      ],
+      "heading_text": "ConvertPipelineOptions",
+      "token_count": 74,
+      "char_count": 305,
+      "start_char": 8937,
+      "end_char": 9242,
+      "semantic_score": 0.7,
+      "structural_score": 0.7999999999999998,
+      "retrieval_quality": 0.5723529411764706,
+      "chunking_strategy": "hierarchical_balanced_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T09:13:44.567505",
+      "document_id": "13c9127fcc51",
+      "document_name": "_docling-project_docling_2.3-configuration-and-pipeline-options",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling\\_docling-project_docling_2.3-configuration-and-pipeline-options.md",
+      "source_filename": "_docling-project_docling_2.3-configuration-and-pipeline-options.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling",
+      "relative_path": "Docs\\Docling\\_docling-project_docling_2.3-configuration-and-pipeline-options.md",
+      "hierarchy_path": "ConvertPipelineOptions",
+      "chunk_hash": "1ed286ec9d596504",
+      "content_digest": "1ed286ec9d596504",
+      "chunk_length": 305,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "docling",
+          "datamodel",
+          "pipeline",
+          "options",
+          "convertpipelineoptions",
+          "extends",
+          "pipelineoptions",
+          "with",
+          "enrichment",
+          "capabilities",
+          "used",
+          "simplepipeline",
+          "and",
+          "its",
+          "descendants",
+          "sources",
+          "py283",
+          "292",
+          "https",
+          "github"
+        ],
+        "term_weights": [
+          {
+            "term": "docling",
+            "tf": 4,
+            "weight": 0.125
+          },
+          {
+            "term": "datamodel",
+            "tf": 2,
+            "weight": 0.0625
+          },
+          {
+            "term": "pipeline",
+            "tf": 2,
+            "weight": 0.0625
+          },
+          {
+            "term": "options",
+            "tf": 2,
+            "weight": 0.0625
+          },
+          {
+            "term": "convertpipelineoptions",
+            "tf": 1,
+            "weight": 0.03125
+          },
+          {
+            "term": "extends",
+            "tf": 1,
+            "weight": 0.03125
+          },
+          {
+            "term": "pipelineoptions",
+            "tf": 1,
+            "weight": 0.03125
+          },
+          {
+            "term": "with",
+            "tf": 1,
+            "weight": 0.03125
+          },
+          {
+            "term": "enrichment",
+            "tf": 1,
+            "weight": 0.03125
+          },
+          {
+            "term": "capabilities",
+            "tf": 1,
+            "weight": 0.03125
+          },
+          {
+            "term": "used",
+            "tf": 1,
+            "weight": 0.03125
+          },
+          {
+            "term": "simplepipeline",
+            "tf": 1,
+            "weight": 0.03125
+          },
+          {
+            "term": "and",
+            "tf": 1,
+            "weight": 0.03125
+          },
+          {
+            "term": "its",
+            "tf": 1,
+            "weight": 0.03125
+          },
+          {
+            "term": "descendants",
+            "tf": 1,
+            "weight": 0.03125
+          },
+          {
+            "term": "sources",
+            "tf": 1,
+            "weight": 0.03125
+          },
+          {
+            "term": "py283",
+            "tf": 1,
+            "weight": 0.03125
+          },
+          {
+            "term": "292",
+            "tf": 1,
+            "weight": 0.03125
+          },
+          {
+            "term": "https",
+            "tf": 1,
+            "weight": 0.03125
+          },
+          {
+            "term": "github",
+            "tf": 1,
+            "weight": 0.03125
+          }
+        ],
+        "unique_terms": 26,
+        "total_terms": 32
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "ConvertPipelineOptions",
+        "capabilities",
+        "convertpipelineoptions",
+        "datamodel",
+        "docling",
+        "enrichment",
+        "extends",
+        "options",
+        "pipeline",
+        "pipelineoptions",
+        "with"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.7999999999999998,
+      "retrieval_quality": 0.5723529411764706,
+      "overall": 0.6907843137254902
+    }
+  },
+  {
+    "text": "### PaginatedPipelineOptions\n\nAdds image generation controls for pipelines processing paginated documents:\n\n```\n```\n\n**Sources:** [docling/datamodel/pipeline\\_options.py294-298](https://github.com/docling-project/docling/blob/f7244a43/docling/datamodel/pipeline_options.py#L294-L298)\n\n---",
+    "metadata": {
+      "chunk_id": "13c9127fcc51-0007",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling\\_docling-project_docling_2.3-configuration-and-pipeline-options.md",
+      "filename": "_docling-project_docling_2.3-configuration-and-pipeline-options.md",
+      "file_extension": ".md",
+      "chunk_index": 7,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "PaginatedPipelineOptions"
+      ],
+      "heading_text": "PaginatedPipelineOptions",
+      "token_count": 68,
+      "char_count": 288,
+      "start_char": 9244,
+      "end_char": 9532,
+      "semantic_score": 0.7,
+      "structural_score": 0.7999999999999998,
+      "retrieval_quality": 0.57125,
+      "chunking_strategy": "hierarchical_balanced_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T09:13:44.567887",
+      "document_id": "13c9127fcc51",
+      "document_name": "_docling-project_docling_2.3-configuration-and-pipeline-options",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling\\_docling-project_docling_2.3-configuration-and-pipeline-options.md",
+      "source_filename": "_docling-project_docling_2.3-configuration-and-pipeline-options.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling",
+      "relative_path": "Docs\\Docling\\_docling-project_docling_2.3-configuration-and-pipeline-options.md",
+      "hierarchy_path": "PaginatedPipelineOptions",
+      "chunk_hash": "87274cc6e17e6157",
+      "content_digest": "87274cc6e17e6157",
+      "chunk_length": 288,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "docling",
+          "datamodel",
+          "pipeline",
+          "options",
+          "paginatedpipelineoptions",
+          "adds",
+          "image",
+          "generation",
+          "controls",
+          "for",
+          "pipelines",
+          "processing",
+          "paginated",
+          "documents",
+          "sources",
+          "py294",
+          "298",
+          "https",
+          "github",
+          "com"
+        ],
+        "term_weights": [
+          {
+            "term": "docling",
+            "tf": 4,
+            "weight": 0.129032
+          },
+          {
+            "term": "datamodel",
+            "tf": 2,
+            "weight": 0.064516
+          },
+          {
+            "term": "pipeline",
+            "tf": 2,
+            "weight": 0.064516
+          },
+          {
+            "term": "options",
+            "tf": 2,
+            "weight": 0.064516
+          },
+          {
+            "term": "paginatedpipelineoptions",
+            "tf": 1,
+            "weight": 0.032258
+          },
+          {
+            "term": "adds",
+            "tf": 1,
+            "weight": 0.032258
+          },
+          {
+            "term": "image",
+            "tf": 1,
+            "weight": 0.032258
+          },
+          {
+            "term": "generation",
+            "tf": 1,
+            "weight": 0.032258
+          },
+          {
+            "term": "controls",
+            "tf": 1,
+            "weight": 0.032258
+          },
+          {
+            "term": "for",
+            "tf": 1,
+            "weight": 0.032258
+          },
+          {
+            "term": "pipelines",
+            "tf": 1,
+            "weight": 0.032258
+          },
+          {
+            "term": "processing",
+            "tf": 1,
+            "weight": 0.032258
+          },
+          {
+            "term": "paginated",
+            "tf": 1,
+            "weight": 0.032258
+          },
+          {
+            "term": "documents",
+            "tf": 1,
+            "weight": 0.032258
+          },
+          {
+            "term": "sources",
+            "tf": 1,
+            "weight": 0.032258
+          },
+          {
+            "term": "py294",
+            "tf": 1,
+            "weight": 0.032258
+          },
+          {
+            "term": "298",
+            "tf": 1,
+            "weight": 0.032258
+          },
+          {
+            "term": "https",
+            "tf": 1,
+            "weight": 0.032258
+          },
+          {
+            "term": "github",
+            "tf": 1,
+            "weight": 0.032258
+          },
+          {
+            "term": "com",
+            "tf": 1,
+            "weight": 0.032258
+          }
+        ],
+        "unique_terms": 25,
+        "total_terms": 31
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "PaginatedPipelineOptions",
+        "adds",
+        "controls",
+        "datamodel",
+        "docling",
+        "for",
+        "generation",
+        "image",
+        "options",
+        "paginatedpipelineoptions",
+        "pipeline"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.7999999999999998,
+      "retrieval_quality": 0.57125,
+      "overall": 0.6904166666666667
+    }
+  },
+  {
+    "text": "### PdfPipelineOptions\n\nThe most comprehensive options class, controlling all aspects of PDF processing in `StandardPdfPipeline` and `ThreadedStandardPdfPipeline`:\n\n```\n```\n\n**Key fields:**\n\n- **Feature toggles**: `do_table_structure`, `do_ocr`, `do_code_enrichment`, `do_formula_enrichment`, `do_picture_classification`, `do_picture_description`\n- **Nested configurations**: `table_structure_options`, `ocr_options`, `layout_options`\n- **Image control**: `images_scale`, `generate_page_images`, `generate_picture_images`, `generate_table_images` (deprecated)\n- **Text handling**: `force_backend_text` (use PDF's embedded text instead of VLM output)\n\n**Sources:** [docling/datamodel/pipeline\\_options.py334-363](https://github.com/docling-project/docling/blob/f7244a43/docling/datamodel/pipeline_options.py#L334-L363)",
+    "metadata": {
+      "chunk_id": "13c9127fcc51-0009",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling\\_docling-project_docling_2.3-configuration-and-pipeline-options.md",
+      "filename": "_docling-project_docling_2.3-configuration-and-pipeline-options.md",
+      "file_extension": ".md",
+      "chunk_index": 9,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "PdfPipelineOptions"
+      ],
+      "heading_text": "PdfPipelineOptions",
+      "token_count": 194,
+      "char_count": 817,
+      "start_char": 9564,
+      "end_char": 10381,
+      "semantic_score": 0.7999999999999999,
+      "structural_score": 0.7999999999999998,
+      "retrieval_quality": 0.5641379310344827,
+      "chunking_strategy": "hierarchical_balanced_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T09:13:44.568760",
+      "document_id": "13c9127fcc51",
+      "document_name": "_docling-project_docling_2.3-configuration-and-pipeline-options",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling\\_docling-project_docling_2.3-configuration-and-pipeline-options.md",
+      "source_filename": "_docling-project_docling_2.3-configuration-and-pipeline-options.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling",
+      "relative_path": "Docs\\Docling\\_docling-project_docling_2.3-configuration-and-pipeline-options.md",
+      "hierarchy_path": "PdfPipelineOptions",
+      "chunk_hash": "31bd8ff845c6e483",
+      "content_digest": "31bd8ff845c6e483",
+      "chunk_length": 817,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "options",
+          "images",
+          "docling",
+          "table",
+          "picture",
+          "generate",
+          "text",
+          "pdf",
+          "structure",
+          "ocr",
+          "enrichment",
+          "datamodel",
+          "pipeline",
+          "pdfpipelineoptions",
+          "the",
+          "most",
+          "comprehensive",
+          "class",
+          "controlling",
+          "all"
+        ],
+        "term_weights": [
+          {
+            "term": "options",
+            "tf": 6,
+            "weight": 0.070588
+          },
+          {
+            "term": "images",
+            "tf": 4,
+            "weight": 0.047059
+          },
+          {
+            "term": "docling",
+            "tf": 4,
+            "weight": 0.047059
+          },
+          {
+            "term": "table",
+            "tf": 3,
+            "weight": 0.035294
+          },
+          {
+            "term": "picture",
+            "tf": 3,
+            "weight": 0.035294
+          },
+          {
+            "term": "generate",
+            "tf": 3,
+            "weight": 0.035294
+          },
+          {
+            "term": "text",
+            "tf": 3,
+            "weight": 0.035294
+          },
+          {
+            "term": "pdf",
+            "tf": 2,
+            "weight": 0.023529
+          },
+          {
+            "term": "structure",
+            "tf": 2,
+            "weight": 0.023529
+          },
+          {
+            "term": "ocr",
+            "tf": 2,
+            "weight": 0.023529
+          },
+          {
+            "term": "enrichment",
+            "tf": 2,
+            "weight": 0.023529
+          },
+          {
+            "term": "datamodel",
+            "tf": 2,
+            "weight": 0.023529
+          },
+          {
+            "term": "pipeline",
+            "tf": 2,
+            "weight": 0.023529
+          },
+          {
+            "term": "pdfpipelineoptions",
+            "tf": 1,
+            "weight": 0.011765
+          },
+          {
+            "term": "the",
+            "tf": 1,
+            "weight": 0.011765
+          },
+          {
+            "term": "most",
+            "tf": 1,
+            "weight": 0.011765
+          },
+          {
+            "term": "comprehensive",
+            "tf": 1,
+            "weight": 0.011765
+          },
+          {
+            "term": "class",
+            "tf": 1,
+            "weight": 0.011765
+          },
+          {
+            "term": "controlling",
+            "tf": 1,
+            "weight": 0.011765
+          },
+          {
+            "term": "all",
+            "tf": 1,
+            "weight": 0.011765
+          }
+        ],
+        "unique_terms": 60,
+        "total_terms": 85
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": true,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "PdfPipelineOptions",
+        "docling",
+        "generate",
+        "images",
+        "ocr",
+        "options",
+        "pdf",
+        "picture",
+        "structure",
+        "table",
+        "text"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.7999999999999999,
+      "structural": 0.7999999999999998,
+      "retrieval_quality": 0.5641379310344827,
+      "overall": 0.7213793103448275
+    }
+  },
+  {
+    "text": "### VlmPipelineOptions\n\nConfiguration for vision-language model-based processing:\n\n```\n```\n\nThe `vlm_options` field accepts either:\n\n- `InlineVlmOptions`: For local model inference (HuggingFace Transformers, MLX, vLLM)\n- `ApiVlmOptions`: For OpenAI-compatible API endpoints (Ollama, vLLM server)\n\n**Sources:** [docling/datamodel/pipeline\\_options.py300-309](https://github.com/docling-project/docling/blob/f7244a43/docling/datamodel/pipeline_options.py#L300-L309) [docling/datamodel/pipeline\\_options\\_vlm\\_model.py](https://github.com/docling-project/docling/blob/f7244a43/docling/datamodel/pipeline_options_vlm_model.py)",
+    "metadata": {
+      "chunk_id": "13c9127fcc51-0010",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling\\_docling-project_docling_2.3-configuration-and-pipeline-options.md",
+      "filename": "_docling-project_docling_2.3-configuration-and-pipeline-options.md",
+      "file_extension": ".md",
+      "chunk_index": 10,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "VlmPipelineOptions"
+      ],
+      "heading_text": "VlmPipelineOptions",
+      "token_count": 164,
+      "char_count": 622,
+      "start_char": 10383,
+      "end_char": 11005,
+      "semantic_score": 0.7,
+      "structural_score": 0.7999999999999998,
+      "retrieval_quality": 0.5566666666666666,
+      "chunking_strategy": "hierarchical_balanced_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T09:13:44.569312",
+      "document_id": "13c9127fcc51",
+      "document_name": "_docling-project_docling_2.3-configuration-and-pipeline-options",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling\\_docling-project_docling_2.3-configuration-and-pipeline-options.md",
+      "source_filename": "_docling-project_docling_2.3-configuration-and-pipeline-options.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling",
+      "relative_path": "Docs\\Docling\\_docling-project_docling_2.3-configuration-and-pipeline-options.md",
+      "hierarchy_path": "VlmPipelineOptions",
+      "chunk_hash": "0e8ea31673757e04",
+      "content_digest": "0e8ea31673757e04",
+      "chunk_length": 622,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "docling",
+          "options",
+          "model",
+          "datamodel",
+          "pipeline",
+          "for",
+          "vlm",
+          "vllm",
+          "https",
+          "github",
+          "com",
+          "project",
+          "blob",
+          "f7244a43",
+          "vlmpipelineoptions",
+          "configuration",
+          "vision",
+          "language",
+          "based",
+          "processing"
+        ],
+        "term_weights": [
+          {
+            "term": "docling",
+            "tf": 8,
+            "weight": 0.109589
+          },
+          {
+            "term": "options",
+            "tf": 5,
+            "weight": 0.068493
+          },
+          {
+            "term": "model",
+            "tf": 4,
+            "weight": 0.054795
+          },
+          {
+            "term": "datamodel",
+            "tf": 4,
+            "weight": 0.054795
+          },
+          {
+            "term": "pipeline",
+            "tf": 4,
+            "weight": 0.054795
+          },
+          {
+            "term": "for",
+            "tf": 3,
+            "weight": 0.041096
+          },
+          {
+            "term": "vlm",
+            "tf": 3,
+            "weight": 0.041096
+          },
+          {
+            "term": "vllm",
+            "tf": 2,
+            "weight": 0.027397
+          },
+          {
+            "term": "https",
+            "tf": 2,
+            "weight": 0.027397
+          },
+          {
+            "term": "github",
+            "tf": 2,
+            "weight": 0.027397
+          },
+          {
+            "term": "com",
+            "tf": 2,
+            "weight": 0.027397
+          },
+          {
+            "term": "project",
+            "tf": 2,
+            "weight": 0.027397
+          },
+          {
+            "term": "blob",
+            "tf": 2,
+            "weight": 0.027397
+          },
+          {
+            "term": "f7244a43",
+            "tf": 2,
+            "weight": 0.027397
+          },
+          {
+            "term": "vlmpipelineoptions",
+            "tf": 1,
+            "weight": 0.013699
+          },
+          {
+            "term": "configuration",
+            "tf": 1,
+            "weight": 0.013699
+          },
+          {
+            "term": "vision",
+            "tf": 1,
+            "weight": 0.013699
+          },
+          {
+            "term": "language",
+            "tf": 1,
+            "weight": 0.013699
+          },
+          {
+            "term": "based",
+            "tf": 1,
+            "weight": 0.013699
+          },
+          {
+            "term": "processing",
+            "tf": 1,
+            "weight": 0.013699
+          }
+        ],
+        "unique_terms": 42,
+        "total_terms": 73
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": true,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "VlmPipelineOptions",
+        "datamodel",
+        "docling",
+        "for",
+        "github",
+        "https",
+        "model",
+        "options",
+        "pipeline",
+        "vllm",
+        "vlm"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.7999999999999998,
+      "retrieval_quality": 0.5566666666666666,
+      "overall": 0.6855555555555556
+    }
+  },
+  {
+    "text": "### AsrPipelineOptions\n\nConfiguration for audio transcription:\n\n```\n```\n\nThe `asr_options` field specifies the Whisper model variant (TINY, BASE, SMALL, MEDIUM, LARGE, TURBO).\n\n**Sources:** [docling/datamodel/pipeline\\_options.py324-326](https://github.com/docling-project/docling/blob/f7244a43/docling/datamodel/pipeline_options.py#L324-L326) [docling/datamodel/pipeline\\_options\\_asr\\_model.py](https://github.com/docling-project/docling/blob/f7244a43/docling/datamodel/pipeline_options_asr_model.py)",
+    "metadata": {
+      "chunk_id": "13c9127fcc51-0011",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling\\_docling-project_docling_2.3-configuration-and-pipeline-options.md",
+      "filename": "_docling-project_docling_2.3-configuration-and-pipeline-options.md",
+      "file_extension": ".md",
+      "chunk_index": 11,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "AsrPipelineOptions"
+      ],
+      "heading_text": "AsrPipelineOptions",
+      "token_count": 133,
+      "char_count": 502,
+      "start_char": 11007,
+      "end_char": 11509,
+      "semantic_score": 0.7,
+      "structural_score": 0.7999999999999998,
+      "retrieval_quality": 0.5660000000000001,
+      "chunking_strategy": "hierarchical_balanced_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T09:13:44.569708",
+      "document_id": "13c9127fcc51",
+      "document_name": "_docling-project_docling_2.3-configuration-and-pipeline-options",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling\\_docling-project_docling_2.3-configuration-and-pipeline-options.md",
+      "source_filename": "_docling-project_docling_2.3-configuration-and-pipeline-options.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling",
+      "relative_path": "Docs\\Docling\\_docling-project_docling_2.3-configuration-and-pipeline-options.md",
+      "hierarchy_path": "AsrPipelineOptions",
+      "chunk_hash": "2e028aef8dcdbe11",
+      "content_digest": "2e028aef8dcdbe11",
+      "chunk_length": 502,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "docling",
+          "options",
+          "datamodel",
+          "pipeline",
+          "asr",
+          "model",
+          "the",
+          "https",
+          "github",
+          "com",
+          "project",
+          "blob",
+          "f7244a43",
+          "asrpipelineoptions",
+          "configuration",
+          "for",
+          "audio",
+          "transcription",
+          "field",
+          "specifies"
+        ],
+        "term_weights": [
+          {
+            "term": "docling",
+            "tf": 8,
+            "weight": 0.131148
+          },
+          {
+            "term": "options",
+            "tf": 5,
+            "weight": 0.081967
+          },
+          {
+            "term": "datamodel",
+            "tf": 4,
+            "weight": 0.065574
+          },
+          {
+            "term": "pipeline",
+            "tf": 4,
+            "weight": 0.065574
+          },
+          {
+            "term": "asr",
+            "tf": 3,
+            "weight": 0.04918
+          },
+          {
+            "term": "model",
+            "tf": 3,
+            "weight": 0.04918
+          },
+          {
+            "term": "the",
+            "tf": 2,
+            "weight": 0.032787
+          },
+          {
+            "term": "https",
+            "tf": 2,
+            "weight": 0.032787
+          },
+          {
+            "term": "github",
+            "tf": 2,
+            "weight": 0.032787
+          },
+          {
+            "term": "com",
+            "tf": 2,
+            "weight": 0.032787
+          },
+          {
+            "term": "project",
+            "tf": 2,
+            "weight": 0.032787
+          },
+          {
+            "term": "blob",
+            "tf": 2,
+            "weight": 0.032787
+          },
+          {
+            "term": "f7244a43",
+            "tf": 2,
+            "weight": 0.032787
+          },
+          {
+            "term": "asrpipelineoptions",
+            "tf": 1,
+            "weight": 0.016393
+          },
+          {
+            "term": "configuration",
+            "tf": 1,
+            "weight": 0.016393
+          },
+          {
+            "term": "for",
+            "tf": 1,
+            "weight": 0.016393
+          },
+          {
+            "term": "audio",
+            "tf": 1,
+            "weight": 0.016393
+          },
+          {
+            "term": "transcription",
+            "tf": 1,
+            "weight": 0.016393
+          },
+          {
+            "term": "field",
+            "tf": 1,
+            "weight": 0.016393
+          },
+          {
+            "term": "specifies",
+            "tf": 1,
+            "weight": 0.016393
+          }
+        ],
+        "unique_terms": 33,
+        "total_terms": 61
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "AsrPipelineOptions",
+        "asr",
+        "com",
+        "datamodel",
+        "docling",
+        "github",
+        "https",
+        "model",
+        "options",
+        "pipeline",
+        "the"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.7999999999999998,
+      "retrieval_quality": 0.5660000000000001,
+      "overall": 0.6886666666666666
+    }
+  },
+  {
+    "text": "### ThreadedPdfPipelineOptions\n\nExtends `PdfPipelineOptions` with batch processing and concurrency controls:\n\n```\n```\n\nThese control the threaded pipeline's batching and backpressure mechanisms. See [Threaded PDF Pipeline](docling-project/docling/5.2-threaded-pdf-pipeline.md) for details.\n\n**Sources:** [docling/datamodel/pipeline\\_options.py371-384](https://github.com/docling-project/docling/blob/f7244a43/docling/datamodel/pipeline_options.py#L371-L384)\n\n---",
+    "metadata": {
+      "chunk_id": "13c9127fcc51-0012",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling\\_docling-project_docling_2.3-configuration-and-pipeline-options.md",
+      "filename": "_docling-project_docling_2.3-configuration-and-pipeline-options.md",
+      "file_extension": ".md",
+      "chunk_index": 12,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "ThreadedPdfPipelineOptions"
+      ],
+      "heading_text": "ThreadedPdfPipelineOptions",
+      "token_count": 110,
+      "char_count": 462,
+      "start_char": 11511,
+      "end_char": 11973,
+      "semantic_score": 0.6,
+      "structural_score": 0.7999999999999998,
+      "retrieval_quality": 0.57,
+      "chunking_strategy": "hierarchical_balanced_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T09:13:44.570160",
+      "document_id": "13c9127fcc51",
+      "document_name": "_docling-project_docling_2.3-configuration-and-pipeline-options",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling\\_docling-project_docling_2.3-configuration-and-pipeline-options.md",
+      "source_filename": "_docling-project_docling_2.3-configuration-and-pipeline-options.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling",
+      "relative_path": "Docs\\Docling\\_docling-project_docling_2.3-configuration-and-pipeline-options.md",
+      "hierarchy_path": "ThreadedPdfPipelineOptions",
+      "chunk_hash": "cc57a63639e936f0",
+      "content_digest": "cc57a63639e936f0",
+      "chunk_length": 462,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "docling",
+          "pipeline",
+          "threaded",
+          "and",
+          "pdf",
+          "project",
+          "datamodel",
+          "options",
+          "threadedpdfpipelineoptions",
+          "extends",
+          "pdfpipelineoptions",
+          "with",
+          "batch",
+          "processing",
+          "concurrency",
+          "controls",
+          "these",
+          "control",
+          "the",
+          "batching"
+        ],
+        "term_weights": [
+          {
+            "term": "docling",
+            "tf": 6,
+            "weight": 0.117647
+          },
+          {
+            "term": "pipeline",
+            "tf": 5,
+            "weight": 0.098039
+          },
+          {
+            "term": "threaded",
+            "tf": 3,
+            "weight": 0.058824
+          },
+          {
+            "term": "and",
+            "tf": 2,
+            "weight": 0.039216
+          },
+          {
+            "term": "pdf",
+            "tf": 2,
+            "weight": 0.039216
+          },
+          {
+            "term": "project",
+            "tf": 2,
+            "weight": 0.039216
+          },
+          {
+            "term": "datamodel",
+            "tf": 2,
+            "weight": 0.039216
+          },
+          {
+            "term": "options",
+            "tf": 2,
+            "weight": 0.039216
+          },
+          {
+            "term": "threadedpdfpipelineoptions",
+            "tf": 1,
+            "weight": 0.019608
+          },
+          {
+            "term": "extends",
+            "tf": 1,
+            "weight": 0.019608
+          },
+          {
+            "term": "pdfpipelineoptions",
+            "tf": 1,
+            "weight": 0.019608
+          },
+          {
+            "term": "with",
+            "tf": 1,
+            "weight": 0.019608
+          },
+          {
+            "term": "batch",
+            "tf": 1,
+            "weight": 0.019608
+          },
+          {
+            "term": "processing",
+            "tf": 1,
+            "weight": 0.019608
+          },
+          {
+            "term": "concurrency",
+            "tf": 1,
+            "weight": 0.019608
+          },
+          {
+            "term": "controls",
+            "tf": 1,
+            "weight": 0.019608
+          },
+          {
+            "term": "these",
+            "tf": 1,
+            "weight": 0.019608
+          },
+          {
+            "term": "control",
+            "tf": 1,
+            "weight": 0.019608
+          },
+          {
+            "term": "the",
+            "tf": 1,
+            "weight": 0.019608
+          },
+          {
+            "term": "batching",
+            "tf": 1,
+            "weight": 0.019608
+          }
+        ],
+        "unique_terms": 35,
+        "total_terms": 51
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "ThreadedPdfPipelineOptions",
+        "and",
+        "datamodel",
+        "docling",
+        "extends",
+        "options",
+        "pdf",
+        "pipeline",
+        "project",
+        "threaded",
+        "threadedpdfpipelineoptions"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.6,
+      "structural": 0.7999999999999998,
+      "retrieval_quality": 0.57,
+      "overall": 0.6566666666666666
+    }
+  },
+  {
+    "text": "## Model-Specific Options",
+    "metadata": {
+      "chunk_id": "13c9127fcc51-0013",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling\\_docling-project_docling_2.3-configuration-and-pipeline-options.md",
+      "filename": "_docling-project_docling_2.3-configuration-and-pipeline-options.md",
+      "file_extension": ".md",
+      "chunk_index": 13,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Model-Specific Options"
+      ],
+      "heading_text": "Model-Specific Options",
+      "token_count": 5,
+      "char_count": 25,
+      "start_char": 11975,
+      "end_char": 12000,
+      "semantic_score": 0.8,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.59,
+      "chunking_strategy": "hierarchical_balanced_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T09:13:44.570302",
+      "document_id": "13c9127fcc51",
+      "document_name": "_docling-project_docling_2.3-configuration-and-pipeline-options",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling\\_docling-project_docling_2.3-configuration-and-pipeline-options.md",
+      "source_filename": "_docling-project_docling_2.3-configuration-and-pipeline-options.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling",
+      "relative_path": "Docs\\Docling\\_docling-project_docling_2.3-configuration-and-pipeline-options.md",
+      "hierarchy_path": "Model-Specific Options",
+      "chunk_hash": "d35200ec59396c5e",
+      "content_digest": "d35200ec59396c5e",
+      "chunk_length": 25,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "model",
+          "specific",
+          "options"
+        ],
+        "term_weights": [
+          {
+            "term": "model",
+            "tf": 1,
+            "weight": 0.333333
+          },
+          {
+            "term": "specific",
+            "tf": 1,
+            "weight": 0.333333
+          },
+          {
+            "term": "options",
+            "tf": 1,
+            "weight": 0.333333
+          }
+        ],
+        "unique_terms": 3,
+        "total_terms": 3
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Model-Specific Options",
+        "model",
+        "options",
+        "specific"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.8,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.59,
+      "overall": 0.7633333333333333
+    }
+  },
+  {
+    "text": "### AcceleratorOptions\n\nControls hardware acceleration and parallelism across all models:\n\n```\n```\n\n**Device selection logic:**\n\n1. If `device == AUTO`, `decide_device()` probes available hardware\n2. Priority order: CUDA → MPS (macOS) → CPU\n3. Some models (e.g., TableStructureModel) override MPS to CPU for performance\n\n**Environment variable precedence:**\n\n- `DOCLING_DEVICE` overrides default but not explicit constructor argument\n- `DOCLING_NUM_THREADS` takes precedence over `OMP_NUM_THREADS`\n- Constructor arguments always take precedence over environment variables\n\n**Sources:** [docling/datamodel/accelerator\\_options.py](https://github.com/docling-project/docling/blob/f7244a43/docling/datamodel/accelerator_options.py) [docling/utils/accelerator\\_utils.py](https://github.com/docling-project/docling/blob/f7244a43/docling/utils/accelerator_utils.py) [tests/test\\_options.py43-96](https://github.com/docling-project/docling/blob/f7244a43/tests/test_options.py#L43-L96)",
+    "metadata": {
+      "chunk_id": "13c9127fcc51-0014",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling\\_docling-project_docling_2.3-configuration-and-pipeline-options.md",
+      "filename": "_docling-project_docling_2.3-configuration-and-pipeline-options.md",
+      "file_extension": ".md",
+      "chunk_index": 14,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "AcceleratorOptions"
+      ],
+      "heading_text": "AcceleratorOptions",
+      "token_count": 233,
+      "char_count": 977,
+      "start_char": 12002,
+      "end_char": 12979,
+      "semantic_score": 0.7,
+      "structural_score": 0.7999999999999998,
+      "retrieval_quality": 0.55,
+      "chunking_strategy": "hierarchical_balanced_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T09:13:44.571050",
+      "document_id": "13c9127fcc51",
+      "document_name": "_docling-project_docling_2.3-configuration-and-pipeline-options",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling\\_docling-project_docling_2.3-configuration-and-pipeline-options.md",
+      "source_filename": "_docling-project_docling_2.3-configuration-and-pipeline-options.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling",
+      "relative_path": "Docs\\Docling\\_docling-project_docling_2.3-configuration-and-pipeline-options.md",
+      "hierarchy_path": "AcceleratorOptions",
+      "chunk_hash": "69079c50e59e24c2",
+      "content_digest": "69079c50e59e24c2",
+      "chunk_length": 977,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "docling",
+          "device",
+          "accelerator",
+          "options",
+          "utils",
+          "precedence",
+          "https",
+          "github",
+          "com",
+          "project",
+          "blob",
+          "f7244a43",
+          "hardware",
+          "models",
+          "mps",
+          "cpu",
+          "environment",
+          "constructor",
+          "num",
+          "threads"
+        ],
+        "term_weights": [
+          {
+            "term": "docling",
+            "tf": 12,
+            "weight": 0.107143
+          },
+          {
+            "term": "device",
+            "tf": 4,
+            "weight": 0.035714
+          },
+          {
+            "term": "accelerator",
+            "tf": 4,
+            "weight": 0.035714
+          },
+          {
+            "term": "options",
+            "tf": 4,
+            "weight": 0.035714
+          },
+          {
+            "term": "utils",
+            "tf": 4,
+            "weight": 0.035714
+          },
+          {
+            "term": "precedence",
+            "tf": 3,
+            "weight": 0.026786
+          },
+          {
+            "term": "https",
+            "tf": 3,
+            "weight": 0.026786
+          },
+          {
+            "term": "github",
+            "tf": 3,
+            "weight": 0.026786
+          },
+          {
+            "term": "com",
+            "tf": 3,
+            "weight": 0.026786
+          },
+          {
+            "term": "project",
+            "tf": 3,
+            "weight": 0.026786
+          },
+          {
+            "term": "blob",
+            "tf": 3,
+            "weight": 0.026786
+          },
+          {
+            "term": "f7244a43",
+            "tf": 3,
+            "weight": 0.026786
+          },
+          {
+            "term": "hardware",
+            "tf": 2,
+            "weight": 0.017857
+          },
+          {
+            "term": "models",
+            "tf": 2,
+            "weight": 0.017857
+          },
+          {
+            "term": "mps",
+            "tf": 2,
+            "weight": 0.017857
+          },
+          {
+            "term": "cpu",
+            "tf": 2,
+            "weight": 0.017857
+          },
+          {
+            "term": "environment",
+            "tf": 2,
+            "weight": 0.017857
+          },
+          {
+            "term": "constructor",
+            "tf": 2,
+            "weight": 0.017857
+          },
+          {
+            "term": "num",
+            "tf": 2,
+            "weight": 0.017857
+          },
+          {
+            "term": "threads",
+            "tf": 2,
+            "weight": 0.017857
+          }
+        ],
+        "unique_terms": 63,
+        "total_terms": 112
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": true,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "AcceleratorOptions",
+        "accelerator",
+        "com",
+        "device",
+        "docling",
+        "github",
+        "https",
+        "options",
+        "precedence",
+        "project",
+        "utils"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.7999999999999998,
+      "retrieval_quality": 0.55,
+      "overall": 0.6833333333333332
+    }
+  },
+  {
+    "text": "### OcrOptions Hierarchy\n\nOCR options use a factory pattern with a polymorphic hierarchy:\n\n```\n```\n\n**Factory usage pattern:**\n\n```\n```\n\n**Key fields:**\n\n- `lang`: Language codes (varies by engine: `[\"eng\", \"deu\"]` for Tesseract, `[\"en\", \"de\"]` for EasyOCR)\n- `force_full_page_ocr`: Always OCR the entire page, ignoring bitmap detection\n- `bitmap_area_threshold`: Minimum page area covered by bitmaps to trigger OCR (default: 0.05 = 5%)\n\n**Sources:** [docling/datamodel/pipeline\\_options.py74-199](https://github.com/docling-project/docling/blob/f7244a43/docling/datamodel/pipeline_options.py#L74-L199) [docling/models/factories.py](https://github.com/docling-project/docling/blob/f7244a43/docling/models/factories.py) [docling/cli/main.py599-612](https://github.com/docling-project/docling/blob/f7244a43/docling/cli/main.py#L599-L612)",
+    "metadata": {
+      "chunk_id": "13c9127fcc51-0015",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling\\_docling-project_docling_2.3-configuration-and-pipeline-options.md",
+      "filename": "_docling-project_docling_2.3-configuration-and-pipeline-options.md",
+      "file_extension": ".md",
+      "chunk_index": 15,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "OcrOptions Hierarchy"
+      ],
+      "heading_text": "OcrOptions Hierarchy",
+      "token_count": 232,
+      "char_count": 835,
+      "start_char": 12981,
+      "end_char": 13816,
+      "semantic_score": 0.7,
+      "structural_score": 0.7999999999999998,
+      "retrieval_quality": 0.5445454545454546,
+      "chunking_strategy": "hierarchical_balanced_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T09:13:44.571781",
+      "document_id": "13c9127fcc51",
+      "document_name": "_docling-project_docling_2.3-configuration-and-pipeline-options",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling\\_docling-project_docling_2.3-configuration-and-pipeline-options.md",
+      "source_filename": "_docling-project_docling_2.3-configuration-and-pipeline-options.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling",
+      "relative_path": "Docs\\Docling\\_docling-project_docling_2.3-configuration-and-pipeline-options.md",
+      "hierarchy_path": "OcrOptions Hierarchy",
+      "chunk_hash": "9129bf3f6cbbd0ee",
+      "content_digest": "9129bf3f6cbbd0ee",
+      "chunk_length": 835,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "docling",
+          "ocr",
+          "options",
+          "page",
+          "https",
+          "github",
+          "com",
+          "project",
+          "blob",
+          "f7244a43",
+          "hierarchy",
+          "factory",
+          "pattern",
+          "for",
+          "bitmap",
+          "area",
+          "datamodel",
+          "pipeline",
+          "models",
+          "factories"
+        ],
+        "term_weights": [
+          {
+            "term": "docling",
+            "tf": 12,
+            "weight": 0.117647
+          },
+          {
+            "term": "ocr",
+            "tf": 4,
+            "weight": 0.039216
+          },
+          {
+            "term": "options",
+            "tf": 3,
+            "weight": 0.029412
+          },
+          {
+            "term": "page",
+            "tf": 3,
+            "weight": 0.029412
+          },
+          {
+            "term": "https",
+            "tf": 3,
+            "weight": 0.029412
+          },
+          {
+            "term": "github",
+            "tf": 3,
+            "weight": 0.029412
+          },
+          {
+            "term": "com",
+            "tf": 3,
+            "weight": 0.029412
+          },
+          {
+            "term": "project",
+            "tf": 3,
+            "weight": 0.029412
+          },
+          {
+            "term": "blob",
+            "tf": 3,
+            "weight": 0.029412
+          },
+          {
+            "term": "f7244a43",
+            "tf": 3,
+            "weight": 0.029412
+          },
+          {
+            "term": "hierarchy",
+            "tf": 2,
+            "weight": 0.019608
+          },
+          {
+            "term": "factory",
+            "tf": 2,
+            "weight": 0.019608
+          },
+          {
+            "term": "pattern",
+            "tf": 2,
+            "weight": 0.019608
+          },
+          {
+            "term": "for",
+            "tf": 2,
+            "weight": 0.019608
+          },
+          {
+            "term": "bitmap",
+            "tf": 2,
+            "weight": 0.019608
+          },
+          {
+            "term": "area",
+            "tf": 2,
+            "weight": 0.019608
+          },
+          {
+            "term": "datamodel",
+            "tf": 2,
+            "weight": 0.019608
+          },
+          {
+            "term": "pipeline",
+            "tf": 2,
+            "weight": 0.019608
+          },
+          {
+            "term": "models",
+            "tf": 2,
+            "weight": 0.019608
+          },
+          {
+            "term": "factories",
+            "tf": 2,
+            "weight": 0.019608
+          }
+        ],
+        "unique_terms": 60,
+        "total_terms": 102
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": true,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "OcrOptions Hierarchy",
+        "blob",
+        "com",
+        "docling",
+        "f7244a43",
+        "github",
+        "https",
+        "ocr",
+        "options",
+        "page",
+        "project"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.7999999999999998,
+      "retrieval_quality": 0.5445454545454546,
+      "overall": 0.6815151515151515
+    }
+  },
+  {
+    "text": "### LayoutOptions\n\nConfiguration for layout analysis:\n\n```\n```\n\n**Model specifications available:**\n\n- `DOCLING_LAYOUT_HERON` (default): Balanced performance\n- `DOCLING_LAYOUT_EGRET_MEDIUM`, `DOCLING_LAYOUT_EGRET_LARGE`, `DOCLING_LAYOUT_EGRET_XLARGE`: Newer models with varying capacity\n- `DOCLING_LAYOUT_V2`: Legacy model\n\nEach `LayoutModelConfig` specifies:\n\n- `repo_id`: HuggingFace repository\n- `revision`: Git revision or tag\n- `model_repo_folder`: Local folder name\n- `model_path`: Path within the repository\n\n**Sources:** [docling/datamodel/pipeline\\_options.py311-322](https://github.com/docling-project/docling/blob/f7244a43/docling/datamodel/pipeline_options.py#L311-L322) [docling/datamodel/layout\\_model\\_specs.py](https://github.com/docling-project/docling/blob/f7244a43/docling/datamodel/layout_model_specs.py)",
+    "metadata": {
+      "chunk_id": "13c9127fcc51-0017",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling\\_docling-project_docling_2.3-configuration-and-pipeline-options.md",
+      "filename": "_docling-project_docling_2.3-configuration-and-pipeline-options.md",
+      "file_extension": ".md",
+      "chunk_index": 17,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "LayoutOptions"
+      ],
+      "heading_text": "LayoutOptions",
+      "token_count": 216,
+      "char_count": 824,
+      "start_char": 14770,
+      "end_char": 15594,
+      "semantic_score": 0.7999999999999999,
+      "structural_score": 0.7999999999999998,
+      "retrieval_quality": 0.5471428571428572,
+      "chunking_strategy": "hierarchical_balanced_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T09:13:44.573336",
+      "document_id": "13c9127fcc51",
+      "document_name": "_docling-project_docling_2.3-configuration-and-pipeline-options",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling\\_docling-project_docling_2.3-configuration-and-pipeline-options.md",
+      "source_filename": "_docling-project_docling_2.3-configuration-and-pipeline-options.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling",
+      "relative_path": "Docs\\Docling\\_docling-project_docling_2.3-configuration-and-pipeline-options.md",
+      "hierarchy_path": "LayoutOptions",
+      "chunk_hash": "c72de27b8238602d",
+      "content_digest": "c72de27b8238602d",
+      "chunk_length": 824,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "docling",
+          "layout",
+          "model",
+          "datamodel",
+          "egret",
+          "repo",
+          "repository",
+          "revision",
+          "folder",
+          "path",
+          "pipeline",
+          "options",
+          "https",
+          "github",
+          "com",
+          "project",
+          "blob",
+          "f7244a43",
+          "specs",
+          "layoutoptions"
+        ],
+        "term_weights": [
+          {
+            "term": "docling",
+            "tf": 13,
+            "weight": 0.135417
+          },
+          {
+            "term": "layout",
+            "tf": 8,
+            "weight": 0.083333
+          },
+          {
+            "term": "model",
+            "tf": 6,
+            "weight": 0.0625
+          },
+          {
+            "term": "datamodel",
+            "tf": 4,
+            "weight": 0.041667
+          },
+          {
+            "term": "egret",
+            "tf": 3,
+            "weight": 0.03125
+          },
+          {
+            "term": "repo",
+            "tf": 2,
+            "weight": 0.020833
+          },
+          {
+            "term": "repository",
+            "tf": 2,
+            "weight": 0.020833
+          },
+          {
+            "term": "revision",
+            "tf": 2,
+            "weight": 0.020833
+          },
+          {
+            "term": "folder",
+            "tf": 2,
+            "weight": 0.020833
+          },
+          {
+            "term": "path",
+            "tf": 2,
+            "weight": 0.020833
+          },
+          {
+            "term": "pipeline",
+            "tf": 2,
+            "weight": 0.020833
+          },
+          {
+            "term": "options",
+            "tf": 2,
+            "weight": 0.020833
+          },
+          {
+            "term": "https",
+            "tf": 2,
+            "weight": 0.020833
+          },
+          {
+            "term": "github",
+            "tf": 2,
+            "weight": 0.020833
+          },
+          {
+            "term": "com",
+            "tf": 2,
+            "weight": 0.020833
+          },
+          {
+            "term": "project",
+            "tf": 2,
+            "weight": 0.020833
+          },
+          {
+            "term": "blob",
+            "tf": 2,
+            "weight": 0.020833
+          },
+          {
+            "term": "f7244a43",
+            "tf": 2,
+            "weight": 0.020833
+          },
+          {
+            "term": "specs",
+            "tf": 2,
+            "weight": 0.020833
+          },
+          {
+            "term": "layoutoptions",
+            "tf": 1,
+            "weight": 0.010417
+          }
+        ],
+        "unique_terms": 53,
+        "total_terms": 96
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": true,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "LayoutOptions",
+        "datamodel",
+        "docling",
+        "egret",
+        "folder",
+        "layout",
+        "model",
+        "path",
+        "repo",
+        "repository",
+        "revision"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.7999999999999999,
+      "structural": 0.7999999999999998,
+      "retrieval_quality": 0.5471428571428572,
+      "overall": 0.7157142857142856
+    }
+  },
+  {
+    "text": "### Picture Description Options\n\nEnrichment models for describing images have two option types:\n\n```\n```\n\n```\n```\n\nPre-configured options:\n\n- `smolvlm_picture_description`: Uses SmolVLM-256M-Instruct\n- `granite_picture_description`: Uses IBM Granite Vision 3.3-2B\n\n**Sources:** [docling/datamodel/pipeline\\_options.py201-245](https://github.com/docling-project/docling/blob/f7244a43/docling/datamodel/pipeline_options.py#L201-L245)\n\n---",
+    "metadata": {
+      "chunk_id": "13c9127fcc51-0018",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling\\_docling-project_docling_2.3-configuration-and-pipeline-options.md",
+      "filename": "_docling-project_docling_2.3-configuration-and-pipeline-options.md",
+      "file_extension": ".md",
+      "chunk_index": 18,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Picture Description Options"
+      ],
+      "heading_text": "Picture Description Options",
+      "token_count": 116,
+      "char_count": 436,
+      "start_char": 15596,
+      "end_char": 16032,
+      "semantic_score": 0.7,
+      "structural_score": 0.7999999999999998,
+      "retrieval_quality": 0.5445454545454546,
+      "chunking_strategy": "hierarchical_balanced_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T09:13:44.573777",
+      "document_id": "13c9127fcc51",
+      "document_name": "_docling-project_docling_2.3-configuration-and-pipeline-options",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling\\_docling-project_docling_2.3-configuration-and-pipeline-options.md",
+      "source_filename": "_docling-project_docling_2.3-configuration-and-pipeline-options.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling",
+      "relative_path": "Docs\\Docling\\_docling-project_docling_2.3-configuration-and-pipeline-options.md",
+      "hierarchy_path": "Picture Description Options",
+      "chunk_hash": "7ab749267ad784ed",
+      "content_digest": "7ab749267ad784ed",
+      "chunk_length": 436,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "options",
+          "docling",
+          "picture",
+          "description",
+          "smolvlm",
+          "uses",
+          "granite",
+          "datamodel",
+          "pipeline",
+          "enrichment",
+          "models",
+          "for",
+          "describing",
+          "images",
+          "have",
+          "two",
+          "option",
+          "types",
+          "pre",
+          "configured"
+        ],
+        "term_weights": [
+          {
+            "term": "options",
+            "tf": 4,
+            "weight": 0.08
+          },
+          {
+            "term": "docling",
+            "tf": 4,
+            "weight": 0.08
+          },
+          {
+            "term": "picture",
+            "tf": 3,
+            "weight": 0.06
+          },
+          {
+            "term": "description",
+            "tf": 3,
+            "weight": 0.06
+          },
+          {
+            "term": "smolvlm",
+            "tf": 2,
+            "weight": 0.04
+          },
+          {
+            "term": "uses",
+            "tf": 2,
+            "weight": 0.04
+          },
+          {
+            "term": "granite",
+            "tf": 2,
+            "weight": 0.04
+          },
+          {
+            "term": "datamodel",
+            "tf": 2,
+            "weight": 0.04
+          },
+          {
+            "term": "pipeline",
+            "tf": 2,
+            "weight": 0.04
+          },
+          {
+            "term": "enrichment",
+            "tf": 1,
+            "weight": 0.02
+          },
+          {
+            "term": "models",
+            "tf": 1,
+            "weight": 0.02
+          },
+          {
+            "term": "for",
+            "tf": 1,
+            "weight": 0.02
+          },
+          {
+            "term": "describing",
+            "tf": 1,
+            "weight": 0.02
+          },
+          {
+            "term": "images",
+            "tf": 1,
+            "weight": 0.02
+          },
+          {
+            "term": "have",
+            "tf": 1,
+            "weight": 0.02
+          },
+          {
+            "term": "two",
+            "tf": 1,
+            "weight": 0.02
+          },
+          {
+            "term": "option",
+            "tf": 1,
+            "weight": 0.02
+          },
+          {
+            "term": "types",
+            "tf": 1,
+            "weight": 0.02
+          },
+          {
+            "term": "pre",
+            "tf": 1,
+            "weight": 0.02
+          },
+          {
+            "term": "configured",
+            "tf": 1,
+            "weight": 0.02
+          }
+        ],
+        "unique_terms": 35,
+        "total_terms": 50
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": true,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Picture Description Options",
+        "datamodel",
+        "description",
+        "docling",
+        "enrichment",
+        "granite",
+        "options",
+        "picture",
+        "pipeline",
+        "smolvlm",
+        "uses"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.7999999999999998,
+      "retrieval_quality": 0.5445454545454546,
+      "overall": 0.6815151515151515
+    }
+  },
+  {
+    "text": "## Configuration Flow: CLI to Pipeline\n\nThe following diagram shows how CLI arguments transform into configured pipelines:\n\n```\n```\n\n**Sources:** [docling/cli/main.py299-816](https://github.com/docling-project/docling/blob/f7244a43/docling/cli/main.py#L299-L816) [docling/document\\_converter.py207-378](https://github.com/docling-project/docling/blob/f7244a43/docling/document_converter.py#L207-L378)\n\n---",
+    "metadata": {
+      "chunk_id": "13c9127fcc51-0019",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling\\_docling-project_docling_2.3-configuration-and-pipeline-options.md",
+      "filename": "_docling-project_docling_2.3-configuration-and-pipeline-options.md",
+      "file_extension": ".md",
+      "chunk_index": 19,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Configuration Flow: CLI to Pipeline"
+      ],
+      "heading_text": "Configuration Flow: CLI to Pipeline",
+      "token_count": 101,
+      "char_count": 405,
+      "start_char": 16034,
+      "end_char": 16439,
+      "semantic_score": 0.6,
+      "structural_score": 0.7999999999999998,
+      "retrieval_quality": 0.5639130434782609,
+      "chunking_strategy": "hierarchical_balanced_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T09:13:44.574265",
+      "document_id": "13c9127fcc51",
+      "document_name": "_docling-project_docling_2.3-configuration-and-pipeline-options",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling\\_docling-project_docling_2.3-configuration-and-pipeline-options.md",
+      "source_filename": "_docling-project_docling_2.3-configuration-and-pipeline-options.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling",
+      "relative_path": "Docs\\Docling\\_docling-project_docling_2.3-configuration-and-pipeline-options.md",
+      "hierarchy_path": "Configuration Flow: CLI to Pipeline",
+      "chunk_hash": "a0ab175c1275746e",
+      "content_digest": "a0ab175c1275746e",
+      "chunk_length": 405,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "docling",
+          "cli",
+          "main",
+          "https",
+          "github",
+          "com",
+          "project",
+          "blob",
+          "f7244a43",
+          "document",
+          "converter",
+          "configuration",
+          "flow",
+          "pipeline",
+          "the",
+          "following",
+          "diagram",
+          "shows",
+          "how",
+          "arguments"
+        ],
+        "term_weights": [
+          {
+            "term": "docling",
+            "tf": 8,
+            "weight": 0.153846
+          },
+          {
+            "term": "cli",
+            "tf": 4,
+            "weight": 0.076923
+          },
+          {
+            "term": "main",
+            "tf": 2,
+            "weight": 0.038462
+          },
+          {
+            "term": "https",
+            "tf": 2,
+            "weight": 0.038462
+          },
+          {
+            "term": "github",
+            "tf": 2,
+            "weight": 0.038462
+          },
+          {
+            "term": "com",
+            "tf": 2,
+            "weight": 0.038462
+          },
+          {
+            "term": "project",
+            "tf": 2,
+            "weight": 0.038462
+          },
+          {
+            "term": "blob",
+            "tf": 2,
+            "weight": 0.038462
+          },
+          {
+            "term": "f7244a43",
+            "tf": 2,
+            "weight": 0.038462
+          },
+          {
+            "term": "document",
+            "tf": 2,
+            "weight": 0.038462
+          },
+          {
+            "term": "converter",
+            "tf": 2,
+            "weight": 0.038462
+          },
+          {
+            "term": "configuration",
+            "tf": 1,
+            "weight": 0.019231
+          },
+          {
+            "term": "flow",
+            "tf": 1,
+            "weight": 0.019231
+          },
+          {
+            "term": "pipeline",
+            "tf": 1,
+            "weight": 0.019231
+          },
+          {
+            "term": "the",
+            "tf": 1,
+            "weight": 0.019231
+          },
+          {
+            "term": "following",
+            "tf": 1,
+            "weight": 0.019231
+          },
+          {
+            "term": "diagram",
+            "tf": 1,
+            "weight": 0.019231
+          },
+          {
+            "term": "shows",
+            "tf": 1,
+            "weight": 0.019231
+          },
+          {
+            "term": "how",
+            "tf": 1,
+            "weight": 0.019231
+          },
+          {
+            "term": "arguments",
+            "tf": 1,
+            "weight": 0.019231
+          }
+        ],
+        "unique_terms": 33,
+        "total_terms": 52
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Configuration Flow: CLI to Pipeline",
+        "blob",
+        "cli",
+        "com",
+        "docling",
+        "document",
+        "f7244a43",
+        "github",
+        "https",
+        "main",
+        "project"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.6,
+      "structural": 0.7999999999999998,
+      "retrieval_quality": 0.5639130434782609,
+      "overall": 0.6546376811594202
+    }
+  },
+  {
+    "text": "## Environment Variable Configuration  Environment variables provide an alternative to CLI arguments, useful for deployment scenarios:  | Environment Variable  | Type  | Default  | Affects                                     | | --------------------- | ----- | -------- | ------------------------------------------- | | `DOCLING_DEVICE`      | `str` | `\"auto\"` | `AcceleratorOptions.device`                 | | `OMP_NUM_THREADS`     | `int` | `4`      | `AcceleratorOptions.num_threads` (fallback) | | `DOCLING_NUM_THREADS` | `int` | `4`      | `AcceleratorOptions.num_threads` (primary)  |  **Precedence rules:**  1. Explicit constructor arguments (highest) 2. Environment variables 3. Default values (lowest)  **Example:** ``` ``` **Sources:** [docling/datamodel/accelerator\\_options.py](https://github.com/docling-project/docling/blob/f7244a43/docling/datamodel/accelerator_options.py) [tests/test\\_options.py43-96](https://github.com/docling-project/docling/blob/f7244a43/tests/test_options.py#L43-L96)  ---",
+    "metadata": {
+      "chunk_id": "13c9127fcc51-0020",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling\\_docling-project_docling_2.3-configuration-and-pipeline-options.md",
+      "filename": "_docling-project_docling_2.3-configuration-and-pipeline-options.md",
+      "file_extension": ".md",
+      "chunk_index": 20,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Environment Variable Configuration"
+      ],
+      "heading_text": "Environment Variable Configuration",
+      "token_count": 242,
+      "char_count": 1011,
+      "start_char": 16441,
+      "end_char": 17452,
+      "semantic_score": 0.7,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.67,
+      "chunking_strategy": "hierarchical_balanced_structural",
+      "content_type": "table_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T09:13:44.575016",
+      "document_id": "13c9127fcc51",
+      "document_name": "_docling-project_docling_2.3-configuration-and-pipeline-options",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling\\_docling-project_docling_2.3-configuration-and-pipeline-options.md",
+      "source_filename": "_docling-project_docling_2.3-configuration-and-pipeline-options.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling",
+      "relative_path": "Docs\\Docling\\_docling-project_docling_2.3-configuration-and-pipeline-options.md",
+      "hierarchy_path": "Environment Variable Configuration",
+      "chunk_hash": "2d11d08988327438",
+      "content_digest": "2d11d08988327438",
+      "chunk_length": 1011,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "docling",
+          "environment",
+          "num",
+          "threads",
+          "options",
+          "acceleratoroptions",
+          "variable",
+          "variables",
+          "arguments",
+          "default",
+          "device",
+          "int",
+          "datamodel",
+          "accelerator",
+          "https",
+          "github",
+          "com",
+          "project",
+          "blob",
+          "f7244a43"
+        ],
+        "term_weights": [
+          {
+            "term": "docling",
+            "tf": 8,
+            "weight": 0.093023
+          },
+          {
+            "term": "environment",
+            "tf": 4,
+            "weight": 0.046512
+          },
+          {
+            "term": "num",
+            "tf": 4,
+            "weight": 0.046512
+          },
+          {
+            "term": "threads",
+            "tf": 4,
+            "weight": 0.046512
+          },
+          {
+            "term": "options",
+            "tf": 4,
+            "weight": 0.046512
+          },
+          {
+            "term": "acceleratoroptions",
+            "tf": 3,
+            "weight": 0.034884
+          },
+          {
+            "term": "variable",
+            "tf": 2,
+            "weight": 0.023256
+          },
+          {
+            "term": "variables",
+            "tf": 2,
+            "weight": 0.023256
+          },
+          {
+            "term": "arguments",
+            "tf": 2,
+            "weight": 0.023256
+          },
+          {
+            "term": "default",
+            "tf": 2,
+            "weight": 0.023256
+          },
+          {
+            "term": "device",
+            "tf": 2,
+            "weight": 0.023256
+          },
+          {
+            "term": "int",
+            "tf": 2,
+            "weight": 0.023256
+          },
+          {
+            "term": "datamodel",
+            "tf": 2,
+            "weight": 0.023256
+          },
+          {
+            "term": "accelerator",
+            "tf": 2,
+            "weight": 0.023256
+          },
+          {
+            "term": "https",
+            "tf": 2,
+            "weight": 0.023256
+          },
+          {
+            "term": "github",
+            "tf": 2,
+            "weight": 0.023256
+          },
+          {
+            "term": "com",
+            "tf": 2,
+            "weight": 0.023256
+          },
+          {
+            "term": "project",
+            "tf": 2,
+            "weight": 0.023256
+          },
+          {
+            "term": "blob",
+            "tf": 2,
+            "weight": 0.023256
+          },
+          {
+            "term": "f7244a43",
+            "tf": 2,
+            "weight": 0.023256
+          }
+        ],
+        "unique_terms": 49,
+        "total_terms": 86
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Environment Variable Configuration",
+        "acceleratoroptions",
+        "arguments",
+        "default",
+        "docling",
+        "environment",
+        "num",
+        "options",
+        "threads",
+        "variable",
+        "variables"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.67,
+      "overall": 0.7566666666666667
+    }
+  },
+  {
+    "text": "## FormatOption and Pipeline Mapping\n\nThe `DocumentConverter` uses `FormatOption` objects to map input formats to processing pipelines:\n\n```\n```\n\n**Default format options:** The `_get_default_option()` function provides sensible defaults for all supported formats:\n\n```\n```\n\n**Custom configuration example:**\n\n```\n```\n\n**Sources:** [docling/document\\_converter.py62-181](https://github.com/docling-project/docling/blob/f7244a43/docling/document_converter.py#L62-L181) [docling/datamodel/base\\_models.py36-42](https://github.com/docling-project/docling/blob/f7244a43/docling/datamodel/base_models.py#L36-L42)\n\n---",
+    "metadata": {
+      "chunk_id": "13c9127fcc51-0021",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling\\_docling-project_docling_2.3-configuration-and-pipeline-options.md",
+      "filename": "_docling-project_docling_2.3-configuration-and-pipeline-options.md",
+      "file_extension": ".md",
+      "chunk_index": 21,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "FormatOption and Pipeline Mapping"
+      ],
+      "heading_text": "FormatOption and Pipeline Mapping",
+      "token_count": 146,
+      "char_count": 612,
+      "start_char": 17456,
+      "end_char": 18068,
+      "semantic_score": 0.7,
+      "structural_score": 0.7999999999999998,
+      "retrieval_quality": 0.7411627906976744,
+      "chunking_strategy": "hierarchical_balanced_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T09:13:44.575832",
+      "document_id": "13c9127fcc51",
+      "document_name": "_docling-project_docling_2.3-configuration-and-pipeline-options",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling\\_docling-project_docling_2.3-configuration-and-pipeline-options.md",
+      "source_filename": "_docling-project_docling_2.3-configuration-and-pipeline-options.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling",
+      "relative_path": "Docs\\Docling\\_docling-project_docling_2.3-configuration-and-pipeline-options.md",
+      "hierarchy_path": "FormatOption and Pipeline Mapping",
+      "chunk_hash": "6c84d99b9026b493",
+      "content_digest": "6c84d99b9026b493",
+      "chunk_length": 612,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "docling",
+          "formatoption",
+          "the",
+          "formats",
+          "default",
+          "document",
+          "converter",
+          "https",
+          "github",
+          "com",
+          "project",
+          "blob",
+          "f7244a43",
+          "datamodel",
+          "base",
+          "models",
+          "and",
+          "pipeline",
+          "mapping",
+          "documentconverter"
+        ],
+        "term_weights": [
+          {
+            "term": "docling",
+            "tf": 8,
+            "weight": 0.114286
+          },
+          {
+            "term": "formatoption",
+            "tf": 2,
+            "weight": 0.028571
+          },
+          {
+            "term": "the",
+            "tf": 2,
+            "weight": 0.028571
+          },
+          {
+            "term": "formats",
+            "tf": 2,
+            "weight": 0.028571
+          },
+          {
+            "term": "default",
+            "tf": 2,
+            "weight": 0.028571
+          },
+          {
+            "term": "document",
+            "tf": 2,
+            "weight": 0.028571
+          },
+          {
+            "term": "converter",
+            "tf": 2,
+            "weight": 0.028571
+          },
+          {
+            "term": "https",
+            "tf": 2,
+            "weight": 0.028571
+          },
+          {
+            "term": "github",
+            "tf": 2,
+            "weight": 0.028571
+          },
+          {
+            "term": "com",
+            "tf": 2,
+            "weight": 0.028571
+          },
+          {
+            "term": "project",
+            "tf": 2,
+            "weight": 0.028571
+          },
+          {
+            "term": "blob",
+            "tf": 2,
+            "weight": 0.028571
+          },
+          {
+            "term": "f7244a43",
+            "tf": 2,
+            "weight": 0.028571
+          },
+          {
+            "term": "datamodel",
+            "tf": 2,
+            "weight": 0.028571
+          },
+          {
+            "term": "base",
+            "tf": 2,
+            "weight": 0.028571
+          },
+          {
+            "term": "models",
+            "tf": 2,
+            "weight": 0.028571
+          },
+          {
+            "term": "and",
+            "tf": 1,
+            "weight": 0.014286
+          },
+          {
+            "term": "pipeline",
+            "tf": 1,
+            "weight": 0.014286
+          },
+          {
+            "term": "mapping",
+            "tf": 1,
+            "weight": 0.014286
+          },
+          {
+            "term": "documentconverter",
+            "tf": 1,
+            "weight": 0.014286
+          }
+        ],
+        "unique_terms": 48,
+        "total_terms": 70
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "FormatOption and Pipeline Mapping",
+        "com",
+        "converter",
+        "default",
+        "docling",
+        "document",
+        "formatoption",
+        "formats",
+        "github",
+        "https",
+        "the"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.7999999999999998,
+      "retrieval_quality": 0.7411627906976744,
+      "overall": 0.7470542635658913
+    }
+  },
+  {
+    "text": "## Pipeline Caching and Options Hashing\n\nTo avoid redundant model loading, `DocumentConverter` caches pipeline instances based on a composite key of `(pipeline_class, options_hash)`:\n\n```\n```\n\n**Key implications:**\n\n- **Options must be hashable**: All fields are serialized to compute the hash\n- **Options must be comparable**: Identical options produce identical hashes\n- **Thread-safe**: Cache access is protected by `_PIPELINE_CACHE_LOCK`\n- **Lifecycle**: Cache lives for the lifetime of the `DocumentConverter` instance\n\n**Example scenario:**\n\n```\n```\n\n**Sources:** [docling/document\\_converter.py207-378](https://github.com/docling-project/docling/blob/f7244a43/docling/document_converter.py#L207-L378) [docling/cli/main.py787-790](https://github.com/docling-project/docling/blob/f7244a43/docling/cli/main.py#L787-L790)\n\n---",
+    "metadata": {
+      "chunk_id": "13c9127fcc51-0022",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling\\_docling-project_docling_2.3-configuration-and-pipeline-options.md",
+      "filename": "_docling-project_docling_2.3-configuration-and-pipeline-options.md",
+      "file_extension": ".md",
+      "chunk_index": 22,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Pipeline Caching and Options Hashing"
+      ],
+      "heading_text": "Pipeline Caching and Options Hashing",
+      "token_count": 195,
+      "char_count": 829,
+      "start_char": 18070,
+      "end_char": 18899,
+      "semantic_score": 0.7,
+      "structural_score": 0.7999999999999998,
+      "retrieval_quality": 0.7198701298701299,
+      "chunking_strategy": "hierarchical_balanced_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T09:13:44.576446",
+      "document_id": "13c9127fcc51",
+      "document_name": "_docling-project_docling_2.3-configuration-and-pipeline-options",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling\\_docling-project_docling_2.3-configuration-and-pipeline-options.md",
+      "source_filename": "_docling-project_docling_2.3-configuration-and-pipeline-options.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling",
+      "relative_path": "Docs\\Docling\\_docling-project_docling_2.3-configuration-and-pipeline-options.md",
+      "hierarchy_path": "Pipeline Caching and Options Hashing",
+      "chunk_hash": "540826b5022e71af",
+      "content_digest": "540826b5022e71af",
+      "chunk_length": 829,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "docling",
+          "options",
+          "pipeline",
+          "the",
+          "cache",
+          "documentconverter",
+          "key",
+          "hash",
+          "must",
+          "identical",
+          "document",
+          "converter",
+          "https",
+          "github",
+          "com",
+          "project",
+          "blob",
+          "f7244a43",
+          "cli",
+          "main"
+        ],
+        "term_weights": [
+          {
+            "term": "docling",
+            "tf": 8,
+            "weight": 0.083333
+          },
+          {
+            "term": "options",
+            "tf": 5,
+            "weight": 0.052083
+          },
+          {
+            "term": "pipeline",
+            "tf": 4,
+            "weight": 0.041667
+          },
+          {
+            "term": "the",
+            "tf": 3,
+            "weight": 0.03125
+          },
+          {
+            "term": "cache",
+            "tf": 3,
+            "weight": 0.03125
+          },
+          {
+            "term": "documentconverter",
+            "tf": 2,
+            "weight": 0.020833
+          },
+          {
+            "term": "key",
+            "tf": 2,
+            "weight": 0.020833
+          },
+          {
+            "term": "hash",
+            "tf": 2,
+            "weight": 0.020833
+          },
+          {
+            "term": "must",
+            "tf": 2,
+            "weight": 0.020833
+          },
+          {
+            "term": "identical",
+            "tf": 2,
+            "weight": 0.020833
+          },
+          {
+            "term": "document",
+            "tf": 2,
+            "weight": 0.020833
+          },
+          {
+            "term": "converter",
+            "tf": 2,
+            "weight": 0.020833
+          },
+          {
+            "term": "https",
+            "tf": 2,
+            "weight": 0.020833
+          },
+          {
+            "term": "github",
+            "tf": 2,
+            "weight": 0.020833
+          },
+          {
+            "term": "com",
+            "tf": 2,
+            "weight": 0.020833
+          },
+          {
+            "term": "project",
+            "tf": 2,
+            "weight": 0.020833
+          },
+          {
+            "term": "blob",
+            "tf": 2,
+            "weight": 0.020833
+          },
+          {
+            "term": "f7244a43",
+            "tf": 2,
+            "weight": 0.020833
+          },
+          {
+            "term": "cli",
+            "tf": 2,
+            "weight": 0.020833
+          },
+          {
+            "term": "main",
+            "tf": 2,
+            "weight": 0.020833
+          }
+        ],
+        "unique_terms": 63,
+        "total_terms": 96
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": true,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Pipeline Caching and Options Hashing",
+        "cache",
+        "docling",
+        "documentconverter",
+        "hash",
+        "identical",
+        "key",
+        "must",
+        "options",
+        "pipeline",
+        "the"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.7999999999999998,
+      "retrieval_quality": 0.7198701298701299,
+      "overall": 0.7399567099567098
+    }
+  },
+  {
+    "text": "## Common Configuration Patterns",
+    "metadata": {
+      "chunk_id": "13c9127fcc51-0023",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling\\_docling-project_docling_2.3-configuration-and-pipeline-options.md",
+      "filename": "_docling-project_docling_2.3-configuration-and-pipeline-options.md",
+      "file_extension": ".md",
+      "chunk_index": 23,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Common Configuration Patterns"
+      ],
+      "heading_text": "Common Configuration Patterns",
+      "token_count": 4,
+      "char_count": 32,
+      "start_char": 18901,
+      "end_char": 18933,
+      "semantic_score": 0.8,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.59,
+      "chunking_strategy": "hierarchical_balanced_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T09:13:44.576596",
+      "document_id": "13c9127fcc51",
+      "document_name": "_docling-project_docling_2.3-configuration-and-pipeline-options",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling\\_docling-project_docling_2.3-configuration-and-pipeline-options.md",
+      "source_filename": "_docling-project_docling_2.3-configuration-and-pipeline-options.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling",
+      "relative_path": "Docs\\Docling\\_docling-project_docling_2.3-configuration-and-pipeline-options.md",
+      "hierarchy_path": "Common Configuration Patterns",
+      "chunk_hash": "72905c40ac5cd43b",
+      "content_digest": "72905c40ac5cd43b",
+      "chunk_length": 32,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "common",
+          "configuration",
+          "patterns"
+        ],
+        "term_weights": [
+          {
+            "term": "common",
+            "tf": 1,
+            "weight": 0.333333
+          },
+          {
+            "term": "configuration",
+            "tf": 1,
+            "weight": 0.333333
+          },
+          {
+            "term": "patterns",
+            "tf": 1,
+            "weight": 0.333333
+          }
+        ],
+        "unique_terms": 3,
+        "total_terms": 3
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Common Configuration Patterns",
+        "common",
+        "configuration",
+        "patterns"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.8,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.59,
+      "overall": 0.7633333333333333
+    }
+  },
+  {
+    "text": "### Pattern 1: Minimal OCR-Free PDF Processing\n\nFast processing without OCR or table extraction:\n\n```\n```\n\n**Sources:** [tests/test\\_options.py141-165](https://github.com/docling-project/docling/blob/f7244a43/tests/test_options.py#L141-L165)",
+    "metadata": {
+      "chunk_id": "13c9127fcc51-0024",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling\\_docling-project_docling_2.3-configuration-and-pipeline-options.md",
+      "filename": "_docling-project_docling_2.3-configuration-and-pipeline-options.md",
+      "file_extension": ".md",
+      "chunk_index": 24,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Pattern 1: Minimal OCR-Free PDF Processing"
+      ],
+      "heading_text": "Pattern 1: Minimal OCR-Free PDF Processing",
+      "token_count": 61,
+      "char_count": 241,
+      "start_char": 18935,
+      "end_char": 19176,
+      "semantic_score": 0.6,
+      "structural_score": 0.7999999999999998,
+      "retrieval_quality": 0.5566666666666666,
+      "chunking_strategy": "hierarchical_balanced_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T09:13:44.576866",
+      "document_id": "13c9127fcc51",
+      "document_name": "_docling-project_docling_2.3-configuration-and-pipeline-options",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling\\_docling-project_docling_2.3-configuration-and-pipeline-options.md",
+      "source_filename": "_docling-project_docling_2.3-configuration-and-pipeline-options.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling",
+      "relative_path": "Docs\\Docling\\_docling-project_docling_2.3-configuration-and-pipeline-options.md",
+      "hierarchy_path": "Pattern 1: Minimal OCR-Free PDF Processing",
+      "chunk_hash": "579fab7591656047",
+      "content_digest": "579fab7591656047",
+      "chunk_length": 241,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "ocr",
+          "processing",
+          "tests",
+          "test",
+          "options",
+          "docling",
+          "pattern",
+          "minimal",
+          "free",
+          "pdf",
+          "fast",
+          "without",
+          "table",
+          "extraction",
+          "sources",
+          "py141",
+          "165",
+          "https",
+          "github",
+          "com"
+        ],
+        "term_weights": [
+          {
+            "term": "ocr",
+            "tf": 2,
+            "weight": 0.064516
+          },
+          {
+            "term": "processing",
+            "tf": 2,
+            "weight": 0.064516
+          },
+          {
+            "term": "tests",
+            "tf": 2,
+            "weight": 0.064516
+          },
+          {
+            "term": "test",
+            "tf": 2,
+            "weight": 0.064516
+          },
+          {
+            "term": "options",
+            "tf": 2,
+            "weight": 0.064516
+          },
+          {
+            "term": "docling",
+            "tf": 2,
+            "weight": 0.064516
+          },
+          {
+            "term": "pattern",
+            "tf": 1,
+            "weight": 0.032258
+          },
+          {
+            "term": "minimal",
+            "tf": 1,
+            "weight": 0.032258
+          },
+          {
+            "term": "free",
+            "tf": 1,
+            "weight": 0.032258
+          },
+          {
+            "term": "pdf",
+            "tf": 1,
+            "weight": 0.032258
+          },
+          {
+            "term": "fast",
+            "tf": 1,
+            "weight": 0.032258
+          },
+          {
+            "term": "without",
+            "tf": 1,
+            "weight": 0.032258
+          },
+          {
+            "term": "table",
+            "tf": 1,
+            "weight": 0.032258
+          },
+          {
+            "term": "extraction",
+            "tf": 1,
+            "weight": 0.032258
+          },
+          {
+            "term": "sources",
+            "tf": 1,
+            "weight": 0.032258
+          },
+          {
+            "term": "py141",
+            "tf": 1,
+            "weight": 0.032258
+          },
+          {
+            "term": "165",
+            "tf": 1,
+            "weight": 0.032258
+          },
+          {
+            "term": "https",
+            "tf": 1,
+            "weight": 0.032258
+          },
+          {
+            "term": "github",
+            "tf": 1,
+            "weight": 0.032258
+          },
+          {
+            "term": "com",
+            "tf": 1,
+            "weight": 0.032258
+          }
+        ],
+        "unique_terms": 25,
+        "total_terms": 31
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Pattern 1: Minimal OCR-Free PDF Processing",
+        "docling",
+        "free",
+        "minimal",
+        "ocr",
+        "options",
+        "pattern",
+        "pdf",
+        "processing",
+        "test",
+        "tests"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.6,
+      "structural": 0.7999999999999998,
+      "retrieval_quality": 0.5566666666666666,
+      "overall": 0.6522222222222221
+    }
+  },
+  {
+    "text": "### Pattern 3: GPU-Accelerated Processing\n\n```\n```\n\n**Sources:** [tests/test\\_options.py43-78](https://github.com/docling-project/docling/blob/f7244a43/tests/test_options.py#L43-L78)",
+    "metadata": {
+      "chunk_id": "13c9127fcc51-0026",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling\\_docling-project_docling_2.3-configuration-and-pipeline-options.md",
+      "filename": "_docling-project_docling_2.3-configuration-and-pipeline-options.md",
+      "file_extension": ".md",
+      "chunk_index": 26,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Pattern 3: GPU-Accelerated Processing"
+      ],
+      "heading_text": "Pattern 3: GPU-Accelerated Processing",
+      "token_count": 54,
+      "char_count": 182,
+      "start_char": 19366,
+      "end_char": 19548,
+      "semantic_score": 0.6,
+      "structural_score": 0.7999999999999998,
+      "retrieval_quality": 0.5566666666666666,
+      "chunking_strategy": "hierarchical_balanced_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T09:13:44.577345",
+      "document_id": "13c9127fcc51",
+      "document_name": "_docling-project_docling_2.3-configuration-and-pipeline-options",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling\\_docling-project_docling_2.3-configuration-and-pipeline-options.md",
+      "source_filename": "_docling-project_docling_2.3-configuration-and-pipeline-options.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling",
+      "relative_path": "Docs\\Docling\\_docling-project_docling_2.3-configuration-and-pipeline-options.md",
+      "hierarchy_path": "Pattern 3: GPU-Accelerated Processing",
+      "chunk_hash": "b485aaef9b365b2d",
+      "content_digest": "b485aaef9b365b2d",
+      "chunk_length": 182,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "tests",
+          "test",
+          "options",
+          "docling",
+          "pattern",
+          "gpu",
+          "accelerated",
+          "processing",
+          "sources",
+          "py43",
+          "https",
+          "github",
+          "com",
+          "project",
+          "blob",
+          "f7244a43",
+          "l43",
+          "l78"
+        ],
+        "term_weights": [
+          {
+            "term": "tests",
+            "tf": 2,
+            "weight": 0.090909
+          },
+          {
+            "term": "test",
+            "tf": 2,
+            "weight": 0.090909
+          },
+          {
+            "term": "options",
+            "tf": 2,
+            "weight": 0.090909
+          },
+          {
+            "term": "docling",
+            "tf": 2,
+            "weight": 0.090909
+          },
+          {
+            "term": "pattern",
+            "tf": 1,
+            "weight": 0.045455
+          },
+          {
+            "term": "gpu",
+            "tf": 1,
+            "weight": 0.045455
+          },
+          {
+            "term": "accelerated",
+            "tf": 1,
+            "weight": 0.045455
+          },
+          {
+            "term": "processing",
+            "tf": 1,
+            "weight": 0.045455
+          },
+          {
+            "term": "sources",
+            "tf": 1,
+            "weight": 0.045455
+          },
+          {
+            "term": "py43",
+            "tf": 1,
+            "weight": 0.045455
+          },
+          {
+            "term": "https",
+            "tf": 1,
+            "weight": 0.045455
+          },
+          {
+            "term": "github",
+            "tf": 1,
+            "weight": 0.045455
+          },
+          {
+            "term": "com",
+            "tf": 1,
+            "weight": 0.045455
+          },
+          {
+            "term": "project",
+            "tf": 1,
+            "weight": 0.045455
+          },
+          {
+            "term": "blob",
+            "tf": 1,
+            "weight": 0.045455
+          },
+          {
+            "term": "f7244a43",
+            "tf": 1,
+            "weight": 0.045455
+          },
+          {
+            "term": "l43",
+            "tf": 1,
+            "weight": 0.045455
+          },
+          {
+            "term": "l78",
+            "tf": 1,
+            "weight": 0.045455
+          }
+        ],
+        "unique_terms": 18,
+        "total_terms": 22
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Pattern 3: GPU-Accelerated Processing",
+        "accelerated",
+        "docling",
+        "gpu",
+        "options",
+        "pattern",
+        "processing",
+        "py43",
+        "sources",
+        "test",
+        "tests"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.6,
+      "structural": 0.7999999999999998,
+      "retrieval_quality": 0.5566666666666666,
+      "overall": 0.6522222222222221
+    }
+  },
+  {
+    "text": "### Pattern 4: Code and Formula Enrichment\n\n```\n```\n\n**Sources:** [docling/models/code\\_formula\\_model.py70-116](https://github.com/docling-project/docling/blob/f7244a43/docling/models/code_formula_model.py#L70-L116)",
+    "metadata": {
+      "chunk_id": "13c9127fcc51-0027",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling\\_docling-project_docling_2.3-configuration-and-pipeline-options.md",
+      "filename": "_docling-project_docling_2.3-configuration-and-pipeline-options.md",
+      "file_extension": ".md",
+      "chunk_index": 27,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Pattern 4: Code and Formula Enrichment"
+      ],
+      "heading_text": "Pattern 4: Code and Formula Enrichment",
+      "token_count": 61,
+      "char_count": 216,
+      "start_char": 19550,
+      "end_char": 19766,
+      "semantic_score": 0.6,
+      "structural_score": 0.7999999999999998,
+      "retrieval_quality": 0.5627272727272727,
+      "chunking_strategy": "hierarchical_balanced_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T09:13:44.577593",
+      "document_id": "13c9127fcc51",
+      "document_name": "_docling-project_docling_2.3-configuration-and-pipeline-options",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling\\_docling-project_docling_2.3-configuration-and-pipeline-options.md",
+      "source_filename": "_docling-project_docling_2.3-configuration-and-pipeline-options.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling",
+      "relative_path": "Docs\\Docling\\_docling-project_docling_2.3-configuration-and-pipeline-options.md",
+      "hierarchy_path": "Pattern 4: Code and Formula Enrichment",
+      "chunk_hash": "8c0469a158262347",
+      "content_digest": "8c0469a158262347",
+      "chunk_length": 216,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "docling",
+          "code",
+          "formula",
+          "models",
+          "model",
+          "pattern",
+          "and",
+          "enrichment",
+          "sources",
+          "py70",
+          "116",
+          "https",
+          "github",
+          "com",
+          "project",
+          "blob",
+          "f7244a43",
+          "l70",
+          "l116"
+        ],
+        "term_weights": [
+          {
+            "term": "docling",
+            "tf": 4,
+            "weight": 0.142857
+          },
+          {
+            "term": "code",
+            "tf": 3,
+            "weight": 0.107143
+          },
+          {
+            "term": "formula",
+            "tf": 3,
+            "weight": 0.107143
+          },
+          {
+            "term": "models",
+            "tf": 2,
+            "weight": 0.071429
+          },
+          {
+            "term": "model",
+            "tf": 2,
+            "weight": 0.071429
+          },
+          {
+            "term": "pattern",
+            "tf": 1,
+            "weight": 0.035714
+          },
+          {
+            "term": "and",
+            "tf": 1,
+            "weight": 0.035714
+          },
+          {
+            "term": "enrichment",
+            "tf": 1,
+            "weight": 0.035714
+          },
+          {
+            "term": "sources",
+            "tf": 1,
+            "weight": 0.035714
+          },
+          {
+            "term": "py70",
+            "tf": 1,
+            "weight": 0.035714
+          },
+          {
+            "term": "116",
+            "tf": 1,
+            "weight": 0.035714
+          },
+          {
+            "term": "https",
+            "tf": 1,
+            "weight": 0.035714
+          },
+          {
+            "term": "github",
+            "tf": 1,
+            "weight": 0.035714
+          },
+          {
+            "term": "com",
+            "tf": 1,
+            "weight": 0.035714
+          },
+          {
+            "term": "project",
+            "tf": 1,
+            "weight": 0.035714
+          },
+          {
+            "term": "blob",
+            "tf": 1,
+            "weight": 0.035714
+          },
+          {
+            "term": "f7244a43",
+            "tf": 1,
+            "weight": 0.035714
+          },
+          {
+            "term": "l70",
+            "tf": 1,
+            "weight": 0.035714
+          },
+          {
+            "term": "l116",
+            "tf": 1,
+            "weight": 0.035714
+          }
+        ],
+        "unique_terms": 19,
+        "total_terms": 28
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Pattern 4: Code and Formula Enrichment",
+        "and",
+        "code",
+        "docling",
+        "enrichment",
+        "formula",
+        "model",
+        "models",
+        "pattern",
+        "py70",
+        "sources"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.6,
+      "structural": 0.7999999999999998,
+      "retrieval_quality": 0.5627272727272727,
+      "overall": 0.6542424242424242
+    }
+  },
+  {
+    "text": "### Pattern 7: Custom Model Artifacts Path\n\n```\n```\n\nThis overrides the default cache location (`~/.cache/docling`) for model artifacts.\n\n**Sources:** [docling/cli/main.py783-785](https://github.com/docling-project/docling/blob/f7244a43/docling/cli/main.py#L783-L785) [docling/datamodel/pipeline\\_options.py280](https://github.com/docling-project/docling/blob/f7244a43/docling/datamodel/pipeline_options.py#L280-L280)\n\n---",
+    "metadata": {
+      "chunk_id": "13c9127fcc51-0030",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling\\_docling-project_docling_2.3-configuration-and-pipeline-options.md",
+      "filename": "_docling-project_docling_2.3-configuration-and-pipeline-options.md",
+      "file_extension": ".md",
+      "chunk_index": 30,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Pattern 7: Custom Model Artifacts Path"
+      ],
+      "heading_text": "Pattern 7: Custom Model Artifacts Path",
+      "token_count": 113,
+      "char_count": 422,
+      "start_char": 20180,
+      "end_char": 20602,
+      "semantic_score": 0.6,
+      "structural_score": 0.7999999999999998,
+      "retrieval_quality": 0.5639130434782609,
+      "chunking_strategy": "hierarchical_balanced_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T09:13:44.579357",
+      "document_id": "13c9127fcc51",
+      "document_name": "_docling-project_docling_2.3-configuration-and-pipeline-options",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling\\_docling-project_docling_2.3-configuration-and-pipeline-options.md",
+      "source_filename": "_docling-project_docling_2.3-configuration-and-pipeline-options.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling",
+      "relative_path": "Docs\\Docling\\_docling-project_docling_2.3-configuration-and-pipeline-options.md",
+      "hierarchy_path": "Pattern 7: Custom Model Artifacts Path",
+      "chunk_hash": "4bf7d83ae439b447",
+      "content_digest": "4bf7d83ae439b447",
+      "chunk_length": 422,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "docling",
+          "model",
+          "artifacts",
+          "cache",
+          "cli",
+          "main",
+          "https",
+          "github",
+          "com",
+          "project",
+          "blob",
+          "f7244a43",
+          "datamodel",
+          "pipeline",
+          "options",
+          "l280",
+          "pattern",
+          "custom",
+          "path",
+          "this"
+        ],
+        "term_weights": [
+          {
+            "term": "docling",
+            "tf": 9,
+            "weight": 0.166667
+          },
+          {
+            "term": "model",
+            "tf": 2,
+            "weight": 0.037037
+          },
+          {
+            "term": "artifacts",
+            "tf": 2,
+            "weight": 0.037037
+          },
+          {
+            "term": "cache",
+            "tf": 2,
+            "weight": 0.037037
+          },
+          {
+            "term": "cli",
+            "tf": 2,
+            "weight": 0.037037
+          },
+          {
+            "term": "main",
+            "tf": 2,
+            "weight": 0.037037
+          },
+          {
+            "term": "https",
+            "tf": 2,
+            "weight": 0.037037
+          },
+          {
+            "term": "github",
+            "tf": 2,
+            "weight": 0.037037
+          },
+          {
+            "term": "com",
+            "tf": 2,
+            "weight": 0.037037
+          },
+          {
+            "term": "project",
+            "tf": 2,
+            "weight": 0.037037
+          },
+          {
+            "term": "blob",
+            "tf": 2,
+            "weight": 0.037037
+          },
+          {
+            "term": "f7244a43",
+            "tf": 2,
+            "weight": 0.037037
+          },
+          {
+            "term": "datamodel",
+            "tf": 2,
+            "weight": 0.037037
+          },
+          {
+            "term": "pipeline",
+            "tf": 2,
+            "weight": 0.037037
+          },
+          {
+            "term": "options",
+            "tf": 2,
+            "weight": 0.037037
+          },
+          {
+            "term": "l280",
+            "tf": 2,
+            "weight": 0.037037
+          },
+          {
+            "term": "pattern",
+            "tf": 1,
+            "weight": 0.018519
+          },
+          {
+            "term": "custom",
+            "tf": 1,
+            "weight": 0.018519
+          },
+          {
+            "term": "path",
+            "tf": 1,
+            "weight": 0.018519
+          },
+          {
+            "term": "this",
+            "tf": 1,
+            "weight": 0.018519
+          }
+        ],
+        "unique_terms": 31,
+        "total_terms": 54
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Pattern 7: Custom Model Artifacts Path",
+        "artifacts",
+        "cache",
+        "cli",
+        "com",
+        "docling",
+        "github",
+        "https",
+        "main",
+        "model",
+        "project"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.6,
+      "structural": 0.7999999999999998,
+      "retrieval_quality": 0.5639130434782609,
+      "overall": 0.6546376811594202
+    }
+  },
+  {
+    "text": "## Options Validation and Type Safety\n\nAll options classes use Pydantic for validation:\n\n```\n```\n\n**Protected fields:**\n\n- `model_config = ConfigDict(extra=\"forbid\")` prevents typos in field names\n- `ClassVar` fields (like `kind`) are not included in serialization\n- Optional fields with defaults enable gradual configuration\n\n**Sources:** [docling/datamodel/pipeline\\_options.py](https://github.com/docling-project/docling/blob/f7244a43/docling/datamodel/pipeline_options.py)\n\n---",
+    "metadata": {
+      "chunk_id": "13c9127fcc51-0031",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling\\_docling-project_docling_2.3-configuration-and-pipeline-options.md",
+      "filename": "_docling-project_docling_2.3-configuration-and-pipeline-options.md",
+      "file_extension": ".md",
+      "chunk_index": 31,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Options Validation and Type Safety"
+      ],
+      "heading_text": "Options Validation and Type Safety",
+      "token_count": 111,
+      "char_count": 481,
+      "start_char": 20604,
+      "end_char": 21085,
+      "semantic_score": 0.7999999999999999,
+      "structural_score": 0.7999999999999998,
+      "retrieval_quality": 0.5517021276595745,
+      "chunking_strategy": "hierarchical_balanced_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T09:13:44.580052",
+      "document_id": "13c9127fcc51",
+      "document_name": "_docling-project_docling_2.3-configuration-and-pipeline-options",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling\\_docling-project_docling_2.3-configuration-and-pipeline-options.md",
+      "source_filename": "_docling-project_docling_2.3-configuration-and-pipeline-options.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling",
+      "relative_path": "Docs\\Docling\\_docling-project_docling_2.3-configuration-and-pipeline-options.md",
+      "hierarchy_path": "Options Validation and Type Safety",
+      "chunk_hash": "d6d3cdf749c436f2",
+      "content_digest": "d6d3cdf749c436f2",
+      "chunk_length": 481,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "options",
+          "docling",
+          "fields",
+          "validation",
+          "datamodel",
+          "pipeline",
+          "and",
+          "type",
+          "safety",
+          "all",
+          "classes",
+          "use",
+          "pydantic",
+          "for",
+          "protected",
+          "model",
+          "config",
+          "configdict",
+          "extra",
+          "forbid"
+        ],
+        "term_weights": [
+          {
+            "term": "options",
+            "tf": 4,
+            "weight": 0.072727
+          },
+          {
+            "term": "docling",
+            "tf": 4,
+            "weight": 0.072727
+          },
+          {
+            "term": "fields",
+            "tf": 3,
+            "weight": 0.054545
+          },
+          {
+            "term": "validation",
+            "tf": 2,
+            "weight": 0.036364
+          },
+          {
+            "term": "datamodel",
+            "tf": 2,
+            "weight": 0.036364
+          },
+          {
+            "term": "pipeline",
+            "tf": 2,
+            "weight": 0.036364
+          },
+          {
+            "term": "and",
+            "tf": 1,
+            "weight": 0.018182
+          },
+          {
+            "term": "type",
+            "tf": 1,
+            "weight": 0.018182
+          },
+          {
+            "term": "safety",
+            "tf": 1,
+            "weight": 0.018182
+          },
+          {
+            "term": "all",
+            "tf": 1,
+            "weight": 0.018182
+          },
+          {
+            "term": "classes",
+            "tf": 1,
+            "weight": 0.018182
+          },
+          {
+            "term": "use",
+            "tf": 1,
+            "weight": 0.018182
+          },
+          {
+            "term": "pydantic",
+            "tf": 1,
+            "weight": 0.018182
+          },
+          {
+            "term": "for",
+            "tf": 1,
+            "weight": 0.018182
+          },
+          {
+            "term": "protected",
+            "tf": 1,
+            "weight": 0.018182
+          },
+          {
+            "term": "model",
+            "tf": 1,
+            "weight": 0.018182
+          },
+          {
+            "term": "config",
+            "tf": 1,
+            "weight": 0.018182
+          },
+          {
+            "term": "configdict",
+            "tf": 1,
+            "weight": 0.018182
+          },
+          {
+            "term": "extra",
+            "tf": 1,
+            "weight": 0.018182
+          },
+          {
+            "term": "forbid",
+            "tf": 1,
+            "weight": 0.018182
+          }
+        ],
+        "unique_terms": 44,
+        "total_terms": 55
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": true,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Options Validation and Type Safety",
+        "all",
+        "and",
+        "datamodel",
+        "docling",
+        "fields",
+        "options",
+        "pipeline",
+        "safety",
+        "type",
+        "validation"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.7999999999999999,
+      "structural": 0.7999999999999998,
+      "retrieval_quality": 0.5517021276595745,
+      "overall": 0.7172340425531915
+    }
+  },
+  {
+    "text": "## Summary\n\nDocling's configuration system provides:\n\n1. **Hierarchical structure**: Base classes provide common fields, specialized classes add domain-specific controls\n2. **Type safety**: Pydantic validation catches configuration errors early\n3. **Multiple sources**: CLI, environment variables, and programmatic API all map to the same options classes\n4. **Factory patterns**: OCR engines and other pluggable components use factories with options\n5. **Efficient caching**: Pipeline instances are reused based on options hashing\n6. **Sensible defaults**: Every option has a reasonable default value\n7. **Extensibility**: New options can be added without breaking existing code\n\nFor pipeline-specific behavior, see [Processing Pipelines](docling-project/docling/5-processing-pipelines.md). For model initialization details, see [AI/ML Models](docling-project/docling/4-aiml-models.md).\n\nDismiss\n\nRefresh this wiki\n\nThis wiki was recently refreshed. Please wait 4 days to refresh again.",
+    "metadata": {
+      "chunk_id": "13c9127fcc51-0032",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling\\_docling-project_docling_2.3-configuration-and-pipeline-options.md",
+      "filename": "_docling-project_docling_2.3-configuration-and-pipeline-options.md",
+      "file_extension": ".md",
+      "chunk_index": 32,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Summary"
+      ],
+      "heading_text": "Summary",
+      "token_count": 205,
+      "char_count": 986,
+      "start_char": 21087,
+      "end_char": 22073,
+      "semantic_score": 0.7,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5569491525423729,
+      "chunking_strategy": "hierarchical_balanced_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T09:13:44.580870",
+      "document_id": "13c9127fcc51",
+      "document_name": "_docling-project_docling_2.3-configuration-and-pipeline-options",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling\\_docling-project_docling_2.3-configuration-and-pipeline-options.md",
+      "source_filename": "_docling-project_docling_2.3-configuration-and-pipeline-options.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling",
+      "relative_path": "Docs\\Docling\\_docling-project_docling_2.3-configuration-and-pipeline-options.md",
+      "hierarchy_path": "Summary",
+      "chunk_hash": "6f7bd4b10722c332",
+      "content_digest": "6f7bd4b10722c332",
+      "chunk_length": 986,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "docling",
+          "options",
+          "classes",
+          "configuration",
+          "specific",
+          "and",
+          "pipeline",
+          "for",
+          "see",
+          "processing",
+          "pipelines",
+          "project",
+          "models",
+          "refresh",
+          "this",
+          "wiki",
+          "summary",
+          "system",
+          "provides",
+          "hierarchical"
+        ],
+        "term_weights": [
+          {
+            "term": "docling",
+            "tf": 5,
+            "weight": 0.043478
+          },
+          {
+            "term": "options",
+            "tf": 4,
+            "weight": 0.034783
+          },
+          {
+            "term": "classes",
+            "tf": 3,
+            "weight": 0.026087
+          },
+          {
+            "term": "configuration",
+            "tf": 2,
+            "weight": 0.017391
+          },
+          {
+            "term": "specific",
+            "tf": 2,
+            "weight": 0.017391
+          },
+          {
+            "term": "and",
+            "tf": 2,
+            "weight": 0.017391
+          },
+          {
+            "term": "pipeline",
+            "tf": 2,
+            "weight": 0.017391
+          },
+          {
+            "term": "for",
+            "tf": 2,
+            "weight": 0.017391
+          },
+          {
+            "term": "see",
+            "tf": 2,
+            "weight": 0.017391
+          },
+          {
+            "term": "processing",
+            "tf": 2,
+            "weight": 0.017391
+          },
+          {
+            "term": "pipelines",
+            "tf": 2,
+            "weight": 0.017391
+          },
+          {
+            "term": "project",
+            "tf": 2,
+            "weight": 0.017391
+          },
+          {
+            "term": "models",
+            "tf": 2,
+            "weight": 0.017391
+          },
+          {
+            "term": "refresh",
+            "tf": 2,
+            "weight": 0.017391
+          },
+          {
+            "term": "this",
+            "tf": 2,
+            "weight": 0.017391
+          },
+          {
+            "term": "wiki",
+            "tf": 2,
+            "weight": 0.017391
+          },
+          {
+            "term": "summary",
+            "tf": 1,
+            "weight": 0.008696
+          },
+          {
+            "term": "system",
+            "tf": 1,
+            "weight": 0.008696
+          },
+          {
+            "term": "provides",
+            "tf": 1,
+            "weight": 0.008696
+          },
+          {
+            "term": "hierarchical",
+            "tf": 1,
+            "weight": 0.008696
+          }
+        ],
+        "unique_terms": 93,
+        "total_terms": 115
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Summary",
+        "and",
+        "classes",
+        "configuration",
+        "docling",
+        "for",
+        "options",
+        "pipeline",
+        "processing",
+        "see",
+        "specific"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5569491525423729,
+      "overall": 0.7189830508474575
+    }
+  },
+  {
+    "text": "### On this page  - [Configuration and Pipeline Options](#configuration-and-pipeline-options.md) - [Purpose and Scope](#purpose-and-scope.md) - [Options Architecture Overview](#options-architecture-overview.md) - [Base Options Classes](#base-options-classes.md) - [BaseOptions](#baseoptions.md) - [PipelineOptions](#pipelineoptions.md) - [ConvertPipelineOptions](#convertpipelineoptions.md) - [PaginatedPipelineOptions](#paginatedpipelineoptions.md) - [Pipeline-Specific Options](#pipeline-specific-options.md) - [PdfPipelineOptions](#pdfpipelineoptions.md) - [VlmPipelineOptions](#vlmpipelineoptions.md) - [AsrPipelineOptions](#asrpipelineoptions.md) - [ThreadedPdfPipelineOptions](#threadedpdfpipelineoptions.md) - [Model-Specific Options](#model-specific-options.md) - [AcceleratorOptions](#acceleratoroptions.md) - [OcrOptions Hierarchy](#ocroptions-hierarchy.md) - [TableStructureOptions](#tablestructureoptions.md) - [LayoutOptions](#layoutoptions.md) - [Picture Description Options](#picture-description-options.md) - [Configuration Flow: CLI to Pipeline](#configuration-flow-cli-to-pipeline.md) - [Environment Variable Configuration](#environment-variable-configuration.md) - [FormatOption and Pipeline Mapping](#formatoption-and-pipeline-mapping.md) - [Pipeline Caching and Options Hashing](#pipeline-caching-and-options-hashing.md) - [Common Configuration Patterns](#common-configuration-patterns.md) - [Pattern 1: Minimal OCR-Free PDF Processing](#pattern-1-minimal-ocr-free-pdf-processing.md) - [Pattern 2: High-Accuracy Table Extraction](#pattern-2-high-accuracy-table-extraction.md) - [Pattern 3: GPU-Accelerated Processing](#pattern-3-gpu-accelerated-processing.md) - [Pattern 4: Code and Formula Enrichment](#pattern-4-code-and-formula-enrichment.md) - [Pattern 5: Custom OCR Engine](#pattern-5-custom-ocr-engine.md) - [Pattern 6: Picture Classification and Description](#pattern-6-picture-classification-and-description.md) - [Pattern 7: Custom Model Artifacts Path](#pattern-7-custom-model-artifacts-path.md) - [Options Validation and Type Safety](#options-validation-and-type-safety.md) - [Summary](#summary.md)",
+    "metadata": {
+      "chunk_id": "13c9127fcc51-0033",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling\\_docling-project_docling_2.3-configuration-and-pipeline-options.md",
+      "filename": "_docling-project_docling_2.3-configuration-and-pipeline-options.md",
+      "file_extension": ".md",
+      "chunk_index": 33,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "On this page"
+      ],
+      "heading_text": "On this page",
+      "token_count": 527,
+      "char_count": 2130,
+      "start_char": 22075,
+      "end_char": 24205,
+      "semantic_score": 0.7,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.6902985074626866,
+      "chunking_strategy": "hierarchical_balanced_structural",
+      "content_type": "list_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T09:13:44.582384",
+      "document_id": "13c9127fcc51",
+      "document_name": "_docling-project_docling_2.3-configuration-and-pipeline-options",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling\\_docling-project_docling_2.3-configuration-and-pipeline-options.md",
+      "source_filename": "_docling-project_docling_2.3-configuration-and-pipeline-options.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling",
+      "relative_path": "Docs\\Docling\\_docling-project_docling_2.3-configuration-and-pipeline-options.md",
+      "hierarchy_path": "On this page",
+      "chunk_hash": "34897cf372c18072",
+      "content_digest": "34897cf372c18072",
+      "chunk_length": 2130,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "options",
+          "and",
+          "pattern",
+          "pipeline",
+          "configuration",
+          "specific",
+          "model",
+          "picture",
+          "description",
+          "ocr",
+          "processing",
+          "custom",
+          "purpose",
+          "scope",
+          "architecture",
+          "overview",
+          "base",
+          "classes",
+          "baseoptions",
+          "pipelineoptions"
+        ],
+        "term_weights": [
+          {
+            "term": "options",
+            "tf": 16,
+            "weight": 0.084211
+          },
+          {
+            "term": "and",
+            "tf": 14,
+            "weight": 0.073684
+          },
+          {
+            "term": "pattern",
+            "tf": 14,
+            "weight": 0.073684
+          },
+          {
+            "term": "pipeline",
+            "tf": 10,
+            "weight": 0.052632
+          },
+          {
+            "term": "configuration",
+            "tf": 8,
+            "weight": 0.042105
+          },
+          {
+            "term": "specific",
+            "tf": 4,
+            "weight": 0.021053
+          },
+          {
+            "term": "model",
+            "tf": 4,
+            "weight": 0.021053
+          },
+          {
+            "term": "picture",
+            "tf": 4,
+            "weight": 0.021053
+          },
+          {
+            "term": "description",
+            "tf": 4,
+            "weight": 0.021053
+          },
+          {
+            "term": "ocr",
+            "tf": 4,
+            "weight": 0.021053
+          },
+          {
+            "term": "processing",
+            "tf": 4,
+            "weight": 0.021053
+          },
+          {
+            "term": "custom",
+            "tf": 4,
+            "weight": 0.021053
+          },
+          {
+            "term": "purpose",
+            "tf": 2,
+            "weight": 0.010526
+          },
+          {
+            "term": "scope",
+            "tf": 2,
+            "weight": 0.010526
+          },
+          {
+            "term": "architecture",
+            "tf": 2,
+            "weight": 0.010526
+          },
+          {
+            "term": "overview",
+            "tf": 2,
+            "weight": 0.010526
+          },
+          {
+            "term": "base",
+            "tf": 2,
+            "weight": 0.010526
+          },
+          {
+            "term": "classes",
+            "tf": 2,
+            "weight": 0.010526
+          },
+          {
+            "term": "baseoptions",
+            "tf": 2,
+            "weight": 0.010526
+          },
+          {
+            "term": "pipelineoptions",
+            "tf": 2,
+            "weight": 0.010526
+          }
+        ],
+        "unique_terms": 63,
+        "total_terms": 190
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "On this page",
+        "and",
+        "configuration",
+        "description",
+        "model",
+        "ocr",
+        "options",
+        "pattern",
+        "picture",
+        "pipeline",
+        "specific"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.6902985074626866,
+      "overall": 0.7634328358208955
+    }
+  }
+]

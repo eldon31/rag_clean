@@ -1,0 +1,2286 @@
+[
+  {
+    "text": "## Overview  The client authentication system implements OAuth 2.0 Authorization Code flow with PKCE (Proof Key for Code Exchange) for secure authentication with MCP servers. It supports both modern RFC 9728 protected resource architecture and legacy authorization server patterns for backwards compatibility. **Key Components:**  - `OAuthClientProvider` - Main authentication provider implementing `httpx.Auth` - `OAuthContext` - Stateful context managing OAuth flow data - `PKCEParameters` - PKCE parameter generation and validation - `TokenStorage` - Protocol for persistent token storage  Sources: [src/mcp/client/auth.py1-552](https://github.com/modelcontextprotocol/python-sdk/blob/146d7efb/src/mcp/client/auth.py#L1-L552) [tests/client/test\\_auth.py1-900](https://github.com/modelcontextprotocol/python-sdk/blob/146d7efb/tests/client/test_auth.py#L1-L900)",
+    "metadata": {
+      "chunk_id": "fba7a82dd0b4-0001",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_3.3-client-authentication.md",
+      "filename": "_modelcontextprotocol_python-sdk_3.3-client-authentication.md",
+      "file_extension": ".md",
+      "chunk_index": 1,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Overview"
+      ],
+      "heading_text": "Overview",
+      "token_count": 191,
+      "char_count": 862,
+      "start_char": 4676,
+      "end_char": 5538,
+      "semantic_score": 0.7,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5187499999999999,
+      "chunking_strategy": "hybrid_adaptive_structural",
+      "content_type": "list_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T09:13:51.058317",
+      "document_id": "fba7a82dd0b4",
+      "document_name": "_modelcontextprotocol_python-sdk_3.3-client-authentication",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_3.3-client-authentication.md",
+      "source_filename": "_modelcontextprotocol_python-sdk_3.3-client-authentication.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk",
+      "relative_path": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_3.3-client-authentication.md",
+      "hierarchy_path": "Overview",
+      "chunk_hash": "fe4d1b45c63c8b39",
+      "content_digest": "fe4d1b45c63c8b39",
+      "chunk_length": 862,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "client",
+          "auth",
+          "for",
+          "authentication",
+          "mcp",
+          "oauth",
+          "authorization",
+          "code",
+          "flow",
+          "with",
+          "pkce",
+          "key",
+          "and",
+          "src",
+          "py1",
+          "https",
+          "github",
+          "com",
+          "modelcontextprotocol",
+          "python"
+        ],
+        "term_weights": [
+          {
+            "term": "client",
+            "tf": 5,
+            "weight": 0.04717
+          },
+          {
+            "term": "auth",
+            "tf": 5,
+            "weight": 0.04717
+          },
+          {
+            "term": "for",
+            "tf": 4,
+            "weight": 0.037736
+          },
+          {
+            "term": "authentication",
+            "tf": 3,
+            "weight": 0.028302
+          },
+          {
+            "term": "mcp",
+            "tf": 3,
+            "weight": 0.028302
+          },
+          {
+            "term": "oauth",
+            "tf": 2,
+            "weight": 0.018868
+          },
+          {
+            "term": "authorization",
+            "tf": 2,
+            "weight": 0.018868
+          },
+          {
+            "term": "code",
+            "tf": 2,
+            "weight": 0.018868
+          },
+          {
+            "term": "flow",
+            "tf": 2,
+            "weight": 0.018868
+          },
+          {
+            "term": "with",
+            "tf": 2,
+            "weight": 0.018868
+          },
+          {
+            "term": "pkce",
+            "tf": 2,
+            "weight": 0.018868
+          },
+          {
+            "term": "key",
+            "tf": 2,
+            "weight": 0.018868
+          },
+          {
+            "term": "and",
+            "tf": 2,
+            "weight": 0.018868
+          },
+          {
+            "term": "src",
+            "tf": 2,
+            "weight": 0.018868
+          },
+          {
+            "term": "py1",
+            "tf": 2,
+            "weight": 0.018868
+          },
+          {
+            "term": "https",
+            "tf": 2,
+            "weight": 0.018868
+          },
+          {
+            "term": "github",
+            "tf": 2,
+            "weight": 0.018868
+          },
+          {
+            "term": "com",
+            "tf": 2,
+            "weight": 0.018868
+          },
+          {
+            "term": "modelcontextprotocol",
+            "tf": 2,
+            "weight": 0.018868
+          },
+          {
+            "term": "python",
+            "tf": 2,
+            "weight": 0.018868
+          }
+        ],
+        "unique_terms": 71,
+        "total_terms": 106
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Overview",
+        "auth",
+        "authentication",
+        "authorization",
+        "client",
+        "code",
+        "flow",
+        "for",
+        "mcp",
+        "oauth",
+        "with"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5187499999999999,
+      "overall": 0.7062499999999999
+    }
+  },
+  {
+    "text": "## Architecture Overview\n\n```\n```\n\nSources: [src/mcp/client/auth.py179-552](https://github.com/modelcontextprotocol/python-sdk/blob/146d7efb/src/mcp/client/auth.py#L179-L552) [src/mcp/client/auth.py84-177](https://github.com/modelcontextprotocol/python-sdk/blob/146d7efb/src/mcp/client/auth.py#L84-L177)",
+    "metadata": {
+      "chunk_id": "fba7a82dd0b4-0002",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_3.3-client-authentication.md",
+      "filename": "_modelcontextprotocol_python-sdk_3.3-client-authentication.md",
+      "file_extension": ".md",
+      "chunk_index": 2,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Architecture Overview"
+      ],
+      "heading_text": "Architecture Overview",
+      "token_count": 88,
+      "char_count": 303,
+      "start_char": 5541,
+      "end_char": 5844,
+      "semantic_score": 0.6,
+      "structural_score": 0.7,
+      "retrieval_quality": 0.5525,
+      "chunking_strategy": "hybrid_adaptive_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T09:13:51.059238",
+      "document_id": "fba7a82dd0b4",
+      "document_name": "_modelcontextprotocol_python-sdk_3.3-client-authentication",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_3.3-client-authentication.md",
+      "source_filename": "_modelcontextprotocol_python-sdk_3.3-client-authentication.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk",
+      "relative_path": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_3.3-client-authentication.md",
+      "hierarchy_path": "Architecture Overview",
+      "chunk_hash": "ee2a4cf50971797f",
+      "content_digest": "ee2a4cf50971797f",
+      "chunk_length": 303,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "src",
+          "mcp",
+          "client",
+          "auth",
+          "https",
+          "github",
+          "com",
+          "modelcontextprotocol",
+          "python",
+          "sdk",
+          "blob",
+          "146d7efb",
+          "architecture",
+          "overview",
+          "sources",
+          "py179",
+          "552",
+          "l179",
+          "l552",
+          "py84"
+        ],
+        "term_weights": [
+          {
+            "term": "src",
+            "tf": 4,
+            "weight": 0.093023
+          },
+          {
+            "term": "mcp",
+            "tf": 4,
+            "weight": 0.093023
+          },
+          {
+            "term": "client",
+            "tf": 4,
+            "weight": 0.093023
+          },
+          {
+            "term": "auth",
+            "tf": 4,
+            "weight": 0.093023
+          },
+          {
+            "term": "https",
+            "tf": 2,
+            "weight": 0.046512
+          },
+          {
+            "term": "github",
+            "tf": 2,
+            "weight": 0.046512
+          },
+          {
+            "term": "com",
+            "tf": 2,
+            "weight": 0.046512
+          },
+          {
+            "term": "modelcontextprotocol",
+            "tf": 2,
+            "weight": 0.046512
+          },
+          {
+            "term": "python",
+            "tf": 2,
+            "weight": 0.046512
+          },
+          {
+            "term": "sdk",
+            "tf": 2,
+            "weight": 0.046512
+          },
+          {
+            "term": "blob",
+            "tf": 2,
+            "weight": 0.046512
+          },
+          {
+            "term": "146d7efb",
+            "tf": 2,
+            "weight": 0.046512
+          },
+          {
+            "term": "architecture",
+            "tf": 1,
+            "weight": 0.023256
+          },
+          {
+            "term": "overview",
+            "tf": 1,
+            "weight": 0.023256
+          },
+          {
+            "term": "sources",
+            "tf": 1,
+            "weight": 0.023256
+          },
+          {
+            "term": "py179",
+            "tf": 1,
+            "weight": 0.023256
+          },
+          {
+            "term": "552",
+            "tf": 1,
+            "weight": 0.023256
+          },
+          {
+            "term": "l179",
+            "tf": 1,
+            "weight": 0.023256
+          },
+          {
+            "term": "l552",
+            "tf": 1,
+            "weight": 0.023256
+          },
+          {
+            "term": "py84",
+            "tf": 1,
+            "weight": 0.023256
+          }
+        ],
+        "unique_terms": 23,
+        "total_terms": 43
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Architecture Overview",
+        "auth",
+        "client",
+        "com",
+        "github",
+        "https",
+        "mcp",
+        "modelcontextprotocol",
+        "python",
+        "sdk",
+        "src"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.6,
+      "structural": 0.7,
+      "retrieval_quality": 0.5525,
+      "overall": 0.6174999999999999
+    }
+  },
+  {
+    "text": "### OAuthContext  The `OAuthContext` dataclass maintains all state during the OAuth flow, including discovered metadata, client information, and current tokens. **State Management:**  - **Discovery metadata**: `protected_resource_metadata`, `oauth_metadata` - **Client registration**: `client_info` - **Token state**: `current_tokens`, `token_expiry_time` - **Thread safety**: `lock` (anyio.Lock)  **Key Methods:**  - `is_token_valid()` - Check token validity and expiration - `can_refresh_token()` - Determine if refresh is possible - `get_resource_url()` - Calculate RFC 8707 resource parameter - `should_include_resource_param()` - Protocol version-aware parameter inclusion  Sources: [src/mcp/client/auth.py84-177](https://github.com/modelcontextprotocol/python-sdk/blob/146d7efb/src/mcp/client/auth.py#L84-L177)",
+    "metadata": {
+      "chunk_id": "fba7a82dd0b4-0005",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_3.3-client-authentication.md",
+      "filename": "_modelcontextprotocol_python-sdk_3.3-client-authentication.md",
+      "file_extension": ".md",
+      "chunk_index": 5,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "OAuthContext"
+      ],
+      "heading_text": "OAuthContext",
+      "token_count": 184,
+      "char_count": 816,
+      "start_char": 7324,
+      "end_char": 8140,
+      "semantic_score": 0.7999999999999999,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5347368421052632,
+      "chunking_strategy": "hybrid_adaptive_structural",
+      "content_type": "list_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T09:13:51.061915",
+      "document_id": "fba7a82dd0b4",
+      "document_name": "_modelcontextprotocol_python-sdk_3.3-client-authentication",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_3.3-client-authentication.md",
+      "source_filename": "_modelcontextprotocol_python-sdk_3.3-client-authentication.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk",
+      "relative_path": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_3.3-client-authentication.md",
+      "hierarchy_path": "OAuthContext",
+      "chunk_hash": "6e8f8c273ddb9a19",
+      "content_digest": "6e8f8c273ddb9a19",
+      "chunk_length": 816,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "client",
+          "token",
+          "metadata",
+          "resource",
+          "state",
+          "oauthcontext",
+          "the",
+          "oauth",
+          "and",
+          "current",
+          "tokens",
+          "lock",
+          "refresh",
+          "parameter",
+          "src",
+          "mcp",
+          "auth",
+          "dataclass",
+          "maintains",
+          "all"
+        ],
+        "term_weights": [
+          {
+            "term": "client",
+            "tf": 5,
+            "weight": 0.051546
+          },
+          {
+            "term": "token",
+            "tf": 5,
+            "weight": 0.051546
+          },
+          {
+            "term": "metadata",
+            "tf": 4,
+            "weight": 0.041237
+          },
+          {
+            "term": "resource",
+            "tf": 4,
+            "weight": 0.041237
+          },
+          {
+            "term": "state",
+            "tf": 3,
+            "weight": 0.030928
+          },
+          {
+            "term": "oauthcontext",
+            "tf": 2,
+            "weight": 0.020619
+          },
+          {
+            "term": "the",
+            "tf": 2,
+            "weight": 0.020619
+          },
+          {
+            "term": "oauth",
+            "tf": 2,
+            "weight": 0.020619
+          },
+          {
+            "term": "and",
+            "tf": 2,
+            "weight": 0.020619
+          },
+          {
+            "term": "current",
+            "tf": 2,
+            "weight": 0.020619
+          },
+          {
+            "term": "tokens",
+            "tf": 2,
+            "weight": 0.020619
+          },
+          {
+            "term": "lock",
+            "tf": 2,
+            "weight": 0.020619
+          },
+          {
+            "term": "refresh",
+            "tf": 2,
+            "weight": 0.020619
+          },
+          {
+            "term": "parameter",
+            "tf": 2,
+            "weight": 0.020619
+          },
+          {
+            "term": "src",
+            "tf": 2,
+            "weight": 0.020619
+          },
+          {
+            "term": "mcp",
+            "tf": 2,
+            "weight": 0.020619
+          },
+          {
+            "term": "auth",
+            "tf": 2,
+            "weight": 0.020619
+          },
+          {
+            "term": "dataclass",
+            "tf": 1,
+            "weight": 0.010309
+          },
+          {
+            "term": "maintains",
+            "tf": 1,
+            "weight": 0.010309
+          },
+          {
+            "term": "all",
+            "tf": 1,
+            "weight": 0.010309
+          }
+        ],
+        "unique_terms": 69,
+        "total_terms": 97
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "OAuthContext",
+        "and",
+        "client",
+        "current",
+        "metadata",
+        "oauth",
+        "oauthcontext",
+        "resource",
+        "state",
+        "the",
+        "token"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.7999999999999999,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5347368421052632,
+      "overall": 0.7449122807017542
+    }
+  },
+  {
+    "text": "### PKCEParameters\n\nImplements PKCE (Proof Key for Code Exchange) parameter generation following RFC 7636 for enhanced security.\n\n**Generation Process:**\n\n- **Code verifier**: 128-character random string using `[A-Za-z0-9-._~]`\n- **Code challenge**: SHA256 hash of verifier, base64url-encoded (no padding)\n- **Challenge method**: Always \"S256\"\n\n```\n```\n\nSources: [src/mcp/client/auth.py49-62](https://github.com/modelcontextprotocol/python-sdk/blob/146d7efb/src/mcp/client/auth.py#L49-L62) [tests/client/test\\_auth.py82-107](https://github.com/modelcontextprotocol/python-sdk/blob/146d7efb/tests/client/test_auth.py#L82-L107)",
+    "metadata": {
+      "chunk_id": "fba7a82dd0b4-0006",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_3.3-client-authentication.md",
+      "filename": "_modelcontextprotocol_python-sdk_3.3-client-authentication.md",
+      "file_extension": ".md",
+      "chunk_index": 6,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "PKCEParameters"
+      ],
+      "heading_text": "PKCEParameters",
+      "token_count": 167,
+      "char_count": 625,
+      "start_char": 8143,
+      "end_char": 8768,
+      "semantic_score": 0.7,
+      "structural_score": 0.7999999999999998,
+      "retrieval_quality": 0.5580851063829787,
+      "chunking_strategy": "hybrid_adaptive_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T09:13:51.062971",
+      "document_id": "fba7a82dd0b4",
+      "document_name": "_modelcontextprotocol_python-sdk_3.3-client-authentication",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_3.3-client-authentication.md",
+      "source_filename": "_modelcontextprotocol_python-sdk_3.3-client-authentication.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk",
+      "relative_path": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_3.3-client-authentication.md",
+      "hierarchy_path": "PKCEParameters",
+      "chunk_hash": "198c1ef6e0efee98",
+      "content_digest": "198c1ef6e0efee98",
+      "chunk_length": 625,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "client",
+          "auth",
+          "code",
+          "for",
+          "generation",
+          "verifier",
+          "challenge",
+          "src",
+          "mcp",
+          "https",
+          "github",
+          "com",
+          "modelcontextprotocol",
+          "python",
+          "sdk",
+          "blob",
+          "146d7efb",
+          "tests",
+          "test",
+          "pkceparameters"
+        ],
+        "term_weights": [
+          {
+            "term": "client",
+            "tf": 4,
+            "weight": 0.051948
+          },
+          {
+            "term": "auth",
+            "tf": 4,
+            "weight": 0.051948
+          },
+          {
+            "term": "code",
+            "tf": 3,
+            "weight": 0.038961
+          },
+          {
+            "term": "for",
+            "tf": 2,
+            "weight": 0.025974
+          },
+          {
+            "term": "generation",
+            "tf": 2,
+            "weight": 0.025974
+          },
+          {
+            "term": "verifier",
+            "tf": 2,
+            "weight": 0.025974
+          },
+          {
+            "term": "challenge",
+            "tf": 2,
+            "weight": 0.025974
+          },
+          {
+            "term": "src",
+            "tf": 2,
+            "weight": 0.025974
+          },
+          {
+            "term": "mcp",
+            "tf": 2,
+            "weight": 0.025974
+          },
+          {
+            "term": "https",
+            "tf": 2,
+            "weight": 0.025974
+          },
+          {
+            "term": "github",
+            "tf": 2,
+            "weight": 0.025974
+          },
+          {
+            "term": "com",
+            "tf": 2,
+            "weight": 0.025974
+          },
+          {
+            "term": "modelcontextprotocol",
+            "tf": 2,
+            "weight": 0.025974
+          },
+          {
+            "term": "python",
+            "tf": 2,
+            "weight": 0.025974
+          },
+          {
+            "term": "sdk",
+            "tf": 2,
+            "weight": 0.025974
+          },
+          {
+            "term": "blob",
+            "tf": 2,
+            "weight": 0.025974
+          },
+          {
+            "term": "146d7efb",
+            "tf": 2,
+            "weight": 0.025974
+          },
+          {
+            "term": "tests",
+            "tf": 2,
+            "weight": 0.025974
+          },
+          {
+            "term": "test",
+            "tf": 2,
+            "weight": 0.025974
+          },
+          {
+            "term": "pkceparameters",
+            "tf": 1,
+            "weight": 0.012987
+          }
+        ],
+        "unique_terms": 53,
+        "total_terms": 77
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": true,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "PKCEParameters",
+        "auth",
+        "challenge",
+        "client",
+        "code",
+        "for",
+        "generation",
+        "https",
+        "mcp",
+        "src",
+        "verifier"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.7999999999999998,
+      "retrieval_quality": 0.5580851063829787,
+      "overall": 0.6860283687943262
+    }
+  },
+  {
+    "text": "### Complete OAuth Flow Sequence\n\n```\n```\n\nSources: [src/mcp/client/auth.py485-552](https://github.com/modelcontextprotocol/python-sdk/blob/146d7efb/src/mcp/client/auth.py#L485-L552) [tests/client/test\\_auth.py575-701](https://github.com/modelcontextprotocol/python-sdk/blob/146d7efb/tests/client/test_auth.py#L575-L701)",
+    "metadata": {
+      "chunk_id": "fba7a82dd0b4-0008",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_3.3-client-authentication.md",
+      "filename": "_modelcontextprotocol_python-sdk_3.3-client-authentication.md",
+      "file_extension": ".md",
+      "chunk_index": 8,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Complete OAuth Flow Sequence"
+      ],
+      "heading_text": "Complete OAuth Flow Sequence",
+      "token_count": 89,
+      "char_count": 320,
+      "start_char": 8794,
+      "end_char": 9114,
+      "semantic_score": 0.6,
+      "structural_score": 0.7,
+      "retrieval_quality": 0.56,
+      "chunking_strategy": "hybrid_adaptive_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T09:13:51.063608",
+      "document_id": "fba7a82dd0b4",
+      "document_name": "_modelcontextprotocol_python-sdk_3.3-client-authentication",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_3.3-client-authentication.md",
+      "source_filename": "_modelcontextprotocol_python-sdk_3.3-client-authentication.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk",
+      "relative_path": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_3.3-client-authentication.md",
+      "hierarchy_path": "Complete OAuth Flow Sequence",
+      "chunk_hash": "add35cdcc063d8ff",
+      "content_digest": "add35cdcc063d8ff",
+      "chunk_length": 320,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "client",
+          "auth",
+          "src",
+          "mcp",
+          "https",
+          "github",
+          "com",
+          "modelcontextprotocol",
+          "python",
+          "sdk",
+          "blob",
+          "146d7efb",
+          "tests",
+          "test",
+          "complete",
+          "oauth",
+          "flow",
+          "sequence",
+          "sources",
+          "py485"
+        ],
+        "term_weights": [
+          {
+            "term": "client",
+            "tf": 4,
+            "weight": 0.088889
+          },
+          {
+            "term": "auth",
+            "tf": 4,
+            "weight": 0.088889
+          },
+          {
+            "term": "src",
+            "tf": 2,
+            "weight": 0.044444
+          },
+          {
+            "term": "mcp",
+            "tf": 2,
+            "weight": 0.044444
+          },
+          {
+            "term": "https",
+            "tf": 2,
+            "weight": 0.044444
+          },
+          {
+            "term": "github",
+            "tf": 2,
+            "weight": 0.044444
+          },
+          {
+            "term": "com",
+            "tf": 2,
+            "weight": 0.044444
+          },
+          {
+            "term": "modelcontextprotocol",
+            "tf": 2,
+            "weight": 0.044444
+          },
+          {
+            "term": "python",
+            "tf": 2,
+            "weight": 0.044444
+          },
+          {
+            "term": "sdk",
+            "tf": 2,
+            "weight": 0.044444
+          },
+          {
+            "term": "blob",
+            "tf": 2,
+            "weight": 0.044444
+          },
+          {
+            "term": "146d7efb",
+            "tf": 2,
+            "weight": 0.044444
+          },
+          {
+            "term": "tests",
+            "tf": 2,
+            "weight": 0.044444
+          },
+          {
+            "term": "test",
+            "tf": 2,
+            "weight": 0.044444
+          },
+          {
+            "term": "complete",
+            "tf": 1,
+            "weight": 0.022222
+          },
+          {
+            "term": "oauth",
+            "tf": 1,
+            "weight": 0.022222
+          },
+          {
+            "term": "flow",
+            "tf": 1,
+            "weight": 0.022222
+          },
+          {
+            "term": "sequence",
+            "tf": 1,
+            "weight": 0.022222
+          },
+          {
+            "term": "sources",
+            "tf": 1,
+            "weight": 0.022222
+          },
+          {
+            "term": "py485",
+            "tf": 1,
+            "weight": 0.022222
+          }
+        ],
+        "unique_terms": 27,
+        "total_terms": 45
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Complete OAuth Flow Sequence",
+        "auth",
+        "client",
+        "com",
+        "github",
+        "https",
+        "mcp",
+        "modelcontextprotocol",
+        "python",
+        "sdk",
+        "src"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.6,
+      "structural": 0.7,
+      "retrieval_quality": 0.56,
+      "overall": 0.62
+    }
+  },
+  {
+    "text": "### Discovery Mechanisms\n\nThe client implements multiple discovery mechanisms for maximum compatibility:\n\n**1. RFC 9728 Protected Resource Discovery**\n\n- Extracts resource metadata URL from `WWW-Authenticate` header\n- Falls back to `/.well-known/oauth-protected-resource`\n- Discovers authorization server URLs\n\n**2. OAuth Metadata Discovery with Fallback** The client tries multiple discovery URLs in order:\n\n1. `/.well-known/oauth-authorization-server{path}` (RFC 8414 path-aware)\n2. `/.well-known/oauth-authorization-server` (OAuth root)\n3. `/.well-known/openid-configuration{path}` (OIDC path-aware)\n4. `{server_url}/.well-known/openid-configuration` (OIDC fallback)\n\n```\n```\n\nSources: [src/mcp/client/auth.py254-279](https://github.com/modelcontextprotocol/python-sdk/blob/146d7efb/src/mcp/client/auth.py#L254-L279) [src/mcp/client/auth.py231-253](https://github.com/modelcontextprotocol/python-sdk/blob/146d7efb/src/mcp/client/auth.py#L231-L253) [tests/client/test\\_auth.py252-365](https://github.com/modelcontextprotocol/python-sdk/blob/146d7efb/tests/client/test_auth.py#L252-L365)",
+    "metadata": {
+      "chunk_id": "fba7a82dd0b4-0009",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_3.3-client-authentication.md",
+      "filename": "_modelcontextprotocol_python-sdk_3.3-client-authentication.md",
+      "file_extension": ".md",
+      "chunk_index": 9,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Discovery Mechanisms"
+      ],
+      "heading_text": "Discovery Mechanisms",
+      "token_count": 275,
+      "char_count": 1088,
+      "start_char": 9116,
+      "end_char": 10204,
+      "semantic_score": 0.6,
+      "structural_score": 0.7999999999999998,
+      "retrieval_quality": 0.5283561643835616,
+      "chunking_strategy": "hybrid_adaptive_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T09:13:51.064703",
+      "document_id": "fba7a82dd0b4",
+      "document_name": "_modelcontextprotocol_python-sdk_3.3-client-authentication",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_3.3-client-authentication.md",
+      "source_filename": "_modelcontextprotocol_python-sdk_3.3-client-authentication.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk",
+      "relative_path": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_3.3-client-authentication.md",
+      "hierarchy_path": "Discovery Mechanisms",
+      "chunk_hash": "32fdb1cb9b6abd2f",
+      "content_digest": "32fdb1cb9b6abd2f",
+      "chunk_length": 1088,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "client",
+          "auth",
+          "discovery",
+          "well",
+          "known",
+          "oauth",
+          "server",
+          "path",
+          "src",
+          "mcp",
+          "resource",
+          "authorization",
+          "https",
+          "github",
+          "com",
+          "modelcontextprotocol",
+          "python",
+          "sdk",
+          "blob",
+          "146d7efb"
+        ],
+        "term_weights": [
+          {
+            "term": "client",
+            "tf": 8,
+            "weight": 0.056738
+          },
+          {
+            "term": "auth",
+            "tf": 6,
+            "weight": 0.042553
+          },
+          {
+            "term": "discovery",
+            "tf": 5,
+            "weight": 0.035461
+          },
+          {
+            "term": "well",
+            "tf": 5,
+            "weight": 0.035461
+          },
+          {
+            "term": "known",
+            "tf": 5,
+            "weight": 0.035461
+          },
+          {
+            "term": "oauth",
+            "tf": 5,
+            "weight": 0.035461
+          },
+          {
+            "term": "server",
+            "tf": 4,
+            "weight": 0.028369
+          },
+          {
+            "term": "path",
+            "tf": 4,
+            "weight": 0.028369
+          },
+          {
+            "term": "src",
+            "tf": 4,
+            "weight": 0.028369
+          },
+          {
+            "term": "mcp",
+            "tf": 4,
+            "weight": 0.028369
+          },
+          {
+            "term": "resource",
+            "tf": 3,
+            "weight": 0.021277
+          },
+          {
+            "term": "authorization",
+            "tf": 3,
+            "weight": 0.021277
+          },
+          {
+            "term": "https",
+            "tf": 3,
+            "weight": 0.021277
+          },
+          {
+            "term": "github",
+            "tf": 3,
+            "weight": 0.021277
+          },
+          {
+            "term": "com",
+            "tf": 3,
+            "weight": 0.021277
+          },
+          {
+            "term": "modelcontextprotocol",
+            "tf": 3,
+            "weight": 0.021277
+          },
+          {
+            "term": "python",
+            "tf": 3,
+            "weight": 0.021277
+          },
+          {
+            "term": "sdk",
+            "tf": 3,
+            "weight": 0.021277
+          },
+          {
+            "term": "blob",
+            "tf": 3,
+            "weight": 0.021277
+          },
+          {
+            "term": "146d7efb",
+            "tf": 3,
+            "weight": 0.021277
+          }
+        ],
+        "unique_terms": 66,
+        "total_terms": 141
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": true,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Discovery Mechanisms",
+        "auth",
+        "client",
+        "discovery",
+        "known",
+        "mcp",
+        "oauth",
+        "path",
+        "server",
+        "src",
+        "well"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.6,
+      "structural": 0.7999999999999998,
+      "retrieval_quality": 0.5283561643835616,
+      "overall": 0.6427853881278538
+    }
+  },
+  {
+    "text": "### WWW-Authenticate Header Parsing\n\nSupports RFC 9728 resource metadata discovery via `WWW-Authenticate` header parsing:\n\n```\n```\n\n**Supported Header Formats:**\n\n- `Bearer resource_metadata=\"https://api.example.com/.well-known/oauth-protected-resource\"`\n- `Bearer resource_metadata=https://api.example.com/metadata`\n- `Bearer realm=\"api\", resource_metadata=\"https://api.example.com/metadata\", error=\"insufficient_scope\"`\n\nSources: [src/mcp/client/auth.py207-229](https://github.com/modelcontextprotocol/python-sdk/blob/146d7efb/src/mcp/client/auth.py#L207-L229) [tests/client/test\\_auth.py782-900](https://github.com/modelcontextprotocol/python-sdk/blob/146d7efb/tests/client/test_auth.py#L782-L900)",
+    "metadata": {
+      "chunk_id": "fba7a82dd0b4-0010",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_3.3-client-authentication.md",
+      "filename": "_modelcontextprotocol_python-sdk_3.3-client-authentication.md",
+      "file_extension": ".md",
+      "chunk_index": 10,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "WWW-Authenticate Header Parsing"
+      ],
+      "heading_text": "WWW-Authenticate Header Parsing",
+      "token_count": 170,
+      "char_count": 700,
+      "start_char": 10206,
+      "end_char": 10906,
+      "semantic_score": 0.7,
+      "structural_score": 0.7999999999999998,
+      "retrieval_quality": 0.7263636363636363,
+      "chunking_strategy": "hybrid_adaptive_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T09:13:51.065525",
+      "document_id": "fba7a82dd0b4",
+      "document_name": "_modelcontextprotocol_python-sdk_3.3-client-authentication",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_3.3-client-authentication.md",
+      "source_filename": "_modelcontextprotocol_python-sdk_3.3-client-authentication.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk",
+      "relative_path": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_3.3-client-authentication.md",
+      "hierarchy_path": "WWW-Authenticate Header Parsing",
+      "chunk_hash": "84e67098597dd0e1",
+      "content_digest": "84e67098597dd0e1",
+      "chunk_length": 700,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "metadata",
+          "resource",
+          "https",
+          "com",
+          "api",
+          "client",
+          "auth",
+          "header",
+          "bearer",
+          "example",
+          "www",
+          "authenticate",
+          "parsing",
+          "src",
+          "mcp",
+          "github",
+          "modelcontextprotocol",
+          "python",
+          "sdk",
+          "blob"
+        ],
+        "term_weights": [
+          {
+            "term": "metadata",
+            "tf": 6,
+            "weight": 0.065217
+          },
+          {
+            "term": "resource",
+            "tf": 5,
+            "weight": 0.054348
+          },
+          {
+            "term": "https",
+            "tf": 5,
+            "weight": 0.054348
+          },
+          {
+            "term": "com",
+            "tf": 5,
+            "weight": 0.054348
+          },
+          {
+            "term": "api",
+            "tf": 4,
+            "weight": 0.043478
+          },
+          {
+            "term": "client",
+            "tf": 4,
+            "weight": 0.043478
+          },
+          {
+            "term": "auth",
+            "tf": 4,
+            "weight": 0.043478
+          },
+          {
+            "term": "header",
+            "tf": 3,
+            "weight": 0.032609
+          },
+          {
+            "term": "bearer",
+            "tf": 3,
+            "weight": 0.032609
+          },
+          {
+            "term": "example",
+            "tf": 3,
+            "weight": 0.032609
+          },
+          {
+            "term": "www",
+            "tf": 2,
+            "weight": 0.021739
+          },
+          {
+            "term": "authenticate",
+            "tf": 2,
+            "weight": 0.021739
+          },
+          {
+            "term": "parsing",
+            "tf": 2,
+            "weight": 0.021739
+          },
+          {
+            "term": "src",
+            "tf": 2,
+            "weight": 0.021739
+          },
+          {
+            "term": "mcp",
+            "tf": 2,
+            "weight": 0.021739
+          },
+          {
+            "term": "github",
+            "tf": 2,
+            "weight": 0.021739
+          },
+          {
+            "term": "modelcontextprotocol",
+            "tf": 2,
+            "weight": 0.021739
+          },
+          {
+            "term": "python",
+            "tf": 2,
+            "weight": 0.021739
+          },
+          {
+            "term": "sdk",
+            "tf": 2,
+            "weight": 0.021739
+          },
+          {
+            "term": "blob",
+            "tf": 2,
+            "weight": 0.021739
+          }
+        ],
+        "unique_terms": 47,
+        "total_terms": 92
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": true,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "WWW-Authenticate Header Parsing",
+        "api",
+        "auth",
+        "bearer",
+        "client",
+        "com",
+        "example",
+        "header",
+        "https",
+        "metadata",
+        "resource"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.7999999999999998,
+      "retrieval_quality": 0.7263636363636363,
+      "overall": 0.7421212121212121
+    }
+  },
+  {
+    "text": "### Token Validation and Refresh\n\n**Token Validity Checking:**\n\n```\n```\n\n**Automatic Refresh Logic:** The provider automatically attempts token refresh when:\n\n1. Current token is expired but refresh token exists\n2. Client information is available for authentication\n3. Refresh fails trigger full re-authentication\n\nSources: [src/mcp/client/auth.py127-143](https://github.com/modelcontextprotocol/python-sdk/blob/146d7efb/src/mcp/client/auth.py#L127-L143) [src/mcp/client/auth.py494-502](https://github.com/modelcontextprotocol/python-sdk/blob/146d7efb/src/mcp/client/auth.py#L494-L502) [src/mcp/client/auth.py411-462](https://github.com/modelcontextprotocol/python-sdk/blob/146d7efb/src/mcp/client/auth.py#L411-L462)",
+    "metadata": {
+      "chunk_id": "fba7a82dd0b4-0013",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_3.3-client-authentication.md",
+      "filename": "_modelcontextprotocol_python-sdk_3.3-client-authentication.md",
+      "file_extension": ".md",
+      "chunk_index": 13,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Token Validation and Refresh"
+      ],
+      "heading_text": "Token Validation and Refresh",
+      "token_count": 179,
+      "char_count": 716,
+      "start_char": 10959,
+      "end_char": 11675,
+      "semantic_score": 0.6,
+      "structural_score": 0.7999999999999998,
+      "retrieval_quality": 0.5313043478260869,
+      "chunking_strategy": "hybrid_adaptive_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T09:13:51.066663",
+      "document_id": "fba7a82dd0b4",
+      "document_name": "_modelcontextprotocol_python-sdk_3.3-client-authentication",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_3.3-client-authentication.md",
+      "source_filename": "_modelcontextprotocol_python-sdk_3.3-client-authentication.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk",
+      "relative_path": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_3.3-client-authentication.md",
+      "hierarchy_path": "Token Validation and Refresh",
+      "chunk_hash": "3989f996bc7e0d41",
+      "content_digest": "3989f996bc7e0d41",
+      "chunk_length": 716,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "client",
+          "src",
+          "mcp",
+          "auth",
+          "token",
+          "refresh",
+          "https",
+          "github",
+          "com",
+          "modelcontextprotocol",
+          "python",
+          "sdk",
+          "blob",
+          "146d7efb",
+          "authentication",
+          "validation",
+          "and",
+          "validity",
+          "checking",
+          "automatic"
+        ],
+        "term_weights": [
+          {
+            "term": "client",
+            "tf": 7,
+            "weight": 0.073684
+          },
+          {
+            "term": "src",
+            "tf": 6,
+            "weight": 0.063158
+          },
+          {
+            "term": "mcp",
+            "tf": 6,
+            "weight": 0.063158
+          },
+          {
+            "term": "auth",
+            "tf": 6,
+            "weight": 0.063158
+          },
+          {
+            "term": "token",
+            "tf": 5,
+            "weight": 0.052632
+          },
+          {
+            "term": "refresh",
+            "tf": 5,
+            "weight": 0.052632
+          },
+          {
+            "term": "https",
+            "tf": 3,
+            "weight": 0.031579
+          },
+          {
+            "term": "github",
+            "tf": 3,
+            "weight": 0.031579
+          },
+          {
+            "term": "com",
+            "tf": 3,
+            "weight": 0.031579
+          },
+          {
+            "term": "modelcontextprotocol",
+            "tf": 3,
+            "weight": 0.031579
+          },
+          {
+            "term": "python",
+            "tf": 3,
+            "weight": 0.031579
+          },
+          {
+            "term": "sdk",
+            "tf": 3,
+            "weight": 0.031579
+          },
+          {
+            "term": "blob",
+            "tf": 3,
+            "weight": 0.031579
+          },
+          {
+            "term": "146d7efb",
+            "tf": 3,
+            "weight": 0.031579
+          },
+          {
+            "term": "authentication",
+            "tf": 2,
+            "weight": 0.021053
+          },
+          {
+            "term": "validation",
+            "tf": 1,
+            "weight": 0.010526
+          },
+          {
+            "term": "and",
+            "tf": 1,
+            "weight": 0.010526
+          },
+          {
+            "term": "validity",
+            "tf": 1,
+            "weight": 0.010526
+          },
+          {
+            "term": "checking",
+            "tf": 1,
+            "weight": 0.010526
+          },
+          {
+            "term": "automatic",
+            "tf": 1,
+            "weight": 0.010526
+          }
+        ],
+        "unique_terms": 49,
+        "total_terms": 95
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Token Validation and Refresh",
+        "auth",
+        "client",
+        "com",
+        "github",
+        "https",
+        "mcp",
+        "modelcontextprotocol",
+        "refresh",
+        "src",
+        "token"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.6,
+      "structural": 0.7999999999999998,
+      "retrieval_quality": 0.5313043478260869,
+      "overall": 0.643768115942029
+    }
+  },
+  {
+    "text": "### Resource Parameter Handling\n\nImplements RFC 8707 resource parameter inclusion based on protocol version and protected resource metadata:\n\n```\n```\n\n**Resource URL Calculation:**\n\n- Uses protected resource metadata if available and valid\n- Falls back to canonical server URL derived from MCP endpoint\n- Validates hierarchical resource relationships\n\nSources: [src/mcp/client/auth.py159-177](https://github.com/modelcontextprotocol/python-sdk/blob/146d7efb/src/mcp/client/auth.py#L159-L177) [src/mcp/client/auth.py144-158](https://github.com/modelcontextprotocol/python-sdk/blob/146d7efb/src/mcp/client/auth.py#L144-L158) [tests/client/test\\_auth.py459-534](https://github.com/modelcontextprotocol/python-sdk/blob/146d7efb/tests/client/test_auth.py#L459-L534)",
+    "metadata": {
+      "chunk_id": "fba7a82dd0b4-0014",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_3.3-client-authentication.md",
+      "filename": "_modelcontextprotocol_python-sdk_3.3-client-authentication.md",
+      "file_extension": ".md",
+      "chunk_index": 14,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Resource Parameter Handling"
+      ],
+      "heading_text": "Resource Parameter Handling",
+      "token_count": 179,
+      "char_count": 760,
+      "start_char": 11677,
+      "end_char": 12437,
+      "semantic_score": 0.7,
+      "structural_score": 0.7999999999999998,
+      "retrieval_quality": 0.5265384615384615,
+      "chunking_strategy": "hybrid_adaptive_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T09:13:51.067418",
+      "document_id": "fba7a82dd0b4",
+      "document_name": "_modelcontextprotocol_python-sdk_3.3-client-authentication",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_3.3-client-authentication.md",
+      "source_filename": "_modelcontextprotocol_python-sdk_3.3-client-authentication.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk",
+      "relative_path": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_3.3-client-authentication.md",
+      "hierarchy_path": "Resource Parameter Handling",
+      "chunk_hash": "52b5a942f6e9a178",
+      "content_digest": "52b5a942f6e9a178",
+      "chunk_length": 760,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "resource",
+          "client",
+          "auth",
+          "mcp",
+          "src",
+          "https",
+          "github",
+          "com",
+          "modelcontextprotocol",
+          "python",
+          "sdk",
+          "blob",
+          "146d7efb",
+          "parameter",
+          "and",
+          "protected",
+          "metadata",
+          "url",
+          "tests",
+          "test"
+        ],
+        "term_weights": [
+          {
+            "term": "resource",
+            "tf": 6,
+            "weight": 0.06
+          },
+          {
+            "term": "client",
+            "tf": 6,
+            "weight": 0.06
+          },
+          {
+            "term": "auth",
+            "tf": 6,
+            "weight": 0.06
+          },
+          {
+            "term": "mcp",
+            "tf": 5,
+            "weight": 0.05
+          },
+          {
+            "term": "src",
+            "tf": 4,
+            "weight": 0.04
+          },
+          {
+            "term": "https",
+            "tf": 3,
+            "weight": 0.03
+          },
+          {
+            "term": "github",
+            "tf": 3,
+            "weight": 0.03
+          },
+          {
+            "term": "com",
+            "tf": 3,
+            "weight": 0.03
+          },
+          {
+            "term": "modelcontextprotocol",
+            "tf": 3,
+            "weight": 0.03
+          },
+          {
+            "term": "python",
+            "tf": 3,
+            "weight": 0.03
+          },
+          {
+            "term": "sdk",
+            "tf": 3,
+            "weight": 0.03
+          },
+          {
+            "term": "blob",
+            "tf": 3,
+            "weight": 0.03
+          },
+          {
+            "term": "146d7efb",
+            "tf": 3,
+            "weight": 0.03
+          },
+          {
+            "term": "parameter",
+            "tf": 2,
+            "weight": 0.02
+          },
+          {
+            "term": "and",
+            "tf": 2,
+            "weight": 0.02
+          },
+          {
+            "term": "protected",
+            "tf": 2,
+            "weight": 0.02
+          },
+          {
+            "term": "metadata",
+            "tf": 2,
+            "weight": 0.02
+          },
+          {
+            "term": "url",
+            "tf": 2,
+            "weight": 0.02
+          },
+          {
+            "term": "tests",
+            "tf": 2,
+            "weight": 0.02
+          },
+          {
+            "term": "test",
+            "tf": 2,
+            "weight": 0.02
+          }
+        ],
+        "unique_terms": 55,
+        "total_terms": 100
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": true,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Resource Parameter Handling",
+        "auth",
+        "client",
+        "com",
+        "github",
+        "https",
+        "mcp",
+        "modelcontextprotocol",
+        "python",
+        "resource",
+        "src"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.7999999999999998,
+      "retrieval_quality": 0.5265384615384615,
+      "overall": 0.6755128205128204
+    }
+  },
+  {
+    "text": "### TokenStorage Protocol\n\nThe `TokenStorage` protocol defines the interface for persistent token storage:\n\n```\n```\n\n**Implementation Requirements:**\n\n- **Persistence**: Tokens should survive application restarts\n- **Security**: Secure storage with appropriate encryption\n- **Concurrency**: Thread-safe access patterns\n- **Cleanup**: Automatic removal of expired tokens\n\n**Example Storage Implementation:**\n\n```\n```\n\nSources: [src/mcp/client/auth.py64-82](https://github.com/modelcontextprotocol/python-sdk/blob/146d7efb/src/mcp/client/auth.py#L64-L82) [tests/client/test\\_auth.py17-35](https://github.com/modelcontextprotocol/python-sdk/blob/146d7efb/tests/client/test_auth.py#L17-L35)",
+    "metadata": {
+      "chunk_id": "fba7a82dd0b4-0016",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_3.3-client-authentication.md",
+      "filename": "_modelcontextprotocol_python-sdk_3.3-client-authentication.md",
+      "file_extension": ".md",
+      "chunk_index": 16,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "TokenStorage Protocol"
+      ],
+      "heading_text": "TokenStorage Protocol",
+      "token_count": 157,
+      "char_count": 686,
+      "start_char": 12457,
+      "end_char": 13143,
+      "semantic_score": 0.7,
+      "structural_score": 0.7999999999999998,
+      "retrieval_quality": 0.7311764705882352,
+      "chunking_strategy": "hybrid_adaptive_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T09:13:51.068287",
+      "document_id": "fba7a82dd0b4",
+      "document_name": "_modelcontextprotocol_python-sdk_3.3-client-authentication",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_3.3-client-authentication.md",
+      "source_filename": "_modelcontextprotocol_python-sdk_3.3-client-authentication.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk",
+      "relative_path": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_3.3-client-authentication.md",
+      "hierarchy_path": "TokenStorage Protocol",
+      "chunk_hash": "11d15898621c58a0",
+      "content_digest": "11d15898621c58a0",
+      "chunk_length": 686,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "client",
+          "auth",
+          "storage",
+          "tokenstorage",
+          "protocol",
+          "the",
+          "implementation",
+          "tokens",
+          "src",
+          "mcp",
+          "https",
+          "github",
+          "com",
+          "modelcontextprotocol",
+          "python",
+          "sdk",
+          "blob",
+          "146d7efb",
+          "tests",
+          "test"
+        ],
+        "term_weights": [
+          {
+            "term": "client",
+            "tf": 4,
+            "weight": 0.051282
+          },
+          {
+            "term": "auth",
+            "tf": 4,
+            "weight": 0.051282
+          },
+          {
+            "term": "storage",
+            "tf": 3,
+            "weight": 0.038462
+          },
+          {
+            "term": "tokenstorage",
+            "tf": 2,
+            "weight": 0.025641
+          },
+          {
+            "term": "protocol",
+            "tf": 2,
+            "weight": 0.025641
+          },
+          {
+            "term": "the",
+            "tf": 2,
+            "weight": 0.025641
+          },
+          {
+            "term": "implementation",
+            "tf": 2,
+            "weight": 0.025641
+          },
+          {
+            "term": "tokens",
+            "tf": 2,
+            "weight": 0.025641
+          },
+          {
+            "term": "src",
+            "tf": 2,
+            "weight": 0.025641
+          },
+          {
+            "term": "mcp",
+            "tf": 2,
+            "weight": 0.025641
+          },
+          {
+            "term": "https",
+            "tf": 2,
+            "weight": 0.025641
+          },
+          {
+            "term": "github",
+            "tf": 2,
+            "weight": 0.025641
+          },
+          {
+            "term": "com",
+            "tf": 2,
+            "weight": 0.025641
+          },
+          {
+            "term": "modelcontextprotocol",
+            "tf": 2,
+            "weight": 0.025641
+          },
+          {
+            "term": "python",
+            "tf": 2,
+            "weight": 0.025641
+          },
+          {
+            "term": "sdk",
+            "tf": 2,
+            "weight": 0.025641
+          },
+          {
+            "term": "blob",
+            "tf": 2,
+            "weight": 0.025641
+          },
+          {
+            "term": "146d7efb",
+            "tf": 2,
+            "weight": 0.025641
+          },
+          {
+            "term": "tests",
+            "tf": 2,
+            "weight": 0.025641
+          },
+          {
+            "term": "test",
+            "tf": 2,
+            "weight": 0.025641
+          }
+        ],
+        "unique_terms": 53,
+        "total_terms": 78
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": true,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "TokenStorage Protocol",
+        "auth",
+        "client",
+        "implementation",
+        "mcp",
+        "protocol",
+        "src",
+        "storage",
+        "the",
+        "tokens",
+        "tokenstorage"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.7999999999999998,
+      "retrieval_quality": 0.7311764705882352,
+      "overall": 0.7437254901960784
+    }
+  },
+  {
+    "text": "## Integration Examples",
+    "metadata": {
+      "chunk_id": "fba7a82dd0b4-0019",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_3.3-client-authentication.md",
+      "filename": "_modelcontextprotocol_python-sdk_3.3-client-authentication.md",
+      "file_extension": ".md",
+      "chunk_index": 19,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Integration Examples"
+      ],
+      "heading_text": "Integration Examples",
+      "token_count": 3,
+      "char_count": 23,
+      "start_char": 14396,
+      "end_char": 14419,
+      "semantic_score": 0.8,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.59,
+      "chunking_strategy": "hybrid_adaptive_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T09:13:51.070044",
+      "document_id": "fba7a82dd0b4",
+      "document_name": "_modelcontextprotocol_python-sdk_3.3-client-authentication",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_3.3-client-authentication.md",
+      "source_filename": "_modelcontextprotocol_python-sdk_3.3-client-authentication.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk",
+      "relative_path": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_3.3-client-authentication.md",
+      "hierarchy_path": "Integration Examples",
+      "chunk_hash": "12e5a3dfd851e10e",
+      "content_digest": "12e5a3dfd851e10e",
+      "chunk_length": 23,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "integration",
+          "examples"
+        ],
+        "term_weights": [
+          {
+            "term": "integration",
+            "tf": 1,
+            "weight": 0.5
+          },
+          {
+            "term": "examples",
+            "tf": 1,
+            "weight": 0.5
+          }
+        ],
+        "unique_terms": 2,
+        "total_terms": 2
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Integration Examples",
+        "examples",
+        "integration"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.8,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.59,
+      "overall": 0.7633333333333333
+    }
+  },
+  {
+    "text": "### Transport Integration  The authentication provider integrates seamlessly with all MCP transports:  - **StreamableHTTP**: Built-in OAuth support via `httpx.AsyncClient` - **SSE**: Authentication headers added to SSE connections - **WebSocket**: OAuth tokens passed in connection headers - **stdio**: Not applicable (local process communication)  Sources: [examples/clients/simple-auth-client/](https://github.com/modelcontextprotocol/python-sdk/blob/146d7efb/examples/clients/simple-auth-client/) [src/mcp/client/auth.py485-552](https://github.com/modelcontextprotocol/python-sdk/blob/146d7efb/src/mcp/client/auth.py#L485-L552)  Dismiss  Refresh this wiki  Enter email to refresh",
+    "metadata": {
+      "chunk_id": "fba7a82dd0b4-0021",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_3.3-client-authentication.md",
+      "filename": "_modelcontextprotocol_python-sdk_3.3-client-authentication.md",
+      "file_extension": ".md",
+      "chunk_index": 21,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Transport Integration"
+      ],
+      "heading_text": "Transport Integration",
+      "token_count": 150,
+      "char_count": 682,
+      "start_char": 14464,
+      "end_char": 15146,
+      "semantic_score": 0.7,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.7447169811320754,
+      "chunking_strategy": "hybrid_adaptive_structural",
+      "content_type": "list_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T09:13:51.070859",
+      "document_id": "fba7a82dd0b4",
+      "document_name": "_modelcontextprotocol_python-sdk_3.3-client-authentication",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_3.3-client-authentication.md",
+      "source_filename": "_modelcontextprotocol_python-sdk_3.3-client-authentication.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk",
+      "relative_path": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_3.3-client-authentication.md",
+      "hierarchy_path": "Transport Integration",
+      "chunk_hash": "23e3263903d9752c",
+      "content_digest": "23e3263903d9752c",
+      "chunk_length": 682,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "auth",
+          "client",
+          "mcp",
+          "authentication",
+          "oauth",
+          "sse",
+          "headers",
+          "examples",
+          "clients",
+          "simple",
+          "https",
+          "github",
+          "com",
+          "modelcontextprotocol",
+          "python",
+          "sdk",
+          "blob",
+          "146d7efb",
+          "src",
+          "refresh"
+        ],
+        "term_weights": [
+          {
+            "term": "auth",
+            "tf": 4,
+            "weight": 0.04878
+          },
+          {
+            "term": "client",
+            "tf": 4,
+            "weight": 0.04878
+          },
+          {
+            "term": "mcp",
+            "tf": 3,
+            "weight": 0.036585
+          },
+          {
+            "term": "authentication",
+            "tf": 2,
+            "weight": 0.02439
+          },
+          {
+            "term": "oauth",
+            "tf": 2,
+            "weight": 0.02439
+          },
+          {
+            "term": "sse",
+            "tf": 2,
+            "weight": 0.02439
+          },
+          {
+            "term": "headers",
+            "tf": 2,
+            "weight": 0.02439
+          },
+          {
+            "term": "examples",
+            "tf": 2,
+            "weight": 0.02439
+          },
+          {
+            "term": "clients",
+            "tf": 2,
+            "weight": 0.02439
+          },
+          {
+            "term": "simple",
+            "tf": 2,
+            "weight": 0.02439
+          },
+          {
+            "term": "https",
+            "tf": 2,
+            "weight": 0.02439
+          },
+          {
+            "term": "github",
+            "tf": 2,
+            "weight": 0.02439
+          },
+          {
+            "term": "com",
+            "tf": 2,
+            "weight": 0.02439
+          },
+          {
+            "term": "modelcontextprotocol",
+            "tf": 2,
+            "weight": 0.02439
+          },
+          {
+            "term": "python",
+            "tf": 2,
+            "weight": 0.02439
+          },
+          {
+            "term": "sdk",
+            "tf": 2,
+            "weight": 0.02439
+          },
+          {
+            "term": "blob",
+            "tf": 2,
+            "weight": 0.02439
+          },
+          {
+            "term": "146d7efb",
+            "tf": 2,
+            "weight": 0.02439
+          },
+          {
+            "term": "src",
+            "tf": 2,
+            "weight": 0.02439
+          },
+          {
+            "term": "refresh",
+            "tf": 2,
+            "weight": 0.02439
+          }
+        ],
+        "unique_terms": 57,
+        "total_terms": 82
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Transport Integration",
+        "auth",
+        "authentication",
+        "client",
+        "clients",
+        "examples",
+        "headers",
+        "mcp",
+        "oauth",
+        "simple",
+        "sse"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.7447169811320754,
+      "overall": 0.781572327044025
+    }
+  }
+]

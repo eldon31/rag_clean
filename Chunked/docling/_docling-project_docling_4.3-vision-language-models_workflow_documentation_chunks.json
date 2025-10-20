@@ -1,0 +1,3942 @@
+[
+  {
+    "text": "## VLM Integration Architecture\n\nDocling provides a unified interface for VLM integration supporting both local model execution and external API services. The architecture separates model deployment strategy from the VLM capabilities exposed to pipelines.\n\n**Diagram: VLM Integration Architecture**\n\n```\n```\n\nThe architecture provides two key abstractions:\n\n- **`BaseVlmPageModel`**: Defines the interface for page-level VLM processing, requiring implementations to provide `__call__(conv_res, page_batch)` and `process_images(image_batch, prompt)` methods\n- **`BaseVlmOptions`**: Provides configuration for VLM behavior including prompts, scaling, temperature, and response format handling\n\nSources: [docling/models/base\\_model.py46-127](https://github.com/docling-project/docling/blob/f7244a43/docling/models/base_model.py#L46-L127) [docling/datamodel/pipeline\\_options\\_vlm\\_model.py13-32](https://github.com/docling-project/docling/blob/f7244a43/docling/datamodel/pipeline_options_vlm_model.py#L13-L32) [docling/pipeline/vlm\\_pipeline.py](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/vlm_pipeline.py)",
+    "metadata": {
+      "chunk_id": "cdf58fad0588-0001",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling\\_docling-project_docling_4.3-vision-language-models.md",
+      "filename": "_docling-project_docling_4.3-vision-language-models.md",
+      "file_extension": ".md",
+      "chunk_index": 1,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "VLM Integration Architecture"
+      ],
+      "heading_text": "VLM Integration Architecture",
+      "token_count": 260,
+      "char_count": 1133,
+      "start_char": 7094,
+      "end_char": 8227,
+      "semantic_score": 0.7,
+      "structural_score": 0.7999999999999998,
+      "retrieval_quality": 0.5078571428571428,
+      "chunking_strategy": "hierarchical_balanced_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T09:13:45.285641",
+      "document_id": "cdf58fad0588",
+      "document_name": "_docling-project_docling_4.3-vision-language-models",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling\\_docling-project_docling_4.3-vision-language-models.md",
+      "source_filename": "_docling-project_docling_4.3-vision-language-models.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling",
+      "relative_path": "Docs\\Docling\\_docling-project_docling_4.3-vision-language-models.md",
+      "hierarchy_path": "VLM Integration Architecture",
+      "chunk_hash": "72a4cbd8dc4aa4ec",
+      "content_digest": "72a4cbd8dc4aa4ec",
+      "chunk_length": 1133,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "docling",
+          "vlm",
+          "model",
+          "pipeline",
+          "architecture",
+          "the",
+          "integration",
+          "provides",
+          "for",
+          "and",
+          "https",
+          "github",
+          "com",
+          "project",
+          "blob",
+          "f7244a43",
+          "interface",
+          "page",
+          "batch",
+          "models"
+        ],
+        "term_weights": [
+          {
+            "term": "docling",
+            "tf": 13,
+            "weight": 0.093525
+          },
+          {
+            "term": "vlm",
+            "tf": 10,
+            "weight": 0.071942
+          },
+          {
+            "term": "model",
+            "tf": 6,
+            "weight": 0.043165
+          },
+          {
+            "term": "pipeline",
+            "tf": 6,
+            "weight": 0.043165
+          },
+          {
+            "term": "architecture",
+            "tf": 4,
+            "weight": 0.028777
+          },
+          {
+            "term": "the",
+            "tf": 4,
+            "weight": 0.028777
+          },
+          {
+            "term": "integration",
+            "tf": 3,
+            "weight": 0.021583
+          },
+          {
+            "term": "provides",
+            "tf": 3,
+            "weight": 0.021583
+          },
+          {
+            "term": "for",
+            "tf": 3,
+            "weight": 0.021583
+          },
+          {
+            "term": "and",
+            "tf": 3,
+            "weight": 0.021583
+          },
+          {
+            "term": "https",
+            "tf": 3,
+            "weight": 0.021583
+          },
+          {
+            "term": "github",
+            "tf": 3,
+            "weight": 0.021583
+          },
+          {
+            "term": "com",
+            "tf": 3,
+            "weight": 0.021583
+          },
+          {
+            "term": "project",
+            "tf": 3,
+            "weight": 0.021583
+          },
+          {
+            "term": "blob",
+            "tf": 3,
+            "weight": 0.021583
+          },
+          {
+            "term": "f7244a43",
+            "tf": 3,
+            "weight": 0.021583
+          },
+          {
+            "term": "interface",
+            "tf": 2,
+            "weight": 0.014388
+          },
+          {
+            "term": "page",
+            "tf": 2,
+            "weight": 0.014388
+          },
+          {
+            "term": "batch",
+            "tf": 2,
+            "weight": 0.014388
+          },
+          {
+            "term": "models",
+            "tf": 2,
+            "weight": 0.014388
+          }
+        ],
+        "unique_terms": 75,
+        "total_terms": 139
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": true,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "VLM Integration Architecture",
+        "and",
+        "architecture",
+        "docling",
+        "for",
+        "integration",
+        "model",
+        "pipeline",
+        "provides",
+        "the",
+        "vlm"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.7999999999999998,
+      "retrieval_quality": 0.5078571428571428,
+      "overall": 0.6692857142857142
+    }
+  },
+  {
+    "text": "## Available VLM Model Variants\n\nDocling provides pre-configured specifications for popular VLM models, optimized for document understanding tasks. These are defined in `vlm_model_specs` and can be used directly or customized.\n\n**Diagram: VLM Model Variants and Frameworks**\n\n```\n```",
+    "metadata": {
+      "chunk_id": "cdf58fad0588-0002",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling\\_docling-project_docling_4.3-vision-language-models.md",
+      "filename": "_docling-project_docling_4.3-vision-language-models.md",
+      "file_extension": ".md",
+      "chunk_index": 2,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Available VLM Model Variants"
+      ],
+      "heading_text": "Available VLM Model Variants",
+      "token_count": 60,
+      "char_count": 283,
+      "start_char": 8229,
+      "end_char": 8512,
+      "semantic_score": 0.7,
+      "structural_score": 0.7999999999999998,
+      "retrieval_quality": 0.5347368421052632,
+      "chunking_strategy": "hierarchical_balanced_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T09:13:45.285968",
+      "document_id": "cdf58fad0588",
+      "document_name": "_docling-project_docling_4.3-vision-language-models",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling\\_docling-project_docling_4.3-vision-language-models.md",
+      "source_filename": "_docling-project_docling_4.3-vision-language-models.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling",
+      "relative_path": "Docs\\Docling\\_docling-project_docling_4.3-vision-language-models.md",
+      "hierarchy_path": "Available VLM Model Variants",
+      "chunk_hash": "03e7df302f7a8faf",
+      "content_digest": "03e7df302f7a8faf",
+      "chunk_length": 283,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "vlm",
+          "model",
+          "variants",
+          "for",
+          "and",
+          "available",
+          "docling",
+          "provides",
+          "pre",
+          "configured",
+          "specifications",
+          "popular",
+          "models",
+          "optimized",
+          "document",
+          "understanding",
+          "tasks",
+          "these",
+          "are",
+          "defined"
+        ],
+        "term_weights": [
+          {
+            "term": "vlm",
+            "tf": 4,
+            "weight": 0.114286
+          },
+          {
+            "term": "model",
+            "tf": 3,
+            "weight": 0.085714
+          },
+          {
+            "term": "variants",
+            "tf": 2,
+            "weight": 0.057143
+          },
+          {
+            "term": "for",
+            "tf": 2,
+            "weight": 0.057143
+          },
+          {
+            "term": "and",
+            "tf": 2,
+            "weight": 0.057143
+          },
+          {
+            "term": "available",
+            "tf": 1,
+            "weight": 0.028571
+          },
+          {
+            "term": "docling",
+            "tf": 1,
+            "weight": 0.028571
+          },
+          {
+            "term": "provides",
+            "tf": 1,
+            "weight": 0.028571
+          },
+          {
+            "term": "pre",
+            "tf": 1,
+            "weight": 0.028571
+          },
+          {
+            "term": "configured",
+            "tf": 1,
+            "weight": 0.028571
+          },
+          {
+            "term": "specifications",
+            "tf": 1,
+            "weight": 0.028571
+          },
+          {
+            "term": "popular",
+            "tf": 1,
+            "weight": 0.028571
+          },
+          {
+            "term": "models",
+            "tf": 1,
+            "weight": 0.028571
+          },
+          {
+            "term": "optimized",
+            "tf": 1,
+            "weight": 0.028571
+          },
+          {
+            "term": "document",
+            "tf": 1,
+            "weight": 0.028571
+          },
+          {
+            "term": "understanding",
+            "tf": 1,
+            "weight": 0.028571
+          },
+          {
+            "term": "tasks",
+            "tf": 1,
+            "weight": 0.028571
+          },
+          {
+            "term": "these",
+            "tf": 1,
+            "weight": 0.028571
+          },
+          {
+            "term": "are",
+            "tf": 1,
+            "weight": 0.028571
+          },
+          {
+            "term": "defined",
+            "tf": 1,
+            "weight": 0.028571
+          }
+        ],
+        "unique_terms": 27,
+        "total_terms": 35
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Available VLM Model Variants",
+        "and",
+        "available",
+        "configured",
+        "docling",
+        "for",
+        "model",
+        "pre",
+        "provides",
+        "variants",
+        "vlm"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.7999999999999998,
+      "retrieval_quality": 0.5347368421052632,
+      "overall": 0.6782456140350877
+    }
+  },
+  {
+    "text": "### GraniteDocling Models  GraniteDocling is a specialized 258M parameter model trained for document understanding that outputs structured DOCTAGS format. It represents the recommended choice for document conversion in Docling. | Variant                          | Repo ID                                | Framework    | Devices   | Notes                          | | -------------------------------- | -------------------------------------- | ------------ | --------- | ------------------------------ | | **GRANITEDOCLING\\_TRANSFORMERS** | `ibm-granite/granite-docling-258M`     | Transformers | CPU, CUDA | Default for non-Apple hardware | | **GRANITEDOCLING\\_MLX**          | `ibm-granite/granite-docling-258M-mlx` | MLX          | MPS       | Optimized for Apple Silicon    | | **GRANITEDOCLING\\_VLLM**         | `ibm-granite/granite-docling-258M`     | vLLM         | CUDA      | High-throughput inference      |  Configuration example: ``` ``` Sources: [docling/datamodel/vlm\\_model\\_specs.py21-56](https://github.com/docling-project/docling/blob/f7244a43/docling/datamodel/vlm_model_specs.py#L21-L56) [docs/usage/vision\\_models.md40-87](https://github.com/docling-project/docling/blob/f7244a43/docs/usage/vision_models.md#L40-L87)",
+    "metadata": {
+      "chunk_id": "cdf58fad0588-0003",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling\\_docling-project_docling_4.3-vision-language-models.md",
+      "filename": "_docling-project_docling_4.3-vision-language-models.md",
+      "file_extension": ".md",
+      "chunk_index": 3,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "GraniteDocling Models"
+      ],
+      "heading_text": "GraniteDocling Models",
+      "token_count": 303,
+      "char_count": 1237,
+      "start_char": 8514,
+      "end_char": 9751,
+      "semantic_score": 0.7999999999999999,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.6799,
+      "chunking_strategy": "hierarchical_balanced_structural",
+      "content_type": "table_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T09:13:45.286798",
+      "document_id": "cdf58fad0588",
+      "document_name": "_docling-project_docling_4.3-vision-language-models",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling\\_docling-project_docling_4.3-vision-language-models.md",
+      "source_filename": "_docling-project_docling_4.3-vision-language-models.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling",
+      "relative_path": "Docs\\Docling\\_docling-project_docling_4.3-vision-language-models.md",
+      "hierarchy_path": "GraniteDocling Models",
+      "chunk_hash": "e2dee47f7045515d",
+      "content_digest": "e2dee47f7045515d",
+      "chunk_length": 1237,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "docling",
+          "granite",
+          "granitedocling",
+          "258m",
+          "for",
+          "models",
+          "model",
+          "ibm",
+          "mlx",
+          "document",
+          "transformers",
+          "cuda",
+          "apple",
+          "vllm",
+          "datamodel",
+          "vlm",
+          "specs",
+          "https",
+          "github",
+          "com"
+        ],
+        "term_weights": [
+          {
+            "term": "docling",
+            "tf": 10,
+            "weight": 0.088496
+          },
+          {
+            "term": "granite",
+            "tf": 6,
+            "weight": 0.053097
+          },
+          {
+            "term": "granitedocling",
+            "tf": 5,
+            "weight": 0.044248
+          },
+          {
+            "term": "258m",
+            "tf": 4,
+            "weight": 0.035398
+          },
+          {
+            "term": "for",
+            "tf": 4,
+            "weight": 0.035398
+          },
+          {
+            "term": "models",
+            "tf": 3,
+            "weight": 0.026549
+          },
+          {
+            "term": "model",
+            "tf": 3,
+            "weight": 0.026549
+          },
+          {
+            "term": "ibm",
+            "tf": 3,
+            "weight": 0.026549
+          },
+          {
+            "term": "mlx",
+            "tf": 3,
+            "weight": 0.026549
+          },
+          {
+            "term": "document",
+            "tf": 2,
+            "weight": 0.017699
+          },
+          {
+            "term": "transformers",
+            "tf": 2,
+            "weight": 0.017699
+          },
+          {
+            "term": "cuda",
+            "tf": 2,
+            "weight": 0.017699
+          },
+          {
+            "term": "apple",
+            "tf": 2,
+            "weight": 0.017699
+          },
+          {
+            "term": "vllm",
+            "tf": 2,
+            "weight": 0.017699
+          },
+          {
+            "term": "datamodel",
+            "tf": 2,
+            "weight": 0.017699
+          },
+          {
+            "term": "vlm",
+            "tf": 2,
+            "weight": 0.017699
+          },
+          {
+            "term": "specs",
+            "tf": 2,
+            "weight": 0.017699
+          },
+          {
+            "term": "https",
+            "tf": 2,
+            "weight": 0.017699
+          },
+          {
+            "term": "github",
+            "tf": 2,
+            "weight": 0.017699
+          },
+          {
+            "term": "com",
+            "tf": 2,
+            "weight": 0.017699
+          }
+        ],
+        "unique_terms": 64,
+        "total_terms": 113
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "258m",
+        "GraniteDocling Models",
+        "docling",
+        "document",
+        "for",
+        "granite",
+        "granitedocling",
+        "ibm",
+        "mlx",
+        "model",
+        "models"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.7999999999999999,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.6799,
+      "overall": 0.7932999999999999
+    }
+  },
+  {
+    "text": "### General-Purpose VLM Models  Docling supports general-purpose VLMs that output Markdown or HTML, suitable for document conversion when DOCTAGS-trained models are not required. | Model                  | Primary Output | Notable Features                                | | ---------------------- | -------------- | ----------------------------------------------- | | **Granite Vision 3.2** | Markdown       | IBM's 2B vision model, multi-framework support  | | **Pixtral 12B**        | Markdown       | Mistral's 12B multimodal model                  | | **Qwen2.5-VL**         | Markdown       | 3B parameter model with strong OCR capabilities | | **Phi-4**              | Markdown       | Microsoft's 14B multimodal model                | | **GOT-OCR 2.0**        | Markdown       | Specialized OCR model with format preservation  |  Example configuration for Granite Vision: ``` ``` Sources: [docling/datamodel/vlm\\_model\\_specs.py143-245](https://github.com/docling-project/docling/blob/f7244a43/docling/datamodel/vlm_model_specs.py#L143-L245) [docs/usage/vision\\_models.md46-58](https://github.com/docling-project/docling/blob/f7244a43/docs/usage/vision_models.md#L46-L58)",
+    "metadata": {
+      "chunk_id": "cdf58fad0588-0005",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling\\_docling-project_docling_4.3-vision-language-models.md",
+      "filename": "_docling-project_docling_4.3-vision-language-models.md",
+      "file_extension": ".md",
+      "chunk_index": 5,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "General-Purpose VLM Models"
+      ],
+      "heading_text": "General-Purpose VLM Models",
+      "token_count": 280,
+      "char_count": 1179,
+      "start_char": 10639,
+      "end_char": 11818,
+      "semantic_score": 0.7,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.6672727272727274,
+      "chunking_strategy": "hierarchical_balanced_structural",
+      "content_type": "table_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T09:13:45.289913",
+      "document_id": "cdf58fad0588",
+      "document_name": "_docling-project_docling_4.3-vision-language-models",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling\\_docling-project_docling_4.3-vision-language-models.md",
+      "source_filename": "_docling-project_docling_4.3-vision-language-models.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling",
+      "relative_path": "Docs\\Docling\\_docling-project_docling_4.3-vision-language-models.md",
+      "hierarchy_path": "General-Purpose VLM Models",
+      "chunk_hash": "58095a52d9c665c2",
+      "content_digest": "58095a52d9c665c2",
+      "chunk_length": 1179,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "model",
+          "docling",
+          "markdown",
+          "vision",
+          "models",
+          "vlm",
+          "ocr",
+          "general",
+          "purpose",
+          "output",
+          "for",
+          "granite",
+          "12b",
+          "multimodal",
+          "with",
+          "datamodel",
+          "specs",
+          "https",
+          "github",
+          "com"
+        ],
+        "term_weights": [
+          {
+            "term": "model",
+            "tf": 8,
+            "weight": 0.069565
+          },
+          {
+            "term": "docling",
+            "tf": 7,
+            "weight": 0.06087
+          },
+          {
+            "term": "markdown",
+            "tf": 6,
+            "weight": 0.052174
+          },
+          {
+            "term": "vision",
+            "tf": 5,
+            "weight": 0.043478
+          },
+          {
+            "term": "models",
+            "tf": 4,
+            "weight": 0.034783
+          },
+          {
+            "term": "vlm",
+            "tf": 3,
+            "weight": 0.026087
+          },
+          {
+            "term": "ocr",
+            "tf": 3,
+            "weight": 0.026087
+          },
+          {
+            "term": "general",
+            "tf": 2,
+            "weight": 0.017391
+          },
+          {
+            "term": "purpose",
+            "tf": 2,
+            "weight": 0.017391
+          },
+          {
+            "term": "output",
+            "tf": 2,
+            "weight": 0.017391
+          },
+          {
+            "term": "for",
+            "tf": 2,
+            "weight": 0.017391
+          },
+          {
+            "term": "granite",
+            "tf": 2,
+            "weight": 0.017391
+          },
+          {
+            "term": "12b",
+            "tf": 2,
+            "weight": 0.017391
+          },
+          {
+            "term": "multimodal",
+            "tf": 2,
+            "weight": 0.017391
+          },
+          {
+            "term": "with",
+            "tf": 2,
+            "weight": 0.017391
+          },
+          {
+            "term": "datamodel",
+            "tf": 2,
+            "weight": 0.017391
+          },
+          {
+            "term": "specs",
+            "tf": 2,
+            "weight": 0.017391
+          },
+          {
+            "term": "https",
+            "tf": 2,
+            "weight": 0.017391
+          },
+          {
+            "term": "github",
+            "tf": 2,
+            "weight": 0.017391
+          },
+          {
+            "term": "com",
+            "tf": 2,
+            "weight": 0.017391
+          }
+        ],
+        "unique_terms": 68,
+        "total_terms": 115
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "General-Purpose VLM Models",
+        "docling",
+        "general",
+        "markdown",
+        "model",
+        "models",
+        "ocr",
+        "output",
+        "purpose",
+        "vision",
+        "vlm"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.6672727272727274,
+      "overall": 0.7557575757575757
+    }
+  },
+  {
+    "text": "### Custom Model Configuration\n\nBeyond pre-configured models, custom VLMs can be integrated by specifying `InlineVlmOptions` directly:\n\n```\n```\n\nSources: [docs/usage/vision\\_models.md88-113](https://github.com/docling-project/docling/blob/f7244a43/docs/usage/vision_models.md#L88-L113) [docling/datamodel/pipeline\\_options\\_vlm\\_model.py54-89](https://github.com/docling-project/docling/blob/f7244a43/docling/datamodel/pipeline_options_vlm_model.py#L54-L89)",
+    "metadata": {
+      "chunk_id": "cdf58fad0588-0006",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling\\_docling-project_docling_4.3-vision-language-models.md",
+      "filename": "_docling-project_docling_4.3-vision-language-models.md",
+      "file_extension": ".md",
+      "chunk_index": 6,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Custom Model Configuration"
+      ],
+      "heading_text": "Custom Model Configuration",
+      "token_count": 126,
+      "char_count": 457,
+      "start_char": 11823,
+      "end_char": 12280,
+      "semantic_score": 0.7,
+      "structural_score": 0.7,
+      "retrieval_quality": 0.5614285714285714,
+      "chunking_strategy": "hierarchical_balanced_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T09:13:45.290752",
+      "document_id": "cdf58fad0588",
+      "document_name": "_docling-project_docling_4.3-vision-language-models",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling\\_docling-project_docling_4.3-vision-language-models.md",
+      "source_filename": "_docling-project_docling_4.3-vision-language-models.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling",
+      "relative_path": "Docs\\Docling\\_docling-project_docling_4.3-vision-language-models.md",
+      "hierarchy_path": "Custom Model Configuration",
+      "chunk_hash": "94c91334ad918d59",
+      "content_digest": "94c91334ad918d59",
+      "chunk_length": 457,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "docling",
+          "model",
+          "models",
+          "custom",
+          "docs",
+          "usage",
+          "vision",
+          "https",
+          "github",
+          "com",
+          "project",
+          "blob",
+          "f7244a43",
+          "datamodel",
+          "pipeline",
+          "options",
+          "vlm",
+          "configuration",
+          "beyond",
+          "pre"
+        ],
+        "term_weights": [
+          {
+            "term": "docling",
+            "tf": 6,
+            "weight": 0.103448
+          },
+          {
+            "term": "model",
+            "tf": 3,
+            "weight": 0.051724
+          },
+          {
+            "term": "models",
+            "tf": 3,
+            "weight": 0.051724
+          },
+          {
+            "term": "custom",
+            "tf": 2,
+            "weight": 0.034483
+          },
+          {
+            "term": "docs",
+            "tf": 2,
+            "weight": 0.034483
+          },
+          {
+            "term": "usage",
+            "tf": 2,
+            "weight": 0.034483
+          },
+          {
+            "term": "vision",
+            "tf": 2,
+            "weight": 0.034483
+          },
+          {
+            "term": "https",
+            "tf": 2,
+            "weight": 0.034483
+          },
+          {
+            "term": "github",
+            "tf": 2,
+            "weight": 0.034483
+          },
+          {
+            "term": "com",
+            "tf": 2,
+            "weight": 0.034483
+          },
+          {
+            "term": "project",
+            "tf": 2,
+            "weight": 0.034483
+          },
+          {
+            "term": "blob",
+            "tf": 2,
+            "weight": 0.034483
+          },
+          {
+            "term": "f7244a43",
+            "tf": 2,
+            "weight": 0.034483
+          },
+          {
+            "term": "datamodel",
+            "tf": 2,
+            "weight": 0.034483
+          },
+          {
+            "term": "pipeline",
+            "tf": 2,
+            "weight": 0.034483
+          },
+          {
+            "term": "options",
+            "tf": 2,
+            "weight": 0.034483
+          },
+          {
+            "term": "vlm",
+            "tf": 2,
+            "weight": 0.034483
+          },
+          {
+            "term": "configuration",
+            "tf": 1,
+            "weight": 0.017241
+          },
+          {
+            "term": "beyond",
+            "tf": 1,
+            "weight": 0.017241
+          },
+          {
+            "term": "pre",
+            "tf": 1,
+            "weight": 0.017241
+          }
+        ],
+        "unique_terms": 35,
+        "total_terms": 58
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Custom Model Configuration",
+        "com",
+        "custom",
+        "docling",
+        "docs",
+        "github",
+        "https",
+        "model",
+        "models",
+        "usage",
+        "vision"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.7,
+      "retrieval_quality": 0.5614285714285714,
+      "overall": 0.6538095238095237
+    }
+  },
+  {
+    "text": "## Response Formats\n\nVLM models support multiple output formats optimized for different document understanding tasks. The response format determines how the VLM structures its output and how Docling processes it into a `DoclingDocument`.\n\n**Diagram: Response Format Processing**\n\n```\n```",
+    "metadata": {
+      "chunk_id": "cdf58fad0588-0007",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling\\_docling-project_docling_4.3-vision-language-models.md",
+      "filename": "_docling-project_docling_4.3-vision-language-models.md",
+      "file_extension": ".md",
+      "chunk_index": 7,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Response Formats"
+      ],
+      "heading_text": "Response Formats",
+      "token_count": 52,
+      "char_count": 287,
+      "start_char": 12282,
+      "end_char": 12569,
+      "semantic_score": 0.7,
+      "structural_score": 0.7999999999999998,
+      "retrieval_quality": 0.5207692307692308,
+      "chunking_strategy": "hierarchical_balanced_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T09:13:45.291064",
+      "document_id": "cdf58fad0588",
+      "document_name": "_docling-project_docling_4.3-vision-language-models",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling\\_docling-project_docling_4.3-vision-language-models.md",
+      "source_filename": "_docling-project_docling_4.3-vision-language-models.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling",
+      "relative_path": "Docs\\Docling\\_docling-project_docling_4.3-vision-language-models.md",
+      "hierarchy_path": "Response Formats",
+      "chunk_hash": "3dbbbee9f234abce",
+      "content_digest": "3dbbbee9f234abce",
+      "chunk_length": 287,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "response",
+          "formats",
+          "vlm",
+          "output",
+          "the",
+          "format",
+          "how",
+          "models",
+          "support",
+          "multiple",
+          "optimized",
+          "for",
+          "different",
+          "document",
+          "understanding",
+          "tasks",
+          "determines",
+          "structures",
+          "its",
+          "and"
+        ],
+        "term_weights": [
+          {
+            "term": "response",
+            "tf": 3,
+            "weight": 0.088235
+          },
+          {
+            "term": "formats",
+            "tf": 2,
+            "weight": 0.058824
+          },
+          {
+            "term": "vlm",
+            "tf": 2,
+            "weight": 0.058824
+          },
+          {
+            "term": "output",
+            "tf": 2,
+            "weight": 0.058824
+          },
+          {
+            "term": "the",
+            "tf": 2,
+            "weight": 0.058824
+          },
+          {
+            "term": "format",
+            "tf": 2,
+            "weight": 0.058824
+          },
+          {
+            "term": "how",
+            "tf": 2,
+            "weight": 0.058824
+          },
+          {
+            "term": "models",
+            "tf": 1,
+            "weight": 0.029412
+          },
+          {
+            "term": "support",
+            "tf": 1,
+            "weight": 0.029412
+          },
+          {
+            "term": "multiple",
+            "tf": 1,
+            "weight": 0.029412
+          },
+          {
+            "term": "optimized",
+            "tf": 1,
+            "weight": 0.029412
+          },
+          {
+            "term": "for",
+            "tf": 1,
+            "weight": 0.029412
+          },
+          {
+            "term": "different",
+            "tf": 1,
+            "weight": 0.029412
+          },
+          {
+            "term": "document",
+            "tf": 1,
+            "weight": 0.029412
+          },
+          {
+            "term": "understanding",
+            "tf": 1,
+            "weight": 0.029412
+          },
+          {
+            "term": "tasks",
+            "tf": 1,
+            "weight": 0.029412
+          },
+          {
+            "term": "determines",
+            "tf": 1,
+            "weight": 0.029412
+          },
+          {
+            "term": "structures",
+            "tf": 1,
+            "weight": 0.029412
+          },
+          {
+            "term": "its",
+            "tf": 1,
+            "weight": 0.029412
+          },
+          {
+            "term": "and",
+            "tf": 1,
+            "weight": 0.029412
+          }
+        ],
+        "unique_terms": 26,
+        "total_terms": 34
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Response Formats",
+        "format",
+        "formats",
+        "how",
+        "models",
+        "multiple",
+        "output",
+        "response",
+        "support",
+        "the",
+        "vlm"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.7999999999999998,
+      "retrieval_quality": 0.5207692307692308,
+      "overall": 0.6735897435897434
+    }
+  },
+  {
+    "text": "### DOCTAGS Format\n\nDOCTAGS is an XML-based structured format designed specifically for document understanding. It provides the most accurate representation of document structure and is the recommended format for document conversion.\n\nExample DOCTAGS output:\n\n```\n```\n\nModels trained for DOCTAGS output include:\n\n- GraniteDocling (all variants)\n- SmolDocling (all variants)\n\nConfiguration:\n\n```\n```\n\nSources: [docling/datamodel/pipeline\\_options\\_vlm\\_model.py27-32](https://github.com/docling-project/docling/blob/f7244a43/docling/datamodel/pipeline_options_vlm_model.py#L27-L32) [docling/datamodel/vlm\\_model\\_specs.py22-37](https://github.com/docling-project/docling/blob/f7244a43/docling/datamodel/vlm_model_specs.py#L22-L37)",
+    "metadata": {
+      "chunk_id": "cdf58fad0588-0008",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling\\_docling-project_docling_4.3-vision-language-models.md",
+      "filename": "_docling-project_docling_4.3-vision-language-models.md",
+      "file_extension": ".md",
+      "chunk_index": 8,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "DOCTAGS Format"
+      ],
+      "heading_text": "DOCTAGS Format",
+      "token_count": 184,
+      "char_count": 729,
+      "start_char": 12571,
+      "end_char": 13300,
+      "semantic_score": 0.7,
+      "structural_score": 0.7999999999999998,
+      "retrieval_quality": 0.6989285714285715,
+      "chunking_strategy": "hierarchical_balanced_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T09:13:45.291605",
+      "document_id": "cdf58fad0588",
+      "document_name": "_docling-project_docling_4.3-vision-language-models",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling\\_docling-project_docling_4.3-vision-language-models.md",
+      "source_filename": "_docling-project_docling_4.3-vision-language-models.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling",
+      "relative_path": "Docs\\Docling\\_docling-project_docling_4.3-vision-language-models.md",
+      "hierarchy_path": "DOCTAGS Format",
+      "chunk_hash": "d322b6535be98bb4",
+      "content_digest": "d322b6535be98bb4",
+      "chunk_length": 729,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "docling",
+          "doctags",
+          "datamodel",
+          "vlm",
+          "model",
+          "format",
+          "for",
+          "document",
+          "the",
+          "output",
+          "all",
+          "variants",
+          "pipeline",
+          "options",
+          "https",
+          "github",
+          "com",
+          "project",
+          "blob",
+          "f7244a43"
+        ],
+        "term_weights": [
+          {
+            "term": "docling",
+            "tf": 8,
+            "weight": 0.091954
+          },
+          {
+            "term": "doctags",
+            "tf": 4,
+            "weight": 0.045977
+          },
+          {
+            "term": "datamodel",
+            "tf": 4,
+            "weight": 0.045977
+          },
+          {
+            "term": "vlm",
+            "tf": 4,
+            "weight": 0.045977
+          },
+          {
+            "term": "model",
+            "tf": 4,
+            "weight": 0.045977
+          },
+          {
+            "term": "format",
+            "tf": 3,
+            "weight": 0.034483
+          },
+          {
+            "term": "for",
+            "tf": 3,
+            "weight": 0.034483
+          },
+          {
+            "term": "document",
+            "tf": 3,
+            "weight": 0.034483
+          },
+          {
+            "term": "the",
+            "tf": 2,
+            "weight": 0.022989
+          },
+          {
+            "term": "output",
+            "tf": 2,
+            "weight": 0.022989
+          },
+          {
+            "term": "all",
+            "tf": 2,
+            "weight": 0.022989
+          },
+          {
+            "term": "variants",
+            "tf": 2,
+            "weight": 0.022989
+          },
+          {
+            "term": "pipeline",
+            "tf": 2,
+            "weight": 0.022989
+          },
+          {
+            "term": "options",
+            "tf": 2,
+            "weight": 0.022989
+          },
+          {
+            "term": "https",
+            "tf": 2,
+            "weight": 0.022989
+          },
+          {
+            "term": "github",
+            "tf": 2,
+            "weight": 0.022989
+          },
+          {
+            "term": "com",
+            "tf": 2,
+            "weight": 0.022989
+          },
+          {
+            "term": "project",
+            "tf": 2,
+            "weight": 0.022989
+          },
+          {
+            "term": "blob",
+            "tf": 2,
+            "weight": 0.022989
+          },
+          {
+            "term": "f7244a43",
+            "tf": 2,
+            "weight": 0.022989
+          }
+        ],
+        "unique_terms": 49,
+        "total_terms": 87
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": true,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "DOCTAGS Format",
+        "datamodel",
+        "docling",
+        "doctags",
+        "document",
+        "for",
+        "format",
+        "model",
+        "output",
+        "the",
+        "vlm"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.7999999999999998,
+      "retrieval_quality": 0.6989285714285715,
+      "overall": 0.7329761904761903
+    }
+  },
+  {
+    "text": "### Markdown Format\n\nMarkdown format outputs standard Markdown syntax, suitable for general-purpose document representation. This format is widely compatible with downstream tools and libraries.\n\nExample Markdown output:\n\n```\n```\n\nModels outputting Markdown include:\n\n- Granite Vision\n- Pixtral\n- Qwen2.5-VL\n- GOT-OCR 2.0\n\nConfiguration:\n\n```\n```\n\nSources: [docling/datamodel/vlm\\_model\\_specs.py144-157](https://github.com/docling-project/docling/blob/f7244a43/docling/datamodel/vlm_model_specs.py#L144-L157) [docs/usage/vision\\_models.md4-9](https://github.com/docling-project/docling/blob/f7244a43/docs/usage/vision_models.md#L4-L9)",
+    "metadata": {
+      "chunk_id": "cdf58fad0588-0009",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling\\_docling-project_docling_4.3-vision-language-models.md",
+      "filename": "_docling-project_docling_4.3-vision-language-models.md",
+      "file_extension": ".md",
+      "chunk_index": 9,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Markdown Format"
+      ],
+      "heading_text": "Markdown Format",
+      "token_count": 165,
+      "char_count": 635,
+      "start_char": 13302,
+      "end_char": 13937,
+      "semantic_score": 0.7,
+      "structural_score": 0.7999999999999998,
+      "retrieval_quality": 0.7165306122448979,
+      "chunking_strategy": "hierarchical_balanced_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T09:13:45.292116",
+      "document_id": "cdf58fad0588",
+      "document_name": "_docling-project_docling_4.3-vision-language-models",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling\\_docling-project_docling_4.3-vision-language-models.md",
+      "source_filename": "_docling-project_docling_4.3-vision-language-models.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling",
+      "relative_path": "Docs\\Docling\\_docling-project_docling_4.3-vision-language-models.md",
+      "hierarchy_path": "Markdown Format",
+      "chunk_hash": "a5435e65e795c0cb",
+      "content_digest": "a5435e65e795c0cb",
+      "chunk_length": 635,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "docling",
+          "markdown",
+          "format",
+          "models",
+          "vision",
+          "datamodel",
+          "vlm",
+          "model",
+          "specs",
+          "https",
+          "github",
+          "com",
+          "project",
+          "blob",
+          "f7244a43",
+          "docs",
+          "usage",
+          "outputs",
+          "standard",
+          "syntax"
+        ],
+        "term_weights": [
+          {
+            "term": "docling",
+            "tf": 6,
+            "weight": 0.077922
+          },
+          {
+            "term": "markdown",
+            "tf": 5,
+            "weight": 0.064935
+          },
+          {
+            "term": "format",
+            "tf": 3,
+            "weight": 0.038961
+          },
+          {
+            "term": "models",
+            "tf": 3,
+            "weight": 0.038961
+          },
+          {
+            "term": "vision",
+            "tf": 3,
+            "weight": 0.038961
+          },
+          {
+            "term": "datamodel",
+            "tf": 2,
+            "weight": 0.025974
+          },
+          {
+            "term": "vlm",
+            "tf": 2,
+            "weight": 0.025974
+          },
+          {
+            "term": "model",
+            "tf": 2,
+            "weight": 0.025974
+          },
+          {
+            "term": "specs",
+            "tf": 2,
+            "weight": 0.025974
+          },
+          {
+            "term": "https",
+            "tf": 2,
+            "weight": 0.025974
+          },
+          {
+            "term": "github",
+            "tf": 2,
+            "weight": 0.025974
+          },
+          {
+            "term": "com",
+            "tf": 2,
+            "weight": 0.025974
+          },
+          {
+            "term": "project",
+            "tf": 2,
+            "weight": 0.025974
+          },
+          {
+            "term": "blob",
+            "tf": 2,
+            "weight": 0.025974
+          },
+          {
+            "term": "f7244a43",
+            "tf": 2,
+            "weight": 0.025974
+          },
+          {
+            "term": "docs",
+            "tf": 2,
+            "weight": 0.025974
+          },
+          {
+            "term": "usage",
+            "tf": 2,
+            "weight": 0.025974
+          },
+          {
+            "term": "outputs",
+            "tf": 1,
+            "weight": 0.012987
+          },
+          {
+            "term": "standard",
+            "tf": 1,
+            "weight": 0.012987
+          },
+          {
+            "term": "syntax",
+            "tf": 1,
+            "weight": 0.012987
+          }
+        ],
+        "unique_terms": 50,
+        "total_terms": 77
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": true,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Markdown Format",
+        "datamodel",
+        "docling",
+        "format",
+        "https",
+        "markdown",
+        "model",
+        "models",
+        "specs",
+        "vision",
+        "vlm"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.7999999999999998,
+      "retrieval_quality": 0.7165306122448979,
+      "overall": 0.7388435374149659
+    }
+  },
+  {
+    "text": "### HTML Format\n\nHTML format outputs HTML markup, preserving semantic document structure through HTML tags. This format is useful for web-based applications and rich document viewers.\n\nConfiguration:\n\n```\n```\n\nSources: [docling/datamodel/pipeline\\_options\\_vlm\\_model.py27-32](https://github.com/docling-project/docling/blob/f7244a43/docling/datamodel/pipeline_options_vlm_model.py#L27-L32)",
+    "metadata": {
+      "chunk_id": "cdf58fad0588-0010",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling\\_docling-project_docling_4.3-vision-language-models.md",
+      "filename": "_docling-project_docling_4.3-vision-language-models.md",
+      "file_extension": ".md",
+      "chunk_index": 10,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "HTML Format"
+      ],
+      "heading_text": "HTML Format",
+      "token_count": 90,
+      "char_count": 390,
+      "start_char": 13939,
+      "end_char": 14329,
+      "semantic_score": 0.7,
+      "structural_score": 0.7,
+      "retrieval_quality": 0.522258064516129,
+      "chunking_strategy": "hierarchical_balanced_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T09:13:45.292427",
+      "document_id": "cdf58fad0588",
+      "document_name": "_docling-project_docling_4.3-vision-language-models",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling\\_docling-project_docling_4.3-vision-language-models.md",
+      "source_filename": "_docling-project_docling_4.3-vision-language-models.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling",
+      "relative_path": "Docs\\Docling\\_docling-project_docling_4.3-vision-language-models.md",
+      "hierarchy_path": "HTML Format",
+      "chunk_hash": "99a1b3514d32d646",
+      "content_digest": "99a1b3514d32d646",
+      "chunk_length": 390,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "html",
+          "docling",
+          "format",
+          "document",
+          "datamodel",
+          "pipeline",
+          "options",
+          "vlm",
+          "model",
+          "outputs",
+          "markup",
+          "preserving",
+          "semantic",
+          "structure",
+          "through",
+          "tags",
+          "this",
+          "useful",
+          "for",
+          "web"
+        ],
+        "term_weights": [
+          {
+            "term": "html",
+            "tf": 4,
+            "weight": 0.08
+          },
+          {
+            "term": "docling",
+            "tf": 4,
+            "weight": 0.08
+          },
+          {
+            "term": "format",
+            "tf": 3,
+            "weight": 0.06
+          },
+          {
+            "term": "document",
+            "tf": 2,
+            "weight": 0.04
+          },
+          {
+            "term": "datamodel",
+            "tf": 2,
+            "weight": 0.04
+          },
+          {
+            "term": "pipeline",
+            "tf": 2,
+            "weight": 0.04
+          },
+          {
+            "term": "options",
+            "tf": 2,
+            "weight": 0.04
+          },
+          {
+            "term": "vlm",
+            "tf": 2,
+            "weight": 0.04
+          },
+          {
+            "term": "model",
+            "tf": 2,
+            "weight": 0.04
+          },
+          {
+            "term": "outputs",
+            "tf": 1,
+            "weight": 0.02
+          },
+          {
+            "term": "markup",
+            "tf": 1,
+            "weight": 0.02
+          },
+          {
+            "term": "preserving",
+            "tf": 1,
+            "weight": 0.02
+          },
+          {
+            "term": "semantic",
+            "tf": 1,
+            "weight": 0.02
+          },
+          {
+            "term": "structure",
+            "tf": 1,
+            "weight": 0.02
+          },
+          {
+            "term": "through",
+            "tf": 1,
+            "weight": 0.02
+          },
+          {
+            "term": "tags",
+            "tf": 1,
+            "weight": 0.02
+          },
+          {
+            "term": "this",
+            "tf": 1,
+            "weight": 0.02
+          },
+          {
+            "term": "useful",
+            "tf": 1,
+            "weight": 0.02
+          },
+          {
+            "term": "for",
+            "tf": 1,
+            "weight": 0.02
+          },
+          {
+            "term": "web",
+            "tf": 1,
+            "weight": 0.02
+          }
+        ],
+        "unique_terms": 36,
+        "total_terms": 50
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "HTML Format",
+        "datamodel",
+        "docling",
+        "document",
+        "format",
+        "html",
+        "model",
+        "options",
+        "outputs",
+        "pipeline",
+        "vlm"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.7,
+      "retrieval_quality": 0.522258064516129,
+      "overall": 0.640752688172043
+    }
+  },
+  {
+    "text": "### Custom Response Processing\n\nThe `decode_response()` method in `BaseVlmOptions` allows custom post-processing of VLM outputs. This enables integration with models that return structured responses requiring transformation.\n\nExample implementation:\n\n```\n```\n\nThis pattern is used internally for specialized models like OlmOcr that return JSON-structured responses.\n\nSources: [docling/datamodel/pipeline\\_options\\_vlm\\_model.py20-24](https://github.com/docling-project/docling/blob/f7244a43/docling/datamodel/pipeline_options_vlm_model.py#L20-L24)",
+    "metadata": {
+      "chunk_id": "cdf58fad0588-0011",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling\\_docling-project_docling_4.3-vision-language-models.md",
+      "filename": "_docling-project_docling_4.3-vision-language-models.md",
+      "file_extension": ".md",
+      "chunk_index": 11,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Custom Response Processing"
+      ],
+      "heading_text": "Custom Response Processing",
+      "token_count": 119,
+      "char_count": 547,
+      "start_char": 14331,
+      "end_char": 14878,
+      "semantic_score": 0.7,
+      "structural_score": 0.7,
+      "retrieval_quality": 0.7508695652173912,
+      "chunking_strategy": "hierarchical_balanced_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T09:13:45.292846",
+      "document_id": "cdf58fad0588",
+      "document_name": "_docling-project_docling_4.3-vision-language-models",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling\\_docling-project_docling_4.3-vision-language-models.md",
+      "source_filename": "_docling-project_docling_4.3-vision-language-models.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling",
+      "relative_path": "Docs\\Docling\\_docling-project_docling_4.3-vision-language-models.md",
+      "hierarchy_path": "Custom Response Processing",
+      "chunk_hash": "c21ed36e279389d9",
+      "content_digest": "c21ed36e279389d9",
+      "chunk_length": 547,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "docling",
+          "vlm",
+          "custom",
+          "response",
+          "processing",
+          "this",
+          "models",
+          "that",
+          "return",
+          "structured",
+          "responses",
+          "datamodel",
+          "pipeline",
+          "options",
+          "model",
+          "the",
+          "decode",
+          "method",
+          "basevlmoptions",
+          "allows"
+        ],
+        "term_weights": [
+          {
+            "term": "docling",
+            "tf": 4,
+            "weight": 0.061538
+          },
+          {
+            "term": "vlm",
+            "tf": 3,
+            "weight": 0.046154
+          },
+          {
+            "term": "custom",
+            "tf": 2,
+            "weight": 0.030769
+          },
+          {
+            "term": "response",
+            "tf": 2,
+            "weight": 0.030769
+          },
+          {
+            "term": "processing",
+            "tf": 2,
+            "weight": 0.030769
+          },
+          {
+            "term": "this",
+            "tf": 2,
+            "weight": 0.030769
+          },
+          {
+            "term": "models",
+            "tf": 2,
+            "weight": 0.030769
+          },
+          {
+            "term": "that",
+            "tf": 2,
+            "weight": 0.030769
+          },
+          {
+            "term": "return",
+            "tf": 2,
+            "weight": 0.030769
+          },
+          {
+            "term": "structured",
+            "tf": 2,
+            "weight": 0.030769
+          },
+          {
+            "term": "responses",
+            "tf": 2,
+            "weight": 0.030769
+          },
+          {
+            "term": "datamodel",
+            "tf": 2,
+            "weight": 0.030769
+          },
+          {
+            "term": "pipeline",
+            "tf": 2,
+            "weight": 0.030769
+          },
+          {
+            "term": "options",
+            "tf": 2,
+            "weight": 0.030769
+          },
+          {
+            "term": "model",
+            "tf": 2,
+            "weight": 0.030769
+          },
+          {
+            "term": "the",
+            "tf": 1,
+            "weight": 0.015385
+          },
+          {
+            "term": "decode",
+            "tf": 1,
+            "weight": 0.015385
+          },
+          {
+            "term": "method",
+            "tf": 1,
+            "weight": 0.015385
+          },
+          {
+            "term": "basevlmoptions",
+            "tf": 1,
+            "weight": 0.015385
+          },
+          {
+            "term": "allows",
+            "tf": 1,
+            "weight": 0.015385
+          }
+        ],
+        "unique_terms": 47,
+        "total_terms": 65
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Custom Response Processing",
+        "custom",
+        "docling",
+        "models",
+        "processing",
+        "response",
+        "return",
+        "structured",
+        "that",
+        "this",
+        "vlm"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.7,
+      "retrieval_quality": 0.7508695652173912,
+      "overall": 0.7169565217391304
+    }
+  },
+  {
+    "text": "## VLM Configuration Options\n\nVLM behavior is controlled through configuration classes that specify model selection, inference parameters, and processing options.\n\n**Diagram: VLM Configuration Hierarchy**\n\n```\n```",
+    "metadata": {
+      "chunk_id": "cdf58fad0588-0012",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling\\_docling-project_docling_4.3-vision-language-models.md",
+      "filename": "_docling-project_docling_4.3-vision-language-models.md",
+      "file_extension": ".md",
+      "chunk_index": 12,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "VLM Configuration Options"
+      ],
+      "heading_text": "VLM Configuration Options",
+      "token_count": 38,
+      "char_count": 213,
+      "start_char": 14880,
+      "end_char": 15093,
+      "semantic_score": 0.7,
+      "structural_score": 0.7999999999999998,
+      "retrieval_quality": 0.5323076923076923,
+      "chunking_strategy": "hierarchical_balanced_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T09:13:45.293053",
+      "document_id": "cdf58fad0588",
+      "document_name": "_docling-project_docling_4.3-vision-language-models",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling\\_docling-project_docling_4.3-vision-language-models.md",
+      "source_filename": "_docling-project_docling_4.3-vision-language-models.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling",
+      "relative_path": "Docs\\Docling\\_docling-project_docling_4.3-vision-language-models.md",
+      "hierarchy_path": "VLM Configuration Options",
+      "chunk_hash": "087f1249dceaf11f",
+      "content_digest": "087f1249dceaf11f",
+      "chunk_length": 213,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "vlm",
+          "configuration",
+          "options",
+          "behavior",
+          "controlled",
+          "through",
+          "classes",
+          "that",
+          "specify",
+          "model",
+          "selection",
+          "inference",
+          "parameters",
+          "and",
+          "processing",
+          "diagram",
+          "hierarchy"
+        ],
+        "term_weights": [
+          {
+            "term": "vlm",
+            "tf": 3,
+            "weight": 0.136364
+          },
+          {
+            "term": "configuration",
+            "tf": 3,
+            "weight": 0.136364
+          },
+          {
+            "term": "options",
+            "tf": 2,
+            "weight": 0.090909
+          },
+          {
+            "term": "behavior",
+            "tf": 1,
+            "weight": 0.045455
+          },
+          {
+            "term": "controlled",
+            "tf": 1,
+            "weight": 0.045455
+          },
+          {
+            "term": "through",
+            "tf": 1,
+            "weight": 0.045455
+          },
+          {
+            "term": "classes",
+            "tf": 1,
+            "weight": 0.045455
+          },
+          {
+            "term": "that",
+            "tf": 1,
+            "weight": 0.045455
+          },
+          {
+            "term": "specify",
+            "tf": 1,
+            "weight": 0.045455
+          },
+          {
+            "term": "model",
+            "tf": 1,
+            "weight": 0.045455
+          },
+          {
+            "term": "selection",
+            "tf": 1,
+            "weight": 0.045455
+          },
+          {
+            "term": "inference",
+            "tf": 1,
+            "weight": 0.045455
+          },
+          {
+            "term": "parameters",
+            "tf": 1,
+            "weight": 0.045455
+          },
+          {
+            "term": "and",
+            "tf": 1,
+            "weight": 0.045455
+          },
+          {
+            "term": "processing",
+            "tf": 1,
+            "weight": 0.045455
+          },
+          {
+            "term": "diagram",
+            "tf": 1,
+            "weight": 0.045455
+          },
+          {
+            "term": "hierarchy",
+            "tf": 1,
+            "weight": 0.045455
+          }
+        ],
+        "unique_terms": 17,
+        "total_terms": 22
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "VLM Configuration Options",
+        "behavior",
+        "classes",
+        "configuration",
+        "controlled",
+        "model",
+        "options",
+        "specify",
+        "that",
+        "through",
+        "vlm"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.7999999999999998,
+      "retrieval_quality": 0.5323076923076923,
+      "overall": 0.6774358974358973
+    }
+  },
+  {
+    "text": "### Generation Control\n\nVLM generation behavior can be fine-tuned through stopping criteria and generation configuration:\n\n**Stop Strings**: Simple string-based stopping\n\n```\n```\n\n**Custom Stopping Criteria**: Programmatic stopping logic\n\n```\n```\n\n**Extra Generation Config**: Framework-specific parameters\n\n```\n```\n\nSources: [docling/datamodel/pipeline\\_options\\_vlm\\_model.py78-82](https://github.com/docling-project/docling/blob/f7244a43/docling/datamodel/pipeline_options_vlm_model.py#L78-L82) [docling/models/utils/generation\\_utils.py](https://github.com/docling-project/docling/blob/f7244a43/docling/models/utils/generation_utils.py)",
+    "metadata": {
+      "chunk_id": "cdf58fad0588-0016",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling\\_docling-project_docling_4.3-vision-language-models.md",
+      "filename": "_docling-project_docling_4.3-vision-language-models.md",
+      "file_extension": ".md",
+      "chunk_index": 16,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Generation Control"
+      ],
+      "heading_text": "Generation Control",
+      "token_count": 149,
+      "char_count": 640,
+      "start_char": 17408,
+      "end_char": 18048,
+      "semantic_score": 0.7,
+      "structural_score": 0.7999999999999998,
+      "retrieval_quality": 0.5075,
+      "chunking_strategy": "hierarchical_balanced_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T09:13:45.295931",
+      "document_id": "cdf58fad0588",
+      "document_name": "_docling-project_docling_4.3-vision-language-models",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling\\_docling-project_docling_4.3-vision-language-models.md",
+      "source_filename": "_docling-project_docling_4.3-vision-language-models.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling",
+      "relative_path": "Docs\\Docling\\_docling-project_docling_4.3-vision-language-models.md",
+      "hierarchy_path": "Generation Control",
+      "chunk_hash": "1de9fbf51bd3dc7b",
+      "content_digest": "1de9fbf51bd3dc7b",
+      "chunk_length": 640,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "docling",
+          "generation",
+          "stopping",
+          "utils",
+          "vlm",
+          "criteria",
+          "datamodel",
+          "pipeline",
+          "options",
+          "model",
+          "https",
+          "github",
+          "com",
+          "project",
+          "blob",
+          "f7244a43",
+          "models",
+          "control",
+          "behavior",
+          "can"
+        ],
+        "term_weights": [
+          {
+            "term": "docling",
+            "tf": 8,
+            "weight": 0.108108
+          },
+          {
+            "term": "generation",
+            "tf": 6,
+            "weight": 0.081081
+          },
+          {
+            "term": "stopping",
+            "tf": 4,
+            "weight": 0.054054
+          },
+          {
+            "term": "utils",
+            "tf": 4,
+            "weight": 0.054054
+          },
+          {
+            "term": "vlm",
+            "tf": 3,
+            "weight": 0.040541
+          },
+          {
+            "term": "criteria",
+            "tf": 2,
+            "weight": 0.027027
+          },
+          {
+            "term": "datamodel",
+            "tf": 2,
+            "weight": 0.027027
+          },
+          {
+            "term": "pipeline",
+            "tf": 2,
+            "weight": 0.027027
+          },
+          {
+            "term": "options",
+            "tf": 2,
+            "weight": 0.027027
+          },
+          {
+            "term": "model",
+            "tf": 2,
+            "weight": 0.027027
+          },
+          {
+            "term": "https",
+            "tf": 2,
+            "weight": 0.027027
+          },
+          {
+            "term": "github",
+            "tf": 2,
+            "weight": 0.027027
+          },
+          {
+            "term": "com",
+            "tf": 2,
+            "weight": 0.027027
+          },
+          {
+            "term": "project",
+            "tf": 2,
+            "weight": 0.027027
+          },
+          {
+            "term": "blob",
+            "tf": 2,
+            "weight": 0.027027
+          },
+          {
+            "term": "f7244a43",
+            "tf": 2,
+            "weight": 0.027027
+          },
+          {
+            "term": "models",
+            "tf": 2,
+            "weight": 0.027027
+          },
+          {
+            "term": "control",
+            "tf": 1,
+            "weight": 0.013514
+          },
+          {
+            "term": "behavior",
+            "tf": 1,
+            "weight": 0.013514
+          },
+          {
+            "term": "can",
+            "tf": 1,
+            "weight": 0.013514
+          }
+        ],
+        "unique_terms": 42,
+        "total_terms": 74
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Generation Control",
+        "criteria",
+        "datamodel",
+        "docling",
+        "generation",
+        "model",
+        "options",
+        "pipeline",
+        "stopping",
+        "utils",
+        "vlm"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.7999999999999998,
+      "retrieval_quality": 0.5075,
+      "overall": 0.6691666666666666
+    }
+  },
+  {
+    "text": "## Prompt Construction and Formatting\n\nVLM prompts are constructed through the `build_prompt()` method, which can be customized to include page-specific context or structured instructions.\n\n**Diagram: Prompt Processing Flow**\n\n```\n```",
+    "metadata": {
+      "chunk_id": "cdf58fad0588-0017",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling\\_docling-project_docling_4.3-vision-language-models.md",
+      "filename": "_docling-project_docling_4.3-vision-language-models.md",
+      "file_extension": ".md",
+      "chunk_index": 17,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Prompt Construction and Formatting"
+      ],
+      "heading_text": "Prompt Construction and Formatting",
+      "token_count": 42,
+      "char_count": 234,
+      "start_char": 18050,
+      "end_char": 18284,
+      "semantic_score": 0.7,
+      "structural_score": 0.7999999999999998,
+      "retrieval_quality": 0.57,
+      "chunking_strategy": "hierarchical_balanced_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T09:13:45.296178",
+      "document_id": "cdf58fad0588",
+      "document_name": "_docling-project_docling_4.3-vision-language-models",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling\\_docling-project_docling_4.3-vision-language-models.md",
+      "source_filename": "_docling-project_docling_4.3-vision-language-models.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling",
+      "relative_path": "Docs\\Docling\\_docling-project_docling_4.3-vision-language-models.md",
+      "hierarchy_path": "Prompt Construction and Formatting",
+      "chunk_hash": "e1f762b78569d7bf",
+      "content_digest": "e1f762b78569d7bf",
+      "chunk_length": 234,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "prompt",
+          "construction",
+          "and",
+          "formatting",
+          "vlm",
+          "prompts",
+          "are",
+          "constructed",
+          "through",
+          "the",
+          "build",
+          "method",
+          "which",
+          "can",
+          "customized",
+          "include",
+          "page",
+          "specific",
+          "context",
+          "structured"
+        ],
+        "term_weights": [
+          {
+            "term": "prompt",
+            "tf": 3,
+            "weight": 0.115385
+          },
+          {
+            "term": "construction",
+            "tf": 1,
+            "weight": 0.038462
+          },
+          {
+            "term": "and",
+            "tf": 1,
+            "weight": 0.038462
+          },
+          {
+            "term": "formatting",
+            "tf": 1,
+            "weight": 0.038462
+          },
+          {
+            "term": "vlm",
+            "tf": 1,
+            "weight": 0.038462
+          },
+          {
+            "term": "prompts",
+            "tf": 1,
+            "weight": 0.038462
+          },
+          {
+            "term": "are",
+            "tf": 1,
+            "weight": 0.038462
+          },
+          {
+            "term": "constructed",
+            "tf": 1,
+            "weight": 0.038462
+          },
+          {
+            "term": "through",
+            "tf": 1,
+            "weight": 0.038462
+          },
+          {
+            "term": "the",
+            "tf": 1,
+            "weight": 0.038462
+          },
+          {
+            "term": "build",
+            "tf": 1,
+            "weight": 0.038462
+          },
+          {
+            "term": "method",
+            "tf": 1,
+            "weight": 0.038462
+          },
+          {
+            "term": "which",
+            "tf": 1,
+            "weight": 0.038462
+          },
+          {
+            "term": "can",
+            "tf": 1,
+            "weight": 0.038462
+          },
+          {
+            "term": "customized",
+            "tf": 1,
+            "weight": 0.038462
+          },
+          {
+            "term": "include",
+            "tf": 1,
+            "weight": 0.038462
+          },
+          {
+            "term": "page",
+            "tf": 1,
+            "weight": 0.038462
+          },
+          {
+            "term": "specific",
+            "tf": 1,
+            "weight": 0.038462
+          },
+          {
+            "term": "context",
+            "tf": 1,
+            "weight": 0.038462
+          },
+          {
+            "term": "structured",
+            "tf": 1,
+            "weight": 0.038462
+          }
+        ],
+        "unique_terms": 24,
+        "total_terms": 26
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Prompt Construction and Formatting",
+        "and",
+        "are",
+        "constructed",
+        "construction",
+        "formatting",
+        "prompt",
+        "prompts",
+        "the",
+        "through",
+        "vlm"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.7999999999999998,
+      "retrieval_quality": 0.57,
+      "overall": 0.69
+    }
+  },
+  {
+    "text": "### Prompt Styles  | Style    | Usage                            | Example                         | | -------- | -------------------------------- | ------------------------------- | | **CHAT** | Uses model's chat template       | \\`<                             | | **RAW**  | Direct prompt without formatting | `Convert this page to docling.` | | **NONE** | No text prompt (image-only)      | `\"\"`                            |",
+    "metadata": {
+      "chunk_id": "cdf58fad0588-0018",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling\\_docling-project_docling_4.3-vision-language-models.md",
+      "filename": "_docling-project_docling_4.3-vision-language-models.md",
+      "file_extension": ".md",
+      "chunk_index": 18,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Prompt Styles"
+      ],
+      "heading_text": "Prompt Styles",
+      "token_count": 77,
+      "char_count": 428,
+      "start_char": 18286,
+      "end_char": 18714,
+      "semantic_score": 0.7999999999999999,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.666470588235294,
+      "chunking_strategy": "hierarchical_balanced_structural",
+      "content_type": "table_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T09:13:45.296516",
+      "document_id": "cdf58fad0588",
+      "document_name": "_docling-project_docling_4.3-vision-language-models",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling\\_docling-project_docling_4.3-vision-language-models.md",
+      "source_filename": "_docling-project_docling_4.3-vision-language-models.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling",
+      "relative_path": "Docs\\Docling\\_docling-project_docling_4.3-vision-language-models.md",
+      "hierarchy_path": "Prompt Styles",
+      "chunk_hash": "63c8bd957d350097",
+      "content_digest": "63c8bd957d350097",
+      "chunk_length": 428,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "prompt",
+          "chat",
+          "styles",
+          "style",
+          "usage",
+          "example",
+          "uses",
+          "model",
+          "template",
+          "raw",
+          "direct",
+          "without",
+          "formatting",
+          "convert",
+          "this",
+          "page",
+          "docling",
+          "none",
+          "text",
+          "image"
+        ],
+        "term_weights": [
+          {
+            "term": "prompt",
+            "tf": 3,
+            "weight": 0.125
+          },
+          {
+            "term": "chat",
+            "tf": 2,
+            "weight": 0.083333
+          },
+          {
+            "term": "styles",
+            "tf": 1,
+            "weight": 0.041667
+          },
+          {
+            "term": "style",
+            "tf": 1,
+            "weight": 0.041667
+          },
+          {
+            "term": "usage",
+            "tf": 1,
+            "weight": 0.041667
+          },
+          {
+            "term": "example",
+            "tf": 1,
+            "weight": 0.041667
+          },
+          {
+            "term": "uses",
+            "tf": 1,
+            "weight": 0.041667
+          },
+          {
+            "term": "model",
+            "tf": 1,
+            "weight": 0.041667
+          },
+          {
+            "term": "template",
+            "tf": 1,
+            "weight": 0.041667
+          },
+          {
+            "term": "raw",
+            "tf": 1,
+            "weight": 0.041667
+          },
+          {
+            "term": "direct",
+            "tf": 1,
+            "weight": 0.041667
+          },
+          {
+            "term": "without",
+            "tf": 1,
+            "weight": 0.041667
+          },
+          {
+            "term": "formatting",
+            "tf": 1,
+            "weight": 0.041667
+          },
+          {
+            "term": "convert",
+            "tf": 1,
+            "weight": 0.041667
+          },
+          {
+            "term": "this",
+            "tf": 1,
+            "weight": 0.041667
+          },
+          {
+            "term": "page",
+            "tf": 1,
+            "weight": 0.041667
+          },
+          {
+            "term": "docling",
+            "tf": 1,
+            "weight": 0.041667
+          },
+          {
+            "term": "none",
+            "tf": 1,
+            "weight": 0.041667
+          },
+          {
+            "term": "text",
+            "tf": 1,
+            "weight": 0.041667
+          },
+          {
+            "term": "image",
+            "tf": 1,
+            "weight": 0.041667
+          }
+        ],
+        "unique_terms": 21,
+        "total_terms": 24
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Prompt Styles",
+        "chat",
+        "example",
+        "model",
+        "prompt",
+        "raw",
+        "style",
+        "styles",
+        "template",
+        "usage",
+        "uses"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.7999999999999999,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.666470588235294,
+      "overall": 0.7888235294117646
+    }
+  },
+  {
+    "text": "### Dynamic Prompt Construction\n\nThe `build_prompt()` method can access page metadata for context-aware prompts:\n\n```\n```\n\nSources: [docling/models/base\\_model.py85-126](https://github.com/docling-project/docling/blob/f7244a43/docling/models/base_model.py#L85-L126) [docling/datamodel/pipeline\\_options\\_vlm\\_model.py20-24](https://github.com/docling-project/docling/blob/f7244a43/docling/datamodel/pipeline_options_vlm_model.py#L20-L24)",
+    "metadata": {
+      "chunk_id": "cdf58fad0588-0019",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling\\_docling-project_docling_4.3-vision-language-models.md",
+      "filename": "_docling-project_docling_4.3-vision-language-models.md",
+      "file_extension": ".md",
+      "chunk_index": 19,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Dynamic Prompt Construction"
+      ],
+      "heading_text": "Dynamic Prompt Construction",
+      "token_count": 116,
+      "char_count": 437,
+      "start_char": 18716,
+      "end_char": 19153,
+      "semantic_score": 0.7,
+      "structural_score": 0.7,
+      "retrieval_quality": 0.5742105263157895,
+      "chunking_strategy": "hierarchical_balanced_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T09:13:45.296974",
+      "document_id": "cdf58fad0588",
+      "document_name": "_docling-project_docling_4.3-vision-language-models",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling\\_docling-project_docling_4.3-vision-language-models.md",
+      "source_filename": "_docling-project_docling_4.3-vision-language-models.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling",
+      "relative_path": "Docs\\Docling\\_docling-project_docling_4.3-vision-language-models.md",
+      "hierarchy_path": "Dynamic Prompt Construction",
+      "chunk_hash": "aec0a8953f8ab3ce",
+      "content_digest": "aec0a8953f8ab3ce",
+      "chunk_length": 437,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "docling",
+          "model",
+          "prompt",
+          "models",
+          "base",
+          "https",
+          "github",
+          "com",
+          "project",
+          "blob",
+          "f7244a43",
+          "datamodel",
+          "pipeline",
+          "options",
+          "vlm",
+          "dynamic",
+          "construction",
+          "the",
+          "build",
+          "method"
+        ],
+        "term_weights": [
+          {
+            "term": "docling",
+            "tf": 8,
+            "weight": 0.135593
+          },
+          {
+            "term": "model",
+            "tf": 4,
+            "weight": 0.067797
+          },
+          {
+            "term": "prompt",
+            "tf": 2,
+            "weight": 0.033898
+          },
+          {
+            "term": "models",
+            "tf": 2,
+            "weight": 0.033898
+          },
+          {
+            "term": "base",
+            "tf": 2,
+            "weight": 0.033898
+          },
+          {
+            "term": "https",
+            "tf": 2,
+            "weight": 0.033898
+          },
+          {
+            "term": "github",
+            "tf": 2,
+            "weight": 0.033898
+          },
+          {
+            "term": "com",
+            "tf": 2,
+            "weight": 0.033898
+          },
+          {
+            "term": "project",
+            "tf": 2,
+            "weight": 0.033898
+          },
+          {
+            "term": "blob",
+            "tf": 2,
+            "weight": 0.033898
+          },
+          {
+            "term": "f7244a43",
+            "tf": 2,
+            "weight": 0.033898
+          },
+          {
+            "term": "datamodel",
+            "tf": 2,
+            "weight": 0.033898
+          },
+          {
+            "term": "pipeline",
+            "tf": 2,
+            "weight": 0.033898
+          },
+          {
+            "term": "options",
+            "tf": 2,
+            "weight": 0.033898
+          },
+          {
+            "term": "vlm",
+            "tf": 2,
+            "weight": 0.033898
+          },
+          {
+            "term": "dynamic",
+            "tf": 1,
+            "weight": 0.016949
+          },
+          {
+            "term": "construction",
+            "tf": 1,
+            "weight": 0.016949
+          },
+          {
+            "term": "the",
+            "tf": 1,
+            "weight": 0.016949
+          },
+          {
+            "term": "build",
+            "tf": 1,
+            "weight": 0.016949
+          },
+          {
+            "term": "method",
+            "tf": 1,
+            "weight": 0.016949
+          }
+        ],
+        "unique_terms": 36,
+        "total_terms": 59
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Dynamic Prompt Construction",
+        "base",
+        "blob",
+        "com",
+        "docling",
+        "github",
+        "https",
+        "model",
+        "models",
+        "project",
+        "prompt"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.7,
+      "retrieval_quality": 0.5742105263157895,
+      "overall": 0.6580701754385965
+    }
+  },
+  {
+    "text": "## Response Formats and Processing\n\nVLM models support multiple output formats optimized for different document understanding tasks and downstream processing requirements.",
+    "metadata": {
+      "chunk_id": "cdf58fad0588-0020",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling\\_docling-project_docling_4.3-vision-language-models.md",
+      "filename": "_docling-project_docling_4.3-vision-language-models.md",
+      "file_extension": ".md",
+      "chunk_index": 20,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Response Formats and Processing"
+      ],
+      "heading_text": "Response Formats and Processing",
+      "token_count": 24,
+      "char_count": 171,
+      "start_char": 19155,
+      "end_char": 19326,
+      "semantic_score": 0.8,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5471428571428572,
+      "chunking_strategy": "hierarchical_balanced_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T09:13:45.297151",
+      "document_id": "cdf58fad0588",
+      "document_name": "_docling-project_docling_4.3-vision-language-models",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling\\_docling-project_docling_4.3-vision-language-models.md",
+      "source_filename": "_docling-project_docling_4.3-vision-language-models.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling",
+      "relative_path": "Docs\\Docling\\_docling-project_docling_4.3-vision-language-models.md",
+      "hierarchy_path": "Response Formats and Processing",
+      "chunk_hash": "415281323fa7ca37",
+      "content_digest": "415281323fa7ca37",
+      "chunk_length": 171,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "formats",
+          "and",
+          "processing",
+          "response",
+          "vlm",
+          "models",
+          "support",
+          "multiple",
+          "output",
+          "optimized",
+          "for",
+          "different",
+          "document",
+          "understanding",
+          "tasks",
+          "downstream",
+          "requirements"
+        ],
+        "term_weights": [
+          {
+            "term": "formats",
+            "tf": 2,
+            "weight": 0.1
+          },
+          {
+            "term": "and",
+            "tf": 2,
+            "weight": 0.1
+          },
+          {
+            "term": "processing",
+            "tf": 2,
+            "weight": 0.1
+          },
+          {
+            "term": "response",
+            "tf": 1,
+            "weight": 0.05
+          },
+          {
+            "term": "vlm",
+            "tf": 1,
+            "weight": 0.05
+          },
+          {
+            "term": "models",
+            "tf": 1,
+            "weight": 0.05
+          },
+          {
+            "term": "support",
+            "tf": 1,
+            "weight": 0.05
+          },
+          {
+            "term": "multiple",
+            "tf": 1,
+            "weight": 0.05
+          },
+          {
+            "term": "output",
+            "tf": 1,
+            "weight": 0.05
+          },
+          {
+            "term": "optimized",
+            "tf": 1,
+            "weight": 0.05
+          },
+          {
+            "term": "for",
+            "tf": 1,
+            "weight": 0.05
+          },
+          {
+            "term": "different",
+            "tf": 1,
+            "weight": 0.05
+          },
+          {
+            "term": "document",
+            "tf": 1,
+            "weight": 0.05
+          },
+          {
+            "term": "understanding",
+            "tf": 1,
+            "weight": 0.05
+          },
+          {
+            "term": "tasks",
+            "tf": 1,
+            "weight": 0.05
+          },
+          {
+            "term": "downstream",
+            "tf": 1,
+            "weight": 0.05
+          },
+          {
+            "term": "requirements",
+            "tf": 1,
+            "weight": 0.05
+          }
+        ],
+        "unique_terms": 17,
+        "total_terms": 20
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Response Formats and Processing",
+        "and",
+        "formats",
+        "models",
+        "multiple",
+        "optimized",
+        "output",
+        "processing",
+        "response",
+        "support",
+        "vlm"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.8,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5471428571428572,
+      "overall": 0.7490476190476191
+    }
+  },
+  {
+    "text": "### Custom Response Processing\n\nVLM options support custom response processing through the `decode_response()` method, enabling specialized handling for specific model outputs:\n\n```\n```\n\nThis pattern allows integration with models that return structured responses requiring post-processing before integration into the document representation.\n\nSources: [docling/datamodel/pipeline\\_options\\_vlm\\_model.py18-22](https://github.com/docling-project/docling/blob/f7244a43/docling/datamodel/pipeline_options_vlm_model.py#L18-L22) [docs/examples/vlm\\_pipeline\\_api\\_model.py78-85](https://github.com/docling-project/docling/blob/f7244a43/docs/examples/vlm_pipeline_api_model.py#L78-L85)",
+    "metadata": {
+      "chunk_id": "cdf58fad0588-0022",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling\\_docling-project_docling_4.3-vision-language-models.md",
+      "filename": "_docling-project_docling_4.3-vision-language-models.md",
+      "file_extension": ".md",
+      "chunk_index": 22,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Custom Response Processing"
+      ],
+      "heading_text": "Custom Response Processing",
+      "token_count": 150,
+      "char_count": 680,
+      "start_char": 19364,
+      "end_char": 20044,
+      "semantic_score": 0.7,
+      "structural_score": 0.7,
+      "retrieval_quality": 0.7490909090909091,
+      "chunking_strategy": "hierarchical_balanced_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T09:13:45.297715",
+      "document_id": "cdf58fad0588",
+      "document_name": "_docling-project_docling_4.3-vision-language-models",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling\\_docling-project_docling_4.3-vision-language-models.md",
+      "source_filename": "_docling-project_docling_4.3-vision-language-models.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling",
+      "relative_path": "Docs\\Docling\\_docling-project_docling_4.3-vision-language-models.md",
+      "hierarchy_path": "Custom Response Processing",
+      "chunk_hash": "d11b89cd0965fe22",
+      "content_digest": "d11b89cd0965fe22",
+      "chunk_length": 680,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "docling",
+          "vlm",
+          "model",
+          "pipeline",
+          "response",
+          "processing",
+          "options",
+          "custom",
+          "the",
+          "integration",
+          "datamodel",
+          "https",
+          "github",
+          "com",
+          "project",
+          "blob",
+          "f7244a43",
+          "docs",
+          "examples",
+          "api"
+        ],
+        "term_weights": [
+          {
+            "term": "docling",
+            "tf": 6,
+            "weight": 0.068966
+          },
+          {
+            "term": "vlm",
+            "tf": 5,
+            "weight": 0.057471
+          },
+          {
+            "term": "model",
+            "tf": 5,
+            "weight": 0.057471
+          },
+          {
+            "term": "pipeline",
+            "tf": 4,
+            "weight": 0.045977
+          },
+          {
+            "term": "response",
+            "tf": 3,
+            "weight": 0.034483
+          },
+          {
+            "term": "processing",
+            "tf": 3,
+            "weight": 0.034483
+          },
+          {
+            "term": "options",
+            "tf": 3,
+            "weight": 0.034483
+          },
+          {
+            "term": "custom",
+            "tf": 2,
+            "weight": 0.022989
+          },
+          {
+            "term": "the",
+            "tf": 2,
+            "weight": 0.022989
+          },
+          {
+            "term": "integration",
+            "tf": 2,
+            "weight": 0.022989
+          },
+          {
+            "term": "datamodel",
+            "tf": 2,
+            "weight": 0.022989
+          },
+          {
+            "term": "https",
+            "tf": 2,
+            "weight": 0.022989
+          },
+          {
+            "term": "github",
+            "tf": 2,
+            "weight": 0.022989
+          },
+          {
+            "term": "com",
+            "tf": 2,
+            "weight": 0.022989
+          },
+          {
+            "term": "project",
+            "tf": 2,
+            "weight": 0.022989
+          },
+          {
+            "term": "blob",
+            "tf": 2,
+            "weight": 0.022989
+          },
+          {
+            "term": "f7244a43",
+            "tf": 2,
+            "weight": 0.022989
+          },
+          {
+            "term": "docs",
+            "tf": 2,
+            "weight": 0.022989
+          },
+          {
+            "term": "examples",
+            "tf": 2,
+            "weight": 0.022989
+          },
+          {
+            "term": "api",
+            "tf": 2,
+            "weight": 0.022989
+          }
+        ],
+        "unique_terms": 52,
+        "total_terms": 87
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Custom Response Processing",
+        "custom",
+        "docling",
+        "integration",
+        "model",
+        "options",
+        "pipeline",
+        "processing",
+        "response",
+        "the",
+        "vlm"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.7,
+      "retrieval_quality": 0.7490909090909091,
+      "overall": 0.7163636363636363
+    }
+  },
+  {
+    "text": "## VLM Integration Examples\n\nThe codebase includes comprehensive examples demonstrating VLM integration patterns for different deployment scenarios and model types.",
+    "metadata": {
+      "chunk_id": "cdf58fad0588-0023",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling\\_docling-project_docling_4.3-vision-language-models.md",
+      "filename": "_docling-project_docling_4.3-vision-language-models.md",
+      "file_extension": ".md",
+      "chunk_index": 23,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "VLM Integration Examples"
+      ],
+      "heading_text": "VLM Integration Examples",
+      "token_count": 25,
+      "char_count": 164,
+      "start_char": 20046,
+      "end_char": 20210,
+      "semantic_score": 0.8,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.745,
+      "chunking_strategy": "hierarchical_balanced_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T09:13:45.297892",
+      "document_id": "cdf58fad0588",
+      "document_name": "_docling-project_docling_4.3-vision-language-models",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling\\_docling-project_docling_4.3-vision-language-models.md",
+      "source_filename": "_docling-project_docling_4.3-vision-language-models.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling",
+      "relative_path": "Docs\\Docling\\_docling-project_docling_4.3-vision-language-models.md",
+      "hierarchy_path": "VLM Integration Examples",
+      "chunk_hash": "b6d3f5dcfdc6470c",
+      "content_digest": "b6d3f5dcfdc6470c",
+      "chunk_length": 164,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "vlm",
+          "integration",
+          "examples",
+          "the",
+          "codebase",
+          "includes",
+          "comprehensive",
+          "demonstrating",
+          "patterns",
+          "for",
+          "different",
+          "deployment",
+          "scenarios",
+          "and",
+          "model",
+          "types"
+        ],
+        "term_weights": [
+          {
+            "term": "vlm",
+            "tf": 2,
+            "weight": 0.105263
+          },
+          {
+            "term": "integration",
+            "tf": 2,
+            "weight": 0.105263
+          },
+          {
+            "term": "examples",
+            "tf": 2,
+            "weight": 0.105263
+          },
+          {
+            "term": "the",
+            "tf": 1,
+            "weight": 0.052632
+          },
+          {
+            "term": "codebase",
+            "tf": 1,
+            "weight": 0.052632
+          },
+          {
+            "term": "includes",
+            "tf": 1,
+            "weight": 0.052632
+          },
+          {
+            "term": "comprehensive",
+            "tf": 1,
+            "weight": 0.052632
+          },
+          {
+            "term": "demonstrating",
+            "tf": 1,
+            "weight": 0.052632
+          },
+          {
+            "term": "patterns",
+            "tf": 1,
+            "weight": 0.052632
+          },
+          {
+            "term": "for",
+            "tf": 1,
+            "weight": 0.052632
+          },
+          {
+            "term": "different",
+            "tf": 1,
+            "weight": 0.052632
+          },
+          {
+            "term": "deployment",
+            "tf": 1,
+            "weight": 0.052632
+          },
+          {
+            "term": "scenarios",
+            "tf": 1,
+            "weight": 0.052632
+          },
+          {
+            "term": "and",
+            "tf": 1,
+            "weight": 0.052632
+          },
+          {
+            "term": "model",
+            "tf": 1,
+            "weight": 0.052632
+          },
+          {
+            "term": "types",
+            "tf": 1,
+            "weight": 0.052632
+          }
+        ],
+        "unique_terms": 16,
+        "total_terms": 19
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "VLM Integration Examples",
+        "codebase",
+        "comprehensive",
+        "demonstrating",
+        "examples",
+        "for",
+        "includes",
+        "integration",
+        "patterns",
+        "the",
+        "vlm"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.8,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.745,
+      "overall": 0.815
+    }
+  },
+  {
+    "text": "### Multi-Model Comparison Framework\n\nThe `compare_vlm_models.py` example provides a systematic approach for evaluating different VLM models and frameworks:\n\n```\n```\n\nThis framework enables systematic evaluation of model performance, output quality, and resource utilization across different VLM implementations.\n\nSources: [docs/examples/compare\\_vlm\\_models.py33-101](https://github.com/docling-project/docling/blob/f7244a43/docs/examples/compare_vlm_models.py#L33-L101) [docs/examples/compare\\_vlm\\_models.py146-198](https://github.com/docling-project/docling/blob/f7244a43/docs/examples/compare_vlm_models.py#L146-L198)\n\nDismiss\n\nRefresh this wiki\n\nThis wiki was recently refreshed. Please wait 4 days to refresh again.",
+    "metadata": {
+      "chunk_id": "cdf58fad0588-0024",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling\\_docling-project_docling_4.3-vision-language-models.md",
+      "filename": "_docling-project_docling_4.3-vision-language-models.md",
+      "file_extension": ".md",
+      "chunk_index": 24,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Multi-Model Comparison Framework"
+      ],
+      "heading_text": "Multi-Model Comparison Framework",
+      "token_count": 165,
+      "char_count": 722,
+      "start_char": 20212,
+      "end_char": 20934,
+      "semantic_score": 0.7,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.7364285714285713,
+      "chunking_strategy": "hierarchical_balanced_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T09:13:45.298383",
+      "document_id": "cdf58fad0588",
+      "document_name": "_docling-project_docling_4.3-vision-language-models",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling\\_docling-project_docling_4.3-vision-language-models.md",
+      "source_filename": "_docling-project_docling_4.3-vision-language-models.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling",
+      "relative_path": "Docs\\Docling\\_docling-project_docling_4.3-vision-language-models.md",
+      "hierarchy_path": "Multi-Model Comparison Framework",
+      "chunk_hash": "1fff9f10e68b5409",
+      "content_digest": "1fff9f10e68b5409",
+      "chunk_length": 722,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "vlm",
+          "models",
+          "compare",
+          "docs",
+          "examples",
+          "docling",
+          "this",
+          "model",
+          "framework",
+          "systematic",
+          "different",
+          "and",
+          "https",
+          "github",
+          "com",
+          "project",
+          "blob",
+          "f7244a43",
+          "refresh",
+          "wiki"
+        ],
+        "term_weights": [
+          {
+            "term": "vlm",
+            "tf": 7,
+            "weight": 0.074468
+          },
+          {
+            "term": "models",
+            "tf": 6,
+            "weight": 0.06383
+          },
+          {
+            "term": "compare",
+            "tf": 5,
+            "weight": 0.053191
+          },
+          {
+            "term": "docs",
+            "tf": 4,
+            "weight": 0.042553
+          },
+          {
+            "term": "examples",
+            "tf": 4,
+            "weight": 0.042553
+          },
+          {
+            "term": "docling",
+            "tf": 4,
+            "weight": 0.042553
+          },
+          {
+            "term": "this",
+            "tf": 3,
+            "weight": 0.031915
+          },
+          {
+            "term": "model",
+            "tf": 2,
+            "weight": 0.021277
+          },
+          {
+            "term": "framework",
+            "tf": 2,
+            "weight": 0.021277
+          },
+          {
+            "term": "systematic",
+            "tf": 2,
+            "weight": 0.021277
+          },
+          {
+            "term": "different",
+            "tf": 2,
+            "weight": 0.021277
+          },
+          {
+            "term": "and",
+            "tf": 2,
+            "weight": 0.021277
+          },
+          {
+            "term": "https",
+            "tf": 2,
+            "weight": 0.021277
+          },
+          {
+            "term": "github",
+            "tf": 2,
+            "weight": 0.021277
+          },
+          {
+            "term": "com",
+            "tf": 2,
+            "weight": 0.021277
+          },
+          {
+            "term": "project",
+            "tf": 2,
+            "weight": 0.021277
+          },
+          {
+            "term": "blob",
+            "tf": 2,
+            "weight": 0.021277
+          },
+          {
+            "term": "f7244a43",
+            "tf": 2,
+            "weight": 0.021277
+          },
+          {
+            "term": "refresh",
+            "tf": 2,
+            "weight": 0.021277
+          },
+          {
+            "term": "wiki",
+            "tf": 2,
+            "weight": 0.021277
+          }
+        ],
+        "unique_terms": 55,
+        "total_terms": 94
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Multi-Model Comparison Framework",
+        "compare",
+        "docling",
+        "docs",
+        "examples",
+        "framework",
+        "model",
+        "models",
+        "systematic",
+        "this",
+        "vlm"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.7364285714285713,
+      "overall": 0.7788095238095237
+    }
+  },
+  {
+    "text": "### On this page  - [Vision Language Models](#vision-language-models.md) - [VLM Integration Architecture](#vlm-integration-architecture.md) - [Available VLM Model Variants](#available-vlm-model-variants.md) - [GraniteDocling Models](#granitedocling-models.md) - [SmolDocling Models](#smoldocling-models.md) - [General-Purpose VLM Models](#general-purpose-vlm-models.md) - [Custom Model Configuration](#custom-model-configuration.md) - [Response Formats](#response-formats.md) - [DOCTAGS Format](#doctags-format.md) - [Markdown Format](#markdown-format.md) - [HTML Format](#html-format.md) - [Custom Response Processing](#custom-response-processing.md) - [VLM Configuration Options](#vlm-configuration-options.md) - [Core Configuration Parameters](#core-configuration-parameters.md) - [Inline Model Parameters](#inline-model-parameters.md) - [API Model Parameters](#api-model-parameters.md) - [Generation Control](#generation-control.md) - [Prompt Construction and Formatting](#prompt-construction-and-formatting.md) - [Prompt Styles](#prompt-styles.md) - [Dynamic Prompt Construction](#dynamic-prompt-construction.md) - [Response Formats and Processing](#response-formats-and-processing.md) - [Response Format Types](#response-format-types.md) - [Custom Response Processing](#custom-response-processing-1.md) - [VLM Integration Examples](#vlm-integration-examples.md) - [Multi-Model Comparison Framework](#multi-model-comparison-framework.md)",
+    "metadata": {
+      "chunk_id": "cdf58fad0588-0025",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling\\_docling-project_docling_4.3-vision-language-models.md",
+      "filename": "_docling-project_docling_4.3-vision-language-models.md",
+      "file_extension": ".md",
+      "chunk_index": 25,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "On this page"
+      ],
+      "heading_text": "On this page",
+      "token_count": 354,
+      "char_count": 1442,
+      "start_char": 20936,
+      "end_char": 22378,
+      "semantic_score": 0.6,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.6880181818181818,
+      "chunking_strategy": "hierarchical_balanced_structural",
+      "content_type": "list_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T09:13:45.299348",
+      "document_id": "cdf58fad0588",
+      "document_name": "_docling-project_docling_4.3-vision-language-models",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling\\_docling-project_docling_4.3-vision-language-models.md",
+      "source_filename": "_docling-project_docling_4.3-vision-language-models.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\docling",
+      "relative_path": "Docs\\Docling\\_docling-project_docling_4.3-vision-language-models.md",
+      "hierarchy_path": "On this page",
+      "chunk_hash": "b57161ba6581d740",
+      "content_digest": "b57161ba6581d740",
+      "chunk_length": 1442,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "vlm",
+          "model",
+          "response",
+          "models",
+          "format",
+          "custom",
+          "configuration",
+          "processing",
+          "parameters",
+          "prompt",
+          "integration",
+          "formats",
+          "construction",
+          "and",
+          "vision",
+          "language",
+          "architecture",
+          "available",
+          "variants",
+          "granitedocling"
+        ],
+        "term_weights": [
+          {
+            "term": "vlm",
+            "tf": 10,
+            "weight": 0.068493
+          },
+          {
+            "term": "model",
+            "tf": 10,
+            "weight": 0.068493
+          },
+          {
+            "term": "response",
+            "tf": 10,
+            "weight": 0.068493
+          },
+          {
+            "term": "models",
+            "tf": 8,
+            "weight": 0.054795
+          },
+          {
+            "term": "format",
+            "tf": 8,
+            "weight": 0.054795
+          },
+          {
+            "term": "custom",
+            "tf": 6,
+            "weight": 0.041096
+          },
+          {
+            "term": "configuration",
+            "tf": 6,
+            "weight": 0.041096
+          },
+          {
+            "term": "processing",
+            "tf": 6,
+            "weight": 0.041096
+          },
+          {
+            "term": "parameters",
+            "tf": 6,
+            "weight": 0.041096
+          },
+          {
+            "term": "prompt",
+            "tf": 6,
+            "weight": 0.041096
+          },
+          {
+            "term": "integration",
+            "tf": 4,
+            "weight": 0.027397
+          },
+          {
+            "term": "formats",
+            "tf": 4,
+            "weight": 0.027397
+          },
+          {
+            "term": "construction",
+            "tf": 4,
+            "weight": 0.027397
+          },
+          {
+            "term": "and",
+            "tf": 4,
+            "weight": 0.027397
+          },
+          {
+            "term": "vision",
+            "tf": 2,
+            "weight": 0.013699
+          },
+          {
+            "term": "language",
+            "tf": 2,
+            "weight": 0.013699
+          },
+          {
+            "term": "architecture",
+            "tf": 2,
+            "weight": 0.013699
+          },
+          {
+            "term": "available",
+            "tf": 2,
+            "weight": 0.013699
+          },
+          {
+            "term": "variants",
+            "tf": 2,
+            "weight": 0.013699
+          },
+          {
+            "term": "granitedocling",
+            "tf": 2,
+            "weight": 0.013699
+          }
+        ],
+        "unique_terms": 42,
+        "total_terms": 146
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "On this page",
+        "configuration",
+        "custom",
+        "format",
+        "model",
+        "models",
+        "parameters",
+        "processing",
+        "prompt",
+        "response",
+        "vlm"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.6,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.6880181818181818,
+      "overall": 0.729339393939394
+    }
+  }
+]

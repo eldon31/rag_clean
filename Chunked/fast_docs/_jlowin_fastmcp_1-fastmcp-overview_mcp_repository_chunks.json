@@ -1,0 +1,1603 @@
+[
+  {
+    "text": "# FastMCP Overview  Relevant source files  - [README.md](https://github.com/jlowin/fastmcp/blob/66221ed3/README.md) - [docs/docs.json](https://github.com/jlowin/fastmcp/blob/66221ed3/docs/docs.json) - [docs/getting-started/welcome.mdx](https://github.com/jlowin/fastmcp/blob/66221ed3/docs/getting-started/welcome.mdx) - [src/fastmcp/\\_\\_init\\_\\_.py](https://github.com/jlowin/fastmcp/blob/66221ed3/src/fastmcp/__init__.py) - [src/fastmcp/server/server.py](https://github.com/jlowin/fastmcp/blob/66221ed3/src/fastmcp/server/server.py) - [src/fastmcp/settings.py](https://github.com/jlowin/fastmcp/blob/66221ed3/src/fastmcp/settings.py) - [tests/server/test\\_import\\_server.py](https://github.com/jlowin/fastmcp/blob/66221ed3/tests/server/test_import_server.py) - [tests/server/test\\_mount.py](https://github.com/jlowin/fastmcp/blob/66221ed3/tests/server/test_mount.py) - [tests/server/test\\_server.py](https://github.com/jlowin/fastmcp/blob/66221ed3/tests/server/test_server.py)  This document provides a high-level introduction to the FastMCP framework architecture, covering its core purpose, major system components, and how they work together to enable production-ready Model Context Protocol (MCP) applications. For detailed server implementation patterns, see [FastMCP Server Core](jlowin/fastmcp/2-fastmcp-server-core.md). For client usage and transport mechanisms, see [FastMCP Client System](jlowin/fastmcp/3-fastmcp-client-system.md). For deployment and configuration specifics, see [Configuration Management](jlowin/fastmcp/7-configuration-management.md).",
+    "metadata": {
+      "chunk_id": "63b179486fdd-0000",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\jlowin_fastmcp\\_jlowin_fastmcp_1-fastmcp-overview.md",
+      "filename": "_jlowin_fastmcp_1-fastmcp-overview.md",
+      "file_extension": ".md",
+      "chunk_index": 0,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "FastMCP Overview"
+      ],
+      "heading_text": "FastMCP Overview",
+      "token_count": 425,
+      "char_count": 1565,
+      "start_char": 1726,
+      "end_char": 3291,
+      "semantic_score": 0.6,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5579878048780488,
+      "chunking_strategy": "hybrid_adaptive_structural",
+      "content_type": "list_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T09:13:49.238164",
+      "document_id": "63b179486fdd",
+      "document_name": "_jlowin_fastmcp_1-fastmcp-overview",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\jlowin_fastmcp\\_jlowin_fastmcp_1-fastmcp-overview.md",
+      "source_filename": "_jlowin_fastmcp_1-fastmcp-overview.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\jlowin_fastmcp",
+      "relative_path": "Docs\\FAST_DOCS\\jlowin_fastmcp\\_jlowin_fastmcp_1-fastmcp-overview.md",
+      "hierarchy_path": "FastMCP Overview",
+      "chunk_hash": "565661981f8f53bd",
+      "content_digest": "565661981f8f53bd",
+      "chunk_length": 1565,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "fastmcp",
+          "server",
+          "jlowin",
+          "https",
+          "github",
+          "com",
+          "blob",
+          "66221ed3",
+          "docs",
+          "src",
+          "tests",
+          "test",
+          "core",
+          "system",
+          "and",
+          "for",
+          "see",
+          "client",
+          "configuration",
+          "readme"
+        ],
+        "term_weights": [
+          {
+            "term": "fastmcp",
+            "tf": 24,
+            "weight": 0.118227
+          },
+          {
+            "term": "server",
+            "tf": 17,
+            "weight": 0.083744
+          },
+          {
+            "term": "jlowin",
+            "tf": 12,
+            "weight": 0.059113
+          },
+          {
+            "term": "https",
+            "tf": 9,
+            "weight": 0.044335
+          },
+          {
+            "term": "github",
+            "tf": 9,
+            "weight": 0.044335
+          },
+          {
+            "term": "com",
+            "tf": 9,
+            "weight": 0.044335
+          },
+          {
+            "term": "blob",
+            "tf": 9,
+            "weight": 0.044335
+          },
+          {
+            "term": "66221ed3",
+            "tf": 9,
+            "weight": 0.044335
+          },
+          {
+            "term": "docs",
+            "tf": 6,
+            "weight": 0.029557
+          },
+          {
+            "term": "src",
+            "tf": 6,
+            "weight": 0.029557
+          },
+          {
+            "term": "tests",
+            "tf": 6,
+            "weight": 0.029557
+          },
+          {
+            "term": "test",
+            "tf": 6,
+            "weight": 0.029557
+          },
+          {
+            "term": "core",
+            "tf": 3,
+            "weight": 0.014778
+          },
+          {
+            "term": "system",
+            "tf": 3,
+            "weight": 0.014778
+          },
+          {
+            "term": "and",
+            "tf": 3,
+            "weight": 0.014778
+          },
+          {
+            "term": "for",
+            "tf": 3,
+            "weight": 0.014778
+          },
+          {
+            "term": "see",
+            "tf": 3,
+            "weight": 0.014778
+          },
+          {
+            "term": "client",
+            "tf": 3,
+            "weight": 0.014778
+          },
+          {
+            "term": "configuration",
+            "tf": 3,
+            "weight": 0.014778
+          },
+          {
+            "term": "readme",
+            "tf": 2,
+            "weight": 0.009852
+          }
+        ],
+        "unique_terms": 68,
+        "total_terms": 203
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "66221ed3",
+        "FastMCP Overview",
+        "blob",
+        "com",
+        "docs",
+        "fastmcp",
+        "github",
+        "https",
+        "jlowin",
+        "server",
+        "src"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.6,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5579878048780488,
+      "overall": 0.6859959349593496
+    }
+  },
+  {
+    "text": "## What is FastMCP?\n\nFastMCP is a comprehensive Python framework for building production-ready MCP servers and clients. The Model Context Protocol (MCP) is a standardized way to connect LLMs to tools and data sources, and FastMCP provides the infrastructure to make these connections robust, secure, and scalable.\n\nAt its core, FastMCP wraps the low-level MCP protocol with a high-level, Pythonic interface. The framework handles protocol details, authentication, deployment, and advanced patterns like server composition and proxying.\n\nSources: [src/fastmcp/server/server.py1-84](https://github.com/jlowin/fastmcp/blob/66221ed3/src/fastmcp/server/server.py#L1-L84) [README.md37-54](https://github.com/jlowin/fastmcp/blob/66221ed3/README.md#L37-L54) [docs/getting-started/welcome.mdx21-57](https://github.com/jlowin/fastmcp/blob/66221ed3/docs/getting-started/welcome.mdx#L21-L57)",
+    "metadata": {
+      "chunk_id": "63b179486fdd-0001",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\jlowin_fastmcp\\_jlowin_fastmcp_1-fastmcp-overview.md",
+      "filename": "_jlowin_fastmcp_1-fastmcp-overview.md",
+      "file_extension": ".md",
+      "chunk_index": 1,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "What is FastMCP?"
+      ],
+      "heading_text": "What is FastMCP?",
+      "token_count": 225,
+      "char_count": 879,
+      "start_char": 3294,
+      "end_char": 4173,
+      "semantic_score": 0.7,
+      "structural_score": 0.7,
+      "retrieval_quality": 0.515,
+      "chunking_strategy": "hybrid_adaptive_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T09:13:49.239134",
+      "document_id": "63b179486fdd",
+      "document_name": "_jlowin_fastmcp_1-fastmcp-overview",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\jlowin_fastmcp\\_jlowin_fastmcp_1-fastmcp-overview.md",
+      "source_filename": "_jlowin_fastmcp_1-fastmcp-overview.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\jlowin_fastmcp",
+      "relative_path": "Docs\\FAST_DOCS\\jlowin_fastmcp\\_jlowin_fastmcp_1-fastmcp-overview.md",
+      "hierarchy_path": "What is FastMCP?",
+      "chunk_hash": "5fdbdebf8bed8878",
+      "content_digest": "5fdbdebf8bed8878",
+      "chunk_length": 879,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "fastmcp",
+          "and",
+          "server",
+          "the",
+          "mcp",
+          "protocol",
+          "https",
+          "github",
+          "com",
+          "jlowin",
+          "blob",
+          "66221ed3",
+          "framework",
+          "sources",
+          "level",
+          "src",
+          "readme",
+          "docs",
+          "getting",
+          "started"
+        ],
+        "term_weights": [
+          {
+            "term": "fastmcp",
+            "tf": 9,
+            "weight": 0.076923
+          },
+          {
+            "term": "and",
+            "tf": 6,
+            "weight": 0.051282
+          },
+          {
+            "term": "server",
+            "tf": 5,
+            "weight": 0.042735
+          },
+          {
+            "term": "the",
+            "tf": 4,
+            "weight": 0.034188
+          },
+          {
+            "term": "mcp",
+            "tf": 3,
+            "weight": 0.025641
+          },
+          {
+            "term": "protocol",
+            "tf": 3,
+            "weight": 0.025641
+          },
+          {
+            "term": "https",
+            "tf": 3,
+            "weight": 0.025641
+          },
+          {
+            "term": "github",
+            "tf": 3,
+            "weight": 0.025641
+          },
+          {
+            "term": "com",
+            "tf": 3,
+            "weight": 0.025641
+          },
+          {
+            "term": "jlowin",
+            "tf": 3,
+            "weight": 0.025641
+          },
+          {
+            "term": "blob",
+            "tf": 3,
+            "weight": 0.025641
+          },
+          {
+            "term": "66221ed3",
+            "tf": 3,
+            "weight": 0.025641
+          },
+          {
+            "term": "framework",
+            "tf": 2,
+            "weight": 0.017094
+          },
+          {
+            "term": "sources",
+            "tf": 2,
+            "weight": 0.017094
+          },
+          {
+            "term": "level",
+            "tf": 2,
+            "weight": 0.017094
+          },
+          {
+            "term": "src",
+            "tf": 2,
+            "weight": 0.017094
+          },
+          {
+            "term": "readme",
+            "tf": 2,
+            "weight": 0.017094
+          },
+          {
+            "term": "docs",
+            "tf": 2,
+            "weight": 0.017094
+          },
+          {
+            "term": "getting",
+            "tf": 2,
+            "weight": 0.017094
+          },
+          {
+            "term": "started",
+            "tf": 2,
+            "weight": 0.017094
+          }
+        ],
+        "unique_terms": 72,
+        "total_terms": 117
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "What is FastMCP?",
+        "and",
+        "com",
+        "fastmcp",
+        "github",
+        "https",
+        "jlowin",
+        "mcp",
+        "protocol",
+        "server",
+        "the"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.7,
+      "retrieval_quality": 0.515,
+      "overall": 0.6383333333333333
+    }
+  },
+  {
+    "text": "## Core Architecture Overview\n\nFastMCP follows a layered architecture with clear separation between the high-level developer interface, protocol implementation, and transport layers.",
+    "metadata": {
+      "chunk_id": "63b179486fdd-0002",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\jlowin_fastmcp\\_jlowin_fastmcp_1-fastmcp-overview.md",
+      "filename": "_jlowin_fastmcp_1-fastmcp-overview.md",
+      "file_extension": ".md",
+      "chunk_index": 2,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Core Architecture Overview"
+      ],
+      "heading_text": "Core Architecture Overview",
+      "token_count": 29,
+      "char_count": 182,
+      "start_char": 4175,
+      "end_char": 4357,
+      "semantic_score": 0.8,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5763636363636364,
+      "chunking_strategy": "hybrid_adaptive_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T09:13:49.239322",
+      "document_id": "63b179486fdd",
+      "document_name": "_jlowin_fastmcp_1-fastmcp-overview",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\jlowin_fastmcp\\_jlowin_fastmcp_1-fastmcp-overview.md",
+      "source_filename": "_jlowin_fastmcp_1-fastmcp-overview.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\jlowin_fastmcp",
+      "relative_path": "Docs\\FAST_DOCS\\jlowin_fastmcp\\_jlowin_fastmcp_1-fastmcp-overview.md",
+      "hierarchy_path": "Core Architecture Overview",
+      "chunk_hash": "faecefcb0d899676",
+      "content_digest": "faecefcb0d899676",
+      "chunk_length": 182,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "architecture",
+          "core",
+          "overview",
+          "fastmcp",
+          "follows",
+          "layered",
+          "with",
+          "clear",
+          "separation",
+          "between",
+          "the",
+          "high",
+          "level",
+          "developer",
+          "interface",
+          "protocol",
+          "implementation",
+          "and",
+          "transport",
+          "layers"
+        ],
+        "term_weights": [
+          {
+            "term": "architecture",
+            "tf": 2,
+            "weight": 0.095238
+          },
+          {
+            "term": "core",
+            "tf": 1,
+            "weight": 0.047619
+          },
+          {
+            "term": "overview",
+            "tf": 1,
+            "weight": 0.047619
+          },
+          {
+            "term": "fastmcp",
+            "tf": 1,
+            "weight": 0.047619
+          },
+          {
+            "term": "follows",
+            "tf": 1,
+            "weight": 0.047619
+          },
+          {
+            "term": "layered",
+            "tf": 1,
+            "weight": 0.047619
+          },
+          {
+            "term": "with",
+            "tf": 1,
+            "weight": 0.047619
+          },
+          {
+            "term": "clear",
+            "tf": 1,
+            "weight": 0.047619
+          },
+          {
+            "term": "separation",
+            "tf": 1,
+            "weight": 0.047619
+          },
+          {
+            "term": "between",
+            "tf": 1,
+            "weight": 0.047619
+          },
+          {
+            "term": "the",
+            "tf": 1,
+            "weight": 0.047619
+          },
+          {
+            "term": "high",
+            "tf": 1,
+            "weight": 0.047619
+          },
+          {
+            "term": "level",
+            "tf": 1,
+            "weight": 0.047619
+          },
+          {
+            "term": "developer",
+            "tf": 1,
+            "weight": 0.047619
+          },
+          {
+            "term": "interface",
+            "tf": 1,
+            "weight": 0.047619
+          },
+          {
+            "term": "protocol",
+            "tf": 1,
+            "weight": 0.047619
+          },
+          {
+            "term": "implementation",
+            "tf": 1,
+            "weight": 0.047619
+          },
+          {
+            "term": "and",
+            "tf": 1,
+            "weight": 0.047619
+          },
+          {
+            "term": "transport",
+            "tf": 1,
+            "weight": 0.047619
+          },
+          {
+            "term": "layers",
+            "tf": 1,
+            "weight": 0.047619
+          }
+        ],
+        "unique_terms": 20,
+        "total_terms": 21
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Core Architecture Overview",
+        "architecture",
+        "between",
+        "clear",
+        "core",
+        "fastmcp",
+        "follows",
+        "layered",
+        "overview",
+        "separation",
+        "with"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.8,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5763636363636364,
+      "overall": 0.7587878787878788
+    }
+  },
+  {
+    "text": "### Proxy Servers\n\nThe `FastMCP.as_proxy()` method creates servers that act as intermediaries:\n\n```\n```\n\nSources: [tests/server/test\\_mount.py19-67](https://github.com/jlowin/fastmcp/blob/66221ed3/tests/server/test_mount.py#L19-L67) [tests/server/test\\_import\\_server.py10-34](https://github.com/jlowin/fastmcp/blob/66221ed3/tests/server/test_import_server.py#L10-L34) [src/fastmcp/server/proxy.py](https://github.com/jlowin/fastmcp/blob/66221ed3/src/fastmcp/server/proxy.py)",
+    "metadata": {
+      "chunk_id": "63b179486fdd-0013",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\jlowin_fastmcp\\_jlowin_fastmcp_1-fastmcp-overview.md",
+      "filename": "_jlowin_fastmcp_1-fastmcp-overview.md",
+      "file_extension": ".md",
+      "chunk_index": 13,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Proxy Servers"
+      ],
+      "heading_text": "Proxy Servers",
+      "token_count": 141,
+      "char_count": 475,
+      "start_char": 8673,
+      "end_char": 9148,
+      "semantic_score": 0.6,
+      "structural_score": 0.7,
+      "retrieval_quality": 0.5566666666666666,
+      "chunking_strategy": "hybrid_adaptive_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T09:13:49.243448",
+      "document_id": "63b179486fdd",
+      "document_name": "_jlowin_fastmcp_1-fastmcp-overview",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\jlowin_fastmcp\\_jlowin_fastmcp_1-fastmcp-overview.md",
+      "source_filename": "_jlowin_fastmcp_1-fastmcp-overview.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\jlowin_fastmcp",
+      "relative_path": "Docs\\FAST_DOCS\\jlowin_fastmcp\\_jlowin_fastmcp_1-fastmcp-overview.md",
+      "hierarchy_path": "Proxy Servers",
+      "chunk_hash": "98c56875c5af313b",
+      "content_digest": "98c56875c5af313b",
+      "chunk_length": 475,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "server",
+          "fastmcp",
+          "proxy",
+          "tests",
+          "test",
+          "https",
+          "github",
+          "com",
+          "jlowin",
+          "blob",
+          "66221ed3",
+          "servers",
+          "mount",
+          "import",
+          "src",
+          "the",
+          "method",
+          "creates",
+          "that",
+          "act"
+        ],
+        "term_weights": [
+          {
+            "term": "server",
+            "tf": 8,
+            "weight": 0.123077
+          },
+          {
+            "term": "fastmcp",
+            "tf": 6,
+            "weight": 0.092308
+          },
+          {
+            "term": "proxy",
+            "tf": 4,
+            "weight": 0.061538
+          },
+          {
+            "term": "tests",
+            "tf": 4,
+            "weight": 0.061538
+          },
+          {
+            "term": "test",
+            "tf": 4,
+            "weight": 0.061538
+          },
+          {
+            "term": "https",
+            "tf": 3,
+            "weight": 0.046154
+          },
+          {
+            "term": "github",
+            "tf": 3,
+            "weight": 0.046154
+          },
+          {
+            "term": "com",
+            "tf": 3,
+            "weight": 0.046154
+          },
+          {
+            "term": "jlowin",
+            "tf": 3,
+            "weight": 0.046154
+          },
+          {
+            "term": "blob",
+            "tf": 3,
+            "weight": 0.046154
+          },
+          {
+            "term": "66221ed3",
+            "tf": 3,
+            "weight": 0.046154
+          },
+          {
+            "term": "servers",
+            "tf": 2,
+            "weight": 0.030769
+          },
+          {
+            "term": "mount",
+            "tf": 2,
+            "weight": 0.030769
+          },
+          {
+            "term": "import",
+            "tf": 2,
+            "weight": 0.030769
+          },
+          {
+            "term": "src",
+            "tf": 2,
+            "weight": 0.030769
+          },
+          {
+            "term": "the",
+            "tf": 1,
+            "weight": 0.015385
+          },
+          {
+            "term": "method",
+            "tf": 1,
+            "weight": 0.015385
+          },
+          {
+            "term": "creates",
+            "tf": 1,
+            "weight": 0.015385
+          },
+          {
+            "term": "that",
+            "tf": 1,
+            "weight": 0.015385
+          },
+          {
+            "term": "act",
+            "tf": 1,
+            "weight": 0.015385
+          }
+        ],
+        "unique_terms": 28,
+        "total_terms": 65
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Proxy Servers",
+        "blob",
+        "com",
+        "fastmcp",
+        "github",
+        "https",
+        "jlowin",
+        "proxy",
+        "server",
+        "test",
+        "tests"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.6,
+      "structural": 0.7,
+      "retrieval_quality": 0.5566666666666666,
+      "overall": 0.6188888888888888
+    }
+  },
+  {
+    "text": "## Configuration and Settings\n\nFastMCP uses a hierarchical settings system with environment variable support:",
+    "metadata": {
+      "chunk_id": "63b179486fdd-0014",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\jlowin_fastmcp\\_jlowin_fastmcp_1-fastmcp-overview.md",
+      "filename": "_jlowin_fastmcp_1-fastmcp-overview.md",
+      "file_extension": ".md",
+      "chunk_index": 14,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Configuration and Settings"
+      ],
+      "heading_text": "Configuration and Settings",
+      "token_count": 18,
+      "char_count": 109,
+      "start_char": 9150,
+      "end_char": 9259,
+      "semantic_score": 0.8,
+      "structural_score": 0.7,
+      "retrieval_quality": 0.5685714285714286,
+      "chunking_strategy": "hybrid_adaptive_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T09:13:49.243593",
+      "document_id": "63b179486fdd",
+      "document_name": "_jlowin_fastmcp_1-fastmcp-overview",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\jlowin_fastmcp\\_jlowin_fastmcp_1-fastmcp-overview.md",
+      "source_filename": "_jlowin_fastmcp_1-fastmcp-overview.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\jlowin_fastmcp",
+      "relative_path": "Docs\\FAST_DOCS\\jlowin_fastmcp\\_jlowin_fastmcp_1-fastmcp-overview.md",
+      "hierarchy_path": "Configuration and Settings",
+      "chunk_hash": "7bb77aff0bcd980b",
+      "content_digest": "7bb77aff0bcd980b",
+      "chunk_length": 109,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "settings",
+          "configuration",
+          "and",
+          "fastmcp",
+          "uses",
+          "hierarchical",
+          "system",
+          "with",
+          "environment",
+          "variable",
+          "support"
+        ],
+        "term_weights": [
+          {
+            "term": "settings",
+            "tf": 2,
+            "weight": 0.166667
+          },
+          {
+            "term": "configuration",
+            "tf": 1,
+            "weight": 0.083333
+          },
+          {
+            "term": "and",
+            "tf": 1,
+            "weight": 0.083333
+          },
+          {
+            "term": "fastmcp",
+            "tf": 1,
+            "weight": 0.083333
+          },
+          {
+            "term": "uses",
+            "tf": 1,
+            "weight": 0.083333
+          },
+          {
+            "term": "hierarchical",
+            "tf": 1,
+            "weight": 0.083333
+          },
+          {
+            "term": "system",
+            "tf": 1,
+            "weight": 0.083333
+          },
+          {
+            "term": "with",
+            "tf": 1,
+            "weight": 0.083333
+          },
+          {
+            "term": "environment",
+            "tf": 1,
+            "weight": 0.083333
+          },
+          {
+            "term": "variable",
+            "tf": 1,
+            "weight": 0.083333
+          },
+          {
+            "term": "support",
+            "tf": 1,
+            "weight": 0.083333
+          }
+        ],
+        "unique_terms": 11,
+        "total_terms": 12
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Configuration and Settings",
+        "and",
+        "configuration",
+        "environment",
+        "fastmcp",
+        "hierarchical",
+        "settings",
+        "system",
+        "uses",
+        "variable",
+        "with"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.8,
+      "structural": 0.7,
+      "retrieval_quality": 0.5685714285714286,
+      "overall": 0.6895238095238095
+    }
+  },
+  {
+    "text": "### Settings Structure\n\nThe `Settings` class provides configuration via environment variables prefixed with `FASTMCP_`:\n\n- `FASTMCP_LOG_LEVEL`: Logging configuration\n- `FASTMCP_SERVER_AUTH`: Authentication provider class path\n- `FASTMCP_INCLUDE_TAGS`/`FASTMCP_EXCLUDE_TAGS`: Component filtering\n- `FASTMCP_HOST`/`FASTMCP_PORT`: HTTP server configuration",
+    "metadata": {
+      "chunk_id": "63b179486fdd-0015",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\jlowin_fastmcp\\_jlowin_fastmcp_1-fastmcp-overview.md",
+      "filename": "_jlowin_fastmcp_1-fastmcp-overview.md",
+      "file_extension": ".md",
+      "chunk_index": 15,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Settings Structure"
+      ],
+      "heading_text": "Settings Structure",
+      "token_count": 84,
+      "char_count": 353,
+      "start_char": 9261,
+      "end_char": 9614,
+      "semantic_score": 0.8,
+      "structural_score": 0.7999999999999998,
+      "retrieval_quality": 0.5354545454545454,
+      "chunking_strategy": "hybrid_adaptive_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T09:13:49.243809",
+      "document_id": "63b179486fdd",
+      "document_name": "_jlowin_fastmcp_1-fastmcp-overview",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\jlowin_fastmcp\\_jlowin_fastmcp_1-fastmcp-overview.md",
+      "source_filename": "_jlowin_fastmcp_1-fastmcp-overview.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\jlowin_fastmcp",
+      "relative_path": "Docs\\FAST_DOCS\\jlowin_fastmcp\\_jlowin_fastmcp_1-fastmcp-overview.md",
+      "hierarchy_path": "Settings Structure",
+      "chunk_hash": "6b792d2dd5d7c879",
+      "content_digest": "6b792d2dd5d7c879",
+      "chunk_length": 353,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "fastmcp",
+          "configuration",
+          "settings",
+          "class",
+          "server",
+          "tags",
+          "structure",
+          "the",
+          "provides",
+          "via",
+          "environment",
+          "variables",
+          "prefixed",
+          "with",
+          "log",
+          "level",
+          "logging",
+          "auth",
+          "authentication",
+          "provider"
+        ],
+        "term_weights": [
+          {
+            "term": "fastmcp",
+            "tf": 7,
+            "weight": 0.175
+          },
+          {
+            "term": "configuration",
+            "tf": 3,
+            "weight": 0.075
+          },
+          {
+            "term": "settings",
+            "tf": 2,
+            "weight": 0.05
+          },
+          {
+            "term": "class",
+            "tf": 2,
+            "weight": 0.05
+          },
+          {
+            "term": "server",
+            "tf": 2,
+            "weight": 0.05
+          },
+          {
+            "term": "tags",
+            "tf": 2,
+            "weight": 0.05
+          },
+          {
+            "term": "structure",
+            "tf": 1,
+            "weight": 0.025
+          },
+          {
+            "term": "the",
+            "tf": 1,
+            "weight": 0.025
+          },
+          {
+            "term": "provides",
+            "tf": 1,
+            "weight": 0.025
+          },
+          {
+            "term": "via",
+            "tf": 1,
+            "weight": 0.025
+          },
+          {
+            "term": "environment",
+            "tf": 1,
+            "weight": 0.025
+          },
+          {
+            "term": "variables",
+            "tf": 1,
+            "weight": 0.025
+          },
+          {
+            "term": "prefixed",
+            "tf": 1,
+            "weight": 0.025
+          },
+          {
+            "term": "with",
+            "tf": 1,
+            "weight": 0.025
+          },
+          {
+            "term": "log",
+            "tf": 1,
+            "weight": 0.025
+          },
+          {
+            "term": "level",
+            "tf": 1,
+            "weight": 0.025
+          },
+          {
+            "term": "logging",
+            "tf": 1,
+            "weight": 0.025
+          },
+          {
+            "term": "auth",
+            "tf": 1,
+            "weight": 0.025
+          },
+          {
+            "term": "authentication",
+            "tf": 1,
+            "weight": 0.025
+          },
+          {
+            "term": "provider",
+            "tf": 1,
+            "weight": 0.025
+          }
+        ],
+        "unique_terms": 28,
+        "total_terms": 40
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": true,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Settings Structure",
+        "class",
+        "configuration",
+        "fastmcp",
+        "provides",
+        "server",
+        "settings",
+        "structure",
+        "tags",
+        "the",
+        "via"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.8,
+      "structural": 0.7999999999999998,
+      "retrieval_quality": 0.5354545454545454,
+      "overall": 0.7118181818181818
+    }
+  },
+  {
+    "text": "## Authentication and Security\n\nFastMCP provides enterprise-grade authentication through the `AuthProvider` system:",
+    "metadata": {
+      "chunk_id": "63b179486fdd-0017",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\jlowin_fastmcp\\_jlowin_fastmcp_1-fastmcp-overview.md",
+      "filename": "_jlowin_fastmcp_1-fastmcp-overview.md",
+      "file_extension": ".md",
+      "chunk_index": 17,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Authentication and Security"
+      ],
+      "heading_text": "Authentication and Security",
+      "token_count": 19,
+      "char_count": 115,
+      "start_char": 9970,
+      "end_char": 10085,
+      "semantic_score": 0.8,
+      "structural_score": 0.7,
+      "retrieval_quality": 0.565,
+      "chunking_strategy": "hybrid_adaptive_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T09:13:49.244206",
+      "document_id": "63b179486fdd",
+      "document_name": "_jlowin_fastmcp_1-fastmcp-overview",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\jlowin_fastmcp\\_jlowin_fastmcp_1-fastmcp-overview.md",
+      "source_filename": "_jlowin_fastmcp_1-fastmcp-overview.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\jlowin_fastmcp",
+      "relative_path": "Docs\\FAST_DOCS\\jlowin_fastmcp\\_jlowin_fastmcp_1-fastmcp-overview.md",
+      "hierarchy_path": "Authentication and Security",
+      "chunk_hash": "c401c7499375cb4c",
+      "content_digest": "c401c7499375cb4c",
+      "chunk_length": 115,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "authentication",
+          "and",
+          "security",
+          "fastmcp",
+          "provides",
+          "enterprise",
+          "grade",
+          "through",
+          "the",
+          "authprovider",
+          "system"
+        ],
+        "term_weights": [
+          {
+            "term": "authentication",
+            "tf": 2,
+            "weight": 0.166667
+          },
+          {
+            "term": "and",
+            "tf": 1,
+            "weight": 0.083333
+          },
+          {
+            "term": "security",
+            "tf": 1,
+            "weight": 0.083333
+          },
+          {
+            "term": "fastmcp",
+            "tf": 1,
+            "weight": 0.083333
+          },
+          {
+            "term": "provides",
+            "tf": 1,
+            "weight": 0.083333
+          },
+          {
+            "term": "enterprise",
+            "tf": 1,
+            "weight": 0.083333
+          },
+          {
+            "term": "grade",
+            "tf": 1,
+            "weight": 0.083333
+          },
+          {
+            "term": "through",
+            "tf": 1,
+            "weight": 0.083333
+          },
+          {
+            "term": "the",
+            "tf": 1,
+            "weight": 0.083333
+          },
+          {
+            "term": "authprovider",
+            "tf": 1,
+            "weight": 0.083333
+          },
+          {
+            "term": "system",
+            "tf": 1,
+            "weight": 0.083333
+          }
+        ],
+        "unique_terms": 11,
+        "total_terms": 12
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Authentication and Security",
+        "and",
+        "authentication",
+        "authprovider",
+        "enterprise",
+        "fastmcp",
+        "grade",
+        "provides",
+        "security",
+        "the",
+        "through"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.8,
+      "structural": 0.7,
+      "retrieval_quality": 0.565,
+      "overall": 0.6883333333333334
+    }
+  },
+  {
+    "text": "### Authentication Providers  The framework includes built-in providers for major identity systems:  - `GoogleProvider` - `GitHubProvider` - `AzureProvider` - `Auth0Provider` - `WorkOSProvider` - `JWTVerifier`",
+    "metadata": {
+      "chunk_id": "63b179486fdd-0018",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\jlowin_fastmcp\\_jlowin_fastmcp_1-fastmcp-overview.md",
+      "filename": "_jlowin_fastmcp_1-fastmcp-overview.md",
+      "file_extension": ".md",
+      "chunk_index": 18,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Authentication Providers"
+      ],
+      "heading_text": "Authentication Providers",
+      "token_count": 48,
+      "char_count": 209,
+      "start_char": 10087,
+      "end_char": 10296,
+      "semantic_score": 0.8,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.515,
+      "chunking_strategy": "hybrid_adaptive_structural",
+      "content_type": "list_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T09:13:49.244494",
+      "document_id": "63b179486fdd",
+      "document_name": "_jlowin_fastmcp_1-fastmcp-overview",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\jlowin_fastmcp\\_jlowin_fastmcp_1-fastmcp-overview.md",
+      "source_filename": "_jlowin_fastmcp_1-fastmcp-overview.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\jlowin_fastmcp",
+      "relative_path": "Docs\\FAST_DOCS\\jlowin_fastmcp\\_jlowin_fastmcp_1-fastmcp-overview.md",
+      "hierarchy_path": "Authentication Providers",
+      "chunk_hash": "a3504c59f266c2c0",
+      "content_digest": "a3504c59f266c2c0",
+      "chunk_length": 209,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "providers",
+          "authentication",
+          "the",
+          "framework",
+          "includes",
+          "built",
+          "for",
+          "major",
+          "identity",
+          "systems",
+          "googleprovider",
+          "githubprovider",
+          "azureprovider",
+          "auth0provider",
+          "workosprovider",
+          "jwtverifier"
+        ],
+        "term_weights": [
+          {
+            "term": "providers",
+            "tf": 2,
+            "weight": 0.117647
+          },
+          {
+            "term": "authentication",
+            "tf": 1,
+            "weight": 0.058824
+          },
+          {
+            "term": "the",
+            "tf": 1,
+            "weight": 0.058824
+          },
+          {
+            "term": "framework",
+            "tf": 1,
+            "weight": 0.058824
+          },
+          {
+            "term": "includes",
+            "tf": 1,
+            "weight": 0.058824
+          },
+          {
+            "term": "built",
+            "tf": 1,
+            "weight": 0.058824
+          },
+          {
+            "term": "for",
+            "tf": 1,
+            "weight": 0.058824
+          },
+          {
+            "term": "major",
+            "tf": 1,
+            "weight": 0.058824
+          },
+          {
+            "term": "identity",
+            "tf": 1,
+            "weight": 0.058824
+          },
+          {
+            "term": "systems",
+            "tf": 1,
+            "weight": 0.058824
+          },
+          {
+            "term": "googleprovider",
+            "tf": 1,
+            "weight": 0.058824
+          },
+          {
+            "term": "githubprovider",
+            "tf": 1,
+            "weight": 0.058824
+          },
+          {
+            "term": "azureprovider",
+            "tf": 1,
+            "weight": 0.058824
+          },
+          {
+            "term": "auth0provider",
+            "tf": 1,
+            "weight": 0.058824
+          },
+          {
+            "term": "workosprovider",
+            "tf": 1,
+            "weight": 0.058824
+          },
+          {
+            "term": "jwtverifier",
+            "tf": 1,
+            "weight": 0.058824
+          }
+        ],
+        "unique_terms": 16,
+        "total_terms": 17
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Authentication Providers",
+        "authentication",
+        "built",
+        "for",
+        "framework",
+        "identity",
+        "includes",
+        "major",
+        "providers",
+        "systems",
+        "the"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.8,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.515,
+      "overall": 0.7383333333333333
+    }
+  },
+  {
+    "text": "### In-Memory Testing\n\nThe `FastMCPTransport` enables efficient testing without process management:\n\n```\n```",
+    "metadata": {
+      "chunk_id": "63b179486fdd-0021",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\jlowin_fastmcp\\_jlowin_fastmcp_1-fastmcp-overview.md",
+      "filename": "_jlowin_fastmcp_1-fastmcp-overview.md",
+      "file_extension": ".md",
+      "chunk_index": 21,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "In-Memory Testing"
+      ],
+      "heading_text": "In-Memory Testing",
+      "token_count": 23,
+      "char_count": 108,
+      "start_char": 10885,
+      "end_char": 10993,
+      "semantic_score": 0.8,
+      "structural_score": 0.7,
+      "retrieval_quality": 0.5438461538461539,
+      "chunking_strategy": "hybrid_adaptive_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T09:13:49.246180",
+      "document_id": "63b179486fdd",
+      "document_name": "_jlowin_fastmcp_1-fastmcp-overview",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\jlowin_fastmcp\\_jlowin_fastmcp_1-fastmcp-overview.md",
+      "source_filename": "_jlowin_fastmcp_1-fastmcp-overview.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\jlowin_fastmcp",
+      "relative_path": "Docs\\FAST_DOCS\\jlowin_fastmcp\\_jlowin_fastmcp_1-fastmcp-overview.md",
+      "hierarchy_path": "In-Memory Testing",
+      "chunk_hash": "c11568f8a9fc7e9d",
+      "content_digest": "c11568f8a9fc7e9d",
+      "chunk_length": 108,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "testing",
+          "memory",
+          "the",
+          "fastmcptransport",
+          "enables",
+          "efficient",
+          "without",
+          "process",
+          "management"
+        ],
+        "term_weights": [
+          {
+            "term": "testing",
+            "tf": 2,
+            "weight": 0.2
+          },
+          {
+            "term": "memory",
+            "tf": 1,
+            "weight": 0.1
+          },
+          {
+            "term": "the",
+            "tf": 1,
+            "weight": 0.1
+          },
+          {
+            "term": "fastmcptransport",
+            "tf": 1,
+            "weight": 0.1
+          },
+          {
+            "term": "enables",
+            "tf": 1,
+            "weight": 0.1
+          },
+          {
+            "term": "efficient",
+            "tf": 1,
+            "weight": 0.1
+          },
+          {
+            "term": "without",
+            "tf": 1,
+            "weight": 0.1
+          },
+          {
+            "term": "process",
+            "tf": 1,
+            "weight": 0.1
+          },
+          {
+            "term": "management",
+            "tf": 1,
+            "weight": 0.1
+          }
+        ],
+        "unique_terms": 9,
+        "total_terms": 10
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "In-Memory Testing",
+        "efficient",
+        "enables",
+        "fastmcptransport",
+        "management",
+        "memory",
+        "process",
+        "testing",
+        "the",
+        "without"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.8,
+      "structural": 0.7,
+      "retrieval_quality": 0.5438461538461539,
+      "overall": 0.6812820512820513
+    }
+  }
+]

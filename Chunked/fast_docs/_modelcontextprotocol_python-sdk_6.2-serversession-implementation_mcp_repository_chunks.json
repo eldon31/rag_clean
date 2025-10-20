@@ -1,0 +1,2360 @@
+[
+  {
+    "text": "# ServerSession Implementation\n\nRelevant source files\n\n- [src/mcp/server/models.py](https://github.com/modelcontextprotocol/python-sdk/blob/146d7efb/src/mcp/server/models.py)\n- [src/mcp/server/session.py](https://github.com/modelcontextprotocol/python-sdk/blob/146d7efb/src/mcp/server/session.py)\n- [tests/server/test\\_session.py](https://github.com/modelcontextprotocol/python-sdk/blob/146d7efb/tests/server/test_session.py)\n\nThe ServerSession class provides the core session management functionality for MCP servers, handling individual client connections and managing bidirectional communication between servers and clients. It serves as the low-level foundation that higher-level server frameworks like FastMCP build upon for managing protocol-compliant client interactions.\n\nFor information about the high-level FastMCP framework that uses ServerSession internally, see [FastMCP Server Framework](modelcontextprotocol/python-sdk/2-fastmcp-server-framework.md). For details about the underlying BaseSession architecture, see [Session Management](modelcontextprotocol/python-sdk/4.2-session-management.md).",
+    "metadata": {
+      "chunk_id": "d76907876195-0000",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_6.2-serversession-implementation.md",
+      "filename": "_modelcontextprotocol_python-sdk_6.2-serversession-implementation.md",
+      "file_extension": ".md",
+      "chunk_index": 0,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "ServerSession Implementation"
+      ],
+      "heading_text": "ServerSession Implementation",
+      "token_count": 224,
+      "char_count": 1109,
+      "start_char": 3440,
+      "end_char": 4549,
+      "semantic_score": 0.7,
+      "structural_score": 0.9999999999999999,
+      "retrieval_quality": 0.5187499999999999,
+      "chunking_strategy": "hybrid_adaptive_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T09:13:51.714415",
+      "document_id": "d76907876195",
+      "document_name": "_modelcontextprotocol_python-sdk_6.2-serversession-implementation",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_6.2-serversession-implementation.md",
+      "source_filename": "_modelcontextprotocol_python-sdk_6.2-serversession-implementation.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk",
+      "relative_path": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_6.2-serversession-implementation.md",
+      "hierarchy_path": "ServerSession Implementation",
+      "chunk_hash": "bb6c8a27bf0b4370",
+      "content_digest": "bb6c8a27bf0b4370",
+      "chunk_length": 1109,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "server",
+          "session",
+          "mcp",
+          "modelcontextprotocol",
+          "python",
+          "sdk",
+          "the",
+          "src",
+          "for",
+          "fastmcp",
+          "serversession",
+          "https",
+          "github",
+          "com",
+          "blob",
+          "146d7efb",
+          "management",
+          "level",
+          "framework",
+          "models"
+        ],
+        "term_weights": [
+          {
+            "term": "server",
+            "tf": 9,
+            "weight": 0.067164
+          },
+          {
+            "term": "session",
+            "tf": 7,
+            "weight": 0.052239
+          },
+          {
+            "term": "mcp",
+            "tf": 5,
+            "weight": 0.037313
+          },
+          {
+            "term": "modelcontextprotocol",
+            "tf": 5,
+            "weight": 0.037313
+          },
+          {
+            "term": "python",
+            "tf": 5,
+            "weight": 0.037313
+          },
+          {
+            "term": "sdk",
+            "tf": 5,
+            "weight": 0.037313
+          },
+          {
+            "term": "the",
+            "tf": 5,
+            "weight": 0.037313
+          },
+          {
+            "term": "src",
+            "tf": 4,
+            "weight": 0.029851
+          },
+          {
+            "term": "for",
+            "tf": 4,
+            "weight": 0.029851
+          },
+          {
+            "term": "fastmcp",
+            "tf": 4,
+            "weight": 0.029851
+          },
+          {
+            "term": "serversession",
+            "tf": 3,
+            "weight": 0.022388
+          },
+          {
+            "term": "https",
+            "tf": 3,
+            "weight": 0.022388
+          },
+          {
+            "term": "github",
+            "tf": 3,
+            "weight": 0.022388
+          },
+          {
+            "term": "com",
+            "tf": 3,
+            "weight": 0.022388
+          },
+          {
+            "term": "blob",
+            "tf": 3,
+            "weight": 0.022388
+          },
+          {
+            "term": "146d7efb",
+            "tf": 3,
+            "weight": 0.022388
+          },
+          {
+            "term": "management",
+            "tf": 3,
+            "weight": 0.022388
+          },
+          {
+            "term": "level",
+            "tf": 3,
+            "weight": 0.022388
+          },
+          {
+            "term": "framework",
+            "tf": 3,
+            "weight": 0.022388
+          },
+          {
+            "term": "models",
+            "tf": 2,
+            "weight": 0.014925
+          }
+        ],
+        "unique_terms": 63,
+        "total_terms": 134
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": true,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "ServerSession Implementation",
+        "fastmcp",
+        "for",
+        "mcp",
+        "modelcontextprotocol",
+        "python",
+        "sdk",
+        "server",
+        "session",
+        "src",
+        "the"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.9999999999999999,
+      "retrieval_quality": 0.5187499999999999,
+      "overall": 0.7395833333333331
+    }
+  },
+  {
+    "text": "## Architecture Overview\n\nServerSession extends the BaseSession class with server-specific functionality, implementing the server side of the MCP protocol communication pattern.\n\n```\n```\n\nSources: [src/mcp/server/session.py71-79](https://github.com/modelcontextprotocol/python-sdk/blob/146d7efb/src/mcp/server/session.py#L71-L79) [src/mcp/server/session.py58-62](https://github.com/modelcontextprotocol/python-sdk/blob/146d7efb/src/mcp/server/session.py#L58-L62) [src/mcp/server/models.py14-21](https://github.com/modelcontextprotocol/python-sdk/blob/146d7efb/src/mcp/server/models.py#L14-L21)",
+    "metadata": {
+      "chunk_id": "d76907876195-0001",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_6.2-serversession-implementation.md",
+      "filename": "_modelcontextprotocol_python-sdk_6.2-serversession-implementation.md",
+      "file_extension": ".md",
+      "chunk_index": 1,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Architecture Overview"
+      ],
+      "heading_text": "Architecture Overview",
+      "token_count": 150,
+      "char_count": 593,
+      "start_char": 4551,
+      "end_char": 5144,
+      "semantic_score": 0.6,
+      "structural_score": 0.7,
+      "retrieval_quality": 0.5566666666666666,
+      "chunking_strategy": "hybrid_adaptive_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T09:13:51.714921",
+      "document_id": "d76907876195",
+      "document_name": "_modelcontextprotocol_python-sdk_6.2-serversession-implementation",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_6.2-serversession-implementation.md",
+      "source_filename": "_modelcontextprotocol_python-sdk_6.2-serversession-implementation.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk",
+      "relative_path": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_6.2-serversession-implementation.md",
+      "hierarchy_path": "Architecture Overview",
+      "chunk_hash": "e8f80642046c04a8",
+      "content_digest": "e8f80642046c04a8",
+      "chunk_length": 593,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "server",
+          "mcp",
+          "src",
+          "session",
+          "the",
+          "https",
+          "github",
+          "com",
+          "modelcontextprotocol",
+          "python",
+          "sdk",
+          "blob",
+          "146d7efb",
+          "models",
+          "architecture",
+          "overview",
+          "serversession",
+          "extends",
+          "basesession",
+          "class"
+        ],
+        "term_weights": [
+          {
+            "term": "server",
+            "tf": 8,
+            "weight": 0.102564
+          },
+          {
+            "term": "mcp",
+            "tf": 7,
+            "weight": 0.089744
+          },
+          {
+            "term": "src",
+            "tf": 6,
+            "weight": 0.076923
+          },
+          {
+            "term": "session",
+            "tf": 4,
+            "weight": 0.051282
+          },
+          {
+            "term": "the",
+            "tf": 3,
+            "weight": 0.038462
+          },
+          {
+            "term": "https",
+            "tf": 3,
+            "weight": 0.038462
+          },
+          {
+            "term": "github",
+            "tf": 3,
+            "weight": 0.038462
+          },
+          {
+            "term": "com",
+            "tf": 3,
+            "weight": 0.038462
+          },
+          {
+            "term": "modelcontextprotocol",
+            "tf": 3,
+            "weight": 0.038462
+          },
+          {
+            "term": "python",
+            "tf": 3,
+            "weight": 0.038462
+          },
+          {
+            "term": "sdk",
+            "tf": 3,
+            "weight": 0.038462
+          },
+          {
+            "term": "blob",
+            "tf": 3,
+            "weight": 0.038462
+          },
+          {
+            "term": "146d7efb",
+            "tf": 3,
+            "weight": 0.038462
+          },
+          {
+            "term": "models",
+            "tf": 2,
+            "weight": 0.025641
+          },
+          {
+            "term": "architecture",
+            "tf": 1,
+            "weight": 0.012821
+          },
+          {
+            "term": "overview",
+            "tf": 1,
+            "weight": 0.012821
+          },
+          {
+            "term": "serversession",
+            "tf": 1,
+            "weight": 0.012821
+          },
+          {
+            "term": "extends",
+            "tf": 1,
+            "weight": 0.012821
+          },
+          {
+            "term": "basesession",
+            "tf": 1,
+            "weight": 0.012821
+          },
+          {
+            "term": "class",
+            "tf": 1,
+            "weight": 0.012821
+          }
+        ],
+        "unique_terms": 38,
+        "total_terms": 78
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Architecture Overview",
+        "com",
+        "github",
+        "https",
+        "mcp",
+        "modelcontextprotocol",
+        "python",
+        "server",
+        "session",
+        "src",
+        "the"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.6,
+      "structural": 0.7,
+      "retrieval_quality": 0.5566666666666666,
+      "overall": 0.6188888888888888
+    }
+  },
+  {
+    "text": "### Initialization Protocol\n\nThe initialization process follows the MCP specification:\n\n1. **Client sends InitializeRequest**: Contains protocol version, capabilities, and client info\n2. **Server responds with InitializeResult**: Confirms protocol version and advertises server capabilities\n3. **Client sends InitializedNotification**: Signals readiness to begin normal operations\n\n```\n```\n\nSources: [src/mcp/server/session.py144-165](https://github.com/modelcontextprotocol/python-sdk/blob/146d7efb/src/mcp/server/session.py#L144-L165) [src/mcp/server/session.py177-178](https://github.com/modelcontextprotocol/python-sdk/blob/146d7efb/src/mcp/server/session.py#L177-L178)",
+    "metadata": {
+      "chunk_id": "d76907876195-0004",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_6.2-serversession-implementation.md",
+      "filename": "_modelcontextprotocol_python-sdk_6.2-serversession-implementation.md",
+      "file_extension": ".md",
+      "chunk_index": 4,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Initialization Protocol"
+      ],
+      "heading_text": "Initialization Protocol",
+      "token_count": 148,
+      "char_count": 673,
+      "start_char": 6350,
+      "end_char": 7023,
+      "semantic_score": 0.7,
+      "structural_score": 0.7,
+      "retrieval_quality": 0.54,
+      "chunking_strategy": "hybrid_adaptive_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T09:13:51.717319",
+      "document_id": "d76907876195",
+      "document_name": "_modelcontextprotocol_python-sdk_6.2-serversession-implementation",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_6.2-serversession-implementation.md",
+      "source_filename": "_modelcontextprotocol_python-sdk_6.2-serversession-implementation.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk",
+      "relative_path": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_6.2-serversession-implementation.md",
+      "hierarchy_path": "Initialization Protocol",
+      "chunk_hash": "a9f4c87279d2101f",
+      "content_digest": "a9f4c87279d2101f",
+      "chunk_length": 673,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "server",
+          "mcp",
+          "src",
+          "session",
+          "protocol",
+          "client",
+          "initialization",
+          "the",
+          "sends",
+          "version",
+          "capabilities",
+          "and",
+          "https",
+          "github",
+          "com",
+          "modelcontextprotocol",
+          "python",
+          "sdk",
+          "blob",
+          "146d7efb"
+        ],
+        "term_weights": [
+          {
+            "term": "server",
+            "tf": 6,
+            "weight": 0.075949
+          },
+          {
+            "term": "mcp",
+            "tf": 5,
+            "weight": 0.063291
+          },
+          {
+            "term": "src",
+            "tf": 4,
+            "weight": 0.050633
+          },
+          {
+            "term": "session",
+            "tf": 4,
+            "weight": 0.050633
+          },
+          {
+            "term": "protocol",
+            "tf": 3,
+            "weight": 0.037975
+          },
+          {
+            "term": "client",
+            "tf": 3,
+            "weight": 0.037975
+          },
+          {
+            "term": "initialization",
+            "tf": 2,
+            "weight": 0.025316
+          },
+          {
+            "term": "the",
+            "tf": 2,
+            "weight": 0.025316
+          },
+          {
+            "term": "sends",
+            "tf": 2,
+            "weight": 0.025316
+          },
+          {
+            "term": "version",
+            "tf": 2,
+            "weight": 0.025316
+          },
+          {
+            "term": "capabilities",
+            "tf": 2,
+            "weight": 0.025316
+          },
+          {
+            "term": "and",
+            "tf": 2,
+            "weight": 0.025316
+          },
+          {
+            "term": "https",
+            "tf": 2,
+            "weight": 0.025316
+          },
+          {
+            "term": "github",
+            "tf": 2,
+            "weight": 0.025316
+          },
+          {
+            "term": "com",
+            "tf": 2,
+            "weight": 0.025316
+          },
+          {
+            "term": "modelcontextprotocol",
+            "tf": 2,
+            "weight": 0.025316
+          },
+          {
+            "term": "python",
+            "tf": 2,
+            "weight": 0.025316
+          },
+          {
+            "term": "sdk",
+            "tf": 2,
+            "weight": 0.025316
+          },
+          {
+            "term": "blob",
+            "tf": 2,
+            "weight": 0.025316
+          },
+          {
+            "term": "146d7efb",
+            "tf": 2,
+            "weight": 0.025316
+          }
+        ],
+        "unique_terms": 46,
+        "total_terms": 79
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Initialization Protocol",
+        "client",
+        "initialization",
+        "mcp",
+        "protocol",
+        "sends",
+        "server",
+        "session",
+        "src",
+        "the",
+        "version"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.7,
+      "retrieval_quality": 0.54,
+      "overall": 0.6466666666666666
+    }
+  },
+  {
+    "text": "### Capability Checking Logic\n\nThe `check_client_capability()` method validates whether a client supports specific MCP capabilities:\n\n```\n```\n\nSources: [src/mcp/server/session.py105-136](https://github.com/modelcontextprotocol/python-sdk/blob/146d7efb/src/mcp/server/session.py#L105-L136)",
+    "metadata": {
+      "chunk_id": "d76907876195-0006",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_6.2-serversession-implementation.md",
+      "filename": "_modelcontextprotocol_python-sdk_6.2-serversession-implementation.md",
+      "file_extension": ".md",
+      "chunk_index": 6,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Capability Checking Logic"
+      ],
+      "heading_text": "Capability Checking Logic",
+      "token_count": 66,
+      "char_count": 288,
+      "start_char": 7173,
+      "end_char": 7461,
+      "semantic_score": 0.7,
+      "structural_score": 0.7,
+      "retrieval_quality": 0.5742105263157895,
+      "chunking_strategy": "hybrid_adaptive_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T09:13:51.717958",
+      "document_id": "d76907876195",
+      "document_name": "_modelcontextprotocol_python-sdk_6.2-serversession-implementation",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_6.2-serversession-implementation.md",
+      "source_filename": "_modelcontextprotocol_python-sdk_6.2-serversession-implementation.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk",
+      "relative_path": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_6.2-serversession-implementation.md",
+      "hierarchy_path": "Capability Checking Logic",
+      "chunk_hash": "4adc81cdd5ae27e0",
+      "content_digest": "4adc81cdd5ae27e0",
+      "chunk_length": 288,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "mcp",
+          "capability",
+          "client",
+          "src",
+          "server",
+          "session",
+          "checking",
+          "logic",
+          "the",
+          "check",
+          "method",
+          "validates",
+          "whether",
+          "supports",
+          "specific",
+          "capabilities",
+          "sources",
+          "py105",
+          "136",
+          "https"
+        ],
+        "term_weights": [
+          {
+            "term": "mcp",
+            "tf": 3,
+            "weight": 0.083333
+          },
+          {
+            "term": "capability",
+            "tf": 2,
+            "weight": 0.055556
+          },
+          {
+            "term": "client",
+            "tf": 2,
+            "weight": 0.055556
+          },
+          {
+            "term": "src",
+            "tf": 2,
+            "weight": 0.055556
+          },
+          {
+            "term": "server",
+            "tf": 2,
+            "weight": 0.055556
+          },
+          {
+            "term": "session",
+            "tf": 2,
+            "weight": 0.055556
+          },
+          {
+            "term": "checking",
+            "tf": 1,
+            "weight": 0.027778
+          },
+          {
+            "term": "logic",
+            "tf": 1,
+            "weight": 0.027778
+          },
+          {
+            "term": "the",
+            "tf": 1,
+            "weight": 0.027778
+          },
+          {
+            "term": "check",
+            "tf": 1,
+            "weight": 0.027778
+          },
+          {
+            "term": "method",
+            "tf": 1,
+            "weight": 0.027778
+          },
+          {
+            "term": "validates",
+            "tf": 1,
+            "weight": 0.027778
+          },
+          {
+            "term": "whether",
+            "tf": 1,
+            "weight": 0.027778
+          },
+          {
+            "term": "supports",
+            "tf": 1,
+            "weight": 0.027778
+          },
+          {
+            "term": "specific",
+            "tf": 1,
+            "weight": 0.027778
+          },
+          {
+            "term": "capabilities",
+            "tf": 1,
+            "weight": 0.027778
+          },
+          {
+            "term": "sources",
+            "tf": 1,
+            "weight": 0.027778
+          },
+          {
+            "term": "py105",
+            "tf": 1,
+            "weight": 0.027778
+          },
+          {
+            "term": "136",
+            "tf": 1,
+            "weight": 0.027778
+          },
+          {
+            "term": "https",
+            "tf": 1,
+            "weight": 0.027778
+          }
+        ],
+        "unique_terms": 29,
+        "total_terms": 36
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Capability Checking Logic",
+        "capability",
+        "check",
+        "checking",
+        "client",
+        "logic",
+        "mcp",
+        "server",
+        "session",
+        "src",
+        "the"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.7,
+      "retrieval_quality": 0.5742105263157895,
+      "overall": 0.6580701754385965
+    }
+  },
+  {
+    "text": "## Message Processing Architecture\n\nServerSession handles both incoming messages from clients and outgoing messages to clients through dedicated processing pipelines.",
+    "metadata": {
+      "chunk_id": "d76907876195-0007",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_6.2-serversession-implementation.md",
+      "filename": "_modelcontextprotocol_python-sdk_6.2-serversession-implementation.md",
+      "file_extension": ".md",
+      "chunk_index": 7,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Message Processing Architecture"
+      ],
+      "heading_text": "Message Processing Architecture",
+      "token_count": 23,
+      "char_count": 166,
+      "start_char": 7463,
+      "end_char": 7629,
+      "semantic_score": 0.8,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.545,
+      "chunking_strategy": "hybrid_adaptive_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T09:13:51.718276",
+      "document_id": "d76907876195",
+      "document_name": "_modelcontextprotocol_python-sdk_6.2-serversession-implementation",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_6.2-serversession-implementation.md",
+      "source_filename": "_modelcontextprotocol_python-sdk_6.2-serversession-implementation.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk",
+      "relative_path": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_6.2-serversession-implementation.md",
+      "hierarchy_path": "Message Processing Architecture",
+      "chunk_hash": "20b866e9ba13a3fe",
+      "content_digest": "20b866e9ba13a3fe",
+      "chunk_length": 166,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "processing",
+          "messages",
+          "clients",
+          "message",
+          "architecture",
+          "serversession",
+          "handles",
+          "both",
+          "incoming",
+          "from",
+          "and",
+          "outgoing",
+          "through",
+          "dedicated",
+          "pipelines"
+        ],
+        "term_weights": [
+          {
+            "term": "processing",
+            "tf": 2,
+            "weight": 0.111111
+          },
+          {
+            "term": "messages",
+            "tf": 2,
+            "weight": 0.111111
+          },
+          {
+            "term": "clients",
+            "tf": 2,
+            "weight": 0.111111
+          },
+          {
+            "term": "message",
+            "tf": 1,
+            "weight": 0.055556
+          },
+          {
+            "term": "architecture",
+            "tf": 1,
+            "weight": 0.055556
+          },
+          {
+            "term": "serversession",
+            "tf": 1,
+            "weight": 0.055556
+          },
+          {
+            "term": "handles",
+            "tf": 1,
+            "weight": 0.055556
+          },
+          {
+            "term": "both",
+            "tf": 1,
+            "weight": 0.055556
+          },
+          {
+            "term": "incoming",
+            "tf": 1,
+            "weight": 0.055556
+          },
+          {
+            "term": "from",
+            "tf": 1,
+            "weight": 0.055556
+          },
+          {
+            "term": "and",
+            "tf": 1,
+            "weight": 0.055556
+          },
+          {
+            "term": "outgoing",
+            "tf": 1,
+            "weight": 0.055556
+          },
+          {
+            "term": "through",
+            "tf": 1,
+            "weight": 0.055556
+          },
+          {
+            "term": "dedicated",
+            "tf": 1,
+            "weight": 0.055556
+          },
+          {
+            "term": "pipelines",
+            "tf": 1,
+            "weight": 0.055556
+          }
+        ],
+        "unique_terms": 15,
+        "total_terms": 18
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Message Processing Architecture",
+        "architecture",
+        "both",
+        "clients",
+        "from",
+        "handles",
+        "incoming",
+        "message",
+        "messages",
+        "processing",
+        "serversession"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.8,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.545,
+      "overall": 0.7483333333333334
+    }
+  },
+  {
+    "text": "### Incoming Message Flow\n\n```\n```\n\nSources: [src/mcp/server/session.py138-140](https://github.com/modelcontextprotocol/python-sdk/blob/146d7efb/src/mcp/server/session.py#L138-L140) [src/mcp/server/session.py326-327](https://github.com/modelcontextprotocol/python-sdk/blob/146d7efb/src/mcp/server/session.py#L326-L327) [src/mcp/server/session.py329-333](https://github.com/modelcontextprotocol/python-sdk/blob/146d7efb/src/mcp/server/session.py#L329-L333)",
+    "metadata": {
+      "chunk_id": "d76907876195-0008",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_6.2-serversession-implementation.md",
+      "filename": "_modelcontextprotocol_python-sdk_6.2-serversession-implementation.md",
+      "file_extension": ".md",
+      "chunk_index": 8,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Incoming Message Flow"
+      ],
+      "heading_text": "Incoming Message Flow",
+      "token_count": 128,
+      "char_count": 455,
+      "start_char": 7631,
+      "end_char": 8086,
+      "semantic_score": 0.6,
+      "structural_score": 0.7,
+      "retrieval_quality": 0.56,
+      "chunking_strategy": "hybrid_adaptive_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T09:13:51.718799",
+      "document_id": "d76907876195",
+      "document_name": "_modelcontextprotocol_python-sdk_6.2-serversession-implementation",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_6.2-serversession-implementation.md",
+      "source_filename": "_modelcontextprotocol_python-sdk_6.2-serversession-implementation.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk",
+      "relative_path": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_6.2-serversession-implementation.md",
+      "hierarchy_path": "Incoming Message Flow",
+      "chunk_hash": "23c46079df2e22dc",
+      "content_digest": "23c46079df2e22dc",
+      "chunk_length": 455,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "src",
+          "mcp",
+          "server",
+          "session",
+          "https",
+          "github",
+          "com",
+          "modelcontextprotocol",
+          "python",
+          "sdk",
+          "blob",
+          "146d7efb",
+          "incoming",
+          "message",
+          "flow",
+          "sources",
+          "py138",
+          "140",
+          "l138",
+          "l140"
+        ],
+        "term_weights": [
+          {
+            "term": "src",
+            "tf": 6,
+            "weight": 0.09375
+          },
+          {
+            "term": "mcp",
+            "tf": 6,
+            "weight": 0.09375
+          },
+          {
+            "term": "server",
+            "tf": 6,
+            "weight": 0.09375
+          },
+          {
+            "term": "session",
+            "tf": 6,
+            "weight": 0.09375
+          },
+          {
+            "term": "https",
+            "tf": 3,
+            "weight": 0.046875
+          },
+          {
+            "term": "github",
+            "tf": 3,
+            "weight": 0.046875
+          },
+          {
+            "term": "com",
+            "tf": 3,
+            "weight": 0.046875
+          },
+          {
+            "term": "modelcontextprotocol",
+            "tf": 3,
+            "weight": 0.046875
+          },
+          {
+            "term": "python",
+            "tf": 3,
+            "weight": 0.046875
+          },
+          {
+            "term": "sdk",
+            "tf": 3,
+            "weight": 0.046875
+          },
+          {
+            "term": "blob",
+            "tf": 3,
+            "weight": 0.046875
+          },
+          {
+            "term": "146d7efb",
+            "tf": 3,
+            "weight": 0.046875
+          },
+          {
+            "term": "incoming",
+            "tf": 1,
+            "weight": 0.015625
+          },
+          {
+            "term": "message",
+            "tf": 1,
+            "weight": 0.015625
+          },
+          {
+            "term": "flow",
+            "tf": 1,
+            "weight": 0.015625
+          },
+          {
+            "term": "sources",
+            "tf": 1,
+            "weight": 0.015625
+          },
+          {
+            "term": "py138",
+            "tf": 1,
+            "weight": 0.015625
+          },
+          {
+            "term": "140",
+            "tf": 1,
+            "weight": 0.015625
+          },
+          {
+            "term": "l138",
+            "tf": 1,
+            "weight": 0.015625
+          },
+          {
+            "term": "l140",
+            "tf": 1,
+            "weight": 0.015625
+          }
+        ],
+        "unique_terms": 28,
+        "total_terms": 64
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Incoming Message Flow",
+        "com",
+        "github",
+        "https",
+        "mcp",
+        "modelcontextprotocol",
+        "python",
+        "sdk",
+        "server",
+        "session",
+        "src"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.6,
+      "structural": 0.7,
+      "retrieval_quality": 0.56,
+      "overall": 0.62
+    }
+  },
+  {
+    "text": "### Request Validation\n\nAll incoming requests except ping are validated against the initialization state:\n\n```\n```\n\nSources: [src/mcp/server/session.py169-171](https://github.com/modelcontextprotocol/python-sdk/blob/146d7efb/src/mcp/server/session.py#L169-L171)",
+    "metadata": {
+      "chunk_id": "d76907876195-0009",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_6.2-serversession-implementation.md",
+      "filename": "_modelcontextprotocol_python-sdk_6.2-serversession-implementation.md",
+      "file_extension": ".md",
+      "chunk_index": 9,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Request Validation"
+      ],
+      "heading_text": "Request Validation",
+      "token_count": 61,
+      "char_count": 261,
+      "start_char": 8088,
+      "end_char": 8349,
+      "semantic_score": 0.7,
+      "structural_score": 0.7,
+      "retrieval_quality": 0.5733333333333334,
+      "chunking_strategy": "hybrid_adaptive_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T09:13:51.719142",
+      "document_id": "d76907876195",
+      "document_name": "_modelcontextprotocol_python-sdk_6.2-serversession-implementation",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_6.2-serversession-implementation.md",
+      "source_filename": "_modelcontextprotocol_python-sdk_6.2-serversession-implementation.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk",
+      "relative_path": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_6.2-serversession-implementation.md",
+      "hierarchy_path": "Request Validation",
+      "chunk_hash": "e6840fe5f2819729",
+      "content_digest": "e6840fe5f2819729",
+      "chunk_length": 261,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "src",
+          "mcp",
+          "server",
+          "session",
+          "request",
+          "validation",
+          "all",
+          "incoming",
+          "requests",
+          "except",
+          "ping",
+          "are",
+          "validated",
+          "against",
+          "the",
+          "initialization",
+          "state",
+          "sources",
+          "py169",
+          "171"
+        ],
+        "term_weights": [
+          {
+            "term": "src",
+            "tf": 2,
+            "weight": 0.058824
+          },
+          {
+            "term": "mcp",
+            "tf": 2,
+            "weight": 0.058824
+          },
+          {
+            "term": "server",
+            "tf": 2,
+            "weight": 0.058824
+          },
+          {
+            "term": "session",
+            "tf": 2,
+            "weight": 0.058824
+          },
+          {
+            "term": "request",
+            "tf": 1,
+            "weight": 0.029412
+          },
+          {
+            "term": "validation",
+            "tf": 1,
+            "weight": 0.029412
+          },
+          {
+            "term": "all",
+            "tf": 1,
+            "weight": 0.029412
+          },
+          {
+            "term": "incoming",
+            "tf": 1,
+            "weight": 0.029412
+          },
+          {
+            "term": "requests",
+            "tf": 1,
+            "weight": 0.029412
+          },
+          {
+            "term": "except",
+            "tf": 1,
+            "weight": 0.029412
+          },
+          {
+            "term": "ping",
+            "tf": 1,
+            "weight": 0.029412
+          },
+          {
+            "term": "are",
+            "tf": 1,
+            "weight": 0.029412
+          },
+          {
+            "term": "validated",
+            "tf": 1,
+            "weight": 0.029412
+          },
+          {
+            "term": "against",
+            "tf": 1,
+            "weight": 0.029412
+          },
+          {
+            "term": "the",
+            "tf": 1,
+            "weight": 0.029412
+          },
+          {
+            "term": "initialization",
+            "tf": 1,
+            "weight": 0.029412
+          },
+          {
+            "term": "state",
+            "tf": 1,
+            "weight": 0.029412
+          },
+          {
+            "term": "sources",
+            "tf": 1,
+            "weight": 0.029412
+          },
+          {
+            "term": "py169",
+            "tf": 1,
+            "weight": 0.029412
+          },
+          {
+            "term": "171",
+            "tf": 1,
+            "weight": 0.029412
+          }
+        ],
+        "unique_terms": 30,
+        "total_terms": 34
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Request Validation",
+        "all",
+        "except",
+        "incoming",
+        "mcp",
+        "request",
+        "requests",
+        "server",
+        "session",
+        "src",
+        "validation"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.7,
+      "retrieval_quality": 0.5733333333333334,
+      "overall": 0.6577777777777777
+    }
+  },
+  {
+    "text": "## Server-to-Client Communication Methods\n\nServerSession provides a comprehensive set of methods for servers to communicate with clients, covering all major MCP protocol operations.",
+    "metadata": {
+      "chunk_id": "d76907876195-0010",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_6.2-serversession-implementation.md",
+      "filename": "_modelcontextprotocol_python-sdk_6.2-serversession-implementation.md",
+      "file_extension": ".md",
+      "chunk_index": 10,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Server-to-Client Communication Methods"
+      ],
+      "heading_text": "Server-to-Client Communication Methods",
+      "token_count": 30,
+      "char_count": 181,
+      "start_char": 8351,
+      "end_char": 8532,
+      "semantic_score": 0.8,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5769565217391305,
+      "chunking_strategy": "hybrid_adaptive_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T09:13:51.719433",
+      "document_id": "d76907876195",
+      "document_name": "_modelcontextprotocol_python-sdk_6.2-serversession-implementation",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_6.2-serversession-implementation.md",
+      "source_filename": "_modelcontextprotocol_python-sdk_6.2-serversession-implementation.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk",
+      "relative_path": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_6.2-serversession-implementation.md",
+      "hierarchy_path": "Server-to-Client Communication Methods",
+      "chunk_hash": "501407c5d87e86f6",
+      "content_digest": "501407c5d87e86f6",
+      "chunk_length": 181,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "methods",
+          "server",
+          "client",
+          "communication",
+          "serversession",
+          "provides",
+          "comprehensive",
+          "set",
+          "for",
+          "servers",
+          "communicate",
+          "with",
+          "clients",
+          "covering",
+          "all",
+          "major",
+          "mcp",
+          "protocol",
+          "operations"
+        ],
+        "term_weights": [
+          {
+            "term": "methods",
+            "tf": 2,
+            "weight": 0.1
+          },
+          {
+            "term": "server",
+            "tf": 1,
+            "weight": 0.05
+          },
+          {
+            "term": "client",
+            "tf": 1,
+            "weight": 0.05
+          },
+          {
+            "term": "communication",
+            "tf": 1,
+            "weight": 0.05
+          },
+          {
+            "term": "serversession",
+            "tf": 1,
+            "weight": 0.05
+          },
+          {
+            "term": "provides",
+            "tf": 1,
+            "weight": 0.05
+          },
+          {
+            "term": "comprehensive",
+            "tf": 1,
+            "weight": 0.05
+          },
+          {
+            "term": "set",
+            "tf": 1,
+            "weight": 0.05
+          },
+          {
+            "term": "for",
+            "tf": 1,
+            "weight": 0.05
+          },
+          {
+            "term": "servers",
+            "tf": 1,
+            "weight": 0.05
+          },
+          {
+            "term": "communicate",
+            "tf": 1,
+            "weight": 0.05
+          },
+          {
+            "term": "with",
+            "tf": 1,
+            "weight": 0.05
+          },
+          {
+            "term": "clients",
+            "tf": 1,
+            "weight": 0.05
+          },
+          {
+            "term": "covering",
+            "tf": 1,
+            "weight": 0.05
+          },
+          {
+            "term": "all",
+            "tf": 1,
+            "weight": 0.05
+          },
+          {
+            "term": "major",
+            "tf": 1,
+            "weight": 0.05
+          },
+          {
+            "term": "mcp",
+            "tf": 1,
+            "weight": 0.05
+          },
+          {
+            "term": "protocol",
+            "tf": 1,
+            "weight": 0.05
+          },
+          {
+            "term": "operations",
+            "tf": 1,
+            "weight": 0.05
+          }
+        ],
+        "unique_terms": 19,
+        "total_terms": 20
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Server-to-Client Communication Methods",
+        "client",
+        "communication",
+        "comprehensive",
+        "for",
+        "methods",
+        "provides",
+        "server",
+        "servers",
+        "serversession",
+        "set"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.8,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5769565217391305,
+      "overall": 0.7589855072463768
+    }
+  },
+  {
+    "text": "### Request Methods\n\nServerSession can initiate requests to clients for advanced MCP operations:\n\n```\n```\n\nSources: [src/mcp/server/session.py214-247](https://github.com/modelcontextprotocol/python-sdk/blob/146d7efb/src/mcp/server/session.py#L214-L247) [src/mcp/server/session.py249-254](https://github.com/modelcontextprotocol/python-sdk/blob/146d7efb/src/mcp/server/session.py#L249-L254) [src/mcp/server/session.py256-282](https://github.com/modelcontextprotocol/python-sdk/blob/146d7efb/src/mcp/server/session.py#L256-L282) [src/mcp/server/session.py284-289](https://github.com/modelcontextprotocol/python-sdk/blob/146d7efb/src/mcp/server/session.py#L284-L289)",
+    "metadata": {
+      "chunk_id": "d76907876195-0012",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_6.2-serversession-implementation.md",
+      "filename": "_modelcontextprotocol_python-sdk_6.2-serversession-implementation.md",
+      "file_extension": ".md",
+      "chunk_index": 12,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Request Methods"
+      ],
+      "heading_text": "Request Methods",
+      "token_count": 178,
+      "char_count": 663,
+      "start_char": 9935,
+      "end_char": 10598,
+      "semantic_score": 0.6,
+      "structural_score": 0.7,
+      "retrieval_quality": 0.575,
+      "chunking_strategy": "hybrid_adaptive_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T09:13:51.721958",
+      "document_id": "d76907876195",
+      "document_name": "_modelcontextprotocol_python-sdk_6.2-serversession-implementation",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_6.2-serversession-implementation.md",
+      "source_filename": "_modelcontextprotocol_python-sdk_6.2-serversession-implementation.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk",
+      "relative_path": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_6.2-serversession-implementation.md",
+      "hierarchy_path": "Request Methods",
+      "chunk_hash": "d921ccea25129d20",
+      "content_digest": "d921ccea25129d20",
+      "chunk_length": 663,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "mcp",
+          "src",
+          "server",
+          "session",
+          "https",
+          "github",
+          "com",
+          "modelcontextprotocol",
+          "python",
+          "sdk",
+          "blob",
+          "146d7efb",
+          "request",
+          "methods",
+          "serversession",
+          "can",
+          "initiate",
+          "requests",
+          "clients",
+          "for"
+        ],
+        "term_weights": [
+          {
+            "term": "mcp",
+            "tf": 9,
+            "weight": 0.097826
+          },
+          {
+            "term": "src",
+            "tf": 8,
+            "weight": 0.086957
+          },
+          {
+            "term": "server",
+            "tf": 8,
+            "weight": 0.086957
+          },
+          {
+            "term": "session",
+            "tf": 8,
+            "weight": 0.086957
+          },
+          {
+            "term": "https",
+            "tf": 4,
+            "weight": 0.043478
+          },
+          {
+            "term": "github",
+            "tf": 4,
+            "weight": 0.043478
+          },
+          {
+            "term": "com",
+            "tf": 4,
+            "weight": 0.043478
+          },
+          {
+            "term": "modelcontextprotocol",
+            "tf": 4,
+            "weight": 0.043478
+          },
+          {
+            "term": "python",
+            "tf": 4,
+            "weight": 0.043478
+          },
+          {
+            "term": "sdk",
+            "tf": 4,
+            "weight": 0.043478
+          },
+          {
+            "term": "blob",
+            "tf": 4,
+            "weight": 0.043478
+          },
+          {
+            "term": "146d7efb",
+            "tf": 4,
+            "weight": 0.043478
+          },
+          {
+            "term": "request",
+            "tf": 1,
+            "weight": 0.01087
+          },
+          {
+            "term": "methods",
+            "tf": 1,
+            "weight": 0.01087
+          },
+          {
+            "term": "serversession",
+            "tf": 1,
+            "weight": 0.01087
+          },
+          {
+            "term": "can",
+            "tf": 1,
+            "weight": 0.01087
+          },
+          {
+            "term": "initiate",
+            "tf": 1,
+            "weight": 0.01087
+          },
+          {
+            "term": "requests",
+            "tf": 1,
+            "weight": 0.01087
+          },
+          {
+            "term": "clients",
+            "tf": 1,
+            "weight": 0.01087
+          },
+          {
+            "term": "for",
+            "tf": 1,
+            "weight": 0.01087
+          }
+        ],
+        "unique_terms": 39,
+        "total_terms": 92
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Request Methods",
+        "com",
+        "github",
+        "https",
+        "mcp",
+        "modelcontextprotocol",
+        "python",
+        "sdk",
+        "server",
+        "session",
+        "src"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.6,
+      "structural": 0.7,
+      "retrieval_quality": 0.575,
+      "overall": 0.6249999999999999
+    }
+  },
+  {
+    "text": "### Protocol Message Types\n\n```\n```\n\nSources: [src/mcp/server/session.py71-79](https://github.com/modelcontextprotocol/python-sdk/blob/146d7efb/src/mcp/server/session.py#L71-L79)",
+    "metadata": {
+      "chunk_id": "d76907876195-0014",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_6.2-serversession-implementation.md",
+      "filename": "_modelcontextprotocol_python-sdk_6.2-serversession-implementation.md",
+      "file_extension": ".md",
+      "chunk_index": 14,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Protocol Message Types"
+      ],
+      "heading_text": "Protocol Message Types",
+      "token_count": 50,
+      "char_count": 178,
+      "start_char": 10770,
+      "end_char": 10948,
+      "semantic_score": 0.6,
+      "structural_score": 0.7,
+      "retrieval_quality": 0.5525,
+      "chunking_strategy": "hybrid_adaptive_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T09:13:51.722534",
+      "document_id": "d76907876195",
+      "document_name": "_modelcontextprotocol_python-sdk_6.2-serversession-implementation",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_6.2-serversession-implementation.md",
+      "source_filename": "_modelcontextprotocol_python-sdk_6.2-serversession-implementation.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk",
+      "relative_path": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_6.2-serversession-implementation.md",
+      "hierarchy_path": "Protocol Message Types",
+      "chunk_hash": "8a30a9066f59ac36",
+      "content_digest": "8a30a9066f59ac36",
+      "chunk_length": 178,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "src",
+          "mcp",
+          "server",
+          "session",
+          "protocol",
+          "message",
+          "types",
+          "sources",
+          "py71",
+          "https",
+          "github",
+          "com",
+          "modelcontextprotocol",
+          "python",
+          "sdk",
+          "blob",
+          "146d7efb",
+          "l71",
+          "l79"
+        ],
+        "term_weights": [
+          {
+            "term": "src",
+            "tf": 2,
+            "weight": 0.086957
+          },
+          {
+            "term": "mcp",
+            "tf": 2,
+            "weight": 0.086957
+          },
+          {
+            "term": "server",
+            "tf": 2,
+            "weight": 0.086957
+          },
+          {
+            "term": "session",
+            "tf": 2,
+            "weight": 0.086957
+          },
+          {
+            "term": "protocol",
+            "tf": 1,
+            "weight": 0.043478
+          },
+          {
+            "term": "message",
+            "tf": 1,
+            "weight": 0.043478
+          },
+          {
+            "term": "types",
+            "tf": 1,
+            "weight": 0.043478
+          },
+          {
+            "term": "sources",
+            "tf": 1,
+            "weight": 0.043478
+          },
+          {
+            "term": "py71",
+            "tf": 1,
+            "weight": 0.043478
+          },
+          {
+            "term": "https",
+            "tf": 1,
+            "weight": 0.043478
+          },
+          {
+            "term": "github",
+            "tf": 1,
+            "weight": 0.043478
+          },
+          {
+            "term": "com",
+            "tf": 1,
+            "weight": 0.043478
+          },
+          {
+            "term": "modelcontextprotocol",
+            "tf": 1,
+            "weight": 0.043478
+          },
+          {
+            "term": "python",
+            "tf": 1,
+            "weight": 0.043478
+          },
+          {
+            "term": "sdk",
+            "tf": 1,
+            "weight": 0.043478
+          },
+          {
+            "term": "blob",
+            "tf": 1,
+            "weight": 0.043478
+          },
+          {
+            "term": "146d7efb",
+            "tf": 1,
+            "weight": 0.043478
+          },
+          {
+            "term": "l71",
+            "tf": 1,
+            "weight": 0.043478
+          },
+          {
+            "term": "l79",
+            "tf": 1,
+            "weight": 0.043478
+          }
+        ],
+        "unique_terms": 19,
+        "total_terms": 23
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Protocol Message Types",
+        "https",
+        "mcp",
+        "message",
+        "protocol",
+        "py71",
+        "server",
+        "session",
+        "sources",
+        "src",
+        "types"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.6,
+      "structural": 0.7,
+      "retrieval_quality": 0.5525,
+      "overall": 0.6174999999999999
+    }
+  },
+  {
+    "text": "### Stateless Mode Support\n\nServerSession supports stateless operation for scenarios where session persistence is not required:\n\n```\n```\n\nIn stateless mode, the session immediately transitions to `Initialized` state, bypassing the normal MCP initialization handshake.\n\nSources: [src/mcp/server/session.py88-93](https://github.com/modelcontextprotocol/python-sdk/blob/146d7efb/src/mcp/server/session.py#L88-L93)\n\nDismiss\n\nRefresh this wiki\n\nEnter email to refresh",
+    "metadata": {
+      "chunk_id": "d76907876195-0015",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_6.2-serversession-implementation.md",
+      "filename": "_modelcontextprotocol_python-sdk_6.2-serversession-implementation.md",
+      "file_extension": ".md",
+      "chunk_index": 15,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Stateless Mode Support"
+      ],
+      "heading_text": "Stateless Mode Support",
+      "token_count": 98,
+      "char_count": 462,
+      "start_char": 10950,
+      "end_char": 11412,
+      "semantic_score": 0.7,
+      "structural_score": 0.7,
+      "retrieval_quality": 0.5422727272727272,
+      "chunking_strategy": "hybrid_adaptive_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T09:13:51.723072",
+      "document_id": "d76907876195",
+      "document_name": "_modelcontextprotocol_python-sdk_6.2-serversession-implementation",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_6.2-serversession-implementation.md",
+      "source_filename": "_modelcontextprotocol_python-sdk_6.2-serversession-implementation.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk",
+      "relative_path": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_6.2-serversession-implementation.md",
+      "hierarchy_path": "Stateless Mode Support",
+      "chunk_hash": "251a48983d3d8c4d",
+      "content_digest": "251a48983d3d8c4d",
+      "chunk_length": 462,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "session",
+          "stateless",
+          "mcp",
+          "mode",
+          "the",
+          "src",
+          "server",
+          "refresh",
+          "support",
+          "serversession",
+          "supports",
+          "operation",
+          "for",
+          "scenarios",
+          "where",
+          "persistence",
+          "not",
+          "required",
+          "immediately",
+          "transitions"
+        ],
+        "term_weights": [
+          {
+            "term": "session",
+            "tf": 4,
+            "weight": 0.072727
+          },
+          {
+            "term": "stateless",
+            "tf": 3,
+            "weight": 0.054545
+          },
+          {
+            "term": "mcp",
+            "tf": 3,
+            "weight": 0.054545
+          },
+          {
+            "term": "mode",
+            "tf": 2,
+            "weight": 0.036364
+          },
+          {
+            "term": "the",
+            "tf": 2,
+            "weight": 0.036364
+          },
+          {
+            "term": "src",
+            "tf": 2,
+            "weight": 0.036364
+          },
+          {
+            "term": "server",
+            "tf": 2,
+            "weight": 0.036364
+          },
+          {
+            "term": "refresh",
+            "tf": 2,
+            "weight": 0.036364
+          },
+          {
+            "term": "support",
+            "tf": 1,
+            "weight": 0.018182
+          },
+          {
+            "term": "serversession",
+            "tf": 1,
+            "weight": 0.018182
+          },
+          {
+            "term": "supports",
+            "tf": 1,
+            "weight": 0.018182
+          },
+          {
+            "term": "operation",
+            "tf": 1,
+            "weight": 0.018182
+          },
+          {
+            "term": "for",
+            "tf": 1,
+            "weight": 0.018182
+          },
+          {
+            "term": "scenarios",
+            "tf": 1,
+            "weight": 0.018182
+          },
+          {
+            "term": "where",
+            "tf": 1,
+            "weight": 0.018182
+          },
+          {
+            "term": "persistence",
+            "tf": 1,
+            "weight": 0.018182
+          },
+          {
+            "term": "not",
+            "tf": 1,
+            "weight": 0.018182
+          },
+          {
+            "term": "required",
+            "tf": 1,
+            "weight": 0.018182
+          },
+          {
+            "term": "immediately",
+            "tf": 1,
+            "weight": 0.018182
+          },
+          {
+            "term": "transitions",
+            "tf": 1,
+            "weight": 0.018182
+          }
+        ],
+        "unique_terms": 43,
+        "total_terms": 55
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Stateless Mode Support",
+        "mcp",
+        "mode",
+        "refresh",
+        "server",
+        "serversession",
+        "session",
+        "src",
+        "stateless",
+        "support",
+        "the"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.7,
+      "retrieval_quality": 0.5422727272727272,
+      "overall": 0.6474242424242423
+    }
+  },
+  {
+    "text": "### On this page  - [ServerSession Implementation](#serversession-implementation.md) - [Architecture Overview](#architecture-overview.md) - [Session Lifecycle and Initialization](#session-lifecycle-and-initialization.md) - [Initialization States](#initialization-states.md) - [Initialization Protocol](#initialization-protocol.md) - [Client Capability Management](#client-capability-management.md) - [Capability Checking Logic](#capability-checking-logic.md) - [Message Processing Architecture](#message-processing-architecture.md) - [Incoming Message Flow](#incoming-message-flow.md) - [Request Validation](#request-validation.md) - [Server-to-Client Communication Methods](#server-to-client-communication-methods.md) - [Notification Methods](#notification-methods.md) - [Request Methods](#request-methods.md) - [Integration with MCP Protocol](#integration-with-mcp-protocol.md) - [Protocol Message Types](#protocol-message-types.md) - [Stateless Mode Support](#stateless-mode-support.md)",
+    "metadata": {
+      "chunk_id": "d76907876195-0016",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_6.2-serversession-implementation.md",
+      "filename": "_modelcontextprotocol_python-sdk_6.2-serversession-implementation.md",
+      "file_extension": ".md",
+      "chunk_index": 16,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "On this page"
+      ],
+      "heading_text": "On this page",
+      "token_count": 213,
+      "char_count": 989,
+      "start_char": 11414,
+      "end_char": 12403,
+      "semantic_score": 0.7,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5042857142857142,
+      "chunking_strategy": "hybrid_adaptive_structural",
+      "content_type": "list_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T09:13:51.723876",
+      "document_id": "d76907876195",
+      "document_name": "_modelcontextprotocol_python-sdk_6.2-serversession-implementation",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_6.2-serversession-implementation.md",
+      "source_filename": "_modelcontextprotocol_python-sdk_6.2-serversession-implementation.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk",
+      "relative_path": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_6.2-serversession-implementation.md",
+      "hierarchy_path": "On this page",
+      "chunk_hash": "a97215978b2a267d",
+      "content_digest": "a97215978b2a267d",
+      "chunk_length": 989,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "initialization",
+          "protocol",
+          "message",
+          "methods",
+          "architecture",
+          "client",
+          "capability",
+          "request",
+          "serversession",
+          "implementation",
+          "overview",
+          "session",
+          "lifecycle",
+          "and",
+          "states",
+          "management",
+          "checking",
+          "logic",
+          "processing",
+          "incoming"
+        ],
+        "term_weights": [
+          {
+            "term": "initialization",
+            "tf": 6,
+            "weight": 0.066667
+          },
+          {
+            "term": "protocol",
+            "tf": 6,
+            "weight": 0.066667
+          },
+          {
+            "term": "message",
+            "tf": 6,
+            "weight": 0.066667
+          },
+          {
+            "term": "methods",
+            "tf": 6,
+            "weight": 0.066667
+          },
+          {
+            "term": "architecture",
+            "tf": 4,
+            "weight": 0.044444
+          },
+          {
+            "term": "client",
+            "tf": 4,
+            "weight": 0.044444
+          },
+          {
+            "term": "capability",
+            "tf": 4,
+            "weight": 0.044444
+          },
+          {
+            "term": "request",
+            "tf": 4,
+            "weight": 0.044444
+          },
+          {
+            "term": "serversession",
+            "tf": 2,
+            "weight": 0.022222
+          },
+          {
+            "term": "implementation",
+            "tf": 2,
+            "weight": 0.022222
+          },
+          {
+            "term": "overview",
+            "tf": 2,
+            "weight": 0.022222
+          },
+          {
+            "term": "session",
+            "tf": 2,
+            "weight": 0.022222
+          },
+          {
+            "term": "lifecycle",
+            "tf": 2,
+            "weight": 0.022222
+          },
+          {
+            "term": "and",
+            "tf": 2,
+            "weight": 0.022222
+          },
+          {
+            "term": "states",
+            "tf": 2,
+            "weight": 0.022222
+          },
+          {
+            "term": "management",
+            "tf": 2,
+            "weight": 0.022222
+          },
+          {
+            "term": "checking",
+            "tf": 2,
+            "weight": 0.022222
+          },
+          {
+            "term": "logic",
+            "tf": 2,
+            "weight": 0.022222
+          },
+          {
+            "term": "processing",
+            "tf": 2,
+            "weight": 0.022222
+          },
+          {
+            "term": "incoming",
+            "tf": 2,
+            "weight": 0.022222
+          }
+        ],
+        "unique_terms": 34,
+        "total_terms": 90
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "On this page",
+        "architecture",
+        "capability",
+        "client",
+        "implementation",
+        "initialization",
+        "message",
+        "methods",
+        "protocol",
+        "request",
+        "serversession"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5042857142857142,
+      "overall": 0.7014285714285714
+    }
+  }
+]

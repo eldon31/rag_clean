@@ -1,0 +1,2002 @@
+[
+  {
+    "text": "## Purpose and Scope\n\nThis document details how Pydantic handles the conversion of Python objects to and from JSON. It covers both the serialization (Python → JSON) and deserialization (JSON → Python) processes, including the core architecture, built-in serialization behavior for various data types, and customization options.\n\nFor information about validators, see [Validators](pydantic/pydantic/4.1-validators.md). For information about the broader serialization system including Python dict serialization, see [Serializers](pydantic/pydantic/4.2-serializers.md).",
+    "metadata": {
+      "chunk_id": "841f46e47b40-0001",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\pydantic\\_pydantic_pydantic_4.3-json-conversion.md",
+      "filename": "_pydantic_pydantic_4.3-json-conversion.md",
+      "file_extension": ".md",
+      "chunk_index": 1,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Purpose and Scope"
+      ],
+      "heading_text": "Purpose and Scope",
+      "token_count": 116,
+      "char_count": 566,
+      "start_char": 2642,
+      "end_char": 3208,
+      "semantic_score": 0.7,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5172727272727272,
+      "chunking_strategy": "hybrid_adaptive_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T09:13:53.288696",
+      "document_id": "841f46e47b40",
+      "document_name": "_pydantic_pydantic_4.3-json-conversion",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\pydantic\\_pydantic_pydantic_4.3-json-conversion.md",
+      "source_filename": "_pydantic_pydantic_4.3-json-conversion.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\pydantic",
+      "relative_path": "Docs\\pydantic\\_pydantic_pydantic_4.3-json-conversion.md",
+      "hierarchy_path": "Purpose and Scope",
+      "chunk_hash": "cc81f5ea59e465ce",
+      "content_digest": "cc81f5ea59e465ce",
+      "chunk_length": 566,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "pydantic",
+          "and",
+          "the",
+          "python",
+          "serialization",
+          "json",
+          "for",
+          "validators",
+          "including",
+          "information",
+          "about",
+          "see",
+          "serializers",
+          "purpose",
+          "scope",
+          "this",
+          "document",
+          "details",
+          "how",
+          "handles"
+        ],
+        "term_weights": [
+          {
+            "term": "pydantic",
+            "tf": 5,
+            "weight": 0.075758
+          },
+          {
+            "term": "and",
+            "tf": 4,
+            "weight": 0.060606
+          },
+          {
+            "term": "the",
+            "tf": 4,
+            "weight": 0.060606
+          },
+          {
+            "term": "python",
+            "tf": 4,
+            "weight": 0.060606
+          },
+          {
+            "term": "serialization",
+            "tf": 4,
+            "weight": 0.060606
+          },
+          {
+            "term": "json",
+            "tf": 3,
+            "weight": 0.045455
+          },
+          {
+            "term": "for",
+            "tf": 3,
+            "weight": 0.045455
+          },
+          {
+            "term": "validators",
+            "tf": 3,
+            "weight": 0.045455
+          },
+          {
+            "term": "including",
+            "tf": 2,
+            "weight": 0.030303
+          },
+          {
+            "term": "information",
+            "tf": 2,
+            "weight": 0.030303
+          },
+          {
+            "term": "about",
+            "tf": 2,
+            "weight": 0.030303
+          },
+          {
+            "term": "see",
+            "tf": 2,
+            "weight": 0.030303
+          },
+          {
+            "term": "serializers",
+            "tf": 2,
+            "weight": 0.030303
+          },
+          {
+            "term": "purpose",
+            "tf": 1,
+            "weight": 0.015152
+          },
+          {
+            "term": "scope",
+            "tf": 1,
+            "weight": 0.015152
+          },
+          {
+            "term": "this",
+            "tf": 1,
+            "weight": 0.015152
+          },
+          {
+            "term": "document",
+            "tf": 1,
+            "weight": 0.015152
+          },
+          {
+            "term": "details",
+            "tf": 1,
+            "weight": 0.015152
+          },
+          {
+            "term": "how",
+            "tf": 1,
+            "weight": 0.015152
+          },
+          {
+            "term": "handles",
+            "tf": 1,
+            "weight": 0.015152
+          }
+        ],
+        "unique_terms": 39,
+        "total_terms": 66
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Purpose and Scope",
+        "and",
+        "for",
+        "including",
+        "information",
+        "json",
+        "pydantic",
+        "python",
+        "serialization",
+        "the",
+        "validators"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5172727272727272,
+      "overall": 0.7057575757575757
+    }
+  },
+  {
+    "text": "## JSON Serialization Methods\n\nPydantic provides two primary ways to serialize objects to JSON:\n\n1. `BaseModel.model_dump_json()` - For serializing model instances\n2. `TypeAdapter.dump_json()` - For serializing arbitrary types\n\n```\n```\n\nSources: [tests/test\\_json.py134-137](https://github.com/pydantic/pydantic/blob/76ef0b08/tests/test_json.py#L134-L137) [tests/test\\_json.py92-94](https://github.com/pydantic/pydantic/blob/76ef0b08/tests/test_json.py#L92-L94)",
+    "metadata": {
+      "chunk_id": "841f46e47b40-0003",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\pydantic\\_pydantic_pydantic_4.3-json-conversion.md",
+      "filename": "_pydantic_pydantic_4.3-json-conversion.md",
+      "file_extension": ".md",
+      "chunk_index": 3,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "JSON Serialization Methods"
+      ],
+      "heading_text": "JSON Serialization Methods",
+      "token_count": 129,
+      "char_count": 461,
+      "start_char": 3606,
+      "end_char": 4067,
+      "semantic_score": 0.6,
+      "structural_score": 0.7,
+      "retrieval_quality": 0.5445454545454546,
+      "chunking_strategy": "hybrid_adaptive_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T09:13:53.289516",
+      "document_id": "841f46e47b40",
+      "document_name": "_pydantic_pydantic_4.3-json-conversion",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\pydantic\\_pydantic_pydantic_4.3-json-conversion.md",
+      "source_filename": "_pydantic_pydantic_4.3-json-conversion.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\pydantic",
+      "relative_path": "Docs\\pydantic\\_pydantic_pydantic_4.3-json-conversion.md",
+      "hierarchy_path": "JSON Serialization Methods",
+      "chunk_hash": "41be0b3456483da7",
+      "content_digest": "41be0b3456483da7",
+      "chunk_length": 461,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "json",
+          "pydantic",
+          "tests",
+          "test",
+          "model",
+          "dump",
+          "for",
+          "serializing",
+          "https",
+          "github",
+          "com",
+          "blob",
+          "76ef0b08",
+          "serialization",
+          "methods",
+          "provides",
+          "two",
+          "primary",
+          "ways",
+          "serialize"
+        ],
+        "term_weights": [
+          {
+            "term": "json",
+            "tf": 8,
+            "weight": 0.133333
+          },
+          {
+            "term": "pydantic",
+            "tf": 5,
+            "weight": 0.083333
+          },
+          {
+            "term": "tests",
+            "tf": 4,
+            "weight": 0.066667
+          },
+          {
+            "term": "test",
+            "tf": 4,
+            "weight": 0.066667
+          },
+          {
+            "term": "model",
+            "tf": 2,
+            "weight": 0.033333
+          },
+          {
+            "term": "dump",
+            "tf": 2,
+            "weight": 0.033333
+          },
+          {
+            "term": "for",
+            "tf": 2,
+            "weight": 0.033333
+          },
+          {
+            "term": "serializing",
+            "tf": 2,
+            "weight": 0.033333
+          },
+          {
+            "term": "https",
+            "tf": 2,
+            "weight": 0.033333
+          },
+          {
+            "term": "github",
+            "tf": 2,
+            "weight": 0.033333
+          },
+          {
+            "term": "com",
+            "tf": 2,
+            "weight": 0.033333
+          },
+          {
+            "term": "blob",
+            "tf": 2,
+            "weight": 0.033333
+          },
+          {
+            "term": "76ef0b08",
+            "tf": 2,
+            "weight": 0.033333
+          },
+          {
+            "term": "serialization",
+            "tf": 1,
+            "weight": 0.016667
+          },
+          {
+            "term": "methods",
+            "tf": 1,
+            "weight": 0.016667
+          },
+          {
+            "term": "provides",
+            "tf": 1,
+            "weight": 0.016667
+          },
+          {
+            "term": "two",
+            "tf": 1,
+            "weight": 0.016667
+          },
+          {
+            "term": "primary",
+            "tf": 1,
+            "weight": 0.016667
+          },
+          {
+            "term": "ways",
+            "tf": 1,
+            "weight": 0.016667
+          },
+          {
+            "term": "serialize",
+            "tf": 1,
+            "weight": 0.016667
+          }
+        ],
+        "unique_terms": 34,
+        "total_terms": 60
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "JSON Serialization Methods",
+        "dump",
+        "for",
+        "github",
+        "https",
+        "json",
+        "model",
+        "pydantic",
+        "serializing",
+        "test",
+        "tests"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.6,
+      "structural": 0.7,
+      "retrieval_quality": 0.5445454545454546,
+      "overall": 0.6148484848484848
+    }
+  },
+  {
+    "text": "## JSON Deserialization Methods\n\nPydantic provides corresponding methods for deserializing JSON:\n\n1. `BaseModel.model_validate_json()` - For deserializing to model instances\n2. `TypeAdapter.validate_json()` - For deserializing to arbitrary types\n\n```\n```\n\nSources: [tests/test\\_json.py234-236](https://github.com/pydantic/pydantic/blob/76ef0b08/tests/test_json.py#L234-L236) [tests/test\\_json.py251](https://github.com/pydantic/pydantic/blob/76ef0b08/tests/test_json.py#L251-L251)",
+    "metadata": {
+      "chunk_id": "841f46e47b40-0006",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\pydantic\\_pydantic_pydantic_4.3-json-conversion.md",
+      "filename": "_pydantic_pydantic_4.3-json-conversion.md",
+      "file_extension": ".md",
+      "chunk_index": 6,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "JSON Deserialization Methods"
+      ],
+      "heading_text": "JSON Deserialization Methods",
+      "token_count": 131,
+      "char_count": 480,
+      "start_char": 5519,
+      "end_char": 5999,
+      "semantic_score": 0.6,
+      "structural_score": 0.7,
+      "retrieval_quality": 0.515,
+      "chunking_strategy": "hybrid_adaptive_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T09:13:53.291360",
+      "document_id": "841f46e47b40",
+      "document_name": "_pydantic_pydantic_4.3-json-conversion",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\pydantic\\_pydantic_pydantic_4.3-json-conversion.md",
+      "source_filename": "_pydantic_pydantic_4.3-json-conversion.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\pydantic",
+      "relative_path": "Docs\\pydantic\\_pydantic_pydantic_4.3-json-conversion.md",
+      "hierarchy_path": "JSON Deserialization Methods",
+      "chunk_hash": "164c49ee6ed4e825",
+      "content_digest": "164c49ee6ed4e825",
+      "chunk_length": 480,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "json",
+          "pydantic",
+          "tests",
+          "test",
+          "for",
+          "deserializing",
+          "methods",
+          "model",
+          "validate",
+          "https",
+          "github",
+          "com",
+          "blob",
+          "76ef0b08",
+          "l251",
+          "deserialization",
+          "provides",
+          "corresponding",
+          "basemodel",
+          "instances"
+        ],
+        "term_weights": [
+          {
+            "term": "json",
+            "tf": 8,
+            "weight": 0.135593
+          },
+          {
+            "term": "pydantic",
+            "tf": 5,
+            "weight": 0.084746
+          },
+          {
+            "term": "tests",
+            "tf": 4,
+            "weight": 0.067797
+          },
+          {
+            "term": "test",
+            "tf": 4,
+            "weight": 0.067797
+          },
+          {
+            "term": "for",
+            "tf": 3,
+            "weight": 0.050847
+          },
+          {
+            "term": "deserializing",
+            "tf": 3,
+            "weight": 0.050847
+          },
+          {
+            "term": "methods",
+            "tf": 2,
+            "weight": 0.033898
+          },
+          {
+            "term": "model",
+            "tf": 2,
+            "weight": 0.033898
+          },
+          {
+            "term": "validate",
+            "tf": 2,
+            "weight": 0.033898
+          },
+          {
+            "term": "https",
+            "tf": 2,
+            "weight": 0.033898
+          },
+          {
+            "term": "github",
+            "tf": 2,
+            "weight": 0.033898
+          },
+          {
+            "term": "com",
+            "tf": 2,
+            "weight": 0.033898
+          },
+          {
+            "term": "blob",
+            "tf": 2,
+            "weight": 0.033898
+          },
+          {
+            "term": "76ef0b08",
+            "tf": 2,
+            "weight": 0.033898
+          },
+          {
+            "term": "l251",
+            "tf": 2,
+            "weight": 0.033898
+          },
+          {
+            "term": "deserialization",
+            "tf": 1,
+            "weight": 0.016949
+          },
+          {
+            "term": "provides",
+            "tf": 1,
+            "weight": 0.016949
+          },
+          {
+            "term": "corresponding",
+            "tf": 1,
+            "weight": 0.016949
+          },
+          {
+            "term": "basemodel",
+            "tf": 1,
+            "weight": 0.016949
+          },
+          {
+            "term": "instances",
+            "tf": 1,
+            "weight": 0.016949
+          }
+        ],
+        "unique_terms": 29,
+        "total_terms": 59
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "JSON Deserialization Methods",
+        "deserializing",
+        "for",
+        "https",
+        "json",
+        "methods",
+        "model",
+        "pydantic",
+        "test",
+        "tests",
+        "validate"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.6,
+      "structural": 0.7,
+      "retrieval_quality": 0.515,
+      "overall": 0.605
+    }
+  },
+  {
+    "text": "### Built-in Type Serialization  | Python Type                       | JSON Representation        | Example                                  | | --------------------------------- | -------------------------- | ---------------------------------------- | | `str`                             | string                     | `\"text\"`                                 | | `int`/`float`                     | number                     | `123`, `3.14`                            | | `bool`                            | boolean                    | `true`, `false`                          | | `None`                            | null                       | `null`                                   | | `list`/`tuple`/`set`              | array                      | `[1, 2, 3]`                              | | `dict`                            | object                     | `{\"key\": \"value\"}`                       | | `UUID`                            | string                     | `\"ebcdab58-6eb8-46fb-a190-d07a33e9eac8\"` | | `datetime`                        | string (ISO 8601)          | `\"2032-01-01T01:01:00\"`                  | | `date`                            | string (ISO 8601)          | `\"2032-01-01\"`                           | | `time`                            | string (ISO 8601)          | `\"12:34:56\"`                             | | `timedelta`                       | string (ISO 8601 duration) | `\"P12DT34.000056S\"`                      | | `bytes`                           | string (UTF-8)             | `\"this is bytes\"`                        | | `Decimal`                         | string                     | `\"12.34\"`                                | | `Enum`                            | string/number              | `\"bar\"`                                  | | `Pattern`                         | string                     | `\"^regex$\"`                              | | `SecretStr`/`SecretBytes`         | string (masked)            | `\"**********\"`                           | | `IPv4Address`/`IPv6Address`       | string                     | `\"192.168.0.1\"`                          | | `Path`/`FilePath`/`DirectoryPath` | string                     | `\"/path/to/file\"`                        |  Sources: [tests/test\\_json.py61-91](https://github.com/pydantic/pydantic/blob/76ef0b08/tests/test_json.py#L61-L91) [tests/test\\_json.py107-120](https://github.com/pydantic/pydantic/blob/76ef0b08/tests/test_json.py#L107-L120)",
+    "metadata": {
+      "chunk_id": "841f46e47b40-0008",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\pydantic\\_pydantic_pydantic_4.3-json-conversion.md",
+      "filename": "_pydantic_pydantic_4.3-json-conversion.md",
+      "file_extension": ".md",
+      "chunk_index": 8,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Built-in Type Serialization"
+      ],
+      "heading_text": "Built-in Type Serialization",
+      "token_count": 509,
+      "char_count": 2458,
+      "start_char": 6253,
+      "end_char": 8711,
+      "semantic_score": 0.7999999999999999,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.6275449101796406,
+      "chunking_strategy": "hybrid_adaptive_structural",
+      "content_type": "table_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T09:13:53.293341",
+      "document_id": "841f46e47b40",
+      "document_name": "_pydantic_pydantic_4.3-json-conversion",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\pydantic\\_pydantic_pydantic_4.3-json-conversion.md",
+      "source_filename": "_pydantic_pydantic_4.3-json-conversion.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\pydantic",
+      "relative_path": "Docs\\pydantic\\_pydantic_pydantic_4.3-json-conversion.md",
+      "hierarchy_path": "Built-in Type Serialization",
+      "chunk_hash": "daeb391c3103f56a",
+      "content_digest": "daeb391c3103f56a",
+      "chunk_length": 2458,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "string",
+          "json",
+          "iso",
+          "8601",
+          "tests",
+          "test",
+          "pydantic",
+          "type",
+          "number",
+          "null",
+          "2032",
+          "bytes",
+          "path",
+          "https",
+          "github",
+          "com",
+          "blob",
+          "76ef0b08",
+          "built",
+          "serialization"
+        ],
+        "term_weights": [
+          {
+            "term": "string",
+            "tf": 13,
+            "weight": 0.106557
+          },
+          {
+            "term": "json",
+            "tf": 5,
+            "weight": 0.040984
+          },
+          {
+            "term": "iso",
+            "tf": 4,
+            "weight": 0.032787
+          },
+          {
+            "term": "8601",
+            "tf": 4,
+            "weight": 0.032787
+          },
+          {
+            "term": "tests",
+            "tf": 4,
+            "weight": 0.032787
+          },
+          {
+            "term": "test",
+            "tf": 4,
+            "weight": 0.032787
+          },
+          {
+            "term": "pydantic",
+            "tf": 4,
+            "weight": 0.032787
+          },
+          {
+            "term": "type",
+            "tf": 2,
+            "weight": 0.016393
+          },
+          {
+            "term": "number",
+            "tf": 2,
+            "weight": 0.016393
+          },
+          {
+            "term": "null",
+            "tf": 2,
+            "weight": 0.016393
+          },
+          {
+            "term": "2032",
+            "tf": 2,
+            "weight": 0.016393
+          },
+          {
+            "term": "bytes",
+            "tf": 2,
+            "weight": 0.016393
+          },
+          {
+            "term": "path",
+            "tf": 2,
+            "weight": 0.016393
+          },
+          {
+            "term": "https",
+            "tf": 2,
+            "weight": 0.016393
+          },
+          {
+            "term": "github",
+            "tf": 2,
+            "weight": 0.016393
+          },
+          {
+            "term": "com",
+            "tf": 2,
+            "weight": 0.016393
+          },
+          {
+            "term": "blob",
+            "tf": 2,
+            "weight": 0.016393
+          },
+          {
+            "term": "76ef0b08",
+            "tf": 2,
+            "weight": 0.016393
+          },
+          {
+            "term": "built",
+            "tf": 1,
+            "weight": 0.008197
+          },
+          {
+            "term": "serialization",
+            "tf": 1,
+            "weight": 0.008197
+          }
+        ],
+        "unique_terms": 80,
+        "total_terms": 122
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "8601",
+        "Built-in Type Serialization",
+        "iso",
+        "json",
+        "null",
+        "number",
+        "pydantic",
+        "string",
+        "test",
+        "tests",
+        "type"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.7999999999999999,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.6275449101796406,
+      "overall": 0.7758483033932135
+    }
+  },
+  {
+    "text": "#### Infinity and NaN\n\nBy default, `float('inf')`, `float('-inf')`, and `float('nan')` values raise errors in JSON serialization. You can configure how they are handled:\n\n```\n```\n\nWith this configuration, these values become `\"Infinity\"`, `\"-Infinity\"`, and `\"NaN\"` in JSON.\n\nSources: [tests/test\\_json.py508-538](https://github.com/pydantic/pydantic/blob/76ef0b08/tests/test_json.py#L508-L538)",
+    "metadata": {
+      "chunk_id": "841f46e47b40-0010",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\pydantic\\_pydantic_pydantic_4.3-json-conversion.md",
+      "filename": "_pydantic_pydantic_4.3-json-conversion.md",
+      "file_extension": ".md",
+      "chunk_index": 10,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Infinity and NaN"
+      ],
+      "heading_text": "Infinity and NaN",
+      "token_count": 108,
+      "char_count": 394,
+      "start_char": 8732,
+      "end_char": 9126,
+      "semantic_score": 0.7,
+      "structural_score": 0.7,
+      "retrieval_quality": 0.5515384615384615,
+      "chunking_strategy": "hybrid_adaptive_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T09:13:53.294603",
+      "document_id": "841f46e47b40",
+      "document_name": "_pydantic_pydantic_4.3-json-conversion",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\pydantic\\_pydantic_pydantic_4.3-json-conversion.md",
+      "source_filename": "_pydantic_pydantic_4.3-json-conversion.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\pydantic",
+      "relative_path": "Docs\\pydantic\\_pydantic_pydantic_4.3-json-conversion.md",
+      "hierarchy_path": "Infinity and NaN",
+      "chunk_hash": "f6f69d5c6a824370",
+      "content_digest": "f6f69d5c6a824370",
+      "chunk_length": 394,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "json",
+          "infinity",
+          "and",
+          "nan",
+          "float",
+          "inf",
+          "values",
+          "tests",
+          "test",
+          "pydantic",
+          "default",
+          "raise",
+          "errors",
+          "serialization",
+          "you",
+          "can",
+          "configure",
+          "how",
+          "they",
+          "are"
+        ],
+        "term_weights": [
+          {
+            "term": "json",
+            "tf": 4,
+            "weight": 0.076923
+          },
+          {
+            "term": "infinity",
+            "tf": 3,
+            "weight": 0.057692
+          },
+          {
+            "term": "and",
+            "tf": 3,
+            "weight": 0.057692
+          },
+          {
+            "term": "nan",
+            "tf": 3,
+            "weight": 0.057692
+          },
+          {
+            "term": "float",
+            "tf": 3,
+            "weight": 0.057692
+          },
+          {
+            "term": "inf",
+            "tf": 2,
+            "weight": 0.038462
+          },
+          {
+            "term": "values",
+            "tf": 2,
+            "weight": 0.038462
+          },
+          {
+            "term": "tests",
+            "tf": 2,
+            "weight": 0.038462
+          },
+          {
+            "term": "test",
+            "tf": 2,
+            "weight": 0.038462
+          },
+          {
+            "term": "pydantic",
+            "tf": 2,
+            "weight": 0.038462
+          },
+          {
+            "term": "default",
+            "tf": 1,
+            "weight": 0.019231
+          },
+          {
+            "term": "raise",
+            "tf": 1,
+            "weight": 0.019231
+          },
+          {
+            "term": "errors",
+            "tf": 1,
+            "weight": 0.019231
+          },
+          {
+            "term": "serialization",
+            "tf": 1,
+            "weight": 0.019231
+          },
+          {
+            "term": "you",
+            "tf": 1,
+            "weight": 0.019231
+          },
+          {
+            "term": "can",
+            "tf": 1,
+            "weight": 0.019231
+          },
+          {
+            "term": "configure",
+            "tf": 1,
+            "weight": 0.019231
+          },
+          {
+            "term": "how",
+            "tf": 1,
+            "weight": 0.019231
+          },
+          {
+            "term": "they",
+            "tf": 1,
+            "weight": 0.019231
+          },
+          {
+            "term": "are",
+            "tf": 1,
+            "weight": 0.019231
+          }
+        ],
+        "unique_terms": 36,
+        "total_terms": 52
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Infinity and NaN",
+        "and",
+        "float",
+        "inf",
+        "infinity",
+        "json",
+        "nan",
+        "pydantic",
+        "test",
+        "tests",
+        "values"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.7,
+      "retrieval_quality": 0.5515384615384615,
+      "overall": 0.6505128205128204
+    }
+  },
+  {
+    "text": "### Field Serializers\n\nField serializers allow customizing serialization for specific fields in a model:\n\n```\n```\n\nThe `when_used` parameter can be:\n\n- `'always'` (default): Apply the serializer for all serializations\n- `'json'`: Apply only when serializing to JSON\n- `'unless-none'`: Apply only for non-None values\n\nSources: [tests/test\\_json.py212-226](https://github.com/pydantic/pydantic/blob/76ef0b08/tests/test_json.py#L212-L226) [tests/test\\_json.py292-332](https://github.com/pydantic/pydantic/blob/76ef0b08/tests/test_json.py#L292-L332)",
+    "metadata": {
+      "chunk_id": "841f46e47b40-0013",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\pydantic\\_pydantic_pydantic_4.3-json-conversion.md",
+      "filename": "_pydantic_pydantic_4.3-json-conversion.md",
+      "file_extension": ".md",
+      "chunk_index": 13,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Field Serializers"
+      ],
+      "heading_text": "Field Serializers",
+      "token_count": 150,
+      "char_count": 545,
+      "start_char": 9915,
+      "end_char": 10460,
+      "semantic_score": 0.7,
+      "structural_score": 0.7999999999999998,
+      "retrieval_quality": 0.52125,
+      "chunking_strategy": "hybrid_adaptive_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T09:13:53.295800",
+      "document_id": "841f46e47b40",
+      "document_name": "_pydantic_pydantic_4.3-json-conversion",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\pydantic\\_pydantic_pydantic_4.3-json-conversion.md",
+      "source_filename": "_pydantic_pydantic_4.3-json-conversion.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\pydantic",
+      "relative_path": "Docs\\pydantic\\_pydantic_pydantic_4.3-json-conversion.md",
+      "hierarchy_path": "Field Serializers",
+      "chunk_hash": "05c3fdaca3f53926",
+      "content_digest": "05c3fdaca3f53926",
+      "chunk_length": 545,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "json",
+          "tests",
+          "test",
+          "pydantic",
+          "for",
+          "apply",
+          "field",
+          "serializers",
+          "the",
+          "when",
+          "only",
+          "none",
+          "https",
+          "github",
+          "com",
+          "blob",
+          "76ef0b08",
+          "allow",
+          "customizing",
+          "serialization"
+        ],
+        "term_weights": [
+          {
+            "term": "json",
+            "tf": 6,
+            "weight": 0.082192
+          },
+          {
+            "term": "tests",
+            "tf": 4,
+            "weight": 0.054795
+          },
+          {
+            "term": "test",
+            "tf": 4,
+            "weight": 0.054795
+          },
+          {
+            "term": "pydantic",
+            "tf": 4,
+            "weight": 0.054795
+          },
+          {
+            "term": "for",
+            "tf": 3,
+            "weight": 0.041096
+          },
+          {
+            "term": "apply",
+            "tf": 3,
+            "weight": 0.041096
+          },
+          {
+            "term": "field",
+            "tf": 2,
+            "weight": 0.027397
+          },
+          {
+            "term": "serializers",
+            "tf": 2,
+            "weight": 0.027397
+          },
+          {
+            "term": "the",
+            "tf": 2,
+            "weight": 0.027397
+          },
+          {
+            "term": "when",
+            "tf": 2,
+            "weight": 0.027397
+          },
+          {
+            "term": "only",
+            "tf": 2,
+            "weight": 0.027397
+          },
+          {
+            "term": "none",
+            "tf": 2,
+            "weight": 0.027397
+          },
+          {
+            "term": "https",
+            "tf": 2,
+            "weight": 0.027397
+          },
+          {
+            "term": "github",
+            "tf": 2,
+            "weight": 0.027397
+          },
+          {
+            "term": "com",
+            "tf": 2,
+            "weight": 0.027397
+          },
+          {
+            "term": "blob",
+            "tf": 2,
+            "weight": 0.027397
+          },
+          {
+            "term": "76ef0b08",
+            "tf": 2,
+            "weight": 0.027397
+          },
+          {
+            "term": "allow",
+            "tf": 1,
+            "weight": 0.013699
+          },
+          {
+            "term": "customizing",
+            "tf": 1,
+            "weight": 0.013699
+          },
+          {
+            "term": "serialization",
+            "tf": 1,
+            "weight": 0.013699
+          }
+        ],
+        "unique_terms": 44,
+        "total_terms": 73
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": true,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Field Serializers",
+        "apply",
+        "field",
+        "for",
+        "json",
+        "pydantic",
+        "serializers",
+        "test",
+        "tests",
+        "the",
+        "when"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.7999999999999998,
+      "retrieval_quality": 0.52125,
+      "overall": 0.67375
+    }
+  },
+  {
+    "text": "### JSON Encoders\n\nYou can use the `json_encoders` configuration option to customize serialization for specific types:\n\n```\n```\n\nJSON encoders are applied when serializing to JSON, not when creating Python dictionaries.\n\nSources: [tests/test\\_json.py400-414](https://github.com/pydantic/pydantic/blob/76ef0b08/tests/test_json.py#L400-L414) [tests/test\\_json.py426-439](https://github.com/pydantic/pydantic/blob/76ef0b08/tests/test_json.py#L426-L439) [tests/test\\_json.py480-488](https://github.com/pydantic/pydantic/blob/76ef0b08/tests/test_json.py#L480-L488)",
+    "metadata": {
+      "chunk_id": "841f46e47b40-0014",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\pydantic\\_pydantic_pydantic_4.3-json-conversion.md",
+      "filename": "_pydantic_pydantic_4.3-json-conversion.md",
+      "file_extension": ".md",
+      "chunk_index": 14,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "JSON Encoders"
+      ],
+      "heading_text": "JSON Encoders",
+      "token_count": 157,
+      "char_count": 559,
+      "start_char": 10462,
+      "end_char": 11021,
+      "semantic_score": 0.6,
+      "structural_score": 0.7,
+      "retrieval_quality": 0.5471428571428572,
+      "chunking_strategy": "hybrid_adaptive_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T09:13:53.296301",
+      "document_id": "841f46e47b40",
+      "document_name": "_pydantic_pydantic_4.3-json-conversion",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\pydantic\\_pydantic_pydantic_4.3-json-conversion.md",
+      "source_filename": "_pydantic_pydantic_4.3-json-conversion.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\pydantic",
+      "relative_path": "Docs\\pydantic\\_pydantic_pydantic_4.3-json-conversion.md",
+      "hierarchy_path": "JSON Encoders",
+      "chunk_hash": "a27b22046358af8e",
+      "content_digest": "a27b22046358af8e",
+      "chunk_length": 559,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "json",
+          "tests",
+          "test",
+          "pydantic",
+          "encoders",
+          "https",
+          "github",
+          "com",
+          "blob",
+          "76ef0b08",
+          "when",
+          "you",
+          "can",
+          "use",
+          "the",
+          "configuration",
+          "option",
+          "customize",
+          "serialization",
+          "for"
+        ],
+        "term_weights": [
+          {
+            "term": "json",
+            "tf": 10,
+            "weight": 0.126582
+          },
+          {
+            "term": "tests",
+            "tf": 6,
+            "weight": 0.075949
+          },
+          {
+            "term": "test",
+            "tf": 6,
+            "weight": 0.075949
+          },
+          {
+            "term": "pydantic",
+            "tf": 6,
+            "weight": 0.075949
+          },
+          {
+            "term": "encoders",
+            "tf": 3,
+            "weight": 0.037975
+          },
+          {
+            "term": "https",
+            "tf": 3,
+            "weight": 0.037975
+          },
+          {
+            "term": "github",
+            "tf": 3,
+            "weight": 0.037975
+          },
+          {
+            "term": "com",
+            "tf": 3,
+            "weight": 0.037975
+          },
+          {
+            "term": "blob",
+            "tf": 3,
+            "weight": 0.037975
+          },
+          {
+            "term": "76ef0b08",
+            "tf": 3,
+            "weight": 0.037975
+          },
+          {
+            "term": "when",
+            "tf": 2,
+            "weight": 0.025316
+          },
+          {
+            "term": "you",
+            "tf": 1,
+            "weight": 0.012658
+          },
+          {
+            "term": "can",
+            "tf": 1,
+            "weight": 0.012658
+          },
+          {
+            "term": "use",
+            "tf": 1,
+            "weight": 0.012658
+          },
+          {
+            "term": "the",
+            "tf": 1,
+            "weight": 0.012658
+          },
+          {
+            "term": "configuration",
+            "tf": 1,
+            "weight": 0.012658
+          },
+          {
+            "term": "option",
+            "tf": 1,
+            "weight": 0.012658
+          },
+          {
+            "term": "customize",
+            "tf": 1,
+            "weight": 0.012658
+          },
+          {
+            "term": "serialization",
+            "tf": 1,
+            "weight": 0.012658
+          },
+          {
+            "term": "for",
+            "tf": 1,
+            "weight": 0.012658
+          }
+        ],
+        "unique_terms": 42,
+        "total_terms": 79
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "76ef0b08",
+        "JSON Encoders",
+        "blob",
+        "com",
+        "encoders",
+        "github",
+        "https",
+        "json",
+        "pydantic",
+        "test",
+        "tests"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.6,
+      "structural": 0.7,
+      "retrieval_quality": 0.5471428571428572,
+      "overall": 0.6157142857142857
+    }
+  },
+  {
+    "text": "## Integration with Standard JSON Module\n\nPydantic provides a compatibility function for use with the standard `json` module:\n\n```\n```\n\nThis allows serializing models and other Pydantic types using the standard `json` module.\n\nSources: [tests/test\\_json.py120](https://github.com/pydantic/pydantic/blob/76ef0b08/tests/test_json.py#L120-L120) [tests/test\\_json.py278-288](https://github.com/pydantic/pydantic/blob/76ef0b08/tests/test_json.py#L278-L288)",
+    "metadata": {
+      "chunk_id": "841f46e47b40-0016",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\pydantic\\_pydantic_pydantic_4.3-json-conversion.md",
+      "filename": "_pydantic_pydantic_4.3-json-conversion.md",
+      "file_extension": ".md",
+      "chunk_index": 16,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Integration with Standard JSON Module"
+      ],
+      "heading_text": "Integration with Standard JSON Module",
+      "token_count": 121,
+      "char_count": 451,
+      "start_char": 11277,
+      "end_char": 11728,
+      "semantic_score": 0.6,
+      "structural_score": 0.7,
+      "retrieval_quality": 0.5316666666666666,
+      "chunking_strategy": "hybrid_adaptive_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T09:13:53.296941",
+      "document_id": "841f46e47b40",
+      "document_name": "_pydantic_pydantic_4.3-json-conversion",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\pydantic\\_pydantic_pydantic_4.3-json-conversion.md",
+      "source_filename": "_pydantic_pydantic_4.3-json-conversion.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\pydantic",
+      "relative_path": "Docs\\pydantic\\_pydantic_pydantic_4.3-json-conversion.md",
+      "hierarchy_path": "Integration with Standard JSON Module",
+      "chunk_hash": "09ced980072fc4cf",
+      "content_digest": "09ced980072fc4cf",
+      "chunk_length": 451,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "json",
+          "pydantic",
+          "tests",
+          "test",
+          "standard",
+          "module",
+          "with",
+          "the",
+          "https",
+          "github",
+          "com",
+          "blob",
+          "76ef0b08",
+          "l120",
+          "integration",
+          "provides",
+          "compatibility",
+          "function",
+          "for",
+          "use"
+        ],
+        "term_weights": [
+          {
+            "term": "json",
+            "tf": 7,
+            "weight": 0.111111
+          },
+          {
+            "term": "pydantic",
+            "tf": 6,
+            "weight": 0.095238
+          },
+          {
+            "term": "tests",
+            "tf": 4,
+            "weight": 0.063492
+          },
+          {
+            "term": "test",
+            "tf": 4,
+            "weight": 0.063492
+          },
+          {
+            "term": "standard",
+            "tf": 3,
+            "weight": 0.047619
+          },
+          {
+            "term": "module",
+            "tf": 3,
+            "weight": 0.047619
+          },
+          {
+            "term": "with",
+            "tf": 2,
+            "weight": 0.031746
+          },
+          {
+            "term": "the",
+            "tf": 2,
+            "weight": 0.031746
+          },
+          {
+            "term": "https",
+            "tf": 2,
+            "weight": 0.031746
+          },
+          {
+            "term": "github",
+            "tf": 2,
+            "weight": 0.031746
+          },
+          {
+            "term": "com",
+            "tf": 2,
+            "weight": 0.031746
+          },
+          {
+            "term": "blob",
+            "tf": 2,
+            "weight": 0.031746
+          },
+          {
+            "term": "76ef0b08",
+            "tf": 2,
+            "weight": 0.031746
+          },
+          {
+            "term": "l120",
+            "tf": 2,
+            "weight": 0.031746
+          },
+          {
+            "term": "integration",
+            "tf": 1,
+            "weight": 0.015873
+          },
+          {
+            "term": "provides",
+            "tf": 1,
+            "weight": 0.015873
+          },
+          {
+            "term": "compatibility",
+            "tf": 1,
+            "weight": 0.015873
+          },
+          {
+            "term": "function",
+            "tf": 1,
+            "weight": 0.015873
+          },
+          {
+            "term": "for",
+            "tf": 1,
+            "weight": 0.015873
+          },
+          {
+            "term": "use",
+            "tf": 1,
+            "weight": 0.015873
+          }
+        ],
+        "unique_terms": 34,
+        "total_terms": 63
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Integration with Standard JSON Module",
+        "github",
+        "https",
+        "json",
+        "module",
+        "pydantic",
+        "standard",
+        "test",
+        "tests",
+        "the",
+        "with"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.6,
+      "structural": 0.7,
+      "retrieval_quality": 0.5316666666666666,
+      "overall": 0.6105555555555555
+    }
+  },
+  {
+    "text": "## Inheritance and JSON Serialization\n\nIn class inheritance, field serializers from parent classes are used, unless the child class provides its own serializer for the same field:\n\n```\n```\n\nNote that `json_encoders` configurations are not inherited; child models must define their own.\n\nSources: [tests/test\\_json.py254-268](https://github.com/pydantic/pydantic/blob/76ef0b08/tests/test_json.py#L254-L268) [tests/test\\_json.py426-439](https://github.com/pydantic/pydantic/blob/76ef0b08/tests/test_json.py#L426-L439)",
+    "metadata": {
+      "chunk_id": "841f46e47b40-0017",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\pydantic\\_pydantic_pydantic_4.3-json-conversion.md",
+      "filename": "_pydantic_pydantic_4.3-json-conversion.md",
+      "file_extension": ".md",
+      "chunk_index": 17,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Inheritance and JSON Serialization"
+      ],
+      "heading_text": "Inheritance and JSON Serialization",
+      "token_count": 131,
+      "char_count": 515,
+      "start_char": 11730,
+      "end_char": 12245,
+      "semantic_score": 0.7,
+      "structural_score": 0.7,
+      "retrieval_quality": 0.5566666666666666,
+      "chunking_strategy": "hybrid_adaptive_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T09:13:53.297375",
+      "document_id": "841f46e47b40",
+      "document_name": "_pydantic_pydantic_4.3-json-conversion",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\pydantic\\_pydantic_pydantic_4.3-json-conversion.md",
+      "source_filename": "_pydantic_pydantic_4.3-json-conversion.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\pydantic",
+      "relative_path": "Docs\\pydantic\\_pydantic_pydantic_4.3-json-conversion.md",
+      "hierarchy_path": "Inheritance and JSON Serialization",
+      "chunk_hash": "0b47218eba42c6ac",
+      "content_digest": "0b47218eba42c6ac",
+      "chunk_length": 515,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "json",
+          "tests",
+          "test",
+          "pydantic",
+          "inheritance",
+          "class",
+          "field",
+          "are",
+          "the",
+          "child",
+          "own",
+          "https",
+          "github",
+          "com",
+          "blob",
+          "76ef0b08",
+          "and",
+          "serialization",
+          "serializers",
+          "from"
+        ],
+        "term_weights": [
+          {
+            "term": "json",
+            "tf": 6,
+            "weight": 0.081081
+          },
+          {
+            "term": "tests",
+            "tf": 4,
+            "weight": 0.054054
+          },
+          {
+            "term": "test",
+            "tf": 4,
+            "weight": 0.054054
+          },
+          {
+            "term": "pydantic",
+            "tf": 4,
+            "weight": 0.054054
+          },
+          {
+            "term": "inheritance",
+            "tf": 2,
+            "weight": 0.027027
+          },
+          {
+            "term": "class",
+            "tf": 2,
+            "weight": 0.027027
+          },
+          {
+            "term": "field",
+            "tf": 2,
+            "weight": 0.027027
+          },
+          {
+            "term": "are",
+            "tf": 2,
+            "weight": 0.027027
+          },
+          {
+            "term": "the",
+            "tf": 2,
+            "weight": 0.027027
+          },
+          {
+            "term": "child",
+            "tf": 2,
+            "weight": 0.027027
+          },
+          {
+            "term": "own",
+            "tf": 2,
+            "weight": 0.027027
+          },
+          {
+            "term": "https",
+            "tf": 2,
+            "weight": 0.027027
+          },
+          {
+            "term": "github",
+            "tf": 2,
+            "weight": 0.027027
+          },
+          {
+            "term": "com",
+            "tf": 2,
+            "weight": 0.027027
+          },
+          {
+            "term": "blob",
+            "tf": 2,
+            "weight": 0.027027
+          },
+          {
+            "term": "76ef0b08",
+            "tf": 2,
+            "weight": 0.027027
+          },
+          {
+            "term": "and",
+            "tf": 1,
+            "weight": 0.013514
+          },
+          {
+            "term": "serialization",
+            "tf": 1,
+            "weight": 0.013514
+          },
+          {
+            "term": "serializers",
+            "tf": 1,
+            "weight": 0.013514
+          },
+          {
+            "term": "from",
+            "tf": 1,
+            "weight": 0.013514
+          }
+        ],
+        "unique_terms": 48,
+        "total_terms": 74
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Inheritance and JSON Serialization",
+        "are",
+        "child",
+        "class",
+        "field",
+        "inheritance",
+        "json",
+        "pydantic",
+        "test",
+        "tests",
+        "the"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.7,
+      "retrieval_quality": 0.5566666666666666,
+      "overall": 0.6522222222222221
+    }
+  },
+  {
+    "text": "## JSON Schema and Conversion\n\nFor information about generating JSON Schema from Pydantic models, see [JSON Schema Generation](pydantic/pydantic/5.2-json-schema-generation.md).\n\nSources: [tests/test\\_json.py372-397](https://github.com/pydantic/pydantic/blob/76ef0b08/tests/test_json.py#L372-L397)\n\nDismiss\n\nRefresh this wiki\n\nThis wiki was recently refreshed. Please wait 4 days to refresh again.",
+    "metadata": {
+      "chunk_id": "841f46e47b40-0018",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\pydantic\\_pydantic_pydantic_4.3-json-conversion.md",
+      "filename": "_pydantic_pydantic_4.3-json-conversion.md",
+      "file_extension": ".md",
+      "chunk_index": 18,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "JSON Schema and Conversion"
+      ],
+      "heading_text": "JSON Schema and Conversion",
+      "token_count": 99,
+      "char_count": 396,
+      "start_char": 12247,
+      "end_char": 12643,
+      "semantic_score": 0.6,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.54,
+      "chunking_strategy": "hybrid_adaptive_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T09:13:53.297795",
+      "document_id": "841f46e47b40",
+      "document_name": "_pydantic_pydantic_4.3-json-conversion",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\pydantic\\_pydantic_pydantic_4.3-json-conversion.md",
+      "source_filename": "_pydantic_pydantic_4.3-json-conversion.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\pydantic",
+      "relative_path": "Docs\\pydantic\\_pydantic_pydantic_4.3-json-conversion.md",
+      "hierarchy_path": "JSON Schema and Conversion",
+      "chunk_hash": "dab96888ef6ad72f",
+      "content_digest": "dab96888ef6ad72f",
+      "chunk_length": 396,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "json",
+          "pydantic",
+          "schema",
+          "generation",
+          "tests",
+          "test",
+          "refresh",
+          "this",
+          "wiki",
+          "and",
+          "conversion",
+          "for",
+          "information",
+          "about",
+          "generating",
+          "from",
+          "models",
+          "see",
+          "sources",
+          "py372"
+        ],
+        "term_weights": [
+          {
+            "term": "json",
+            "tf": 6,
+            "weight": 0.111111
+          },
+          {
+            "term": "pydantic",
+            "tf": 5,
+            "weight": 0.092593
+          },
+          {
+            "term": "schema",
+            "tf": 4,
+            "weight": 0.074074
+          },
+          {
+            "term": "generation",
+            "tf": 2,
+            "weight": 0.037037
+          },
+          {
+            "term": "tests",
+            "tf": 2,
+            "weight": 0.037037
+          },
+          {
+            "term": "test",
+            "tf": 2,
+            "weight": 0.037037
+          },
+          {
+            "term": "refresh",
+            "tf": 2,
+            "weight": 0.037037
+          },
+          {
+            "term": "this",
+            "tf": 2,
+            "weight": 0.037037
+          },
+          {
+            "term": "wiki",
+            "tf": 2,
+            "weight": 0.037037
+          },
+          {
+            "term": "and",
+            "tf": 1,
+            "weight": 0.018519
+          },
+          {
+            "term": "conversion",
+            "tf": 1,
+            "weight": 0.018519
+          },
+          {
+            "term": "for",
+            "tf": 1,
+            "weight": 0.018519
+          },
+          {
+            "term": "information",
+            "tf": 1,
+            "weight": 0.018519
+          },
+          {
+            "term": "about",
+            "tf": 1,
+            "weight": 0.018519
+          },
+          {
+            "term": "generating",
+            "tf": 1,
+            "weight": 0.018519
+          },
+          {
+            "term": "from",
+            "tf": 1,
+            "weight": 0.018519
+          },
+          {
+            "term": "models",
+            "tf": 1,
+            "weight": 0.018519
+          },
+          {
+            "term": "see",
+            "tf": 1,
+            "weight": 0.018519
+          },
+          {
+            "term": "sources",
+            "tf": 1,
+            "weight": 0.018519
+          },
+          {
+            "term": "py372",
+            "tf": 1,
+            "weight": 0.018519
+          }
+        ],
+        "unique_terms": 36,
+        "total_terms": 54
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "JSON Schema and Conversion",
+        "and",
+        "generation",
+        "json",
+        "pydantic",
+        "refresh",
+        "schema",
+        "test",
+        "tests",
+        "this",
+        "wiki"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.6,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.54,
+      "overall": 0.68
+    }
+  }
+]

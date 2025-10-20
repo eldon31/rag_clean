@@ -1,0 +1,2002 @@
+[
+  {
+    "text": "## Purpose and Scope\n\nThis document covers Pydantic's testing infrastructure, including pytest configuration, test fixtures, module creation utilities, and validation helpers. The framework provides tools for dynamic module creation, JSON schema validation, schema generation monitoring, and thread safety management across the test suite.\n\nFor information about CI/CD pipelines and automation, see [CI/CD Pipeline](pydantic/pydantic/7.2-cicd-pipeline.md). For documentation building and testing, see [Documentation System](pydantic/pydantic/7.3-documentation-system.md).\n\n---",
+    "metadata": {
+      "chunk_id": "773eb0d068b2-0001",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\pydantic\\_pydantic_pydantic_7.1-testing-framework.md",
+      "filename": "_pydantic_pydantic_7.1-testing-framework.md",
+      "file_extension": ".md",
+      "chunk_index": 1,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Purpose and Scope"
+      ],
+      "heading_text": "Purpose and Scope",
+      "token_count": 117,
+      "char_count": 576,
+      "start_char": 2553,
+      "end_char": 3129,
+      "semantic_score": 0.7,
+      "structural_score": 0.7999999999999998,
+      "retrieval_quality": 0.5367741935483871,
+      "chunking_strategy": "hybrid_adaptive_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T09:13:53.953202",
+      "document_id": "773eb0d068b2",
+      "document_name": "_pydantic_pydantic_7.1-testing-framework",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\pydantic\\_pydantic_pydantic_7.1-testing-framework.md",
+      "source_filename": "_pydantic_pydantic_7.1-testing-framework.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\pydantic",
+      "relative_path": "Docs\\pydantic\\_pydantic_pydantic_7.1-testing-framework.md",
+      "hierarchy_path": "Purpose and Scope",
+      "chunk_hash": "25adf364443e1c00",
+      "content_digest": "25adf364443e1c00",
+      "chunk_length": 576,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "and",
+          "pydantic",
+          "for",
+          "documentation",
+          "testing",
+          "test",
+          "module",
+          "creation",
+          "validation",
+          "the",
+          "schema",
+          "see",
+          "pipeline",
+          "system",
+          "purpose",
+          "scope",
+          "this",
+          "document",
+          "covers",
+          "infrastructure"
+        ],
+        "term_weights": [
+          {
+            "term": "and",
+            "tf": 5,
+            "weight": 0.075758
+          },
+          {
+            "term": "pydantic",
+            "tf": 5,
+            "weight": 0.075758
+          },
+          {
+            "term": "for",
+            "tf": 3,
+            "weight": 0.045455
+          },
+          {
+            "term": "documentation",
+            "tf": 3,
+            "weight": 0.045455
+          },
+          {
+            "term": "testing",
+            "tf": 2,
+            "weight": 0.030303
+          },
+          {
+            "term": "test",
+            "tf": 2,
+            "weight": 0.030303
+          },
+          {
+            "term": "module",
+            "tf": 2,
+            "weight": 0.030303
+          },
+          {
+            "term": "creation",
+            "tf": 2,
+            "weight": 0.030303
+          },
+          {
+            "term": "validation",
+            "tf": 2,
+            "weight": 0.030303
+          },
+          {
+            "term": "the",
+            "tf": 2,
+            "weight": 0.030303
+          },
+          {
+            "term": "schema",
+            "tf": 2,
+            "weight": 0.030303
+          },
+          {
+            "term": "see",
+            "tf": 2,
+            "weight": 0.030303
+          },
+          {
+            "term": "pipeline",
+            "tf": 2,
+            "weight": 0.030303
+          },
+          {
+            "term": "system",
+            "tf": 2,
+            "weight": 0.030303
+          },
+          {
+            "term": "purpose",
+            "tf": 1,
+            "weight": 0.015152
+          },
+          {
+            "term": "scope",
+            "tf": 1,
+            "weight": 0.015152
+          },
+          {
+            "term": "this",
+            "tf": 1,
+            "weight": 0.015152
+          },
+          {
+            "term": "document",
+            "tf": 1,
+            "weight": 0.015152
+          },
+          {
+            "term": "covers",
+            "tf": 1,
+            "weight": 0.015152
+          },
+          {
+            "term": "infrastructure",
+            "tf": 1,
+            "weight": 0.015152
+          }
+        ],
+        "unique_terms": 44,
+        "total_terms": 66
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Purpose and Scope",
+        "and",
+        "creation",
+        "documentation",
+        "for",
+        "module",
+        "pydantic",
+        "test",
+        "testing",
+        "the",
+        "validation"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.7999999999999998,
+      "retrieval_quality": 0.5367741935483871,
+      "overall": 0.6789247311827956
+    }
+  },
+  {
+    "text": "## Test Configuration Architecture\n\nThe testing framework is built on pytest and configured through `tests/conftest.py`. The configuration system provides command-line options, session-wide settings, and automatic test collection hooks.\n\n```\n```\n\n**Sources:** [tests/conftest.py25-28](https://github.com/pydantic/pydantic/blob/76ef0b08/tests/conftest.py#L25-L28) [tests/conftest.py57-62](https://github.com/pydantic/pydantic/blob/76ef0b08/tests/conftest.py#L57-L62) [tests/conftest.py198-203](https://github.com/pydantic/pydantic/blob/76ef0b08/tests/conftest.py#L198-L203)",
+    "metadata": {
+      "chunk_id": "773eb0d068b2-0002",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\pydantic\\_pydantic_pydantic_7.1-testing-framework.md",
+      "filename": "_pydantic_pydantic_7.1-testing-framework.md",
+      "file_extension": ".md",
+      "chunk_index": 2,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Test Configuration Architecture"
+      ],
+      "heading_text": "Test Configuration Architecture",
+      "token_count": 161,
+      "char_count": 572,
+      "start_char": 3131,
+      "end_char": 3703,
+      "semantic_score": 0.6,
+      "structural_score": 0.7999999999999998,
+      "retrieval_quality": 0.5458823529411765,
+      "chunking_strategy": "hybrid_adaptive_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T09:13:53.953720",
+      "document_id": "773eb0d068b2",
+      "document_name": "_pydantic_pydantic_7.1-testing-framework",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\pydantic\\_pydantic_pydantic_7.1-testing-framework.md",
+      "source_filename": "_pydantic_pydantic_7.1-testing-framework.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\pydantic",
+      "relative_path": "Docs\\pydantic\\_pydantic_pydantic_7.1-testing-framework.md",
+      "hierarchy_path": "Test Configuration Architecture",
+      "chunk_hash": "09a10d0cbbdf5ba2",
+      "content_digest": "09a10d0cbbdf5ba2",
+      "chunk_length": 572,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "tests",
+          "conftest",
+          "pydantic",
+          "https",
+          "github",
+          "com",
+          "blob",
+          "76ef0b08",
+          "test",
+          "configuration",
+          "the",
+          "and",
+          "architecture",
+          "testing",
+          "framework",
+          "built",
+          "pytest",
+          "configured",
+          "through",
+          "system"
+        ],
+        "term_weights": [
+          {
+            "term": "tests",
+            "tf": 7,
+            "weight": 0.097222
+          },
+          {
+            "term": "conftest",
+            "tf": 7,
+            "weight": 0.097222
+          },
+          {
+            "term": "pydantic",
+            "tf": 6,
+            "weight": 0.083333
+          },
+          {
+            "term": "https",
+            "tf": 3,
+            "weight": 0.041667
+          },
+          {
+            "term": "github",
+            "tf": 3,
+            "weight": 0.041667
+          },
+          {
+            "term": "com",
+            "tf": 3,
+            "weight": 0.041667
+          },
+          {
+            "term": "blob",
+            "tf": 3,
+            "weight": 0.041667
+          },
+          {
+            "term": "76ef0b08",
+            "tf": 3,
+            "weight": 0.041667
+          },
+          {
+            "term": "test",
+            "tf": 2,
+            "weight": 0.027778
+          },
+          {
+            "term": "configuration",
+            "tf": 2,
+            "weight": 0.027778
+          },
+          {
+            "term": "the",
+            "tf": 2,
+            "weight": 0.027778
+          },
+          {
+            "term": "and",
+            "tf": 2,
+            "weight": 0.027778
+          },
+          {
+            "term": "architecture",
+            "tf": 1,
+            "weight": 0.013889
+          },
+          {
+            "term": "testing",
+            "tf": 1,
+            "weight": 0.013889
+          },
+          {
+            "term": "framework",
+            "tf": 1,
+            "weight": 0.013889
+          },
+          {
+            "term": "built",
+            "tf": 1,
+            "weight": 0.013889
+          },
+          {
+            "term": "pytest",
+            "tf": 1,
+            "weight": 0.013889
+          },
+          {
+            "term": "configured",
+            "tf": 1,
+            "weight": 0.013889
+          },
+          {
+            "term": "through",
+            "tf": 1,
+            "weight": 0.013889
+          },
+          {
+            "term": "system",
+            "tf": 1,
+            "weight": 0.013889
+          }
+        ],
+        "unique_terms": 41,
+        "total_terms": 72
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "76ef0b08",
+        "Test Configuration Architecture",
+        "blob",
+        "com",
+        "configuration",
+        "conftest",
+        "github",
+        "https",
+        "pydantic",
+        "test",
+        "tests"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.6,
+      "structural": 0.7999999999999998,
+      "retrieval_quality": 0.5458823529411765,
+      "overall": 0.6486274509803921
+    }
+  },
+  {
+    "text": "### Session-Wide Configuration\n\nThe `disable_error_urls` fixture runs once per test session and sets an environment variable to prevent Pydantic from including documentation URLs in error messages during tests. This prevents version-specific URLs from appearing in test outputs that would need frequent updating.\n\n**Sources:** [tests/conftest.py57-62](https://github.com/pydantic/pydantic/blob/76ef0b08/tests/conftest.py#L57-L62)\n\n---",
+    "metadata": {
+      "chunk_id": "773eb0d068b2-0004",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\pydantic\\_pydantic_pydantic_7.1-testing-framework.md",
+      "filename": "_pydantic_pydantic_7.1-testing-framework.md",
+      "file_extension": ".md",
+      "chunk_index": 4,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Session-Wide Configuration"
+      ],
+      "heading_text": "Session-Wide Configuration",
+      "token_count": 96,
+      "char_count": 434,
+      "start_char": 4247,
+      "end_char": 4681,
+      "semantic_score": 0.7,
+      "structural_score": 0.7999999999999998,
+      "retrieval_quality": 0.5633333333333334,
+      "chunking_strategy": "hybrid_adaptive_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T09:13:53.955092",
+      "document_id": "773eb0d068b2",
+      "document_name": "_pydantic_pydantic_7.1-testing-framework",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\pydantic\\_pydantic_pydantic_7.1-testing-framework.md",
+      "source_filename": "_pydantic_pydantic_7.1-testing-framework.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\pydantic",
+      "relative_path": "Docs\\pydantic\\_pydantic_pydantic_7.1-testing-framework.md",
+      "hierarchy_path": "Session-Wide Configuration",
+      "chunk_hash": "197836e3992c46b5",
+      "content_digest": "197836e3992c46b5",
+      "chunk_length": 434,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "urls",
+          "pydantic",
+          "tests",
+          "session",
+          "error",
+          "test",
+          "from",
+          "conftest",
+          "wide",
+          "configuration",
+          "the",
+          "disable",
+          "fixture",
+          "runs",
+          "once",
+          "per",
+          "and",
+          "sets",
+          "environment",
+          "variable"
+        ],
+        "term_weights": [
+          {
+            "term": "urls",
+            "tf": 3,
+            "weight": 0.053571
+          },
+          {
+            "term": "pydantic",
+            "tf": 3,
+            "weight": 0.053571
+          },
+          {
+            "term": "tests",
+            "tf": 3,
+            "weight": 0.053571
+          },
+          {
+            "term": "session",
+            "tf": 2,
+            "weight": 0.035714
+          },
+          {
+            "term": "error",
+            "tf": 2,
+            "weight": 0.035714
+          },
+          {
+            "term": "test",
+            "tf": 2,
+            "weight": 0.035714
+          },
+          {
+            "term": "from",
+            "tf": 2,
+            "weight": 0.035714
+          },
+          {
+            "term": "conftest",
+            "tf": 2,
+            "weight": 0.035714
+          },
+          {
+            "term": "wide",
+            "tf": 1,
+            "weight": 0.017857
+          },
+          {
+            "term": "configuration",
+            "tf": 1,
+            "weight": 0.017857
+          },
+          {
+            "term": "the",
+            "tf": 1,
+            "weight": 0.017857
+          },
+          {
+            "term": "disable",
+            "tf": 1,
+            "weight": 0.017857
+          },
+          {
+            "term": "fixture",
+            "tf": 1,
+            "weight": 0.017857
+          },
+          {
+            "term": "runs",
+            "tf": 1,
+            "weight": 0.017857
+          },
+          {
+            "term": "once",
+            "tf": 1,
+            "weight": 0.017857
+          },
+          {
+            "term": "per",
+            "tf": 1,
+            "weight": 0.017857
+          },
+          {
+            "term": "and",
+            "tf": 1,
+            "weight": 0.017857
+          },
+          {
+            "term": "sets",
+            "tf": 1,
+            "weight": 0.017857
+          },
+          {
+            "term": "environment",
+            "tf": 1,
+            "weight": 0.017857
+          },
+          {
+            "term": "variable",
+            "tf": 1,
+            "weight": 0.017857
+          }
+        ],
+        "unique_terms": 45,
+        "total_terms": 56
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Session-Wide Configuration",
+        "configuration",
+        "conftest",
+        "error",
+        "from",
+        "pydantic",
+        "session",
+        "test",
+        "tests",
+        "urls",
+        "wide"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.7999999999999998,
+      "retrieval_quality": 0.5633333333333334,
+      "overall": 0.6877777777777777
+    }
+  },
+  {
+    "text": "## Test Fixtures\n\nPydantic's test suite provides several specialized fixtures for common testing patterns. These fixtures handle module creation, subprocess execution, schema generation monitoring, and JSON schema validation.\n\n```\n```\n\n**Sources:** [tests/conftest.py64-182](https://github.com/pydantic/pydantic/blob/76ef0b08/tests/conftest.py#L64-L182)",
+    "metadata": {
+      "chunk_id": "773eb0d068b2-0005",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\pydantic\\_pydantic_pydantic_7.1-testing-framework.md",
+      "filename": "_pydantic_pydantic_7.1-testing-framework.md",
+      "file_extension": ".md",
+      "chunk_index": 5,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Test Fixtures"
+      ],
+      "heading_text": "Test Fixtures",
+      "token_count": 83,
+      "char_count": 353,
+      "start_char": 4683,
+      "end_char": 5036,
+      "semantic_score": 0.6,
+      "structural_score": 0.7999999999999998,
+      "retrieval_quality": 0.543125,
+      "chunking_strategy": "hybrid_adaptive_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T09:13:53.955590",
+      "document_id": "773eb0d068b2",
+      "document_name": "_pydantic_pydantic_7.1-testing-framework",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\pydantic\\_pydantic_pydantic_7.1-testing-framework.md",
+      "source_filename": "_pydantic_pydantic_7.1-testing-framework.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\pydantic",
+      "relative_path": "Docs\\pydantic\\_pydantic_pydantic_7.1-testing-framework.md",
+      "hierarchy_path": "Test Fixtures",
+      "chunk_hash": "18c6e1870039bbc1",
+      "content_digest": "18c6e1870039bbc1",
+      "chunk_length": 353,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "fixtures",
+          "pydantic",
+          "test",
+          "schema",
+          "tests",
+          "conftest",
+          "suite",
+          "provides",
+          "several",
+          "specialized",
+          "for",
+          "common",
+          "testing",
+          "patterns",
+          "these",
+          "handle",
+          "module",
+          "creation",
+          "subprocess",
+          "execution"
+        ],
+        "term_weights": [
+          {
+            "term": "fixtures",
+            "tf": 3,
+            "weight": 0.069767
+          },
+          {
+            "term": "pydantic",
+            "tf": 3,
+            "weight": 0.069767
+          },
+          {
+            "term": "test",
+            "tf": 2,
+            "weight": 0.046512
+          },
+          {
+            "term": "schema",
+            "tf": 2,
+            "weight": 0.046512
+          },
+          {
+            "term": "tests",
+            "tf": 2,
+            "weight": 0.046512
+          },
+          {
+            "term": "conftest",
+            "tf": 2,
+            "weight": 0.046512
+          },
+          {
+            "term": "suite",
+            "tf": 1,
+            "weight": 0.023256
+          },
+          {
+            "term": "provides",
+            "tf": 1,
+            "weight": 0.023256
+          },
+          {
+            "term": "several",
+            "tf": 1,
+            "weight": 0.023256
+          },
+          {
+            "term": "specialized",
+            "tf": 1,
+            "weight": 0.023256
+          },
+          {
+            "term": "for",
+            "tf": 1,
+            "weight": 0.023256
+          },
+          {
+            "term": "common",
+            "tf": 1,
+            "weight": 0.023256
+          },
+          {
+            "term": "testing",
+            "tf": 1,
+            "weight": 0.023256
+          },
+          {
+            "term": "patterns",
+            "tf": 1,
+            "weight": 0.023256
+          },
+          {
+            "term": "these",
+            "tf": 1,
+            "weight": 0.023256
+          },
+          {
+            "term": "handle",
+            "tf": 1,
+            "weight": 0.023256
+          },
+          {
+            "term": "module",
+            "tf": 1,
+            "weight": 0.023256
+          },
+          {
+            "term": "creation",
+            "tf": 1,
+            "weight": 0.023256
+          },
+          {
+            "term": "subprocess",
+            "tf": 1,
+            "weight": 0.023256
+          },
+          {
+            "term": "execution",
+            "tf": 1,
+            "weight": 0.023256
+          }
+        ],
+        "unique_terms": 35,
+        "total_terms": 43
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Test Fixtures",
+        "conftest",
+        "fixtures",
+        "provides",
+        "pydantic",
+        "schema",
+        "several",
+        "specialized",
+        "suite",
+        "test",
+        "tests"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.6,
+      "structural": 0.7999999999999998,
+      "retrieval_quality": 0.543125,
+      "overall": 0.6477083333333332
+    }
+  },
+  {
+    "text": "## Dynamic Module Creation\n\nThe `create_module` fixture enables tests to create and import Python modules on-the-fly from source code strings or function bodies. This is essential for testing import-time behaviors, module-level validation, and schema caching.",
+    "metadata": {
+      "chunk_id": "773eb0d068b2-0007",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\pydantic\\_pydantic_pydantic_7.1-testing-framework.md",
+      "filename": "_pydantic_pydantic_7.1-testing-framework.md",
+      "file_extension": ".md",
+      "chunk_index": 7,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Dynamic Module Creation"
+      ],
+      "heading_text": "Dynamic Module Creation",
+      "token_count": 47,
+      "char_count": 259,
+      "start_char": 5800,
+      "end_char": 6059,
+      "semantic_score": 0.7999999999999999,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5814285714285714,
+      "chunking_strategy": "hybrid_adaptive_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T09:13:53.956893",
+      "document_id": "773eb0d068b2",
+      "document_name": "_pydantic_pydantic_7.1-testing-framework",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\pydantic\\_pydantic_pydantic_7.1-testing-framework.md",
+      "source_filename": "_pydantic_pydantic_7.1-testing-framework.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\pydantic",
+      "relative_path": "Docs\\pydantic\\_pydantic_pydantic_7.1-testing-framework.md",
+      "hierarchy_path": "Dynamic Module Creation",
+      "chunk_hash": "5df5c1a1bf8caf31",
+      "content_digest": "5df5c1a1bf8caf31",
+      "chunk_length": 259,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "module",
+          "the",
+          "create",
+          "and",
+          "import",
+          "dynamic",
+          "creation",
+          "fixture",
+          "enables",
+          "tests",
+          "python",
+          "modules",
+          "fly",
+          "from",
+          "source",
+          "code",
+          "strings",
+          "function",
+          "bodies",
+          "this"
+        ],
+        "term_weights": [
+          {
+            "term": "module",
+            "tf": 3,
+            "weight": 0.085714
+          },
+          {
+            "term": "the",
+            "tf": 2,
+            "weight": 0.057143
+          },
+          {
+            "term": "create",
+            "tf": 2,
+            "weight": 0.057143
+          },
+          {
+            "term": "and",
+            "tf": 2,
+            "weight": 0.057143
+          },
+          {
+            "term": "import",
+            "tf": 2,
+            "weight": 0.057143
+          },
+          {
+            "term": "dynamic",
+            "tf": 1,
+            "weight": 0.028571
+          },
+          {
+            "term": "creation",
+            "tf": 1,
+            "weight": 0.028571
+          },
+          {
+            "term": "fixture",
+            "tf": 1,
+            "weight": 0.028571
+          },
+          {
+            "term": "enables",
+            "tf": 1,
+            "weight": 0.028571
+          },
+          {
+            "term": "tests",
+            "tf": 1,
+            "weight": 0.028571
+          },
+          {
+            "term": "python",
+            "tf": 1,
+            "weight": 0.028571
+          },
+          {
+            "term": "modules",
+            "tf": 1,
+            "weight": 0.028571
+          },
+          {
+            "term": "fly",
+            "tf": 1,
+            "weight": 0.028571
+          },
+          {
+            "term": "from",
+            "tf": 1,
+            "weight": 0.028571
+          },
+          {
+            "term": "source",
+            "tf": 1,
+            "weight": 0.028571
+          },
+          {
+            "term": "code",
+            "tf": 1,
+            "weight": 0.028571
+          },
+          {
+            "term": "strings",
+            "tf": 1,
+            "weight": 0.028571
+          },
+          {
+            "term": "function",
+            "tf": 1,
+            "weight": 0.028571
+          },
+          {
+            "term": "bodies",
+            "tf": 1,
+            "weight": 0.028571
+          },
+          {
+            "term": "this",
+            "tf": 1,
+            "weight": 0.028571
+          }
+        ],
+        "unique_terms": 29,
+        "total_terms": 35
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Dynamic Module Creation",
+        "and",
+        "create",
+        "creation",
+        "dynamic",
+        "enables",
+        "fixture",
+        "import",
+        "module",
+        "tests",
+        "the"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.7999999999999999,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5814285714285714,
+      "overall": 0.7604761904761904
+    }
+  },
+  {
+    "text": "### Function Source Code Extraction\n\nThe `_extract_source_code_from_function` helper extracts the body of a test function, enabling a decorator-like pattern for module creation:\n\n```\n```\n\nThe function:\n\n1. Validates that the function has no arguments ([tests/conftest.py31-32](https://github.com/pydantic/pydantic/blob/76ef0b08/tests/conftest.py#L31-L32))\n2. Uses `inspect.getsource()` to get source code ([tests/conftest.py36](https://github.com/pydantic/pydantic/blob/76ef0b08/tests/conftest.py#L36-L36))\n3. Skips the `def` line ([tests/conftest.py37-39](https://github.com/pydantic/pydantic/blob/76ef0b08/tests/conftest.py#L37-L39))\n4. Dedents and returns the body ([tests/conftest.py43](https://github.com/pydantic/pydantic/blob/76ef0b08/tests/conftest.py#L43-L43))\n\n**Sources:** [tests/conftest.py30-44](https://github.com/pydantic/pydantic/blob/76ef0b08/tests/conftest.py#L30-L44)",
+    "metadata": {
+      "chunk_id": "773eb0d068b2-0009",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\pydantic\\_pydantic_pydantic_7.1-testing-framework.md",
+      "filename": "_pydantic_pydantic_7.1-testing-framework.md",
+      "file_extension": ".md",
+      "chunk_index": 9,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Function Source Code Extraction"
+      ],
+      "heading_text": "Function Source Code Extraction",
+      "token_count": 266,
+      "char_count": 886,
+      "start_char": 6219,
+      "end_char": 7105,
+      "semantic_score": 0.6,
+      "structural_score": 0.7999999999999998,
+      "retrieval_quality": 0.5331034482758621,
+      "chunking_strategy": "hybrid_adaptive_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T09:13:53.958402",
+      "document_id": "773eb0d068b2",
+      "document_name": "_pydantic_pydantic_7.1-testing-framework",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\pydantic\\_pydantic_pydantic_7.1-testing-framework.md",
+      "source_filename": "_pydantic_pydantic_7.1-testing-framework.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\pydantic",
+      "relative_path": "Docs\\pydantic\\_pydantic_pydantic_7.1-testing-framework.md",
+      "hierarchy_path": "Function Source Code Extraction",
+      "chunk_hash": "3cb9b3ce97dc7e39",
+      "content_digest": "3cb9b3ce97dc7e39",
+      "chunk_length": 886,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "tests",
+          "conftest",
+          "pydantic",
+          "the",
+          "function",
+          "https",
+          "github",
+          "com",
+          "blob",
+          "76ef0b08",
+          "source",
+          "code",
+          "body",
+          "l36",
+          "l43",
+          "extraction",
+          "extract",
+          "from",
+          "helper",
+          "extracts"
+        ],
+        "term_weights": [
+          {
+            "term": "tests",
+            "tf": 10,
+            "weight": 0.08547
+          },
+          {
+            "term": "conftest",
+            "tf": 10,
+            "weight": 0.08547
+          },
+          {
+            "term": "pydantic",
+            "tf": 10,
+            "weight": 0.08547
+          },
+          {
+            "term": "the",
+            "tf": 6,
+            "weight": 0.051282
+          },
+          {
+            "term": "function",
+            "tf": 5,
+            "weight": 0.042735
+          },
+          {
+            "term": "https",
+            "tf": 5,
+            "weight": 0.042735
+          },
+          {
+            "term": "github",
+            "tf": 5,
+            "weight": 0.042735
+          },
+          {
+            "term": "com",
+            "tf": 5,
+            "weight": 0.042735
+          },
+          {
+            "term": "blob",
+            "tf": 5,
+            "weight": 0.042735
+          },
+          {
+            "term": "76ef0b08",
+            "tf": 5,
+            "weight": 0.042735
+          },
+          {
+            "term": "source",
+            "tf": 3,
+            "weight": 0.025641
+          },
+          {
+            "term": "code",
+            "tf": 3,
+            "weight": 0.025641
+          },
+          {
+            "term": "body",
+            "tf": 2,
+            "weight": 0.017094
+          },
+          {
+            "term": "l36",
+            "tf": 2,
+            "weight": 0.017094
+          },
+          {
+            "term": "l43",
+            "tf": 2,
+            "weight": 0.017094
+          },
+          {
+            "term": "extraction",
+            "tf": 1,
+            "weight": 0.008547
+          },
+          {
+            "term": "extract",
+            "tf": 1,
+            "weight": 0.008547
+          },
+          {
+            "term": "from",
+            "tf": 1,
+            "weight": 0.008547
+          },
+          {
+            "term": "helper",
+            "tf": 1,
+            "weight": 0.008547
+          },
+          {
+            "term": "extracts",
+            "tf": 1,
+            "weight": 0.008547
+          }
+        ],
+        "unique_terms": 54,
+        "total_terms": 117
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "76ef0b08",
+        "Function Source Code Extraction",
+        "blob",
+        "com",
+        "conftest",
+        "function",
+        "github",
+        "https",
+        "pydantic",
+        "tests",
+        "the"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.6,
+      "structural": 0.7999999999999998,
+      "retrieval_quality": 0.5331034482758621,
+      "overall": 0.644367816091954
+    }
+  },
+  {
+    "text": "## Subprocess Code Execution\n\nThe `subprocess_run_code` fixture provides process-isolated code execution, essential for testing import-time side effects, environment isolation, and subprocess-specific behaviors.\n\n```\n```\n\n**Sources:** [tests/conftest.py105-119](https://github.com/pydantic/pydantic/blob/76ef0b08/tests/conftest.py#L105-L119)\n\nThe fixture creates a temporary `test.py` file and executes it with `subprocess.check_output`, returning the captured stdout as a UTF-8 string. This ensures complete process isolation between test execution and the code being tested.\n\n---",
+    "metadata": {
+      "chunk_id": "773eb0d068b2-0012",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\pydantic\\_pydantic_pydantic_7.1-testing-framework.md",
+      "filename": "_pydantic_pydantic_7.1-testing-framework.md",
+      "file_extension": ".md",
+      "chunk_index": 12,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Subprocess Code Execution"
+      ],
+      "heading_text": "Subprocess Code Execution",
+      "token_count": 128,
+      "char_count": 581,
+      "start_char": 8682,
+      "end_char": 9263,
+      "semantic_score": 0.7,
+      "structural_score": 0.7999999999999998,
+      "retrieval_quality": 0.535,
+      "chunking_strategy": "hybrid_adaptive_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T09:13:53.961055",
+      "document_id": "773eb0d068b2",
+      "document_name": "_pydantic_pydantic_7.1-testing-framework",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\pydantic\\_pydantic_pydantic_7.1-testing-framework.md",
+      "source_filename": "_pydantic_pydantic_7.1-testing-framework.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\pydantic",
+      "relative_path": "Docs\\pydantic\\_pydantic_pydantic_7.1-testing-framework.md",
+      "hierarchy_path": "Subprocess Code Execution",
+      "chunk_hash": "d86a02727588cee1",
+      "content_digest": "d86a02727588cee1",
+      "chunk_length": 581,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "subprocess",
+          "code",
+          "the",
+          "execution",
+          "and",
+          "fixture",
+          "process",
+          "isolation",
+          "tests",
+          "conftest",
+          "pydantic",
+          "test",
+          "run",
+          "provides",
+          "isolated",
+          "essential",
+          "for",
+          "testing",
+          "import",
+          "time"
+        ],
+        "term_weights": [
+          {
+            "term": "subprocess",
+            "tf": 4,
+            "weight": 0.054795
+          },
+          {
+            "term": "code",
+            "tf": 4,
+            "weight": 0.054795
+          },
+          {
+            "term": "the",
+            "tf": 4,
+            "weight": 0.054795
+          },
+          {
+            "term": "execution",
+            "tf": 3,
+            "weight": 0.041096
+          },
+          {
+            "term": "and",
+            "tf": 3,
+            "weight": 0.041096
+          },
+          {
+            "term": "fixture",
+            "tf": 2,
+            "weight": 0.027397
+          },
+          {
+            "term": "process",
+            "tf": 2,
+            "weight": 0.027397
+          },
+          {
+            "term": "isolation",
+            "tf": 2,
+            "weight": 0.027397
+          },
+          {
+            "term": "tests",
+            "tf": 2,
+            "weight": 0.027397
+          },
+          {
+            "term": "conftest",
+            "tf": 2,
+            "weight": 0.027397
+          },
+          {
+            "term": "pydantic",
+            "tf": 2,
+            "weight": 0.027397
+          },
+          {
+            "term": "test",
+            "tf": 2,
+            "weight": 0.027397
+          },
+          {
+            "term": "run",
+            "tf": 1,
+            "weight": 0.013699
+          },
+          {
+            "term": "provides",
+            "tf": 1,
+            "weight": 0.013699
+          },
+          {
+            "term": "isolated",
+            "tf": 1,
+            "weight": 0.013699
+          },
+          {
+            "term": "essential",
+            "tf": 1,
+            "weight": 0.013699
+          },
+          {
+            "term": "for",
+            "tf": 1,
+            "weight": 0.013699
+          },
+          {
+            "term": "testing",
+            "tf": 1,
+            "weight": 0.013699
+          },
+          {
+            "term": "import",
+            "tf": 1,
+            "weight": 0.013699
+          },
+          {
+            "term": "time",
+            "tf": 1,
+            "weight": 0.013699
+          }
+        ],
+        "unique_terms": 53,
+        "total_terms": 73
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Subprocess Code Execution",
+        "and",
+        "code",
+        "conftest",
+        "execution",
+        "fixture",
+        "isolation",
+        "process",
+        "subprocess",
+        "tests",
+        "the"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.7999999999999998,
+      "retrieval_quality": 0.535,
+      "overall": 0.6783333333333332
+    }
+  },
+  {
+    "text": "## Schema Generation Monitoring\n\nThe `generate_schema_calls` fixture tracks how many times schema generation occurs, useful for testing caching behaviors and performance optimizations.",
+    "metadata": {
+      "chunk_id": "773eb0d068b2-0013",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\pydantic\\_pydantic_pydantic_7.1-testing-framework.md",
+      "filename": "_pydantic_pydantic_7.1-testing-framework.md",
+      "file_extension": ".md",
+      "chunk_index": 13,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Schema Generation Monitoring"
+      ],
+      "heading_text": "Schema Generation Monitoring",
+      "token_count": 29,
+      "char_count": 184,
+      "start_char": 9265,
+      "end_char": 9449,
+      "semantic_score": 0.8,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5627272727272727,
+      "chunking_strategy": "hybrid_adaptive_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T09:13:53.961398",
+      "document_id": "773eb0d068b2",
+      "document_name": "_pydantic_pydantic_7.1-testing-framework",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\pydantic\\_pydantic_pydantic_7.1-testing-framework.md",
+      "source_filename": "_pydantic_pydantic_7.1-testing-framework.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\pydantic",
+      "relative_path": "Docs\\pydantic\\_pydantic_pydantic_7.1-testing-framework.md",
+      "hierarchy_path": "Schema Generation Monitoring",
+      "chunk_hash": "073451c4a949fe15",
+      "content_digest": "073451c4a949fe15",
+      "chunk_length": 184,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "schema",
+          "generation",
+          "monitoring",
+          "the",
+          "generate",
+          "calls",
+          "fixture",
+          "tracks",
+          "how",
+          "many",
+          "times",
+          "occurs",
+          "useful",
+          "for",
+          "testing",
+          "caching",
+          "behaviors",
+          "and",
+          "performance",
+          "optimizations"
+        ],
+        "term_weights": [
+          {
+            "term": "schema",
+            "tf": 3,
+            "weight": 0.130435
+          },
+          {
+            "term": "generation",
+            "tf": 2,
+            "weight": 0.086957
+          },
+          {
+            "term": "monitoring",
+            "tf": 1,
+            "weight": 0.043478
+          },
+          {
+            "term": "the",
+            "tf": 1,
+            "weight": 0.043478
+          },
+          {
+            "term": "generate",
+            "tf": 1,
+            "weight": 0.043478
+          },
+          {
+            "term": "calls",
+            "tf": 1,
+            "weight": 0.043478
+          },
+          {
+            "term": "fixture",
+            "tf": 1,
+            "weight": 0.043478
+          },
+          {
+            "term": "tracks",
+            "tf": 1,
+            "weight": 0.043478
+          },
+          {
+            "term": "how",
+            "tf": 1,
+            "weight": 0.043478
+          },
+          {
+            "term": "many",
+            "tf": 1,
+            "weight": 0.043478
+          },
+          {
+            "term": "times",
+            "tf": 1,
+            "weight": 0.043478
+          },
+          {
+            "term": "occurs",
+            "tf": 1,
+            "weight": 0.043478
+          },
+          {
+            "term": "useful",
+            "tf": 1,
+            "weight": 0.043478
+          },
+          {
+            "term": "for",
+            "tf": 1,
+            "weight": 0.043478
+          },
+          {
+            "term": "testing",
+            "tf": 1,
+            "weight": 0.043478
+          },
+          {
+            "term": "caching",
+            "tf": 1,
+            "weight": 0.043478
+          },
+          {
+            "term": "behaviors",
+            "tf": 1,
+            "weight": 0.043478
+          },
+          {
+            "term": "and",
+            "tf": 1,
+            "weight": 0.043478
+          },
+          {
+            "term": "performance",
+            "tf": 1,
+            "weight": 0.043478
+          },
+          {
+            "term": "optimizations",
+            "tf": 1,
+            "weight": 0.043478
+          }
+        ],
+        "unique_terms": 20,
+        "total_terms": 23
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Schema Generation Monitoring",
+        "calls",
+        "fixture",
+        "generate",
+        "generation",
+        "how",
+        "many",
+        "monitoring",
+        "schema",
+        "the",
+        "tracks"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.8,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5627272727272727,
+      "overall": 0.7542424242424243
+    }
+  },
+  {
+    "text": "### Call Counter Implementation\n\n```\n```\n\n**Sources:** [tests/conftest.py144-161](https://github.com/pydantic/pydantic/blob/76ef0b08/tests/conftest.py#L144-L161)\n\nThe fixture uses a depth counter to handle recursive `GenerateSchema.generate_schema` calls - only root-level calls increment the counter. This prevents double-counting when schema generation triggers nested schema generation.\n\n**Data Structures:**\n\n- `CallCounter` dataclass with `count` field and `reset()` method ([tests/conftest.py136-142](https://github.com/pydantic/pydantic/blob/76ef0b08/tests/conftest.py#L136-L142))\n- `depth` variable tracks recursion level ([tests/conftest.py148](https://github.com/pydantic/pydantic/blob/76ef0b08/tests/conftest.py#L148-L148))\n\n**Sources:** [tests/conftest.py136-161](https://github.com/pydantic/pydantic/blob/76ef0b08/tests/conftest.py#L136-L161)\n\n---",
+    "metadata": {
+      "chunk_id": "773eb0d068b2-0014",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\pydantic\\_pydantic_pydantic_7.1-testing-framework.md",
+      "filename": "_pydantic_pydantic_7.1-testing-framework.md",
+      "file_extension": ".md",
+      "chunk_index": 14,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Call Counter Implementation"
+      ],
+      "heading_text": "Call Counter Implementation",
+      "token_count": 234,
+      "char_count": 860,
+      "start_char": 9451,
+      "end_char": 10311,
+      "semantic_score": 0.6,
+      "structural_score": 0.7999999999999998,
+      "retrieval_quality": 0.5486206896551724,
+      "chunking_strategy": "hybrid_adaptive_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T09:13:53.962424",
+      "document_id": "773eb0d068b2",
+      "document_name": "_pydantic_pydantic_7.1-testing-framework",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\pydantic\\_pydantic_pydantic_7.1-testing-framework.md",
+      "source_filename": "_pydantic_pydantic_7.1-testing-framework.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\pydantic",
+      "relative_path": "Docs\\pydantic\\_pydantic_pydantic_7.1-testing-framework.md",
+      "hierarchy_path": "Call Counter Implementation",
+      "chunk_hash": "69cdffe7c341be0e",
+      "content_digest": "69cdffe7c341be0e",
+      "chunk_length": 860,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "tests",
+          "conftest",
+          "pydantic",
+          "https",
+          "github",
+          "com",
+          "blob",
+          "76ef0b08",
+          "counter",
+          "schema",
+          "sources",
+          "161",
+          "l161",
+          "the",
+          "depth",
+          "calls",
+          "level",
+          "generation",
+          "py136",
+          "l136"
+        ],
+        "term_weights": [
+          {
+            "term": "tests",
+            "tf": 8,
+            "weight": 0.074074
+          },
+          {
+            "term": "conftest",
+            "tf": 8,
+            "weight": 0.074074
+          },
+          {
+            "term": "pydantic",
+            "tf": 8,
+            "weight": 0.074074
+          },
+          {
+            "term": "https",
+            "tf": 4,
+            "weight": 0.037037
+          },
+          {
+            "term": "github",
+            "tf": 4,
+            "weight": 0.037037
+          },
+          {
+            "term": "com",
+            "tf": 4,
+            "weight": 0.037037
+          },
+          {
+            "term": "blob",
+            "tf": 4,
+            "weight": 0.037037
+          },
+          {
+            "term": "76ef0b08",
+            "tf": 4,
+            "weight": 0.037037
+          },
+          {
+            "term": "counter",
+            "tf": 3,
+            "weight": 0.027778
+          },
+          {
+            "term": "schema",
+            "tf": 3,
+            "weight": 0.027778
+          },
+          {
+            "term": "sources",
+            "tf": 2,
+            "weight": 0.018519
+          },
+          {
+            "term": "161",
+            "tf": 2,
+            "weight": 0.018519
+          },
+          {
+            "term": "l161",
+            "tf": 2,
+            "weight": 0.018519
+          },
+          {
+            "term": "the",
+            "tf": 2,
+            "weight": 0.018519
+          },
+          {
+            "term": "depth",
+            "tf": 2,
+            "weight": 0.018519
+          },
+          {
+            "term": "calls",
+            "tf": 2,
+            "weight": 0.018519
+          },
+          {
+            "term": "level",
+            "tf": 2,
+            "weight": 0.018519
+          },
+          {
+            "term": "generation",
+            "tf": 2,
+            "weight": 0.018519
+          },
+          {
+            "term": "py136",
+            "tf": 2,
+            "weight": 0.018519
+          },
+          {
+            "term": "l136",
+            "tf": 2,
+            "weight": 0.018519
+          }
+        ],
+        "unique_terms": 57,
+        "total_terms": 108
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": true,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "76ef0b08",
+        "Call Counter Implementation",
+        "blob",
+        "com",
+        "conftest",
+        "counter",
+        "github",
+        "https",
+        "pydantic",
+        "schema",
+        "tests"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.6,
+      "structural": 0.7999999999999998,
+      "retrieval_quality": 0.5486206896551724,
+      "overall": 0.6495402298850574
+    }
+  },
+  {
+    "text": "### On this page\n\n- [Testing Framework](#testing-framework.md)\n- [Purpose and Scope](#purpose-and-scope.md)\n- [Test Configuration Architecture](#test-configuration-architecture.md)\n- [Command-Line Options](#command-line-options.md)\n- [Session-Wide Configuration](#session-wide-configuration.md)\n- [Test Fixtures](#test-fixtures.md)\n- [Fixture Catalog](#fixture-catalog.md)\n- [Dynamic Module Creation](#dynamic-module-creation.md)\n- [Module Creation Pipeline](#module-creation-pipeline.md)\n- [Function Source Code Extraction](#function-source-code-extraction.md)\n- [Module File Creation](#module-file-creation.md)\n- [Assertion Rewriting](#assertion-rewriting.md)\n- [Subprocess Code Execution](#subprocess-code-execution.md)\n- [Schema Generation Monitoring](#schema-generation-monitoring.md)\n- [Call Counter Implementation](#call-counter-implementation.md)\n- [JSON Schema Validation](#json-schema-validation.md)\n- [Validation Flow](#validation-flow.md)\n- [Opting Out of Validation](#opting-out-of-validation.md)\n- [Thread Safety Management](#thread-safety-management.md)\n- [Thread-Unsafe Fixtures](#thread-unsafe-fixtures.md)\n- [Thread-Unsafe Fixture List](#thread-unsafe-fixture-list.md)\n- [Collection Hook Timing](#collection-hook-timing.md)\n- [Test Utility Classes](#test-utility-classes.md)\n- [Err Dataclass](#err-dataclass.md)\n- [CallCounter Dataclass](#callcounter-dataclass.md)\n- [Summary](#summary.md)",
+    "metadata": {
+      "chunk_id": "773eb0d068b2-0026",
+      "source_file": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\pydantic\\_pydantic_pydantic_7.1-testing-framework.md",
+      "filename": "_pydantic_pydantic_7.1-testing-framework.md",
+      "file_extension": ".md",
+      "chunk_index": 26,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "On this page"
+      ],
+      "heading_text": "On this page",
+      "token_count": 346,
+      "char_count": 1407,
+      "start_char": 16238,
+      "end_char": 17645,
+      "semantic_score": 0.6,
+      "structural_score": 0.7999999999999998,
+      "retrieval_quality": 0.5119632653061225,
+      "chunking_strategy": "hybrid_adaptive_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T09:13:53.967653",
+      "document_id": "773eb0d068b2",
+      "document_name": "_pydantic_pydantic_7.1-testing-framework",
+      "source_path": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\pydantic\\_pydantic_pydantic_7.1-testing-framework.md",
+      "source_filename": "_pydantic_pydantic_7.1-testing-framework.md",
+      "source_directory": "C:\\Users\\raze0\\Documents\\LLM_KNOWLEDGE_CREATOR\\RAG\\RAG_CLEAN\\Docs\\pydantic",
+      "relative_path": "Docs\\pydantic\\_pydantic_pydantic_7.1-testing-framework.md",
+      "hierarchy_path": "On this page",
+      "chunk_hash": "7ccdb7d1196354c0",
+      "content_digest": "7ccdb7d1196354c0",
+      "chunk_length": 1407,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant_ecosystem"
+      ],
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "test",
+          "module",
+          "creation",
+          "validation",
+          "thread",
+          "configuration",
+          "fixtures",
+          "fixture",
+          "code",
+          "schema",
+          "unsafe",
+          "dataclass",
+          "testing",
+          "framework",
+          "purpose",
+          "and",
+          "scope",
+          "architecture",
+          "command",
+          "line"
+        ],
+        "term_weights": [
+          {
+            "term": "test",
+            "tf": 6,
+            "weight": 0.041667
+          },
+          {
+            "term": "module",
+            "tf": 6,
+            "weight": 0.041667
+          },
+          {
+            "term": "creation",
+            "tf": 6,
+            "weight": 0.041667
+          },
+          {
+            "term": "validation",
+            "tf": 6,
+            "weight": 0.041667
+          },
+          {
+            "term": "thread",
+            "tf": 6,
+            "weight": 0.041667
+          },
+          {
+            "term": "configuration",
+            "tf": 4,
+            "weight": 0.027778
+          },
+          {
+            "term": "fixtures",
+            "tf": 4,
+            "weight": 0.027778
+          },
+          {
+            "term": "fixture",
+            "tf": 4,
+            "weight": 0.027778
+          },
+          {
+            "term": "code",
+            "tf": 4,
+            "weight": 0.027778
+          },
+          {
+            "term": "schema",
+            "tf": 4,
+            "weight": 0.027778
+          },
+          {
+            "term": "unsafe",
+            "tf": 4,
+            "weight": 0.027778
+          },
+          {
+            "term": "dataclass",
+            "tf": 4,
+            "weight": 0.027778
+          },
+          {
+            "term": "testing",
+            "tf": 2,
+            "weight": 0.013889
+          },
+          {
+            "term": "framework",
+            "tf": 2,
+            "weight": 0.013889
+          },
+          {
+            "term": "purpose",
+            "tf": 2,
+            "weight": 0.013889
+          },
+          {
+            "term": "and",
+            "tf": 2,
+            "weight": 0.013889
+          },
+          {
+            "term": "scope",
+            "tf": 2,
+            "weight": 0.013889
+          },
+          {
+            "term": "architecture",
+            "tf": 2,
+            "weight": 0.013889
+          },
+          {
+            "term": "command",
+            "tf": 2,
+            "weight": 0.013889
+          },
+          {
+            "term": "line",
+            "tf": 2,
+            "weight": 0.013889
+          }
+        ],
+        "unique_terms": 56,
+        "total_terms": 144
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": true,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "On this page",
+        "code",
+        "configuration",
+        "creation",
+        "fixture",
+        "fixtures",
+        "module",
+        "schema",
+        "test",
+        "thread",
+        "validation"
+      ]
+    },
+    "advanced_scores": {
+      "semantic": 0.6,
+      "structural": 0.7999999999999998,
+      "retrieval_quality": 0.5119632653061225,
+      "overall": 0.6373210884353742
+    }
+  }
+]
