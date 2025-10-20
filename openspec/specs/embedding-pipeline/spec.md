@@ -1,4 +1,8 @@
-## ADDED Requirements
+# embedding-pipeline Specification
+
+## Purpose
+TBD - created by archiving change optimize-kaggle-embedding-memory. Update Purpose after archive.
+## Requirements
 ### Requirement: Adaptive GPU Embedding Execution
 The Kaggle embedder (`processor/kaggle_ultimate_embedder_v4.py`) SHALL monitor free GPU memory before and after each batch, SHALL keep GPU 0 allocations under 12GB, and MUST proactively shrink batch sizes, pause companion models, or relocate them to alternate devices when remaining memory drops below the configured safety margin. When additional GPUs are unavailable, the embedder SHALL fall back to CPU execution for companion models instead of aborting the run with an out-of-memory error, and when GPU 1 is available it MUST be used for companion workloads before reverting to CPU.
 
@@ -45,7 +49,6 @@ The embedder SHALL expose a sequential ensemble mode that executes each configur
 - **WHEN** the embeddings are aggregated
 - **THEN** the combined vector matches the weighting semantics of simultaneous ensemble mode within tolerance and the telemetry records `ensemble_pass_completed` events for each model
 
-## MODIFIED Requirements
 ### Requirement: Structured Run Summary
 The batch runner script (`scripts/embed_collections_v5.py`) MUST emit a structured JSON summary describing each collection processed (or skipped) and the embedder (`processor/kaggle_ultimate_embedder_v4.py`) MUST surface the data needed to populate that summary without additional scraping. The summary SHALL include mitigation metadata whenever adaptive batching, device reassignment, or cache fallbacks are triggered during the run.
 
@@ -58,3 +61,4 @@ The batch runner script (`scripts/embed_collections_v5.py`) MUST emit a structur
 - **GIVEN** the embedder adjusts batch sizes, moves models between devices, or relies on cached Hugging Face artifacts during execution
 - **WHEN** the run summary is generated
 - **THEN** the summary entry for that collection records the mitigation actions and any residual warnings so operators can audit the adjustments
+

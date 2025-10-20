@@ -163,6 +163,17 @@ KAGGLE_OPTIMIZED_MODELS = {
         recommended_batch_size=16,
         memory_efficient=True
     ),
+
+    # QUINARY: Qwen3 instruction-aware encoder (balanced quality vs params)
+    "qwen3-embedding-0.6b": ModelConfig(
+        name="qwen3-embedding-0.6b",
+        hf_model_id="Qwen/Qwen3-Embedding-0.6B",
+        vector_dim=1024,
+        max_tokens=32768,
+        recommended_batch_size=12,
+        memory_efficient=True,
+        supports_flash_attention=False
+    ),
     
     # QUATERNARY: Qdrant ONNX-optimized (Ultra-fast inference)
     "qdrant-minilm-onnx": ModelConfig(
@@ -305,7 +316,7 @@ class KaggleExportConfig:
 class EnsembleConfig:
     """Multi-model ensemble configuration"""
     # Ensemble models: Both support 1024D (Jina Code via Matryoshka, Jina V4 native)
-    ensemble_models: List[str] = field(default_factory=lambda: ["jina-code-embeddings-1.5b", "bge-m3"])
+    ensemble_models: List[str] = field(default_factory=lambda: ["jina-code-embeddings-1.5b", "bge-m3", "qwen3-embedding-0.6b"])
 
     # Ensemble weighting strategy
     weighting_strategy: str = "equal"  # equal, performance_based, adaptive
@@ -3693,7 +3704,7 @@ def main():
     
     # V5 Feature Configurations (using V5-specified models)
     ensemble_config = EnsembleConfig(
-        ensemble_models=["jina-code-embeddings-1.5b", "bge-m3"],
+        ensemble_models=["jina-code-embeddings-1.5b", "bge-m3", "qwen3-embedding-0.6b"],
         weighting_strategy="equal",
         aggregation_method="weighted_average"
     )
