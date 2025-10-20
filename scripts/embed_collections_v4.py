@@ -23,7 +23,7 @@ IS_KAGGLE = Path("/kaggle").exists()
 
 # Kaggle-friendly defaults so the notebook can invoke this module without a long CLI string.
 KAGGLE_DEFAULTS = {
-    "chunks_root": Path("/kaggle/working/rad_clean/Chunked"),
+    "chunks_root": Path("/kaggle/working/rag_clean/Chunked"),
     "output_root": Path("/kaggle/working/Embeddings"),
     "collections": [
         "qdrant_ecosystem",

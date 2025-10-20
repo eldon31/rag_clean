@@ -1306,7 +1306,7 @@ class UltimateKaggleEmbedderV4:
         if self.is_kaggle:
             # Prefer the working directory used by the notebook runtime
             candidates.extend([
-                Path("/kaggle/working/rad_clean/Chunked"),
+                Path("/kaggle/working/rag_clean/Chunked"),
                 Path("/kaggle/working/Chunked"),
             ])
 
@@ -1367,7 +1367,7 @@ class UltimateKaggleEmbedderV4:
     
     def load_chunks_from_processing(
         self,
-        chunks_dir: str = "/kaggle/working/rad_clean/Chunked"
+        chunks_dir: str = "/kaggle/working/rag_clean/Chunked"
     ) -> Dict[str, Any]:
         """Load processed chunks, preferring Kaggle's working `Chunked` folder when present."""
         
