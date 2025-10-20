@@ -1,0 +1,1712 @@
+[
+  {
+    "text": "## ClientSession Architecture  The `ClientSession` class serves as the primary interface for MCP client applications, built on top of the `BaseSession` foundation for session management and message handling. ``` ``` **Sources:** [src/mcp/client/session.py101-136](https://github.com/modelcontextprotocol/python-sdk/blob/146d7efb/src/mcp/client/session.py#L101-L136) [src/mcp/shared/session.py159-200](https://github.com/modelcontextprotocol/python-sdk/blob/146d7efb/src/mcp/shared/session.py#L159-L200)",
+    "metadata": {
+      "chunk_id": "788433e361cf-0001",
+      "source_file": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_3-client-framework.md",
+      "filename": "_modelcontextprotocol_python-sdk_3-client-framework.md",
+      "file_extension": ".md",
+      "chunk_index": 1,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "ClientSession Architecture"
+      ],
+      "heading_text": "ClientSession Architecture",
+      "token_count": 121,
+      "char_count": 502,
+      "start_char": 5089,
+      "end_char": 5591,
+      "semantic_score": 0.7,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5536363636363636,
+      "chunking_strategy": "hybrid_adaptive_structural",
+      "content_type": "code_block",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:10.626980",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 121,
+      "document_id": "788433e361cf",
+      "document_name": "_modelcontextprotocol_python-sdk_3-client-framework",
+      "source_path": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_3-client-framework.md",
+      "source_filename": "_modelcontextprotocol_python-sdk_3-client-framework.md",
+      "source_directory": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk",
+      "relative_path": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_3-client-framework.md",
+      "hierarchy_path": "ClientSession Architecture",
+      "chunk_hash": "2781f750447c4d0f",
+      "content_digest": "2781f750447c4d0f",
+      "chunk_length": 502,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "fast_docs"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "mcp",
+          "session",
+          "src",
+          "the",
+          "client",
+          "clientsession",
+          "for",
+          "https",
+          "github",
+          "com",
+          "modelcontextprotocol",
+          "python",
+          "sdk",
+          "blob",
+          "146d7efb",
+          "shared",
+          "architecture",
+          "class",
+          "serves",
+          "primary"
+        ],
+        "term_weights": [
+          {
+            "term": "mcp",
+            "tf": 5,
+            "weight": 0.076923
+          },
+          {
+            "term": "session",
+            "tf": 5,
+            "weight": 0.076923
+          },
+          {
+            "term": "src",
+            "tf": 4,
+            "weight": 0.061538
+          },
+          {
+            "term": "the",
+            "tf": 3,
+            "weight": 0.046154
+          },
+          {
+            "term": "client",
+            "tf": 3,
+            "weight": 0.046154
+          },
+          {
+            "term": "clientsession",
+            "tf": 2,
+            "weight": 0.030769
+          },
+          {
+            "term": "for",
+            "tf": 2,
+            "weight": 0.030769
+          },
+          {
+            "term": "https",
+            "tf": 2,
+            "weight": 0.030769
+          },
+          {
+            "term": "github",
+            "tf": 2,
+            "weight": 0.030769
+          },
+          {
+            "term": "com",
+            "tf": 2,
+            "weight": 0.030769
+          },
+          {
+            "term": "modelcontextprotocol",
+            "tf": 2,
+            "weight": 0.030769
+          },
+          {
+            "term": "python",
+            "tf": 2,
+            "weight": 0.030769
+          },
+          {
+            "term": "sdk",
+            "tf": 2,
+            "weight": 0.030769
+          },
+          {
+            "term": "blob",
+            "tf": 2,
+            "weight": 0.030769
+          },
+          {
+            "term": "146d7efb",
+            "tf": 2,
+            "weight": 0.030769
+          },
+          {
+            "term": "shared",
+            "tf": 2,
+            "weight": 0.030769
+          },
+          {
+            "term": "architecture",
+            "tf": 1,
+            "weight": 0.015385
+          },
+          {
+            "term": "class",
+            "tf": 1,
+            "weight": 0.015385
+          },
+          {
+            "term": "serves",
+            "tf": 1,
+            "weight": 0.015385
+          },
+          {
+            "term": "primary",
+            "tf": 1,
+            "weight": 0.015385
+          }
+        ],
+        "unique_terms": 39,
+        "total_terms": 65
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "ClientSession Architecture",
+        "client",
+        "clientsession",
+        "com",
+        "for",
+        "github",
+        "https",
+        "mcp",
+        "session",
+        "src",
+        "the"
+      ],
+      "collection_name": "FAST_DOCS"
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5536363636363636,
+      "overall": 0.7178787878787878
+    }
+  },
+  {
+    "text": "## Session Lifecycle and Initialization  The client session follows a structured initialization process to establish protocol compatibility and exchange capability information with the server. ``` ``` **Sources:** [src/mcp/client/session.py137-174](https://github.com/modelcontextprotocol/python-sdk/blob/146d7efb/src/mcp/client/session.py#L137-L174) [tests/client/test\\_session.py30-114](https://github.com/modelcontextprotocol/python-sdk/blob/146d7efb/tests/client/test_session.py#L30-L114)",
+    "metadata": {
+      "chunk_id": "788433e361cf-0002",
+      "source_file": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_3-client-framework.md",
+      "filename": "_modelcontextprotocol_python-sdk_3-client-framework.md",
+      "file_extension": ".md",
+      "chunk_index": 2,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Session Lifecycle and Initialization"
+      ],
+      "heading_text": "Session Lifecycle and Initialization",
+      "token_count": 108,
+      "char_count": 492,
+      "start_char": 5595,
+      "end_char": 6087,
+      "semantic_score": 0.7,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5382758620689655,
+      "chunking_strategy": "hybrid_adaptive_structural",
+      "content_type": "code_block",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:10.627915",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 108,
+      "document_id": "788433e361cf",
+      "document_name": "_modelcontextprotocol_python-sdk_3-client-framework",
+      "source_path": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_3-client-framework.md",
+      "source_filename": "_modelcontextprotocol_python-sdk_3-client-framework.md",
+      "source_directory": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk",
+      "relative_path": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_3-client-framework.md",
+      "hierarchy_path": "Session Lifecycle and Initialization",
+      "chunk_hash": "04d7c9708a60408d",
+      "content_digest": "04d7c9708a60408d",
+      "chunk_length": 492,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "fast_docs"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "session",
+          "client",
+          "and",
+          "initialization",
+          "the",
+          "src",
+          "mcp",
+          "https",
+          "github",
+          "com",
+          "modelcontextprotocol",
+          "python",
+          "sdk",
+          "blob",
+          "146d7efb",
+          "tests",
+          "test",
+          "lifecycle",
+          "follows",
+          "structured"
+        ],
+        "term_weights": [
+          {
+            "term": "session",
+            "tf": 6,
+            "weight": 0.096774
+          },
+          {
+            "term": "client",
+            "tf": 5,
+            "weight": 0.080645
+          },
+          {
+            "term": "and",
+            "tf": 2,
+            "weight": 0.032258
+          },
+          {
+            "term": "initialization",
+            "tf": 2,
+            "weight": 0.032258
+          },
+          {
+            "term": "the",
+            "tf": 2,
+            "weight": 0.032258
+          },
+          {
+            "term": "src",
+            "tf": 2,
+            "weight": 0.032258
+          },
+          {
+            "term": "mcp",
+            "tf": 2,
+            "weight": 0.032258
+          },
+          {
+            "term": "https",
+            "tf": 2,
+            "weight": 0.032258
+          },
+          {
+            "term": "github",
+            "tf": 2,
+            "weight": 0.032258
+          },
+          {
+            "term": "com",
+            "tf": 2,
+            "weight": 0.032258
+          },
+          {
+            "term": "modelcontextprotocol",
+            "tf": 2,
+            "weight": 0.032258
+          },
+          {
+            "term": "python",
+            "tf": 2,
+            "weight": 0.032258
+          },
+          {
+            "term": "sdk",
+            "tf": 2,
+            "weight": 0.032258
+          },
+          {
+            "term": "blob",
+            "tf": 2,
+            "weight": 0.032258
+          },
+          {
+            "term": "146d7efb",
+            "tf": 2,
+            "weight": 0.032258
+          },
+          {
+            "term": "tests",
+            "tf": 2,
+            "weight": 0.032258
+          },
+          {
+            "term": "test",
+            "tf": 2,
+            "weight": 0.032258
+          },
+          {
+            "term": "lifecycle",
+            "tf": 1,
+            "weight": 0.016129
+          },
+          {
+            "term": "follows",
+            "tf": 1,
+            "weight": 0.016129
+          },
+          {
+            "term": "structured",
+            "tf": 1,
+            "weight": 0.016129
+          }
+        ],
+        "unique_terms": 38,
+        "total_terms": 62
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Session Lifecycle and Initialization",
+        "and",
+        "client",
+        "com",
+        "github",
+        "https",
+        "initialization",
+        "mcp",
+        "session",
+        "src",
+        "the"
+      ],
+      "collection_name": "FAST_DOCS"
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5382758620689655,
+      "overall": 0.7127586206896551
+    }
+  },
+  {
+    "text": "## Request and Response Handling\n\nThe framework implements a sophisticated request/response system with progress tracking, timeout management, and structured validation.",
+    "metadata": {
+      "chunk_id": "788433e361cf-0003",
+      "source_file": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_3-client-framework.md",
+      "filename": "_modelcontextprotocol_python-sdk_3-client-framework.md",
+      "file_extension": ".md",
+      "chunk_index": 3,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Request and Response Handling"
+      ],
+      "heading_text": "Request and Response Handling",
+      "token_count": 25,
+      "char_count": 169,
+      "start_char": 6091,
+      "end_char": 6260,
+      "semantic_score": 0.8,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.575,
+      "chunking_strategy": "hybrid_adaptive_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:10.628188",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 25,
+      "document_id": "788433e361cf",
+      "document_name": "_modelcontextprotocol_python-sdk_3-client-framework",
+      "source_path": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_3-client-framework.md",
+      "source_filename": "_modelcontextprotocol_python-sdk_3-client-framework.md",
+      "source_directory": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk",
+      "relative_path": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_3-client-framework.md",
+      "hierarchy_path": "Request and Response Handling",
+      "chunk_hash": "f7b6d3e0b01b4164",
+      "content_digest": "f7b6d3e0b01b4164",
+      "chunk_length": 169,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "fast_docs"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "request",
+          "and",
+          "response",
+          "handling",
+          "the",
+          "framework",
+          "implements",
+          "sophisticated",
+          "system",
+          "with",
+          "progress",
+          "tracking",
+          "timeout",
+          "management",
+          "structured",
+          "validation"
+        ],
+        "term_weights": [
+          {
+            "term": "request",
+            "tf": 2,
+            "weight": 0.105263
+          },
+          {
+            "term": "and",
+            "tf": 2,
+            "weight": 0.105263
+          },
+          {
+            "term": "response",
+            "tf": 2,
+            "weight": 0.105263
+          },
+          {
+            "term": "handling",
+            "tf": 1,
+            "weight": 0.052632
+          },
+          {
+            "term": "the",
+            "tf": 1,
+            "weight": 0.052632
+          },
+          {
+            "term": "framework",
+            "tf": 1,
+            "weight": 0.052632
+          },
+          {
+            "term": "implements",
+            "tf": 1,
+            "weight": 0.052632
+          },
+          {
+            "term": "sophisticated",
+            "tf": 1,
+            "weight": 0.052632
+          },
+          {
+            "term": "system",
+            "tf": 1,
+            "weight": 0.052632
+          },
+          {
+            "term": "with",
+            "tf": 1,
+            "weight": 0.052632
+          },
+          {
+            "term": "progress",
+            "tf": 1,
+            "weight": 0.052632
+          },
+          {
+            "term": "tracking",
+            "tf": 1,
+            "weight": 0.052632
+          },
+          {
+            "term": "timeout",
+            "tf": 1,
+            "weight": 0.052632
+          },
+          {
+            "term": "management",
+            "tf": 1,
+            "weight": 0.052632
+          },
+          {
+            "term": "structured",
+            "tf": 1,
+            "weight": 0.052632
+          },
+          {
+            "term": "validation",
+            "tf": 1,
+            "weight": 0.052632
+          }
+        ],
+        "unique_terms": 16,
+        "total_terms": 19
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Request and Response Handling",
+        "and",
+        "framework",
+        "handling",
+        "implements",
+        "request",
+        "response",
+        "sophisticated",
+        "system",
+        "the",
+        "with"
+      ],
+      "collection_name": "FAST_DOCS"
+    },
+    "advanced_scores": {
+      "semantic": 0.8,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.575,
+      "overall": 0.7583333333333333
+    }
+  },
+  {
+    "text": "### Tool Output Validation  The client automatically validates structured tool outputs against server-provided schemas: ``` ``` **Sources:** [src/mcp/client/session.py298-319](https://github.com/modelcontextprotocol/python-sdk/blob/146d7efb/src/mcp/client/session.py#L298-L319) [src/mcp/client/session.py377-381](https://github.com/modelcontextprotocol/python-sdk/blob/146d7efb/src/mcp/client/session.py#L377-L381)",
+    "metadata": {
+      "chunk_id": "788433e361cf-0005",
+      "source_file": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_3-client-framework.md",
+      "filename": "_modelcontextprotocol_python-sdk_3-client-framework.md",
+      "file_extension": ".md",
+      "chunk_index": 5,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Tool Output Validation"
+      ],
+      "heading_text": "Tool Output Validation",
+      "token_count": 101,
+      "char_count": 414,
+      "start_char": 7401,
+      "end_char": 7815,
+      "semantic_score": 0.6,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5584210526315789,
+      "chunking_strategy": "hybrid_adaptive_structural",
+      "content_type": "code_block",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:10.629819",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 101,
+      "document_id": "788433e361cf",
+      "document_name": "_modelcontextprotocol_python-sdk_3-client-framework",
+      "source_path": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_3-client-framework.md",
+      "source_filename": "_modelcontextprotocol_python-sdk_3-client-framework.md",
+      "source_directory": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk",
+      "relative_path": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_3-client-framework.md",
+      "hierarchy_path": "Tool Output Validation",
+      "chunk_hash": "4b3d58607376a23b",
+      "content_digest": "4b3d58607376a23b",
+      "chunk_length": 414,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "fast_docs"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "client",
+          "src",
+          "mcp",
+          "session",
+          "tool",
+          "https",
+          "github",
+          "com",
+          "modelcontextprotocol",
+          "python",
+          "sdk",
+          "blob",
+          "146d7efb",
+          "output",
+          "validation",
+          "the",
+          "automatically",
+          "validates",
+          "structured",
+          "outputs"
+        ],
+        "term_weights": [
+          {
+            "term": "client",
+            "tf": 5,
+            "weight": 0.090909
+          },
+          {
+            "term": "src",
+            "tf": 4,
+            "weight": 0.072727
+          },
+          {
+            "term": "mcp",
+            "tf": 4,
+            "weight": 0.072727
+          },
+          {
+            "term": "session",
+            "tf": 4,
+            "weight": 0.072727
+          },
+          {
+            "term": "tool",
+            "tf": 2,
+            "weight": 0.036364
+          },
+          {
+            "term": "https",
+            "tf": 2,
+            "weight": 0.036364
+          },
+          {
+            "term": "github",
+            "tf": 2,
+            "weight": 0.036364
+          },
+          {
+            "term": "com",
+            "tf": 2,
+            "weight": 0.036364
+          },
+          {
+            "term": "modelcontextprotocol",
+            "tf": 2,
+            "weight": 0.036364
+          },
+          {
+            "term": "python",
+            "tf": 2,
+            "weight": 0.036364
+          },
+          {
+            "term": "sdk",
+            "tf": 2,
+            "weight": 0.036364
+          },
+          {
+            "term": "blob",
+            "tf": 2,
+            "weight": 0.036364
+          },
+          {
+            "term": "146d7efb",
+            "tf": 2,
+            "weight": 0.036364
+          },
+          {
+            "term": "output",
+            "tf": 1,
+            "weight": 0.018182
+          },
+          {
+            "term": "validation",
+            "tf": 1,
+            "weight": 0.018182
+          },
+          {
+            "term": "the",
+            "tf": 1,
+            "weight": 0.018182
+          },
+          {
+            "term": "automatically",
+            "tf": 1,
+            "weight": 0.018182
+          },
+          {
+            "term": "validates",
+            "tf": 1,
+            "weight": 0.018182
+          },
+          {
+            "term": "structured",
+            "tf": 1,
+            "weight": 0.018182
+          },
+          {
+            "term": "outputs",
+            "tf": 1,
+            "weight": 0.018182
+          }
+        ],
+        "unique_terms": 33,
+        "total_terms": 55
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Tool Output Validation",
+        "client",
+        "com",
+        "github",
+        "https",
+        "mcp",
+        "modelcontextprotocol",
+        "python",
+        "session",
+        "src",
+        "tool"
+      ],
+      "collection_name": "FAST_DOCS"
+    },
+    "advanced_scores": {
+      "semantic": 0.6,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5584210526315789,
+      "overall": 0.686140350877193
+    }
+  },
+  {
+    "text": "## Progress and Notification System\n\nThe client framework supports bidirectional progress reporting and server-initiated notifications through callback functions and progress tokens.",
+    "metadata": {
+      "chunk_id": "788433e361cf-0006",
+      "source_file": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_3-client-framework.md",
+      "filename": "_modelcontextprotocol_python-sdk_3-client-framework.md",
+      "file_extension": ".md",
+      "chunk_index": 6,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Progress and Notification System"
+      ],
+      "heading_text": "Progress and Notification System",
+      "token_count": 26,
+      "char_count": 182,
+      "start_char": 7819,
+      "end_char": 8001,
+      "semantic_score": 0.8,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5328571428571428,
+      "chunking_strategy": "hybrid_adaptive_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:10.630073",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 26,
+      "document_id": "788433e361cf",
+      "document_name": "_modelcontextprotocol_python-sdk_3-client-framework",
+      "source_path": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_3-client-framework.md",
+      "source_filename": "_modelcontextprotocol_python-sdk_3-client-framework.md",
+      "source_directory": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk",
+      "relative_path": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_3-client-framework.md",
+      "hierarchy_path": "Progress and Notification System",
+      "chunk_hash": "26b66a500d01f19a",
+      "content_digest": "26b66a500d01f19a",
+      "chunk_length": 182,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "fast_docs"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "progress",
+          "and",
+          "notification",
+          "system",
+          "the",
+          "client",
+          "framework",
+          "supports",
+          "bidirectional",
+          "reporting",
+          "server",
+          "initiated",
+          "notifications",
+          "through",
+          "callback",
+          "functions",
+          "tokens"
+        ],
+        "term_weights": [
+          {
+            "term": "progress",
+            "tf": 3,
+            "weight": 0.142857
+          },
+          {
+            "term": "and",
+            "tf": 3,
+            "weight": 0.142857
+          },
+          {
+            "term": "notification",
+            "tf": 1,
+            "weight": 0.047619
+          },
+          {
+            "term": "system",
+            "tf": 1,
+            "weight": 0.047619
+          },
+          {
+            "term": "the",
+            "tf": 1,
+            "weight": 0.047619
+          },
+          {
+            "term": "client",
+            "tf": 1,
+            "weight": 0.047619
+          },
+          {
+            "term": "framework",
+            "tf": 1,
+            "weight": 0.047619
+          },
+          {
+            "term": "supports",
+            "tf": 1,
+            "weight": 0.047619
+          },
+          {
+            "term": "bidirectional",
+            "tf": 1,
+            "weight": 0.047619
+          },
+          {
+            "term": "reporting",
+            "tf": 1,
+            "weight": 0.047619
+          },
+          {
+            "term": "server",
+            "tf": 1,
+            "weight": 0.047619
+          },
+          {
+            "term": "initiated",
+            "tf": 1,
+            "weight": 0.047619
+          },
+          {
+            "term": "notifications",
+            "tf": 1,
+            "weight": 0.047619
+          },
+          {
+            "term": "through",
+            "tf": 1,
+            "weight": 0.047619
+          },
+          {
+            "term": "callback",
+            "tf": 1,
+            "weight": 0.047619
+          },
+          {
+            "term": "functions",
+            "tf": 1,
+            "weight": 0.047619
+          },
+          {
+            "term": "tokens",
+            "tf": 1,
+            "weight": 0.047619
+          }
+        ],
+        "unique_terms": 17,
+        "total_terms": 21
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Progress and Notification System",
+        "and",
+        "bidirectional",
+        "client",
+        "framework",
+        "notification",
+        "progress",
+        "reporting",
+        "supports",
+        "system",
+        "the"
+      ],
+      "collection_name": "FAST_DOCS"
+    },
+    "advanced_scores": {
+      "semantic": 0.8,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5328571428571428,
+      "overall": 0.7442857142857142
+    }
+  },
+  {
+    "text": "### Progress Callback Integration ``` ``` **Sources:** [src/mcp/shared/session.py242-253](https://github.com/modelcontextprotocol/python-sdk/blob/146d7efb/src/mcp/shared/session.py#L242-L253) [src/mcp/shared/session.py389-399](https://github.com/modelcontextprotocol/python-sdk/blob/146d7efb/src/mcp/shared/session.py#L389-L399)",
+    "metadata": {
+      "chunk_id": "788433e361cf-0007",
+      "source_file": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_3-client-framework.md",
+      "filename": "_modelcontextprotocol_python-sdk_3-client-framework.md",
+      "file_extension": ".md",
+      "chunk_index": 7,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Progress Callback Integration"
+      ],
+      "heading_text": "Progress Callback Integration",
+      "token_count": 87,
+      "char_count": 328,
+      "start_char": 8003,
+      "end_char": 8331,
+      "semantic_score": 0.6,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5566666666666666,
+      "chunking_strategy": "hybrid_adaptive_structural",
+      "content_type": "code_block",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:10.630627",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 87,
+      "document_id": "788433e361cf",
+      "document_name": "_modelcontextprotocol_python-sdk_3-client-framework",
+      "source_path": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_3-client-framework.md",
+      "source_filename": "_modelcontextprotocol_python-sdk_3-client-framework.md",
+      "source_directory": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk",
+      "relative_path": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_3-client-framework.md",
+      "hierarchy_path": "Progress Callback Integration",
+      "chunk_hash": "dc2f3ccf8eb50230",
+      "content_digest": "dc2f3ccf8eb50230",
+      "chunk_length": 328,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "fast_docs"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "src",
+          "mcp",
+          "shared",
+          "session",
+          "https",
+          "github",
+          "com",
+          "modelcontextprotocol",
+          "python",
+          "sdk",
+          "blob",
+          "146d7efb",
+          "progress",
+          "callback",
+          "integration",
+          "sources",
+          "py242",
+          "253",
+          "l242",
+          "l253"
+        ],
+        "term_weights": [
+          {
+            "term": "src",
+            "tf": 4,
+            "weight": 0.090909
+          },
+          {
+            "term": "mcp",
+            "tf": 4,
+            "weight": 0.090909
+          },
+          {
+            "term": "shared",
+            "tf": 4,
+            "weight": 0.090909
+          },
+          {
+            "term": "session",
+            "tf": 4,
+            "weight": 0.090909
+          },
+          {
+            "term": "https",
+            "tf": 2,
+            "weight": 0.045455
+          },
+          {
+            "term": "github",
+            "tf": 2,
+            "weight": 0.045455
+          },
+          {
+            "term": "com",
+            "tf": 2,
+            "weight": 0.045455
+          },
+          {
+            "term": "modelcontextprotocol",
+            "tf": 2,
+            "weight": 0.045455
+          },
+          {
+            "term": "python",
+            "tf": 2,
+            "weight": 0.045455
+          },
+          {
+            "term": "sdk",
+            "tf": 2,
+            "weight": 0.045455
+          },
+          {
+            "term": "blob",
+            "tf": 2,
+            "weight": 0.045455
+          },
+          {
+            "term": "146d7efb",
+            "tf": 2,
+            "weight": 0.045455
+          },
+          {
+            "term": "progress",
+            "tf": 1,
+            "weight": 0.022727
+          },
+          {
+            "term": "callback",
+            "tf": 1,
+            "weight": 0.022727
+          },
+          {
+            "term": "integration",
+            "tf": 1,
+            "weight": 0.022727
+          },
+          {
+            "term": "sources",
+            "tf": 1,
+            "weight": 0.022727
+          },
+          {
+            "term": "py242",
+            "tf": 1,
+            "weight": 0.022727
+          },
+          {
+            "term": "253",
+            "tf": 1,
+            "weight": 0.022727
+          },
+          {
+            "term": "l242",
+            "tf": 1,
+            "weight": 0.022727
+          },
+          {
+            "term": "l253",
+            "tf": 1,
+            "weight": 0.022727
+          }
+        ],
+        "unique_terms": 24,
+        "total_terms": 44
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Progress Callback Integration",
+        "com",
+        "github",
+        "https",
+        "mcp",
+        "modelcontextprotocol",
+        "python",
+        "sdk",
+        "session",
+        "shared",
+        "src"
+      ],
+      "collection_name": "FAST_DOCS"
+    },
+    "advanced_scores": {
+      "semantic": 0.6,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5566666666666666,
+      "overall": 0.6855555555555556
+    }
+  },
+  {
+    "text": "## Transport Integration  The client framework abstracts transport details through stream-based interfaces, allowing it to work with various transport mechanisms. ``` ``` **Sources:** [src/mcp/client/session.py110-128](https://github.com/modelcontextprotocol/python-sdk/blob/146d7efb/src/mcp/client/session.py#L110-L128) [src/mcp/client/\\_\\_main\\_\\_.py36-64](https://github.com/modelcontextprotocol/python-sdk/blob/146d7efb/src/mcp/client/__main__.py#L36-L64)",
+    "metadata": {
+      "chunk_id": "788433e361cf-0009",
+      "source_file": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_3-client-framework.md",
+      "filename": "_modelcontextprotocol_python-sdk_3-client-framework.md",
+      "file_extension": ".md",
+      "chunk_index": 9,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Transport Integration"
+      ],
+      "heading_text": "Transport Integration",
+      "token_count": 116,
+      "char_count": 459,
+      "start_char": 9355,
+      "end_char": 9814,
+      "semantic_score": 0.6,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.554,
+      "chunking_strategy": "hybrid_adaptive_structural",
+      "content_type": "code_block",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:10.632335",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 116,
+      "document_id": "788433e361cf",
+      "document_name": "_modelcontextprotocol_python-sdk_3-client-framework",
+      "source_path": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_3-client-framework.md",
+      "source_filename": "_modelcontextprotocol_python-sdk_3-client-framework.md",
+      "source_directory": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk",
+      "relative_path": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_3-client-framework.md",
+      "hierarchy_path": "Transport Integration",
+      "chunk_hash": "41d55747663fbfa6",
+      "content_digest": "41d55747663fbfa6",
+      "chunk_length": 459,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "fast_docs"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "client",
+          "src",
+          "mcp",
+          "transport",
+          "session",
+          "https",
+          "github",
+          "com",
+          "modelcontextprotocol",
+          "python",
+          "sdk",
+          "blob",
+          "146d7efb",
+          "main",
+          "integration",
+          "the",
+          "framework",
+          "abstracts",
+          "details",
+          "through"
+        ],
+        "term_weights": [
+          {
+            "term": "client",
+            "tf": 5,
+            "weight": 0.086207
+          },
+          {
+            "term": "src",
+            "tf": 4,
+            "weight": 0.068966
+          },
+          {
+            "term": "mcp",
+            "tf": 4,
+            "weight": 0.068966
+          },
+          {
+            "term": "transport",
+            "tf": 3,
+            "weight": 0.051724
+          },
+          {
+            "term": "session",
+            "tf": 2,
+            "weight": 0.034483
+          },
+          {
+            "term": "https",
+            "tf": 2,
+            "weight": 0.034483
+          },
+          {
+            "term": "github",
+            "tf": 2,
+            "weight": 0.034483
+          },
+          {
+            "term": "com",
+            "tf": 2,
+            "weight": 0.034483
+          },
+          {
+            "term": "modelcontextprotocol",
+            "tf": 2,
+            "weight": 0.034483
+          },
+          {
+            "term": "python",
+            "tf": 2,
+            "weight": 0.034483
+          },
+          {
+            "term": "sdk",
+            "tf": 2,
+            "weight": 0.034483
+          },
+          {
+            "term": "blob",
+            "tf": 2,
+            "weight": 0.034483
+          },
+          {
+            "term": "146d7efb",
+            "tf": 2,
+            "weight": 0.034483
+          },
+          {
+            "term": "main",
+            "tf": 2,
+            "weight": 0.034483
+          },
+          {
+            "term": "integration",
+            "tf": 1,
+            "weight": 0.017241
+          },
+          {
+            "term": "the",
+            "tf": 1,
+            "weight": 0.017241
+          },
+          {
+            "term": "framework",
+            "tf": 1,
+            "weight": 0.017241
+          },
+          {
+            "term": "abstracts",
+            "tf": 1,
+            "weight": 0.017241
+          },
+          {
+            "term": "details",
+            "tf": 1,
+            "weight": 0.017241
+          },
+          {
+            "term": "through",
+            "tf": 1,
+            "weight": 0.017241
+          }
+        ],
+        "unique_terms": 36,
+        "total_terms": 58
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Transport Integration",
+        "client",
+        "com",
+        "github",
+        "https",
+        "mcp",
+        "modelcontextprotocol",
+        "python",
+        "session",
+        "src",
+        "transport"
+      ],
+      "collection_name": "FAST_DOCS"
+    },
+    "advanced_scores": {
+      "semantic": 0.6,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.554,
+      "overall": 0.6846666666666668
+    }
+  },
+  {
+    "text": "### Memory Transport Factory  The `create_connected_server_and_client_session()` function provides a complete testing environment with in-memory communication: ``` ``` **Sources:** [src/mcp/shared/memory.py28-50](https://github.com/modelcontextprotocol/python-sdk/blob/146d7efb/src/mcp/shared/memory.py#L28-L50) [src/mcp/shared/memory.py53-99](https://github.com/modelcontextprotocol/python-sdk/blob/146d7efb/src/mcp/shared/memory.py#L53-L99)",
+    "metadata": {
+      "chunk_id": "788433e361cf-0011",
+      "source_file": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_3-client-framework.md",
+      "filename": "_modelcontextprotocol_python-sdk_3-client-framework.md",
+      "file_extension": ".md",
+      "chunk_index": 11,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Memory Transport Factory"
+      ],
+      "heading_text": "Memory Transport Factory",
+      "token_count": 108,
+      "char_count": 442,
+      "start_char": 9952,
+      "end_char": 10394,
+      "semantic_score": 0.7,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.575,
+      "chunking_strategy": "hybrid_adaptive_structural",
+      "content_type": "code_block",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:10.633432",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 108,
+      "document_id": "788433e361cf",
+      "document_name": "_modelcontextprotocol_python-sdk_3-client-framework",
+      "source_path": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_3-client-framework.md",
+      "source_filename": "_modelcontextprotocol_python-sdk_3-client-framework.md",
+      "source_directory": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk",
+      "relative_path": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_3-client-framework.md",
+      "hierarchy_path": "Memory Transport Factory",
+      "chunk_hash": "e1c0372d0a104aad",
+      "content_digest": "e1c0372d0a104aad",
+      "chunk_length": 442,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "fast_docs"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "memory",
+          "src",
+          "mcp",
+          "shared",
+          "https",
+          "github",
+          "com",
+          "modelcontextprotocol",
+          "python",
+          "sdk",
+          "blob",
+          "146d7efb",
+          "transport",
+          "factory",
+          "the",
+          "create",
+          "connected",
+          "server",
+          "and",
+          "client"
+        ],
+        "term_weights": [
+          {
+            "term": "memory",
+            "tf": 6,
+            "weight": 0.105263
+          },
+          {
+            "term": "src",
+            "tf": 4,
+            "weight": 0.070175
+          },
+          {
+            "term": "mcp",
+            "tf": 4,
+            "weight": 0.070175
+          },
+          {
+            "term": "shared",
+            "tf": 4,
+            "weight": 0.070175
+          },
+          {
+            "term": "https",
+            "tf": 2,
+            "weight": 0.035088
+          },
+          {
+            "term": "github",
+            "tf": 2,
+            "weight": 0.035088
+          },
+          {
+            "term": "com",
+            "tf": 2,
+            "weight": 0.035088
+          },
+          {
+            "term": "modelcontextprotocol",
+            "tf": 2,
+            "weight": 0.035088
+          },
+          {
+            "term": "python",
+            "tf": 2,
+            "weight": 0.035088
+          },
+          {
+            "term": "sdk",
+            "tf": 2,
+            "weight": 0.035088
+          },
+          {
+            "term": "blob",
+            "tf": 2,
+            "weight": 0.035088
+          },
+          {
+            "term": "146d7efb",
+            "tf": 2,
+            "weight": 0.035088
+          },
+          {
+            "term": "transport",
+            "tf": 1,
+            "weight": 0.017544
+          },
+          {
+            "term": "factory",
+            "tf": 1,
+            "weight": 0.017544
+          },
+          {
+            "term": "the",
+            "tf": 1,
+            "weight": 0.017544
+          },
+          {
+            "term": "create",
+            "tf": 1,
+            "weight": 0.017544
+          },
+          {
+            "term": "connected",
+            "tf": 1,
+            "weight": 0.017544
+          },
+          {
+            "term": "server",
+            "tf": 1,
+            "weight": 0.017544
+          },
+          {
+            "term": "and",
+            "tf": 1,
+            "weight": 0.017544
+          },
+          {
+            "term": "client",
+            "tf": 1,
+            "weight": 0.017544
+          }
+        ],
+        "unique_terms": 35,
+        "total_terms": 57
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Memory Transport Factory",
+        "com",
+        "github",
+        "https",
+        "mcp",
+        "memory",
+        "modelcontextprotocol",
+        "python",
+        "sdk",
+        "shared",
+        "src"
+      ],
+      "collection_name": "FAST_DOCS"
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.575,
+      "overall": 0.725
+    }
+  }
+]

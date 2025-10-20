@@ -170,6 +170,62 @@ def main():
     logger.info("="*80)
     logger.info(f"Total Chunks: {len(results)}")
     logger.info(f"Output Directory: {output_dir}")
+
+    collection_summary = {}
+    for chunk in results:
+        metadata = chunk.get("metadata") or {}
+        hints = metadata.get("collection_hints")
+
+        if isinstance(hints, str):
+            hints = [hint.strip() for hint in hints.split(",") if hint.strip()]
+        elif isinstance(hints, (list, tuple)):
+            hints = [str(hint).strip() for hint in hints if str(hint).strip()]
+        elif hints is None:
+            hints = []
+        else:
+            hints = [str(hints).strip()] if str(hints).strip() else []
+
+        if not hints:
+            hints = ["__missing__"]
+
+        for hint in hints:
+            key = hint.lower()
+            summary = collection_summary.setdefault(
+                key, {"chunks": 0, "sources": set()}
+            )
+            summary["chunks"] += 1
+            source_path = metadata.get("source_file")
+            if source_path:
+                summary["sources"].add(source_path)
+
+    if collection_summary:
+        logger.info("Collection hint distribution:")
+        for hint, data in sorted(collection_summary.items()):
+            logger.info(
+                f"  - {hint}: {data['chunks']} chunks from {len(data['sources'])} files"
+            )
+    else:
+        logger.warning("No collection_hints metadata found on any chunk")
+
+    sample_chunk = next(
+        (chunk for chunk in results if chunk.get("metadata")), None
+    )
+    if sample_chunk:
+        preview = sample_chunk["metadata"]
+        sample_preview = {
+            key: preview[key]
+            for key in (
+                "collection_hints",
+                "source_file",
+                "document_name",
+                "chunk_index",
+                "total_chunks",
+            )
+            if key in preview
+        }
+        logger.info(f"Sample chunk metadata preview: {sample_preview}")
+    else:
+        logger.warning("Unable to preview chunk metadata; none present")
     
     # Validate
     logger.info("\n" + "="*80)

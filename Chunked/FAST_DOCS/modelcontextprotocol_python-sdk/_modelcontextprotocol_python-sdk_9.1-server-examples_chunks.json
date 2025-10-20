@@ -1,0 +1,4214 @@
+[
+  {
+    "text": "# Server Examples  Relevant source files  - [examples/servers/simple-prompt/mcp\\_simple\\_prompt/server.py](https://github.com/modelcontextprotocol/python-sdk/blob/146d7efb/examples/servers/simple-prompt/mcp_simple_prompt/server.py) - [examples/servers/simple-resource/mcp\\_simple\\_resource/server.py](https://github.com/modelcontextprotocol/python-sdk/blob/146d7efb/examples/servers/simple-resource/mcp_simple_resource/server.py) - [examples/servers/simple-streamablehttp-stateless/mcp\\_simple\\_streamablehttp\\_stateless/server.py](https://github.com/modelcontextprotocol/python-sdk/blob/146d7efb/examples/servers/simple-streamablehttp-stateless/mcp_simple_streamablehttp_stateless/server.py) - [examples/servers/simple-streamablehttp/mcp\\_simple\\_streamablehttp/server.py](https://github.com/modelcontextprotocol/python-sdk/blob/146d7efb/examples/servers/simple-streamablehttp/mcp_simple_streamablehttp/server.py) - [examples/servers/simple-tool/mcp\\_simple\\_tool/server.py](https://github.com/modelcontextprotocol/python-sdk/blob/146d7efb/examples/servers/simple-tool/mcp_simple_tool/server.py) - [examples/snippets/servers/direct\\_execution.py](https://github.com/modelcontextprotocol/python-sdk/blob/146d7efb/examples/snippets/servers/direct_execution.py) - [examples/snippets/servers/structured\\_output.py](https://github.com/modelcontextprotocol/python-sdk/blob/146d7efb/examples/snippets/servers/structured_output.py) - [tests/issues/test\\_88\\_random\\_error.py](https://github.com/modelcontextprotocol/python-sdk/blob/146d7efb/tests/issues/test_88_random_error.py) - [tests/server/fastmcp/test\\_integration.py](https://github.com/modelcontextprotocol/python-sdk/blob/146d7efb/tests/server/fastmcp/test_integration.py)  This document provides comprehensive examples of MCP server implementations using both the low-level `Server` class and the high-level `FastMCP` framework. These examples demonstrate various MCP capabilities including tools, resources, prompts, progress reporting, and different transport mechanisms. For client-side examples and integration patterns, see [Client Examples](modelcontextprotocol/python-sdk/9.2-client-examples.md). For detailed FastMCP framework documentation, see [FastMCP Server Framework](modelcontextprotocol/python-sdk/2-fastmcp-server-framework.md).",
+    "metadata": {
+      "chunk_id": "e56133af3246-0000",
+      "source_file": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_9.1-server-examples.md",
+      "filename": "_modelcontextprotocol_python-sdk_9.1-server-examples.md",
+      "file_extension": ".md",
+      "chunk_index": 0,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Server Examples"
+      ],
+      "heading_text": "Server Examples",
+      "token_count": 516,
+      "char_count": 2297,
+      "start_char": 3427,
+      "end_char": 5724,
+      "semantic_score": 0.6,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.926923076923077,
+      "chunking_strategy": "hybrid_adaptive_structural",
+      "content_type": "code_block",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:11.539694",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 516,
+      "document_id": "e56133af3246",
+      "document_name": "_modelcontextprotocol_python-sdk_9.1-server-examples",
+      "source_path": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_9.1-server-examples.md",
+      "source_filename": "_modelcontextprotocol_python-sdk_9.1-server-examples.md",
+      "source_directory": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk",
+      "relative_path": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_9.1-server-examples.md",
+      "hierarchy_path": "Server Examples",
+      "chunk_hash": "eca676566606e464",
+      "content_digest": "eca676566606e464",
+      "chunk_length": 2297,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "fast_docs"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "examples",
+          "simple",
+          "server",
+          "servers",
+          "mcp",
+          "modelcontextprotocol",
+          "python",
+          "sdk",
+          "https",
+          "github",
+          "com",
+          "blob",
+          "146d7efb",
+          "streamablehttp",
+          "fastmcp",
+          "prompt",
+          "resource",
+          "stateless",
+          "tool",
+          "snippets"
+        ],
+        "term_weights": [
+          {
+            "term": "examples",
+            "tf": 20,
+            "weight": 0.074627
+          },
+          {
+            "term": "simple",
+            "tf": 20,
+            "weight": 0.074627
+          },
+          {
+            "term": "server",
+            "tf": 17,
+            "weight": 0.063433
+          },
+          {
+            "term": "servers",
+            "tf": 14,
+            "weight": 0.052239
+          },
+          {
+            "term": "mcp",
+            "tf": 12,
+            "weight": 0.044776
+          },
+          {
+            "term": "modelcontextprotocol",
+            "tf": 11,
+            "weight": 0.041045
+          },
+          {
+            "term": "python",
+            "tf": 11,
+            "weight": 0.041045
+          },
+          {
+            "term": "sdk",
+            "tf": 11,
+            "weight": 0.041045
+          },
+          {
+            "term": "https",
+            "tf": 9,
+            "weight": 0.033582
+          },
+          {
+            "term": "github",
+            "tf": 9,
+            "weight": 0.033582
+          },
+          {
+            "term": "com",
+            "tf": 9,
+            "weight": 0.033582
+          },
+          {
+            "term": "blob",
+            "tf": 9,
+            "weight": 0.033582
+          },
+          {
+            "term": "146d7efb",
+            "tf": 9,
+            "weight": 0.033582
+          },
+          {
+            "term": "streamablehttp",
+            "tf": 8,
+            "weight": 0.029851
+          },
+          {
+            "term": "fastmcp",
+            "tf": 6,
+            "weight": 0.022388
+          },
+          {
+            "term": "prompt",
+            "tf": 4,
+            "weight": 0.014925
+          },
+          {
+            "term": "resource",
+            "tf": 4,
+            "weight": 0.014925
+          },
+          {
+            "term": "stateless",
+            "tf": 4,
+            "weight": 0.014925
+          },
+          {
+            "term": "tool",
+            "tf": 4,
+            "weight": 0.014925
+          },
+          {
+            "term": "snippets",
+            "tf": 4,
+            "weight": 0.014925
+          }
+        ],
+        "unique_terms": 67,
+        "total_terms": 268
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Server Examples",
+        "examples",
+        "github",
+        "https",
+        "mcp",
+        "modelcontextprotocol",
+        "python",
+        "sdk",
+        "server",
+        "servers",
+        "simple"
+      ],
+      "collection_name": "FAST_DOCS"
+    },
+    "advanced_scores": {
+      "semantic": 0.6,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.926923076923077,
+      "overall": 0.8089743589743591
+    }
+  },
+  {
+    "text": "## Server Implementation Approaches\n\nThe MCP Python SDK provides two primary approaches for building servers, each suited for different use cases and complexity levels.",
+    "metadata": {
+      "chunk_id": "e56133af3246-0001",
+      "source_file": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_9.1-server-examples.md",
+      "filename": "_modelcontextprotocol_python-sdk_9.1-server-examples.md",
+      "file_extension": ".md",
+      "chunk_index": 1,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Server Implementation Approaches"
+      ],
+      "heading_text": "Server Implementation Approaches",
+      "token_count": 28,
+      "char_count": 168,
+      "start_char": 5727,
+      "end_char": 5895,
+      "semantic_score": 0.8,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.565,
+      "chunking_strategy": "hybrid_adaptive_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:11.540314",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 28,
+      "document_id": "e56133af3246",
+      "document_name": "_modelcontextprotocol_python-sdk_9.1-server-examples",
+      "source_path": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_9.1-server-examples.md",
+      "source_filename": "_modelcontextprotocol_python-sdk_9.1-server-examples.md",
+      "source_directory": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk",
+      "relative_path": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_9.1-server-examples.md",
+      "hierarchy_path": "Server Implementation Approaches",
+      "chunk_hash": "56aeeacbccdb1543",
+      "content_digest": "56aeeacbccdb1543",
+      "chunk_length": 168,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "fast_docs"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "approaches",
+          "for",
+          "server",
+          "implementation",
+          "the",
+          "mcp",
+          "python",
+          "sdk",
+          "provides",
+          "two",
+          "primary",
+          "building",
+          "servers",
+          "each",
+          "suited",
+          "different",
+          "use",
+          "cases",
+          "and",
+          "complexity"
+        ],
+        "term_weights": [
+          {
+            "term": "approaches",
+            "tf": 2,
+            "weight": 0.086957
+          },
+          {
+            "term": "for",
+            "tf": 2,
+            "weight": 0.086957
+          },
+          {
+            "term": "server",
+            "tf": 1,
+            "weight": 0.043478
+          },
+          {
+            "term": "implementation",
+            "tf": 1,
+            "weight": 0.043478
+          },
+          {
+            "term": "the",
+            "tf": 1,
+            "weight": 0.043478
+          },
+          {
+            "term": "mcp",
+            "tf": 1,
+            "weight": 0.043478
+          },
+          {
+            "term": "python",
+            "tf": 1,
+            "weight": 0.043478
+          },
+          {
+            "term": "sdk",
+            "tf": 1,
+            "weight": 0.043478
+          },
+          {
+            "term": "provides",
+            "tf": 1,
+            "weight": 0.043478
+          },
+          {
+            "term": "two",
+            "tf": 1,
+            "weight": 0.043478
+          },
+          {
+            "term": "primary",
+            "tf": 1,
+            "weight": 0.043478
+          },
+          {
+            "term": "building",
+            "tf": 1,
+            "weight": 0.043478
+          },
+          {
+            "term": "servers",
+            "tf": 1,
+            "weight": 0.043478
+          },
+          {
+            "term": "each",
+            "tf": 1,
+            "weight": 0.043478
+          },
+          {
+            "term": "suited",
+            "tf": 1,
+            "weight": 0.043478
+          },
+          {
+            "term": "different",
+            "tf": 1,
+            "weight": 0.043478
+          },
+          {
+            "term": "use",
+            "tf": 1,
+            "weight": 0.043478
+          },
+          {
+            "term": "cases",
+            "tf": 1,
+            "weight": 0.043478
+          },
+          {
+            "term": "and",
+            "tf": 1,
+            "weight": 0.043478
+          },
+          {
+            "term": "complexity",
+            "tf": 1,
+            "weight": 0.043478
+          }
+        ],
+        "unique_terms": 21,
+        "total_terms": 23
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Server Implementation Approaches",
+        "approaches",
+        "for",
+        "implementation",
+        "mcp",
+        "provides",
+        "python",
+        "sdk",
+        "server",
+        "the",
+        "two"
+      ],
+      "collection_name": "FAST_DOCS"
+    },
+    "advanced_scores": {
+      "semantic": 0.8,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.565,
+      "overall": 0.7549999999999999
+    }
+  },
+  {
+    "text": "### Server Implementation Architecture ``` ``` Sources: [examples/servers/simple-resource/mcp\\_simple\\_resource/server.py1-94](https://github.com/modelcontextprotocol/python-sdk/blob/146d7efb/examples/servers/simple-resource/mcp_simple_resource/server.py#L1-L94) [examples/servers/simple-tool/mcp\\_simple\\_tool/server.py1-94](https://github.com/modelcontextprotocol/python-sdk/blob/146d7efb/examples/servers/simple-tool/mcp_simple_tool/server.py#L1-L94) [examples/snippets/servers/structured\\_output.py1-98](https://github.com/modelcontextprotocol/python-sdk/blob/146d7efb/examples/snippets/servers/structured_output.py#L1-L98)",
+    "metadata": {
+      "chunk_id": "e56133af3246-0002",
+      "source_file": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_9.1-server-examples.md",
+      "filename": "_modelcontextprotocol_python-sdk_9.1-server-examples.md",
+      "file_extension": ".md",
+      "chunk_index": 2,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Server Implementation Architecture"
+      ],
+      "heading_text": "Server Implementation Architecture",
+      "token_count": 156,
+      "char_count": 627,
+      "start_char": 5897,
+      "end_char": 6524,
+      "semantic_score": 0.6,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.76,
+      "chunking_strategy": "hybrid_adaptive_structural",
+      "content_type": "code_block",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:11.541559",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 156,
+      "document_id": "e56133af3246",
+      "document_name": "_modelcontextprotocol_python-sdk_9.1-server-examples",
+      "source_path": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_9.1-server-examples.md",
+      "source_filename": "_modelcontextprotocol_python-sdk_9.1-server-examples.md",
+      "source_directory": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk",
+      "relative_path": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_9.1-server-examples.md",
+      "hierarchy_path": "Server Implementation Architecture",
+      "chunk_hash": "1f255ea9cfa3b76f",
+      "content_digest": "1f255ea9cfa3b76f",
+      "chunk_length": 627,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "fast_docs"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "simple",
+          "examples",
+          "servers",
+          "server",
+          "resource",
+          "mcp",
+          "tool",
+          "py1",
+          "https",
+          "github",
+          "com",
+          "modelcontextprotocol",
+          "python",
+          "sdk",
+          "blob",
+          "146d7efb",
+          "l94",
+          "snippets",
+          "structured",
+          "output"
+        ],
+        "term_weights": [
+          {
+            "term": "simple",
+            "tf": 8,
+            "weight": 0.105263
+          },
+          {
+            "term": "examples",
+            "tf": 6,
+            "weight": 0.078947
+          },
+          {
+            "term": "servers",
+            "tf": 6,
+            "weight": 0.078947
+          },
+          {
+            "term": "server",
+            "tf": 5,
+            "weight": 0.065789
+          },
+          {
+            "term": "resource",
+            "tf": 4,
+            "weight": 0.052632
+          },
+          {
+            "term": "mcp",
+            "tf": 4,
+            "weight": 0.052632
+          },
+          {
+            "term": "tool",
+            "tf": 4,
+            "weight": 0.052632
+          },
+          {
+            "term": "py1",
+            "tf": 3,
+            "weight": 0.039474
+          },
+          {
+            "term": "https",
+            "tf": 3,
+            "weight": 0.039474
+          },
+          {
+            "term": "github",
+            "tf": 3,
+            "weight": 0.039474
+          },
+          {
+            "term": "com",
+            "tf": 3,
+            "weight": 0.039474
+          },
+          {
+            "term": "modelcontextprotocol",
+            "tf": 3,
+            "weight": 0.039474
+          },
+          {
+            "term": "python",
+            "tf": 3,
+            "weight": 0.039474
+          },
+          {
+            "term": "sdk",
+            "tf": 3,
+            "weight": 0.039474
+          },
+          {
+            "term": "blob",
+            "tf": 3,
+            "weight": 0.039474
+          },
+          {
+            "term": "146d7efb",
+            "tf": 3,
+            "weight": 0.039474
+          },
+          {
+            "term": "l94",
+            "tf": 2,
+            "weight": 0.026316
+          },
+          {
+            "term": "snippets",
+            "tf": 2,
+            "weight": 0.026316
+          },
+          {
+            "term": "structured",
+            "tf": 2,
+            "weight": 0.026316
+          },
+          {
+            "term": "output",
+            "tf": 2,
+            "weight": 0.026316
+          }
+        ],
+        "unique_terms": 24,
+        "total_terms": 76
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Server Implementation Architecture",
+        "examples",
+        "github",
+        "https",
+        "mcp",
+        "py1",
+        "resource",
+        "server",
+        "servers",
+        "simple",
+        "tool"
+      ],
+      "collection_name": "FAST_DOCS"
+    },
+    "advanced_scores": {
+      "semantic": 0.6,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.76,
+      "overall": 0.7533333333333333
+    }
+  },
+  {
+    "text": "## Low-Level Server Examples  The low-level `Server` class provides direct control over MCP protocol handling and is suitable for complex server implementations requiring fine-grained control.",
+    "metadata": {
+      "chunk_id": "e56133af3246-0003",
+      "source_file": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_9.1-server-examples.md",
+      "filename": "_modelcontextprotocol_python-sdk_9.1-server-examples.md",
+      "file_extension": ".md",
+      "chunk_index": 3,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Low-Level Server Examples"
+      ],
+      "heading_text": "Low-Level Server Examples",
+      "token_count": 33,
+      "char_count": 192,
+      "start_char": 6528,
+      "end_char": 6720,
+      "semantic_score": 0.8,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.766,
+      "chunking_strategy": "hybrid_adaptive_structural",
+      "content_type": "code_block",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:11.542792",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 33,
+      "document_id": "e56133af3246",
+      "document_name": "_modelcontextprotocol_python-sdk_9.1-server-examples",
+      "source_path": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_9.1-server-examples.md",
+      "source_filename": "_modelcontextprotocol_python-sdk_9.1-server-examples.md",
+      "source_directory": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk",
+      "relative_path": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_9.1-server-examples.md",
+      "hierarchy_path": "Low-Level Server Examples",
+      "chunk_hash": "2c1f1b94876fb098",
+      "content_digest": "2c1f1b94876fb098",
+      "chunk_length": 192,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "fast_docs"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "server",
+          "low",
+          "level",
+          "control",
+          "examples",
+          "the",
+          "class",
+          "provides",
+          "direct",
+          "over",
+          "mcp",
+          "protocol",
+          "handling",
+          "and",
+          "suitable",
+          "for",
+          "complex",
+          "implementations",
+          "requiring",
+          "fine"
+        ],
+        "term_weights": [
+          {
+            "term": "server",
+            "tf": 3,
+            "weight": 0.115385
+          },
+          {
+            "term": "low",
+            "tf": 2,
+            "weight": 0.076923
+          },
+          {
+            "term": "level",
+            "tf": 2,
+            "weight": 0.076923
+          },
+          {
+            "term": "control",
+            "tf": 2,
+            "weight": 0.076923
+          },
+          {
+            "term": "examples",
+            "tf": 1,
+            "weight": 0.038462
+          },
+          {
+            "term": "the",
+            "tf": 1,
+            "weight": 0.038462
+          },
+          {
+            "term": "class",
+            "tf": 1,
+            "weight": 0.038462
+          },
+          {
+            "term": "provides",
+            "tf": 1,
+            "weight": 0.038462
+          },
+          {
+            "term": "direct",
+            "tf": 1,
+            "weight": 0.038462
+          },
+          {
+            "term": "over",
+            "tf": 1,
+            "weight": 0.038462
+          },
+          {
+            "term": "mcp",
+            "tf": 1,
+            "weight": 0.038462
+          },
+          {
+            "term": "protocol",
+            "tf": 1,
+            "weight": 0.038462
+          },
+          {
+            "term": "handling",
+            "tf": 1,
+            "weight": 0.038462
+          },
+          {
+            "term": "and",
+            "tf": 1,
+            "weight": 0.038462
+          },
+          {
+            "term": "suitable",
+            "tf": 1,
+            "weight": 0.038462
+          },
+          {
+            "term": "for",
+            "tf": 1,
+            "weight": 0.038462
+          },
+          {
+            "term": "complex",
+            "tf": 1,
+            "weight": 0.038462
+          },
+          {
+            "term": "implementations",
+            "tf": 1,
+            "weight": 0.038462
+          },
+          {
+            "term": "requiring",
+            "tf": 1,
+            "weight": 0.038462
+          },
+          {
+            "term": "fine",
+            "tf": 1,
+            "weight": 0.038462
+          }
+        ],
+        "unique_terms": 21,
+        "total_terms": 26
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Low-Level Server Examples",
+        "class",
+        "control",
+        "direct",
+        "examples",
+        "level",
+        "low",
+        "over",
+        "provides",
+        "server",
+        "the"
+      ],
+      "collection_name": "FAST_DOCS"
+    },
+    "advanced_scores": {
+      "semantic": 0.8,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.766,
+      "overall": 0.8220000000000001
+    }
+  },
+  {
+    "text": "### Basic Resource Server  The simple resource server demonstrates fundamental resource serving capabilities using the low-level `Server` class. ``` ``` Sources: [examples/servers/simple-resource/mcp\\_simple\\_resource/server.py34-58](https://github.com/modelcontextprotocol/python-sdk/blob/146d7efb/examples/servers/simple-resource/mcp_simple_resource/server.py#L34-L58)",
+    "metadata": {
+      "chunk_id": "e56133af3246-0004",
+      "source_file": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_9.1-server-examples.md",
+      "filename": "_modelcontextprotocol_python-sdk_9.1-server-examples.md",
+      "file_extension": ".md",
+      "chunk_index": 4,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Basic Resource Server"
+      ],
+      "heading_text": "Basic Resource Server",
+      "token_count": 78,
+      "char_count": 370,
+      "start_char": 6722,
+      "end_char": 7092,
+      "semantic_score": 0.7,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.7218181818181818,
+      "chunking_strategy": "hybrid_adaptive_structural",
+      "content_type": "code_block",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:11.544046",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 78,
+      "document_id": "e56133af3246",
+      "document_name": "_modelcontextprotocol_python-sdk_9.1-server-examples",
+      "source_path": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_9.1-server-examples.md",
+      "source_filename": "_modelcontextprotocol_python-sdk_9.1-server-examples.md",
+      "source_directory": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk",
+      "relative_path": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_9.1-server-examples.md",
+      "hierarchy_path": "Basic Resource Server",
+      "chunk_hash": "aad47b8e9112af4b",
+      "content_digest": "aad47b8e9112af4b",
+      "chunk_length": 370,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "fast_docs"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "resource",
+          "server",
+          "simple",
+          "the",
+          "examples",
+          "servers",
+          "mcp",
+          "basic",
+          "demonstrates",
+          "fundamental",
+          "serving",
+          "capabilities",
+          "using",
+          "low",
+          "level",
+          "class",
+          "sources",
+          "py34",
+          "https",
+          "github"
+        ],
+        "term_weights": [
+          {
+            "term": "resource",
+            "tf": 7,
+            "weight": 0.152174
+          },
+          {
+            "term": "server",
+            "tf": 5,
+            "weight": 0.108696
+          },
+          {
+            "term": "simple",
+            "tf": 5,
+            "weight": 0.108696
+          },
+          {
+            "term": "the",
+            "tf": 2,
+            "weight": 0.043478
+          },
+          {
+            "term": "examples",
+            "tf": 2,
+            "weight": 0.043478
+          },
+          {
+            "term": "servers",
+            "tf": 2,
+            "weight": 0.043478
+          },
+          {
+            "term": "mcp",
+            "tf": 2,
+            "weight": 0.043478
+          },
+          {
+            "term": "basic",
+            "tf": 1,
+            "weight": 0.021739
+          },
+          {
+            "term": "demonstrates",
+            "tf": 1,
+            "weight": 0.021739
+          },
+          {
+            "term": "fundamental",
+            "tf": 1,
+            "weight": 0.021739
+          },
+          {
+            "term": "serving",
+            "tf": 1,
+            "weight": 0.021739
+          },
+          {
+            "term": "capabilities",
+            "tf": 1,
+            "weight": 0.021739
+          },
+          {
+            "term": "using",
+            "tf": 1,
+            "weight": 0.021739
+          },
+          {
+            "term": "low",
+            "tf": 1,
+            "weight": 0.021739
+          },
+          {
+            "term": "level",
+            "tf": 1,
+            "weight": 0.021739
+          },
+          {
+            "term": "class",
+            "tf": 1,
+            "weight": 0.021739
+          },
+          {
+            "term": "sources",
+            "tf": 1,
+            "weight": 0.021739
+          },
+          {
+            "term": "py34",
+            "tf": 1,
+            "weight": 0.021739
+          },
+          {
+            "term": "https",
+            "tf": 1,
+            "weight": 0.021739
+          },
+          {
+            "term": "github",
+            "tf": 1,
+            "weight": 0.021739
+          }
+        ],
+        "unique_terms": 28,
+        "total_terms": 46
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Basic Resource Server",
+        "basic",
+        "demonstrates",
+        "examples",
+        "fundamental",
+        "mcp",
+        "resource",
+        "server",
+        "servers",
+        "simple",
+        "the"
+      ],
+      "collection_name": "FAST_DOCS"
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.7218181818181818,
+      "overall": 0.7739393939393939
+    }
+  },
+  {
+    "text": "### Basic Tool Server  The simple tool server shows HTTP client functionality and tool execution patterns. ``` ``` Sources: [examples/servers/simple-tool/mcp\\_simple\\_tool/server.py32-58](https://github.com/modelcontextprotocol/python-sdk/blob/146d7efb/examples/servers/simple-tool/mcp_simple_tool/server.py#L32-L58)",
+    "metadata": {
+      "chunk_id": "e56133af3246-0005",
+      "source_file": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_9.1-server-examples.md",
+      "filename": "_modelcontextprotocol_python-sdk_9.1-server-examples.md",
+      "file_extension": ".md",
+      "chunk_index": 5,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Basic Tool Server"
+      ],
+      "heading_text": "Basic Tool Server",
+      "token_count": 73,
+      "char_count": 316,
+      "start_char": 7096,
+      "end_char": 7412,
+      "semantic_score": 0.7,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.73,
+      "chunking_strategy": "hybrid_adaptive_structural",
+      "content_type": "code_block",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:11.544917",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 73,
+      "document_id": "e56133af3246",
+      "document_name": "_modelcontextprotocol_python-sdk_9.1-server-examples",
+      "source_path": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_9.1-server-examples.md",
+      "source_filename": "_modelcontextprotocol_python-sdk_9.1-server-examples.md",
+      "source_directory": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk",
+      "relative_path": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_9.1-server-examples.md",
+      "hierarchy_path": "Basic Tool Server",
+      "chunk_hash": "699ea1d710be019e",
+      "content_digest": "699ea1d710be019e",
+      "chunk_length": 316,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "fast_docs"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "tool",
+          "simple",
+          "server",
+          "examples",
+          "servers",
+          "mcp",
+          "basic",
+          "the",
+          "shows",
+          "http",
+          "client",
+          "functionality",
+          "and",
+          "execution",
+          "patterns",
+          "sources",
+          "py32",
+          "https",
+          "github",
+          "com"
+        ],
+        "term_weights": [
+          {
+            "term": "tool",
+            "tf": 7,
+            "weight": 0.162791
+          },
+          {
+            "term": "simple",
+            "tf": 5,
+            "weight": 0.116279
+          },
+          {
+            "term": "server",
+            "tf": 4,
+            "weight": 0.093023
+          },
+          {
+            "term": "examples",
+            "tf": 2,
+            "weight": 0.046512
+          },
+          {
+            "term": "servers",
+            "tf": 2,
+            "weight": 0.046512
+          },
+          {
+            "term": "mcp",
+            "tf": 2,
+            "weight": 0.046512
+          },
+          {
+            "term": "basic",
+            "tf": 1,
+            "weight": 0.023256
+          },
+          {
+            "term": "the",
+            "tf": 1,
+            "weight": 0.023256
+          },
+          {
+            "term": "shows",
+            "tf": 1,
+            "weight": 0.023256
+          },
+          {
+            "term": "http",
+            "tf": 1,
+            "weight": 0.023256
+          },
+          {
+            "term": "client",
+            "tf": 1,
+            "weight": 0.023256
+          },
+          {
+            "term": "functionality",
+            "tf": 1,
+            "weight": 0.023256
+          },
+          {
+            "term": "and",
+            "tf": 1,
+            "weight": 0.023256
+          },
+          {
+            "term": "execution",
+            "tf": 1,
+            "weight": 0.023256
+          },
+          {
+            "term": "patterns",
+            "tf": 1,
+            "weight": 0.023256
+          },
+          {
+            "term": "sources",
+            "tf": 1,
+            "weight": 0.023256
+          },
+          {
+            "term": "py32",
+            "tf": 1,
+            "weight": 0.023256
+          },
+          {
+            "term": "https",
+            "tf": 1,
+            "weight": 0.023256
+          },
+          {
+            "term": "github",
+            "tf": 1,
+            "weight": 0.023256
+          },
+          {
+            "term": "com",
+            "tf": 1,
+            "weight": 0.023256
+          }
+        ],
+        "unique_terms": 27,
+        "total_terms": 43
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Basic Tool Server",
+        "basic",
+        "examples",
+        "http",
+        "mcp",
+        "server",
+        "servers",
+        "shows",
+        "simple",
+        "the",
+        "tool"
+      ],
+      "collection_name": "FAST_DOCS"
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.73,
+      "overall": 0.7766666666666667
+    }
+  },
+  {
+    "text": "### Basic Prompt Server  The simple prompt server demonstrates template-based prompt generation. ``` ``` Sources: [examples/servers/simple-prompt/mcp\\_simple\\_prompt/server.py44-77](https://github.com/modelcontextprotocol/python-sdk/blob/146d7efb/examples/servers/simple-prompt/mcp_simple_prompt/server.py#L44-L77)",
+    "metadata": {
+      "chunk_id": "e56133af3246-0006",
+      "source_file": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_9.1-server-examples.md",
+      "filename": "_modelcontextprotocol_python-sdk_9.1-server-examples.md",
+      "file_extension": ".md",
+      "chunk_index": 6,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Basic Prompt Server"
+      ],
+      "heading_text": "Basic Prompt Server",
+      "token_count": 72,
+      "char_count": 314,
+      "start_char": 7416,
+      "end_char": 7730,
+      "semantic_score": 0.7,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.715,
+      "chunking_strategy": "hybrid_adaptive_structural",
+      "content_type": "code_block",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:11.545752",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 72,
+      "document_id": "e56133af3246",
+      "document_name": "_modelcontextprotocol_python-sdk_9.1-server-examples",
+      "source_path": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_9.1-server-examples.md",
+      "source_filename": "_modelcontextprotocol_python-sdk_9.1-server-examples.md",
+      "source_directory": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk",
+      "relative_path": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_9.1-server-examples.md",
+      "hierarchy_path": "Basic Prompt Server",
+      "chunk_hash": "c664393486861fae",
+      "content_digest": "c664393486861fae",
+      "chunk_length": 314,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "fast_docs"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "prompt",
+          "simple",
+          "server",
+          "examples",
+          "servers",
+          "mcp",
+          "basic",
+          "the",
+          "demonstrates",
+          "template",
+          "based",
+          "generation",
+          "sources",
+          "py44",
+          "https",
+          "github",
+          "com",
+          "modelcontextprotocol",
+          "python",
+          "sdk"
+        ],
+        "term_weights": [
+          {
+            "term": "prompt",
+            "tf": 7,
+            "weight": 0.175
+          },
+          {
+            "term": "simple",
+            "tf": 5,
+            "weight": 0.125
+          },
+          {
+            "term": "server",
+            "tf": 4,
+            "weight": 0.1
+          },
+          {
+            "term": "examples",
+            "tf": 2,
+            "weight": 0.05
+          },
+          {
+            "term": "servers",
+            "tf": 2,
+            "weight": 0.05
+          },
+          {
+            "term": "mcp",
+            "tf": 2,
+            "weight": 0.05
+          },
+          {
+            "term": "basic",
+            "tf": 1,
+            "weight": 0.025
+          },
+          {
+            "term": "the",
+            "tf": 1,
+            "weight": 0.025
+          },
+          {
+            "term": "demonstrates",
+            "tf": 1,
+            "weight": 0.025
+          },
+          {
+            "term": "template",
+            "tf": 1,
+            "weight": 0.025
+          },
+          {
+            "term": "based",
+            "tf": 1,
+            "weight": 0.025
+          },
+          {
+            "term": "generation",
+            "tf": 1,
+            "weight": 0.025
+          },
+          {
+            "term": "sources",
+            "tf": 1,
+            "weight": 0.025
+          },
+          {
+            "term": "py44",
+            "tf": 1,
+            "weight": 0.025
+          },
+          {
+            "term": "https",
+            "tf": 1,
+            "weight": 0.025
+          },
+          {
+            "term": "github",
+            "tf": 1,
+            "weight": 0.025
+          },
+          {
+            "term": "com",
+            "tf": 1,
+            "weight": 0.025
+          },
+          {
+            "term": "modelcontextprotocol",
+            "tf": 1,
+            "weight": 0.025
+          },
+          {
+            "term": "python",
+            "tf": 1,
+            "weight": 0.025
+          },
+          {
+            "term": "sdk",
+            "tf": 1,
+            "weight": 0.025
+          }
+        ],
+        "unique_terms": 24,
+        "total_terms": 40
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Basic Prompt Server",
+        "basic",
+        "demonstrates",
+        "examples",
+        "mcp",
+        "prompt",
+        "server",
+        "servers",
+        "simple",
+        "template",
+        "the"
+      ],
+      "collection_name": "FAST_DOCS"
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.715,
+      "overall": 0.7716666666666666
+    }
+  },
+  {
+    "text": "## StreamableHTTP Transport Examples\n\nStreamableHTTP transport enables bidirectional communication with session management and resumability features.",
+    "metadata": {
+      "chunk_id": "e56133af3246-0007",
+      "source_file": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_9.1-server-examples.md",
+      "filename": "_modelcontextprotocol_python-sdk_9.1-server-examples.md",
+      "file_extension": ".md",
+      "chunk_index": 7,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "StreamableHTTP Transport Examples"
+      ],
+      "heading_text": "StreamableHTTP Transport Examples",
+      "token_count": 24,
+      "char_count": 149,
+      "start_char": 7734,
+      "end_char": 7883,
+      "semantic_score": 0.8,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.55,
+      "chunking_strategy": "hybrid_adaptive_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:11.546385",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 24,
+      "document_id": "e56133af3246",
+      "document_name": "_modelcontextprotocol_python-sdk_9.1-server-examples",
+      "source_path": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_9.1-server-examples.md",
+      "source_filename": "_modelcontextprotocol_python-sdk_9.1-server-examples.md",
+      "source_directory": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk",
+      "relative_path": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_9.1-server-examples.md",
+      "hierarchy_path": "StreamableHTTP Transport Examples",
+      "chunk_hash": "7decec502dffeb41",
+      "content_digest": "7decec502dffeb41",
+      "chunk_length": 149,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "fast_docs"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "streamablehttp",
+          "transport",
+          "examples",
+          "enables",
+          "bidirectional",
+          "communication",
+          "with",
+          "session",
+          "management",
+          "and",
+          "resumability",
+          "features"
+        ],
+        "term_weights": [
+          {
+            "term": "streamablehttp",
+            "tf": 2,
+            "weight": 0.142857
+          },
+          {
+            "term": "transport",
+            "tf": 2,
+            "weight": 0.142857
+          },
+          {
+            "term": "examples",
+            "tf": 1,
+            "weight": 0.071429
+          },
+          {
+            "term": "enables",
+            "tf": 1,
+            "weight": 0.071429
+          },
+          {
+            "term": "bidirectional",
+            "tf": 1,
+            "weight": 0.071429
+          },
+          {
+            "term": "communication",
+            "tf": 1,
+            "weight": 0.071429
+          },
+          {
+            "term": "with",
+            "tf": 1,
+            "weight": 0.071429
+          },
+          {
+            "term": "session",
+            "tf": 1,
+            "weight": 0.071429
+          },
+          {
+            "term": "management",
+            "tf": 1,
+            "weight": 0.071429
+          },
+          {
+            "term": "and",
+            "tf": 1,
+            "weight": 0.071429
+          },
+          {
+            "term": "resumability",
+            "tf": 1,
+            "weight": 0.071429
+          },
+          {
+            "term": "features",
+            "tf": 1,
+            "weight": 0.071429
+          }
+        ],
+        "unique_terms": 12,
+        "total_terms": 14
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "StreamableHTTP Transport Examples",
+        "and",
+        "bidirectional",
+        "communication",
+        "enables",
+        "examples",
+        "management",
+        "session",
+        "streamablehttp",
+        "transport",
+        "with"
+      ],
+      "collection_name": "FAST_DOCS"
+    },
+    "advanced_scores": {
+      "semantic": 0.8,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.55,
+      "overall": 0.75
+    }
+  },
+  {
+    "text": "### StreamableHTTP with Event Store ``` ``` Sources: [examples/servers/simple-streamablehttp/mcp\\_simple\\_streamablehttp/server.py47-165](https://github.com/modelcontextprotocol/python-sdk/blob/146d7efb/examples/servers/simple-streamablehttp/mcp_simple_streamablehttp/server.py#L47-L165)",
+    "metadata": {
+      "chunk_id": "e56133af3246-0008",
+      "source_file": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_9.1-server-examples.md",
+      "filename": "_modelcontextprotocol_python-sdk_9.1-server-examples.md",
+      "file_extension": ".md",
+      "chunk_index": 8,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "StreamableHTTP with Event Store"
+      ],
+      "heading_text": "StreamableHTTP with Event Store",
+      "token_count": 70,
+      "char_count": 287,
+      "start_char": 7885,
+      "end_char": 8172,
+      "semantic_score": 0.7,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.7566666666666667,
+      "chunking_strategy": "hybrid_adaptive_structural",
+      "content_type": "code_block",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:11.549109",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 70,
+      "document_id": "e56133af3246",
+      "document_name": "_modelcontextprotocol_python-sdk_9.1-server-examples",
+      "source_path": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_9.1-server-examples.md",
+      "source_filename": "_modelcontextprotocol_python-sdk_9.1-server-examples.md",
+      "source_directory": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk",
+      "relative_path": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_9.1-server-examples.md",
+      "hierarchy_path": "StreamableHTTP with Event Store",
+      "chunk_hash": "c9c43bc8785b934c",
+      "content_digest": "c9c43bc8785b934c",
+      "chunk_length": 287,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "fast_docs"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "streamablehttp",
+          "simple",
+          "examples",
+          "servers",
+          "mcp",
+          "server",
+          "with",
+          "event",
+          "store",
+          "sources",
+          "py47",
+          "165",
+          "https",
+          "github",
+          "com",
+          "modelcontextprotocol",
+          "python",
+          "sdk",
+          "blob",
+          "146d7efb"
+        ],
+        "term_weights": [
+          {
+            "term": "streamablehttp",
+            "tf": 5,
+            "weight": 0.151515
+          },
+          {
+            "term": "simple",
+            "tf": 4,
+            "weight": 0.121212
+          },
+          {
+            "term": "examples",
+            "tf": 2,
+            "weight": 0.060606
+          },
+          {
+            "term": "servers",
+            "tf": 2,
+            "weight": 0.060606
+          },
+          {
+            "term": "mcp",
+            "tf": 2,
+            "weight": 0.060606
+          },
+          {
+            "term": "server",
+            "tf": 2,
+            "weight": 0.060606
+          },
+          {
+            "term": "with",
+            "tf": 1,
+            "weight": 0.030303
+          },
+          {
+            "term": "event",
+            "tf": 1,
+            "weight": 0.030303
+          },
+          {
+            "term": "store",
+            "tf": 1,
+            "weight": 0.030303
+          },
+          {
+            "term": "sources",
+            "tf": 1,
+            "weight": 0.030303
+          },
+          {
+            "term": "py47",
+            "tf": 1,
+            "weight": 0.030303
+          },
+          {
+            "term": "165",
+            "tf": 1,
+            "weight": 0.030303
+          },
+          {
+            "term": "https",
+            "tf": 1,
+            "weight": 0.030303
+          },
+          {
+            "term": "github",
+            "tf": 1,
+            "weight": 0.030303
+          },
+          {
+            "term": "com",
+            "tf": 1,
+            "weight": 0.030303
+          },
+          {
+            "term": "modelcontextprotocol",
+            "tf": 1,
+            "weight": 0.030303
+          },
+          {
+            "term": "python",
+            "tf": 1,
+            "weight": 0.030303
+          },
+          {
+            "term": "sdk",
+            "tf": 1,
+            "weight": 0.030303
+          },
+          {
+            "term": "blob",
+            "tf": 1,
+            "weight": 0.030303
+          },
+          {
+            "term": "146d7efb",
+            "tf": 1,
+            "weight": 0.030303
+          }
+        ],
+        "unique_terms": 22,
+        "total_terms": 33
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "StreamableHTTP with Event Store",
+        "event",
+        "examples",
+        "mcp",
+        "server",
+        "servers",
+        "simple",
+        "sources",
+        "store",
+        "streamablehttp",
+        "with"
+      ],
+      "collection_name": "FAST_DOCS"
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.7566666666666667,
+      "overall": 0.7855555555555555
+    }
+  },
+  {
+    "text": "### Stateless StreamableHTTP ``` ``` Sources: [examples/servers/simple-streamablehttp-stateless/mcp\\_simple\\_streamablehttp\\_stateless/server.py97-140](https://github.com/modelcontextprotocol/python-sdk/blob/146d7efb/examples/servers/simple-streamablehttp-stateless/mcp_simple_streamablehttp_stateless/server.py#L97-L140)",
+    "metadata": {
+      "chunk_id": "e56133af3246-0009",
+      "source_file": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_9.1-server-examples.md",
+      "filename": "_modelcontextprotocol_python-sdk_9.1-server-examples.md",
+      "file_extension": ".md",
+      "chunk_index": 9,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Stateless StreamableHTTP"
+      ],
+      "heading_text": "Stateless StreamableHTTP",
+      "token_count": 77,
+      "char_count": 321,
+      "start_char": 8176,
+      "end_char": 8497,
+      "semantic_score": 0.7,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.7471428571428571,
+      "chunking_strategy": "hybrid_adaptive_structural",
+      "content_type": "code_block",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:11.550643",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 77,
+      "document_id": "e56133af3246",
+      "document_name": "_modelcontextprotocol_python-sdk_9.1-server-examples",
+      "source_path": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_9.1-server-examples.md",
+      "source_filename": "_modelcontextprotocol_python-sdk_9.1-server-examples.md",
+      "source_directory": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk",
+      "relative_path": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_9.1-server-examples.md",
+      "hierarchy_path": "Stateless StreamableHTTP",
+      "chunk_hash": "28495e26e5eaf317",
+      "content_digest": "28495e26e5eaf317",
+      "chunk_length": 321,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "fast_docs"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "stateless",
+          "streamablehttp",
+          "simple",
+          "examples",
+          "servers",
+          "mcp",
+          "server",
+          "sources",
+          "py97",
+          "140",
+          "https",
+          "github",
+          "com",
+          "modelcontextprotocol",
+          "python",
+          "sdk",
+          "blob",
+          "146d7efb",
+          "l97",
+          "l140"
+        ],
+        "term_weights": [
+          {
+            "term": "stateless",
+            "tf": 5,
+            "weight": 0.142857
+          },
+          {
+            "term": "streamablehttp",
+            "tf": 5,
+            "weight": 0.142857
+          },
+          {
+            "term": "simple",
+            "tf": 4,
+            "weight": 0.114286
+          },
+          {
+            "term": "examples",
+            "tf": 2,
+            "weight": 0.057143
+          },
+          {
+            "term": "servers",
+            "tf": 2,
+            "weight": 0.057143
+          },
+          {
+            "term": "mcp",
+            "tf": 2,
+            "weight": 0.057143
+          },
+          {
+            "term": "server",
+            "tf": 2,
+            "weight": 0.057143
+          },
+          {
+            "term": "sources",
+            "tf": 1,
+            "weight": 0.028571
+          },
+          {
+            "term": "py97",
+            "tf": 1,
+            "weight": 0.028571
+          },
+          {
+            "term": "140",
+            "tf": 1,
+            "weight": 0.028571
+          },
+          {
+            "term": "https",
+            "tf": 1,
+            "weight": 0.028571
+          },
+          {
+            "term": "github",
+            "tf": 1,
+            "weight": 0.028571
+          },
+          {
+            "term": "com",
+            "tf": 1,
+            "weight": 0.028571
+          },
+          {
+            "term": "modelcontextprotocol",
+            "tf": 1,
+            "weight": 0.028571
+          },
+          {
+            "term": "python",
+            "tf": 1,
+            "weight": 0.028571
+          },
+          {
+            "term": "sdk",
+            "tf": 1,
+            "weight": 0.028571
+          },
+          {
+            "term": "blob",
+            "tf": 1,
+            "weight": 0.028571
+          },
+          {
+            "term": "146d7efb",
+            "tf": 1,
+            "weight": 0.028571
+          },
+          {
+            "term": "l97",
+            "tf": 1,
+            "weight": 0.028571
+          },
+          {
+            "term": "l140",
+            "tf": 1,
+            "weight": 0.028571
+          }
+        ],
+        "unique_terms": 20,
+        "total_terms": 35
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "140",
+        "Stateless StreamableHTTP",
+        "examples",
+        "mcp",
+        "py97",
+        "server",
+        "servers",
+        "simple",
+        "sources",
+        "stateless",
+        "streamablehttp"
+      ],
+      "collection_name": "FAST_DOCS"
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.7471428571428571,
+      "overall": 0.7823809523809523
+    }
+  },
+  {
+    "text": "## FastMCP Framework Examples\n\nFastMCP provides a decorator-based approach for rapid server development with automatic schema generation and simplified setup.",
+    "metadata": {
+      "chunk_id": "e56133af3246-0010",
+      "source_file": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_9.1-server-examples.md",
+      "filename": "_modelcontextprotocol_python-sdk_9.1-server-examples.md",
+      "file_extension": ".md",
+      "chunk_index": 10,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "FastMCP Framework Examples"
+      ],
+      "heading_text": "FastMCP Framework Examples",
+      "token_count": 27,
+      "char_count": 158,
+      "start_char": 8501,
+      "end_char": 8659,
+      "semantic_score": 0.8,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.575,
+      "chunking_strategy": "hybrid_adaptive_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:11.551029",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 27,
+      "document_id": "e56133af3246",
+      "document_name": "_modelcontextprotocol_python-sdk_9.1-server-examples",
+      "source_path": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_9.1-server-examples.md",
+      "source_filename": "_modelcontextprotocol_python-sdk_9.1-server-examples.md",
+      "source_directory": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk",
+      "relative_path": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_9.1-server-examples.md",
+      "hierarchy_path": "FastMCP Framework Examples",
+      "chunk_hash": "ac1043cc682c62da",
+      "content_digest": "ac1043cc682c62da",
+      "chunk_length": 158,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "fast_docs"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "fastmcp",
+          "framework",
+          "examples",
+          "provides",
+          "decorator",
+          "based",
+          "approach",
+          "for",
+          "rapid",
+          "server",
+          "development",
+          "with",
+          "automatic",
+          "schema",
+          "generation",
+          "and",
+          "simplified",
+          "setup"
+        ],
+        "term_weights": [
+          {
+            "term": "fastmcp",
+            "tf": 2,
+            "weight": 0.105263
+          },
+          {
+            "term": "framework",
+            "tf": 1,
+            "weight": 0.052632
+          },
+          {
+            "term": "examples",
+            "tf": 1,
+            "weight": 0.052632
+          },
+          {
+            "term": "provides",
+            "tf": 1,
+            "weight": 0.052632
+          },
+          {
+            "term": "decorator",
+            "tf": 1,
+            "weight": 0.052632
+          },
+          {
+            "term": "based",
+            "tf": 1,
+            "weight": 0.052632
+          },
+          {
+            "term": "approach",
+            "tf": 1,
+            "weight": 0.052632
+          },
+          {
+            "term": "for",
+            "tf": 1,
+            "weight": 0.052632
+          },
+          {
+            "term": "rapid",
+            "tf": 1,
+            "weight": 0.052632
+          },
+          {
+            "term": "server",
+            "tf": 1,
+            "weight": 0.052632
+          },
+          {
+            "term": "development",
+            "tf": 1,
+            "weight": 0.052632
+          },
+          {
+            "term": "with",
+            "tf": 1,
+            "weight": 0.052632
+          },
+          {
+            "term": "automatic",
+            "tf": 1,
+            "weight": 0.052632
+          },
+          {
+            "term": "schema",
+            "tf": 1,
+            "weight": 0.052632
+          },
+          {
+            "term": "generation",
+            "tf": 1,
+            "weight": 0.052632
+          },
+          {
+            "term": "and",
+            "tf": 1,
+            "weight": 0.052632
+          },
+          {
+            "term": "simplified",
+            "tf": 1,
+            "weight": 0.052632
+          },
+          {
+            "term": "setup",
+            "tf": 1,
+            "weight": 0.052632
+          }
+        ],
+        "unique_terms": 18,
+        "total_terms": 19
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "FastMCP Framework Examples",
+        "approach",
+        "based",
+        "decorator",
+        "examples",
+        "fastmcp",
+        "for",
+        "framework",
+        "provides",
+        "rapid",
+        "server"
+      ],
+      "collection_name": "FAST_DOCS"
+    },
+    "advanced_scores": {
+      "semantic": 0.8,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.575,
+      "overall": 0.7583333333333333
+    }
+  },
+  {
+    "text": "### Structured Output Example ``` ``` Sources: [examples/snippets/servers/structured\\_output.py9-98](https://github.com/modelcontextprotocol/python-sdk/blob/146d7efb/examples/snippets/servers/structured_output.py#L9-L98)",
+    "metadata": {
+      "chunk_id": "e56133af3246-0011",
+      "source_file": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_9.1-server-examples.md",
+      "filename": "_modelcontextprotocol_python-sdk_9.1-server-examples.md",
+      "file_extension": ".md",
+      "chunk_index": 11,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Structured Output Example"
+      ],
+      "heading_text": "Structured Output Example",
+      "token_count": 55,
+      "char_count": 220,
+      "start_char": 8661,
+      "end_char": 8881,
+      "semantic_score": 0.7,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.7525000000000001,
+      "chunking_strategy": "hybrid_adaptive_structural",
+      "content_type": "code_block",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:11.551812",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 55,
+      "document_id": "e56133af3246",
+      "document_name": "_modelcontextprotocol_python-sdk_9.1-server-examples",
+      "source_path": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_9.1-server-examples.md",
+      "source_filename": "_modelcontextprotocol_python-sdk_9.1-server-examples.md",
+      "source_directory": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk",
+      "relative_path": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_9.1-server-examples.md",
+      "hierarchy_path": "Structured Output Example",
+      "chunk_hash": "9c2524bbbcf0e515",
+      "content_digest": "9c2524bbbcf0e515",
+      "chunk_length": 220,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "fast_docs"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "structured",
+          "output",
+          "examples",
+          "snippets",
+          "servers",
+          "example",
+          "sources",
+          "py9",
+          "https",
+          "github",
+          "com",
+          "modelcontextprotocol",
+          "python",
+          "sdk",
+          "blob",
+          "146d7efb",
+          "l98"
+        ],
+        "term_weights": [
+          {
+            "term": "structured",
+            "tf": 3,
+            "weight": 0.125
+          },
+          {
+            "term": "output",
+            "tf": 3,
+            "weight": 0.125
+          },
+          {
+            "term": "examples",
+            "tf": 2,
+            "weight": 0.083333
+          },
+          {
+            "term": "snippets",
+            "tf": 2,
+            "weight": 0.083333
+          },
+          {
+            "term": "servers",
+            "tf": 2,
+            "weight": 0.083333
+          },
+          {
+            "term": "example",
+            "tf": 1,
+            "weight": 0.041667
+          },
+          {
+            "term": "sources",
+            "tf": 1,
+            "weight": 0.041667
+          },
+          {
+            "term": "py9",
+            "tf": 1,
+            "weight": 0.041667
+          },
+          {
+            "term": "https",
+            "tf": 1,
+            "weight": 0.041667
+          },
+          {
+            "term": "github",
+            "tf": 1,
+            "weight": 0.041667
+          },
+          {
+            "term": "com",
+            "tf": 1,
+            "weight": 0.041667
+          },
+          {
+            "term": "modelcontextprotocol",
+            "tf": 1,
+            "weight": 0.041667
+          },
+          {
+            "term": "python",
+            "tf": 1,
+            "weight": 0.041667
+          },
+          {
+            "term": "sdk",
+            "tf": 1,
+            "weight": 0.041667
+          },
+          {
+            "term": "blob",
+            "tf": 1,
+            "weight": 0.041667
+          },
+          {
+            "term": "146d7efb",
+            "tf": 1,
+            "weight": 0.041667
+          },
+          {
+            "term": "l98",
+            "tf": 1,
+            "weight": 0.041667
+          }
+        ],
+        "unique_terms": 17,
+        "total_terms": 24
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Structured Output Example",
+        "example",
+        "examples",
+        "github",
+        "https",
+        "output",
+        "py9",
+        "servers",
+        "snippets",
+        "sources",
+        "structured"
+      ],
+      "collection_name": "FAST_DOCS"
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.7525000000000001,
+      "overall": 0.7841666666666667
+    }
+  },
+  {
+    "text": "### Direct Execution Example ``` ``` Sources: [examples/snippets/servers/direct\\_execution.py10-27](https://github.com/modelcontextprotocol/python-sdk/blob/146d7efb/examples/snippets/servers/direct_execution.py#L10-L27)",
+    "metadata": {
+      "chunk_id": "e56133af3246-0012",
+      "source_file": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_9.1-server-examples.md",
+      "filename": "_modelcontextprotocol_python-sdk_9.1-server-examples.md",
+      "file_extension": ".md",
+      "chunk_index": 12,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Direct Execution Example"
+      ],
+      "heading_text": "Direct Execution Example",
+      "token_count": 54,
+      "char_count": 219,
+      "start_char": 8885,
+      "end_char": 9104,
+      "semantic_score": 0.6,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.7525000000000001,
+      "chunking_strategy": "hybrid_adaptive_structural",
+      "content_type": "code_block",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:11.552622",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 54,
+      "document_id": "e56133af3246",
+      "document_name": "_modelcontextprotocol_python-sdk_9.1-server-examples",
+      "source_path": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_9.1-server-examples.md",
+      "source_filename": "_modelcontextprotocol_python-sdk_9.1-server-examples.md",
+      "source_directory": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk",
+      "relative_path": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_9.1-server-examples.md",
+      "hierarchy_path": "Direct Execution Example",
+      "chunk_hash": "291f34789e3d06c7",
+      "content_digest": "291f34789e3d06c7",
+      "chunk_length": 219,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "fast_docs"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "direct",
+          "execution",
+          "examples",
+          "snippets",
+          "servers",
+          "example",
+          "sources",
+          "py10",
+          "https",
+          "github",
+          "com",
+          "modelcontextprotocol",
+          "python",
+          "sdk",
+          "blob",
+          "146d7efb",
+          "l10",
+          "l27"
+        ],
+        "term_weights": [
+          {
+            "term": "direct",
+            "tf": 3,
+            "weight": 0.12
+          },
+          {
+            "term": "execution",
+            "tf": 3,
+            "weight": 0.12
+          },
+          {
+            "term": "examples",
+            "tf": 2,
+            "weight": 0.08
+          },
+          {
+            "term": "snippets",
+            "tf": 2,
+            "weight": 0.08
+          },
+          {
+            "term": "servers",
+            "tf": 2,
+            "weight": 0.08
+          },
+          {
+            "term": "example",
+            "tf": 1,
+            "weight": 0.04
+          },
+          {
+            "term": "sources",
+            "tf": 1,
+            "weight": 0.04
+          },
+          {
+            "term": "py10",
+            "tf": 1,
+            "weight": 0.04
+          },
+          {
+            "term": "https",
+            "tf": 1,
+            "weight": 0.04
+          },
+          {
+            "term": "github",
+            "tf": 1,
+            "weight": 0.04
+          },
+          {
+            "term": "com",
+            "tf": 1,
+            "weight": 0.04
+          },
+          {
+            "term": "modelcontextprotocol",
+            "tf": 1,
+            "weight": 0.04
+          },
+          {
+            "term": "python",
+            "tf": 1,
+            "weight": 0.04
+          },
+          {
+            "term": "sdk",
+            "tf": 1,
+            "weight": 0.04
+          },
+          {
+            "term": "blob",
+            "tf": 1,
+            "weight": 0.04
+          },
+          {
+            "term": "146d7efb",
+            "tf": 1,
+            "weight": 0.04
+          },
+          {
+            "term": "l10",
+            "tf": 1,
+            "weight": 0.04
+          },
+          {
+            "term": "l27",
+            "tf": 1,
+            "weight": 0.04
+          }
+        ],
+        "unique_terms": 18,
+        "total_terms": 25
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Direct Execution Example",
+        "direct",
+        "example",
+        "examples",
+        "execution",
+        "github",
+        "https",
+        "py10",
+        "servers",
+        "snippets",
+        "sources"
+      ],
+      "collection_name": "FAST_DOCS"
+    },
+    "advanced_scores": {
+      "semantic": 0.6,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.7525000000000001,
+      "overall": 0.7508333333333334
+    }
+  },
+  {
+    "text": "## Feature-Specific Examples\n\nThe integration tests demonstrate various MCP features through focused example servers.",
+    "metadata": {
+      "chunk_id": "e56133af3246-0013",
+      "source_file": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_9.1-server-examples.md",
+      "filename": "_modelcontextprotocol_python-sdk_9.1-server-examples.md",
+      "file_extension": ".md",
+      "chunk_index": 13,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Feature-Specific Examples"
+      ],
+      "heading_text": "Feature-Specific Examples",
+      "token_count": 18,
+      "char_count": 117,
+      "start_char": 9108,
+      "end_char": 9225,
+      "semantic_score": 0.8,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.59,
+      "chunking_strategy": "hybrid_adaptive_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:11.552902",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 18,
+      "document_id": "e56133af3246",
+      "document_name": "_modelcontextprotocol_python-sdk_9.1-server-examples",
+      "source_path": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_9.1-server-examples.md",
+      "source_filename": "_modelcontextprotocol_python-sdk_9.1-server-examples.md",
+      "source_directory": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk",
+      "relative_path": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_9.1-server-examples.md",
+      "hierarchy_path": "Feature-Specific Examples",
+      "chunk_hash": "75d5c76e93d24134",
+      "content_digest": "75d5c76e93d24134",
+      "chunk_length": 117,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "fast_docs"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "feature",
+          "specific",
+          "examples",
+          "the",
+          "integration",
+          "tests",
+          "demonstrate",
+          "various",
+          "mcp",
+          "features",
+          "through",
+          "focused",
+          "example",
+          "servers"
+        ],
+        "term_weights": [
+          {
+            "term": "feature",
+            "tf": 1,
+            "weight": 0.071429
+          },
+          {
+            "term": "specific",
+            "tf": 1,
+            "weight": 0.071429
+          },
+          {
+            "term": "examples",
+            "tf": 1,
+            "weight": 0.071429
+          },
+          {
+            "term": "the",
+            "tf": 1,
+            "weight": 0.071429
+          },
+          {
+            "term": "integration",
+            "tf": 1,
+            "weight": 0.071429
+          },
+          {
+            "term": "tests",
+            "tf": 1,
+            "weight": 0.071429
+          },
+          {
+            "term": "demonstrate",
+            "tf": 1,
+            "weight": 0.071429
+          },
+          {
+            "term": "various",
+            "tf": 1,
+            "weight": 0.071429
+          },
+          {
+            "term": "mcp",
+            "tf": 1,
+            "weight": 0.071429
+          },
+          {
+            "term": "features",
+            "tf": 1,
+            "weight": 0.071429
+          },
+          {
+            "term": "through",
+            "tf": 1,
+            "weight": 0.071429
+          },
+          {
+            "term": "focused",
+            "tf": 1,
+            "weight": 0.071429
+          },
+          {
+            "term": "example",
+            "tf": 1,
+            "weight": 0.071429
+          },
+          {
+            "term": "servers",
+            "tf": 1,
+            "weight": 0.071429
+          }
+        ],
+        "unique_terms": 14,
+        "total_terms": 14
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Feature-Specific Examples",
+        "demonstrate",
+        "examples",
+        "feature",
+        "features",
+        "integration",
+        "mcp",
+        "specific",
+        "tests",
+        "the",
+        "various"
+      ],
+      "collection_name": "FAST_DOCS"
+    },
+    "advanced_scores": {
+      "semantic": 0.8,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.59,
+      "overall": 0.7633333333333333
+    }
+  },
+  {
+    "text": "### Progress Reporting ``` ``` Sources: [tests/server/fastmcp/test\\_integration.py392-440](https://github.com/modelcontextprotocol/python-sdk/blob/146d7efb/tests/server/fastmcp/test_integration.py#L392-L440)",
+    "metadata": {
+      "chunk_id": "e56133af3246-0014",
+      "source_file": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_9.1-server-examples.md",
+      "filename": "_modelcontextprotocol_python-sdk_9.1-server-examples.md",
+      "file_extension": ".md",
+      "chunk_index": 14,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Progress Reporting"
+      ],
+      "heading_text": "Progress Reporting",
+      "token_count": 51,
+      "char_count": 207,
+      "start_char": 9227,
+      "end_char": 9434,
+      "semantic_score": 0.6,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5471428571428572,
+      "chunking_strategy": "hybrid_adaptive_structural",
+      "content_type": "code_block",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:11.553602",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 51,
+      "document_id": "e56133af3246",
+      "document_name": "_modelcontextprotocol_python-sdk_9.1-server-examples",
+      "source_path": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_9.1-server-examples.md",
+      "source_filename": "_modelcontextprotocol_python-sdk_9.1-server-examples.md",
+      "source_directory": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk",
+      "relative_path": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_9.1-server-examples.md",
+      "hierarchy_path": "Progress Reporting",
+      "chunk_hash": "55c457929ff8ea93",
+      "content_digest": "55c457929ff8ea93",
+      "chunk_length": 207,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "fast_docs"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "tests",
+          "server",
+          "fastmcp",
+          "test",
+          "integration",
+          "progress",
+          "reporting",
+          "sources",
+          "py392",
+          "440",
+          "https",
+          "github",
+          "com",
+          "modelcontextprotocol",
+          "python",
+          "sdk",
+          "blob",
+          "146d7efb",
+          "l392",
+          "l440"
+        ],
+        "term_weights": [
+          {
+            "term": "tests",
+            "tf": 2,
+            "weight": 0.08
+          },
+          {
+            "term": "server",
+            "tf": 2,
+            "weight": 0.08
+          },
+          {
+            "term": "fastmcp",
+            "tf": 2,
+            "weight": 0.08
+          },
+          {
+            "term": "test",
+            "tf": 2,
+            "weight": 0.08
+          },
+          {
+            "term": "integration",
+            "tf": 2,
+            "weight": 0.08
+          },
+          {
+            "term": "progress",
+            "tf": 1,
+            "weight": 0.04
+          },
+          {
+            "term": "reporting",
+            "tf": 1,
+            "weight": 0.04
+          },
+          {
+            "term": "sources",
+            "tf": 1,
+            "weight": 0.04
+          },
+          {
+            "term": "py392",
+            "tf": 1,
+            "weight": 0.04
+          },
+          {
+            "term": "440",
+            "tf": 1,
+            "weight": 0.04
+          },
+          {
+            "term": "https",
+            "tf": 1,
+            "weight": 0.04
+          },
+          {
+            "term": "github",
+            "tf": 1,
+            "weight": 0.04
+          },
+          {
+            "term": "com",
+            "tf": 1,
+            "weight": 0.04
+          },
+          {
+            "term": "modelcontextprotocol",
+            "tf": 1,
+            "weight": 0.04
+          },
+          {
+            "term": "python",
+            "tf": 1,
+            "weight": 0.04
+          },
+          {
+            "term": "sdk",
+            "tf": 1,
+            "weight": 0.04
+          },
+          {
+            "term": "blob",
+            "tf": 1,
+            "weight": 0.04
+          },
+          {
+            "term": "146d7efb",
+            "tf": 1,
+            "weight": 0.04
+          },
+          {
+            "term": "l392",
+            "tf": 1,
+            "weight": 0.04
+          },
+          {
+            "term": "l440",
+            "tf": 1,
+            "weight": 0.04
+          }
+        ],
+        "unique_terms": 20,
+        "total_terms": 25
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "440",
+        "Progress Reporting",
+        "fastmcp",
+        "integration",
+        "progress",
+        "py392",
+        "reporting",
+        "server",
+        "sources",
+        "test",
+        "tests"
+      ],
+      "collection_name": "FAST_DOCS"
+    },
+    "advanced_scores": {
+      "semantic": 0.6,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5471428571428572,
+      "overall": 0.6823809523809524
+    }
+  },
+  {
+    "text": "### Notification System ``` ``` Sources: [tests/server/fastmcp/test\\_integration.py524-569](https://github.com/modelcontextprotocol/python-sdk/blob/146d7efb/tests/server/fastmcp/test_integration.py#L524-L569)",
+    "metadata": {
+      "chunk_id": "e56133af3246-0015",
+      "source_file": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_9.1-server-examples.md",
+      "filename": "_modelcontextprotocol_python-sdk_9.1-server-examples.md",
+      "file_extension": ".md",
+      "chunk_index": 15,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Notification System"
+      ],
+      "heading_text": "Notification System",
+      "token_count": 51,
+      "char_count": 208,
+      "start_char": 9438,
+      "end_char": 9646,
+      "semantic_score": 0.6,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5471428571428572,
+      "chunking_strategy": "hybrid_adaptive_structural",
+      "content_type": "code_block",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:11.554387",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 51,
+      "document_id": "e56133af3246",
+      "document_name": "_modelcontextprotocol_python-sdk_9.1-server-examples",
+      "source_path": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_9.1-server-examples.md",
+      "source_filename": "_modelcontextprotocol_python-sdk_9.1-server-examples.md",
+      "source_directory": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk",
+      "relative_path": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_9.1-server-examples.md",
+      "hierarchy_path": "Notification System",
+      "chunk_hash": "0cebd725abb7e1df",
+      "content_digest": "0cebd725abb7e1df",
+      "chunk_length": 208,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "fast_docs"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "tests",
+          "server",
+          "fastmcp",
+          "test",
+          "integration",
+          "notification",
+          "system",
+          "sources",
+          "py524",
+          "569",
+          "https",
+          "github",
+          "com",
+          "modelcontextprotocol",
+          "python",
+          "sdk",
+          "blob",
+          "146d7efb",
+          "l524",
+          "l569"
+        ],
+        "term_weights": [
+          {
+            "term": "tests",
+            "tf": 2,
+            "weight": 0.08
+          },
+          {
+            "term": "server",
+            "tf": 2,
+            "weight": 0.08
+          },
+          {
+            "term": "fastmcp",
+            "tf": 2,
+            "weight": 0.08
+          },
+          {
+            "term": "test",
+            "tf": 2,
+            "weight": 0.08
+          },
+          {
+            "term": "integration",
+            "tf": 2,
+            "weight": 0.08
+          },
+          {
+            "term": "notification",
+            "tf": 1,
+            "weight": 0.04
+          },
+          {
+            "term": "system",
+            "tf": 1,
+            "weight": 0.04
+          },
+          {
+            "term": "sources",
+            "tf": 1,
+            "weight": 0.04
+          },
+          {
+            "term": "py524",
+            "tf": 1,
+            "weight": 0.04
+          },
+          {
+            "term": "569",
+            "tf": 1,
+            "weight": 0.04
+          },
+          {
+            "term": "https",
+            "tf": 1,
+            "weight": 0.04
+          },
+          {
+            "term": "github",
+            "tf": 1,
+            "weight": 0.04
+          },
+          {
+            "term": "com",
+            "tf": 1,
+            "weight": 0.04
+          },
+          {
+            "term": "modelcontextprotocol",
+            "tf": 1,
+            "weight": 0.04
+          },
+          {
+            "term": "python",
+            "tf": 1,
+            "weight": 0.04
+          },
+          {
+            "term": "sdk",
+            "tf": 1,
+            "weight": 0.04
+          },
+          {
+            "term": "blob",
+            "tf": 1,
+            "weight": 0.04
+          },
+          {
+            "term": "146d7efb",
+            "tf": 1,
+            "weight": 0.04
+          },
+          {
+            "term": "l524",
+            "tf": 1,
+            "weight": 0.04
+          },
+          {
+            "term": "l569",
+            "tf": 1,
+            "weight": 0.04
+          }
+        ],
+        "unique_terms": 20,
+        "total_terms": 25
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "569",
+        "Notification System",
+        "fastmcp",
+        "integration",
+        "notification",
+        "py524",
+        "server",
+        "sources",
+        "system",
+        "test",
+        "tests"
+      ],
+      "collection_name": "FAST_DOCS"
+    },
+    "advanced_scores": {
+      "semantic": 0.6,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5471428571428572,
+      "overall": 0.6823809523809524
+    }
+  },
+  {
+    "text": "### Sampling and Elicitation ``` ``` Sources: [tests/server/fastmcp/test\\_integration.py442-521](https://github.com/modelcontextprotocol/python-sdk/blob/146d7efb/tests/server/fastmcp/test_integration.py#L442-L521)",
+    "metadata": {
+      "chunk_id": "e56133af3246-0016",
+      "source_file": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_9.1-server-examples.md",
+      "filename": "_modelcontextprotocol_python-sdk_9.1-server-examples.md",
+      "file_extension": ".md",
+      "chunk_index": 16,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Sampling and Elicitation"
+      ],
+      "heading_text": "Sampling and Elicitation",
+      "token_count": 54,
+      "char_count": 213,
+      "start_char": 9650,
+      "end_char": 9863,
+      "semantic_score": 0.6,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5525,
+      "chunking_strategy": "hybrid_adaptive_structural",
+      "content_type": "code_block",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:11.555162",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 54,
+      "document_id": "e56133af3246",
+      "document_name": "_modelcontextprotocol_python-sdk_9.1-server-examples",
+      "source_path": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_9.1-server-examples.md",
+      "source_filename": "_modelcontextprotocol_python-sdk_9.1-server-examples.md",
+      "source_directory": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk",
+      "relative_path": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_9.1-server-examples.md",
+      "hierarchy_path": "Sampling and Elicitation",
+      "chunk_hash": "525a2c6f49372aaa",
+      "content_digest": "525a2c6f49372aaa",
+      "chunk_length": 213,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "fast_docs"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "tests",
+          "server",
+          "fastmcp",
+          "test",
+          "integration",
+          "sampling",
+          "and",
+          "elicitation",
+          "sources",
+          "py442",
+          "521",
+          "https",
+          "github",
+          "com",
+          "modelcontextprotocol",
+          "python",
+          "sdk",
+          "blob",
+          "146d7efb",
+          "l442"
+        ],
+        "term_weights": [
+          {
+            "term": "tests",
+            "tf": 2,
+            "weight": 0.076923
+          },
+          {
+            "term": "server",
+            "tf": 2,
+            "weight": 0.076923
+          },
+          {
+            "term": "fastmcp",
+            "tf": 2,
+            "weight": 0.076923
+          },
+          {
+            "term": "test",
+            "tf": 2,
+            "weight": 0.076923
+          },
+          {
+            "term": "integration",
+            "tf": 2,
+            "weight": 0.076923
+          },
+          {
+            "term": "sampling",
+            "tf": 1,
+            "weight": 0.038462
+          },
+          {
+            "term": "and",
+            "tf": 1,
+            "weight": 0.038462
+          },
+          {
+            "term": "elicitation",
+            "tf": 1,
+            "weight": 0.038462
+          },
+          {
+            "term": "sources",
+            "tf": 1,
+            "weight": 0.038462
+          },
+          {
+            "term": "py442",
+            "tf": 1,
+            "weight": 0.038462
+          },
+          {
+            "term": "521",
+            "tf": 1,
+            "weight": 0.038462
+          },
+          {
+            "term": "https",
+            "tf": 1,
+            "weight": 0.038462
+          },
+          {
+            "term": "github",
+            "tf": 1,
+            "weight": 0.038462
+          },
+          {
+            "term": "com",
+            "tf": 1,
+            "weight": 0.038462
+          },
+          {
+            "term": "modelcontextprotocol",
+            "tf": 1,
+            "weight": 0.038462
+          },
+          {
+            "term": "python",
+            "tf": 1,
+            "weight": 0.038462
+          },
+          {
+            "term": "sdk",
+            "tf": 1,
+            "weight": 0.038462
+          },
+          {
+            "term": "blob",
+            "tf": 1,
+            "weight": 0.038462
+          },
+          {
+            "term": "146d7efb",
+            "tf": 1,
+            "weight": 0.038462
+          },
+          {
+            "term": "l442",
+            "tf": 1,
+            "weight": 0.038462
+          }
+        ],
+        "unique_terms": 21,
+        "total_terms": 26
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Sampling and Elicitation",
+        "and",
+        "elicitation",
+        "fastmcp",
+        "integration",
+        "py442",
+        "sampling",
+        "server",
+        "sources",
+        "test",
+        "tests"
+      ],
+      "collection_name": "FAST_DOCS"
+    },
+    "advanced_scores": {
+      "semantic": 0.6,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5525,
+      "overall": 0.6841666666666667
+    }
+  },
+  {
+    "text": "## Transport Configuration Patterns\n\nAll server examples support multiple transport configurations, allowing flexible deployment options.",
+    "metadata": {
+      "chunk_id": "e56133af3246-0017",
+      "source_file": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_9.1-server-examples.md",
+      "filename": "_modelcontextprotocol_python-sdk_9.1-server-examples.md",
+      "file_extension": ".md",
+      "chunk_index": 17,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Transport Configuration Patterns"
+      ],
+      "heading_text": "Transport Configuration Patterns",
+      "token_count": 18,
+      "char_count": 137,
+      "start_char": 9867,
+      "end_char": 10004,
+      "semantic_score": 0.8,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.7699999999999999,
+      "chunking_strategy": "hybrid_adaptive_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:11.555426",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 18,
+      "document_id": "e56133af3246",
+      "document_name": "_modelcontextprotocol_python-sdk_9.1-server-examples",
+      "source_path": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_9.1-server-examples.md",
+      "source_filename": "_modelcontextprotocol_python-sdk_9.1-server-examples.md",
+      "source_directory": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk",
+      "relative_path": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_9.1-server-examples.md",
+      "hierarchy_path": "Transport Configuration Patterns",
+      "chunk_hash": "cc195a033e1205bd",
+      "content_digest": "cc195a033e1205bd",
+      "chunk_length": 137,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "fast_docs"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "transport",
+          "configuration",
+          "patterns",
+          "all",
+          "server",
+          "examples",
+          "support",
+          "multiple",
+          "configurations",
+          "allowing",
+          "flexible",
+          "deployment",
+          "options"
+        ],
+        "term_weights": [
+          {
+            "term": "transport",
+            "tf": 2,
+            "weight": 0.142857
+          },
+          {
+            "term": "configuration",
+            "tf": 1,
+            "weight": 0.071429
+          },
+          {
+            "term": "patterns",
+            "tf": 1,
+            "weight": 0.071429
+          },
+          {
+            "term": "all",
+            "tf": 1,
+            "weight": 0.071429
+          },
+          {
+            "term": "server",
+            "tf": 1,
+            "weight": 0.071429
+          },
+          {
+            "term": "examples",
+            "tf": 1,
+            "weight": 0.071429
+          },
+          {
+            "term": "support",
+            "tf": 1,
+            "weight": 0.071429
+          },
+          {
+            "term": "multiple",
+            "tf": 1,
+            "weight": 0.071429
+          },
+          {
+            "term": "configurations",
+            "tf": 1,
+            "weight": 0.071429
+          },
+          {
+            "term": "allowing",
+            "tf": 1,
+            "weight": 0.071429
+          },
+          {
+            "term": "flexible",
+            "tf": 1,
+            "weight": 0.071429
+          },
+          {
+            "term": "deployment",
+            "tf": 1,
+            "weight": 0.071429
+          },
+          {
+            "term": "options",
+            "tf": 1,
+            "weight": 0.071429
+          }
+        ],
+        "unique_terms": 13,
+        "total_terms": 14
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Transport Configuration Patterns",
+        "all",
+        "allowing",
+        "configuration",
+        "configurations",
+        "examples",
+        "multiple",
+        "patterns",
+        "server",
+        "support",
+        "transport"
+      ],
+      "collection_name": "FAST_DOCS"
+    },
+    "advanced_scores": {
+      "semantic": 0.8,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.7699999999999999,
+      "overall": 0.8233333333333333
+    }
+  },
+  {
+    "text": "### Universal Transport Pattern ``` ``` Sources: [examples/servers/simple-resource/mcp\\_simple\\_resource/server.py60-93](https://github.com/modelcontextprotocol/python-sdk/blob/146d7efb/examples/servers/simple-resource/mcp_simple_resource/server.py#L60-L93) [examples/servers/simple-tool/mcp\\_simple\\_tool/server.py60-93](https://github.com/modelcontextprotocol/python-sdk/blob/146d7efb/examples/servers/simple-tool/mcp_simple_tool/server.py#L60-L93) [examples/servers/simple-prompt/mcp\\_simple\\_prompt/server.py79-112](https://github.com/modelcontextprotocol/python-sdk/blob/146d7efb/examples/servers/simple-prompt/mcp_simple_prompt/server.py#L79-L112)  Dismiss  Refresh this wiki  Enter email to refresh",
+    "metadata": {
+      "chunk_id": "e56133af3246-0018",
+      "source_file": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_9.1-server-examples.md",
+      "filename": "_modelcontextprotocol_python-sdk_9.1-server-examples.md",
+      "file_extension": ".md",
+      "chunk_index": 18,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Universal Transport Pattern"
+      ],
+      "heading_text": "Universal Transport Pattern",
+      "token_count": 175,
+      "char_count": 705,
+      "start_char": 10006,
+      "end_char": 10711,
+      "semantic_score": 0.6,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.7566666666666667,
+      "chunking_strategy": "hybrid_adaptive_structural",
+      "content_type": "code_block",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:11.556723",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 175,
+      "document_id": "e56133af3246",
+      "document_name": "_modelcontextprotocol_python-sdk_9.1-server-examples",
+      "source_path": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_9.1-server-examples.md",
+      "source_filename": "_modelcontextprotocol_python-sdk_9.1-server-examples.md",
+      "source_directory": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk",
+      "relative_path": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_9.1-server-examples.md",
+      "hierarchy_path": "Universal Transport Pattern",
+      "chunk_hash": "b81bcedcf56ec852",
+      "content_digest": "b81bcedcf56ec852",
+      "chunk_length": 705,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "fast_docs"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "simple",
+          "examples",
+          "servers",
+          "mcp",
+          "server",
+          "resource",
+          "tool",
+          "prompt",
+          "https",
+          "github",
+          "com",
+          "modelcontextprotocol",
+          "python",
+          "sdk",
+          "blob",
+          "146d7efb",
+          "py60",
+          "l60",
+          "l93",
+          "refresh"
+        ],
+        "term_weights": [
+          {
+            "term": "simple",
+            "tf": 12,
+            "weight": 0.129032
+          },
+          {
+            "term": "examples",
+            "tf": 6,
+            "weight": 0.064516
+          },
+          {
+            "term": "servers",
+            "tf": 6,
+            "weight": 0.064516
+          },
+          {
+            "term": "mcp",
+            "tf": 6,
+            "weight": 0.064516
+          },
+          {
+            "term": "server",
+            "tf": 6,
+            "weight": 0.064516
+          },
+          {
+            "term": "resource",
+            "tf": 4,
+            "weight": 0.043011
+          },
+          {
+            "term": "tool",
+            "tf": 4,
+            "weight": 0.043011
+          },
+          {
+            "term": "prompt",
+            "tf": 4,
+            "weight": 0.043011
+          },
+          {
+            "term": "https",
+            "tf": 3,
+            "weight": 0.032258
+          },
+          {
+            "term": "github",
+            "tf": 3,
+            "weight": 0.032258
+          },
+          {
+            "term": "com",
+            "tf": 3,
+            "weight": 0.032258
+          },
+          {
+            "term": "modelcontextprotocol",
+            "tf": 3,
+            "weight": 0.032258
+          },
+          {
+            "term": "python",
+            "tf": 3,
+            "weight": 0.032258
+          },
+          {
+            "term": "sdk",
+            "tf": 3,
+            "weight": 0.032258
+          },
+          {
+            "term": "blob",
+            "tf": 3,
+            "weight": 0.032258
+          },
+          {
+            "term": "146d7efb",
+            "tf": 3,
+            "weight": 0.032258
+          },
+          {
+            "term": "py60",
+            "tf": 2,
+            "weight": 0.021505
+          },
+          {
+            "term": "l60",
+            "tf": 2,
+            "weight": 0.021505
+          },
+          {
+            "term": "l93",
+            "tf": 2,
+            "weight": 0.021505
+          },
+          {
+            "term": "refresh",
+            "tf": 2,
+            "weight": 0.021505
+          }
+        ],
+        "unique_terms": 33,
+        "total_terms": 93
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Universal Transport Pattern",
+        "examples",
+        "github",
+        "https",
+        "mcp",
+        "prompt",
+        "resource",
+        "server",
+        "servers",
+        "simple",
+        "tool"
+      ],
+      "collection_name": "FAST_DOCS"
+    },
+    "advanced_scores": {
+      "semantic": 0.6,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.7566666666666667,
+      "overall": 0.7522222222222222
+    }
+  },
+  {
+    "text": "### On this page  - [Server Examples](#server-examples.md) - [Server Implementation Approaches](#server-implementation-approaches.md) - [Server Implementation Architecture](#server-implementation-architecture.md) - [Low-Level Server Examples](#low-level-server-examples.md) - [Basic Resource Server](#basic-resource-server.md) - [Basic Tool Server](#basic-tool-server.md) - [Basic Prompt Server](#basic-prompt-server.md) - [StreamableHTTP Transport Examples](#streamablehttp-transport-examples.md) - [StreamableHTTP with Event Store](#streamablehttp-with-event-store.md) - [Stateless StreamableHTTP](#stateless-streamablehttp.md) - [FastMCP Framework Examples](#fastmcp-framework-examples.md) - [Structured Output Example](#structured-output-example.md) - [Direct Execution Example](#direct-execution-example.md) - [Feature-Specific Examples](#feature-specific-examples.md) - [Progress Reporting](#progress-reporting.md) - [Notification System](#notification-system.md) - [Sampling and Elicitation](#sampling-and-elicitation.md) - [Transport Configuration Patterns](#transport-configuration-patterns.md) - [Universal Transport Pattern](#universal-transport-pattern.md)",
+    "metadata": {
+      "chunk_id": "e56133af3246-0019",
+      "source_file": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_9.1-server-examples.md",
+      "filename": "_modelcontextprotocol_python-sdk_9.1-server-examples.md",
+      "file_extension": ".md",
+      "chunk_index": 19,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "On this page"
+      ],
+      "heading_text": "On this page",
+      "token_count": 270,
+      "char_count": 1168,
+      "start_char": 10715,
+      "end_char": 11883,
+      "semantic_score": 0.7,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.6913157894736842,
+      "chunking_strategy": "hybrid_adaptive_structural",
+      "content_type": "code_block",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:11.558953",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 270,
+      "document_id": "e56133af3246",
+      "document_name": "_modelcontextprotocol_python-sdk_9.1-server-examples",
+      "source_path": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_9.1-server-examples.md",
+      "source_filename": "_modelcontextprotocol_python-sdk_9.1-server-examples.md",
+      "source_directory": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk",
+      "relative_path": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_9.1-server-examples.md",
+      "hierarchy_path": "On this page",
+      "chunk_hash": "82285465e570f533",
+      "content_digest": "82285465e570f533",
+      "chunk_length": 1168,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "fast_docs"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "server",
+          "examples",
+          "basic",
+          "streamablehttp",
+          "transport",
+          "implementation",
+          "example",
+          "approaches",
+          "architecture",
+          "low",
+          "level",
+          "resource",
+          "tool",
+          "prompt",
+          "with",
+          "event",
+          "store",
+          "stateless",
+          "fastmcp",
+          "framework"
+        ],
+        "term_weights": [
+          {
+            "term": "server",
+            "tf": 14,
+            "weight": 0.125
+          },
+          {
+            "term": "examples",
+            "tf": 10,
+            "weight": 0.089286
+          },
+          {
+            "term": "basic",
+            "tf": 6,
+            "weight": 0.053571
+          },
+          {
+            "term": "streamablehttp",
+            "tf": 6,
+            "weight": 0.053571
+          },
+          {
+            "term": "transport",
+            "tf": 6,
+            "weight": 0.053571
+          },
+          {
+            "term": "implementation",
+            "tf": 4,
+            "weight": 0.035714
+          },
+          {
+            "term": "example",
+            "tf": 4,
+            "weight": 0.035714
+          },
+          {
+            "term": "approaches",
+            "tf": 2,
+            "weight": 0.017857
+          },
+          {
+            "term": "architecture",
+            "tf": 2,
+            "weight": 0.017857
+          },
+          {
+            "term": "low",
+            "tf": 2,
+            "weight": 0.017857
+          },
+          {
+            "term": "level",
+            "tf": 2,
+            "weight": 0.017857
+          },
+          {
+            "term": "resource",
+            "tf": 2,
+            "weight": 0.017857
+          },
+          {
+            "term": "tool",
+            "tf": 2,
+            "weight": 0.017857
+          },
+          {
+            "term": "prompt",
+            "tf": 2,
+            "weight": 0.017857
+          },
+          {
+            "term": "with",
+            "tf": 2,
+            "weight": 0.017857
+          },
+          {
+            "term": "event",
+            "tf": 2,
+            "weight": 0.017857
+          },
+          {
+            "term": "store",
+            "tf": 2,
+            "weight": 0.017857
+          },
+          {
+            "term": "stateless",
+            "tf": 2,
+            "weight": 0.017857
+          },
+          {
+            "term": "fastmcp",
+            "tf": 2,
+            "weight": 0.017857
+          },
+          {
+            "term": "framework",
+            "tf": 2,
+            "weight": 0.017857
+          }
+        ],
+        "unique_terms": 39,
+        "total_terms": 112
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "On this page",
+        "approaches",
+        "architecture",
+        "basic",
+        "example",
+        "examples",
+        "implementation",
+        "low",
+        "server",
+        "streamablehttp",
+        "transport"
+      ],
+      "collection_name": "FAST_DOCS"
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.6913157894736842,
+      "overall": 0.7637719298245614
+    }
+  }
+]

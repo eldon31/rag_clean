@@ -1,0 +1,1493 @@
+[
+  {
+    "text": "## Purpose and Scope\n\nThis document describes how query and search requests are processed in Qdrant, tracing the execution path from initial API request through collection routing, shard selection, and segment-level search operations. It covers the complete flow of search queries, including request validation, shard selection, read consistency enforcement, and result merging.\n\nFor information about specific filtering and scoring mechanisms, see [Filtering and Scoring](qdrant/qdrant/5.2-filtering-and-scoring.md). For details on data updates and write operations, see [Update Processing Pipeline](qdrant/qdrant/6.1-update-processing-pipeline.md).",
+    "metadata": {
+      "chunk_id": "a0c710d41e61-0001",
+      "source_file": "Docs\\Qdrant\\qdrant_qdrant\\_qdrant_qdrant_5.1-query-request-flow.md",
+      "filename": "_qdrant_qdrant_5.1-query-request-flow.md",
+      "file_extension": ".md",
+      "chunk_index": 1,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Purpose and Scope"
+      ],
+      "heading_text": "Purpose and Scope",
+      "token_count": 130,
+      "char_count": 650,
+      "start_char": 5757,
+      "end_char": 6407,
+      "semantic_score": 0.7,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5347368421052632,
+      "chunking_strategy": "hierarchical_precise_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:43.212573",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 130,
+      "document_id": "a0c710d41e61",
+      "document_name": "_qdrant_qdrant_5.1-query-request-flow",
+      "source_path": "Docs\\Qdrant\\qdrant_qdrant\\_qdrant_qdrant_5.1-query-request-flow.md",
+      "source_filename": "_qdrant_qdrant_5.1-query-request-flow.md",
+      "source_directory": "Docs\\Qdrant\\qdrant_qdrant",
+      "relative_path": "Docs\\Qdrant\\qdrant_qdrant\\_qdrant_qdrant_5.1-query-request-flow.md",
+      "hierarchy_path": "Purpose and Scope",
+      "chunk_hash": "5b44166affb96bb7",
+      "content_digest": "5b44166affb96bb7",
+      "chunk_length": 650,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "and",
+          "qdrant",
+          "search",
+          "filtering",
+          "scoring",
+          "the",
+          "request",
+          "shard",
+          "selection",
+          "operations",
+          "for",
+          "see",
+          "update",
+          "processing",
+          "pipeline",
+          "purpose",
+          "scope",
+          "this",
+          "document",
+          "describes"
+        ],
+        "term_weights": [
+          {
+            "term": "and",
+            "tf": 8,
+            "weight": 0.097561
+          },
+          {
+            "term": "qdrant",
+            "tf": 5,
+            "weight": 0.060976
+          },
+          {
+            "term": "search",
+            "tf": 3,
+            "weight": 0.036585
+          },
+          {
+            "term": "filtering",
+            "tf": 3,
+            "weight": 0.036585
+          },
+          {
+            "term": "scoring",
+            "tf": 3,
+            "weight": 0.036585
+          },
+          {
+            "term": "the",
+            "tf": 2,
+            "weight": 0.02439
+          },
+          {
+            "term": "request",
+            "tf": 2,
+            "weight": 0.02439
+          },
+          {
+            "term": "shard",
+            "tf": 2,
+            "weight": 0.02439
+          },
+          {
+            "term": "selection",
+            "tf": 2,
+            "weight": 0.02439
+          },
+          {
+            "term": "operations",
+            "tf": 2,
+            "weight": 0.02439
+          },
+          {
+            "term": "for",
+            "tf": 2,
+            "weight": 0.02439
+          },
+          {
+            "term": "see",
+            "tf": 2,
+            "weight": 0.02439
+          },
+          {
+            "term": "update",
+            "tf": 2,
+            "weight": 0.02439
+          },
+          {
+            "term": "processing",
+            "tf": 2,
+            "weight": 0.02439
+          },
+          {
+            "term": "pipeline",
+            "tf": 2,
+            "weight": 0.02439
+          },
+          {
+            "term": "purpose",
+            "tf": 1,
+            "weight": 0.012195
+          },
+          {
+            "term": "scope",
+            "tf": 1,
+            "weight": 0.012195
+          },
+          {
+            "term": "this",
+            "tf": 1,
+            "weight": 0.012195
+          },
+          {
+            "term": "document",
+            "tf": 1,
+            "weight": 0.012195
+          },
+          {
+            "term": "describes",
+            "tf": 1,
+            "weight": 0.012195
+          }
+        ],
+        "unique_terms": 55,
+        "total_terms": 82
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Purpose and Scope",
+        "and",
+        "filtering",
+        "operations",
+        "qdrant",
+        "request",
+        "scoring",
+        "search",
+        "selection",
+        "shard",
+        "the"
+      ],
+      "collection_name": "Qdrant"
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5347368421052632,
+      "overall": 0.711578947368421
+    }
+  },
+  {
+    "text": "## Request Types and Entry Points\n\nQdrant supports multiple query types that enter through REST and gRPC APIs. All requests are converted to internal representations for processing.",
+    "metadata": {
+      "chunk_id": "a0c710d41e61-0003",
+      "source_file": "Docs\\Qdrant\\qdrant_qdrant\\_qdrant_qdrant_5.1-query-request-flow.md",
+      "filename": "_qdrant_qdrant_5.1-query-request-flow.md",
+      "file_extension": ".md",
+      "chunk_index": 3,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Request Types and Entry Points"
+      ],
+      "heading_text": "Request Types and Entry Points",
+      "token_count": 33,
+      "char_count": 181,
+      "start_char": 6885,
+      "end_char": 7066,
+      "semantic_score": 0.7,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5677777777777778,
+      "chunking_strategy": "hierarchical_precise_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:43.214695",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 33,
+      "document_id": "a0c710d41e61",
+      "document_name": "_qdrant_qdrant_5.1-query-request-flow",
+      "source_path": "Docs\\Qdrant\\qdrant_qdrant\\_qdrant_qdrant_5.1-query-request-flow.md",
+      "source_filename": "_qdrant_qdrant_5.1-query-request-flow.md",
+      "source_directory": "Docs\\Qdrant\\qdrant_qdrant",
+      "relative_path": "Docs\\Qdrant\\qdrant_qdrant\\_qdrant_qdrant_5.1-query-request-flow.md",
+      "hierarchy_path": "Request Types and Entry Points",
+      "chunk_hash": "9d0b40548edb4f1b",
+      "content_digest": "9d0b40548edb4f1b",
+      "chunk_length": 181,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "types",
+          "and",
+          "request",
+          "entry",
+          "points",
+          "qdrant",
+          "supports",
+          "multiple",
+          "query",
+          "that",
+          "enter",
+          "through",
+          "rest",
+          "grpc",
+          "apis",
+          "all",
+          "requests",
+          "are",
+          "converted",
+          "internal"
+        ],
+        "term_weights": [
+          {
+            "term": "types",
+            "tf": 2,
+            "weight": 0.08
+          },
+          {
+            "term": "and",
+            "tf": 2,
+            "weight": 0.08
+          },
+          {
+            "term": "request",
+            "tf": 1,
+            "weight": 0.04
+          },
+          {
+            "term": "entry",
+            "tf": 1,
+            "weight": 0.04
+          },
+          {
+            "term": "points",
+            "tf": 1,
+            "weight": 0.04
+          },
+          {
+            "term": "qdrant",
+            "tf": 1,
+            "weight": 0.04
+          },
+          {
+            "term": "supports",
+            "tf": 1,
+            "weight": 0.04
+          },
+          {
+            "term": "multiple",
+            "tf": 1,
+            "weight": 0.04
+          },
+          {
+            "term": "query",
+            "tf": 1,
+            "weight": 0.04
+          },
+          {
+            "term": "that",
+            "tf": 1,
+            "weight": 0.04
+          },
+          {
+            "term": "enter",
+            "tf": 1,
+            "weight": 0.04
+          },
+          {
+            "term": "through",
+            "tf": 1,
+            "weight": 0.04
+          },
+          {
+            "term": "rest",
+            "tf": 1,
+            "weight": 0.04
+          },
+          {
+            "term": "grpc",
+            "tf": 1,
+            "weight": 0.04
+          },
+          {
+            "term": "apis",
+            "tf": 1,
+            "weight": 0.04
+          },
+          {
+            "term": "all",
+            "tf": 1,
+            "weight": 0.04
+          },
+          {
+            "term": "requests",
+            "tf": 1,
+            "weight": 0.04
+          },
+          {
+            "term": "are",
+            "tf": 1,
+            "weight": 0.04
+          },
+          {
+            "term": "converted",
+            "tf": 1,
+            "weight": 0.04
+          },
+          {
+            "term": "internal",
+            "tf": 1,
+            "weight": 0.04
+          }
+        ],
+        "unique_terms": 23,
+        "total_terms": 25
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Request Types and Entry Points",
+        "and",
+        "entry",
+        "multiple",
+        "points",
+        "qdrant",
+        "query",
+        "request",
+        "supports",
+        "that",
+        "types"
+      ],
+      "collection_name": "Qdrant"
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5677777777777778,
+      "overall": 0.7225925925925926
+    }
+  },
+  {
+    "text": "## Collection-Level Request Routing  The `Collection` layer receives requests and routes them to the appropriate shards based on shard keys (if using custom sharding) or distributes across all shards (if using auto sharding). ``` ``` **Sharding Method Determination:**  - **Auto Sharding**: Request is sent to all `ShardReplicaSet` instances, and results are merged  - **Custom Sharding**: `shard_key` field in request determines which shards to query    - Shard keys can be keywords or numbers   - Multiple shard keys can be specified via `ShardKeySelector`  **Sources:**  - [lib/collection/src/config.rs76-84](https://github.com/qdrant/qdrant/blob/48203e41/lib/collection/src/config.rs#L76-L84) - [lib/api/src/grpc/conversions.rs92-105](https://github.com/qdrant/qdrant/blob/48203e41/lib/api/src/grpc/conversions.rs#L92-L105) - [lib/collection/src/operations/types.rs554-595](https://github.com/qdrant/qdrant/blob/48203e41/lib/collection/src/operations/types.rs#L554-L595)",
+    "metadata": {
+      "chunk_id": "a0c710d41e61-0005",
+      "source_file": "Docs\\Qdrant\\qdrant_qdrant\\_qdrant_qdrant_5.1-query-request-flow.md",
+      "filename": "_qdrant_qdrant_5.1-query-request-flow.md",
+      "file_extension": ".md",
+      "chunk_index": 5,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Collection-Level Request Routing"
+      ],
+      "heading_text": "Collection-Level Request Routing",
+      "token_count": 252,
+      "char_count": 974,
+      "start_char": 8579,
+      "end_char": 9553,
+      "semantic_score": 0.7,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5013636363636363,
+      "chunking_strategy": "hierarchical_precise_structural",
+      "content_type": "code_block",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:43.225798",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 252,
+      "document_id": "a0c710d41e61",
+      "document_name": "_qdrant_qdrant_5.1-query-request-flow",
+      "source_path": "Docs\\Qdrant\\qdrant_qdrant\\_qdrant_qdrant_5.1-query-request-flow.md",
+      "source_filename": "_qdrant_qdrant_5.1-query-request-flow.md",
+      "source_directory": "Docs\\Qdrant\\qdrant_qdrant",
+      "relative_path": "Docs\\Qdrant\\qdrant_qdrant\\_qdrant_qdrant_5.1-query-request-flow.md",
+      "hierarchy_path": "Collection-Level Request Routing",
+      "chunk_hash": "14f52c0c3b0be864",
+      "content_digest": "14f52c0c3b0be864",
+      "chunk_length": 974,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "collection",
+          "lib",
+          "src",
+          "qdrant",
+          "sharding",
+          "shard",
+          "request",
+          "shards",
+          "keys",
+          "https",
+          "github",
+          "com",
+          "blob",
+          "48203e41",
+          "the",
+          "and",
+          "using",
+          "custom",
+          "all",
+          "auto"
+        ],
+        "term_weights": [
+          {
+            "term": "collection",
+            "tf": 6,
+            "weight": 0.048
+          },
+          {
+            "term": "lib",
+            "tf": 6,
+            "weight": 0.048
+          },
+          {
+            "term": "src",
+            "tf": 6,
+            "weight": 0.048
+          },
+          {
+            "term": "qdrant",
+            "tf": 6,
+            "weight": 0.048
+          },
+          {
+            "term": "sharding",
+            "tf": 5,
+            "weight": 0.04
+          },
+          {
+            "term": "shard",
+            "tf": 4,
+            "weight": 0.032
+          },
+          {
+            "term": "request",
+            "tf": 3,
+            "weight": 0.024
+          },
+          {
+            "term": "shards",
+            "tf": 3,
+            "weight": 0.024
+          },
+          {
+            "term": "keys",
+            "tf": 3,
+            "weight": 0.024
+          },
+          {
+            "term": "https",
+            "tf": 3,
+            "weight": 0.024
+          },
+          {
+            "term": "github",
+            "tf": 3,
+            "weight": 0.024
+          },
+          {
+            "term": "com",
+            "tf": 3,
+            "weight": 0.024
+          },
+          {
+            "term": "blob",
+            "tf": 3,
+            "weight": 0.024
+          },
+          {
+            "term": "48203e41",
+            "tf": 3,
+            "weight": 0.024
+          },
+          {
+            "term": "the",
+            "tf": 2,
+            "weight": 0.016
+          },
+          {
+            "term": "and",
+            "tf": 2,
+            "weight": 0.016
+          },
+          {
+            "term": "using",
+            "tf": 2,
+            "weight": 0.016
+          },
+          {
+            "term": "custom",
+            "tf": 2,
+            "weight": 0.016
+          },
+          {
+            "term": "all",
+            "tf": 2,
+            "weight": 0.016
+          },
+          {
+            "term": "auto",
+            "tf": 2,
+            "weight": 0.016
+          }
+        ],
+        "unique_terms": 69,
+        "total_terms": 125
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Collection-Level Request Routing",
+        "collection",
+        "https",
+        "keys",
+        "lib",
+        "qdrant",
+        "request",
+        "shard",
+        "sharding",
+        "shards",
+        "src"
+      ],
+      "collection_name": "Qdrant"
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5013636363636363,
+      "overall": 0.7004545454545453
+    }
+  },
+  {
+    "text": "### Segment Search Process ``` ``` **Filter Application:**  Payload filters are applied before vector search to narrow the search space:  1. **Filter parsing**: `Filter` conditions converted to queries for payload indices 2. **Index lookup**: `FieldIndex` instances (numeric, keyword, geo, etc.) return matching point IDs 3. **Cardinality estimation**: Estimated number of matching points determines search strategy 4. **Threshold check**: If estimated points < `full_scan_threshold`, use brute force; otherwise use HNSW  **HNSW Search Strategy:**  When using HNSW index:  - **Entry point selection**: Find entry node in HNSW graph - **Greedy search**: Navigate down layers to level 0 - **Beam search**: Explore level 0 with configurable `ef` parameter - **Filtered search**: Only visit points matching payload filter  **Quantization-Aware Search:**  If quantization is enabled (scalar, product, or binary):  1. Search using quantized vectors for speed 2. Retrieve top candidates (with oversampling if configured) 3. Rescore candidates using original vectors for accuracy 4. Return refined results  **Sources:**  - [lib/segment/src/types.rs471-546](https://github.com/qdrant/qdrant/blob/48203e41/lib/segment/src/types.rs#L471-L546) - [lib/collection/src/operations/types.rs25-60](https://github.com/qdrant/qdrant/blob/48203e41/lib/collection/src/operations/types.rs#L25-L60) - Diagram 3 from high-level architecture",
+    "metadata": {
+      "chunk_id": "a0c710d41e61-0011",
+      "source_file": "Docs\\Qdrant\\qdrant_qdrant\\_qdrant_qdrant_5.1-query-request-flow.md",
+      "filename": "_qdrant_qdrant_5.1-query-request-flow.md",
+      "file_extension": ".md",
+      "chunk_index": 11,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Segment Search Process"
+      ],
+      "heading_text": "Segment Search Process",
+      "token_count": 338,
+      "char_count": 1415,
+      "start_char": 12926,
+      "end_char": 14341,
+      "semantic_score": 0.7,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5217703703703704,
+      "chunking_strategy": "hierarchical_precise_structural",
+      "content_type": "code_block",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:43.250562",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 338,
+      "document_id": "a0c710d41e61",
+      "document_name": "_qdrant_qdrant_5.1-query-request-flow",
+      "source_path": "Docs\\Qdrant\\qdrant_qdrant\\_qdrant_qdrant_5.1-query-request-flow.md",
+      "source_filename": "_qdrant_qdrant_5.1-query-request-flow.md",
+      "source_directory": "Docs\\Qdrant\\qdrant_qdrant",
+      "relative_path": "Docs\\Qdrant\\qdrant_qdrant\\_qdrant_qdrant_5.1-query-request-flow.md",
+      "hierarchy_path": "Segment Search Process",
+      "chunk_hash": "9a6860fb1da5ccc5",
+      "content_digest": "9a6860fb1da5ccc5",
+      "chunk_length": 1415,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "search",
+          "filter",
+          "hnsw",
+          "lib",
+          "src",
+          "types",
+          "qdrant",
+          "segment",
+          "payload",
+          "for",
+          "matching",
+          "points",
+          "using",
+          "level",
+          "index",
+          "return",
+          "point",
+          "estimated",
+          "strategy",
+          "threshold"
+        ],
+        "term_weights": [
+          {
+            "term": "search",
+            "tf": 10,
+            "weight": 0.058824
+          },
+          {
+            "term": "filter",
+            "tf": 4,
+            "weight": 0.023529
+          },
+          {
+            "term": "hnsw",
+            "tf": 4,
+            "weight": 0.023529
+          },
+          {
+            "term": "lib",
+            "tf": 4,
+            "weight": 0.023529
+          },
+          {
+            "term": "src",
+            "tf": 4,
+            "weight": 0.023529
+          },
+          {
+            "term": "types",
+            "tf": 4,
+            "weight": 0.023529
+          },
+          {
+            "term": "qdrant",
+            "tf": 4,
+            "weight": 0.023529
+          },
+          {
+            "term": "segment",
+            "tf": 3,
+            "weight": 0.017647
+          },
+          {
+            "term": "payload",
+            "tf": 3,
+            "weight": 0.017647
+          },
+          {
+            "term": "for",
+            "tf": 3,
+            "weight": 0.017647
+          },
+          {
+            "term": "matching",
+            "tf": 3,
+            "weight": 0.017647
+          },
+          {
+            "term": "points",
+            "tf": 3,
+            "weight": 0.017647
+          },
+          {
+            "term": "using",
+            "tf": 3,
+            "weight": 0.017647
+          },
+          {
+            "term": "level",
+            "tf": 3,
+            "weight": 0.017647
+          },
+          {
+            "term": "index",
+            "tf": 2,
+            "weight": 0.011765
+          },
+          {
+            "term": "return",
+            "tf": 2,
+            "weight": 0.011765
+          },
+          {
+            "term": "point",
+            "tf": 2,
+            "weight": 0.011765
+          },
+          {
+            "term": "estimated",
+            "tf": 2,
+            "weight": 0.011765
+          },
+          {
+            "term": "strategy",
+            "tf": 2,
+            "weight": 0.011765
+          },
+          {
+            "term": "threshold",
+            "tf": 2,
+            "weight": 0.011765
+          }
+        ],
+        "unique_terms": 110,
+        "total_terms": 170
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Segment Search Process",
+        "filter",
+        "for",
+        "hnsw",
+        "lib",
+        "payload",
+        "qdrant",
+        "search",
+        "segment",
+        "src",
+        "types"
+      ],
+      "collection_name": "Qdrant"
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5217703703703704,
+      "overall": 0.7072567901234569
+    }
+  },
+  {
+    "text": "### Multi-Level Result Merging ``` ``` **Merging Algorithm:**  1. **Segment-level merge** (in `LocalShard`):     - Collect results from all segments    - Sort by score (considering distance metric)    - Take top `limit + offset` results    - Handle pagination by skipping `offset` items  2. **Shard-level merge** (in `Collection`):     - For auto-sharding: merge results from all shards    - For custom sharding: only results from queried shards    - Re-sort combined results    - Apply final limit  **Score Ordering:**  The ordering depends on the distance metric:  - **Cosine, Dot**: Larger scores are better (`Order::LargeBetter`) - **Euclid, Manhattan**: Smaller scores are better (`Order::SmallBetter`)  **Response Construction:**  Final `ScoredPoint` objects contain:  - `id`: Point ID (numeric or UUID) - `score`: Distance/similarity score - `payload`: Requested payload fields (if `with_payload` specified) - `vector`: Point vector(s) (if `with_vector` specified) - `shard_key`: Shard key for custom sharding - `order_value`: For order\\_by queries  **Sources:**  - [lib/segment/src/types.rs349-366](https://github.com/qdrant/qdrant/blob/48203e41/lib/segment/src/types.rs#L349-L366) - [lib/segment/src/types.rs327-341](https://github.com/qdrant/qdrant/blob/48203e41/lib/segment/src/types.rs#L327-L341) - [lib/collection/src/operations/types.rs131-143](https://github.com/qdrant/qdrant/blob/48203e41/lib/collection/src/operations/types.rs#L131-L143)",
+    "metadata": {
+      "chunk_id": "a0c710d41e61-0013",
+      "source_file": "Docs\\Qdrant\\qdrant_qdrant\\_qdrant_qdrant_5.1-query-request-flow.md",
+      "filename": "_qdrant_qdrant_5.1-query-request-flow.md",
+      "file_extension": ".md",
+      "chunk_index": 13,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Multi-Level Result Merging"
+      ],
+      "heading_text": "Multi-Level Result Merging",
+      "token_count": 388,
+      "char_count": 1455,
+      "start_char": 14498,
+      "end_char": 15953,
+      "semantic_score": 0.7999999999999999,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5259890410958905,
+      "chunking_strategy": "hierarchical_precise_structural",
+      "content_type": "code_block",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:43.255080",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 388,
+      "document_id": "a0c710d41e61",
+      "document_name": "_qdrant_qdrant_5.1-query-request-flow",
+      "source_path": "Docs\\Qdrant\\qdrant_qdrant\\_qdrant_qdrant_5.1-query-request-flow.md",
+      "source_filename": "_qdrant_qdrant_5.1-query-request-flow.md",
+      "source_directory": "Docs\\Qdrant\\qdrant_qdrant",
+      "relative_path": "Docs\\Qdrant\\qdrant_qdrant\\_qdrant_qdrant_5.1-query-request-flow.md",
+      "hierarchy_path": "Multi-Level Result Merging",
+      "chunk_hash": "5b103729e6101a09",
+      "content_digest": "5b103729e6101a09",
+      "chunk_length": 1455,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "lib",
+          "src",
+          "types",
+          "qdrant",
+          "segment",
+          "results",
+          "score",
+          "for",
+          "order",
+          "level",
+          "merge",
+          "from",
+          "distance",
+          "shard",
+          "collection",
+          "sharding",
+          "payload",
+          "vector",
+          "https",
+          "github"
+        ],
+        "term_weights": [
+          {
+            "term": "lib",
+            "tf": 6,
+            "weight": 0.033708
+          },
+          {
+            "term": "src",
+            "tf": 6,
+            "weight": 0.033708
+          },
+          {
+            "term": "types",
+            "tf": 6,
+            "weight": 0.033708
+          },
+          {
+            "term": "qdrant",
+            "tf": 6,
+            "weight": 0.033708
+          },
+          {
+            "term": "segment",
+            "tf": 5,
+            "weight": 0.02809
+          },
+          {
+            "term": "results",
+            "tf": 5,
+            "weight": 0.02809
+          },
+          {
+            "term": "score",
+            "tf": 4,
+            "weight": 0.022472
+          },
+          {
+            "term": "for",
+            "tf": 4,
+            "weight": 0.022472
+          },
+          {
+            "term": "order",
+            "tf": 4,
+            "weight": 0.022472
+          },
+          {
+            "term": "level",
+            "tf": 3,
+            "weight": 0.016854
+          },
+          {
+            "term": "merge",
+            "tf": 3,
+            "weight": 0.016854
+          },
+          {
+            "term": "from",
+            "tf": 3,
+            "weight": 0.016854
+          },
+          {
+            "term": "distance",
+            "tf": 3,
+            "weight": 0.016854
+          },
+          {
+            "term": "shard",
+            "tf": 3,
+            "weight": 0.016854
+          },
+          {
+            "term": "collection",
+            "tf": 3,
+            "weight": 0.016854
+          },
+          {
+            "term": "sharding",
+            "tf": 3,
+            "weight": 0.016854
+          },
+          {
+            "term": "payload",
+            "tf": 3,
+            "weight": 0.016854
+          },
+          {
+            "term": "vector",
+            "tf": 3,
+            "weight": 0.016854
+          },
+          {
+            "term": "https",
+            "tf": 3,
+            "weight": 0.016854
+          },
+          {
+            "term": "github",
+            "tf": 3,
+            "weight": 0.016854
+          }
+        ],
+        "unique_terms": 94,
+        "total_terms": 178
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Multi-Level Result Merging",
+        "for",
+        "level",
+        "lib",
+        "order",
+        "qdrant",
+        "results",
+        "score",
+        "segment",
+        "src",
+        "types"
+      ],
+      "collection_name": "Qdrant"
+    },
+    "advanced_scores": {
+      "semantic": 0.7999999999999999,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5259890410958905,
+      "overall": 0.7419963470319635
+    }
+  },
+  {
+    "text": "## Search Parameters and Optimization\n\nSearch behavior is controlled by `SearchParams` which configure HNSW search, quantization, and exactness requirements.",
+    "metadata": {
+      "chunk_id": "a0c710d41e61-0014",
+      "source_file": "Docs\\Qdrant\\qdrant_qdrant\\_qdrant_qdrant_5.1-query-request-flow.md",
+      "filename": "_qdrant_qdrant_5.1-query-request-flow.md",
+      "file_extension": ".md",
+      "chunk_index": 14,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Search Parameters and Optimization"
+      ],
+      "heading_text": "Search Parameters and Optimization",
+      "token_count": 29,
+      "char_count": 157,
+      "start_char": 15957,
+      "end_char": 16114,
+      "semantic_score": 0.8,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5584210526315789,
+      "chunking_strategy": "hierarchical_precise_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:43.255600",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 29,
+      "document_id": "a0c710d41e61",
+      "document_name": "_qdrant_qdrant_5.1-query-request-flow",
+      "source_path": "Docs\\Qdrant\\qdrant_qdrant\\_qdrant_qdrant_5.1-query-request-flow.md",
+      "source_filename": "_qdrant_qdrant_5.1-query-request-flow.md",
+      "source_directory": "Docs\\Qdrant\\qdrant_qdrant",
+      "relative_path": "Docs\\Qdrant\\qdrant_qdrant\\_qdrant_qdrant_5.1-query-request-flow.md",
+      "hierarchy_path": "Search Parameters and Optimization",
+      "chunk_hash": "5526a3ccc879f3ad",
+      "content_digest": "5526a3ccc879f3ad",
+      "chunk_length": 157,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "search",
+          "and",
+          "parameters",
+          "optimization",
+          "behavior",
+          "controlled",
+          "searchparams",
+          "which",
+          "configure",
+          "hnsw",
+          "quantization",
+          "exactness",
+          "requirements"
+        ],
+        "term_weights": [
+          {
+            "term": "search",
+            "tf": 3,
+            "weight": 0.1875
+          },
+          {
+            "term": "and",
+            "tf": 2,
+            "weight": 0.125
+          },
+          {
+            "term": "parameters",
+            "tf": 1,
+            "weight": 0.0625
+          },
+          {
+            "term": "optimization",
+            "tf": 1,
+            "weight": 0.0625
+          },
+          {
+            "term": "behavior",
+            "tf": 1,
+            "weight": 0.0625
+          },
+          {
+            "term": "controlled",
+            "tf": 1,
+            "weight": 0.0625
+          },
+          {
+            "term": "searchparams",
+            "tf": 1,
+            "weight": 0.0625
+          },
+          {
+            "term": "which",
+            "tf": 1,
+            "weight": 0.0625
+          },
+          {
+            "term": "configure",
+            "tf": 1,
+            "weight": 0.0625
+          },
+          {
+            "term": "hnsw",
+            "tf": 1,
+            "weight": 0.0625
+          },
+          {
+            "term": "quantization",
+            "tf": 1,
+            "weight": 0.0625
+          },
+          {
+            "term": "exactness",
+            "tf": 1,
+            "weight": 0.0625
+          },
+          {
+            "term": "requirements",
+            "tf": 1,
+            "weight": 0.0625
+          }
+        ],
+        "unique_terms": 13,
+        "total_terms": 16
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Search Parameters and Optimization",
+        "and",
+        "behavior",
+        "configure",
+        "controlled",
+        "hnsw",
+        "optimization",
+        "parameters",
+        "search",
+        "searchparams",
+        "which"
+      ],
+      "collection_name": "Qdrant"
+    },
+    "advanced_scores": {
+      "semantic": 0.8,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5584210526315789,
+      "overall": 0.7528070175438596
+    }
+  },
+  {
+    "text": "### Locking Strategy  **Lock Type**: `Arc<tokio::sync::RwLock<()>>`  **Read Lock Held By:**  - Search operations - Scroll operations - Point retrieval operations - Snapshot creation (partial)  **Write Lock Held By:**  - Update operations (upsert, delete) - Segment optimization - Snapshot proxy wrapping/unwrapping  **Lock Acquisition Timing:** ``` ``` **Consistency Guarantees:**  - **Snapshot isolation**: Queries see a consistent snapshot of data - **No torn reads**: Point data (vector + payload) are read atomically - **Scroll consistency**: Paginated scrolls see same data version across pages  **Sources:**  - [lib/collection/src/shards/local\\_shard/mod.rs108-124](https://github.com/qdrant/qdrant/blob/48203e41/lib/collection/src/shards/local_shard/mod.rs#L108-L124) - [lib/collection/src/update\\_handler.rs135-143](https://github.com/qdrant/qdrant/blob/48203e41/lib/collection/src/update_handler.rs#L135-L143) - [lib/collection/src/collection\\_manager/collection\\_updater.rs40-60](https://github.com/qdrant/qdrant/blob/48203e41/lib/collection/src/collection_manager/collection_updater.rs#L40-L60)  Dismiss  Refresh this wiki  Enter email to refresh",
+    "metadata": {
+      "chunk_id": "a0c710d41e61-0019",
+      "source_file": "Docs\\Qdrant\\qdrant_qdrant\\_qdrant_qdrant_5.1-query-request-flow.md",
+      "filename": "_qdrant_qdrant_5.1-query-request-flow.md",
+      "file_extension": ".md",
+      "chunk_index": 19,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Locking Strategy"
+      ],
+      "heading_text": "Locking Strategy",
+      "token_count": 299,
+      "char_count": 1157,
+      "start_char": 18754,
+      "end_char": 19911,
+      "semantic_score": 0.7,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5047368421052632,
+      "chunking_strategy": "hierarchical_precise_structural",
+      "content_type": "code_block",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:43.263113",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 299,
+      "document_id": "a0c710d41e61",
+      "document_name": "_qdrant_qdrant_5.1-query-request-flow",
+      "source_path": "Docs\\Qdrant\\qdrant_qdrant\\_qdrant_qdrant_5.1-query-request-flow.md",
+      "source_filename": "_qdrant_qdrant_5.1-query-request-flow.md",
+      "source_directory": "Docs\\Qdrant\\qdrant_qdrant",
+      "relative_path": "Docs\\Qdrant\\qdrant_qdrant\\_qdrant_qdrant_5.1-query-request-flow.md",
+      "hierarchy_path": "Locking Strategy",
+      "chunk_hash": "e182f8b0dc01fc0e",
+      "content_digest": "e182f8b0dc01fc0e",
+      "chunk_length": 1157,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "collection",
+          "lib",
+          "src",
+          "qdrant",
+          "lock",
+          "operations",
+          "snapshot",
+          "update",
+          "data",
+          "https",
+          "github",
+          "com",
+          "blob",
+          "48203e41",
+          "read",
+          "held",
+          "scroll",
+          "point",
+          "consistency",
+          "see"
+        ],
+        "term_weights": [
+          {
+            "term": "collection",
+            "tf": 10,
+            "weight": 0.06993
+          },
+          {
+            "term": "lib",
+            "tf": 6,
+            "weight": 0.041958
+          },
+          {
+            "term": "src",
+            "tf": 6,
+            "weight": 0.041958
+          },
+          {
+            "term": "qdrant",
+            "tf": 6,
+            "weight": 0.041958
+          },
+          {
+            "term": "lock",
+            "tf": 4,
+            "weight": 0.027972
+          },
+          {
+            "term": "operations",
+            "tf": 4,
+            "weight": 0.027972
+          },
+          {
+            "term": "snapshot",
+            "tf": 4,
+            "weight": 0.027972
+          },
+          {
+            "term": "update",
+            "tf": 3,
+            "weight": 0.020979
+          },
+          {
+            "term": "data",
+            "tf": 3,
+            "weight": 0.020979
+          },
+          {
+            "term": "https",
+            "tf": 3,
+            "weight": 0.020979
+          },
+          {
+            "term": "github",
+            "tf": 3,
+            "weight": 0.020979
+          },
+          {
+            "term": "com",
+            "tf": 3,
+            "weight": 0.020979
+          },
+          {
+            "term": "blob",
+            "tf": 3,
+            "weight": 0.020979
+          },
+          {
+            "term": "48203e41",
+            "tf": 3,
+            "weight": 0.020979
+          },
+          {
+            "term": "read",
+            "tf": 2,
+            "weight": 0.013986
+          },
+          {
+            "term": "held",
+            "tf": 2,
+            "weight": 0.013986
+          },
+          {
+            "term": "scroll",
+            "tf": 2,
+            "weight": 0.013986
+          },
+          {
+            "term": "point",
+            "tf": 2,
+            "weight": 0.013986
+          },
+          {
+            "term": "consistency",
+            "tf": 2,
+            "weight": 0.013986
+          },
+          {
+            "term": "see",
+            "tf": 2,
+            "weight": 0.013986
+          }
+        ],
+        "unique_terms": 82,
+        "total_terms": 143
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Locking Strategy",
+        "collection",
+        "data",
+        "https",
+        "lib",
+        "lock",
+        "operations",
+        "qdrant",
+        "snapshot",
+        "src",
+        "update"
+      ],
+      "collection_name": "Qdrant"
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5047368421052632,
+      "overall": 0.701578947368421
+    }
+  }
+]

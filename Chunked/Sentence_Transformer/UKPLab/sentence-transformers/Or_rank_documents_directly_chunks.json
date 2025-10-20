@@ -1,0 +1,2425 @@
+[
+  {
+    "text": "## Module Architecture\n\nAll model types in sentence-transformers use a modular architecture where functionality is composed of discrete, reusable modules.",
+    "metadata": {
+      "chunk_id": "2d2b28b70c4c-0000",
+      "source_file": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers\\Or_rank_documents_directly.md",
+      "filename": "Or_rank_documents_directly.md",
+      "file_extension": ".md",
+      "chunk_index": 0,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Module Architecture"
+      ],
+      "heading_text": "Module Architecture",
+      "token_count": 25,
+      "char_count": 154,
+      "start_char": 343,
+      "end_char": 497,
+      "semantic_score": 0.8,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.575,
+      "chunking_strategy": "hybrid_adaptive_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:46.058021",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 25,
+      "document_id": "2d2b28b70c4c",
+      "document_name": "Or_rank_documents_directly",
+      "source_path": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers\\Or_rank_documents_directly.md",
+      "source_filename": "Or_rank_documents_directly.md",
+      "source_directory": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers",
+      "relative_path": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers\\Or_rank_documents_directly.md",
+      "hierarchy_path": "Module Architecture",
+      "chunk_hash": "8a3fb4e0b157d7e2",
+      "content_digest": "8a3fb4e0b157d7e2",
+      "chunk_length": 154,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "sentence_transformer"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "architecture",
+          "module",
+          "all",
+          "model",
+          "types",
+          "sentence",
+          "transformers",
+          "use",
+          "modular",
+          "where",
+          "functionality",
+          "composed",
+          "discrete",
+          "reusable",
+          "modules"
+        ],
+        "term_weights": [
+          {
+            "term": "architecture",
+            "tf": 2,
+            "weight": 0.125
+          },
+          {
+            "term": "module",
+            "tf": 1,
+            "weight": 0.0625
+          },
+          {
+            "term": "all",
+            "tf": 1,
+            "weight": 0.0625
+          },
+          {
+            "term": "model",
+            "tf": 1,
+            "weight": 0.0625
+          },
+          {
+            "term": "types",
+            "tf": 1,
+            "weight": 0.0625
+          },
+          {
+            "term": "sentence",
+            "tf": 1,
+            "weight": 0.0625
+          },
+          {
+            "term": "transformers",
+            "tf": 1,
+            "weight": 0.0625
+          },
+          {
+            "term": "use",
+            "tf": 1,
+            "weight": 0.0625
+          },
+          {
+            "term": "modular",
+            "tf": 1,
+            "weight": 0.0625
+          },
+          {
+            "term": "where",
+            "tf": 1,
+            "weight": 0.0625
+          },
+          {
+            "term": "functionality",
+            "tf": 1,
+            "weight": 0.0625
+          },
+          {
+            "term": "composed",
+            "tf": 1,
+            "weight": 0.0625
+          },
+          {
+            "term": "discrete",
+            "tf": 1,
+            "weight": 0.0625
+          },
+          {
+            "term": "reusable",
+            "tf": 1,
+            "weight": 0.0625
+          },
+          {
+            "term": "modules",
+            "tf": 1,
+            "weight": 0.0625
+          }
+        ],
+        "unique_terms": 15,
+        "total_terms": 16
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Module Architecture",
+        "all",
+        "architecture",
+        "model",
+        "modular",
+        "module",
+        "sentence",
+        "transformers",
+        "types",
+        "use",
+        "where"
+      ],
+      "collection_name": "Sentence_Transformer"
+    },
+    "advanced_scores": {
+      "semantic": 0.8,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.575,
+      "overall": 0.7583333333333333
+    }
+  },
+  {
+    "text": "### Router Module for Asymmetric Architectures  The `Router` module enables asymmetric architectures where queries and documents follow different processing paths: ```mermaid graph TB     subgraph \"Router Architecture\"         Input[\"Input + Task\"]         Router[\"Router Module\"]         QueryPath[\"Query Submodules\"]         DocumentPath[\"Document Submodules\"]         Output[\"Task-specific Output\"]     end          Input --> Router     Router -->|task=\"query\"| QueryPath     Router -->|task=\"document\"| DocumentPath     QueryPath --> Output     DocumentPath --> Output ``` This enables models like the inference-free SPLADE variants where queries use only necessary tokens while documents use expanded representations. **Sources:** [sentence_transformers/models/Transformer.py:36-58](), [sentence_transformers/models/Pooling.py:9-41](), [sentence_transformers/models/Router.py](), [tests/sparse_encoder/test_sparse_encoder.py:171-196]()",
+    "metadata": {
+      "chunk_id": "2d2b28b70c4c-0002",
+      "source_file": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers\\Or_rank_documents_directly.md",
+      "filename": "Or_rank_documents_directly.md",
+      "file_extension": ".md",
+      "chunk_index": 2,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Router Module for Asymmetric Architectures"
+      ],
+      "heading_text": "Router Module for Asymmetric Architectures",
+      "token_count": 188,
+      "char_count": 940,
+      "start_char": 1509,
+      "end_char": 2449,
+      "semantic_score": 0.7999999999999999,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5207692307692308,
+      "chunking_strategy": "hybrid_adaptive_structural",
+      "content_type": "code_block",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:46.061882",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 188,
+      "document_id": "2d2b28b70c4c",
+      "document_name": "Or_rank_documents_directly",
+      "source_path": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers\\Or_rank_documents_directly.md",
+      "source_filename": "Or_rank_documents_directly.md",
+      "source_directory": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers",
+      "relative_path": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers\\Or_rank_documents_directly.md",
+      "hierarchy_path": "Router Module for Asymmetric Architectures",
+      "chunk_hash": "13f24602902beed1",
+      "content_digest": "13f24602902beed1",
+      "chunk_length": 940,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "sentence_transformer"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "router",
+          "task",
+          "output",
+          "models",
+          "module",
+          "input",
+          "querypath",
+          "documentpath",
+          "sentence",
+          "transformers",
+          "asymmetric",
+          "architectures",
+          "the",
+          "enables",
+          "where",
+          "queries",
+          "documents",
+          "query",
+          "submodules",
+          "document"
+        ],
+        "term_weights": [
+          {
+            "term": "router",
+            "tf": 9,
+            "weight": 0.09375
+          },
+          {
+            "term": "task",
+            "tf": 4,
+            "weight": 0.041667
+          },
+          {
+            "term": "output",
+            "tf": 4,
+            "weight": 0.041667
+          },
+          {
+            "term": "models",
+            "tf": 4,
+            "weight": 0.041667
+          },
+          {
+            "term": "module",
+            "tf": 3,
+            "weight": 0.03125
+          },
+          {
+            "term": "input",
+            "tf": 3,
+            "weight": 0.03125
+          },
+          {
+            "term": "querypath",
+            "tf": 3,
+            "weight": 0.03125
+          },
+          {
+            "term": "documentpath",
+            "tf": 3,
+            "weight": 0.03125
+          },
+          {
+            "term": "sentence",
+            "tf": 3,
+            "weight": 0.03125
+          },
+          {
+            "term": "transformers",
+            "tf": 3,
+            "weight": 0.03125
+          },
+          {
+            "term": "asymmetric",
+            "tf": 2,
+            "weight": 0.020833
+          },
+          {
+            "term": "architectures",
+            "tf": 2,
+            "weight": 0.020833
+          },
+          {
+            "term": "the",
+            "tf": 2,
+            "weight": 0.020833
+          },
+          {
+            "term": "enables",
+            "tf": 2,
+            "weight": 0.020833
+          },
+          {
+            "term": "where",
+            "tf": 2,
+            "weight": 0.020833
+          },
+          {
+            "term": "queries",
+            "tf": 2,
+            "weight": 0.020833
+          },
+          {
+            "term": "documents",
+            "tf": 2,
+            "weight": 0.020833
+          },
+          {
+            "term": "query",
+            "tf": 2,
+            "weight": 0.020833
+          },
+          {
+            "term": "submodules",
+            "tf": 2,
+            "weight": 0.020833
+          },
+          {
+            "term": "document",
+            "tf": 2,
+            "weight": 0.020833
+          }
+        ],
+        "unique_terms": 54,
+        "total_terms": 96
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Router Module for Asymmetric Architectures",
+        "documentpath",
+        "input",
+        "models",
+        "module",
+        "output",
+        "querypath",
+        "router",
+        "sentence",
+        "task",
+        "transformers"
+      ],
+      "collection_name": "Sentence_Transformer"
+    },
+    "advanced_scores": {
+      "semantic": 0.7999999999999999,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5207692307692308,
+      "overall": 0.7402564102564102
+    }
+  },
+  {
+    "text": "### Backend Support  All three model types support multiple inference backends: - **PyTorch**: Full functionality, training support - **ONNX**: Optimized inference, 2-3x speedup - **OpenVINO**: Intel hardware optimization  **Sources:** [sentence_transformers/SentenceTransformer.py:408-414](), [sentence_transformers/cross_encoder/CrossEncoder.py:259-265](), [README.md:89-167](), [index.rst:12-13]()",
+    "metadata": {
+      "chunk_id": "2d2b28b70c4c-0005",
+      "source_file": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers\\Or_rank_documents_directly.md",
+      "filename": "Or_rank_documents_directly.md",
+      "file_extension": ".md",
+      "chunk_index": 5,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Backend Support"
+      ],
+      "heading_text": "Backend Support",
+      "token_count": 103,
+      "char_count": 400,
+      "start_char": 3273,
+      "end_char": 3673,
+      "semantic_score": 0.7,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5536363636363636,
+      "chunking_strategy": "hybrid_adaptive_structural",
+      "content_type": "code_block",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:46.063997",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 103,
+      "document_id": "2d2b28b70c4c",
+      "document_name": "Or_rank_documents_directly",
+      "source_path": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers\\Or_rank_documents_directly.md",
+      "source_filename": "Or_rank_documents_directly.md",
+      "source_directory": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers",
+      "relative_path": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers\\Or_rank_documents_directly.md",
+      "hierarchy_path": "Backend Support",
+      "chunk_hash": "a77251fe6e313616",
+      "content_digest": "a77251fe6e313616",
+      "chunk_length": 400,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "sentence_transformer"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "support",
+          "inference",
+          "sentence",
+          "transformers",
+          "backend",
+          "all",
+          "three",
+          "model",
+          "types",
+          "multiple",
+          "backends",
+          "pytorch",
+          "full",
+          "functionality",
+          "training",
+          "onnx",
+          "optimized",
+          "speedup",
+          "openvino",
+          "intel"
+        ],
+        "term_weights": [
+          {
+            "term": "support",
+            "tf": 3,
+            "weight": 0.075
+          },
+          {
+            "term": "inference",
+            "tf": 2,
+            "weight": 0.05
+          },
+          {
+            "term": "sentence",
+            "tf": 2,
+            "weight": 0.05
+          },
+          {
+            "term": "transformers",
+            "tf": 2,
+            "weight": 0.05
+          },
+          {
+            "term": "backend",
+            "tf": 1,
+            "weight": 0.025
+          },
+          {
+            "term": "all",
+            "tf": 1,
+            "weight": 0.025
+          },
+          {
+            "term": "three",
+            "tf": 1,
+            "weight": 0.025
+          },
+          {
+            "term": "model",
+            "tf": 1,
+            "weight": 0.025
+          },
+          {
+            "term": "types",
+            "tf": 1,
+            "weight": 0.025
+          },
+          {
+            "term": "multiple",
+            "tf": 1,
+            "weight": 0.025
+          },
+          {
+            "term": "backends",
+            "tf": 1,
+            "weight": 0.025
+          },
+          {
+            "term": "pytorch",
+            "tf": 1,
+            "weight": 0.025
+          },
+          {
+            "term": "full",
+            "tf": 1,
+            "weight": 0.025
+          },
+          {
+            "term": "functionality",
+            "tf": 1,
+            "weight": 0.025
+          },
+          {
+            "term": "training",
+            "tf": 1,
+            "weight": 0.025
+          },
+          {
+            "term": "onnx",
+            "tf": 1,
+            "weight": 0.025
+          },
+          {
+            "term": "optimized",
+            "tf": 1,
+            "weight": 0.025
+          },
+          {
+            "term": "speedup",
+            "tf": 1,
+            "weight": 0.025
+          },
+          {
+            "term": "openvino",
+            "tf": 1,
+            "weight": 0.025
+          },
+          {
+            "term": "intel",
+            "tf": 1,
+            "weight": 0.025
+          }
+        ],
+        "unique_terms": 35,
+        "total_terms": 40
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Backend Support",
+        "all",
+        "backend",
+        "inference",
+        "model",
+        "multiple",
+        "sentence",
+        "support",
+        "three",
+        "transformers",
+        "types"
+      ],
+      "collection_name": "Sentence_Transformer"
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5536363636363636,
+      "overall": 0.7178787878787878
+    }
+  },
+  {
+    "text": "# Module Architecture\n\n\n\n\nThis page details the modular building blocks that compose sentence transformer models. The sentence-transformers library uses a sequential pipeline architecture where modules are chained together to transform input text into final embeddings or representations.",
+    "metadata": {
+      "chunk_id": "2d2b28b70c4c-0006",
+      "source_file": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers\\Or_rank_documents_directly.md",
+      "filename": "Or_rank_documents_directly.md",
+      "file_extension": ".md",
+      "chunk_index": 6,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Module Architecture"
+      ],
+      "heading_text": "Module Architecture",
+      "token_count": 42,
+      "char_count": 288,
+      "start_char": 3675,
+      "end_char": 3963,
+      "semantic_score": 0.7999999999999999,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5737837837837838,
+      "chunking_strategy": "hybrid_adaptive_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:46.064309",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 42,
+      "document_id": "2d2b28b70c4c",
+      "document_name": "Or_rank_documents_directly",
+      "source_path": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers\\Or_rank_documents_directly.md",
+      "source_filename": "Or_rank_documents_directly.md",
+      "source_directory": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers",
+      "relative_path": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers\\Or_rank_documents_directly.md",
+      "hierarchy_path": "Module Architecture",
+      "chunk_hash": "8d273b3a1bbfc496",
+      "content_digest": "8d273b3a1bbfc496",
+      "chunk_length": 288,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "sentence_transformer"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "architecture",
+          "the",
+          "sentence",
+          "module",
+          "this",
+          "page",
+          "details",
+          "modular",
+          "building",
+          "blocks",
+          "that",
+          "compose",
+          "transformer",
+          "models",
+          "transformers",
+          "library",
+          "uses",
+          "sequential",
+          "pipeline",
+          "where"
+        ],
+        "term_weights": [
+          {
+            "term": "architecture",
+            "tf": 2,
+            "weight": 0.058824
+          },
+          {
+            "term": "the",
+            "tf": 2,
+            "weight": 0.058824
+          },
+          {
+            "term": "sentence",
+            "tf": 2,
+            "weight": 0.058824
+          },
+          {
+            "term": "module",
+            "tf": 1,
+            "weight": 0.029412
+          },
+          {
+            "term": "this",
+            "tf": 1,
+            "weight": 0.029412
+          },
+          {
+            "term": "page",
+            "tf": 1,
+            "weight": 0.029412
+          },
+          {
+            "term": "details",
+            "tf": 1,
+            "weight": 0.029412
+          },
+          {
+            "term": "modular",
+            "tf": 1,
+            "weight": 0.029412
+          },
+          {
+            "term": "building",
+            "tf": 1,
+            "weight": 0.029412
+          },
+          {
+            "term": "blocks",
+            "tf": 1,
+            "weight": 0.029412
+          },
+          {
+            "term": "that",
+            "tf": 1,
+            "weight": 0.029412
+          },
+          {
+            "term": "compose",
+            "tf": 1,
+            "weight": 0.029412
+          },
+          {
+            "term": "transformer",
+            "tf": 1,
+            "weight": 0.029412
+          },
+          {
+            "term": "models",
+            "tf": 1,
+            "weight": 0.029412
+          },
+          {
+            "term": "transformers",
+            "tf": 1,
+            "weight": 0.029412
+          },
+          {
+            "term": "library",
+            "tf": 1,
+            "weight": 0.029412
+          },
+          {
+            "term": "uses",
+            "tf": 1,
+            "weight": 0.029412
+          },
+          {
+            "term": "sequential",
+            "tf": 1,
+            "weight": 0.029412
+          },
+          {
+            "term": "pipeline",
+            "tf": 1,
+            "weight": 0.029412
+          },
+          {
+            "term": "where",
+            "tf": 1,
+            "weight": 0.029412
+          }
+        ],
+        "unique_terms": 31,
+        "total_terms": 34
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Module Architecture",
+        "architecture",
+        "blocks",
+        "building",
+        "details",
+        "modular",
+        "module",
+        "page",
+        "sentence",
+        "the",
+        "this"
+      ],
+      "collection_name": "Sentence_Transformer"
+    },
+    "advanced_scores": {
+      "semantic": 0.7999999999999999,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5737837837837838,
+      "overall": 0.7579279279279278
+    }
+  },
+  {
+    "text": "## Overview of Modular Design\n\nThe sentence-transformers library implements a modular architecture where models are composed of sequential modules. Each module performs a specific transformation on input features, passing the result to the next module in the pipeline.",
+    "metadata": {
+      "chunk_id": "2d2b28b70c4c-0007",
+      "source_file": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers\\Or_rank_documents_directly.md",
+      "filename": "Or_rank_documents_directly.md",
+      "file_extension": ".md",
+      "chunk_index": 7,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Overview of Modular Design"
+      ],
+      "heading_text": "Overview of Modular Design",
+      "token_count": 44,
+      "char_count": 268,
+      "start_char": 3965,
+      "end_char": 4233,
+      "semantic_score": 0.7999999999999999,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5347368421052632,
+      "chunking_strategy": "hybrid_adaptive_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:46.064476",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 44,
+      "document_id": "2d2b28b70c4c",
+      "document_name": "Or_rank_documents_directly",
+      "source_path": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers\\Or_rank_documents_directly.md",
+      "source_filename": "Or_rank_documents_directly.md",
+      "source_directory": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers",
+      "relative_path": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers\\Or_rank_documents_directly.md",
+      "hierarchy_path": "Overview of Modular Design",
+      "chunk_hash": "8634d9b2349e4f97",
+      "content_digest": "8634d9b2349e4f97",
+      "chunk_length": 268,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "sentence_transformer"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "the",
+          "modular",
+          "module",
+          "overview",
+          "design",
+          "sentence",
+          "transformers",
+          "library",
+          "implements",
+          "architecture",
+          "where",
+          "models",
+          "are",
+          "composed",
+          "sequential",
+          "modules",
+          "each",
+          "performs",
+          "specific",
+          "transformation"
+        ],
+        "term_weights": [
+          {
+            "term": "the",
+            "tf": 4,
+            "weight": 0.129032
+          },
+          {
+            "term": "modular",
+            "tf": 2,
+            "weight": 0.064516
+          },
+          {
+            "term": "module",
+            "tf": 2,
+            "weight": 0.064516
+          },
+          {
+            "term": "overview",
+            "tf": 1,
+            "weight": 0.032258
+          },
+          {
+            "term": "design",
+            "tf": 1,
+            "weight": 0.032258
+          },
+          {
+            "term": "sentence",
+            "tf": 1,
+            "weight": 0.032258
+          },
+          {
+            "term": "transformers",
+            "tf": 1,
+            "weight": 0.032258
+          },
+          {
+            "term": "library",
+            "tf": 1,
+            "weight": 0.032258
+          },
+          {
+            "term": "implements",
+            "tf": 1,
+            "weight": 0.032258
+          },
+          {
+            "term": "architecture",
+            "tf": 1,
+            "weight": 0.032258
+          },
+          {
+            "term": "where",
+            "tf": 1,
+            "weight": 0.032258
+          },
+          {
+            "term": "models",
+            "tf": 1,
+            "weight": 0.032258
+          },
+          {
+            "term": "are",
+            "tf": 1,
+            "weight": 0.032258
+          },
+          {
+            "term": "composed",
+            "tf": 1,
+            "weight": 0.032258
+          },
+          {
+            "term": "sequential",
+            "tf": 1,
+            "weight": 0.032258
+          },
+          {
+            "term": "modules",
+            "tf": 1,
+            "weight": 0.032258
+          },
+          {
+            "term": "each",
+            "tf": 1,
+            "weight": 0.032258
+          },
+          {
+            "term": "performs",
+            "tf": 1,
+            "weight": 0.032258
+          },
+          {
+            "term": "specific",
+            "tf": 1,
+            "weight": 0.032258
+          },
+          {
+            "term": "transformation",
+            "tf": 1,
+            "weight": 0.032258
+          }
+        ],
+        "unique_terms": 26,
+        "total_terms": 31
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Overview of Modular Design",
+        "architecture",
+        "design",
+        "implements",
+        "library",
+        "modular",
+        "module",
+        "overview",
+        "sentence",
+        "the",
+        "transformers"
+      ],
+      "collection_name": "Sentence_Transformer"
+    },
+    "advanced_scores": {
+      "semantic": 0.7999999999999999,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5347368421052632,
+      "overall": 0.7449122807017542
+    }
+  },
+  {
+    "text": "#### Core Model Architecture ```mermaid graph LR     Input[\"Input Text\"] --> M1[\"Module 1<br/>(InputModule)\"]     M1 --> M2[\"Module 2<br/>(Module)\"]     M2 --> M3[\"Module 3<br/>(Module)\"]     M3 --> Output[\"Final Output\"]          subgraph \"Sequential Pipeline\"         M1         M2         M3     end ``` The core models inherit from `nn.Sequential` and store modules in an ordered collection:  - **`SentenceTransformer`**: Inherits from `nn.Sequential`, produces dense embeddings - **`SparseEncoder`**: Inherits from `SentenceTransformer`, produces sparse embeddings   - **`CrossEncoder`**: Separate architecture (`nn.Module`), scores text pairs directly  Sources: [sentence_transformers/SentenceTransformer.py:61](), [sentence_transformers/sparse_encoder/SparseEncoder.py:27](), [sentence_transformers/cross_encoder/CrossEncoder.py:48]()",
+    "metadata": {
+      "chunk_id": "2d2b28b70c4c-0008",
+      "source_file": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers\\Or_rank_documents_directly.md",
+      "filename": "Or_rank_documents_directly.md",
+      "file_extension": ".md",
+      "chunk_index": 8,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Core Model Architecture"
+      ],
+      "heading_text": "Core Model Architecture",
+      "token_count": 201,
+      "char_count": 841,
+      "start_char": 4235,
+      "end_char": 5076,
+      "semantic_score": 0.7999999999999999,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5291891891891891,
+      "chunking_strategy": "hybrid_adaptive_structural",
+      "content_type": "code_block",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:46.066145",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 201,
+      "document_id": "2d2b28b70c4c",
+      "document_name": "Or_rank_documents_directly",
+      "source_path": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers\\Or_rank_documents_directly.md",
+      "source_filename": "Or_rank_documents_directly.md",
+      "source_directory": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers",
+      "relative_path": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers\\Or_rank_documents_directly.md",
+      "hierarchy_path": "Core Model Architecture",
+      "chunk_hash": "4aad01a819ce9a55",
+      "content_digest": "4aad01a819ce9a55",
+      "chunk_length": 841,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "sentence_transformer"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "module",
+          "sequential",
+          "from",
+          "sentencetransformer",
+          "sentence",
+          "transformers",
+          "core",
+          "architecture",
+          "input",
+          "text",
+          "output",
+          "inherits",
+          "produces",
+          "embeddings",
+          "sparseencoder",
+          "sparse",
+          "crossencoder",
+          "encoder",
+          "model",
+          "mermaid"
+        ],
+        "term_weights": [
+          {
+            "term": "module",
+            "tf": 6,
+            "weight": 0.088235
+          },
+          {
+            "term": "sequential",
+            "tf": 3,
+            "weight": 0.044118
+          },
+          {
+            "term": "from",
+            "tf": 3,
+            "weight": 0.044118
+          },
+          {
+            "term": "sentencetransformer",
+            "tf": 3,
+            "weight": 0.044118
+          },
+          {
+            "term": "sentence",
+            "tf": 3,
+            "weight": 0.044118
+          },
+          {
+            "term": "transformers",
+            "tf": 3,
+            "weight": 0.044118
+          },
+          {
+            "term": "core",
+            "tf": 2,
+            "weight": 0.029412
+          },
+          {
+            "term": "architecture",
+            "tf": 2,
+            "weight": 0.029412
+          },
+          {
+            "term": "input",
+            "tf": 2,
+            "weight": 0.029412
+          },
+          {
+            "term": "text",
+            "tf": 2,
+            "weight": 0.029412
+          },
+          {
+            "term": "output",
+            "tf": 2,
+            "weight": 0.029412
+          },
+          {
+            "term": "inherits",
+            "tf": 2,
+            "weight": 0.029412
+          },
+          {
+            "term": "produces",
+            "tf": 2,
+            "weight": 0.029412
+          },
+          {
+            "term": "embeddings",
+            "tf": 2,
+            "weight": 0.029412
+          },
+          {
+            "term": "sparseencoder",
+            "tf": 2,
+            "weight": 0.029412
+          },
+          {
+            "term": "sparse",
+            "tf": 2,
+            "weight": 0.029412
+          },
+          {
+            "term": "crossencoder",
+            "tf": 2,
+            "weight": 0.029412
+          },
+          {
+            "term": "encoder",
+            "tf": 2,
+            "weight": 0.029412
+          },
+          {
+            "term": "model",
+            "tf": 1,
+            "weight": 0.014706
+          },
+          {
+            "term": "mermaid",
+            "tf": 1,
+            "weight": 0.014706
+          }
+        ],
+        "unique_terms": 41,
+        "total_terms": 68
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Core Model Architecture",
+        "architecture",
+        "core",
+        "from",
+        "input",
+        "module",
+        "sentence",
+        "sentencetransformer",
+        "sequential",
+        "text",
+        "transformers"
+      ],
+      "collection_name": "Sentence_Transformer"
+    },
+    "advanced_scores": {
+      "semantic": 0.7999999999999999,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5291891891891891,
+      "overall": 0.7430630630630629
+    }
+  },
+  {
+    "text": "## Module Type Hierarchy\n\nThe library defines two main types of modules that form the building blocks of all models:",
+    "metadata": {
+      "chunk_id": "2d2b28b70c4c-0009",
+      "source_file": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers\\Or_rank_documents_directly.md",
+      "filename": "Or_rank_documents_directly.md",
+      "file_extension": ".md",
+      "chunk_index": 9,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Module Type Hierarchy"
+      ],
+      "heading_text": "Module Type Hierarchy",
+      "token_count": 23,
+      "char_count": 116,
+      "start_char": 5080,
+      "end_char": 5196,
+      "semantic_score": 0.8,
+      "structural_score": 0.7,
+      "retrieval_quality": 0.56,
+      "chunking_strategy": "hybrid_adaptive_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:46.066522",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 23,
+      "document_id": "2d2b28b70c4c",
+      "document_name": "Or_rank_documents_directly",
+      "source_path": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers\\Or_rank_documents_directly.md",
+      "source_filename": "Or_rank_documents_directly.md",
+      "source_directory": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers",
+      "relative_path": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers\\Or_rank_documents_directly.md",
+      "hierarchy_path": "Module Type Hierarchy",
+      "chunk_hash": "d436fa0701a3e5b5",
+      "content_digest": "d436fa0701a3e5b5",
+      "chunk_length": 116,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "sentence_transformer"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "the",
+          "module",
+          "type",
+          "hierarchy",
+          "library",
+          "defines",
+          "two",
+          "main",
+          "types",
+          "modules",
+          "that",
+          "form",
+          "building",
+          "blocks",
+          "all",
+          "models"
+        ],
+        "term_weights": [
+          {
+            "term": "the",
+            "tf": 2,
+            "weight": 0.117647
+          },
+          {
+            "term": "module",
+            "tf": 1,
+            "weight": 0.058824
+          },
+          {
+            "term": "type",
+            "tf": 1,
+            "weight": 0.058824
+          },
+          {
+            "term": "hierarchy",
+            "tf": 1,
+            "weight": 0.058824
+          },
+          {
+            "term": "library",
+            "tf": 1,
+            "weight": 0.058824
+          },
+          {
+            "term": "defines",
+            "tf": 1,
+            "weight": 0.058824
+          },
+          {
+            "term": "two",
+            "tf": 1,
+            "weight": 0.058824
+          },
+          {
+            "term": "main",
+            "tf": 1,
+            "weight": 0.058824
+          },
+          {
+            "term": "types",
+            "tf": 1,
+            "weight": 0.058824
+          },
+          {
+            "term": "modules",
+            "tf": 1,
+            "weight": 0.058824
+          },
+          {
+            "term": "that",
+            "tf": 1,
+            "weight": 0.058824
+          },
+          {
+            "term": "form",
+            "tf": 1,
+            "weight": 0.058824
+          },
+          {
+            "term": "building",
+            "tf": 1,
+            "weight": 0.058824
+          },
+          {
+            "term": "blocks",
+            "tf": 1,
+            "weight": 0.058824
+          },
+          {
+            "term": "all",
+            "tf": 1,
+            "weight": 0.058824
+          },
+          {
+            "term": "models",
+            "tf": 1,
+            "weight": 0.058824
+          }
+        ],
+        "unique_terms": 16,
+        "total_terms": 17
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Module Type Hierarchy",
+        "defines",
+        "hierarchy",
+        "library",
+        "main",
+        "module",
+        "modules",
+        "the",
+        "two",
+        "type",
+        "types"
+      ],
+      "collection_name": "Sentence_Transformer"
+    },
+    "advanced_scores": {
+      "semantic": 0.8,
+      "structural": 0.7,
+      "retrieval_quality": 0.56,
+      "overall": 0.6866666666666666
+    }
+  },
+  {
+    "text": "#### Module Types  - **`Module`**: Base class defining `forward()`, `save()`, `load()` interface - **`InputModule`**: Subclass adding `tokenize()` capability (must be first in pipeline) - **Dense modules**: `Transformer`, `Pooling`, `Normalize`, `Dense`  - **Sparse modules**: `MLMTransformer`, `SpladePooling`, `SparseStaticEmbedding` - **Routing modules**: `Router` for asymmetric architectures  Sources: [sentence_transformers/models/Module.py:33-89](), [sentence_transformers/models/InputModule.py:13-93](), [sentence_transformers/models/Transformer.py:36](), [sentence_transformers/models/Pooling.py:9](), [sentence_transformers/models/Router.py:22]()",
+    "metadata": {
+      "chunk_id": "2d2b28b70c4c-0011",
+      "source_file": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers\\Or_rank_documents_directly.md",
+      "filename": "Or_rank_documents_directly.md",
+      "file_extension": ".md",
+      "chunk_index": 11,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Module Types"
+      ],
+      "heading_text": "Module Types",
+      "token_count": 164,
+      "char_count": 656,
+      "start_char": 6351,
+      "end_char": 7007,
+      "semantic_score": 0.7999999999999999,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.553265306122449,
+      "chunking_strategy": "hybrid_adaptive_structural",
+      "content_type": "code_block",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:46.069911",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 164,
+      "document_id": "2d2b28b70c4c",
+      "document_name": "Or_rank_documents_directly",
+      "source_path": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers\\Or_rank_documents_directly.md",
+      "source_filename": "Or_rank_documents_directly.md",
+      "source_directory": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers",
+      "relative_path": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers\\Or_rank_documents_directly.md",
+      "hierarchy_path": "Module Types",
+      "chunk_hash": "e6e71f1bc4aac4e2",
+      "content_digest": "e6e71f1bc4aac4e2",
+      "chunk_length": 656,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "sentence_transformer"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "sentence",
+          "transformers",
+          "models",
+          "module",
+          "modules",
+          "inputmodule",
+          "dense",
+          "transformer",
+          "pooling",
+          "router",
+          "types",
+          "base",
+          "class",
+          "defining",
+          "forward",
+          "save",
+          "load",
+          "interface",
+          "subclass",
+          "adding"
+        ],
+        "term_weights": [
+          {
+            "term": "sentence",
+            "tf": 5,
+            "weight": 0.089286
+          },
+          {
+            "term": "transformers",
+            "tf": 5,
+            "weight": 0.089286
+          },
+          {
+            "term": "models",
+            "tf": 5,
+            "weight": 0.089286
+          },
+          {
+            "term": "module",
+            "tf": 3,
+            "weight": 0.053571
+          },
+          {
+            "term": "modules",
+            "tf": 3,
+            "weight": 0.053571
+          },
+          {
+            "term": "inputmodule",
+            "tf": 2,
+            "weight": 0.035714
+          },
+          {
+            "term": "dense",
+            "tf": 2,
+            "weight": 0.035714
+          },
+          {
+            "term": "transformer",
+            "tf": 2,
+            "weight": 0.035714
+          },
+          {
+            "term": "pooling",
+            "tf": 2,
+            "weight": 0.035714
+          },
+          {
+            "term": "router",
+            "tf": 2,
+            "weight": 0.035714
+          },
+          {
+            "term": "types",
+            "tf": 1,
+            "weight": 0.017857
+          },
+          {
+            "term": "base",
+            "tf": 1,
+            "weight": 0.017857
+          },
+          {
+            "term": "class",
+            "tf": 1,
+            "weight": 0.017857
+          },
+          {
+            "term": "defining",
+            "tf": 1,
+            "weight": 0.017857
+          },
+          {
+            "term": "forward",
+            "tf": 1,
+            "weight": 0.017857
+          },
+          {
+            "term": "save",
+            "tf": 1,
+            "weight": 0.017857
+          },
+          {
+            "term": "load",
+            "tf": 1,
+            "weight": 0.017857
+          },
+          {
+            "term": "interface",
+            "tf": 1,
+            "weight": 0.017857
+          },
+          {
+            "term": "subclass",
+            "tf": 1,
+            "weight": 0.017857
+          },
+          {
+            "term": "adding",
+            "tf": 1,
+            "weight": 0.017857
+          }
+        ],
+        "unique_terms": 35,
+        "total_terms": 56
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Module Types",
+        "dense",
+        "inputmodule",
+        "models",
+        "module",
+        "modules",
+        "pooling",
+        "router",
+        "sentence",
+        "transformer",
+        "transformers"
+      ],
+      "collection_name": "Sentence_Transformer"
+    },
+    "advanced_scores": {
+      "semantic": 0.7999999999999999,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.553265306122449,
+      "overall": 0.7510884353741495
+    }
+  },
+  {
+    "text": "### Transformer Module  The `Transformer` module is the most common input module, wrapping Hugging Face transformer models: ```mermaid graph TD     subgraph \"Transformer Module\"         Input[\"Input Texts\"] --> Tokenizer[\"AutoTokenizer\"]         Tokenizer --> Features[\"TokenizedFeatures<br/>{input_ids, attention_mask}\"]         Features --> AutoModel[\"AutoModel<br/>(BERT, RoBERTa, etc.)\"]         AutoModel --> TokenEmb[\"token_embeddings\"]         TokenEmb --> Output[\"{token_embeddings,<br/>attention_mask,<br/>all_layer_embeddings?}\"]     end ``` Key attributes: - `auto_model`: The wrapped Hugging Face model - `tokenizer`: The associated tokenizer - `max_seq_length`: Maximum sequence length - `backend`: Inference backend (`torch`, `onnx`, `openvino`)  Sources: [sentence_transformers/models/Transformer.py:37-646]()",
+    "metadata": {
+      "chunk_id": "2d2b28b70c4c-0013",
+      "source_file": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers\\Or_rank_documents_directly.md",
+      "filename": "Or_rank_documents_directly.md",
+      "file_extension": ".md",
+      "chunk_index": 13,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Transformer Module"
+      ],
+      "heading_text": "Transformer Module",
+      "token_count": 189,
+      "char_count": 824,
+      "start_char": 7031,
+      "end_char": 7855,
+      "semantic_score": 0.7999999999999999,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5275,
+      "chunking_strategy": "hybrid_adaptive_structural",
+      "content_type": "code_block",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:46.071809",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 189,
+      "document_id": "2d2b28b70c4c",
+      "document_name": "Or_rank_documents_directly",
+      "source_path": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers\\Or_rank_documents_directly.md",
+      "source_filename": "Or_rank_documents_directly.md",
+      "source_directory": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers",
+      "relative_path": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers\\Or_rank_documents_directly.md",
+      "hierarchy_path": "Transformer Module",
+      "chunk_hash": "21f31fd2a1dc2854",
+      "content_digest": "21f31fd2a1dc2854",
+      "chunk_length": 824,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "sentence_transformer"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "transformer",
+          "module",
+          "the",
+          "input",
+          "tokenizer",
+          "automodel",
+          "embeddings",
+          "hugging",
+          "face",
+          "models",
+          "features",
+          "attention",
+          "mask",
+          "tokenemb",
+          "token",
+          "model",
+          "length",
+          "backend",
+          "most",
+          "common"
+        ],
+        "term_weights": [
+          {
+            "term": "transformer",
+            "tf": 5,
+            "weight": 0.060241
+          },
+          {
+            "term": "module",
+            "tf": 4,
+            "weight": 0.048193
+          },
+          {
+            "term": "the",
+            "tf": 4,
+            "weight": 0.048193
+          },
+          {
+            "term": "input",
+            "tf": 4,
+            "weight": 0.048193
+          },
+          {
+            "term": "tokenizer",
+            "tf": 4,
+            "weight": 0.048193
+          },
+          {
+            "term": "automodel",
+            "tf": 3,
+            "weight": 0.036145
+          },
+          {
+            "term": "embeddings",
+            "tf": 3,
+            "weight": 0.036145
+          },
+          {
+            "term": "hugging",
+            "tf": 2,
+            "weight": 0.024096
+          },
+          {
+            "term": "face",
+            "tf": 2,
+            "weight": 0.024096
+          },
+          {
+            "term": "models",
+            "tf": 2,
+            "weight": 0.024096
+          },
+          {
+            "term": "features",
+            "tf": 2,
+            "weight": 0.024096
+          },
+          {
+            "term": "attention",
+            "tf": 2,
+            "weight": 0.024096
+          },
+          {
+            "term": "mask",
+            "tf": 2,
+            "weight": 0.024096
+          },
+          {
+            "term": "tokenemb",
+            "tf": 2,
+            "weight": 0.024096
+          },
+          {
+            "term": "token",
+            "tf": 2,
+            "weight": 0.024096
+          },
+          {
+            "term": "model",
+            "tf": 2,
+            "weight": 0.024096
+          },
+          {
+            "term": "length",
+            "tf": 2,
+            "weight": 0.024096
+          },
+          {
+            "term": "backend",
+            "tf": 2,
+            "weight": 0.024096
+          },
+          {
+            "term": "most",
+            "tf": 1,
+            "weight": 0.012048
+          },
+          {
+            "term": "common",
+            "tf": 1,
+            "weight": 0.012048
+          }
+        ],
+        "unique_terms": 52,
+        "total_terms": 83
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Transformer Module",
+        "automodel",
+        "embeddings",
+        "face",
+        "hugging",
+        "input",
+        "models",
+        "module",
+        "the",
+        "tokenizer",
+        "transformer"
+      ],
+      "collection_name": "Sentence_Transformer"
+    },
+    "advanced_scores": {
+      "semantic": 0.7999999999999999,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5275,
+      "overall": 0.7424999999999998
+    }
+  },
+  {
+    "text": "### Pooling Module  The `Pooling` module aggregates token embeddings into sentence embeddings: ```mermaid graph TD     Input[\"{token_embeddings,<br/>attention_mask}\"] --> Strategy[\"Pooling Strategy\"]          Strategy --> CLS[\"CLS Token<br/>pooling_mode_cls_token\"]     Strategy --> Mean[\"Mean Pooling<br/>pooling_mode_mean_tokens\"]      Strategy --> Max[\"Max Pooling<br/>pooling_mode_max_tokens\"]     Strategy --> Last[\"Last Token<br/>pooling_mode_lasttoken\"]     Strategy --> Weighted[\"Weighted Mean<br/>pooling_mode_weightedmean_tokens\"]          CLS --> Concat[\"Concatenate Outputs\"]     Mean --> Concat     Max --> Concat     Last --> Concat     Weighted --> Concat          Concat --> SentEmb[\"{sentence_embedding}\"] ``` Pooling strategies can be combined by setting multiple `pooling_mode_*` flags to `True`. Sources: [sentence_transformers/models/Pooling.py:9-248]()",
+    "metadata": {
+      "chunk_id": "2d2b28b70c4c-0014",
+      "source_file": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers\\Or_rank_documents_directly.md",
+      "filename": "Or_rank_documents_directly.md",
+      "file_extension": ".md",
+      "chunk_index": 14,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Pooling Module"
+      ],
+      "heading_text": "Pooling Module",
+      "token_count": 197,
+      "char_count": 874,
+      "start_char": 7859,
+      "end_char": 8733,
+      "semantic_score": 0.7999999999999999,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5036986301369862,
+      "chunking_strategy": "hybrid_adaptive_structural",
+      "content_type": "code_block",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:46.073772",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 197,
+      "document_id": "2d2b28b70c4c",
+      "document_name": "Or_rank_documents_directly",
+      "source_path": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers\\Or_rank_documents_directly.md",
+      "source_filename": "Or_rank_documents_directly.md",
+      "source_directory": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers",
+      "relative_path": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers\\Or_rank_documents_directly.md",
+      "hierarchy_path": "Pooling Module",
+      "chunk_hash": "84ae8a93b427603f",
+      "content_digest": "84ae8a93b427603f",
+      "chunk_length": 874,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "sentence_transformer"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "pooling",
+          "strategy",
+          "mode",
+          "concat",
+          "token",
+          "mean",
+          "cls",
+          "max",
+          "embeddings",
+          "sentence",
+          "tokens",
+          "last",
+          "weighted",
+          "module",
+          "the",
+          "aggregates",
+          "into",
+          "mermaid",
+          "graph",
+          "input"
+        ],
+        "term_weights": [
+          {
+            "term": "pooling",
+            "tf": 13,
+            "weight": 0.141304
+          },
+          {
+            "term": "strategy",
+            "tf": 7,
+            "weight": 0.076087
+          },
+          {
+            "term": "mode",
+            "tf": 6,
+            "weight": 0.065217
+          },
+          {
+            "term": "concat",
+            "tf": 6,
+            "weight": 0.065217
+          },
+          {
+            "term": "token",
+            "tf": 5,
+            "weight": 0.054348
+          },
+          {
+            "term": "mean",
+            "tf": 5,
+            "weight": 0.054348
+          },
+          {
+            "term": "cls",
+            "tf": 4,
+            "weight": 0.043478
+          },
+          {
+            "term": "max",
+            "tf": 4,
+            "weight": 0.043478
+          },
+          {
+            "term": "embeddings",
+            "tf": 3,
+            "weight": 0.032609
+          },
+          {
+            "term": "sentence",
+            "tf": 3,
+            "weight": 0.032609
+          },
+          {
+            "term": "tokens",
+            "tf": 3,
+            "weight": 0.032609
+          },
+          {
+            "term": "last",
+            "tf": 3,
+            "weight": 0.032609
+          },
+          {
+            "term": "weighted",
+            "tf": 3,
+            "weight": 0.032609
+          },
+          {
+            "term": "module",
+            "tf": 2,
+            "weight": 0.021739
+          },
+          {
+            "term": "the",
+            "tf": 1,
+            "weight": 0.01087
+          },
+          {
+            "term": "aggregates",
+            "tf": 1,
+            "weight": 0.01087
+          },
+          {
+            "term": "into",
+            "tf": 1,
+            "weight": 0.01087
+          },
+          {
+            "term": "mermaid",
+            "tf": 1,
+            "weight": 0.01087
+          },
+          {
+            "term": "graph",
+            "tf": 1,
+            "weight": 0.01087
+          },
+          {
+            "term": "input",
+            "tf": 1,
+            "weight": 0.01087
+          }
+        ],
+        "unique_terms": 39,
+        "total_terms": 92
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Pooling Module",
+        "cls",
+        "concat",
+        "embeddings",
+        "max",
+        "mean",
+        "mode",
+        "pooling",
+        "sentence",
+        "strategy",
+        "token"
+      ],
+      "collection_name": "Sentence_Transformer"
+    },
+    "advanced_scores": {
+      "semantic": 0.7999999999999999,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5036986301369862,
+      "overall": 0.7345662100456619
+    }
+  },
+  {
+    "text": "### Router Module\n\nThe `Router` module enables asymmetric architectures with different processing paths based on task type:",
+    "metadata": {
+      "chunk_id": "2d2b28b70c4c-0015",
+      "source_file": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers\\Or_rank_documents_directly.md",
+      "filename": "Or_rank_documents_directly.md",
+      "file_extension": ".md",
+      "chunk_index": 15,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Router Module"
+      ],
+      "heading_text": "Router Module",
+      "token_count": 21,
+      "char_count": 123,
+      "start_char": 8738,
+      "end_char": 8861,
+      "semantic_score": 0.8,
+      "structural_score": 0.7,
+      "retrieval_quality": 0.5723529411764706,
+      "chunking_strategy": "hybrid_adaptive_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:46.074241",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 21,
+      "document_id": "2d2b28b70c4c",
+      "document_name": "Or_rank_documents_directly",
+      "source_path": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers\\Or_rank_documents_directly.md",
+      "source_filename": "Or_rank_documents_directly.md",
+      "source_directory": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers",
+      "relative_path": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers\\Or_rank_documents_directly.md",
+      "hierarchy_path": "Router Module",
+      "chunk_hash": "eeef4af63d0d8acb",
+      "content_digest": "eeef4af63d0d8acb",
+      "chunk_length": 123,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "sentence_transformer"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "router",
+          "module",
+          "the",
+          "enables",
+          "asymmetric",
+          "architectures",
+          "with",
+          "different",
+          "processing",
+          "paths",
+          "based",
+          "task",
+          "type"
+        ],
+        "term_weights": [
+          {
+            "term": "router",
+            "tf": 2,
+            "weight": 0.133333
+          },
+          {
+            "term": "module",
+            "tf": 2,
+            "weight": 0.133333
+          },
+          {
+            "term": "the",
+            "tf": 1,
+            "weight": 0.066667
+          },
+          {
+            "term": "enables",
+            "tf": 1,
+            "weight": 0.066667
+          },
+          {
+            "term": "asymmetric",
+            "tf": 1,
+            "weight": 0.066667
+          },
+          {
+            "term": "architectures",
+            "tf": 1,
+            "weight": 0.066667
+          },
+          {
+            "term": "with",
+            "tf": 1,
+            "weight": 0.066667
+          },
+          {
+            "term": "different",
+            "tf": 1,
+            "weight": 0.066667
+          },
+          {
+            "term": "processing",
+            "tf": 1,
+            "weight": 0.066667
+          },
+          {
+            "term": "paths",
+            "tf": 1,
+            "weight": 0.066667
+          },
+          {
+            "term": "based",
+            "tf": 1,
+            "weight": 0.066667
+          },
+          {
+            "term": "task",
+            "tf": 1,
+            "weight": 0.066667
+          },
+          {
+            "term": "type",
+            "tf": 1,
+            "weight": 0.066667
+          }
+        ],
+        "unique_terms": 13,
+        "total_terms": 15
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Router Module",
+        "architectures",
+        "asymmetric",
+        "different",
+        "enables",
+        "module",
+        "paths",
+        "processing",
+        "router",
+        "the",
+        "with"
+      ],
+      "collection_name": "Sentence_Transformer"
+    },
+    "advanced_scores": {
+      "semantic": 0.8,
+      "structural": 0.7,
+      "retrieval_quality": 0.5723529411764706,
+      "overall": 0.6907843137254902
+    }
+  },
+  {
+    "text": "#### Router Configuration ```python",
+    "metadata": {
+      "chunk_id": "2d2b28b70c4c-0017",
+      "source_file": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers\\Or_rank_documents_directly.md",
+      "filename": "Or_rank_documents_directly.md",
+      "file_extension": ".md",
+      "chunk_index": 17,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Router Configuration"
+      ],
+      "heading_text": "Router Configuration",
+      "token_count": 5,
+      "char_count": 35,
+      "start_char": 9592,
+      "end_char": 9627,
+      "semantic_score": 0.8,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.59,
+      "chunking_strategy": "hybrid_adaptive_structural",
+      "content_type": "code_block",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:46.075739",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 5,
+      "document_id": "2d2b28b70c4c",
+      "document_name": "Or_rank_documents_directly",
+      "source_path": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers\\Or_rank_documents_directly.md",
+      "source_filename": "Or_rank_documents_directly.md",
+      "source_directory": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers",
+      "relative_path": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers\\Or_rank_documents_directly.md",
+      "hierarchy_path": "Router Configuration",
+      "chunk_hash": "d1658b3bb806d0a3",
+      "content_digest": "d1658b3bb806d0a3",
+      "chunk_length": 35,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "sentence_transformer"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "router",
+          "configuration",
+          "python"
+        ],
+        "term_weights": [
+          {
+            "term": "router",
+            "tf": 1,
+            "weight": 0.333333
+          },
+          {
+            "term": "configuration",
+            "tf": 1,
+            "weight": 0.333333
+          },
+          {
+            "term": "python",
+            "tf": 1,
+            "weight": 0.333333
+          }
+        ],
+        "unique_terms": 3,
+        "total_terms": 3
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Router Configuration",
+        "configuration",
+        "python",
+        "router"
+      ],
+      "collection_name": "Sentence_Transformer"
+    },
+    "advanced_scores": {
+      "semantic": 0.8,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.59,
+      "overall": 0.7633333333333333
+    }
+  }
+]

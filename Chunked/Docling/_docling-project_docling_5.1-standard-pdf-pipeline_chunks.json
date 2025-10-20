@@ -1,0 +1,3932 @@
+[
+  {
+    "text": "## Purpose and Scope\n\nThe `StandardPdfPipeline` implements a sequential, single-threaded processing pipeline for PDF documents that orchestrates five specialized model stages to extract and structure document content. This pipeline processes pages one batch at a time, applying OCR, layout analysis, table structure detection, and assembly operations in sequence.\n\nFor multi-threaded parallel processing with improved performance, see [Threaded PDF Pipeline](docling-project/docling/5.2-threaded-pdf-pipeline.md). For end-to-end vision-language model processing, see [VLM Pipeline](docling-project/docling/5.3-vlm-pipeline.md). For the base pipeline architecture and three-phase execution model, see [Base Pipeline Architecture](docling-project/docling/5.6-base-pipeline-architecture.md).\n\n**Sources:** [docling/pipeline/standard\\_pdf\\_pipeline.py1-243](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/standard_pdf_pipeline.py#L1-L243)\n\n---",
+    "metadata": {
+      "chunk_id": "6833f9500c24-0001",
+      "source_file": "Docs\\Docling\\_docling-project_docling_5.1-standard-pdf-pipeline.md",
+      "filename": "_docling-project_docling_5.1-standard-pdf-pipeline.md",
+      "file_extension": ".md",
+      "chunk_index": 1,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Purpose and Scope"
+      ],
+      "heading_text": "Purpose and Scope",
+      "token_count": 209,
+      "char_count": 966,
+      "start_char": 6803,
+      "end_char": 7769,
+      "semantic_score": 0.7,
+      "structural_score": 0.7999999999999998,
+      "retrieval_quality": 0.5285542168674698,
+      "chunking_strategy": "hierarchical_balanced_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:06.731941",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 209,
+      "document_id": "6833f9500c24",
+      "document_name": "_docling-project_docling_5.1-standard-pdf-pipeline",
+      "source_path": "Docs\\Docling\\_docling-project_docling_5.1-standard-pdf-pipeline.md",
+      "source_filename": "_docling-project_docling_5.1-standard-pdf-pipeline.md",
+      "source_directory": "Docs\\Docling",
+      "relative_path": "Docs\\Docling\\_docling-project_docling_5.1-standard-pdf-pipeline.md",
+      "hierarchy_path": "Purpose and Scope",
+      "chunk_hash": "f2b26b0ab8d4580e",
+      "content_digest": "f2b26b0ab8d4580e",
+      "chunk_length": 966,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "docling"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "pipeline",
+          "docling",
+          "pdf",
+          "and",
+          "threaded",
+          "for",
+          "project",
+          "processing",
+          "model",
+          "see",
+          "base",
+          "architecture",
+          "the",
+          "structure",
+          "end",
+          "vlm",
+          "standard",
+          "purpose",
+          "scope",
+          "standardpdfpipeline"
+        ],
+        "term_weights": [
+          {
+            "term": "pipeline",
+            "tf": 13,
+            "weight": 0.110169
+          },
+          {
+            "term": "docling",
+            "tf": 10,
+            "weight": 0.084746
+          },
+          {
+            "term": "pdf",
+            "tf": 5,
+            "weight": 0.042373
+          },
+          {
+            "term": "and",
+            "tf": 4,
+            "weight": 0.033898
+          },
+          {
+            "term": "threaded",
+            "tf": 4,
+            "weight": 0.033898
+          },
+          {
+            "term": "for",
+            "tf": 4,
+            "weight": 0.033898
+          },
+          {
+            "term": "project",
+            "tf": 4,
+            "weight": 0.033898
+          },
+          {
+            "term": "processing",
+            "tf": 3,
+            "weight": 0.025424
+          },
+          {
+            "term": "model",
+            "tf": 3,
+            "weight": 0.025424
+          },
+          {
+            "term": "see",
+            "tf": 3,
+            "weight": 0.025424
+          },
+          {
+            "term": "base",
+            "tf": 3,
+            "weight": 0.025424
+          },
+          {
+            "term": "architecture",
+            "tf": 3,
+            "weight": 0.025424
+          },
+          {
+            "term": "the",
+            "tf": 2,
+            "weight": 0.016949
+          },
+          {
+            "term": "structure",
+            "tf": 2,
+            "weight": 0.016949
+          },
+          {
+            "term": "end",
+            "tf": 2,
+            "weight": 0.016949
+          },
+          {
+            "term": "vlm",
+            "tf": 2,
+            "weight": 0.016949
+          },
+          {
+            "term": "standard",
+            "tf": 2,
+            "weight": 0.016949
+          },
+          {
+            "term": "purpose",
+            "tf": 1,
+            "weight": 0.008475
+          },
+          {
+            "term": "scope",
+            "tf": 1,
+            "weight": 0.008475
+          },
+          {
+            "term": "standardpdfpipeline",
+            "tf": 1,
+            "weight": 0.008475
+          }
+        ],
+        "unique_terms": 66,
+        "total_terms": 118
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Purpose and Scope",
+        "and",
+        "docling",
+        "for",
+        "model",
+        "pdf",
+        "pipeline",
+        "processing",
+        "project",
+        "see",
+        "threaded"
+      ],
+      "collection_name": "Docling"
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.7999999999999998,
+      "retrieval_quality": 0.5285542168674698,
+      "overall": 0.6761847389558232
+    }
+  },
+  {
+    "text": "### Pipeline Components  The pipeline initializes two model sequences during construction: ``` ``` The `build_pipe` processes pages sequentially through five stages ([standard\\_pdf\\_pipeline.py51-75](https://github.com/docling-project/docling/blob/f7244a43/standard_pdf_pipeline.py#L51-L75)), while the `enrichment_pipe` operates on individual document items after assembly ([standard\\_pdf\\_pipeline.py77-90](https://github.com/docling-project/docling/blob/f7244a43/standard_pdf_pipeline.py#L77-L90)). **Sources:** [docling/pipeline/standard\\_pdf\\_pipeline.py51-90](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/standard_pdf_pipeline.py#L51-L90) [docling/pipeline/base\\_pipeline.py135-177](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/base_pipeline.py#L135-L177)  ---",
+    "metadata": {
+      "chunk_id": "6833f9500c24-0004",
+      "source_file": "Docs\\Docling\\_docling-project_docling_5.1-standard-pdf-pipeline.md",
+      "filename": "_docling-project_docling_5.1-standard-pdf-pipeline.md",
+      "file_extension": ".md",
+      "chunk_index": 4,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Pipeline Components"
+      ],
+      "heading_text": "Pipeline Components",
+      "token_count": 207,
+      "char_count": 824,
+      "start_char": 8414,
+      "end_char": 9238,
+      "semantic_score": 0.6,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5575675675675675,
+      "chunking_strategy": "hierarchical_balanced_structural",
+      "content_type": "code_block",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:06.734386",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 207,
+      "document_id": "6833f9500c24",
+      "document_name": "_docling-project_docling_5.1-standard-pdf-pipeline",
+      "source_path": "Docs\\Docling\\_docling-project_docling_5.1-standard-pdf-pipeline.md",
+      "source_filename": "_docling-project_docling_5.1-standard-pdf-pipeline.md",
+      "source_directory": "Docs\\Docling",
+      "relative_path": "Docs\\Docling\\_docling-project_docling_5.1-standard-pdf-pipeline.md",
+      "hierarchy_path": "Pipeline Components",
+      "chunk_hash": "10d7e0ca639ef732",
+      "content_digest": "10d7e0ca639ef732",
+      "chunk_length": 824,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "docling"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "pipeline",
+          "docling",
+          "standard",
+          "pdf",
+          "https",
+          "github",
+          "com",
+          "project",
+          "blob",
+          "f7244a43",
+          "the",
+          "pipe",
+          "py51",
+          "l51",
+          "l90",
+          "base",
+          "components",
+          "initializes",
+          "two",
+          "model"
+        ],
+        "term_weights": [
+          {
+            "term": "pipeline",
+            "tf": 14,
+            "weight": 0.133333
+          },
+          {
+            "term": "docling",
+            "tf": 12,
+            "weight": 0.114286
+          },
+          {
+            "term": "standard",
+            "tf": 6,
+            "weight": 0.057143
+          },
+          {
+            "term": "pdf",
+            "tf": 6,
+            "weight": 0.057143
+          },
+          {
+            "term": "https",
+            "tf": 4,
+            "weight": 0.038095
+          },
+          {
+            "term": "github",
+            "tf": 4,
+            "weight": 0.038095
+          },
+          {
+            "term": "com",
+            "tf": 4,
+            "weight": 0.038095
+          },
+          {
+            "term": "project",
+            "tf": 4,
+            "weight": 0.038095
+          },
+          {
+            "term": "blob",
+            "tf": 4,
+            "weight": 0.038095
+          },
+          {
+            "term": "f7244a43",
+            "tf": 4,
+            "weight": 0.038095
+          },
+          {
+            "term": "the",
+            "tf": 3,
+            "weight": 0.028571
+          },
+          {
+            "term": "pipe",
+            "tf": 2,
+            "weight": 0.019048
+          },
+          {
+            "term": "py51",
+            "tf": 2,
+            "weight": 0.019048
+          },
+          {
+            "term": "l51",
+            "tf": 2,
+            "weight": 0.019048
+          },
+          {
+            "term": "l90",
+            "tf": 2,
+            "weight": 0.019048
+          },
+          {
+            "term": "base",
+            "tf": 2,
+            "weight": 0.019048
+          },
+          {
+            "term": "components",
+            "tf": 1,
+            "weight": 0.009524
+          },
+          {
+            "term": "initializes",
+            "tf": 1,
+            "weight": 0.009524
+          },
+          {
+            "term": "two",
+            "tf": 1,
+            "weight": 0.009524
+          },
+          {
+            "term": "model",
+            "tf": 1,
+            "weight": 0.009524
+          }
+        ],
+        "unique_terms": 46,
+        "total_terms": 105
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Pipeline Components",
+        "blob",
+        "com",
+        "docling",
+        "f7244a43",
+        "github",
+        "https",
+        "pdf",
+        "pipeline",
+        "project",
+        "standard"
+      ],
+      "collection_name": "Docling"
+    },
+    "advanced_scores": {
+      "semantic": 0.6,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5575675675675675,
+      "overall": 0.685855855855856
+    }
+  },
+  {
+    "text": "## Five-Stage Processing\n\nThe `build_pipe` sequence implements a fixed order of operations. Each model receives an `Iterable[Page]` and must yield the same pages after processing.",
+    "metadata": {
+      "chunk_id": "6833f9500c24-0005",
+      "source_file": "Docs\\Docling\\_docling-project_docling_5.1-standard-pdf-pipeline.md",
+      "filename": "_docling-project_docling_5.1-standard-pdf-pipeline.md",
+      "file_extension": ".md",
+      "chunk_index": 5,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Five-Stage Processing"
+      ],
+      "heading_text": "Five-Stage Processing",
+      "token_count": 38,
+      "char_count": 179,
+      "start_char": 9243,
+      "end_char": 9422,
+      "semantic_score": 0.7,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.578,
+      "chunking_strategy": "hierarchical_balanced_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:06.734747",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 38,
+      "document_id": "6833f9500c24",
+      "document_name": "_docling-project_docling_5.1-standard-pdf-pipeline",
+      "source_path": "Docs\\Docling\\_docling-project_docling_5.1-standard-pdf-pipeline.md",
+      "source_filename": "_docling-project_docling_5.1-standard-pdf-pipeline.md",
+      "source_directory": "Docs\\Docling",
+      "relative_path": "Docs\\Docling\\_docling-project_docling_5.1-standard-pdf-pipeline.md",
+      "hierarchy_path": "Five-Stage Processing",
+      "chunk_hash": "b018a1eb42382d1a",
+      "content_digest": "b018a1eb42382d1a",
+      "chunk_length": 179,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "docling"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "processing",
+          "the",
+          "five",
+          "stage",
+          "build",
+          "pipe",
+          "sequence",
+          "implements",
+          "fixed",
+          "order",
+          "operations",
+          "each",
+          "model",
+          "receives",
+          "iterable",
+          "page",
+          "and",
+          "must",
+          "yield",
+          "same"
+        ],
+        "term_weights": [
+          {
+            "term": "processing",
+            "tf": 2,
+            "weight": 0.083333
+          },
+          {
+            "term": "the",
+            "tf": 2,
+            "weight": 0.083333
+          },
+          {
+            "term": "five",
+            "tf": 1,
+            "weight": 0.041667
+          },
+          {
+            "term": "stage",
+            "tf": 1,
+            "weight": 0.041667
+          },
+          {
+            "term": "build",
+            "tf": 1,
+            "weight": 0.041667
+          },
+          {
+            "term": "pipe",
+            "tf": 1,
+            "weight": 0.041667
+          },
+          {
+            "term": "sequence",
+            "tf": 1,
+            "weight": 0.041667
+          },
+          {
+            "term": "implements",
+            "tf": 1,
+            "weight": 0.041667
+          },
+          {
+            "term": "fixed",
+            "tf": 1,
+            "weight": 0.041667
+          },
+          {
+            "term": "order",
+            "tf": 1,
+            "weight": 0.041667
+          },
+          {
+            "term": "operations",
+            "tf": 1,
+            "weight": 0.041667
+          },
+          {
+            "term": "each",
+            "tf": 1,
+            "weight": 0.041667
+          },
+          {
+            "term": "model",
+            "tf": 1,
+            "weight": 0.041667
+          },
+          {
+            "term": "receives",
+            "tf": 1,
+            "weight": 0.041667
+          },
+          {
+            "term": "iterable",
+            "tf": 1,
+            "weight": 0.041667
+          },
+          {
+            "term": "page",
+            "tf": 1,
+            "weight": 0.041667
+          },
+          {
+            "term": "and",
+            "tf": 1,
+            "weight": 0.041667
+          },
+          {
+            "term": "must",
+            "tf": 1,
+            "weight": 0.041667
+          },
+          {
+            "term": "yield",
+            "tf": 1,
+            "weight": 0.041667
+          },
+          {
+            "term": "same",
+            "tf": 1,
+            "weight": 0.041667
+          }
+        ],
+        "unique_terms": 22,
+        "total_terms": 24
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Five-Stage Processing",
+        "build",
+        "five",
+        "fixed",
+        "implements",
+        "order",
+        "pipe",
+        "processing",
+        "sequence",
+        "stage",
+        "the"
+      ],
+      "collection_name": "Docling"
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.578,
+      "overall": 0.726
+    }
+  },
+  {
+    "text": "### Stage 1: Page Preprocessing  **Class:** `PagePreprocessingModel`\\ **Location:** [docling/models/page\\_preprocessing\\_model.py25-146](https://github.com/docling-project/docling/blob/f7244a43/docling/models/page_preprocessing_model.py#L25-L146)  Responsibilities:  - Generate page images at requested scales (`page.get_image(scale)`) - Extract text cells from PDF backend (`page._backend.get_segmented_page()`) - Calculate parse quality scores using text heuristics - Store results in `page.parsed_page` and `page._image_cache`  The preprocessing model populates page images at multiple scales and extracts programmatic text cells from the backend: ``` ``` Configuration via `PagePreprocessingOptions`:  - `images_scale`: Output image resolution multiplier - `skip_cell_extraction`: Skip cell parsing for VLM-only workflows  **Sources:** [docling/models/page\\_preprocessing\\_model.py37-118](https://github.com/docling-project/docling/blob/f7244a43/docling/models/page_preprocessing_model.py#L37-L118) [docling/pipeline/standard\\_pdf\\_pipeline.py53-57](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/standard_pdf_pipeline.py#L53-L57)",
+    "metadata": {
+      "chunk_id": "6833f9500c24-0006",
+      "source_file": "Docs\\Docling\\_docling-project_docling_5.1-standard-pdf-pipeline.md",
+      "filename": "_docling-project_docling_5.1-standard-pdf-pipeline.md",
+      "file_extension": ".md",
+      "chunk_index": 6,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Stage 1: Page Preprocessing"
+      ],
+      "heading_text": "Stage 1: Page Preprocessing",
+      "token_count": 276,
+      "char_count": 1161,
+      "start_char": 9424,
+      "end_char": 10585,
+      "semantic_score": 0.7,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5225,
+      "chunking_strategy": "hierarchical_balanced_structural",
+      "content_type": "code_block",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:06.736869",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 276,
+      "document_id": "6833f9500c24",
+      "document_name": "_docling-project_docling_5.1-standard-pdf-pipeline",
+      "source_path": "Docs\\Docling\\_docling-project_docling_5.1-standard-pdf-pipeline.md",
+      "source_filename": "_docling-project_docling_5.1-standard-pdf-pipeline.md",
+      "source_directory": "Docs\\Docling",
+      "relative_path": "Docs\\Docling\\_docling-project_docling_5.1-standard-pdf-pipeline.md",
+      "hierarchy_path": "Stage 1: Page Preprocessing",
+      "chunk_hash": "c22d47dfd4f73a1c",
+      "content_digest": "c22d47dfd4f73a1c",
+      "chunk_length": 1161,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "docling"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "page",
+          "docling",
+          "preprocessing",
+          "model",
+          "models",
+          "pipeline",
+          "https",
+          "github",
+          "com",
+          "project",
+          "blob",
+          "f7244a43",
+          "images",
+          "image",
+          "text",
+          "pdf",
+          "backend",
+          "scales",
+          "get",
+          "scale"
+        ],
+        "term_weights": [
+          {
+            "term": "page",
+            "tf": 13,
+            "weight": 0.090278
+          },
+          {
+            "term": "docling",
+            "tf": 12,
+            "weight": 0.083333
+          },
+          {
+            "term": "preprocessing",
+            "tf": 6,
+            "weight": 0.041667
+          },
+          {
+            "term": "model",
+            "tf": 5,
+            "weight": 0.034722
+          },
+          {
+            "term": "models",
+            "tf": 4,
+            "weight": 0.027778
+          },
+          {
+            "term": "pipeline",
+            "tf": 4,
+            "weight": 0.027778
+          },
+          {
+            "term": "https",
+            "tf": 3,
+            "weight": 0.020833
+          },
+          {
+            "term": "github",
+            "tf": 3,
+            "weight": 0.020833
+          },
+          {
+            "term": "com",
+            "tf": 3,
+            "weight": 0.020833
+          },
+          {
+            "term": "project",
+            "tf": 3,
+            "weight": 0.020833
+          },
+          {
+            "term": "blob",
+            "tf": 3,
+            "weight": 0.020833
+          },
+          {
+            "term": "f7244a43",
+            "tf": 3,
+            "weight": 0.020833
+          },
+          {
+            "term": "images",
+            "tf": 3,
+            "weight": 0.020833
+          },
+          {
+            "term": "image",
+            "tf": 3,
+            "weight": 0.020833
+          },
+          {
+            "term": "text",
+            "tf": 3,
+            "weight": 0.020833
+          },
+          {
+            "term": "pdf",
+            "tf": 3,
+            "weight": 0.020833
+          },
+          {
+            "term": "backend",
+            "tf": 3,
+            "weight": 0.020833
+          },
+          {
+            "term": "scales",
+            "tf": 2,
+            "weight": 0.013889
+          },
+          {
+            "term": "get",
+            "tf": 2,
+            "weight": 0.013889
+          },
+          {
+            "term": "scale",
+            "tf": 2,
+            "weight": 0.013889
+          }
+        ],
+        "unique_terms": 74,
+        "total_terms": 144
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Stage 1: Page Preprocessing",
+        "com",
+        "docling",
+        "github",
+        "https",
+        "model",
+        "models",
+        "page",
+        "pipeline",
+        "preprocessing",
+        "project"
+      ],
+      "collection_name": "Docling"
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5225,
+      "overall": 0.7074999999999999
+    }
+  },
+  {
+    "text": "### Stage 2: OCR (Optical Character Recognition)  **Class:** `BaseOcrModel` (abstract)\\ **Implementations:** `RapidOcrModel`, `EasyOcrModel`, `TesseractOcrModel`, `OcrAutoModel`\\ **Location:** [docling/models/base\\_ocr\\_model.py24-228](https://github.com/docling-project/docling/blob/f7244a43/docling/models/base_ocr_model.py#L24-L228)  Responsibilities:  - Detect bitmap-heavy regions using `get_ocr_rects()` ([base\\_ocr\\_model.py40-112](https://github.com/docling-project/docling/blob/f7244a43/base_ocr_model.py#L40-L112)) - Run OCR engine on high-resolution crops of bitmap areas - Filter OCR results to avoid duplicating programmatic text - Append new `TextCell` objects to `page.parsed_page.textline_cells`  OCR processing workflow: ``` ``` The OCR model factory selects the appropriate implementation based on `OcrOptions`:  | Option Type           | Model Class         | Engine                         | | --------------------- | ------------------- | ------------------------------ | | `OcrAutoOptions`      | `OcrAutoModel`      | Auto-selects based on platform | | `RapidOcrOptions`     | `RapidOcrModel`     | ONNX or PyTorch backend        | | `EasyOcrOptions`      | `EasyOcrModel`      | Deep learning OCR              | | `TesseractOcrOptions` | `TesseractOcrModel` | Tesseract binding or CLI       |  **Sources:** [docling/models/base\\_ocr\\_model.py40-217](https://github.com/docling-project/docling/blob/f7244a43/docling/models/base_ocr_model.py#L40-L217) [docling/pipeline/standard\\_pdf\\_pipeline.py49-59](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/standard_pdf_pipeline.py#L49-L59) [docling/models/easyocr\\_model.py28-201](https://github.com/docling-project/docling/blob/f7244a43/docling/models/easyocr_model.py#L28-L201)",
+    "metadata": {
+      "chunk_id": "6833f9500c24-0007",
+      "source_file": "Docs\\Docling\\_docling-project_docling_5.1-standard-pdf-pipeline.md",
+      "filename": "_docling-project_docling_5.1-standard-pdf-pipeline.md",
+      "file_extension": ".md",
+      "chunk_index": 7,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Stage 2: OCR (Optical Character Recognition)"
+      ],
+      "heading_text": "Stage 2: OCR (Optical Character Recognition)",
+      "token_count": 474,
+      "char_count": 1772,
+      "start_char": 10589,
+      "end_char": 12361,
+      "semantic_score": 0.7,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5469619047619048,
+      "chunking_strategy": "hierarchical_balanced_structural",
+      "content_type": "code_block",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:06.740857",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 474,
+      "document_id": "6833f9500c24",
+      "document_name": "_docling-project_docling_5.1-standard-pdf-pipeline",
+      "source_path": "Docs\\Docling\\_docling-project_docling_5.1-standard-pdf-pipeline.md",
+      "source_filename": "_docling-project_docling_5.1-standard-pdf-pipeline.md",
+      "source_directory": "Docs\\Docling",
+      "relative_path": "Docs\\Docling\\_docling-project_docling_5.1-standard-pdf-pipeline.md",
+      "hierarchy_path": "Stage 2: OCR (Optical Character Recognition)",
+      "chunk_hash": "3629568557c49e32",
+      "content_digest": "3629568557c49e32",
+      "chunk_length": 1772,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "docling"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "docling",
+          "ocr",
+          "model",
+          "models",
+          "base",
+          "https",
+          "github",
+          "com",
+          "project",
+          "blob",
+          "f7244a43",
+          "pipeline",
+          "class",
+          "rapidocrmodel",
+          "easyocrmodel",
+          "tesseractocrmodel",
+          "ocrautomodel",
+          "bitmap",
+          "py40",
+          "l40"
+        ],
+        "term_weights": [
+          {
+            "term": "docling",
+            "tf": 18,
+            "weight": 0.094737
+          },
+          {
+            "term": "ocr",
+            "tf": 13,
+            "weight": 0.068421
+          },
+          {
+            "term": "model",
+            "tf": 10,
+            "weight": 0.052632
+          },
+          {
+            "term": "models",
+            "tf": 6,
+            "weight": 0.031579
+          },
+          {
+            "term": "base",
+            "tf": 6,
+            "weight": 0.031579
+          },
+          {
+            "term": "https",
+            "tf": 5,
+            "weight": 0.026316
+          },
+          {
+            "term": "github",
+            "tf": 5,
+            "weight": 0.026316
+          },
+          {
+            "term": "com",
+            "tf": 5,
+            "weight": 0.026316
+          },
+          {
+            "term": "project",
+            "tf": 5,
+            "weight": 0.026316
+          },
+          {
+            "term": "blob",
+            "tf": 5,
+            "weight": 0.026316
+          },
+          {
+            "term": "f7244a43",
+            "tf": 5,
+            "weight": 0.026316
+          },
+          {
+            "term": "pipeline",
+            "tf": 4,
+            "weight": 0.021053
+          },
+          {
+            "term": "class",
+            "tf": 2,
+            "weight": 0.010526
+          },
+          {
+            "term": "rapidocrmodel",
+            "tf": 2,
+            "weight": 0.010526
+          },
+          {
+            "term": "easyocrmodel",
+            "tf": 2,
+            "weight": 0.010526
+          },
+          {
+            "term": "tesseractocrmodel",
+            "tf": 2,
+            "weight": 0.010526
+          },
+          {
+            "term": "ocrautomodel",
+            "tf": 2,
+            "weight": 0.010526
+          },
+          {
+            "term": "bitmap",
+            "tf": 2,
+            "weight": 0.010526
+          },
+          {
+            "term": "py40",
+            "tf": 2,
+            "weight": 0.010526
+          },
+          {
+            "term": "l40",
+            "tf": 2,
+            "weight": 0.010526
+          }
+        ],
+        "unique_terms": 99,
+        "total_terms": 190
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Stage 2: OCR (Optical Character Recognition)",
+        "base",
+        "blob",
+        "com",
+        "docling",
+        "github",
+        "https",
+        "model",
+        "models",
+        "ocr",
+        "project"
+      ],
+      "collection_name": "Docling"
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5469619047619048,
+      "overall": 0.7156539682539682
+    }
+  },
+  {
+    "text": "### Stage 3: Layout Analysis  **Class:** `LayoutModel`\\ **Model:** Heron (DocLayoutModel for legacy)\\ **Location:** [docling/models/layout\\_model.py28-238](https://github.com/docling-project/docling/blob/f7244a43/docling/models/layout_model.py#L28-L238)  Responsibilities:  - Predict bounding boxes and labels for document elements - Apply `LayoutPostprocessor` to resolve overlaps and refine clusters - Assign confidence scores to predictions - Store results in `page.predictions.layout` as `LayoutPrediction`  The layout model identifies document structure using computer vision: ``` ``` Detected element labels (from `DocItemLabel`):  - **Text elements**: `TEXT`, `SECTION_HEADER`, `LIST_ITEM`, `CODE`, `FORMULA`, `CAPTION`, `FOOTNOTE` - **Page decorations**: `PAGE_HEADER`, `PAGE_FOOTER` - **Figures**: `PICTURE` - **Tables**: `TABLE`, `DOCUMENT_INDEX` - **Containers**: `FORM`, `KEY_VALUE_REGION`  Each cluster contains matched cells from earlier stages, enabling text extraction per element. **Sources:** [docling/models/layout\\_model.py148-237](https://github.com/docling-project/docling/blob/f7244a43/docling/models/layout_model.py#L148-L237) [docling/pipeline/standard\\_pdf\\_pipeline.py60-65](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/standard_pdf_pipeline.py#L60-L65)",
+    "metadata": {
+      "chunk_id": "6833f9500c24-0008",
+      "source_file": "Docs\\Docling\\_docling-project_docling_5.1-standard-pdf-pipeline.md",
+      "filename": "_docling-project_docling_5.1-standard-pdf-pipeline.md",
+      "file_extension": ".md",
+      "chunk_index": 8,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Stage 3: Layout Analysis"
+      ],
+      "heading_text": "Stage 3: Layout Analysis",
+      "token_count": 325,
+      "char_count": 1309,
+      "start_char": 12365,
+      "end_char": 13674,
+      "semantic_score": 0.7,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5542307692307692,
+      "chunking_strategy": "hierarchical_balanced_structural",
+      "content_type": "code_block",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:06.744117",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 325,
+      "document_id": "6833f9500c24",
+      "document_name": "_docling-project_docling_5.1-standard-pdf-pipeline",
+      "source_path": "Docs\\Docling\\_docling-project_docling_5.1-standard-pdf-pipeline.md",
+      "source_filename": "_docling-project_docling_5.1-standard-pdf-pipeline.md",
+      "source_directory": "Docs\\Docling",
+      "relative_path": "Docs\\Docling\\_docling-project_docling_5.1-standard-pdf-pipeline.md",
+      "hierarchy_path": "Stage 3: Layout Analysis",
+      "chunk_hash": "bde8b29dbeb9d3f9",
+      "content_digest": "bde8b29dbeb9d3f9",
+      "chunk_length": 1309,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "docling"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "docling",
+          "layout",
+          "model",
+          "models",
+          "page",
+          "pipeline",
+          "https",
+          "github",
+          "com",
+          "project",
+          "blob",
+          "f7244a43",
+          "document",
+          "text",
+          "for",
+          "and",
+          "labels",
+          "elements",
+          "predictions",
+          "element"
+        ],
+        "term_weights": [
+          {
+            "term": "docling",
+            "tf": 12,
+            "weight": 0.077922
+          },
+          {
+            "term": "layout",
+            "tf": 7,
+            "weight": 0.045455
+          },
+          {
+            "term": "model",
+            "tf": 6,
+            "weight": 0.038961
+          },
+          {
+            "term": "models",
+            "tf": 4,
+            "weight": 0.025974
+          },
+          {
+            "term": "page",
+            "tf": 4,
+            "weight": 0.025974
+          },
+          {
+            "term": "pipeline",
+            "tf": 4,
+            "weight": 0.025974
+          },
+          {
+            "term": "https",
+            "tf": 3,
+            "weight": 0.019481
+          },
+          {
+            "term": "github",
+            "tf": 3,
+            "weight": 0.019481
+          },
+          {
+            "term": "com",
+            "tf": 3,
+            "weight": 0.019481
+          },
+          {
+            "term": "project",
+            "tf": 3,
+            "weight": 0.019481
+          },
+          {
+            "term": "blob",
+            "tf": 3,
+            "weight": 0.019481
+          },
+          {
+            "term": "f7244a43",
+            "tf": 3,
+            "weight": 0.019481
+          },
+          {
+            "term": "document",
+            "tf": 3,
+            "weight": 0.019481
+          },
+          {
+            "term": "text",
+            "tf": 3,
+            "weight": 0.019481
+          },
+          {
+            "term": "for",
+            "tf": 2,
+            "weight": 0.012987
+          },
+          {
+            "term": "and",
+            "tf": 2,
+            "weight": 0.012987
+          },
+          {
+            "term": "labels",
+            "tf": 2,
+            "weight": 0.012987
+          },
+          {
+            "term": "elements",
+            "tf": 2,
+            "weight": 0.012987
+          },
+          {
+            "term": "predictions",
+            "tf": 2,
+            "weight": 0.012987
+          },
+          {
+            "term": "element",
+            "tf": 2,
+            "weight": 0.012987
+          }
+        ],
+        "unique_terms": 97,
+        "total_terms": 154
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Stage 3: Layout Analysis",
+        "com",
+        "docling",
+        "github",
+        "https",
+        "layout",
+        "model",
+        "models",
+        "page",
+        "pipeline",
+        "project"
+      ],
+      "collection_name": "Docling"
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5542307692307692,
+      "overall": 0.718076923076923
+    }
+  },
+  {
+    "text": "### Stage 4: Table Structure Detection  **Class:** `TableStructureModel`\\ **Model:** TableFormer (FAST or ACCURATE mode)\\ **Location:** [docling/models/table\\_structure\\_model.py29-305](https://github.com/docling-project/docling/blob/f7244a43/docling/models/table_structure_model.py#L29-L305)  Responsibilities:  - Extract table structure for clusters labeled `TABLE` or `DOCUMENT_INDEX` - Run TableFormer model on table crops at 144 DPI (2x scale) - Parse OTSL sequences and cell coordinates - Match cells to table grid using word-level tokens when available - Store results in `page.predictions.tablestructure.table_map`  Table processing workflow: ``` ``` The model supports two modes via `TableFormerMode`:  - **FAST**: Faster inference, lower accuracy - **ACCURATE**: Slower inference, higher accuracy  Cell matching can be toggled via `do_cell_matching` option:  - `True`: Match predicted cells to source tokens (default) - `False`: Extract text directly from predicted bounding boxes  **Sources:** [docling/models/table\\_structure\\_model.py170-304](https://github.com/docling-project/docling/blob/f7244a43/docling/models/table_structure_model.py#L170-L304) [docling/pipeline/standard\\_pdf\\_pipeline.py66-72](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/standard_pdf_pipeline.py#L66-L72)",
+    "metadata": {
+      "chunk_id": "6833f9500c24-0009",
+      "source_file": "Docs\\Docling\\_docling-project_docling_5.1-standard-pdf-pipeline.md",
+      "filename": "_docling-project_docling_5.1-standard-pdf-pipeline.md",
+      "file_extension": ".md",
+      "chunk_index": 9,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Stage 4: Table Structure Detection"
+      ],
+      "heading_text": "Stage 4: Table Structure Detection",
+      "token_count": 316,
+      "char_count": 1322,
+      "start_char": 13679,
+      "end_char": 15001,
+      "semantic_score": 0.7,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5243652173913044,
+      "chunking_strategy": "hierarchical_balanced_structural",
+      "content_type": "code_block",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:06.747506",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 316,
+      "document_id": "6833f9500c24",
+      "document_name": "_docling-project_docling_5.1-standard-pdf-pipeline",
+      "source_path": "Docs\\Docling\\_docling-project_docling_5.1-standard-pdf-pipeline.md",
+      "source_filename": "_docling-project_docling_5.1-standard-pdf-pipeline.md",
+      "source_directory": "Docs\\Docling",
+      "relative_path": "Docs\\Docling\\_docling-project_docling_5.1-standard-pdf-pipeline.md",
+      "hierarchy_path": "Stage 4: Table Structure Detection",
+      "chunk_hash": "dcd7a692c68c7803",
+      "content_digest": "dcd7a692c68c7803",
+      "chunk_length": 1322,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "docling"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "docling",
+          "table",
+          "model",
+          "structure",
+          "models",
+          "pipeline",
+          "https",
+          "github",
+          "com",
+          "project",
+          "blob",
+          "f7244a43",
+          "cell",
+          "tableformer",
+          "fast",
+          "accurate",
+          "extract",
+          "match",
+          "cells",
+          "tokens"
+        ],
+        "term_weights": [
+          {
+            "term": "docling",
+            "tf": 12,
+            "weight": 0.074074
+          },
+          {
+            "term": "table",
+            "tf": 11,
+            "weight": 0.067901
+          },
+          {
+            "term": "model",
+            "tf": 7,
+            "weight": 0.04321
+          },
+          {
+            "term": "structure",
+            "tf": 6,
+            "weight": 0.037037
+          },
+          {
+            "term": "models",
+            "tf": 4,
+            "weight": 0.024691
+          },
+          {
+            "term": "pipeline",
+            "tf": 4,
+            "weight": 0.024691
+          },
+          {
+            "term": "https",
+            "tf": 3,
+            "weight": 0.018519
+          },
+          {
+            "term": "github",
+            "tf": 3,
+            "weight": 0.018519
+          },
+          {
+            "term": "com",
+            "tf": 3,
+            "weight": 0.018519
+          },
+          {
+            "term": "project",
+            "tf": 3,
+            "weight": 0.018519
+          },
+          {
+            "term": "blob",
+            "tf": 3,
+            "weight": 0.018519
+          },
+          {
+            "term": "f7244a43",
+            "tf": 3,
+            "weight": 0.018519
+          },
+          {
+            "term": "cell",
+            "tf": 3,
+            "weight": 0.018519
+          },
+          {
+            "term": "tableformer",
+            "tf": 2,
+            "weight": 0.012346
+          },
+          {
+            "term": "fast",
+            "tf": 2,
+            "weight": 0.012346
+          },
+          {
+            "term": "accurate",
+            "tf": 2,
+            "weight": 0.012346
+          },
+          {
+            "term": "extract",
+            "tf": 2,
+            "weight": 0.012346
+          },
+          {
+            "term": "match",
+            "tf": 2,
+            "weight": 0.012346
+          },
+          {
+            "term": "cells",
+            "tf": 2,
+            "weight": 0.012346
+          },
+          {
+            "term": "tokens",
+            "tf": 2,
+            "weight": 0.012346
+          }
+        ],
+        "unique_terms": 96,
+        "total_terms": 162
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Stage 4: Table Structure Detection",
+        "com",
+        "docling",
+        "github",
+        "https",
+        "model",
+        "models",
+        "pipeline",
+        "project",
+        "structure",
+        "table"
+      ],
+      "collection_name": "Docling"
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5243652173913044,
+      "overall": 0.7081217391304347
+    }
+  },
+  {
+    "text": "### Stage 5: Page Assembly  **Class:** `PageAssembleModel`\\ **Location:** [docling/models/page\\_assemble\\_model.py30-157](https://github.com/docling-project/docling/blob/f7244a43/docling/models/page_assemble_model.py#L30-L157)  Responsibilities:  - Convert layout clusters into typed `PageElement` objects - Assemble text from cells within each cluster - Handle text sanitization (dehyphenation, Unicode normalization) - Populate `page.assembled` with categorized elements (body, headers)  Assembly creates structured elements: ``` ``` Element types created:  - `TextElement`: Text blocks, headers, captions, formulas, code - `Table`: Tables with structure (OTSL, cells, grid dimensions) - `FigureElement`: Images and diagrams - `ContainerElement`: Forms and key-value regions  **Sources:** [docling/models/page\\_assemble\\_model.py67-156](https://github.com/docling-project/docling/blob/f7244a43/docling/models/page_assemble_model.py#L67-L156) [docling/pipeline/standard\\_pdf\\_pipeline.py73-75](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/standard_pdf_pipeline.py#L73-L75)  ---",
+    "metadata": {
+      "chunk_id": "6833f9500c24-0010",
+      "source_file": "Docs\\Docling\\_docling-project_docling_5.1-standard-pdf-pipeline.md",
+      "filename": "_docling-project_docling_5.1-standard-pdf-pipeline.md",
+      "file_extension": ".md",
+      "chunk_index": 10,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Stage 5: Page Assembly"
+      ],
+      "heading_text": "Stage 5: Page Assembly",
+      "token_count": 272,
+      "char_count": 1107,
+      "start_char": 15005,
+      "end_char": 16112,
+      "semantic_score": 0.7,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5424390243902439,
+      "chunking_strategy": "hierarchical_balanced_structural",
+      "content_type": "code_block",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:06.750481",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 272,
+      "document_id": "6833f9500c24",
+      "document_name": "_docling-project_docling_5.1-standard-pdf-pipeline",
+      "source_path": "Docs\\Docling\\_docling-project_docling_5.1-standard-pdf-pipeline.md",
+      "source_filename": "_docling-project_docling_5.1-standard-pdf-pipeline.md",
+      "source_directory": "Docs\\Docling",
+      "relative_path": "Docs\\Docling\\_docling-project_docling_5.1-standard-pdf-pipeline.md",
+      "hierarchy_path": "Stage 5: Page Assembly",
+      "chunk_hash": "d4188d34b90baf56",
+      "content_digest": "d4188d34b90baf56",
+      "chunk_length": 1107,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "docling"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "docling",
+          "page",
+          "assemble",
+          "models",
+          "model",
+          "pipeline",
+          "https",
+          "github",
+          "com",
+          "project",
+          "blob",
+          "f7244a43",
+          "text",
+          "assembly",
+          "cells",
+          "with",
+          "elements",
+          "headers",
+          "and",
+          "standard"
+        ],
+        "term_weights": [
+          {
+            "term": "docling",
+            "tf": 12,
+            "weight": 0.090226
+          },
+          {
+            "term": "page",
+            "tf": 6,
+            "weight": 0.045113
+          },
+          {
+            "term": "assemble",
+            "tf": 5,
+            "weight": 0.037594
+          },
+          {
+            "term": "models",
+            "tf": 4,
+            "weight": 0.030075
+          },
+          {
+            "term": "model",
+            "tf": 4,
+            "weight": 0.030075
+          },
+          {
+            "term": "pipeline",
+            "tf": 4,
+            "weight": 0.030075
+          },
+          {
+            "term": "https",
+            "tf": 3,
+            "weight": 0.022556
+          },
+          {
+            "term": "github",
+            "tf": 3,
+            "weight": 0.022556
+          },
+          {
+            "term": "com",
+            "tf": 3,
+            "weight": 0.022556
+          },
+          {
+            "term": "project",
+            "tf": 3,
+            "weight": 0.022556
+          },
+          {
+            "term": "blob",
+            "tf": 3,
+            "weight": 0.022556
+          },
+          {
+            "term": "f7244a43",
+            "tf": 3,
+            "weight": 0.022556
+          },
+          {
+            "term": "text",
+            "tf": 3,
+            "weight": 0.022556
+          },
+          {
+            "term": "assembly",
+            "tf": 2,
+            "weight": 0.015038
+          },
+          {
+            "term": "cells",
+            "tf": 2,
+            "weight": 0.015038
+          },
+          {
+            "term": "with",
+            "tf": 2,
+            "weight": 0.015038
+          },
+          {
+            "term": "elements",
+            "tf": 2,
+            "weight": 0.015038
+          },
+          {
+            "term": "headers",
+            "tf": 2,
+            "weight": 0.015038
+          },
+          {
+            "term": "and",
+            "tf": 2,
+            "weight": 0.015038
+          },
+          {
+            "term": "standard",
+            "tf": 2,
+            "weight": 0.015038
+          }
+        ],
+        "unique_terms": 82,
+        "total_terms": 133
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Stage 5: Page Assembly",
+        "assemble",
+        "com",
+        "docling",
+        "github",
+        "https",
+        "model",
+        "models",
+        "page",
+        "pipeline",
+        "project"
+      ],
+      "collection_name": "Docling"
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5424390243902439,
+      "overall": 0.7141463414634147
+    }
+  },
+  {
+    "text": "## Model Integration",
+    "metadata": {
+      "chunk_id": "6833f9500c24-0011",
+      "source_file": "Docs\\Docling\\_docling-project_docling_5.1-standard-pdf-pipeline.md",
+      "filename": "_docling-project_docling_5.1-standard-pdf-pipeline.md",
+      "file_extension": ".md",
+      "chunk_index": 11,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Model Integration"
+      ],
+      "heading_text": "Model Integration",
+      "token_count": 3,
+      "char_count": 20,
+      "start_char": 16116,
+      "end_char": 16136,
+      "semantic_score": 0.8,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.59,
+      "chunking_strategy": "hierarchical_balanced_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:06.750874",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 3,
+      "document_id": "6833f9500c24",
+      "document_name": "_docling-project_docling_5.1-standard-pdf-pipeline",
+      "source_path": "Docs\\Docling\\_docling-project_docling_5.1-standard-pdf-pipeline.md",
+      "source_filename": "_docling-project_docling_5.1-standard-pdf-pipeline.md",
+      "source_directory": "Docs\\Docling",
+      "relative_path": "Docs\\Docling\\_docling-project_docling_5.1-standard-pdf-pipeline.md",
+      "hierarchy_path": "Model Integration",
+      "chunk_hash": "dd45bda747b15097",
+      "content_digest": "dd45bda747b15097",
+      "chunk_length": 20,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "docling"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "model",
+          "integration"
+        ],
+        "term_weights": [
+          {
+            "term": "model",
+            "tf": 1,
+            "weight": 0.5
+          },
+          {
+            "term": "integration",
+            "tf": 1,
+            "weight": 0.5
+          }
+        ],
+        "unique_terms": 2,
+        "total_terms": 2
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Model Integration",
+        "integration",
+        "model"
+      ],
+      "collection_name": "Docling"
+    },
+    "advanced_scores": {
+      "semantic": 0.8,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.59,
+      "overall": 0.7633333333333333
+    }
+  },
+  {
+    "text": "### Pipeline Construction  The `StandardPdfPipeline.__init__()` method initializes models with shared configuration: ``` ``` Configuration flow: ``` ``` All models receive `AcceleratorOptions` to control device placement (CPU/CUDA/MPS) and thread counts. **Sources:** [docling/pipeline/standard\\_pdf\\_pipeline.py35-90](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/standard_pdf_pipeline.py#L35-L90) [docling/datamodel/pipeline\\_options.py](https://github.com/docling-project/docling/blob/f7244a43/docling/datamodel/pipeline_options.py)",
+    "metadata": {
+      "chunk_id": "6833f9500c24-0012",
+      "source_file": "Docs\\Docling\\_docling-project_docling_5.1-standard-pdf-pipeline.md",
+      "filename": "_docling-project_docling_5.1-standard-pdf-pipeline.md",
+      "file_extension": ".md",
+      "chunk_index": 12,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Pipeline Construction"
+      ],
+      "heading_text": "Pipeline Construction",
+      "token_count": 134,
+      "char_count": 563,
+      "start_char": 16138,
+      "end_char": 16701,
+      "semantic_score": 0.7,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5525,
+      "chunking_strategy": "hierarchical_balanced_structural",
+      "content_type": "code_block",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:06.752048",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 134,
+      "document_id": "6833f9500c24",
+      "document_name": "_docling-project_docling_5.1-standard-pdf-pipeline",
+      "source_path": "Docs\\Docling\\_docling-project_docling_5.1-standard-pdf-pipeline.md",
+      "source_filename": "_docling-project_docling_5.1-standard-pdf-pipeline.md",
+      "source_directory": "Docs\\Docling",
+      "relative_path": "Docs\\Docling\\_docling-project_docling_5.1-standard-pdf-pipeline.md",
+      "hierarchy_path": "Pipeline Construction",
+      "chunk_hash": "14fe1e5ae140a1d3",
+      "content_digest": "14fe1e5ae140a1d3",
+      "chunk_length": 563,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "docling"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "docling",
+          "pipeline",
+          "models",
+          "configuration",
+          "standard",
+          "pdf",
+          "https",
+          "github",
+          "com",
+          "project",
+          "blob",
+          "f7244a43",
+          "datamodel",
+          "options",
+          "construction",
+          "the",
+          "standardpdfpipeline",
+          "init",
+          "method",
+          "initializes"
+        ],
+        "term_weights": [
+          {
+            "term": "docling",
+            "tf": 8,
+            "weight": 0.125
+          },
+          {
+            "term": "pipeline",
+            "tf": 7,
+            "weight": 0.109375
+          },
+          {
+            "term": "models",
+            "tf": 2,
+            "weight": 0.03125
+          },
+          {
+            "term": "configuration",
+            "tf": 2,
+            "weight": 0.03125
+          },
+          {
+            "term": "standard",
+            "tf": 2,
+            "weight": 0.03125
+          },
+          {
+            "term": "pdf",
+            "tf": 2,
+            "weight": 0.03125
+          },
+          {
+            "term": "https",
+            "tf": 2,
+            "weight": 0.03125
+          },
+          {
+            "term": "github",
+            "tf": 2,
+            "weight": 0.03125
+          },
+          {
+            "term": "com",
+            "tf": 2,
+            "weight": 0.03125
+          },
+          {
+            "term": "project",
+            "tf": 2,
+            "weight": 0.03125
+          },
+          {
+            "term": "blob",
+            "tf": 2,
+            "weight": 0.03125
+          },
+          {
+            "term": "f7244a43",
+            "tf": 2,
+            "weight": 0.03125
+          },
+          {
+            "term": "datamodel",
+            "tf": 2,
+            "weight": 0.03125
+          },
+          {
+            "term": "options",
+            "tf": 2,
+            "weight": 0.03125
+          },
+          {
+            "term": "construction",
+            "tf": 1,
+            "weight": 0.015625
+          },
+          {
+            "term": "the",
+            "tf": 1,
+            "weight": 0.015625
+          },
+          {
+            "term": "standardpdfpipeline",
+            "tf": 1,
+            "weight": 0.015625
+          },
+          {
+            "term": "init",
+            "tf": 1,
+            "weight": 0.015625
+          },
+          {
+            "term": "method",
+            "tf": 1,
+            "weight": 0.015625
+          },
+          {
+            "term": "initializes",
+            "tf": 1,
+            "weight": 0.015625
+          }
+        ],
+        "unique_terms": 39,
+        "total_terms": 64
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Pipeline Construction",
+        "com",
+        "configuration",
+        "docling",
+        "github",
+        "https",
+        "models",
+        "pdf",
+        "pipeline",
+        "project",
+        "standard"
+      ],
+      "collection_name": "Docling"
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5525,
+      "overall": 0.7174999999999999
+    }
+  },
+  {
+    "text": "### OCR Model Selection  The OCR model is created via factory pattern: ``` ``` The factory uses `OcrOptions.kind` to select the implementation. `OcrAutoModel` provides platform-specific fallbacks. **Sources:** [docling/pipeline/standard\\_pdf\\_pipeline.py115-124](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/standard_pdf_pipeline.py#L115-L124) [docling/models/factories.py](https://github.com/docling-project/docling/blob/f7244a43/docling/models/factories.py)",
+    "metadata": {
+      "chunk_id": "6833f9500c24-0013",
+      "source_file": "Docs\\Docling\\_docling-project_docling_5.1-standard-pdf-pipeline.md",
+      "filename": "_docling-project_docling_5.1-standard-pdf-pipeline.md",
+      "file_extension": ".md",
+      "chunk_index": 13,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "OCR Model Selection"
+      ],
+      "heading_text": "OCR Model Selection",
+      "token_count": 121,
+      "char_count": 488,
+      "start_char": 16708,
+      "end_char": 17196,
+      "semantic_score": 0.6,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5279310344827586,
+      "chunking_strategy": "hierarchical_balanced_structural",
+      "content_type": "code_block",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:06.753213",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 121,
+      "document_id": "6833f9500c24",
+      "document_name": "_docling-project_docling_5.1-standard-pdf-pipeline",
+      "source_path": "Docs\\Docling\\_docling-project_docling_5.1-standard-pdf-pipeline.md",
+      "source_filename": "_docling-project_docling_5.1-standard-pdf-pipeline.md",
+      "source_directory": "Docs\\Docling",
+      "relative_path": "Docs\\Docling\\_docling-project_docling_5.1-standard-pdf-pipeline.md",
+      "hierarchy_path": "OCR Model Selection",
+      "chunk_hash": "0cbf2b2cfdba99a1",
+      "content_digest": "0cbf2b2cfdba99a1",
+      "chunk_length": 488,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "docling"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "docling",
+          "pipeline",
+          "the",
+          "ocr",
+          "model",
+          "factory",
+          "standard",
+          "pdf",
+          "https",
+          "github",
+          "com",
+          "project",
+          "blob",
+          "f7244a43",
+          "models",
+          "factories",
+          "selection",
+          "created",
+          "via",
+          "pattern"
+        ],
+        "term_weights": [
+          {
+            "term": "docling",
+            "tf": 8,
+            "weight": 0.133333
+          },
+          {
+            "term": "pipeline",
+            "tf": 4,
+            "weight": 0.066667
+          },
+          {
+            "term": "the",
+            "tf": 3,
+            "weight": 0.05
+          },
+          {
+            "term": "ocr",
+            "tf": 2,
+            "weight": 0.033333
+          },
+          {
+            "term": "model",
+            "tf": 2,
+            "weight": 0.033333
+          },
+          {
+            "term": "factory",
+            "tf": 2,
+            "weight": 0.033333
+          },
+          {
+            "term": "standard",
+            "tf": 2,
+            "weight": 0.033333
+          },
+          {
+            "term": "pdf",
+            "tf": 2,
+            "weight": 0.033333
+          },
+          {
+            "term": "https",
+            "tf": 2,
+            "weight": 0.033333
+          },
+          {
+            "term": "github",
+            "tf": 2,
+            "weight": 0.033333
+          },
+          {
+            "term": "com",
+            "tf": 2,
+            "weight": 0.033333
+          },
+          {
+            "term": "project",
+            "tf": 2,
+            "weight": 0.033333
+          },
+          {
+            "term": "blob",
+            "tf": 2,
+            "weight": 0.033333
+          },
+          {
+            "term": "f7244a43",
+            "tf": 2,
+            "weight": 0.033333
+          },
+          {
+            "term": "models",
+            "tf": 2,
+            "weight": 0.033333
+          },
+          {
+            "term": "factories",
+            "tf": 2,
+            "weight": 0.033333
+          },
+          {
+            "term": "selection",
+            "tf": 1,
+            "weight": 0.016667
+          },
+          {
+            "term": "created",
+            "tf": 1,
+            "weight": 0.016667
+          },
+          {
+            "term": "via",
+            "tf": 1,
+            "weight": 0.016667
+          },
+          {
+            "term": "pattern",
+            "tf": 1,
+            "weight": 0.016667
+          }
+        ],
+        "unique_terms": 35,
+        "total_terms": 60
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "OCR Model Selection",
+        "docling",
+        "factory",
+        "github",
+        "https",
+        "model",
+        "ocr",
+        "pdf",
+        "pipeline",
+        "standard",
+        "the"
+      ],
+      "collection_name": "Docling"
+    },
+    "advanced_scores": {
+      "semantic": 0.6,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5279310344827586,
+      "overall": 0.6759770114942528
+    }
+  },
+  {
+    "text": "### Artifact Management  Models download artifacts from HuggingFace if `artifacts_path` is not provided: ``` ``` Artifacts are cached at `settings.cache_dir / \"models\"` by default. The pipeline passes `self.artifacts_path` to all models, which is resolved from `PipelineOptions.artifacts_path` or environment variable. **Sources:** [docling/pipeline/base\\_pipeline.py50-60](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/base_pipeline.py#L50-L60) [docling/models/table\\_structure\\_model.py92-101](https://github.com/docling-project/docling/blob/f7244a43/docling/models/table_structure_model.py#L92-L101) [docling/models/layout\\_model.py90-102](https://github.com/docling-project/docling/blob/f7244a43/docling/models/layout_model.py#L90-L102)  ---",
+    "metadata": {
+      "chunk_id": "6833f9500c24-0014",
+      "source_file": "Docs\\Docling\\_docling-project_docling_5.1-standard-pdf-pipeline.md",
+      "filename": "_docling-project_docling_5.1-standard-pdf-pipeline.md",
+      "file_extension": ".md",
+      "chunk_index": 14,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Artifact Management"
+      ],
+      "heading_text": "Artifact Management",
+      "token_count": 194,
+      "char_count": 773,
+      "start_char": 17201,
+      "end_char": 17974,
+      "semantic_score": 0.6,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5627272727272727,
+      "chunking_strategy": "hierarchical_balanced_structural",
+      "content_type": "code_block",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:06.754466",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 194,
+      "document_id": "6833f9500c24",
+      "document_name": "_docling-project_docling_5.1-standard-pdf-pipeline",
+      "source_path": "Docs\\Docling\\_docling-project_docling_5.1-standard-pdf-pipeline.md",
+      "source_filename": "_docling-project_docling_5.1-standard-pdf-pipeline.md",
+      "source_directory": "Docs\\Docling",
+      "relative_path": "Docs\\Docling\\_docling-project_docling_5.1-standard-pdf-pipeline.md",
+      "hierarchy_path": "Artifact Management",
+      "chunk_hash": "b29ea9a180ae1318",
+      "content_digest": "b29ea9a180ae1318",
+      "chunk_length": 773,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "docling"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "docling",
+          "models",
+          "artifacts",
+          "pipeline",
+          "model",
+          "path",
+          "https",
+          "github",
+          "com",
+          "project",
+          "blob",
+          "f7244a43",
+          "from",
+          "base",
+          "table",
+          "structure",
+          "layout",
+          "artifact",
+          "management",
+          "download"
+        ],
+        "term_weights": [
+          {
+            "term": "docling",
+            "tf": 12,
+            "weight": 0.123711
+          },
+          {
+            "term": "models",
+            "tf": 7,
+            "weight": 0.072165
+          },
+          {
+            "term": "artifacts",
+            "tf": 5,
+            "weight": 0.051546
+          },
+          {
+            "term": "pipeline",
+            "tf": 5,
+            "weight": 0.051546
+          },
+          {
+            "term": "model",
+            "tf": 4,
+            "weight": 0.041237
+          },
+          {
+            "term": "path",
+            "tf": 3,
+            "weight": 0.030928
+          },
+          {
+            "term": "https",
+            "tf": 3,
+            "weight": 0.030928
+          },
+          {
+            "term": "github",
+            "tf": 3,
+            "weight": 0.030928
+          },
+          {
+            "term": "com",
+            "tf": 3,
+            "weight": 0.030928
+          },
+          {
+            "term": "project",
+            "tf": 3,
+            "weight": 0.030928
+          },
+          {
+            "term": "blob",
+            "tf": 3,
+            "weight": 0.030928
+          },
+          {
+            "term": "f7244a43",
+            "tf": 3,
+            "weight": 0.030928
+          },
+          {
+            "term": "from",
+            "tf": 2,
+            "weight": 0.020619
+          },
+          {
+            "term": "base",
+            "tf": 2,
+            "weight": 0.020619
+          },
+          {
+            "term": "table",
+            "tf": 2,
+            "weight": 0.020619
+          },
+          {
+            "term": "structure",
+            "tf": 2,
+            "weight": 0.020619
+          },
+          {
+            "term": "layout",
+            "tf": 2,
+            "weight": 0.020619
+          },
+          {
+            "term": "artifact",
+            "tf": 1,
+            "weight": 0.010309
+          },
+          {
+            "term": "management",
+            "tf": 1,
+            "weight": 0.010309
+          },
+          {
+            "term": "download",
+            "tf": 1,
+            "weight": 0.010309
+          }
+        ],
+        "unique_terms": 50,
+        "total_terms": 97
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Artifact Management",
+        "artifacts",
+        "com",
+        "docling",
+        "github",
+        "https",
+        "model",
+        "models",
+        "path",
+        "pipeline",
+        "project"
+      ],
+      "collection_name": "Docling"
+    },
+    "advanced_scores": {
+      "semantic": 0.6,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5627272727272727,
+      "overall": 0.6875757575757575
+    }
+  },
+  {
+    "text": "### Reading Order Construction\n\nThe `ReadingOrderModel` constructs the final `DoclingDocument` hierarchy from assembled elements. It applies heuristics to determine document structure (sections, lists, hierarchical nesting).\n\n**Sources:** [docling/pipeline/standard\\_pdf\\_pipeline.py153](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/standard_pdf_pipeline.py#L153-L153) [docling/models/readingorder\\_model.py](https://github.com/docling-project/docling/blob/f7244a43/docling/models/readingorder_model.py)",
+    "metadata": {
+      "chunk_id": "6833f9500c24-0017",
+      "source_file": "Docs\\Docling\\_docling-project_docling_5.1-standard-pdf-pipeline.md",
+      "filename": "_docling-project_docling_5.1-standard-pdf-pipeline.md",
+      "file_extension": ".md",
+      "chunk_index": 17,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Reading Order Construction"
+      ],
+      "heading_text": "Reading Order Construction",
+      "token_count": 123,
+      "char_count": 532,
+      "start_char": 18304,
+      "end_char": 18836,
+      "semantic_score": 0.7,
+      "structural_score": 0.7999999999999998,
+      "retrieval_quality": 0.5792857142857143,
+      "chunking_strategy": "hierarchical_balanced_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:06.755933",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 123,
+      "document_id": "6833f9500c24",
+      "document_name": "_docling-project_docling_5.1-standard-pdf-pipeline",
+      "source_path": "Docs\\Docling\\_docling-project_docling_5.1-standard-pdf-pipeline.md",
+      "source_filename": "_docling-project_docling_5.1-standard-pdf-pipeline.md",
+      "source_directory": "Docs\\Docling",
+      "relative_path": "Docs\\Docling\\_docling-project_docling_5.1-standard-pdf-pipeline.md",
+      "hierarchy_path": "Reading Order Construction",
+      "chunk_hash": "2e42c5b2a5f1a142",
+      "content_digest": "2e42c5b2a5f1a142",
+      "chunk_length": 532,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "docling"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "docling",
+          "pipeline",
+          "the",
+          "standard",
+          "pdf",
+          "https",
+          "github",
+          "com",
+          "project",
+          "blob",
+          "f7244a43",
+          "l153",
+          "models",
+          "readingorder",
+          "model",
+          "reading",
+          "order",
+          "construction",
+          "readingordermodel",
+          "constructs"
+        ],
+        "term_weights": [
+          {
+            "term": "docling",
+            "tf": 8,
+            "weight": 0.133333
+          },
+          {
+            "term": "pipeline",
+            "tf": 4,
+            "weight": 0.066667
+          },
+          {
+            "term": "the",
+            "tf": 2,
+            "weight": 0.033333
+          },
+          {
+            "term": "standard",
+            "tf": 2,
+            "weight": 0.033333
+          },
+          {
+            "term": "pdf",
+            "tf": 2,
+            "weight": 0.033333
+          },
+          {
+            "term": "https",
+            "tf": 2,
+            "weight": 0.033333
+          },
+          {
+            "term": "github",
+            "tf": 2,
+            "weight": 0.033333
+          },
+          {
+            "term": "com",
+            "tf": 2,
+            "weight": 0.033333
+          },
+          {
+            "term": "project",
+            "tf": 2,
+            "weight": 0.033333
+          },
+          {
+            "term": "blob",
+            "tf": 2,
+            "weight": 0.033333
+          },
+          {
+            "term": "f7244a43",
+            "tf": 2,
+            "weight": 0.033333
+          },
+          {
+            "term": "l153",
+            "tf": 2,
+            "weight": 0.033333
+          },
+          {
+            "term": "models",
+            "tf": 2,
+            "weight": 0.033333
+          },
+          {
+            "term": "readingorder",
+            "tf": 2,
+            "weight": 0.033333
+          },
+          {
+            "term": "model",
+            "tf": 2,
+            "weight": 0.033333
+          },
+          {
+            "term": "reading",
+            "tf": 1,
+            "weight": 0.016667
+          },
+          {
+            "term": "order",
+            "tf": 1,
+            "weight": 0.016667
+          },
+          {
+            "term": "construction",
+            "tf": 1,
+            "weight": 0.016667
+          },
+          {
+            "term": "readingordermodel",
+            "tf": 1,
+            "weight": 0.016667
+          },
+          {
+            "term": "constructs",
+            "tf": 1,
+            "weight": 0.016667
+          }
+        ],
+        "unique_terms": 37,
+        "total_terms": 60
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Reading Order Construction",
+        "blob",
+        "com",
+        "docling",
+        "github",
+        "https",
+        "pdf",
+        "pipeline",
+        "project",
+        "standard",
+        "the"
+      ],
+      "collection_name": "Docling"
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.7999999999999998,
+      "retrieval_quality": 0.5792857142857143,
+      "overall": 0.6930952380952381
+    }
+  },
+  {
+    "text": "### Confidence Scoring  The pipeline aggregates confidence metrics from page-level predictions: ``` ``` - `layout_score`: Mean confidence from layout model predictions - `parse_score`: 10th percentile of text quality scores (emphasizes problems) - `table_score`: Mean table structure confidence - `ocr_score`: Mean OCR confidence (only for OCR'd cells)  **Sources:** [docling/pipeline/standard\\_pdf\\_pipeline.py204-232](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/standard_pdf_pipeline.py#L204-L232)  ---",
+    "metadata": {
+      "chunk_id": "6833f9500c24-0019",
+      "source_file": "Docs\\Docling\\_docling-project_docling_5.1-standard-pdf-pipeline.md",
+      "filename": "_docling-project_docling_5.1-standard-pdf-pipeline.md",
+      "file_extension": ".md",
+      "chunk_index": 19,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Confidence Scoring"
+      ],
+      "heading_text": "Confidence Scoring",
+      "token_count": 123,
+      "char_count": 534,
+      "start_char": 19558,
+      "end_char": 20092,
+      "semantic_score": 0.7999999999999999,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5226530612244897,
+      "chunking_strategy": "hierarchical_balanced_structural",
+      "content_type": "code_block",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:06.759220",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 123,
+      "document_id": "6833f9500c24",
+      "document_name": "_docling-project_docling_5.1-standard-pdf-pipeline",
+      "source_path": "Docs\\Docling\\_docling-project_docling_5.1-standard-pdf-pipeline.md",
+      "source_filename": "_docling-project_docling_5.1-standard-pdf-pipeline.md",
+      "source_directory": "Docs\\Docling",
+      "relative_path": "Docs\\Docling\\_docling-project_docling_5.1-standard-pdf-pipeline.md",
+      "hierarchy_path": "Confidence Scoring",
+      "chunk_hash": "483947604247c0d3",
+      "content_digest": "483947604247c0d3",
+      "chunk_length": 534,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "docling"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "confidence",
+          "pipeline",
+          "score",
+          "docling",
+          "mean",
+          "ocr",
+          "from",
+          "predictions",
+          "layout",
+          "table",
+          "standard",
+          "pdf",
+          "scoring",
+          "the",
+          "aggregates",
+          "metrics",
+          "page",
+          "level",
+          "model",
+          "parse"
+        ],
+        "term_weights": [
+          {
+            "term": "confidence",
+            "tf": 5,
+            "weight": 0.075758
+          },
+          {
+            "term": "pipeline",
+            "tf": 5,
+            "weight": 0.075758
+          },
+          {
+            "term": "score",
+            "tf": 4,
+            "weight": 0.060606
+          },
+          {
+            "term": "docling",
+            "tf": 4,
+            "weight": 0.060606
+          },
+          {
+            "term": "mean",
+            "tf": 3,
+            "weight": 0.045455
+          },
+          {
+            "term": "ocr",
+            "tf": 3,
+            "weight": 0.045455
+          },
+          {
+            "term": "from",
+            "tf": 2,
+            "weight": 0.030303
+          },
+          {
+            "term": "predictions",
+            "tf": 2,
+            "weight": 0.030303
+          },
+          {
+            "term": "layout",
+            "tf": 2,
+            "weight": 0.030303
+          },
+          {
+            "term": "table",
+            "tf": 2,
+            "weight": 0.030303
+          },
+          {
+            "term": "standard",
+            "tf": 2,
+            "weight": 0.030303
+          },
+          {
+            "term": "pdf",
+            "tf": 2,
+            "weight": 0.030303
+          },
+          {
+            "term": "scoring",
+            "tf": 1,
+            "weight": 0.015152
+          },
+          {
+            "term": "the",
+            "tf": 1,
+            "weight": 0.015152
+          },
+          {
+            "term": "aggregates",
+            "tf": 1,
+            "weight": 0.015152
+          },
+          {
+            "term": "metrics",
+            "tf": 1,
+            "weight": 0.015152
+          },
+          {
+            "term": "page",
+            "tf": 1,
+            "weight": 0.015152
+          },
+          {
+            "term": "level",
+            "tf": 1,
+            "weight": 0.015152
+          },
+          {
+            "term": "model",
+            "tf": 1,
+            "weight": 0.015152
+          },
+          {
+            "term": "parse",
+            "tf": 1,
+            "weight": 0.015152
+          }
+        ],
+        "unique_terms": 42,
+        "total_terms": 66
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Confidence Scoring",
+        "confidence",
+        "docling",
+        "from",
+        "layout",
+        "mean",
+        "ocr",
+        "pipeline",
+        "predictions",
+        "score",
+        "table"
+      ],
+      "collection_name": "Docling"
+    },
+    "advanced_scores": {
+      "semantic": 0.7999999999999999,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5226530612244897,
+      "overall": 0.7408843537414965
+    }
+  },
+  {
+    "text": "## Configuration and Options",
+    "metadata": {
+      "chunk_id": "6833f9500c24-0020",
+      "source_file": "Docs\\Docling\\_docling-project_docling_5.1-standard-pdf-pipeline.md",
+      "filename": "_docling-project_docling_5.1-standard-pdf-pipeline.md",
+      "file_extension": ".md",
+      "chunk_index": 20,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Configuration and Options"
+      ],
+      "heading_text": "Configuration and Options",
+      "token_count": 4,
+      "char_count": 28,
+      "start_char": 20096,
+      "end_char": 20124,
+      "semantic_score": 0.8,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.59,
+      "chunking_strategy": "hierarchical_balanced_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:06.759445",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 4,
+      "document_id": "6833f9500c24",
+      "document_name": "_docling-project_docling_5.1-standard-pdf-pipeline",
+      "source_path": "Docs\\Docling\\_docling-project_docling_5.1-standard-pdf-pipeline.md",
+      "source_filename": "_docling-project_docling_5.1-standard-pdf-pipeline.md",
+      "source_directory": "Docs\\Docling",
+      "relative_path": "Docs\\Docling\\_docling-project_docling_5.1-standard-pdf-pipeline.md",
+      "hierarchy_path": "Configuration and Options",
+      "chunk_hash": "33a2fd71c1aaf6ac",
+      "content_digest": "33a2fd71c1aaf6ac",
+      "chunk_length": 28,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "docling"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "configuration",
+          "and",
+          "options"
+        ],
+        "term_weights": [
+          {
+            "term": "configuration",
+            "tf": 1,
+            "weight": 0.333333
+          },
+          {
+            "term": "and",
+            "tf": 1,
+            "weight": 0.333333
+          },
+          {
+            "term": "options",
+            "tf": 1,
+            "weight": 0.333333
+          }
+        ],
+        "unique_terms": 3,
+        "total_terms": 3
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Configuration and Options",
+        "and",
+        "configuration",
+        "options"
+      ],
+      "collection_name": "Docling"
+    },
+    "advanced_scores": {
+      "semantic": 0.8,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.59,
+      "overall": 0.7633333333333333
+    }
+  },
+  {
+    "text": "### PdfPipelineOptions  The `PdfPipelineOptions` class (inherits from `PaginatedPipelineOptions`) controls all aspects of the pipeline: ``` ``` **Sources:** [docling/datamodel/pipeline\\_options.py](https://github.com/docling-project/docling/blob/f7244a43/docling/datamodel/pipeline_options.py) [docling/pipeline/standard\\_pdf\\_pipeline.py35-38](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/standard_pdf_pipeline.py#L35-L38)",
+    "metadata": {
+      "chunk_id": "6833f9500c24-0021",
+      "source_file": "Docs\\Docling\\_docling-project_docling_5.1-standard-pdf-pipeline.md",
+      "filename": "_docling-project_docling_5.1-standard-pdf-pipeline.md",
+      "file_extension": ".md",
+      "chunk_index": 21,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "PdfPipelineOptions"
+      ],
+      "heading_text": "PdfPipelineOptions",
+      "token_count": 114,
+      "char_count": 452,
+      "start_char": 20126,
+      "end_char": 20578,
+      "semantic_score": 0.7,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5584210526315789,
+      "chunking_strategy": "hierarchical_balanced_structural",
+      "content_type": "code_block",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:06.760493",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 114,
+      "document_id": "6833f9500c24",
+      "document_name": "_docling-project_docling_5.1-standard-pdf-pipeline",
+      "source_path": "Docs\\Docling\\_docling-project_docling_5.1-standard-pdf-pipeline.md",
+      "source_filename": "_docling-project_docling_5.1-standard-pdf-pipeline.md",
+      "source_directory": "Docs\\Docling",
+      "relative_path": "Docs\\Docling\\_docling-project_docling_5.1-standard-pdf-pipeline.md",
+      "hierarchy_path": "PdfPipelineOptions",
+      "chunk_hash": "53e6d802c9877a64",
+      "content_digest": "53e6d802c9877a64",
+      "chunk_length": 452,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "docling"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "docling",
+          "pipeline",
+          "pdfpipelineoptions",
+          "the",
+          "datamodel",
+          "options",
+          "https",
+          "github",
+          "com",
+          "project",
+          "blob",
+          "f7244a43",
+          "standard",
+          "pdf",
+          "class",
+          "inherits",
+          "from",
+          "paginatedpipelineoptions",
+          "controls",
+          "all"
+        ],
+        "term_weights": [
+          {
+            "term": "docling",
+            "tf": 8,
+            "weight": 0.16
+          },
+          {
+            "term": "pipeline",
+            "tf": 7,
+            "weight": 0.14
+          },
+          {
+            "term": "pdfpipelineoptions",
+            "tf": 2,
+            "weight": 0.04
+          },
+          {
+            "term": "the",
+            "tf": 2,
+            "weight": 0.04
+          },
+          {
+            "term": "datamodel",
+            "tf": 2,
+            "weight": 0.04
+          },
+          {
+            "term": "options",
+            "tf": 2,
+            "weight": 0.04
+          },
+          {
+            "term": "https",
+            "tf": 2,
+            "weight": 0.04
+          },
+          {
+            "term": "github",
+            "tf": 2,
+            "weight": 0.04
+          },
+          {
+            "term": "com",
+            "tf": 2,
+            "weight": 0.04
+          },
+          {
+            "term": "project",
+            "tf": 2,
+            "weight": 0.04
+          },
+          {
+            "term": "blob",
+            "tf": 2,
+            "weight": 0.04
+          },
+          {
+            "term": "f7244a43",
+            "tf": 2,
+            "weight": 0.04
+          },
+          {
+            "term": "standard",
+            "tf": 2,
+            "weight": 0.04
+          },
+          {
+            "term": "pdf",
+            "tf": 2,
+            "weight": 0.04
+          },
+          {
+            "term": "class",
+            "tf": 1,
+            "weight": 0.02
+          },
+          {
+            "term": "inherits",
+            "tf": 1,
+            "weight": 0.02
+          },
+          {
+            "term": "from",
+            "tf": 1,
+            "weight": 0.02
+          },
+          {
+            "term": "paginatedpipelineoptions",
+            "tf": 1,
+            "weight": 0.02
+          },
+          {
+            "term": "controls",
+            "tf": 1,
+            "weight": 0.02
+          },
+          {
+            "term": "all",
+            "tf": 1,
+            "weight": 0.02
+          }
+        ],
+        "unique_terms": 25,
+        "total_terms": 50
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "PdfPipelineOptions",
+        "com",
+        "datamodel",
+        "docling",
+        "github",
+        "https",
+        "options",
+        "pdfpipelineoptions",
+        "pipeline",
+        "project",
+        "the"
+      ],
+      "collection_name": "Docling"
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5584210526315789,
+      "overall": 0.7194736842105263
+    }
+  },
+  {
+    "text": "### Usage Example ``` ``` **Sources:** [tests/test\\_options.py98-105](https://github.com/docling-project/docling/blob/f7244a43/tests/test_options.py#L98-L105) [docling/document\\_converter.py](https://github.com/docling-project/docling/blob/f7244a43/docling/document_converter.py)  ---",
+    "metadata": {
+      "chunk_id": "6833f9500c24-0022",
+      "source_file": "Docs\\Docling\\_docling-project_docling_5.1-standard-pdf-pipeline.md",
+      "filename": "_docling-project_docling_5.1-standard-pdf-pipeline.md",
+      "file_extension": ".md",
+      "chunk_index": 22,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Usage Example"
+      ],
+      "heading_text": "Usage Example",
+      "token_count": 74,
+      "char_count": 284,
+      "start_char": 20582,
+      "end_char": 20866,
+      "semantic_score": 0.6,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5566666666666666,
+      "chunking_strategy": "hierarchical_balanced_structural",
+      "content_type": "code_block",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:06.761051",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 74,
+      "document_id": "6833f9500c24",
+      "document_name": "_docling-project_docling_5.1-standard-pdf-pipeline",
+      "source_path": "Docs\\Docling\\_docling-project_docling_5.1-standard-pdf-pipeline.md",
+      "source_filename": "_docling-project_docling_5.1-standard-pdf-pipeline.md",
+      "source_directory": "Docs\\Docling",
+      "relative_path": "Docs\\Docling\\_docling-project_docling_5.1-standard-pdf-pipeline.md",
+      "hierarchy_path": "Usage Example",
+      "chunk_hash": "ab4f0f5b9b5fa99a",
+      "content_digest": "ab4f0f5b9b5fa99a",
+      "chunk_length": 284,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "docling"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "docling",
+          "tests",
+          "test",
+          "options",
+          "https",
+          "github",
+          "com",
+          "project",
+          "blob",
+          "f7244a43",
+          "document",
+          "converter",
+          "usage",
+          "example",
+          "sources",
+          "py98",
+          "105",
+          "l98",
+          "l105"
+        ],
+        "term_weights": [
+          {
+            "term": "docling",
+            "tf": 6,
+            "weight": 0.171429
+          },
+          {
+            "term": "tests",
+            "tf": 2,
+            "weight": 0.057143
+          },
+          {
+            "term": "test",
+            "tf": 2,
+            "weight": 0.057143
+          },
+          {
+            "term": "options",
+            "tf": 2,
+            "weight": 0.057143
+          },
+          {
+            "term": "https",
+            "tf": 2,
+            "weight": 0.057143
+          },
+          {
+            "term": "github",
+            "tf": 2,
+            "weight": 0.057143
+          },
+          {
+            "term": "com",
+            "tf": 2,
+            "weight": 0.057143
+          },
+          {
+            "term": "project",
+            "tf": 2,
+            "weight": 0.057143
+          },
+          {
+            "term": "blob",
+            "tf": 2,
+            "weight": 0.057143
+          },
+          {
+            "term": "f7244a43",
+            "tf": 2,
+            "weight": 0.057143
+          },
+          {
+            "term": "document",
+            "tf": 2,
+            "weight": 0.057143
+          },
+          {
+            "term": "converter",
+            "tf": 2,
+            "weight": 0.057143
+          },
+          {
+            "term": "usage",
+            "tf": 1,
+            "weight": 0.028571
+          },
+          {
+            "term": "example",
+            "tf": 1,
+            "weight": 0.028571
+          },
+          {
+            "term": "sources",
+            "tf": 1,
+            "weight": 0.028571
+          },
+          {
+            "term": "py98",
+            "tf": 1,
+            "weight": 0.028571
+          },
+          {
+            "term": "105",
+            "tf": 1,
+            "weight": 0.028571
+          },
+          {
+            "term": "l98",
+            "tf": 1,
+            "weight": 0.028571
+          },
+          {
+            "term": "l105",
+            "tf": 1,
+            "weight": 0.028571
+          }
+        ],
+        "unique_terms": 19,
+        "total_terms": 35
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Usage Example",
+        "blob",
+        "com",
+        "docling",
+        "f7244a43",
+        "github",
+        "https",
+        "options",
+        "project",
+        "test",
+        "tests"
+      ],
+      "collection_name": "Docling"
+    },
+    "advanced_scores": {
+      "semantic": 0.6,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5566666666666666,
+      "overall": 0.6855555555555556
+    }
+  },
+  {
+    "text": "## Processing Flow Summary  The complete end-to-end flow for a single document: ``` ``` **Sources:** [docling/pipeline/base\\_pipeline.py197-283](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/base_pipeline.py#L197-L283) [docling/pipeline/standard\\_pdf\\_pipeline.py126-234](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/standard_pdf_pipeline.py#L126-L234) [docling/pipeline/base\\_pipeline.py93-115](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/base_pipeline.py#L93-L115)  Dismiss  Refresh this wiki  This wiki was recently refreshed. Please wait 4 days to refresh again.",
+    "metadata": {
+      "chunk_id": "6833f9500c24-0027",
+      "source_file": "Docs\\Docling\\_docling-project_docling_5.1-standard-pdf-pipeline.md",
+      "filename": "_docling-project_docling_5.1-standard-pdf-pipeline.md",
+      "file_extension": ".md",
+      "chunk_index": 27,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Processing Flow Summary"
+      ],
+      "heading_text": "Processing Flow Summary",
+      "token_count": 172,
+      "char_count": 653,
+      "start_char": 24457,
+      "end_char": 25110,
+      "semantic_score": 0.6,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5458823529411765,
+      "chunking_strategy": "hierarchical_balanced_structural",
+      "content_type": "code_block",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:06.765745",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 172,
+      "document_id": "6833f9500c24",
+      "document_name": "_docling-project_docling_5.1-standard-pdf-pipeline",
+      "source_path": "Docs\\Docling\\_docling-project_docling_5.1-standard-pdf-pipeline.md",
+      "source_filename": "_docling-project_docling_5.1-standard-pdf-pipeline.md",
+      "source_directory": "Docs\\Docling",
+      "relative_path": "Docs\\Docling\\_docling-project_docling_5.1-standard-pdf-pipeline.md",
+      "hierarchy_path": "Processing Flow Summary",
+      "chunk_hash": "925491ec983664c2",
+      "content_digest": "925491ec983664c2",
+      "chunk_length": 653,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "docling"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "docling",
+          "pipeline",
+          "base",
+          "https",
+          "github",
+          "com",
+          "project",
+          "blob",
+          "f7244a43",
+          "flow",
+          "end",
+          "standard",
+          "pdf",
+          "refresh",
+          "this",
+          "wiki",
+          "processing",
+          "summary",
+          "the",
+          "complete"
+        ],
+        "term_weights": [
+          {
+            "term": "docling",
+            "tf": 12,
+            "weight": 0.136364
+          },
+          {
+            "term": "pipeline",
+            "tf": 12,
+            "weight": 0.136364
+          },
+          {
+            "term": "base",
+            "tf": 4,
+            "weight": 0.045455
+          },
+          {
+            "term": "https",
+            "tf": 3,
+            "weight": 0.034091
+          },
+          {
+            "term": "github",
+            "tf": 3,
+            "weight": 0.034091
+          },
+          {
+            "term": "com",
+            "tf": 3,
+            "weight": 0.034091
+          },
+          {
+            "term": "project",
+            "tf": 3,
+            "weight": 0.034091
+          },
+          {
+            "term": "blob",
+            "tf": 3,
+            "weight": 0.034091
+          },
+          {
+            "term": "f7244a43",
+            "tf": 3,
+            "weight": 0.034091
+          },
+          {
+            "term": "flow",
+            "tf": 2,
+            "weight": 0.022727
+          },
+          {
+            "term": "end",
+            "tf": 2,
+            "weight": 0.022727
+          },
+          {
+            "term": "standard",
+            "tf": 2,
+            "weight": 0.022727
+          },
+          {
+            "term": "pdf",
+            "tf": 2,
+            "weight": 0.022727
+          },
+          {
+            "term": "refresh",
+            "tf": 2,
+            "weight": 0.022727
+          },
+          {
+            "term": "this",
+            "tf": 2,
+            "weight": 0.022727
+          },
+          {
+            "term": "wiki",
+            "tf": 2,
+            "weight": 0.022727
+          },
+          {
+            "term": "processing",
+            "tf": 1,
+            "weight": 0.011364
+          },
+          {
+            "term": "summary",
+            "tf": 1,
+            "weight": 0.011364
+          },
+          {
+            "term": "the",
+            "tf": 1,
+            "weight": 0.011364
+          },
+          {
+            "term": "complete",
+            "tf": 1,
+            "weight": 0.011364
+          }
+        ],
+        "unique_terms": 44,
+        "total_terms": 88
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Processing Flow Summary",
+        "base",
+        "blob",
+        "com",
+        "docling",
+        "f7244a43",
+        "flow",
+        "github",
+        "https",
+        "pipeline",
+        "project"
+      ],
+      "collection_name": "Docling"
+    },
+    "advanced_scores": {
+      "semantic": 0.6,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5458823529411765,
+      "overall": 0.6819607843137255
+    }
+  },
+  {
+    "text": "### On this page  - [Standard PDF Pipeline](#standard-pdf-pipeline.md) - [Purpose and Scope](#purpose-and-scope.md) - [Pipeline Architecture](#pipeline-architecture.md) - [Class Hierarchy](#class-hierarchy.md) - [Pipeline Components](#pipeline-components.md) - [Five-Stage Processing](#five-stage-processing.md) - [Stage 1: Page Preprocessing](#stage-1-page-preprocessing.md) - [Stage 2: OCR (Optical Character Recognition)](#stage-2-ocr-optical-character-recognition.md) - [Stage 3: Layout Analysis](#stage-3-layout-analysis.md) - [Stage 4: Table Structure Detection](#stage-4-table-structure-detection.md) - [Stage 5: Page Assembly](#stage-5-page-assembly.md) - [Model Integration](#model-integration.md) - [Pipeline Construction](#pipeline-construction.md) - [OCR Model Selection](#ocr-model-selection.md) - [Artifact Management](#artifact-management.md) - [Document Assembly](#document-assembly.md) - [Cross-Page Aggregation](#cross-page-aggregation.md) - [Reading Order Construction](#reading-order-construction.md) - [Image Generation](#image-generation.md) - [Confidence Scoring](#confidence-scoring.md) - [Configuration and Options](#configuration-and-options.md) - [PdfPipelineOptions](#pdfpipelineoptions.md) - [Usage Example](#usage-example.md) - [Comparison with Other Pipelines](#comparison-with-other-pipelines.md) - [StandardPdfPipeline vs ThreadedStandardPdfPipeline](#standardpdfpipeline-vs-threadedstandardpdfpipeline.md) - [StandardPdfPipeline vs VlmPipeline](#standardpdfpipeline-vs-vlmpipeline.md) - [Backend Support](#backend-support.md) - [Processing Flow Summary](#processing-flow-summary.md)",
+    "metadata": {
+      "chunk_id": "6833f9500c24-0028",
+      "source_file": "Docs\\Docling\\_docling-project_docling_5.1-standard-pdf-pipeline.md",
+      "filename": "_docling-project_docling_5.1-standard-pdf-pipeline.md",
+      "file_extension": ".md",
+      "chunk_index": 28,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "On this page"
+      ],
+      "heading_text": "On this page",
+      "token_count": 401,
+      "char_count": 1616,
+      "start_char": 25114,
+      "end_char": 26730,
+      "semantic_score": 0.6,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.7166636363636364,
+      "chunking_strategy": "hierarchical_balanced_structural",
+      "content_type": "code_block",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:06.767795",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 401,
+      "document_id": "6833f9500c24",
+      "document_name": "_docling-project_docling_5.1-standard-pdf-pipeline",
+      "source_path": "Docs\\Docling\\_docling-project_docling_5.1-standard-pdf-pipeline.md",
+      "source_filename": "_docling-project_docling_5.1-standard-pdf-pipeline.md",
+      "source_directory": "Docs\\Docling",
+      "relative_path": "Docs\\Docling\\_docling-project_docling_5.1-standard-pdf-pipeline.md",
+      "hierarchy_path": "On this page",
+      "chunk_hash": "10aaec4acbf3fce5",
+      "content_digest": "10aaec4acbf3fce5",
+      "chunk_length": 1616,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "docling"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "stage",
+          "pipeline",
+          "page",
+          "and",
+          "processing",
+          "ocr",
+          "assembly",
+          "model",
+          "construction",
+          "standardpdfpipeline",
+          "standard",
+          "pdf",
+          "purpose",
+          "scope",
+          "architecture",
+          "class",
+          "hierarchy",
+          "components",
+          "five",
+          "preprocessing"
+        ],
+        "term_weights": [
+          {
+            "term": "stage",
+            "tf": 12,
+            "weight": 0.081081
+          },
+          {
+            "term": "pipeline",
+            "tf": 8,
+            "weight": 0.054054
+          },
+          {
+            "term": "page",
+            "tf": 7,
+            "weight": 0.047297
+          },
+          {
+            "term": "and",
+            "tf": 4,
+            "weight": 0.027027
+          },
+          {
+            "term": "processing",
+            "tf": 4,
+            "weight": 0.027027
+          },
+          {
+            "term": "ocr",
+            "tf": 4,
+            "weight": 0.027027
+          },
+          {
+            "term": "assembly",
+            "tf": 4,
+            "weight": 0.027027
+          },
+          {
+            "term": "model",
+            "tf": 4,
+            "weight": 0.027027
+          },
+          {
+            "term": "construction",
+            "tf": 4,
+            "weight": 0.027027
+          },
+          {
+            "term": "standardpdfpipeline",
+            "tf": 4,
+            "weight": 0.027027
+          },
+          {
+            "term": "standard",
+            "tf": 2,
+            "weight": 0.013514
+          },
+          {
+            "term": "pdf",
+            "tf": 2,
+            "weight": 0.013514
+          },
+          {
+            "term": "purpose",
+            "tf": 2,
+            "weight": 0.013514
+          },
+          {
+            "term": "scope",
+            "tf": 2,
+            "weight": 0.013514
+          },
+          {
+            "term": "architecture",
+            "tf": 2,
+            "weight": 0.013514
+          },
+          {
+            "term": "class",
+            "tf": 2,
+            "weight": 0.013514
+          },
+          {
+            "term": "hierarchy",
+            "tf": 2,
+            "weight": 0.013514
+          },
+          {
+            "term": "components",
+            "tf": 2,
+            "weight": 0.013514
+          },
+          {
+            "term": "five",
+            "tf": 2,
+            "weight": 0.013514
+          },
+          {
+            "term": "preprocessing",
+            "tf": 2,
+            "weight": 0.013514
+          }
+        ],
+        "unique_terms": 57,
+        "total_terms": 148
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "On this page",
+        "and",
+        "assembly",
+        "construction",
+        "model",
+        "ocr",
+        "page",
+        "pipeline",
+        "processing",
+        "stage",
+        "standardpdfpipeline"
+      ],
+      "collection_name": "Docling"
+    },
+    "advanced_scores": {
+      "semantic": 0.6,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.7166636363636364,
+      "overall": 0.7388878787878789
+    }
+  }
+]

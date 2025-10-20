@@ -1,0 +1,2517 @@
+[
+  {
+    "text": "## Multi-Processing Architecture  The sentence-transformers library provides built-in multi-processing capabilities that allow distributing encoding tasks across multiple devices or CPU processes. This is particularly useful when processing large datasets or when multiple GPUs are available. ```mermaid graph TD     MainProcess[\"Main Process<br/>SentenceTransformer\"] --> ProcessPool[\"Multi-Process Pool<br/>start_multi_process_pool()\"]     ProcessPool --> Worker1[\"Worker Process 1<br/>Device: cuda:0\"]     ProcessPool --> Worker2[\"Worker Process 2<br/>Device: cuda:1\"]      ProcessPool --> Worker3[\"Worker Process 3<br/>Device: cpu\"]          MainProcess --> ChunkDistribution[\"Data Chunking<br/>chunk_size parameter\"]     ChunkDistribution --> Worker1     ChunkDistribution --> Worker2     ChunkDistribution --> Worker3          Worker1 --> Results1[\"Partial Results 1\"]     Worker2 --> Results2[\"Partial Results 2\"]     Worker3 --> Results3[\"Partial Results 3\"]          Results1 --> Aggregation[\"Result Aggregation<br/>_encode_multi_process()\"]     Results2 --> Aggregation     Results3 --> Aggregation          Aggregation --> FinalOutput[\"Final Embeddings<br/>numpy.ndarray or torch.Tensor\"] ``` **Sources:** [sentence_transformers/SentenceTransformer.py:1046-1158](), [tests/test_multi_process.py:14-42]()",
+    "metadata": {
+      "chunk_id": "fbd6896cf70d-0000",
+      "source_file": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers\\Multi-Processing_and_Optimization.md",
+      "filename": "Multi-Processing_and_Optimization.md",
+      "file_extension": ".md",
+      "chunk_index": 0,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Multi-Processing Architecture"
+      ],
+      "heading_text": "Multi-Processing Architecture",
+      "token_count": 280,
+      "char_count": 1314,
+      "start_char": 546,
+      "end_char": 1860,
+      "semantic_score": 0.7999999999999999,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5027272727272727,
+      "chunking_strategy": "hierarchical_balanced_structural",
+      "content_type": "code_block",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:45.917405",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 280,
+      "document_id": "fbd6896cf70d",
+      "document_name": "Multi-Processing_and_Optimization",
+      "source_path": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers\\Multi-Processing_and_Optimization.md",
+      "source_filename": "Multi-Processing_and_Optimization.md",
+      "source_directory": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers",
+      "relative_path": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers\\Multi-Processing_and_Optimization.md",
+      "hierarchy_path": "Multi-Processing Architecture",
+      "chunk_hash": "e4be4e4d77fefa4b",
+      "content_digest": "e4be4e4d77fefa4b",
+      "chunk_length": 1314,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "sentence_transformer"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "process",
+          "multi",
+          "aggregation",
+          "processpool",
+          "chunkdistribution",
+          "processing",
+          "worker1",
+          "worker",
+          "device",
+          "worker2",
+          "worker3",
+          "partial",
+          "results",
+          "sentence",
+          "transformers",
+          "multiple",
+          "cpu",
+          "when",
+          "mainprocess",
+          "sentencetransformer"
+        ],
+        "term_weights": [
+          {
+            "term": "process",
+            "tf": 8,
+            "weight": 0.066667
+          },
+          {
+            "term": "multi",
+            "tf": 6,
+            "weight": 0.05
+          },
+          {
+            "term": "aggregation",
+            "tf": 5,
+            "weight": 0.041667
+          },
+          {
+            "term": "processpool",
+            "tf": 4,
+            "weight": 0.033333
+          },
+          {
+            "term": "chunkdistribution",
+            "tf": 4,
+            "weight": 0.033333
+          },
+          {
+            "term": "processing",
+            "tf": 3,
+            "weight": 0.025
+          },
+          {
+            "term": "worker1",
+            "tf": 3,
+            "weight": 0.025
+          },
+          {
+            "term": "worker",
+            "tf": 3,
+            "weight": 0.025
+          },
+          {
+            "term": "device",
+            "tf": 3,
+            "weight": 0.025
+          },
+          {
+            "term": "worker2",
+            "tf": 3,
+            "weight": 0.025
+          },
+          {
+            "term": "worker3",
+            "tf": 3,
+            "weight": 0.025
+          },
+          {
+            "term": "partial",
+            "tf": 3,
+            "weight": 0.025
+          },
+          {
+            "term": "results",
+            "tf": 3,
+            "weight": 0.025
+          },
+          {
+            "term": "sentence",
+            "tf": 2,
+            "weight": 0.016667
+          },
+          {
+            "term": "transformers",
+            "tf": 2,
+            "weight": 0.016667
+          },
+          {
+            "term": "multiple",
+            "tf": 2,
+            "weight": 0.016667
+          },
+          {
+            "term": "cpu",
+            "tf": 2,
+            "weight": 0.016667
+          },
+          {
+            "term": "when",
+            "tf": 2,
+            "weight": 0.016667
+          },
+          {
+            "term": "mainprocess",
+            "tf": 2,
+            "weight": 0.016667
+          },
+          {
+            "term": "sentencetransformer",
+            "tf": 2,
+            "weight": 0.016667
+          }
+        ],
+        "unique_terms": 70,
+        "total_terms": 120
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Multi-Processing Architecture",
+        "aggregation",
+        "chunkdistribution",
+        "device",
+        "multi",
+        "process",
+        "processing",
+        "processpool",
+        "worker",
+        "worker1",
+        "worker2"
+      ],
+      "collection_name": "Sentence_Transformer"
+    },
+    "advanced_scores": {
+      "semantic": 0.7999999999999999,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5027272727272727,
+      "overall": 0.734242424242424
+    }
+  },
+  {
+    "text": "### Distributed Encoding Process ```mermaid sequenceDiagram     participant Client as \"Client Code\"     participant ST as \"SentenceTransformer\"     participant Pool as \"Process Pool\"     participant W1 as \"Worker 1\"     participant W2 as \"Worker 2\"          Client->>ST: encode(sentences, device=[\"cuda:0\", \"cuda:1\"])     ST->>ST: _encode_multi_process()     ST->>Pool: Create temporary pool     Pool->>W1: Initialize on cuda:0     Pool->>W2: Initialize on cuda:1          ST->>ST: Split sentences into chunks     ST->>W1: Send chunk 1     ST->>W2: Send chunk 2          W1->>W1: Process batch     W2->>W2: Process batch          W1->>ST: Return embeddings 1     W2->>ST: Return embeddings 2          ST->>ST: Concatenate results     ST->>Pool: Cleanup processes     ST->>Client: Return final embeddings ``` **Sources:** [sentence_transformers/SentenceTransformer.py:1077-1158](), [sentence_transformers/sparse_encoder/SparseEncoder.py:514-532]()",
+    "metadata": {
+      "chunk_id": "fbd6896cf70d-0002",
+      "source_file": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers\\Multi-Processing_and_Optimization.md",
+      "filename": "Multi-Processing_and_Optimization.md",
+      "file_extension": ".md",
+      "chunk_index": 2,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Distributed Encoding Process"
+      ],
+      "heading_text": "Distributed Encoding Process",
+      "token_count": 254,
+      "char_count": 946,
+      "start_char": 2525,
+      "end_char": 3471,
+      "semantic_score": 0.7999999999999999,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5023595505617977,
+      "chunking_strategy": "hierarchical_balanced_structural",
+      "content_type": "code_block",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:45.924134",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 254,
+      "document_id": "fbd6896cf70d",
+      "document_name": "Multi-Processing_and_Optimization",
+      "source_path": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers\\Multi-Processing_and_Optimization.md",
+      "source_filename": "Multi-Processing_and_Optimization.md",
+      "source_directory": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers",
+      "relative_path": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers\\Multi-Processing_and_Optimization.md",
+      "hierarchy_path": "Distributed Encoding Process",
+      "chunk_hash": "5a00b677fa1b08f0",
+      "content_digest": "5a00b677fa1b08f0",
+      "chunk_length": 946,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "sentence_transformer"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "pool",
+          "process",
+          "participant",
+          "client",
+          "cuda",
+          "return",
+          "embeddings",
+          "sentencetransformer",
+          "worker",
+          "encode",
+          "sentences",
+          "initialize",
+          "send",
+          "chunk",
+          "batch",
+          "sentence",
+          "transformers",
+          "distributed",
+          "encoding",
+          "mermaid"
+        ],
+        "term_weights": [
+          {
+            "term": "pool",
+            "tf": 7,
+            "weight": 0.092105
+          },
+          {
+            "term": "process",
+            "tf": 5,
+            "weight": 0.065789
+          },
+          {
+            "term": "participant",
+            "tf": 5,
+            "weight": 0.065789
+          },
+          {
+            "term": "client",
+            "tf": 4,
+            "weight": 0.052632
+          },
+          {
+            "term": "cuda",
+            "tf": 4,
+            "weight": 0.052632
+          },
+          {
+            "term": "return",
+            "tf": 3,
+            "weight": 0.039474
+          },
+          {
+            "term": "embeddings",
+            "tf": 3,
+            "weight": 0.039474
+          },
+          {
+            "term": "sentencetransformer",
+            "tf": 2,
+            "weight": 0.026316
+          },
+          {
+            "term": "worker",
+            "tf": 2,
+            "weight": 0.026316
+          },
+          {
+            "term": "encode",
+            "tf": 2,
+            "weight": 0.026316
+          },
+          {
+            "term": "sentences",
+            "tf": 2,
+            "weight": 0.026316
+          },
+          {
+            "term": "initialize",
+            "tf": 2,
+            "weight": 0.026316
+          },
+          {
+            "term": "send",
+            "tf": 2,
+            "weight": 0.026316
+          },
+          {
+            "term": "chunk",
+            "tf": 2,
+            "weight": 0.026316
+          },
+          {
+            "term": "batch",
+            "tf": 2,
+            "weight": 0.026316
+          },
+          {
+            "term": "sentence",
+            "tf": 2,
+            "weight": 0.026316
+          },
+          {
+            "term": "transformers",
+            "tf": 2,
+            "weight": 0.026316
+          },
+          {
+            "term": "distributed",
+            "tf": 1,
+            "weight": 0.013158
+          },
+          {
+            "term": "encoding",
+            "tf": 1,
+            "weight": 0.013158
+          },
+          {
+            "term": "mermaid",
+            "tf": 1,
+            "weight": 0.013158
+          }
+        ],
+        "unique_terms": 42,
+        "total_terms": 76
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Distributed Encoding Process",
+        "client",
+        "cuda",
+        "embeddings",
+        "encode",
+        "participant",
+        "pool",
+        "process",
+        "return",
+        "sentencetransformer",
+        "worker"
+      ],
+      "collection_name": "Sentence_Transformer"
+    },
+    "advanced_scores": {
+      "semantic": 0.7999999999999999,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5023595505617977,
+      "overall": 0.7341198501872658
+    }
+  },
+  {
+    "text": "## Backend Optimization\n\nSentence-transformers supports multiple inference backends beyond PyTorch, enabling significant performance improvements for production deployments.",
+    "metadata": {
+      "chunk_id": "fbd6896cf70d-0003",
+      "source_file": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers\\Multi-Processing_and_Optimization.md",
+      "filename": "Multi-Processing_and_Optimization.md",
+      "file_extension": ".md",
+      "chunk_index": 3,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Backend Optimization"
+      ],
+      "heading_text": "Backend Optimization",
+      "token_count": 25,
+      "char_count": 173,
+      "start_char": 3475,
+      "end_char": 3648,
+      "semantic_score": 0.8,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.59,
+      "chunking_strategy": "hierarchical_balanced_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:45.924948",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 25,
+      "document_id": "fbd6896cf70d",
+      "document_name": "Multi-Processing_and_Optimization",
+      "source_path": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers\\Multi-Processing_and_Optimization.md",
+      "source_filename": "Multi-Processing_and_Optimization.md",
+      "source_directory": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers",
+      "relative_path": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers\\Multi-Processing_and_Optimization.md",
+      "hierarchy_path": "Backend Optimization",
+      "chunk_hash": "84f45dbb5cf4bb9b",
+      "content_digest": "84f45dbb5cf4bb9b",
+      "chunk_length": 173,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "sentence_transformer"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "backend",
+          "optimization",
+          "sentence",
+          "transformers",
+          "supports",
+          "multiple",
+          "inference",
+          "backends",
+          "beyond",
+          "pytorch",
+          "enabling",
+          "significant",
+          "performance",
+          "improvements",
+          "for",
+          "production",
+          "deployments"
+        ],
+        "term_weights": [
+          {
+            "term": "backend",
+            "tf": 1,
+            "weight": 0.058824
+          },
+          {
+            "term": "optimization",
+            "tf": 1,
+            "weight": 0.058824
+          },
+          {
+            "term": "sentence",
+            "tf": 1,
+            "weight": 0.058824
+          },
+          {
+            "term": "transformers",
+            "tf": 1,
+            "weight": 0.058824
+          },
+          {
+            "term": "supports",
+            "tf": 1,
+            "weight": 0.058824
+          },
+          {
+            "term": "multiple",
+            "tf": 1,
+            "weight": 0.058824
+          },
+          {
+            "term": "inference",
+            "tf": 1,
+            "weight": 0.058824
+          },
+          {
+            "term": "backends",
+            "tf": 1,
+            "weight": 0.058824
+          },
+          {
+            "term": "beyond",
+            "tf": 1,
+            "weight": 0.058824
+          },
+          {
+            "term": "pytorch",
+            "tf": 1,
+            "weight": 0.058824
+          },
+          {
+            "term": "enabling",
+            "tf": 1,
+            "weight": 0.058824
+          },
+          {
+            "term": "significant",
+            "tf": 1,
+            "weight": 0.058824
+          },
+          {
+            "term": "performance",
+            "tf": 1,
+            "weight": 0.058824
+          },
+          {
+            "term": "improvements",
+            "tf": 1,
+            "weight": 0.058824
+          },
+          {
+            "term": "for",
+            "tf": 1,
+            "weight": 0.058824
+          },
+          {
+            "term": "production",
+            "tf": 1,
+            "weight": 0.058824
+          },
+          {
+            "term": "deployments",
+            "tf": 1,
+            "weight": 0.058824
+          }
+        ],
+        "unique_terms": 17,
+        "total_terms": 17
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Backend Optimization",
+        "backend",
+        "backends",
+        "beyond",
+        "inference",
+        "multiple",
+        "optimization",
+        "pytorch",
+        "sentence",
+        "supports",
+        "transformers"
+      ],
+      "collection_name": "Sentence_Transformer"
+    },
+    "advanced_scores": {
+      "semantic": 0.8,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.59,
+      "overall": 0.7633333333333333
+    }
+  },
+  {
+    "text": "### Backend Architecture ```mermaid graph LR     Model[\"Model Loading\"] --> BackendChoice{\"Backend Selection\"}          BackendChoice -->|\"backend='torch'\"| PyTorchBackend[\"PyTorch Backend<br/>AutoModel.from_pretrained()\"]     BackendChoice -->|\"backend='onnx'\"| ONNXBackend[\"ONNX Backend<br/>load_onnx_model()\"]     BackendChoice -->|\"backend='openvino'\"| OpenVINOBackend[\"OpenVINO Backend<br/>load_openvino_model()\"]          PyTorchBackend --> PyTorchInference[\"PyTorch Inference<br/>model(**features)\"]     ONNXBackend --> ONNXInference[\"ONNX Runtime<br/>session.run()\"]     OpenVINOBackend --> OpenVINOInference[\"OpenVINO Runtime<br/>compiled_model()\"]          PyTorchInference --> Output[\"Embeddings Output\"]     ONNXInference --> Output     OpenVINOInference --> Output ``` **Sources:** [sentence_transformers/models/Transformer.py:173-203](), [sentence_transformers/cross_encoder/CrossEncoder.py:236-257]()",
+    "metadata": {
+      "chunk_id": "fbd6896cf70d-0004",
+      "source_file": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers\\Multi-Processing_and_Optimization.md",
+      "filename": "Multi-Processing_and_Optimization.md",
+      "file_extension": ".md",
+      "chunk_index": 4,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Backend Architecture"
+      ],
+      "heading_text": "Backend Architecture",
+      "token_count": 232,
+      "char_count": 915,
+      "start_char": 3650,
+      "end_char": 4565,
+      "semantic_score": 0.7999999999999999,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5348979591836734,
+      "chunking_strategy": "hierarchical_balanced_structural",
+      "content_type": "code_block",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:45.927251",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 232,
+      "document_id": "fbd6896cf70d",
+      "document_name": "Multi-Processing_and_Optimization",
+      "source_path": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers\\Multi-Processing_and_Optimization.md",
+      "source_filename": "Multi-Processing_and_Optimization.md",
+      "source_directory": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers",
+      "relative_path": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers\\Multi-Processing_and_Optimization.md",
+      "hierarchy_path": "Backend Architecture",
+      "chunk_hash": "64184f6e97007268",
+      "content_digest": "64184f6e97007268",
+      "chunk_length": 915,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "sentence_transformer"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "backend",
+          "model",
+          "backendchoice",
+          "onnx",
+          "openvino",
+          "output",
+          "pytorchbackend",
+          "pytorch",
+          "onnxbackend",
+          "load",
+          "openvinobackend",
+          "pytorchinference",
+          "onnxinference",
+          "runtime",
+          "openvinoinference",
+          "sentence",
+          "transformers",
+          "architecture",
+          "mermaid",
+          "graph"
+        ],
+        "term_weights": [
+          {
+            "term": "backend",
+            "tf": 8,
+            "weight": 0.103896
+          },
+          {
+            "term": "model",
+            "tf": 6,
+            "weight": 0.077922
+          },
+          {
+            "term": "backendchoice",
+            "tf": 4,
+            "weight": 0.051948
+          },
+          {
+            "term": "onnx",
+            "tf": 4,
+            "weight": 0.051948
+          },
+          {
+            "term": "openvino",
+            "tf": 4,
+            "weight": 0.051948
+          },
+          {
+            "term": "output",
+            "tf": 4,
+            "weight": 0.051948
+          },
+          {
+            "term": "pytorchbackend",
+            "tf": 2,
+            "weight": 0.025974
+          },
+          {
+            "term": "pytorch",
+            "tf": 2,
+            "weight": 0.025974
+          },
+          {
+            "term": "onnxbackend",
+            "tf": 2,
+            "weight": 0.025974
+          },
+          {
+            "term": "load",
+            "tf": 2,
+            "weight": 0.025974
+          },
+          {
+            "term": "openvinobackend",
+            "tf": 2,
+            "weight": 0.025974
+          },
+          {
+            "term": "pytorchinference",
+            "tf": 2,
+            "weight": 0.025974
+          },
+          {
+            "term": "onnxinference",
+            "tf": 2,
+            "weight": 0.025974
+          },
+          {
+            "term": "runtime",
+            "tf": 2,
+            "weight": 0.025974
+          },
+          {
+            "term": "openvinoinference",
+            "tf": 2,
+            "weight": 0.025974
+          },
+          {
+            "term": "sentence",
+            "tf": 2,
+            "weight": 0.025974
+          },
+          {
+            "term": "transformers",
+            "tf": 2,
+            "weight": 0.025974
+          },
+          {
+            "term": "architecture",
+            "tf": 1,
+            "weight": 0.012987
+          },
+          {
+            "term": "mermaid",
+            "tf": 1,
+            "weight": 0.012987
+          },
+          {
+            "term": "graph",
+            "tf": 1,
+            "weight": 0.012987
+          }
+        ],
+        "unique_terms": 42,
+        "total_terms": 77
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Backend Architecture",
+        "backend",
+        "backendchoice",
+        "load",
+        "model",
+        "onnx",
+        "onnxbackend",
+        "openvino",
+        "output",
+        "pytorch",
+        "pytorchbackend"
+      ],
+      "collection_name": "Sentence_Transformer"
+    },
+    "advanced_scores": {
+      "semantic": 0.7999999999999999,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5348979591836734,
+      "overall": 0.7449659863945577
+    }
+  },
+  {
+    "text": "### Backend-Specific Parameters  Additional configuration options are available through `model_kwargs`: ```python",
+    "metadata": {
+      "chunk_id": "fbd6896cf70d-0006",
+      "source_file": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers\\Multi-Processing_and_Optimization.md",
+      "filename": "Multi-Processing_and_Optimization.md",
+      "file_extension": ".md",
+      "chunk_index": 6,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Backend-Specific Parameters"
+      ],
+      "heading_text": "Backend-Specific Parameters",
+      "token_count": 18,
+      "char_count": 113,
+      "start_char": 5247,
+      "end_char": 5360,
+      "semantic_score": 0.8,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.59,
+      "chunking_strategy": "hierarchical_balanced_structural",
+      "content_type": "code_block",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:45.931080",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 18,
+      "document_id": "fbd6896cf70d",
+      "document_name": "Multi-Processing_and_Optimization",
+      "source_path": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers\\Multi-Processing_and_Optimization.md",
+      "source_filename": "Multi-Processing_and_Optimization.md",
+      "source_directory": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers",
+      "relative_path": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers\\Multi-Processing_and_Optimization.md",
+      "hierarchy_path": "Backend-Specific Parameters",
+      "chunk_hash": "351fa4603f772453",
+      "content_digest": "351fa4603f772453",
+      "chunk_length": 113,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "sentence_transformer"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "backend",
+          "specific",
+          "parameters",
+          "additional",
+          "configuration",
+          "options",
+          "are",
+          "available",
+          "through",
+          "model",
+          "kwargs",
+          "python"
+        ],
+        "term_weights": [
+          {
+            "term": "backend",
+            "tf": 1,
+            "weight": 0.083333
+          },
+          {
+            "term": "specific",
+            "tf": 1,
+            "weight": 0.083333
+          },
+          {
+            "term": "parameters",
+            "tf": 1,
+            "weight": 0.083333
+          },
+          {
+            "term": "additional",
+            "tf": 1,
+            "weight": 0.083333
+          },
+          {
+            "term": "configuration",
+            "tf": 1,
+            "weight": 0.083333
+          },
+          {
+            "term": "options",
+            "tf": 1,
+            "weight": 0.083333
+          },
+          {
+            "term": "are",
+            "tf": 1,
+            "weight": 0.083333
+          },
+          {
+            "term": "available",
+            "tf": 1,
+            "weight": 0.083333
+          },
+          {
+            "term": "through",
+            "tf": 1,
+            "weight": 0.083333
+          },
+          {
+            "term": "model",
+            "tf": 1,
+            "weight": 0.083333
+          },
+          {
+            "term": "kwargs",
+            "tf": 1,
+            "weight": 0.083333
+          },
+          {
+            "term": "python",
+            "tf": 1,
+            "weight": 0.083333
+          }
+        ],
+        "unique_terms": 12,
+        "total_terms": 12
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Backend-Specific Parameters",
+        "additional",
+        "are",
+        "available",
+        "backend",
+        "configuration",
+        "model",
+        "options",
+        "parameters",
+        "specific",
+        "through"
+      ],
+      "collection_name": "Sentence_Transformer"
+    },
+    "advanced_scores": {
+      "semantic": 0.8,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.59,
+      "overall": 0.7633333333333333
+    }
+  },
+  {
+    "text": "# ONNX provider selection model = SentenceTransformer(     \"model-name\",      backend=\"onnx\",     model_kwargs={\"provider\": \"CUDAExecutionProvider\"} )",
+    "metadata": {
+      "chunk_id": "fbd6896cf70d-0007",
+      "source_file": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers\\Multi-Processing_and_Optimization.md",
+      "filename": "Multi-Processing_and_Optimization.md",
+      "file_extension": ".md",
+      "chunk_index": 7,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "ONNX provider selection"
+      ],
+      "heading_text": "ONNX provider selection",
+      "token_count": 33,
+      "char_count": 150,
+      "start_char": 5362,
+      "end_char": 5512,
+      "semantic_score": 0.8,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.59,
+      "chunking_strategy": "hierarchical_balanced_structural",
+      "content_type": "code_block",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:45.931632",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 33,
+      "document_id": "fbd6896cf70d",
+      "document_name": "Multi-Processing_and_Optimization",
+      "source_path": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers\\Multi-Processing_and_Optimization.md",
+      "source_filename": "Multi-Processing_and_Optimization.md",
+      "source_directory": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers",
+      "relative_path": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers\\Multi-Processing_and_Optimization.md",
+      "hierarchy_path": "ONNX provider selection",
+      "chunk_hash": "e432fdf903972522",
+      "content_digest": "e432fdf903972522",
+      "chunk_length": 150,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "sentence_transformer"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "model",
+          "onnx",
+          "provider",
+          "selection",
+          "sentencetransformer",
+          "name",
+          "backend",
+          "kwargs",
+          "cudaexecutionprovider"
+        ],
+        "term_weights": [
+          {
+            "term": "model",
+            "tf": 3,
+            "weight": 0.230769
+          },
+          {
+            "term": "onnx",
+            "tf": 2,
+            "weight": 0.153846
+          },
+          {
+            "term": "provider",
+            "tf": 2,
+            "weight": 0.153846
+          },
+          {
+            "term": "selection",
+            "tf": 1,
+            "weight": 0.076923
+          },
+          {
+            "term": "sentencetransformer",
+            "tf": 1,
+            "weight": 0.076923
+          },
+          {
+            "term": "name",
+            "tf": 1,
+            "weight": 0.076923
+          },
+          {
+            "term": "backend",
+            "tf": 1,
+            "weight": 0.076923
+          },
+          {
+            "term": "kwargs",
+            "tf": 1,
+            "weight": 0.076923
+          },
+          {
+            "term": "cudaexecutionprovider",
+            "tf": 1,
+            "weight": 0.076923
+          }
+        ],
+        "unique_terms": 9,
+        "total_terms": 13
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "ONNX provider selection",
+        "backend",
+        "cudaexecutionprovider",
+        "kwargs",
+        "model",
+        "name",
+        "onnx",
+        "provider",
+        "selection",
+        "sentencetransformer"
+      ],
+      "collection_name": "Sentence_Transformer"
+    },
+    "advanced_scores": {
+      "semantic": 0.8,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.59,
+      "overall": 0.7633333333333333
+    }
+  },
+  {
+    "text": "# Optimized model file selection model = SentenceTransformer(     \"model-name\",     backend=\"openvino\",      model_kwargs={\"file_name\": \"model_optimized.xml\"} )",
+    "metadata": {
+      "chunk_id": "fbd6896cf70d-0008",
+      "source_file": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers\\Multi-Processing_and_Optimization.md",
+      "filename": "Multi-Processing_and_Optimization.md",
+      "file_extension": ".md",
+      "chunk_index": 8,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Optimized model file selection"
+      ],
+      "heading_text": "Optimized model file selection",
+      "token_count": 37,
+      "char_count": 160,
+      "start_char": 5514,
+      "end_char": 5674,
+      "semantic_score": 0.8,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.566923076923077,
+      "chunking_strategy": "hierarchical_balanced_structural",
+      "content_type": "code_block",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:45.932225",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 37,
+      "document_id": "fbd6896cf70d",
+      "document_name": "Multi-Processing_and_Optimization",
+      "source_path": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers\\Multi-Processing_and_Optimization.md",
+      "source_filename": "Multi-Processing_and_Optimization.md",
+      "source_directory": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers",
+      "relative_path": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers\\Multi-Processing_and_Optimization.md",
+      "hierarchy_path": "Optimized model file selection",
+      "chunk_hash": "bdf54a5ac538515c",
+      "content_digest": "bdf54a5ac538515c",
+      "chunk_length": 160,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "sentence_transformer"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "model",
+          "optimized",
+          "file",
+          "name",
+          "selection",
+          "sentencetransformer",
+          "backend",
+          "openvino",
+          "kwargs",
+          "xml"
+        ],
+        "term_weights": [
+          {
+            "term": "model",
+            "tf": 5,
+            "weight": 0.294118
+          },
+          {
+            "term": "optimized",
+            "tf": 2,
+            "weight": 0.117647
+          },
+          {
+            "term": "file",
+            "tf": 2,
+            "weight": 0.117647
+          },
+          {
+            "term": "name",
+            "tf": 2,
+            "weight": 0.117647
+          },
+          {
+            "term": "selection",
+            "tf": 1,
+            "weight": 0.058824
+          },
+          {
+            "term": "sentencetransformer",
+            "tf": 1,
+            "weight": 0.058824
+          },
+          {
+            "term": "backend",
+            "tf": 1,
+            "weight": 0.058824
+          },
+          {
+            "term": "openvino",
+            "tf": 1,
+            "weight": 0.058824
+          },
+          {
+            "term": "kwargs",
+            "tf": 1,
+            "weight": 0.058824
+          },
+          {
+            "term": "xml",
+            "tf": 1,
+            "weight": 0.058824
+          }
+        ],
+        "unique_terms": 10,
+        "total_terms": 17
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Optimized model file selection",
+        "backend",
+        "file",
+        "kwargs",
+        "model",
+        "name",
+        "openvino",
+        "optimized",
+        "selection",
+        "sentencetransformer",
+        "xml"
+      ],
+      "collection_name": "Sentence_Transformer"
+    },
+    "advanced_scores": {
+      "semantic": 0.8,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.566923076923077,
+      "overall": 0.7556410256410256
+    }
+  },
+  {
+    "text": "# Auto-export control model = SentenceTransformer(     \"model-name\",     backend=\"onnx\",     model_kwargs={\"export\": True} ) ``` **Sources:** [sentence_transformers/SentenceTransformer.py:113-119](), [sentence_transformers/backend.py]()",
+    "metadata": {
+      "chunk_id": "fbd6896cf70d-0009",
+      "source_file": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers\\Multi-Processing_and_Optimization.md",
+      "filename": "Multi-Processing_and_Optimization.md",
+      "file_extension": ".md",
+      "chunk_index": 9,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Auto-export control"
+      ],
+      "heading_text": "Auto-export control",
+      "token_count": 54,
+      "char_count": 236,
+      "start_char": 5676,
+      "end_char": 5912,
+      "semantic_score": 0.7,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.59,
+      "chunking_strategy": "hierarchical_balanced_structural",
+      "content_type": "code_block",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:45.933169",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 54,
+      "document_id": "fbd6896cf70d",
+      "document_name": "Multi-Processing_and_Optimization",
+      "source_path": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers\\Multi-Processing_and_Optimization.md",
+      "source_filename": "Multi-Processing_and_Optimization.md",
+      "source_directory": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers",
+      "relative_path": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers\\Multi-Processing_and_Optimization.md",
+      "hierarchy_path": "Auto-export control",
+      "chunk_hash": "ad0b09a9d23f4e64",
+      "content_digest": "ad0b09a9d23f4e64",
+      "chunk_length": 236,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "sentence_transformer"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "model",
+          "export",
+          "sentencetransformer",
+          "backend",
+          "sentence",
+          "transformers",
+          "auto",
+          "control",
+          "name",
+          "onnx",
+          "kwargs",
+          "true",
+          "sources",
+          "113",
+          "119"
+        ],
+        "term_weights": [
+          {
+            "term": "model",
+            "tf": 3,
+            "weight": 0.136364
+          },
+          {
+            "term": "export",
+            "tf": 2,
+            "weight": 0.090909
+          },
+          {
+            "term": "sentencetransformer",
+            "tf": 2,
+            "weight": 0.090909
+          },
+          {
+            "term": "backend",
+            "tf": 2,
+            "weight": 0.090909
+          },
+          {
+            "term": "sentence",
+            "tf": 2,
+            "weight": 0.090909
+          },
+          {
+            "term": "transformers",
+            "tf": 2,
+            "weight": 0.090909
+          },
+          {
+            "term": "auto",
+            "tf": 1,
+            "weight": 0.045455
+          },
+          {
+            "term": "control",
+            "tf": 1,
+            "weight": 0.045455
+          },
+          {
+            "term": "name",
+            "tf": 1,
+            "weight": 0.045455
+          },
+          {
+            "term": "onnx",
+            "tf": 1,
+            "weight": 0.045455
+          },
+          {
+            "term": "kwargs",
+            "tf": 1,
+            "weight": 0.045455
+          },
+          {
+            "term": "true",
+            "tf": 1,
+            "weight": 0.045455
+          },
+          {
+            "term": "sources",
+            "tf": 1,
+            "weight": 0.045455
+          },
+          {
+            "term": "113",
+            "tf": 1,
+            "weight": 0.045455
+          },
+          {
+            "term": "119",
+            "tf": 1,
+            "weight": 0.045455
+          }
+        ],
+        "unique_terms": 15,
+        "total_terms": 22
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Auto-export control",
+        "auto",
+        "backend",
+        "control",
+        "export",
+        "model",
+        "name",
+        "onnx",
+        "sentence",
+        "sentencetransformer",
+        "transformers"
+      ],
+      "collection_name": "Sentence_Transformer"
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.59,
+      "overall": 0.73
+    }
+  },
+  {
+    "text": "### Quantization Pipeline ```mermaid graph TD     FloatEmbeddings[\"Float32 Embeddings<br/>model.encode()\"] --> QuantizationChoice{\"Precision Parameter\"}          QuantizationChoice -->|\"precision='float32'\"| Float32[\"Float32 Output<br/>No quantization\"]     QuantizationChoice -->|\"precision='int8'\"| Int8Quant[\"INT8 Quantization<br/>quantize_embeddings()\"]     QuantizationChoice -->|\"precision='uint8'\"| UInt8Quant[\"UINT8 Quantization<br/>quantize_embeddings()\"]     QuantizationChoice -->|\"precision='binary'\"| BinaryQuant[\"Binary Quantization<br/>quantize_embeddings()\"]     QuantizationChoice -->|\"precision='ubinary'\"| UBinaryQuant[\"Unsigned Binary<br/>quantize_embeddings()\"]          Int8Quant --> MemoryReduction[\"Memory Usage<br/>4x reduction\"]     UInt8Quant --> MemoryReduction     BinaryQuant --> MemoryReduction2[\"Memory Usage<br/>32x reduction\"]     UBinaryQuant --> MemoryReduction2 ``` **Sources:** [sentence_transformers/SentenceTransformer.py:424](), [sentence_transformers/quantization.py]()",
+    "metadata": {
+      "chunk_id": "fbd6896cf70d-0011",
+      "source_file": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers\\Multi-Processing_and_Optimization.md",
+      "filename": "Multi-Processing_and_Optimization.md",
+      "file_extension": ".md",
+      "chunk_index": 11,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Quantization Pipeline"
+      ],
+      "heading_text": "Quantization Pipeline",
+      "token_count": 235,
+      "char_count": 1011,
+      "start_char": 6080,
+      "end_char": 7091,
+      "semantic_score": 0.7999999999999999,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5265384615384615,
+      "chunking_strategy": "hierarchical_balanced_structural",
+      "content_type": "code_block",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:45.936188",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 235,
+      "document_id": "fbd6896cf70d",
+      "document_name": "Multi-Processing_and_Optimization",
+      "source_path": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers\\Multi-Processing_and_Optimization.md",
+      "source_filename": "Multi-Processing_and_Optimization.md",
+      "source_directory": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers",
+      "relative_path": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers\\Multi-Processing_and_Optimization.md",
+      "hierarchy_path": "Quantization Pipeline",
+      "chunk_hash": "b8d24779cefe1519",
+      "content_digest": "b8d24779cefe1519",
+      "chunk_length": 1011,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "sentence_transformer"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "quantization",
+          "quantizationchoice",
+          "precision",
+          "embeddings",
+          "float32",
+          "quantize",
+          "binary",
+          "int8",
+          "int8quant",
+          "uint8",
+          "uint8quant",
+          "binaryquant",
+          "ubinaryquant",
+          "memoryreduction",
+          "memory",
+          "usage",
+          "reduction",
+          "memoryreduction2",
+          "sentence",
+          "transformers"
+        ],
+        "term_weights": [
+          {
+            "term": "quantization",
+            "tf": 6,
+            "weight": 0.081081
+          },
+          {
+            "term": "quantizationchoice",
+            "tf": 6,
+            "weight": 0.081081
+          },
+          {
+            "term": "precision",
+            "tf": 6,
+            "weight": 0.081081
+          },
+          {
+            "term": "embeddings",
+            "tf": 5,
+            "weight": 0.067568
+          },
+          {
+            "term": "float32",
+            "tf": 4,
+            "weight": 0.054054
+          },
+          {
+            "term": "quantize",
+            "tf": 4,
+            "weight": 0.054054
+          },
+          {
+            "term": "binary",
+            "tf": 3,
+            "weight": 0.040541
+          },
+          {
+            "term": "int8",
+            "tf": 2,
+            "weight": 0.027027
+          },
+          {
+            "term": "int8quant",
+            "tf": 2,
+            "weight": 0.027027
+          },
+          {
+            "term": "uint8",
+            "tf": 2,
+            "weight": 0.027027
+          },
+          {
+            "term": "uint8quant",
+            "tf": 2,
+            "weight": 0.027027
+          },
+          {
+            "term": "binaryquant",
+            "tf": 2,
+            "weight": 0.027027
+          },
+          {
+            "term": "ubinaryquant",
+            "tf": 2,
+            "weight": 0.027027
+          },
+          {
+            "term": "memoryreduction",
+            "tf": 2,
+            "weight": 0.027027
+          },
+          {
+            "term": "memory",
+            "tf": 2,
+            "weight": 0.027027
+          },
+          {
+            "term": "usage",
+            "tf": 2,
+            "weight": 0.027027
+          },
+          {
+            "term": "reduction",
+            "tf": 2,
+            "weight": 0.027027
+          },
+          {
+            "term": "memoryreduction2",
+            "tf": 2,
+            "weight": 0.027027
+          },
+          {
+            "term": "sentence",
+            "tf": 2,
+            "weight": 0.027027
+          },
+          {
+            "term": "transformers",
+            "tf": 2,
+            "weight": 0.027027
+          }
+        ],
+        "unique_terms": 34,
+        "total_terms": 74
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Quantization Pipeline",
+        "binary",
+        "embeddings",
+        "float32",
+        "int8",
+        "int8quant",
+        "precision",
+        "quantization",
+        "quantizationchoice",
+        "quantize",
+        "uint8"
+      ],
+      "collection_name": "Sentence_Transformer"
+    },
+    "advanced_scores": {
+      "semantic": 0.7999999999999999,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5265384615384615,
+      "overall": 0.7421794871794871
+    }
+  },
+  {
+    "text": "### Device Management  The library automatically detects and utilizes available hardware acceleration: ```mermaid graph TD     DeviceDetection[\"Device Detection<br/>get_device_name()\"] --> AvailableCheck{\"Hardware Available?\"}          AvailableCheck -->|\"torch.cuda.is_available()\"| CUDA[\"CUDA Devices<br/>cuda:0, cuda:1, ...\"]     AvailableCheck -->|\"torch.backends.mps.is_available()\"| MPS[\"Apple MPS<br/>mps device\"]     AvailableCheck -->|\"is_torch_npu_available()\"| NPU[\"Neural Processing Unit<br/>npu device\"]     AvailableCheck -->|\"HPU available\"| HPU[\"Habana HPU<br/>hpu device\"]     AvailableCheck -->|\"Default\"| CPU[\"CPU Fallback<br/>cpu device\"]          CUDA --> OptimumHabana[\"Optimum Habana<br/>adapt_transformers_to_gaudi()\"]     NPU --> OptimumHabana     HPU --> OptimumHabana ``` **Sources:** [sentence_transformers/SentenceTransformer.py:217-224](), [sentence_transformers/util.py:47-77]()",
+    "metadata": {
+      "chunk_id": "fbd6896cf70d-0014",
+      "source_file": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers\\Multi-Processing_and_Optimization.md",
+      "filename": "Multi-Processing_and_Optimization.md",
+      "file_extension": ".md",
+      "chunk_index": 14,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Device Management"
+      ],
+      "heading_text": "Device Management",
+      "token_count": 225,
+      "char_count": 909,
+      "start_char": 7699,
+      "end_char": 8608,
+      "semantic_score": 0.7999999999999999,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5367741935483871,
+      "chunking_strategy": "hierarchical_balanced_structural",
+      "content_type": "code_block",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:45.940573",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 225,
+      "document_id": "fbd6896cf70d",
+      "document_name": "Multi-Processing_and_Optimization",
+      "source_path": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers\\Multi-Processing_and_Optimization.md",
+      "source_filename": "Multi-Processing_and_Optimization.md",
+      "source_directory": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers",
+      "relative_path": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers\\Multi-Processing_and_Optimization.md",
+      "hierarchy_path": "Device Management",
+      "chunk_hash": "dc186b0cd34138eb",
+      "content_digest": "dc186b0cd34138eb",
+      "chunk_length": 909,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "sentence_transformer"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "device",
+          "available",
+          "availablecheck",
+          "cuda",
+          "hpu",
+          "mps",
+          "npu",
+          "torch",
+          "cpu",
+          "optimumhabana",
+          "transformers",
+          "hardware",
+          "habana",
+          "sentence",
+          "management",
+          "the",
+          "library",
+          "automatically",
+          "detects",
+          "and"
+        ],
+        "term_weights": [
+          {
+            "term": "device",
+            "tf": 7,
+            "weight": 0.081395
+          },
+          {
+            "term": "available",
+            "tf": 6,
+            "weight": 0.069767
+          },
+          {
+            "term": "availablecheck",
+            "tf": 6,
+            "weight": 0.069767
+          },
+          {
+            "term": "cuda",
+            "tf": 6,
+            "weight": 0.069767
+          },
+          {
+            "term": "hpu",
+            "tf": 5,
+            "weight": 0.05814
+          },
+          {
+            "term": "mps",
+            "tf": 4,
+            "weight": 0.046512
+          },
+          {
+            "term": "npu",
+            "tf": 4,
+            "weight": 0.046512
+          },
+          {
+            "term": "torch",
+            "tf": 3,
+            "weight": 0.034884
+          },
+          {
+            "term": "cpu",
+            "tf": 3,
+            "weight": 0.034884
+          },
+          {
+            "term": "optimumhabana",
+            "tf": 3,
+            "weight": 0.034884
+          },
+          {
+            "term": "transformers",
+            "tf": 3,
+            "weight": 0.034884
+          },
+          {
+            "term": "hardware",
+            "tf": 2,
+            "weight": 0.023256
+          },
+          {
+            "term": "habana",
+            "tf": 2,
+            "weight": 0.023256
+          },
+          {
+            "term": "sentence",
+            "tf": 2,
+            "weight": 0.023256
+          },
+          {
+            "term": "management",
+            "tf": 1,
+            "weight": 0.011628
+          },
+          {
+            "term": "the",
+            "tf": 1,
+            "weight": 0.011628
+          },
+          {
+            "term": "library",
+            "tf": 1,
+            "weight": 0.011628
+          },
+          {
+            "term": "automatically",
+            "tf": 1,
+            "weight": 0.011628
+          },
+          {
+            "term": "detects",
+            "tf": 1,
+            "weight": 0.011628
+          },
+          {
+            "term": "and",
+            "tf": 1,
+            "weight": 0.011628
+          }
+        ],
+        "unique_terms": 44,
+        "total_terms": 86
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Device Management",
+        "available",
+        "availablecheck",
+        "cpu",
+        "cuda",
+        "device",
+        "hpu",
+        "mps",
+        "npu",
+        "optimumhabana",
+        "torch"
+      ],
+      "collection_name": "Sentence_Transformer"
+    },
+    "advanced_scores": {
+      "semantic": 0.7999999999999999,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5367741935483871,
+      "overall": 0.7455913978494623
+    }
+  },
+  {
+    "text": "## Memory Optimization Strategies",
+    "metadata": {
+      "chunk_id": "fbd6896cf70d-0016",
+      "source_file": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers\\Multi-Processing_and_Optimization.md",
+      "filename": "Multi-Processing_and_Optimization.md",
+      "file_extension": ".md",
+      "chunk_index": 16,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Memory Optimization Strategies"
+      ],
+      "heading_text": "Memory Optimization Strategies",
+      "token_count": 4,
+      "char_count": 33,
+      "start_char": 9140,
+      "end_char": 9173,
+      "semantic_score": 0.8,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.59,
+      "chunking_strategy": "hierarchical_balanced_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:45.942104",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 4,
+      "document_id": "fbd6896cf70d",
+      "document_name": "Multi-Processing_and_Optimization",
+      "source_path": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers\\Multi-Processing_and_Optimization.md",
+      "source_filename": "Multi-Processing_and_Optimization.md",
+      "source_directory": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers",
+      "relative_path": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers\\Multi-Processing_and_Optimization.md",
+      "hierarchy_path": "Memory Optimization Strategies",
+      "chunk_hash": "1b155fce135f52c9",
+      "content_digest": "1b155fce135f52c9",
+      "chunk_length": 33,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "sentence_transformer"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "memory",
+          "optimization",
+          "strategies"
+        ],
+        "term_weights": [
+          {
+            "term": "memory",
+            "tf": 1,
+            "weight": 0.333333
+          },
+          {
+            "term": "optimization",
+            "tf": 1,
+            "weight": 0.333333
+          },
+          {
+            "term": "strategies",
+            "tf": 1,
+            "weight": 0.333333
+          }
+        ],
+        "unique_terms": 3,
+        "total_terms": 3
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Memory Optimization Strategies",
+        "memory",
+        "optimization",
+        "strategies"
+      ],
+      "collection_name": "Sentence_Transformer"
+    },
+    "advanced_scores": {
+      "semantic": 0.8,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.59,
+      "overall": 0.7633333333333333
+    }
+  },
+  {
+    "text": "### Efficient Encoding Parameters  Several parameters help optimize memory usage during encoding: ```mermaid graph LR     Input[\"Large Dataset\"] --> BatchSize[\"batch_size<br/>Control memory per batch\"]     BatchSize --> ChunkSize[\"chunk_size<br/>Multi-process distribution\"]     ChunkSize --> TruncateDim[\"truncate_dim<br/>Matryoshka model truncation\"]     TruncateDim --> Precision[\"precision<br/>Quantization strategy\"]     Precision --> Output[\"Optimized Embeddings\"]          TruncateDim --> MatryoshkaNote[\"Matryoshka Models<br/>Maintain quality with<br/>reduced dimensions\"] ``` **Sources:** [sentence_transformers/SentenceTransformer.py:485-491](), [sentence_transformers/util.py:436-455]()",
+    "metadata": {
+      "chunk_id": "fbd6896cf70d-0017",
+      "source_file": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers\\Multi-Processing_and_Optimization.md",
+      "filename": "Multi-Processing_and_Optimization.md",
+      "file_extension": ".md",
+      "chunk_index": 17,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Efficient Encoding Parameters"
+      ],
+      "heading_text": "Efficient Encoding Parameters",
+      "token_count": 154,
+      "char_count": 697,
+      "start_char": 9175,
+      "end_char": 9872,
+      "semantic_score": 0.7999999999999999,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.542,
+      "chunking_strategy": "hierarchical_balanced_structural",
+      "content_type": "code_block",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:45.944103",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 154,
+      "document_id": "fbd6896cf70d",
+      "document_name": "Multi-Processing_and_Optimization",
+      "source_path": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers\\Multi-Processing_and_Optimization.md",
+      "source_filename": "Multi-Processing_and_Optimization.md",
+      "source_directory": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers",
+      "relative_path": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers\\Multi-Processing_and_Optimization.md",
+      "hierarchy_path": "Efficient Encoding Parameters",
+      "chunk_hash": "cd7b1139f4c12a14",
+      "content_digest": "cd7b1139f4c12a14",
+      "chunk_length": 697,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "sentence_transformer"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "truncatedim",
+          "precision",
+          "encoding",
+          "parameters",
+          "memory",
+          "batchsize",
+          "batch",
+          "size",
+          "chunksize",
+          "matryoshka",
+          "sentence",
+          "transformers",
+          "efficient",
+          "several",
+          "help",
+          "optimize",
+          "usage",
+          "during",
+          "mermaid",
+          "graph"
+        ],
+        "term_weights": [
+          {
+            "term": "truncatedim",
+            "tf": 3,
+            "weight": 0.045455
+          },
+          {
+            "term": "precision",
+            "tf": 3,
+            "weight": 0.045455
+          },
+          {
+            "term": "encoding",
+            "tf": 2,
+            "weight": 0.030303
+          },
+          {
+            "term": "parameters",
+            "tf": 2,
+            "weight": 0.030303
+          },
+          {
+            "term": "memory",
+            "tf": 2,
+            "weight": 0.030303
+          },
+          {
+            "term": "batchsize",
+            "tf": 2,
+            "weight": 0.030303
+          },
+          {
+            "term": "batch",
+            "tf": 2,
+            "weight": 0.030303
+          },
+          {
+            "term": "size",
+            "tf": 2,
+            "weight": 0.030303
+          },
+          {
+            "term": "chunksize",
+            "tf": 2,
+            "weight": 0.030303
+          },
+          {
+            "term": "matryoshka",
+            "tf": 2,
+            "weight": 0.030303
+          },
+          {
+            "term": "sentence",
+            "tf": 2,
+            "weight": 0.030303
+          },
+          {
+            "term": "transformers",
+            "tf": 2,
+            "weight": 0.030303
+          },
+          {
+            "term": "efficient",
+            "tf": 1,
+            "weight": 0.015152
+          },
+          {
+            "term": "several",
+            "tf": 1,
+            "weight": 0.015152
+          },
+          {
+            "term": "help",
+            "tf": 1,
+            "weight": 0.015152
+          },
+          {
+            "term": "optimize",
+            "tf": 1,
+            "weight": 0.015152
+          },
+          {
+            "term": "usage",
+            "tf": 1,
+            "weight": 0.015152
+          },
+          {
+            "term": "during",
+            "tf": 1,
+            "weight": 0.015152
+          },
+          {
+            "term": "mermaid",
+            "tf": 1,
+            "weight": 0.015152
+          },
+          {
+            "term": "graph",
+            "tf": 1,
+            "weight": 0.015152
+          }
+        ],
+        "unique_terms": 52,
+        "total_terms": 66
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Efficient Encoding Parameters",
+        "batch",
+        "batchsize",
+        "chunksize",
+        "encoding",
+        "matryoshka",
+        "memory",
+        "parameters",
+        "precision",
+        "size",
+        "truncatedim"
+      ],
+      "collection_name": "Sentence_Transformer"
+    },
+    "advanced_scores": {
+      "semantic": 0.7999999999999999,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.542,
+      "overall": 0.7473333333333333
+    }
+  },
+  {
+    "text": "### Pooling Configuration for Memory  The `Pooling` module provides memory-efficient pooling strategies: ```mermaid graph TD     TokenEmbeddings[\"Token Embeddings<br/>[batch_size, seq_len, hidden_dim]\"] --> PoolingChoice{\"Pooling Strategy\"}          PoolingChoice -->|\"pooling_mode='mean'\"| MeanPool[\"Mean Pooling<br/>Average across sequence\"]     PoolingChoice -->|\"pooling_mode='max'\"| MaxPool[\"Max Pooling<br/>Maximum values\"]     PoolingChoice -->|\"pooling_mode='cls'\"| CLSPool[\"CLS Token<br/>First token only\"]     PoolingChoice -->|\"pooling_mode='lasttoken'\"| LastPool[\"Last Token<br/>Final valid token\"]          MeanPool --> SentenceEmbedding[\"Sentence Embedding<br/>[batch_size, hidden_dim]\"]     MaxPool --> SentenceEmbedding     CLSPool --> SentenceEmbedding     LastPool --> SentenceEmbedding          SentenceEmbedding --> IncludePrompt{\"include_prompt=False\"}     IncludePrompt --> PromptExclusion[\"Exclude prompt tokens<br/>from pooling calculation\"] ``` **Sources:** [sentence_transformers/models/Pooling.py:135-241](), [sentence_transformers/models/Pooling.py:142-152]()",
+    "metadata": {
+      "chunk_id": "fbd6896cf70d-0019",
+      "source_file": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers\\Multi-Processing_and_Optimization.md",
+      "filename": "Multi-Processing_and_Optimization.md",
+      "file_extension": ".md",
+      "chunk_index": 19,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Pooling Configuration for Memory"
+      ],
+      "heading_text": "Pooling Configuration for Memory",
+      "token_count": 254,
+      "char_count": 1087,
+      "start_char": 10418,
+      "end_char": 11505,
+      "semantic_score": 0.7999999999999999,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5283561643835616,
+      "chunking_strategy": "hierarchical_balanced_structural",
+      "content_type": "code_block",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:45.948336",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 254,
+      "document_id": "fbd6896cf70d",
+      "document_name": "Multi-Processing_and_Optimization",
+      "source_path": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers\\Multi-Processing_and_Optimization.md",
+      "source_filename": "Multi-Processing_and_Optimization.md",
+      "source_directory": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers",
+      "relative_path": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers\\Multi-Processing_and_Optimization.md",
+      "hierarchy_path": "Pooling Configuration for Memory",
+      "chunk_hash": "8d6d2c9f15b0db18",
+      "content_digest": "8d6d2c9f15b0db18",
+      "chunk_length": 1087,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "sentence_transformer"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "pooling",
+          "token",
+          "poolingchoice",
+          "sentenceembedding",
+          "mode",
+          "sentence",
+          "memory",
+          "batch",
+          "size",
+          "hidden",
+          "dim",
+          "mean",
+          "meanpool",
+          "max",
+          "maxpool",
+          "cls",
+          "clspool",
+          "lastpool",
+          "includeprompt",
+          "prompt"
+        ],
+        "term_weights": [
+          {
+            "term": "pooling",
+            "tf": 13,
+            "weight": 0.12381
+          },
+          {
+            "term": "token",
+            "tf": 5,
+            "weight": 0.047619
+          },
+          {
+            "term": "poolingchoice",
+            "tf": 5,
+            "weight": 0.047619
+          },
+          {
+            "term": "sentenceembedding",
+            "tf": 5,
+            "weight": 0.047619
+          },
+          {
+            "term": "mode",
+            "tf": 4,
+            "weight": 0.038095
+          },
+          {
+            "term": "sentence",
+            "tf": 3,
+            "weight": 0.028571
+          },
+          {
+            "term": "memory",
+            "tf": 2,
+            "weight": 0.019048
+          },
+          {
+            "term": "batch",
+            "tf": 2,
+            "weight": 0.019048
+          },
+          {
+            "term": "size",
+            "tf": 2,
+            "weight": 0.019048
+          },
+          {
+            "term": "hidden",
+            "tf": 2,
+            "weight": 0.019048
+          },
+          {
+            "term": "dim",
+            "tf": 2,
+            "weight": 0.019048
+          },
+          {
+            "term": "mean",
+            "tf": 2,
+            "weight": 0.019048
+          },
+          {
+            "term": "meanpool",
+            "tf": 2,
+            "weight": 0.019048
+          },
+          {
+            "term": "max",
+            "tf": 2,
+            "weight": 0.019048
+          },
+          {
+            "term": "maxpool",
+            "tf": 2,
+            "weight": 0.019048
+          },
+          {
+            "term": "cls",
+            "tf": 2,
+            "weight": 0.019048
+          },
+          {
+            "term": "clspool",
+            "tf": 2,
+            "weight": 0.019048
+          },
+          {
+            "term": "lastpool",
+            "tf": 2,
+            "weight": 0.019048
+          },
+          {
+            "term": "includeprompt",
+            "tf": 2,
+            "weight": 0.019048
+          },
+          {
+            "term": "prompt",
+            "tf": 2,
+            "weight": 0.019048
+          }
+        ],
+        "unique_terms": 60,
+        "total_terms": 105
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Pooling Configuration for Memory",
+        "batch",
+        "hidden",
+        "memory",
+        "mode",
+        "pooling",
+        "poolingchoice",
+        "sentence",
+        "sentenceembedding",
+        "size",
+        "token"
+      ],
+      "collection_name": "Sentence_Transformer"
+    },
+    "advanced_scores": {
+      "semantic": 0.7999999999999999,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5283561643835616,
+      "overall": 0.7427853881278538
+    }
+  }
+]

@@ -1,0 +1,3602 @@
+[
+  {
+    "text": "## Purpose and Scope  Enrichment Models operate on assembled document items after the initial extraction and layout analysis phases. They enhance document elements with additional information such as LaTeX formulas, code snippets with language detection, picture classifications, and image captions. Unlike page-level models (see [Layout and Table Structure Models](docling-project/docling/4.2-layout-and-table-structure-models.md)), enrichment models process individual document items (text blocks, code blocks, pictures) along with their cropped images. This page documents the three main types of enrichment models:  - **CodeFormulaModel**: Extracts LaTeX formulas and code with language detection - **DocumentPictureClassifier**: Classifies pictures into 16 semantic categories - **PictureDescriptionVlmModel**: Generates natural language descriptions of images  For VLM-based document processing that operates at the page level, see [Vision Language Models](docling-project/docling/4.3-vision-language-models.md). For the pipeline execution flow that includes enrichment, see [Base Pipeline Architecture](docling-project/docling/5.6-base-pipeline-architecture.md). ---",
+    "metadata": {
+      "chunk_id": "375f3cfe7e6c-0001",
+      "source_file": "Docs\\Docling\\_docling-project_docling_4.4-enrichment-models.md",
+      "filename": "_docling-project_docling_4.4-enrichment-models.md",
+      "file_extension": ".md",
+      "chunk_index": 1,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Purpose and Scope"
+      ],
+      "heading_text": "Purpose and Scope",
+      "token_count": 223,
+      "char_count": 1173,
+      "start_char": 6145,
+      "end_char": 7318,
+      "semantic_score": 0.7999999999999999,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.51265625,
+      "chunking_strategy": "hierarchical_balanced_structural",
+      "content_type": "list_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:06.625900",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 223,
+      "document_id": "375f3cfe7e6c",
+      "document_name": "_docling-project_docling_4.4-enrichment-models",
+      "source_path": "Docs\\Docling\\_docling-project_docling_4.4-enrichment-models.md",
+      "source_filename": "_docling-project_docling_4.4-enrichment-models.md",
+      "source_directory": "Docs\\Docling",
+      "relative_path": "Docs\\Docling\\_docling-project_docling_4.4-enrichment-models.md",
+      "hierarchy_path": "Purpose and Scope",
+      "chunk_hash": "e1dad5b9d676ca50",
+      "content_digest": "e1dad5b9d676ca50",
+      "chunk_length": 1173,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "docling"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "models",
+          "and",
+          "docling",
+          "language",
+          "enrichment",
+          "document",
+          "the",
+          "with",
+          "layout",
+          "code",
+          "page",
+          "see",
+          "project",
+          "pipeline",
+          "items",
+          "latex",
+          "formulas",
+          "detection",
+          "level",
+          "table"
+        ],
+        "term_weights": [
+          {
+            "term": "models",
+            "tf": 8,
+            "weight": 0.057554
+          },
+          {
+            "term": "and",
+            "tf": 6,
+            "weight": 0.043165
+          },
+          {
+            "term": "docling",
+            "tf": 6,
+            "weight": 0.043165
+          },
+          {
+            "term": "language",
+            "tf": 5,
+            "weight": 0.035971
+          },
+          {
+            "term": "enrichment",
+            "tf": 4,
+            "weight": 0.028777
+          },
+          {
+            "term": "document",
+            "tf": 4,
+            "weight": 0.028777
+          },
+          {
+            "term": "the",
+            "tf": 4,
+            "weight": 0.028777
+          },
+          {
+            "term": "with",
+            "tf": 4,
+            "weight": 0.028777
+          },
+          {
+            "term": "layout",
+            "tf": 3,
+            "weight": 0.021583
+          },
+          {
+            "term": "code",
+            "tf": 3,
+            "weight": 0.021583
+          },
+          {
+            "term": "page",
+            "tf": 3,
+            "weight": 0.021583
+          },
+          {
+            "term": "see",
+            "tf": 3,
+            "weight": 0.021583
+          },
+          {
+            "term": "project",
+            "tf": 3,
+            "weight": 0.021583
+          },
+          {
+            "term": "pipeline",
+            "tf": 3,
+            "weight": 0.021583
+          },
+          {
+            "term": "items",
+            "tf": 2,
+            "weight": 0.014388
+          },
+          {
+            "term": "latex",
+            "tf": 2,
+            "weight": 0.014388
+          },
+          {
+            "term": "formulas",
+            "tf": 2,
+            "weight": 0.014388
+          },
+          {
+            "term": "detection",
+            "tf": 2,
+            "weight": 0.014388
+          },
+          {
+            "term": "level",
+            "tf": 2,
+            "weight": 0.014388
+          },
+          {
+            "term": "table",
+            "tf": 2,
+            "weight": 0.014388
+          }
+        ],
+        "unique_terms": 79,
+        "total_terms": 139
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Purpose and Scope",
+        "and",
+        "code",
+        "docling",
+        "document",
+        "enrichment",
+        "language",
+        "layout",
+        "models",
+        "the",
+        "with"
+      ],
+      "collection_name": "Docling"
+    },
+    "advanced_scores": {
+      "semantic": 0.7999999999999999,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.51265625,
+      "overall": 0.7375520833333332
+    }
+  },
+  {
+    "text": "### Processing Flow  Enrichment models are invoked during the `_enrich_document` phase of the pipeline, after document assembly is complete. They process items in batches, receiving both the document item and its cropped image. **Diagram: Enrichment Processing Flow** ``` ``` Sources: [docling/pipeline/base\\_pipeline.py177-206](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/base_pipeline.py#L177-L206) [docling/pipeline/standard\\_pdf\\_pipeline.py77-90](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/standard_pdf_pipeline.py#L77-L90)  ---",
+    "metadata": {
+      "chunk_id": "375f3cfe7e6c-0003",
+      "source_file": "Docs\\Docling\\_docling-project_docling_4.4-enrichment-models.md",
+      "filename": "_docling-project_docling_4.4-enrichment-models.md",
+      "file_extension": ".md",
+      "chunk_index": 3,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Processing Flow"
+      ],
+      "heading_text": "Processing Flow",
+      "token_count": 146,
+      "char_count": 594,
+      "start_char": 7350,
+      "end_char": 7944,
+      "semantic_score": 0.7,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5481395348837209,
+      "chunking_strategy": "hierarchical_balanced_structural",
+      "content_type": "code_block",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:06.627205",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 146,
+      "document_id": "375f3cfe7e6c",
+      "document_name": "_docling-project_docling_4.4-enrichment-models",
+      "source_path": "Docs\\Docling\\_docling-project_docling_4.4-enrichment-models.md",
+      "source_filename": "_docling-project_docling_4.4-enrichment-models.md",
+      "source_directory": "Docs\\Docling",
+      "relative_path": "Docs\\Docling\\_docling-project_docling_4.4-enrichment-models.md",
+      "hierarchy_path": "Processing Flow",
+      "chunk_hash": "98b13a87bcf2fae9",
+      "content_digest": "98b13a87bcf2fae9",
+      "chunk_length": 594,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "docling"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "pipeline",
+          "docling",
+          "the",
+          "document",
+          "processing",
+          "flow",
+          "enrichment",
+          "base",
+          "https",
+          "github",
+          "com",
+          "project",
+          "blob",
+          "f7244a43",
+          "standard",
+          "pdf",
+          "models",
+          "are",
+          "invoked",
+          "during"
+        ],
+        "term_weights": [
+          {
+            "term": "pipeline",
+            "tf": 9,
+            "weight": 0.118421
+          },
+          {
+            "term": "docling",
+            "tf": 8,
+            "weight": 0.105263
+          },
+          {
+            "term": "the",
+            "tf": 3,
+            "weight": 0.039474
+          },
+          {
+            "term": "document",
+            "tf": 3,
+            "weight": 0.039474
+          },
+          {
+            "term": "processing",
+            "tf": 2,
+            "weight": 0.026316
+          },
+          {
+            "term": "flow",
+            "tf": 2,
+            "weight": 0.026316
+          },
+          {
+            "term": "enrichment",
+            "tf": 2,
+            "weight": 0.026316
+          },
+          {
+            "term": "base",
+            "tf": 2,
+            "weight": 0.026316
+          },
+          {
+            "term": "https",
+            "tf": 2,
+            "weight": 0.026316
+          },
+          {
+            "term": "github",
+            "tf": 2,
+            "weight": 0.026316
+          },
+          {
+            "term": "com",
+            "tf": 2,
+            "weight": 0.026316
+          },
+          {
+            "term": "project",
+            "tf": 2,
+            "weight": 0.026316
+          },
+          {
+            "term": "blob",
+            "tf": 2,
+            "weight": 0.026316
+          },
+          {
+            "term": "f7244a43",
+            "tf": 2,
+            "weight": 0.026316
+          },
+          {
+            "term": "standard",
+            "tf": 2,
+            "weight": 0.026316
+          },
+          {
+            "term": "pdf",
+            "tf": 2,
+            "weight": 0.026316
+          },
+          {
+            "term": "models",
+            "tf": 1,
+            "weight": 0.013158
+          },
+          {
+            "term": "are",
+            "tf": 1,
+            "weight": 0.013158
+          },
+          {
+            "term": "invoked",
+            "tf": 1,
+            "weight": 0.013158
+          },
+          {
+            "term": "during",
+            "tf": 1,
+            "weight": 0.013158
+          }
+        ],
+        "unique_terms": 45,
+        "total_terms": 76
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Processing Flow",
+        "base",
+        "docling",
+        "document",
+        "enrichment",
+        "flow",
+        "github",
+        "https",
+        "pipeline",
+        "processing",
+        "the"
+      ],
+      "collection_name": "Docling"
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5481395348837209,
+      "overall": 0.716046511627907
+    }
+  },
+  {
+    "text": "### Base Class Interface  All enrichment models inherit from `BaseItemAndImageEnrichmentModel`, which defines the standard interface for item-level processing. **Diagram: Enrichment Model Class Hierarchy** ``` ``` Sources: [docling/models/base\\_model.py67-113](https://github.com/docling-project/docling/blob/f7244a43/docling/models/base_model.py#L67-L113) [docling/models/code\\_formula\\_model.py45-66](https://github.com/docling-project/docling/blob/f7244a43/docling/models/code_formula_model.py#L45-L66) [docling/models/document\\_picture\\_classifier.py36-60](https://github.com/docling-project/docling/blob/f7244a43/docling/models/document_picture_classifier.py#L36-L60) [docling/models/picture\\_description\\_vlm\\_model.py24-46](https://github.com/docling-project/docling/blob/f7244a43/docling/models/picture_description_vlm_model.py#L24-L46)  ---",
+    "metadata": {
+      "chunk_id": "375f3cfe7e6c-0004",
+      "source_file": "Docs\\Docling\\_docling-project_docling_4.4-enrichment-models.md",
+      "filename": "_docling-project_docling_4.4-enrichment-models.md",
+      "file_extension": ".md",
+      "chunk_index": 4,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Base Class Interface"
+      ],
+      "heading_text": "Base Class Interface",
+      "token_count": 219,
+      "char_count": 849,
+      "start_char": 7949,
+      "end_char": 8798,
+      "semantic_score": 0.6,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5512903225806451,
+      "chunking_strategy": "hierarchical_balanced_structural",
+      "content_type": "code_block",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:06.629039",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 219,
+      "document_id": "375f3cfe7e6c",
+      "document_name": "_docling-project_docling_4.4-enrichment-models",
+      "source_path": "Docs\\Docling\\_docling-project_docling_4.4-enrichment-models.md",
+      "source_filename": "_docling-project_docling_4.4-enrichment-models.md",
+      "source_directory": "Docs\\Docling",
+      "relative_path": "Docs\\Docling\\_docling-project_docling_4.4-enrichment-models.md",
+      "hierarchy_path": "Base Class Interface",
+      "chunk_hash": "9d4519adb0515f48",
+      "content_digest": "9d4519adb0515f48",
+      "chunk_length": 849,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "docling"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "docling",
+          "models",
+          "model",
+          "https",
+          "github",
+          "com",
+          "project",
+          "blob",
+          "f7244a43",
+          "picture",
+          "base",
+          "class",
+          "interface",
+          "enrichment",
+          "code",
+          "formula",
+          "document",
+          "classifier",
+          "description",
+          "vlm"
+        ],
+        "term_weights": [
+          {
+            "term": "docling",
+            "tf": 16,
+            "weight": 0.146789
+          },
+          {
+            "term": "models",
+            "tf": 9,
+            "weight": 0.082569
+          },
+          {
+            "term": "model",
+            "tf": 7,
+            "weight": 0.06422
+          },
+          {
+            "term": "https",
+            "tf": 4,
+            "weight": 0.036697
+          },
+          {
+            "term": "github",
+            "tf": 4,
+            "weight": 0.036697
+          },
+          {
+            "term": "com",
+            "tf": 4,
+            "weight": 0.036697
+          },
+          {
+            "term": "project",
+            "tf": 4,
+            "weight": 0.036697
+          },
+          {
+            "term": "blob",
+            "tf": 4,
+            "weight": 0.036697
+          },
+          {
+            "term": "f7244a43",
+            "tf": 4,
+            "weight": 0.036697
+          },
+          {
+            "term": "picture",
+            "tf": 4,
+            "weight": 0.036697
+          },
+          {
+            "term": "base",
+            "tf": 3,
+            "weight": 0.027523
+          },
+          {
+            "term": "class",
+            "tf": 2,
+            "weight": 0.018349
+          },
+          {
+            "term": "interface",
+            "tf": 2,
+            "weight": 0.018349
+          },
+          {
+            "term": "enrichment",
+            "tf": 2,
+            "weight": 0.018349
+          },
+          {
+            "term": "code",
+            "tf": 2,
+            "weight": 0.018349
+          },
+          {
+            "term": "formula",
+            "tf": 2,
+            "weight": 0.018349
+          },
+          {
+            "term": "document",
+            "tf": 2,
+            "weight": 0.018349
+          },
+          {
+            "term": "classifier",
+            "tf": 2,
+            "weight": 0.018349
+          },
+          {
+            "term": "description",
+            "tf": 2,
+            "weight": 0.018349
+          },
+          {
+            "term": "vlm",
+            "tf": 2,
+            "weight": 0.018349
+          }
+        ],
+        "unique_terms": 48,
+        "total_terms": 109
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Base Class Interface",
+        "blob",
+        "com",
+        "docling",
+        "f7244a43",
+        "github",
+        "https",
+        "model",
+        "models",
+        "picture",
+        "project"
+      ],
+      "collection_name": "Docling"
+    },
+    "advanced_scores": {
+      "semantic": 0.6,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5512903225806451,
+      "overall": 0.683763440860215
+    }
+  },
+  {
+    "text": "### Processing Logic  **Diagram: CodeFormulaModel Processing Pipeline** ``` ``` Sources: [docling/models/code\\_formula\\_model.py277-337](https://github.com/docling-project/docling/blob/f7244a43/docling/models/code_formula_model.py#L277-L337)  ---",
+    "metadata": {
+      "chunk_id": "375f3cfe7e6c-0008",
+      "source_file": "Docs\\Docling\\_docling-project_docling_4.4-enrichment-models.md",
+      "filename": "_docling-project_docling_4.4-enrichment-models.md",
+      "file_extension": ".md",
+      "chunk_index": 8,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Processing Logic"
+      ],
+      "heading_text": "Processing Logic",
+      "token_count": 61,
+      "char_count": 246,
+      "start_char": 10910,
+      "end_char": 11156,
+      "semantic_score": 0.7,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.54,
+      "chunking_strategy": "hierarchical_balanced_structural",
+      "content_type": "code_block",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:06.632282",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 61,
+      "document_id": "375f3cfe7e6c",
+      "document_name": "_docling-project_docling_4.4-enrichment-models",
+      "source_path": "Docs\\Docling\\_docling-project_docling_4.4-enrichment-models.md",
+      "source_filename": "_docling-project_docling_4.4-enrichment-models.md",
+      "source_directory": "Docs\\Docling",
+      "relative_path": "Docs\\Docling\\_docling-project_docling_4.4-enrichment-models.md",
+      "hierarchy_path": "Processing Logic",
+      "chunk_hash": "b639d857f63d3a78",
+      "content_digest": "b639d857f63d3a78",
+      "chunk_length": 246,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "docling"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "docling",
+          "processing",
+          "models",
+          "code",
+          "formula",
+          "model",
+          "logic",
+          "diagram",
+          "codeformulamodel",
+          "pipeline",
+          "sources",
+          "py277",
+          "337",
+          "https",
+          "github",
+          "com",
+          "project",
+          "blob",
+          "f7244a43",
+          "l277"
+        ],
+        "term_weights": [
+          {
+            "term": "docling",
+            "tf": 4,
+            "weight": 0.137931
+          },
+          {
+            "term": "processing",
+            "tf": 2,
+            "weight": 0.068966
+          },
+          {
+            "term": "models",
+            "tf": 2,
+            "weight": 0.068966
+          },
+          {
+            "term": "code",
+            "tf": 2,
+            "weight": 0.068966
+          },
+          {
+            "term": "formula",
+            "tf": 2,
+            "weight": 0.068966
+          },
+          {
+            "term": "model",
+            "tf": 2,
+            "weight": 0.068966
+          },
+          {
+            "term": "logic",
+            "tf": 1,
+            "weight": 0.034483
+          },
+          {
+            "term": "diagram",
+            "tf": 1,
+            "weight": 0.034483
+          },
+          {
+            "term": "codeformulamodel",
+            "tf": 1,
+            "weight": 0.034483
+          },
+          {
+            "term": "pipeline",
+            "tf": 1,
+            "weight": 0.034483
+          },
+          {
+            "term": "sources",
+            "tf": 1,
+            "weight": 0.034483
+          },
+          {
+            "term": "py277",
+            "tf": 1,
+            "weight": 0.034483
+          },
+          {
+            "term": "337",
+            "tf": 1,
+            "weight": 0.034483
+          },
+          {
+            "term": "https",
+            "tf": 1,
+            "weight": 0.034483
+          },
+          {
+            "term": "github",
+            "tf": 1,
+            "weight": 0.034483
+          },
+          {
+            "term": "com",
+            "tf": 1,
+            "weight": 0.034483
+          },
+          {
+            "term": "project",
+            "tf": 1,
+            "weight": 0.034483
+          },
+          {
+            "term": "blob",
+            "tf": 1,
+            "weight": 0.034483
+          },
+          {
+            "term": "f7244a43",
+            "tf": 1,
+            "weight": 0.034483
+          },
+          {
+            "term": "l277",
+            "tf": 1,
+            "weight": 0.034483
+          }
+        ],
+        "unique_terms": 21,
+        "total_terms": 29
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Processing Logic",
+        "code",
+        "codeformulamodel",
+        "diagram",
+        "docling",
+        "formula",
+        "logic",
+        "model",
+        "models",
+        "pipeline",
+        "processing"
+      ],
+      "collection_name": "Docling"
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.54,
+      "overall": 0.7133333333333333
+    }
+  },
+  {
+    "text": "### Code Language Detection  The model outputs code with a language prefix in the format `<_language_>`. The `_extract_code_language` method extracts this information:  **Pattern:** `^<_([^_>]+)_>\\s*(.*)`  **Example Output:**  - Input: `<_python_>def main():\\n print(\"Hello\")` - Extracted Language: `python` - Remainder: `def main():\\n print(\"Hello\")`  The language string is then converted to a `CodeLanguageLabel` enum member. If the language is unrecognized or missing, it defaults to `CodeLanguageLabel.UNKNOWN`. Sources: [docling/models/code\\_formula\\_model.py156-206](https://github.com/docling-project/docling/blob/f7244a43/docling/models/code_formula_model.py#L156-L206)  ---",
+    "metadata": {
+      "chunk_id": "375f3cfe7e6c-0009",
+      "source_file": "Docs\\Docling\\_docling-project_docling_4.4-enrichment-models.md",
+      "filename": "_docling-project_docling_4.4-enrichment-models.md",
+      "file_extension": ".md",
+      "chunk_index": 9,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Code Language Detection"
+      ],
+      "heading_text": "Code Language Detection",
+      "token_count": 174,
+      "char_count": 683,
+      "start_char": 11160,
+      "end_char": 11843,
+      "semantic_score": 0.7,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.7207692307692307,
+      "chunking_strategy": "hierarchical_balanced_structural",
+      "content_type": "code_block",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:06.634717",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 174,
+      "document_id": "375f3cfe7e6c",
+      "document_name": "_docling-project_docling_4.4-enrichment-models",
+      "source_path": "Docs\\Docling\\_docling-project_docling_4.4-enrichment-models.md",
+      "source_filename": "_docling-project_docling_4.4-enrichment-models.md",
+      "source_directory": "Docs\\Docling",
+      "relative_path": "Docs\\Docling\\_docling-project_docling_4.4-enrichment-models.md",
+      "hierarchy_path": "Code Language Detection",
+      "chunk_hash": "3ab59adeff543c51",
+      "content_digest": "3ab59adeff543c51",
+      "chunk_length": 683,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "docling"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "language",
+          "code",
+          "the",
+          "docling",
+          "model",
+          "python",
+          "def",
+          "main",
+          "print",
+          "hello",
+          "codelanguagelabel",
+          "models",
+          "formula",
+          "detection",
+          "outputs",
+          "with",
+          "prefix",
+          "format",
+          "extract",
+          "method"
+        ],
+        "term_weights": [
+          {
+            "term": "language",
+            "tf": 7,
+            "weight": 0.092105
+          },
+          {
+            "term": "code",
+            "tf": 5,
+            "weight": 0.065789
+          },
+          {
+            "term": "the",
+            "tf": 5,
+            "weight": 0.065789
+          },
+          {
+            "term": "docling",
+            "tf": 4,
+            "weight": 0.052632
+          },
+          {
+            "term": "model",
+            "tf": 3,
+            "weight": 0.039474
+          },
+          {
+            "term": "python",
+            "tf": 2,
+            "weight": 0.026316
+          },
+          {
+            "term": "def",
+            "tf": 2,
+            "weight": 0.026316
+          },
+          {
+            "term": "main",
+            "tf": 2,
+            "weight": 0.026316
+          },
+          {
+            "term": "print",
+            "tf": 2,
+            "weight": 0.026316
+          },
+          {
+            "term": "hello",
+            "tf": 2,
+            "weight": 0.026316
+          },
+          {
+            "term": "codelanguagelabel",
+            "tf": 2,
+            "weight": 0.026316
+          },
+          {
+            "term": "models",
+            "tf": 2,
+            "weight": 0.026316
+          },
+          {
+            "term": "formula",
+            "tf": 2,
+            "weight": 0.026316
+          },
+          {
+            "term": "detection",
+            "tf": 1,
+            "weight": 0.013158
+          },
+          {
+            "term": "outputs",
+            "tf": 1,
+            "weight": 0.013158
+          },
+          {
+            "term": "with",
+            "tf": 1,
+            "weight": 0.013158
+          },
+          {
+            "term": "prefix",
+            "tf": 1,
+            "weight": 0.013158
+          },
+          {
+            "term": "format",
+            "tf": 1,
+            "weight": 0.013158
+          },
+          {
+            "term": "extract",
+            "tf": 1,
+            "weight": 0.013158
+          },
+          {
+            "term": "method",
+            "tf": 1,
+            "weight": 0.013158
+          }
+        ],
+        "unique_terms": 49,
+        "total_terms": 76
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Code Language Detection",
+        "code",
+        "def",
+        "docling",
+        "hello",
+        "language",
+        "main",
+        "model",
+        "print",
+        "python",
+        "the"
+      ],
+      "collection_name": "Docling"
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.7207692307692307,
+      "overall": 0.7735897435897435
+    }
+  },
+  {
+    "text": "### Formula Extraction  For formula elements (identified by `DocItemLabel.FORMULA`), the model extracts LaTeX representations:  **Example:**  - Input: Image of mathematical formula - Output: `E = mc^2`  The extracted LaTeX is stored in the `TextItem.text` field, replacing any placeholder text from layout analysis. Sources: [docling/models/code\\_formula\\_model.py208-245](https://github.com/docling-project/docling/blob/f7244a43/docling/models/code_formula_model.py#L208-L245)  ---",
+    "metadata": {
+      "chunk_id": "375f3cfe7e6c-0010",
+      "source_file": "Docs\\Docling\\_docling-project_docling_4.4-enrichment-models.md",
+      "filename": "_docling-project_docling_4.4-enrichment-models.md",
+      "file_extension": ".md",
+      "chunk_index": 10,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Formula Extraction"
+      ],
+      "heading_text": "Formula Extraction",
+      "token_count": 116,
+      "char_count": 482,
+      "start_char": 11846,
+      "end_char": 12328,
+      "semantic_score": 0.7,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.75,
+      "chunking_strategy": "hierarchical_balanced_structural",
+      "content_type": "list_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:06.635476",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 116,
+      "document_id": "375f3cfe7e6c",
+      "document_name": "_docling-project_docling_4.4-enrichment-models",
+      "source_path": "Docs\\Docling\\_docling-project_docling_4.4-enrichment-models.md",
+      "source_filename": "_docling-project_docling_4.4-enrichment-models.md",
+      "source_directory": "Docs\\Docling",
+      "relative_path": "Docs\\Docling\\_docling-project_docling_4.4-enrichment-models.md",
+      "hierarchy_path": "Formula Extraction",
+      "chunk_hash": "6015148c4fb709fa",
+      "content_digest": "6015148c4fb709fa",
+      "chunk_length": 482,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "docling"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "formula",
+          "docling",
+          "the",
+          "model",
+          "latex",
+          "text",
+          "models",
+          "code",
+          "extraction",
+          "for",
+          "elements",
+          "identified",
+          "docitemlabel",
+          "extracts",
+          "representations",
+          "example",
+          "input",
+          "image",
+          "mathematical",
+          "output"
+        ],
+        "term_weights": [
+          {
+            "term": "formula",
+            "tf": 6,
+            "weight": 0.105263
+          },
+          {
+            "term": "docling",
+            "tf": 4,
+            "weight": 0.070175
+          },
+          {
+            "term": "the",
+            "tf": 3,
+            "weight": 0.052632
+          },
+          {
+            "term": "model",
+            "tf": 3,
+            "weight": 0.052632
+          },
+          {
+            "term": "latex",
+            "tf": 2,
+            "weight": 0.035088
+          },
+          {
+            "term": "text",
+            "tf": 2,
+            "weight": 0.035088
+          },
+          {
+            "term": "models",
+            "tf": 2,
+            "weight": 0.035088
+          },
+          {
+            "term": "code",
+            "tf": 2,
+            "weight": 0.035088
+          },
+          {
+            "term": "extraction",
+            "tf": 1,
+            "weight": 0.017544
+          },
+          {
+            "term": "for",
+            "tf": 1,
+            "weight": 0.017544
+          },
+          {
+            "term": "elements",
+            "tf": 1,
+            "weight": 0.017544
+          },
+          {
+            "term": "identified",
+            "tf": 1,
+            "weight": 0.017544
+          },
+          {
+            "term": "docitemlabel",
+            "tf": 1,
+            "weight": 0.017544
+          },
+          {
+            "term": "extracts",
+            "tf": 1,
+            "weight": 0.017544
+          },
+          {
+            "term": "representations",
+            "tf": 1,
+            "weight": 0.017544
+          },
+          {
+            "term": "example",
+            "tf": 1,
+            "weight": 0.017544
+          },
+          {
+            "term": "input",
+            "tf": 1,
+            "weight": 0.017544
+          },
+          {
+            "term": "image",
+            "tf": 1,
+            "weight": 0.017544
+          },
+          {
+            "term": "mathematical",
+            "tf": 1,
+            "weight": 0.017544
+          },
+          {
+            "term": "output",
+            "tf": 1,
+            "weight": 0.017544
+          }
+        ],
+        "unique_terms": 41,
+        "total_terms": 57
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Formula Extraction",
+        "code",
+        "docling",
+        "extraction",
+        "for",
+        "formula",
+        "latex",
+        "model",
+        "models",
+        "text",
+        "the"
+      ],
+      "collection_name": "Docling"
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.75,
+      "overall": 0.7833333333333332
+    }
+  },
+  {
+    "text": "### Output Structure  **Diagram: PictureClassificationData Structure** ``` ``` **Example:** ``` ``` Sources: [docling/models/document\\_picture\\_classifier.py136-185](https://github.com/docling-project/docling/blob/f7244a43/docling/models/document_picture_classifier.py#L136-L185) [tests/test\\_document\\_picture\\_classifier.py47-64](https://github.com/docling-project/docling/blob/f7244a43/tests/test_document_picture_classifier.py#L47-L64)  ---",
+    "metadata": {
+      "chunk_id": "375f3cfe7e6c-0014",
+      "source_file": "Docs\\Docling\\_docling-project_docling_4.4-enrichment-models.md",
+      "filename": "_docling-project_docling_4.4-enrichment-models.md",
+      "file_extension": ".md",
+      "chunk_index": 14,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Output Structure"
+      ],
+      "heading_text": "Output Structure",
+      "token_count": 106,
+      "char_count": 444,
+      "start_char": 13673,
+      "end_char": 14117,
+      "semantic_score": 0.7,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.73,
+      "chunking_strategy": "hierarchical_balanced_structural",
+      "content_type": "code_block",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:06.637802",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 106,
+      "document_id": "375f3cfe7e6c",
+      "document_name": "_docling-project_docling_4.4-enrichment-models",
+      "source_path": "Docs\\Docling\\_docling-project_docling_4.4-enrichment-models.md",
+      "source_filename": "_docling-project_docling_4.4-enrichment-models.md",
+      "source_directory": "Docs\\Docling",
+      "relative_path": "Docs\\Docling\\_docling-project_docling_4.4-enrichment-models.md",
+      "hierarchy_path": "Output Structure",
+      "chunk_hash": "cc919b16a17b9646",
+      "content_digest": "cc919b16a17b9646",
+      "chunk_length": 444,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "docling"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "docling",
+          "document",
+          "picture",
+          "classifier",
+          "structure",
+          "models",
+          "https",
+          "github",
+          "com",
+          "project",
+          "blob",
+          "f7244a43",
+          "tests",
+          "test",
+          "output",
+          "diagram",
+          "pictureclassificationdata",
+          "example",
+          "sources",
+          "py136"
+        ],
+        "term_weights": [
+          {
+            "term": "docling",
+            "tf": 6,
+            "weight": 0.12
+          },
+          {
+            "term": "document",
+            "tf": 4,
+            "weight": 0.08
+          },
+          {
+            "term": "picture",
+            "tf": 4,
+            "weight": 0.08
+          },
+          {
+            "term": "classifier",
+            "tf": 4,
+            "weight": 0.08
+          },
+          {
+            "term": "structure",
+            "tf": 2,
+            "weight": 0.04
+          },
+          {
+            "term": "models",
+            "tf": 2,
+            "weight": 0.04
+          },
+          {
+            "term": "https",
+            "tf": 2,
+            "weight": 0.04
+          },
+          {
+            "term": "github",
+            "tf": 2,
+            "weight": 0.04
+          },
+          {
+            "term": "com",
+            "tf": 2,
+            "weight": 0.04
+          },
+          {
+            "term": "project",
+            "tf": 2,
+            "weight": 0.04
+          },
+          {
+            "term": "blob",
+            "tf": 2,
+            "weight": 0.04
+          },
+          {
+            "term": "f7244a43",
+            "tf": 2,
+            "weight": 0.04
+          },
+          {
+            "term": "tests",
+            "tf": 2,
+            "weight": 0.04
+          },
+          {
+            "term": "test",
+            "tf": 2,
+            "weight": 0.04
+          },
+          {
+            "term": "output",
+            "tf": 1,
+            "weight": 0.02
+          },
+          {
+            "term": "diagram",
+            "tf": 1,
+            "weight": 0.02
+          },
+          {
+            "term": "pictureclassificationdata",
+            "tf": 1,
+            "weight": 0.02
+          },
+          {
+            "term": "example",
+            "tf": 1,
+            "weight": 0.02
+          },
+          {
+            "term": "sources",
+            "tf": 1,
+            "weight": 0.02
+          },
+          {
+            "term": "py136",
+            "tf": 1,
+            "weight": 0.02
+          }
+        ],
+        "unique_terms": 26,
+        "total_terms": 50
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Output Structure",
+        "classifier",
+        "com",
+        "docling",
+        "document",
+        "github",
+        "https",
+        "models",
+        "picture",
+        "project",
+        "structure"
+      ],
+      "collection_name": "Docling"
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.73,
+      "overall": 0.7766666666666667
+    }
+  },
+  {
+    "text": "### Description Generation  **Diagram: Picture Description Pipeline** ``` ``` Sources: [docling/models/picture\\_description\\_vlm\\_model.py82-116](https://github.com/docling-project/docling/blob/f7244a43/docling/models/picture_description_vlm_model.py#L82-L116)  ---",
+    "metadata": {
+      "chunk_id": "375f3cfe7e6c-0017",
+      "source_file": "Docs\\Docling\\_docling-project_docling_4.4-enrichment-models.md",
+      "filename": "_docling-project_docling_4.4-enrichment-models.md",
+      "file_extension": ".md",
+      "chunk_index": 17,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Description Generation"
+      ],
+      "heading_text": "Description Generation",
+      "token_count": 66,
+      "char_count": 265,
+      "start_char": 15142,
+      "end_char": 15407,
+      "semantic_score": 0.7,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.54,
+      "chunking_strategy": "hierarchical_balanced_structural",
+      "content_type": "code_block",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:06.639272",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 66,
+      "document_id": "375f3cfe7e6c",
+      "document_name": "_docling-project_docling_4.4-enrichment-models",
+      "source_path": "Docs\\Docling\\_docling-project_docling_4.4-enrichment-models.md",
+      "source_filename": "_docling-project_docling_4.4-enrichment-models.md",
+      "source_directory": "Docs\\Docling",
+      "relative_path": "Docs\\Docling\\_docling-project_docling_4.4-enrichment-models.md",
+      "hierarchy_path": "Description Generation",
+      "chunk_hash": "fc29f7ca4adcba8c",
+      "content_digest": "fc29f7ca4adcba8c",
+      "chunk_length": 265,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "docling"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "description",
+          "docling",
+          "picture",
+          "models",
+          "vlm",
+          "model",
+          "generation",
+          "diagram",
+          "pipeline",
+          "sources",
+          "py82",
+          "116",
+          "https",
+          "github",
+          "com",
+          "project",
+          "blob",
+          "f7244a43",
+          "l82",
+          "l116"
+        ],
+        "term_weights": [
+          {
+            "term": "description",
+            "tf": 4,
+            "weight": 0.129032
+          },
+          {
+            "term": "docling",
+            "tf": 4,
+            "weight": 0.129032
+          },
+          {
+            "term": "picture",
+            "tf": 3,
+            "weight": 0.096774
+          },
+          {
+            "term": "models",
+            "tf": 2,
+            "weight": 0.064516
+          },
+          {
+            "term": "vlm",
+            "tf": 2,
+            "weight": 0.064516
+          },
+          {
+            "term": "model",
+            "tf": 2,
+            "weight": 0.064516
+          },
+          {
+            "term": "generation",
+            "tf": 1,
+            "weight": 0.032258
+          },
+          {
+            "term": "diagram",
+            "tf": 1,
+            "weight": 0.032258
+          },
+          {
+            "term": "pipeline",
+            "tf": 1,
+            "weight": 0.032258
+          },
+          {
+            "term": "sources",
+            "tf": 1,
+            "weight": 0.032258
+          },
+          {
+            "term": "py82",
+            "tf": 1,
+            "weight": 0.032258
+          },
+          {
+            "term": "116",
+            "tf": 1,
+            "weight": 0.032258
+          },
+          {
+            "term": "https",
+            "tf": 1,
+            "weight": 0.032258
+          },
+          {
+            "term": "github",
+            "tf": 1,
+            "weight": 0.032258
+          },
+          {
+            "term": "com",
+            "tf": 1,
+            "weight": 0.032258
+          },
+          {
+            "term": "project",
+            "tf": 1,
+            "weight": 0.032258
+          },
+          {
+            "term": "blob",
+            "tf": 1,
+            "weight": 0.032258
+          },
+          {
+            "term": "f7244a43",
+            "tf": 1,
+            "weight": 0.032258
+          },
+          {
+            "term": "l82",
+            "tf": 1,
+            "weight": 0.032258
+          },
+          {
+            "term": "l116",
+            "tf": 1,
+            "weight": 0.032258
+          }
+        ],
+        "unique_terms": 20,
+        "total_terms": 31
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Description Generation",
+        "description",
+        "diagram",
+        "docling",
+        "generation",
+        "model",
+        "models",
+        "picture",
+        "pipeline",
+        "sources",
+        "vlm"
+      ],
+      "collection_name": "Docling"
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.54,
+      "overall": 0.7133333333333333
+    }
+  },
+  {
+    "text": "### Custom Prompts  The `PictureDescriptionVlmOptions` allows customization of the description prompt:  **Default Configuration:** ``` ``` **Message Format:** ``` ``` Sources: [docling/models/picture\\_description\\_vlm\\_model.py86-103](https://github.com/docling-project/docling/blob/f7244a43/docling/models/picture_description_vlm_model.py#L86-L103) [docling/datamodel/pipeline\\_options.py416-438](https://github.com/docling-project/docling/blob/f7244a43/docling/datamodel/pipeline_options.py#L416-L438)  ---",
+    "metadata": {
+      "chunk_id": "375f3cfe7e6c-0018",
+      "source_file": "Docs\\Docling\\_docling-project_docling_4.4-enrichment-models.md",
+      "filename": "_docling-project_docling_4.4-enrichment-models.md",
+      "file_extension": ".md",
+      "chunk_index": 18,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Custom Prompts"
+      ],
+      "heading_text": "Custom Prompts",
+      "token_count": 129,
+      "char_count": 508,
+      "start_char": 15411,
+      "end_char": 15919,
+      "semantic_score": 0.7,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5378260869565217,
+      "chunking_strategy": "hierarchical_balanced_structural",
+      "content_type": "code_block",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:06.640227",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 129,
+      "document_id": "375f3cfe7e6c",
+      "document_name": "_docling-project_docling_4.4-enrichment-models",
+      "source_path": "Docs\\Docling\\_docling-project_docling_4.4-enrichment-models.md",
+      "source_filename": "_docling-project_docling_4.4-enrichment-models.md",
+      "source_directory": "Docs\\Docling",
+      "relative_path": "Docs\\Docling\\_docling-project_docling_4.4-enrichment-models.md",
+      "hierarchy_path": "Custom Prompts",
+      "chunk_hash": "d78d7c142b17cd12",
+      "content_digest": "d78d7c142b17cd12",
+      "chunk_length": 508,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "docling"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "docling",
+          "description",
+          "the",
+          "models",
+          "picture",
+          "vlm",
+          "model",
+          "https",
+          "github",
+          "com",
+          "project",
+          "blob",
+          "f7244a43",
+          "datamodel",
+          "pipeline",
+          "options",
+          "custom",
+          "prompts",
+          "picturedescriptionvlmoptions",
+          "allows"
+        ],
+        "term_weights": [
+          {
+            "term": "docling",
+            "tf": 8,
+            "weight": 0.137931
+          },
+          {
+            "term": "description",
+            "tf": 3,
+            "weight": 0.051724
+          },
+          {
+            "term": "the",
+            "tf": 2,
+            "weight": 0.034483
+          },
+          {
+            "term": "models",
+            "tf": 2,
+            "weight": 0.034483
+          },
+          {
+            "term": "picture",
+            "tf": 2,
+            "weight": 0.034483
+          },
+          {
+            "term": "vlm",
+            "tf": 2,
+            "weight": 0.034483
+          },
+          {
+            "term": "model",
+            "tf": 2,
+            "weight": 0.034483
+          },
+          {
+            "term": "https",
+            "tf": 2,
+            "weight": 0.034483
+          },
+          {
+            "term": "github",
+            "tf": 2,
+            "weight": 0.034483
+          },
+          {
+            "term": "com",
+            "tf": 2,
+            "weight": 0.034483
+          },
+          {
+            "term": "project",
+            "tf": 2,
+            "weight": 0.034483
+          },
+          {
+            "term": "blob",
+            "tf": 2,
+            "weight": 0.034483
+          },
+          {
+            "term": "f7244a43",
+            "tf": 2,
+            "weight": 0.034483
+          },
+          {
+            "term": "datamodel",
+            "tf": 2,
+            "weight": 0.034483
+          },
+          {
+            "term": "pipeline",
+            "tf": 2,
+            "weight": 0.034483
+          },
+          {
+            "term": "options",
+            "tf": 2,
+            "weight": 0.034483
+          },
+          {
+            "term": "custom",
+            "tf": 1,
+            "weight": 0.017241
+          },
+          {
+            "term": "prompts",
+            "tf": 1,
+            "weight": 0.017241
+          },
+          {
+            "term": "picturedescriptionvlmoptions",
+            "tf": 1,
+            "weight": 0.017241
+          },
+          {
+            "term": "allows",
+            "tf": 1,
+            "weight": 0.017241
+          }
+        ],
+        "unique_terms": 35,
+        "total_terms": 58
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Custom Prompts",
+        "com",
+        "description",
+        "docling",
+        "github",
+        "https",
+        "model",
+        "models",
+        "picture",
+        "the",
+        "vlm"
+      ],
+      "collection_name": "Docling"
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5378260869565217,
+      "overall": 0.7126086956521739
+    }
+  },
+  {
+    "text": "### API-Based Picture Description  The `PictureDescriptionApiModel` provides an alternative that uses OpenAI-compatible APIs instead of local model inference. **Configuration:** ``` ``` Sources: [docling/models/picture\\_description\\_api\\_model.py1-100](https://github.com/docling-project/docling/blob/f7244a43/docling/models/picture_description_api_model.py#L1-L100) [docling/datamodel/pipeline\\_options.py441-466](https://github.com/docling-project/docling/blob/f7244a43/docling/datamodel/pipeline_options.py#L441-L466)  ---",
+    "metadata": {
+      "chunk_id": "375f3cfe7e6c-0019",
+      "source_file": "Docs\\Docling\\_docling-project_docling_4.4-enrichment-models.md",
+      "filename": "_docling-project_docling_4.4-enrichment-models.md",
+      "file_extension": ".md",
+      "chunk_index": 19,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "API-Based Picture Description"
+      ],
+      "heading_text": "API-Based Picture Description",
+      "token_count": 127,
+      "char_count": 525,
+      "start_char": 15925,
+      "end_char": 16450,
+      "semantic_score": 0.7,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.578,
+      "chunking_strategy": "hierarchical_balanced_structural",
+      "content_type": "code_block",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:06.641225",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 127,
+      "document_id": "375f3cfe7e6c",
+      "document_name": "_docling-project_docling_4.4-enrichment-models",
+      "source_path": "Docs\\Docling\\_docling-project_docling_4.4-enrichment-models.md",
+      "source_filename": "_docling-project_docling_4.4-enrichment-models.md",
+      "source_directory": "Docs\\Docling",
+      "relative_path": "Docs\\Docling\\_docling-project_docling_4.4-enrichment-models.md",
+      "hierarchy_path": "API-Based Picture Description",
+      "chunk_hash": "ca3ee787c7a84048",
+      "content_digest": "ca3ee787c7a84048",
+      "chunk_length": 525,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "docling"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "docling",
+          "api",
+          "picture",
+          "description",
+          "model",
+          "models",
+          "https",
+          "github",
+          "com",
+          "project",
+          "blob",
+          "f7244a43",
+          "datamodel",
+          "pipeline",
+          "options",
+          "based",
+          "the",
+          "picturedescriptionapimodel",
+          "provides",
+          "alternative"
+        ],
+        "term_weights": [
+          {
+            "term": "docling",
+            "tf": 8,
+            "weight": 0.129032
+          },
+          {
+            "term": "api",
+            "tf": 3,
+            "weight": 0.048387
+          },
+          {
+            "term": "picture",
+            "tf": 3,
+            "weight": 0.048387
+          },
+          {
+            "term": "description",
+            "tf": 3,
+            "weight": 0.048387
+          },
+          {
+            "term": "model",
+            "tf": 3,
+            "weight": 0.048387
+          },
+          {
+            "term": "models",
+            "tf": 2,
+            "weight": 0.032258
+          },
+          {
+            "term": "https",
+            "tf": 2,
+            "weight": 0.032258
+          },
+          {
+            "term": "github",
+            "tf": 2,
+            "weight": 0.032258
+          },
+          {
+            "term": "com",
+            "tf": 2,
+            "weight": 0.032258
+          },
+          {
+            "term": "project",
+            "tf": 2,
+            "weight": 0.032258
+          },
+          {
+            "term": "blob",
+            "tf": 2,
+            "weight": 0.032258
+          },
+          {
+            "term": "f7244a43",
+            "tf": 2,
+            "weight": 0.032258
+          },
+          {
+            "term": "datamodel",
+            "tf": 2,
+            "weight": 0.032258
+          },
+          {
+            "term": "pipeline",
+            "tf": 2,
+            "weight": 0.032258
+          },
+          {
+            "term": "options",
+            "tf": 2,
+            "weight": 0.032258
+          },
+          {
+            "term": "based",
+            "tf": 1,
+            "weight": 0.016129
+          },
+          {
+            "term": "the",
+            "tf": 1,
+            "weight": 0.016129
+          },
+          {
+            "term": "picturedescriptionapimodel",
+            "tf": 1,
+            "weight": 0.016129
+          },
+          {
+            "term": "provides",
+            "tf": 1,
+            "weight": 0.016129
+          },
+          {
+            "term": "alternative",
+            "tf": 1,
+            "weight": 0.016129
+          }
+        ],
+        "unique_terms": 37,
+        "total_terms": 62
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "API-Based Picture Description",
+        "api",
+        "com",
+        "description",
+        "docling",
+        "github",
+        "https",
+        "model",
+        "models",
+        "picture",
+        "project"
+      ],
+      "collection_name": "Docling"
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.578,
+      "overall": 0.726
+    }
+  },
+  {
+    "text": "## Configuration",
+    "metadata": {
+      "chunk_id": "375f3cfe7e6c-0020",
+      "source_file": "Docs\\Docling\\_docling-project_docling_4.4-enrichment-models.md",
+      "filename": "_docling-project_docling_4.4-enrichment-models.md",
+      "file_extension": ".md",
+      "chunk_index": 20,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Configuration"
+      ],
+      "heading_text": "Configuration",
+      "token_count": 2,
+      "char_count": 16,
+      "start_char": 16455,
+      "end_char": 16471,
+      "semantic_score": 0.8,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.59,
+      "chunking_strategy": "hierarchical_balanced_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:06.641440",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 2,
+      "document_id": "375f3cfe7e6c",
+      "document_name": "_docling-project_docling_4.4-enrichment-models",
+      "source_path": "Docs\\Docling\\_docling-project_docling_4.4-enrichment-models.md",
+      "source_filename": "_docling-project_docling_4.4-enrichment-models.md",
+      "source_directory": "Docs\\Docling",
+      "relative_path": "Docs\\Docling\\_docling-project_docling_4.4-enrichment-models.md",
+      "hierarchy_path": "Configuration",
+      "chunk_hash": "75d3d50841c28422",
+      "content_digest": "75d3d50841c28422",
+      "chunk_length": 16,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "docling"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "configuration"
+        ],
+        "term_weights": [
+          {
+            "term": "configuration",
+            "tf": 1,
+            "weight": 1.0
+          }
+        ],
+        "unique_terms": 1,
+        "total_terms": 1
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Configuration",
+        "configuration"
+      ],
+      "collection_name": "Docling"
+    },
+    "advanced_scores": {
+      "semantic": 0.8,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.59,
+      "overall": 0.7633333333333333
+    }
+  },
+  {
+    "text": "### Pipeline Options  Enrichment models are configured through `PdfPipelineOptions`:  **Configuration Table:**  | Option                        | Type    | Default | Description                   | | ----------------------------- | ------- | ------- | ----------------------------- | | `do_code_enrichment`          | `bool`  | `False` | Enable code extraction        | | `do_formula_enrichment`       | `bool`  | `False` | Enable formula extraction     | | `do_picture_classification`   | `bool`  | `False` | Enable picture classification | | `do_picture_description`      | `bool`  | `False` | Enable picture description    | | `picture_description_options` | Options | `None`  | VLM or API configuration      |  **Example Configuration:** ``` ``` Sources: [docling/pipeline/standard\\_pdf\\_pipeline.py77-98](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/standard_pdf_pipeline.py#L77-L98) [docling/datamodel/pipeline\\_options.py184-204](https://github.com/docling-project/docling/blob/f7244a43/docling/datamodel/pipeline_options.py#L184-L204)  ---",
+    "metadata": {
+      "chunk_id": "375f3cfe7e6c-0021",
+      "source_file": "Docs\\Docling\\_docling-project_docling_4.4-enrichment-models.md",
+      "filename": "_docling-project_docling_4.4-enrichment-models.md",
+      "file_extension": ".md",
+      "chunk_index": 21,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Pipeline Options"
+      ],
+      "heading_text": "Pipeline Options",
+      "token_count": 257,
+      "char_count": 1076,
+      "start_char": 16473,
+      "end_char": 17549,
+      "semantic_score": 0.7999999999999999,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.6287096774193549,
+      "chunking_strategy": "hierarchical_balanced_structural",
+      "content_type": "code_block",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:06.643510",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 257,
+      "document_id": "375f3cfe7e6c",
+      "document_name": "_docling-project_docling_4.4-enrichment-models",
+      "source_path": "Docs\\Docling\\_docling-project_docling_4.4-enrichment-models.md",
+      "source_filename": "_docling-project_docling_4.4-enrichment-models.md",
+      "source_directory": "Docs\\Docling",
+      "relative_path": "Docs\\Docling\\_docling-project_docling_4.4-enrichment-models.md",
+      "hierarchy_path": "Pipeline Options",
+      "chunk_hash": "8eb4bcb925758e9c",
+      "content_digest": "8eb4bcb925758e9c",
+      "chunk_length": 1076,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "docling"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "docling",
+          "pipeline",
+          "options",
+          "picture",
+          "description",
+          "bool",
+          "false",
+          "enable",
+          "enrichment",
+          "configuration",
+          "code",
+          "extraction",
+          "formula",
+          "classification",
+          "standard",
+          "pdf",
+          "https",
+          "github",
+          "com",
+          "project"
+        ],
+        "term_weights": [
+          {
+            "term": "docling",
+            "tf": 8,
+            "weight": 0.085106
+          },
+          {
+            "term": "pipeline",
+            "tf": 7,
+            "weight": 0.074468
+          },
+          {
+            "term": "options",
+            "tf": 5,
+            "weight": 0.053191
+          },
+          {
+            "term": "picture",
+            "tf": 5,
+            "weight": 0.053191
+          },
+          {
+            "term": "description",
+            "tf": 4,
+            "weight": 0.042553
+          },
+          {
+            "term": "bool",
+            "tf": 4,
+            "weight": 0.042553
+          },
+          {
+            "term": "false",
+            "tf": 4,
+            "weight": 0.042553
+          },
+          {
+            "term": "enable",
+            "tf": 4,
+            "weight": 0.042553
+          },
+          {
+            "term": "enrichment",
+            "tf": 3,
+            "weight": 0.031915
+          },
+          {
+            "term": "configuration",
+            "tf": 3,
+            "weight": 0.031915
+          },
+          {
+            "term": "code",
+            "tf": 2,
+            "weight": 0.021277
+          },
+          {
+            "term": "extraction",
+            "tf": 2,
+            "weight": 0.021277
+          },
+          {
+            "term": "formula",
+            "tf": 2,
+            "weight": 0.021277
+          },
+          {
+            "term": "classification",
+            "tf": 2,
+            "weight": 0.021277
+          },
+          {
+            "term": "standard",
+            "tf": 2,
+            "weight": 0.021277
+          },
+          {
+            "term": "pdf",
+            "tf": 2,
+            "weight": 0.021277
+          },
+          {
+            "term": "https",
+            "tf": 2,
+            "weight": 0.021277
+          },
+          {
+            "term": "github",
+            "tf": 2,
+            "weight": 0.021277
+          },
+          {
+            "term": "com",
+            "tf": 2,
+            "weight": 0.021277
+          },
+          {
+            "term": "project",
+            "tf": 2,
+            "weight": 0.021277
+          }
+        ],
+        "unique_terms": 44,
+        "total_terms": 94
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Pipeline Options",
+        "bool",
+        "configuration",
+        "description",
+        "docling",
+        "enable",
+        "enrichment",
+        "false",
+        "options",
+        "picture",
+        "pipeline"
+      ],
+      "collection_name": "Docling"
+    },
+    "advanced_scores": {
+      "semantic": 0.7999999999999999,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.6287096774193549,
+      "overall": 0.776236559139785
+    }
+  },
+  {
+    "text": "### Enrichment Pipe Construction  The `StandardPdfPipeline` constructs the enrichment pipeline by prepending the `CodeFormulaModel` to inherited enrichment models:  **File:** [docling/pipeline/standard\\_pdf\\_pipeline.py77-90](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/standard_pdf_pipeline.py#L77-L90) ``` ``` Sources: [docling/pipeline/standard\\_pdf\\_pipeline.py77-90](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/standard_pdf_pipeline.py#L77-L90)  ---",
+    "metadata": {
+      "chunk_id": "375f3cfe7e6c-0024",
+      "source_file": "Docs\\Docling\\_docling-project_docling_4.4-enrichment-models.md",
+      "filename": "_docling-project_docling_4.4-enrichment-models.md",
+      "file_extension": ".md",
+      "chunk_index": 24,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Enrichment Pipe Construction"
+      ],
+      "heading_text": "Enrichment Pipe Construction",
+      "token_count": 133,
+      "char_count": 514,
+      "start_char": 18478,
+      "end_char": 18992,
+      "semantic_score": 0.7,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.518,
+      "chunking_strategy": "hierarchical_balanced_structural",
+      "content_type": "code_block",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:06.647197",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 133,
+      "document_id": "375f3cfe7e6c",
+      "document_name": "_docling-project_docling_4.4-enrichment-models",
+      "source_path": "Docs\\Docling\\_docling-project_docling_4.4-enrichment-models.md",
+      "source_filename": "_docling-project_docling_4.4-enrichment-models.md",
+      "source_directory": "Docs\\Docling",
+      "relative_path": "Docs\\Docling\\_docling-project_docling_4.4-enrichment-models.md",
+      "hierarchy_path": "Enrichment Pipe Construction",
+      "chunk_hash": "84599e818455a1e9",
+      "content_digest": "84599e818455a1e9",
+      "chunk_length": 514,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "docling"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "pipeline",
+          "docling",
+          "standard",
+          "pdf",
+          "enrichment",
+          "the",
+          "py77",
+          "https",
+          "github",
+          "com",
+          "project",
+          "blob",
+          "f7244a43",
+          "l77",
+          "l90",
+          "pipe",
+          "construction",
+          "standardpdfpipeline",
+          "constructs",
+          "prepending"
+        ],
+        "term_weights": [
+          {
+            "term": "pipeline",
+            "tf": 9,
+            "weight": 0.152542
+          },
+          {
+            "term": "docling",
+            "tf": 8,
+            "weight": 0.135593
+          },
+          {
+            "term": "standard",
+            "tf": 4,
+            "weight": 0.067797
+          },
+          {
+            "term": "pdf",
+            "tf": 4,
+            "weight": 0.067797
+          },
+          {
+            "term": "enrichment",
+            "tf": 3,
+            "weight": 0.050847
+          },
+          {
+            "term": "the",
+            "tf": 3,
+            "weight": 0.050847
+          },
+          {
+            "term": "py77",
+            "tf": 2,
+            "weight": 0.033898
+          },
+          {
+            "term": "https",
+            "tf": 2,
+            "weight": 0.033898
+          },
+          {
+            "term": "github",
+            "tf": 2,
+            "weight": 0.033898
+          },
+          {
+            "term": "com",
+            "tf": 2,
+            "weight": 0.033898
+          },
+          {
+            "term": "project",
+            "tf": 2,
+            "weight": 0.033898
+          },
+          {
+            "term": "blob",
+            "tf": 2,
+            "weight": 0.033898
+          },
+          {
+            "term": "f7244a43",
+            "tf": 2,
+            "weight": 0.033898
+          },
+          {
+            "term": "l77",
+            "tf": 2,
+            "weight": 0.033898
+          },
+          {
+            "term": "l90",
+            "tf": 2,
+            "weight": 0.033898
+          },
+          {
+            "term": "pipe",
+            "tf": 1,
+            "weight": 0.016949
+          },
+          {
+            "term": "construction",
+            "tf": 1,
+            "weight": 0.016949
+          },
+          {
+            "term": "standardpdfpipeline",
+            "tf": 1,
+            "weight": 0.016949
+          },
+          {
+            "term": "constructs",
+            "tf": 1,
+            "weight": 0.016949
+          },
+          {
+            "term": "prepending",
+            "tf": 1,
+            "weight": 0.016949
+          }
+        ],
+        "unique_terms": 25,
+        "total_terms": 59
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Enrichment Pipe Construction",
+        "com",
+        "docling",
+        "enrichment",
+        "github",
+        "https",
+        "pdf",
+        "pipeline",
+        "py77",
+        "standard",
+        "the"
+      ],
+      "collection_name": "Docling"
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.518,
+      "overall": 0.706
+    }
+  },
+  {
+    "text": "### Execution Flow in ConvertPipeline  The `ConvertPipeline` base class implements the `_enrich_document` method that orchestrates enrichment processing:  **Diagram: Enrichment Execution in ConvertPipeline** ``` ``` Sources: [docling/pipeline/base\\_pipeline.py177-206](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/base_pipeline.py#L177-L206)  ---",
+    "metadata": {
+      "chunk_id": "375f3cfe7e6c-0025",
+      "source_file": "Docs\\Docling\\_docling-project_docling_4.4-enrichment-models.md",
+      "filename": "_docling-project_docling_4.4-enrichment-models.md",
+      "file_extension": ".md",
+      "chunk_index": 25,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Execution Flow in ConvertPipeline"
+      ],
+      "heading_text": "Execution Flow in ConvertPipeline",
+      "token_count": 87,
+      "char_count": 375,
+      "start_char": 18996,
+      "end_char": 19371,
+      "semantic_score": 0.7,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5344444444444444,
+      "chunking_strategy": "hierarchical_balanced_structural",
+      "content_type": "code_block",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:06.648094",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 87,
+      "document_id": "375f3cfe7e6c",
+      "document_name": "_docling-project_docling_4.4-enrichment-models",
+      "source_path": "Docs\\Docling\\_docling-project_docling_4.4-enrichment-models.md",
+      "source_filename": "_docling-project_docling_4.4-enrichment-models.md",
+      "source_directory": "Docs\\Docling",
+      "relative_path": "Docs\\Docling\\_docling-project_docling_4.4-enrichment-models.md",
+      "hierarchy_path": "Execution Flow in ConvertPipeline",
+      "chunk_hash": "5eec7f05416ff3c8",
+      "content_digest": "5eec7f05416ff3c8",
+      "chunk_length": 375,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "docling"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "docling",
+          "pipeline",
+          "convertpipeline",
+          "base",
+          "execution",
+          "the",
+          "enrichment",
+          "flow",
+          "class",
+          "implements",
+          "enrich",
+          "document",
+          "method",
+          "that",
+          "orchestrates",
+          "processing",
+          "diagram",
+          "sources",
+          "py177",
+          "206"
+        ],
+        "term_weights": [
+          {
+            "term": "docling",
+            "tf": 4,
+            "weight": 0.097561
+          },
+          {
+            "term": "pipeline",
+            "tf": 4,
+            "weight": 0.097561
+          },
+          {
+            "term": "convertpipeline",
+            "tf": 3,
+            "weight": 0.073171
+          },
+          {
+            "term": "base",
+            "tf": 3,
+            "weight": 0.073171
+          },
+          {
+            "term": "execution",
+            "tf": 2,
+            "weight": 0.04878
+          },
+          {
+            "term": "the",
+            "tf": 2,
+            "weight": 0.04878
+          },
+          {
+            "term": "enrichment",
+            "tf": 2,
+            "weight": 0.04878
+          },
+          {
+            "term": "flow",
+            "tf": 1,
+            "weight": 0.02439
+          },
+          {
+            "term": "class",
+            "tf": 1,
+            "weight": 0.02439
+          },
+          {
+            "term": "implements",
+            "tf": 1,
+            "weight": 0.02439
+          },
+          {
+            "term": "enrich",
+            "tf": 1,
+            "weight": 0.02439
+          },
+          {
+            "term": "document",
+            "tf": 1,
+            "weight": 0.02439
+          },
+          {
+            "term": "method",
+            "tf": 1,
+            "weight": 0.02439
+          },
+          {
+            "term": "that",
+            "tf": 1,
+            "weight": 0.02439
+          },
+          {
+            "term": "orchestrates",
+            "tf": 1,
+            "weight": 0.02439
+          },
+          {
+            "term": "processing",
+            "tf": 1,
+            "weight": 0.02439
+          },
+          {
+            "term": "diagram",
+            "tf": 1,
+            "weight": 0.02439
+          },
+          {
+            "term": "sources",
+            "tf": 1,
+            "weight": 0.02439
+          },
+          {
+            "term": "py177",
+            "tf": 1,
+            "weight": 0.02439
+          },
+          {
+            "term": "206",
+            "tf": 1,
+            "weight": 0.02439
+          }
+        ],
+        "unique_terms": 28,
+        "total_terms": 41
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Execution Flow in ConvertPipeline",
+        "base",
+        "class",
+        "convertpipeline",
+        "docling",
+        "enrichment",
+        "execution",
+        "flow",
+        "implements",
+        "pipeline",
+        "the"
+      ],
+      "collection_name": "Docling"
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5344444444444444,
+      "overall": 0.7114814814814814
+    }
+  },
+  {
+    "text": "### Backend Retention for Enrichment  When enrichment models are enabled, the pipeline retains the document backend after assembly to support image cropping:  **File:** [docling/pipeline/standard\\_pdf\\_pipeline.py92-98](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/standard_pdf_pipeline.py#L92-L98) ``` ``` This ensures that page images remain accessible during the enrichment phase, allowing models to crop item-specific regions from the full page images. Sources: [docling/pipeline/standard\\_pdf\\_pipeline.py92-98](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/standard_pdf_pipeline.py#L92-L98)  ---",
+    "metadata": {
+      "chunk_id": "375f3cfe7e6c-0027",
+      "source_file": "Docs\\Docling\\_docling-project_docling_4.4-enrichment-models.md",
+      "filename": "_docling-project_docling_4.4-enrichment-models.md",
+      "file_extension": ".md",
+      "chunk_index": 27,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Backend Retention for Enrichment"
+      ],
+      "heading_text": "Backend Retention for Enrichment",
+      "token_count": 155,
+      "char_count": 658,
+      "start_char": 20509,
+      "end_char": 21167,
+      "semantic_score": 0.7,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5252941176470588,
+      "chunking_strategy": "hierarchical_balanced_structural",
+      "content_type": "code_block",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:06.651979",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 155,
+      "document_id": "375f3cfe7e6c",
+      "document_name": "_docling-project_docling_4.4-enrichment-models",
+      "source_path": "Docs\\Docling\\_docling-project_docling_4.4-enrichment-models.md",
+      "source_filename": "_docling-project_docling_4.4-enrichment-models.md",
+      "source_directory": "Docs\\Docling",
+      "relative_path": "Docs\\Docling\\_docling-project_docling_4.4-enrichment-models.md",
+      "hierarchy_path": "Backend Retention for Enrichment",
+      "chunk_hash": "65f75a232efa169d",
+      "content_digest": "65f75a232efa169d",
+      "chunk_length": 658,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "docling"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "pipeline",
+          "docling",
+          "the",
+          "standard",
+          "pdf",
+          "enrichment",
+          "backend",
+          "models",
+          "py92",
+          "https",
+          "github",
+          "com",
+          "project",
+          "blob",
+          "f7244a43",
+          "l92",
+          "l98",
+          "page",
+          "images",
+          "retention"
+        ],
+        "term_weights": [
+          {
+            "term": "pipeline",
+            "tf": 9,
+            "weight": 0.104651
+          },
+          {
+            "term": "docling",
+            "tf": 8,
+            "weight": 0.093023
+          },
+          {
+            "term": "the",
+            "tf": 4,
+            "weight": 0.046512
+          },
+          {
+            "term": "standard",
+            "tf": 4,
+            "weight": 0.046512
+          },
+          {
+            "term": "pdf",
+            "tf": 4,
+            "weight": 0.046512
+          },
+          {
+            "term": "enrichment",
+            "tf": 3,
+            "weight": 0.034884
+          },
+          {
+            "term": "backend",
+            "tf": 2,
+            "weight": 0.023256
+          },
+          {
+            "term": "models",
+            "tf": 2,
+            "weight": 0.023256
+          },
+          {
+            "term": "py92",
+            "tf": 2,
+            "weight": 0.023256
+          },
+          {
+            "term": "https",
+            "tf": 2,
+            "weight": 0.023256
+          },
+          {
+            "term": "github",
+            "tf": 2,
+            "weight": 0.023256
+          },
+          {
+            "term": "com",
+            "tf": 2,
+            "weight": 0.023256
+          },
+          {
+            "term": "project",
+            "tf": 2,
+            "weight": 0.023256
+          },
+          {
+            "term": "blob",
+            "tf": 2,
+            "weight": 0.023256
+          },
+          {
+            "term": "f7244a43",
+            "tf": 2,
+            "weight": 0.023256
+          },
+          {
+            "term": "l92",
+            "tf": 2,
+            "weight": 0.023256
+          },
+          {
+            "term": "l98",
+            "tf": 2,
+            "weight": 0.023256
+          },
+          {
+            "term": "page",
+            "tf": 2,
+            "weight": 0.023256
+          },
+          {
+            "term": "images",
+            "tf": 2,
+            "weight": 0.023256
+          },
+          {
+            "term": "retention",
+            "tf": 1,
+            "weight": 0.011628
+          }
+        ],
+        "unique_terms": 47,
+        "total_terms": 86
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Backend Retention for Enrichment",
+        "backend",
+        "docling",
+        "enrichment",
+        "https",
+        "models",
+        "pdf",
+        "pipeline",
+        "py92",
+        "standard",
+        "the"
+      ],
+      "collection_name": "Docling"
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5252941176470588,
+      "overall": 0.7084313725490196
+    }
+  },
+  {
+    "text": "## Plugin System for Enrichment  Enrichment models are discoverable through the plugin system using Python entry points. The `docling_defaults` entry point provides default enrichment implementations:  **File:** [docling/models/plugins/defaults.py21-30](https://github.com/docling-project/docling/blob/f7244a43/docling/models/plugins/defaults.py#L21-L30) ``` ``` This allows third-party packages to register additional enrichment models by defining their own entry points. Sources: [docling/models/plugins/defaults.py21-30](https://github.com/docling-project/docling/blob/f7244a43/docling/models/plugins/defaults.py#L21-L30) [docling/models/factories.py1-50](https://github.com/docling-project/docling/blob/f7244a43/docling/models/factories.py#L1-L50)  Dismiss  Refresh this wiki  This wiki was recently refreshed. Please wait 4 days to refresh again.",
+    "metadata": {
+      "chunk_id": "375f3cfe7e6c-0028",
+      "source_file": "Docs\\Docling\\_docling-project_docling_4.4-enrichment-models.md",
+      "filename": "_docling-project_docling_4.4-enrichment-models.md",
+      "file_extension": ".md",
+      "chunk_index": 28,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Plugin System for Enrichment"
+      ],
+      "heading_text": "Plugin System for Enrichment",
+      "token_count": 203,
+      "char_count": 851,
+      "start_char": 21172,
+      "end_char": 22023,
+      "semantic_score": 0.7,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.509047619047619,
+      "chunking_strategy": "hierarchical_balanced_structural",
+      "content_type": "code_block",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:06.653723",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 203,
+      "document_id": "375f3cfe7e6c",
+      "document_name": "_docling-project_docling_4.4-enrichment-models",
+      "source_path": "Docs\\Docling\\_docling-project_docling_4.4-enrichment-models.md",
+      "source_filename": "_docling-project_docling_4.4-enrichment-models.md",
+      "source_directory": "Docs\\Docling",
+      "relative_path": "Docs\\Docling\\_docling-project_docling_4.4-enrichment-models.md",
+      "hierarchy_path": "Plugin System for Enrichment",
+      "chunk_hash": "cb0f5dc4d1fe3d8a",
+      "content_digest": "cb0f5dc4d1fe3d8a",
+      "chunk_length": 851,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "docling"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "docling",
+          "models",
+          "defaults",
+          "enrichment",
+          "plugins",
+          "entry",
+          "https",
+          "github",
+          "com",
+          "project",
+          "blob",
+          "f7244a43",
+          "this",
+          "plugin",
+          "system",
+          "the",
+          "points",
+          "py21",
+          "l21",
+          "l30"
+        ],
+        "term_weights": [
+          {
+            "term": "docling",
+            "tf": 13,
+            "weight": 0.119266
+          },
+          {
+            "term": "models",
+            "tf": 8,
+            "weight": 0.073394
+          },
+          {
+            "term": "defaults",
+            "tf": 5,
+            "weight": 0.045872
+          },
+          {
+            "term": "enrichment",
+            "tf": 4,
+            "weight": 0.036697
+          },
+          {
+            "term": "plugins",
+            "tf": 4,
+            "weight": 0.036697
+          },
+          {
+            "term": "entry",
+            "tf": 3,
+            "weight": 0.027523
+          },
+          {
+            "term": "https",
+            "tf": 3,
+            "weight": 0.027523
+          },
+          {
+            "term": "github",
+            "tf": 3,
+            "weight": 0.027523
+          },
+          {
+            "term": "com",
+            "tf": 3,
+            "weight": 0.027523
+          },
+          {
+            "term": "project",
+            "tf": 3,
+            "weight": 0.027523
+          },
+          {
+            "term": "blob",
+            "tf": 3,
+            "weight": 0.027523
+          },
+          {
+            "term": "f7244a43",
+            "tf": 3,
+            "weight": 0.027523
+          },
+          {
+            "term": "this",
+            "tf": 3,
+            "weight": 0.027523
+          },
+          {
+            "term": "plugin",
+            "tf": 2,
+            "weight": 0.018349
+          },
+          {
+            "term": "system",
+            "tf": 2,
+            "weight": 0.018349
+          },
+          {
+            "term": "the",
+            "tf": 2,
+            "weight": 0.018349
+          },
+          {
+            "term": "points",
+            "tf": 2,
+            "weight": 0.018349
+          },
+          {
+            "term": "py21",
+            "tf": 2,
+            "weight": 0.018349
+          },
+          {
+            "term": "l21",
+            "tf": 2,
+            "weight": 0.018349
+          },
+          {
+            "term": "l30",
+            "tf": 2,
+            "weight": 0.018349
+          }
+        ],
+        "unique_terms": 54,
+        "total_terms": 109
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Plugin System for Enrichment",
+        "com",
+        "defaults",
+        "docling",
+        "enrichment",
+        "entry",
+        "github",
+        "https",
+        "models",
+        "plugins",
+        "project"
+      ],
+      "collection_name": "Docling"
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.509047619047619,
+      "overall": 0.703015873015873
+    }
+  },
+  {
+    "text": "### On this page  - [Enrichment Models](#enrichment-models.md) - [Purpose and Scope](#purpose-and-scope.md) - [Enrichment Architecture](#enrichment-architecture.md) - [Processing Flow](#processing-flow.md) - [Base Class Interface](#base-class-interface.md) - [Item and Image Element Structure](#item-and-image-element-structure.md) - [Code and Formula Enrichment](#code-and-formula-enrichment.md) - [CodeFormulaModel](#codeformulamodel.md) - [Processing Logic](#processing-logic.md) - [Code Language Detection](#code-language-detection.md) - [Formula Extraction](#formula-extraction.md) - [Picture Classification](#picture-classification.md) - [DocumentPictureClassifier](#documentpictureclassifier.md) - [Classification Classes](#classification-classes.md) - [Output Structure](#output-structure.md) - [Picture Description](#picture-description.md) - [PictureDescriptionVlmModel](#picturedescriptionvlmmodel.md) - [Description Generation](#description-generation.md) - [Custom Prompts](#custom-prompts.md) - [API-Based Picture Description](#api-based-picture-description.md) - [Configuration](#configuration.md) - [Pipeline Options](#pipeline-options.md) - [Model Downloading](#model-downloading.md) - [Integration with Pipeline](#integration-with-pipeline.md) - [Enrichment Pipe Construction](#enrichment-pipe-construction.md) - [Execution Flow in ConvertPipeline](#execution-flow-in-convertpipeline.md) - [Image Scaling and Cropping](#image-scaling-and-cropping.md) - [Backend Retention for Enrichment](#backend-retention-for-enrichment.md) - [Plugin System for Enrichment](#plugin-system-for-enrichment.md)",
+    "metadata": {
+      "chunk_id": "375f3cfe7e6c-0029",
+      "source_file": "Docs\\Docling\\_docling-project_docling_4.4-enrichment-models.md",
+      "filename": "_docling-project_docling_4.4-enrichment-models.md",
+      "file_extension": ".md",
+      "chunk_index": 29,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "On this page"
+      ],
+      "heading_text": "On this page",
+      "token_count": 395,
+      "char_count": 1610,
+      "start_char": 22028,
+      "end_char": 23638,
+      "semantic_score": 0.6,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5137830188679244,
+      "chunking_strategy": "hierarchical_balanced_structural",
+      "content_type": "code_block",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:06.655498",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 395,
+      "document_id": "375f3cfe7e6c",
+      "document_name": "_docling-project_docling_4.4-enrichment-models",
+      "source_path": "Docs\\Docling\\_docling-project_docling_4.4-enrichment-models.md",
+      "source_filename": "_docling-project_docling_4.4-enrichment-models.md",
+      "source_directory": "Docs\\Docling",
+      "relative_path": "Docs\\Docling\\_docling-project_docling_4.4-enrichment-models.md",
+      "hierarchy_path": "On this page",
+      "chunk_hash": "338e941531672315",
+      "content_digest": "338e941531672315",
+      "chunk_length": 1610,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "docling"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "enrichment",
+          "and",
+          "picture",
+          "description",
+          "processing",
+          "flow",
+          "image",
+          "structure",
+          "code",
+          "formula",
+          "classification",
+          "pipeline",
+          "for",
+          "models",
+          "purpose",
+          "scope",
+          "architecture",
+          "base",
+          "class",
+          "interface"
+        ],
+        "term_weights": [
+          {
+            "term": "enrichment",
+            "tf": 12,
+            "weight": 0.081081
+          },
+          {
+            "term": "and",
+            "tf": 8,
+            "weight": 0.054054
+          },
+          {
+            "term": "picture",
+            "tf": 6,
+            "weight": 0.040541
+          },
+          {
+            "term": "description",
+            "tf": 6,
+            "weight": 0.040541
+          },
+          {
+            "term": "processing",
+            "tf": 4,
+            "weight": 0.027027
+          },
+          {
+            "term": "flow",
+            "tf": 4,
+            "weight": 0.027027
+          },
+          {
+            "term": "image",
+            "tf": 4,
+            "weight": 0.027027
+          },
+          {
+            "term": "structure",
+            "tf": 4,
+            "weight": 0.027027
+          },
+          {
+            "term": "code",
+            "tf": 4,
+            "weight": 0.027027
+          },
+          {
+            "term": "formula",
+            "tf": 4,
+            "weight": 0.027027
+          },
+          {
+            "term": "classification",
+            "tf": 4,
+            "weight": 0.027027
+          },
+          {
+            "term": "pipeline",
+            "tf": 4,
+            "weight": 0.027027
+          },
+          {
+            "term": "for",
+            "tf": 4,
+            "weight": 0.027027
+          },
+          {
+            "term": "models",
+            "tf": 2,
+            "weight": 0.013514
+          },
+          {
+            "term": "purpose",
+            "tf": 2,
+            "weight": 0.013514
+          },
+          {
+            "term": "scope",
+            "tf": 2,
+            "weight": 0.013514
+          },
+          {
+            "term": "architecture",
+            "tf": 2,
+            "weight": 0.013514
+          },
+          {
+            "term": "base",
+            "tf": 2,
+            "weight": 0.013514
+          },
+          {
+            "term": "class",
+            "tf": 2,
+            "weight": 0.013514
+          },
+          {
+            "term": "interface",
+            "tf": 2,
+            "weight": 0.013514
+          }
+        ],
+        "unique_terms": 54,
+        "total_terms": 148
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "On this page",
+        "and",
+        "code",
+        "description",
+        "enrichment",
+        "flow",
+        "formula",
+        "image",
+        "picture",
+        "processing",
+        "structure"
+      ],
+      "collection_name": "Docling"
+    },
+    "advanced_scores": {
+      "semantic": 0.6,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5137830188679244,
+      "overall": 0.6712610062893081
+    }
+  }
+]

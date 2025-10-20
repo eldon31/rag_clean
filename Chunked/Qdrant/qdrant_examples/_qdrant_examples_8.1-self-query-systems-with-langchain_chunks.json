@@ -1,0 +1,3254 @@
+[
+  {
+    "text": "# Self-Query Systems with LangChain  Relevant source files  - [self-query/self-query.ipynb](https://github.com/qdrant/examples/blob/b3c4b28f/self-query/self-query.ipynb) - [self-query/winemag-data-130k-v2.csv](https://github.com/qdrant/examples/blob/b3c4b28f/self-query/winemag-data-130k-v2.csv)  This document covers the implementation of self-querying retrieval systems using LangChain's `SelfQueryRetriever` with Qdrant vector database. The system translates natural language queries into structured vector searches with metadata filtering, enabling more precise and contextually relevant information retrieval. For information about other advanced RAG patterns, see [Multivector RAG with DSPy](qdrant/examples/6.1-multivector-rag-with-dspy.md), [Graph-Enhanced RAG with Neo4j](qdrant/examples/6.2-graph-enhanced-rag-with-neo4j.md), and [Agentic Systems with CrewAI](qdrant/examples/7-agentic-systems-with-crewai.md).",
+    "metadata": {
+      "chunk_id": "5cd748671eb3-0000",
+      "source_file": "Docs\\Qdrant\\qdrant_examples\\_qdrant_examples_8.1-self-query-systems-with-langchain.md",
+      "filename": "_qdrant_examples_8.1-self-query-systems-with-langchain.md",
+      "file_extension": ".md",
+      "chunk_index": 0,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Self-Query Systems with LangChain"
+      ],
+      "heading_text": "Self-Query Systems with LangChain",
+      "token_count": 240,
+      "char_count": 920,
+      "start_char": 2084,
+      "end_char": 3004,
+      "semantic_score": 0.7,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.7257142857142856,
+      "chunking_strategy": "hierarchical_balanced_structural",
+      "content_type": "list_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:39.610489",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 240,
+      "document_id": "5cd748671eb3",
+      "document_name": "_qdrant_examples_8.1-self-query-systems-with-langchain",
+      "source_path": "Docs\\Qdrant\\qdrant_examples\\_qdrant_examples_8.1-self-query-systems-with-langchain.md",
+      "source_filename": "_qdrant_examples_8.1-self-query-systems-with-langchain.md",
+      "source_directory": "Docs\\Qdrant\\qdrant_examples",
+      "relative_path": "Docs\\Qdrant\\qdrant_examples\\_qdrant_examples_8.1-self-query-systems-with-langchain.md",
+      "hierarchy_path": "Self-Query Systems with LangChain",
+      "chunk_hash": "9656e56d4201453a",
+      "content_digest": "9656e56d4201453a",
+      "chunk_length": 920,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "with",
+          "self",
+          "query",
+          "qdrant",
+          "examples",
+          "rag",
+          "systems",
+          "langchain",
+          "relevant",
+          "ipynb",
+          "https",
+          "github",
+          "com",
+          "blob",
+          "b3c4b28f",
+          "winemag",
+          "data",
+          "130k",
+          "csv",
+          "the"
+        ],
+        "term_weights": [
+          {
+            "term": "with",
+            "tf": 9,
+            "weight": 0.07377
+          },
+          {
+            "term": "self",
+            "tf": 8,
+            "weight": 0.065574
+          },
+          {
+            "term": "query",
+            "tf": 7,
+            "weight": 0.057377
+          },
+          {
+            "term": "qdrant",
+            "tf": 6,
+            "weight": 0.04918
+          },
+          {
+            "term": "examples",
+            "tf": 5,
+            "weight": 0.040984
+          },
+          {
+            "term": "rag",
+            "tf": 5,
+            "weight": 0.040984
+          },
+          {
+            "term": "systems",
+            "tf": 4,
+            "weight": 0.032787
+          },
+          {
+            "term": "langchain",
+            "tf": 2,
+            "weight": 0.016393
+          },
+          {
+            "term": "relevant",
+            "tf": 2,
+            "weight": 0.016393
+          },
+          {
+            "term": "ipynb",
+            "tf": 2,
+            "weight": 0.016393
+          },
+          {
+            "term": "https",
+            "tf": 2,
+            "weight": 0.016393
+          },
+          {
+            "term": "github",
+            "tf": 2,
+            "weight": 0.016393
+          },
+          {
+            "term": "com",
+            "tf": 2,
+            "weight": 0.016393
+          },
+          {
+            "term": "blob",
+            "tf": 2,
+            "weight": 0.016393
+          },
+          {
+            "term": "b3c4b28f",
+            "tf": 2,
+            "weight": 0.016393
+          },
+          {
+            "term": "winemag",
+            "tf": 2,
+            "weight": 0.016393
+          },
+          {
+            "term": "data",
+            "tf": 2,
+            "weight": 0.016393
+          },
+          {
+            "term": "130k",
+            "tf": 2,
+            "weight": 0.016393
+          },
+          {
+            "term": "csv",
+            "tf": 2,
+            "weight": 0.016393
+          },
+          {
+            "term": "the",
+            "tf": 2,
+            "weight": 0.016393
+          }
+        ],
+        "unique_terms": 61,
+        "total_terms": 122
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Self-Query Systems with LangChain",
+        "examples",
+        "ipynb",
+        "langchain",
+        "qdrant",
+        "query",
+        "rag",
+        "relevant",
+        "self",
+        "systems",
+        "with"
+      ],
+      "collection_name": "Qdrant"
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.7257142857142856,
+      "overall": 0.7752380952380952
+    }
+  },
+  {
+    "text": "## System Overview  The self-query system addresses a fundamental challenge in vector search: translating complex natural language queries that contain both semantic content and structured constraints into appropriate vector searches with metadata filters. Instead of embedding the entire query (including filter criteria), the system separates semantic content from metadata constraints. ``` ``` **Sources**: [self-query/self-query.ipynb396-455](https://github.com/qdrant/examples/blob/b3c4b28f/self-query/self-query.ipynb#L396-L455)",
+    "metadata": {
+      "chunk_id": "5cd748671eb3-0001",
+      "source_file": "Docs\\Qdrant\\qdrant_examples\\_qdrant_examples_8.1-self-query-systems-with-langchain.md",
+      "filename": "_qdrant_examples_8.1-self-query-systems-with-langchain.md",
+      "file_extension": ".md",
+      "chunk_index": 1,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "System Overview"
+      ],
+      "heading_text": "System Overview",
+      "token_count": 103,
+      "char_count": 534,
+      "start_char": 3007,
+      "end_char": 3541,
+      "semantic_score": 0.7,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.74,
+      "chunking_strategy": "hierarchical_balanced_structural",
+      "content_type": "code_block",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:39.612097",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 103,
+      "document_id": "5cd748671eb3",
+      "document_name": "_qdrant_examples_8.1-self-query-systems-with-langchain",
+      "source_path": "Docs\\Qdrant\\qdrant_examples\\_qdrant_examples_8.1-self-query-systems-with-langchain.md",
+      "source_filename": "_qdrant_examples_8.1-self-query-systems-with-langchain.md",
+      "source_directory": "Docs\\Qdrant\\qdrant_examples",
+      "relative_path": "Docs\\Qdrant\\qdrant_examples\\_qdrant_examples_8.1-self-query-systems-with-langchain.md",
+      "hierarchy_path": "System Overview",
+      "chunk_hash": "1b72bbb60f9d3a28",
+      "content_digest": "1b72bbb60f9d3a28",
+      "chunk_length": 534,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "query",
+          "self",
+          "system",
+          "the",
+          "vector",
+          "semantic",
+          "content",
+          "constraints",
+          "metadata",
+          "overview",
+          "addresses",
+          "fundamental",
+          "challenge",
+          "search",
+          "translating",
+          "complex",
+          "natural",
+          "language",
+          "queries",
+          "that"
+        ],
+        "term_weights": [
+          {
+            "term": "query",
+            "tf": 6,
+            "weight": 0.088235
+          },
+          {
+            "term": "self",
+            "tf": 5,
+            "weight": 0.073529
+          },
+          {
+            "term": "system",
+            "tf": 3,
+            "weight": 0.044118
+          },
+          {
+            "term": "the",
+            "tf": 3,
+            "weight": 0.044118
+          },
+          {
+            "term": "vector",
+            "tf": 2,
+            "weight": 0.029412
+          },
+          {
+            "term": "semantic",
+            "tf": 2,
+            "weight": 0.029412
+          },
+          {
+            "term": "content",
+            "tf": 2,
+            "weight": 0.029412
+          },
+          {
+            "term": "constraints",
+            "tf": 2,
+            "weight": 0.029412
+          },
+          {
+            "term": "metadata",
+            "tf": 2,
+            "weight": 0.029412
+          },
+          {
+            "term": "overview",
+            "tf": 1,
+            "weight": 0.014706
+          },
+          {
+            "term": "addresses",
+            "tf": 1,
+            "weight": 0.014706
+          },
+          {
+            "term": "fundamental",
+            "tf": 1,
+            "weight": 0.014706
+          },
+          {
+            "term": "challenge",
+            "tf": 1,
+            "weight": 0.014706
+          },
+          {
+            "term": "search",
+            "tf": 1,
+            "weight": 0.014706
+          },
+          {
+            "term": "translating",
+            "tf": 1,
+            "weight": 0.014706
+          },
+          {
+            "term": "complex",
+            "tf": 1,
+            "weight": 0.014706
+          },
+          {
+            "term": "natural",
+            "tf": 1,
+            "weight": 0.014706
+          },
+          {
+            "term": "language",
+            "tf": 1,
+            "weight": 0.014706
+          },
+          {
+            "term": "queries",
+            "tf": 1,
+            "weight": 0.014706
+          },
+          {
+            "term": "that",
+            "tf": 1,
+            "weight": 0.014706
+          }
+        ],
+        "unique_terms": 50,
+        "total_terms": 68
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "System Overview",
+        "constraints",
+        "content",
+        "metadata",
+        "overview",
+        "query",
+        "self",
+        "semantic",
+        "system",
+        "the",
+        "vector"
+      ],
+      "collection_name": "Qdrant"
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.74,
+      "overall": 0.7799999999999999
+    }
+  },
+  {
+    "text": "## Data Preparation and Embedding Pipeline\n\nThe system processes wine review data into a structured format suitable for both vector search and metadata filtering. Each document contains semantic content (wine descriptions) and structured metadata (country, price, points, variety).",
+    "metadata": {
+      "chunk_id": "5cd748671eb3-0002",
+      "source_file": "Docs\\Qdrant\\qdrant_examples\\_qdrant_examples_8.1-self-query-systems-with-langchain.md",
+      "filename": "_qdrant_examples_8.1-self-query-systems-with-langchain.md",
+      "file_extension": ".md",
+      "chunk_index": 2,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Data Preparation and Embedding Pipeline"
+      ],
+      "heading_text": "Data Preparation and Embedding Pipeline",
+      "token_count": 48,
+      "char_count": 281,
+      "start_char": 3545,
+      "end_char": 3826,
+      "semantic_score": 0.7999999999999999,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5505263157894736,
+      "chunking_strategy": "hierarchical_balanced_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:39.612429",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 48,
+      "document_id": "5cd748671eb3",
+      "document_name": "_qdrant_examples_8.1-self-query-systems-with-langchain",
+      "source_path": "Docs\\Qdrant\\qdrant_examples\\_qdrant_examples_8.1-self-query-systems-with-langchain.md",
+      "source_filename": "_qdrant_examples_8.1-self-query-systems-with-langchain.md",
+      "source_directory": "Docs\\Qdrant\\qdrant_examples",
+      "relative_path": "Docs\\Qdrant\\qdrant_examples\\_qdrant_examples_8.1-self-query-systems-with-langchain.md",
+      "hierarchy_path": "Data Preparation and Embedding Pipeline",
+      "chunk_hash": "544e5aab501a18bd",
+      "content_digest": "544e5aab501a18bd",
+      "chunk_length": 281,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "and",
+          "data",
+          "wine",
+          "structured",
+          "metadata",
+          "preparation",
+          "embedding",
+          "pipeline",
+          "the",
+          "system",
+          "processes",
+          "review",
+          "into",
+          "format",
+          "suitable",
+          "for",
+          "both",
+          "vector",
+          "search",
+          "filtering"
+        ],
+        "term_weights": [
+          {
+            "term": "and",
+            "tf": 3,
+            "weight": 0.083333
+          },
+          {
+            "term": "data",
+            "tf": 2,
+            "weight": 0.055556
+          },
+          {
+            "term": "wine",
+            "tf": 2,
+            "weight": 0.055556
+          },
+          {
+            "term": "structured",
+            "tf": 2,
+            "weight": 0.055556
+          },
+          {
+            "term": "metadata",
+            "tf": 2,
+            "weight": 0.055556
+          },
+          {
+            "term": "preparation",
+            "tf": 1,
+            "weight": 0.027778
+          },
+          {
+            "term": "embedding",
+            "tf": 1,
+            "weight": 0.027778
+          },
+          {
+            "term": "pipeline",
+            "tf": 1,
+            "weight": 0.027778
+          },
+          {
+            "term": "the",
+            "tf": 1,
+            "weight": 0.027778
+          },
+          {
+            "term": "system",
+            "tf": 1,
+            "weight": 0.027778
+          },
+          {
+            "term": "processes",
+            "tf": 1,
+            "weight": 0.027778
+          },
+          {
+            "term": "review",
+            "tf": 1,
+            "weight": 0.027778
+          },
+          {
+            "term": "into",
+            "tf": 1,
+            "weight": 0.027778
+          },
+          {
+            "term": "format",
+            "tf": 1,
+            "weight": 0.027778
+          },
+          {
+            "term": "suitable",
+            "tf": 1,
+            "weight": 0.027778
+          },
+          {
+            "term": "for",
+            "tf": 1,
+            "weight": 0.027778
+          },
+          {
+            "term": "both",
+            "tf": 1,
+            "weight": 0.027778
+          },
+          {
+            "term": "vector",
+            "tf": 1,
+            "weight": 0.027778
+          },
+          {
+            "term": "search",
+            "tf": 1,
+            "weight": 0.027778
+          },
+          {
+            "term": "filtering",
+            "tf": 1,
+            "weight": 0.027778
+          }
+        ],
+        "unique_terms": 30,
+        "total_terms": 36
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Data Preparation and Embedding Pipeline",
+        "and",
+        "data",
+        "embedding",
+        "metadata",
+        "pipeline",
+        "preparation",
+        "structured",
+        "system",
+        "the",
+        "wine"
+      ],
+      "collection_name": "Qdrant"
+    },
+    "advanced_scores": {
+      "semantic": 0.7999999999999999,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5505263157894736,
+      "overall": 0.7501754385964912
+    }
+  },
+  {
+    "text": "### Document Structure and Schema ``` ``` **Sources**: [self-query/self-query.ipynb237-295](https://github.com/qdrant/examples/blob/b3c4b28f/self-query/self-query.ipynb#L237-L295)",
+    "metadata": {
+      "chunk_id": "5cd748671eb3-0003",
+      "source_file": "Docs\\Qdrant\\qdrant_examples\\_qdrant_examples_8.1-self-query-systems-with-langchain.md",
+      "filename": "_qdrant_examples_8.1-self-query-systems-with-langchain.md",
+      "file_extension": ".md",
+      "chunk_index": 3,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Document Structure and Schema"
+      ],
+      "heading_text": "Document Structure and Schema",
+      "token_count": 51,
+      "char_count": 179,
+      "start_char": 3828,
+      "end_char": 4007,
+      "semantic_score": 0.6,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5566666666666666,
+      "chunking_strategy": "hierarchical_balanced_structural",
+      "content_type": "code_block",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:39.612918",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 51,
+      "document_id": "5cd748671eb3",
+      "document_name": "_qdrant_examples_8.1-self-query-systems-with-langchain",
+      "source_path": "Docs\\Qdrant\\qdrant_examples\\_qdrant_examples_8.1-self-query-systems-with-langchain.md",
+      "source_filename": "_qdrant_examples_8.1-self-query-systems-with-langchain.md",
+      "source_directory": "Docs\\Qdrant\\qdrant_examples",
+      "relative_path": "Docs\\Qdrant\\qdrant_examples\\_qdrant_examples_8.1-self-query-systems-with-langchain.md",
+      "hierarchy_path": "Document Structure and Schema",
+      "chunk_hash": "322eb79354f70219",
+      "content_digest": "322eb79354f70219",
+      "chunk_length": 179,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "self",
+          "query",
+          "document",
+          "structure",
+          "and",
+          "schema",
+          "sources",
+          "ipynb237",
+          "295",
+          "https",
+          "github",
+          "com",
+          "qdrant",
+          "examples",
+          "blob",
+          "b3c4b28f",
+          "ipynb",
+          "l237",
+          "l295"
+        ],
+        "term_weights": [
+          {
+            "term": "self",
+            "tf": 4,
+            "weight": 0.16
+          },
+          {
+            "term": "query",
+            "tf": 4,
+            "weight": 0.16
+          },
+          {
+            "term": "document",
+            "tf": 1,
+            "weight": 0.04
+          },
+          {
+            "term": "structure",
+            "tf": 1,
+            "weight": 0.04
+          },
+          {
+            "term": "and",
+            "tf": 1,
+            "weight": 0.04
+          },
+          {
+            "term": "schema",
+            "tf": 1,
+            "weight": 0.04
+          },
+          {
+            "term": "sources",
+            "tf": 1,
+            "weight": 0.04
+          },
+          {
+            "term": "ipynb237",
+            "tf": 1,
+            "weight": 0.04
+          },
+          {
+            "term": "295",
+            "tf": 1,
+            "weight": 0.04
+          },
+          {
+            "term": "https",
+            "tf": 1,
+            "weight": 0.04
+          },
+          {
+            "term": "github",
+            "tf": 1,
+            "weight": 0.04
+          },
+          {
+            "term": "com",
+            "tf": 1,
+            "weight": 0.04
+          },
+          {
+            "term": "qdrant",
+            "tf": 1,
+            "weight": 0.04
+          },
+          {
+            "term": "examples",
+            "tf": 1,
+            "weight": 0.04
+          },
+          {
+            "term": "blob",
+            "tf": 1,
+            "weight": 0.04
+          },
+          {
+            "term": "b3c4b28f",
+            "tf": 1,
+            "weight": 0.04
+          },
+          {
+            "term": "ipynb",
+            "tf": 1,
+            "weight": 0.04
+          },
+          {
+            "term": "l237",
+            "tf": 1,
+            "weight": 0.04
+          },
+          {
+            "term": "l295",
+            "tf": 1,
+            "weight": 0.04
+          }
+        ],
+        "unique_terms": 19,
+        "total_terms": 25
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "295",
+        "Document Structure and Schema",
+        "and",
+        "document",
+        "https",
+        "ipynb237",
+        "query",
+        "schema",
+        "self",
+        "sources",
+        "structure"
+      ],
+      "collection_name": "Qdrant"
+    },
+    "advanced_scores": {
+      "semantic": 0.6,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5566666666666666,
+      "overall": 0.6855555555555556
+    }
+  },
+  {
+    "text": "### Embedding and Collection Setup  The system uses `SentenceTransformer` with the \"all-MiniLM-L6-v2\" model for generating embeddings and stores them in a Qdrant collection with cosine distance similarity. | Component             | Configuration            | Purpose                             | | --------------------- | ------------------------ | ----------------------------------- | | `SentenceTransformer` | \"all-MiniLM-L6-v2\"       | Generate 384-dimensional embeddings | | `QdrantClient`        | Remote/local connection  | Vector database operations          | | Collection            | \"wine\\_reviews\"          | Store embeddings and metadata       | | Distance Metric       | `models.Distance.COSINE` | Similarity calculation              | | Vector Size           | 384 dimensions           | Embedding dimensionality            |  **Sources**: [self-query/self-query.ipynb16-31](https://github.com/qdrant/examples/blob/b3c4b28f/self-query/self-query.ipynb#L16-L31) [self-query/self-query.ipynb215-228](https://github.com/qdrant/examples/blob/b3c4b28f/self-query/self-query.ipynb#L215-L228)",
+    "metadata": {
+      "chunk_id": "5cd748671eb3-0004",
+      "source_file": "Docs\\Qdrant\\qdrant_examples\\_qdrant_examples_8.1-self-query-systems-with-langchain.md",
+      "filename": "_qdrant_examples_8.1-self-query-systems-with-langchain.md",
+      "file_extension": ".md",
+      "chunk_index": 4,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Embedding and Collection Setup"
+      ],
+      "heading_text": "Embedding and Collection Setup",
+      "token_count": 244,
+      "char_count": 1102,
+      "start_char": 4011,
+      "end_char": 5113,
+      "semantic_score": 0.7999999999999999,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.6595652173913044,
+      "chunking_strategy": "hierarchical_balanced_structural",
+      "content_type": "table_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:39.613577",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 244,
+      "document_id": "5cd748671eb3",
+      "document_name": "_qdrant_examples_8.1-self-query-systems-with-langchain",
+      "source_path": "Docs\\Qdrant\\qdrant_examples\\_qdrant_examples_8.1-self-query-systems-with-langchain.md",
+      "source_filename": "_qdrant_examples_8.1-self-query-systems-with-langchain.md",
+      "source_directory": "Docs\\Qdrant\\qdrant_examples",
+      "relative_path": "Docs\\Qdrant\\qdrant_examples\\_qdrant_examples_8.1-self-query-systems-with-langchain.md",
+      "hierarchy_path": "Embedding and Collection Setup",
+      "chunk_hash": "e0878059b9666e78",
+      "content_digest": "e0878059b9666e78",
+      "chunk_length": 1102,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "self",
+          "query",
+          "and",
+          "collection",
+          "embeddings",
+          "qdrant",
+          "distance",
+          "embedding",
+          "the",
+          "sentencetransformer",
+          "with",
+          "all",
+          "minilm",
+          "cosine",
+          "similarity",
+          "384",
+          "vector",
+          "https",
+          "github",
+          "com"
+        ],
+        "term_weights": [
+          {
+            "term": "self",
+            "tf": 8,
+            "weight": 0.078431
+          },
+          {
+            "term": "query",
+            "tf": 8,
+            "weight": 0.078431
+          },
+          {
+            "term": "and",
+            "tf": 3,
+            "weight": 0.029412
+          },
+          {
+            "term": "collection",
+            "tf": 3,
+            "weight": 0.029412
+          },
+          {
+            "term": "embeddings",
+            "tf": 3,
+            "weight": 0.029412
+          },
+          {
+            "term": "qdrant",
+            "tf": 3,
+            "weight": 0.029412
+          },
+          {
+            "term": "distance",
+            "tf": 3,
+            "weight": 0.029412
+          },
+          {
+            "term": "embedding",
+            "tf": 2,
+            "weight": 0.019608
+          },
+          {
+            "term": "the",
+            "tf": 2,
+            "weight": 0.019608
+          },
+          {
+            "term": "sentencetransformer",
+            "tf": 2,
+            "weight": 0.019608
+          },
+          {
+            "term": "with",
+            "tf": 2,
+            "weight": 0.019608
+          },
+          {
+            "term": "all",
+            "tf": 2,
+            "weight": 0.019608
+          },
+          {
+            "term": "minilm",
+            "tf": 2,
+            "weight": 0.019608
+          },
+          {
+            "term": "cosine",
+            "tf": 2,
+            "weight": 0.019608
+          },
+          {
+            "term": "similarity",
+            "tf": 2,
+            "weight": 0.019608
+          },
+          {
+            "term": "384",
+            "tf": 2,
+            "weight": 0.019608
+          },
+          {
+            "term": "vector",
+            "tf": 2,
+            "weight": 0.019608
+          },
+          {
+            "term": "https",
+            "tf": 2,
+            "weight": 0.019608
+          },
+          {
+            "term": "github",
+            "tf": 2,
+            "weight": 0.019608
+          },
+          {
+            "term": "com",
+            "tf": 2,
+            "weight": 0.019608
+          }
+        ],
+        "unique_terms": 61,
+        "total_terms": 102
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Embedding and Collection Setup",
+        "and",
+        "collection",
+        "distance",
+        "embedding",
+        "embeddings",
+        "qdrant",
+        "query",
+        "self",
+        "sentencetransformer",
+        "the"
+      ],
+      "collection_name": "Qdrant"
+    },
+    "advanced_scores": {
+      "semantic": 0.7999999999999999,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.6595652173913044,
+      "overall": 0.7865217391304347
+    }
+  },
+  {
+    "text": "### Metadata Schema Definition ``` ``` **Sources**: [self-query/self-query.ipynb424-454](https://github.com/qdrant/examples/blob/b3c4b28f/self-query/self-query.ipynb#L424-L454)",
+    "metadata": {
+      "chunk_id": "5cd748671eb3-0006",
+      "source_file": "Docs\\Qdrant\\qdrant_examples\\_qdrant_examples_8.1-self-query-systems-with-langchain.md",
+      "filename": "_qdrant_examples_8.1-self-query-systems-with-langchain.md",
+      "file_extension": ".md",
+      "chunk_index": 6,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Metadata Schema Definition"
+      ],
+      "heading_text": "Metadata Schema Definition",
+      "token_count": 50,
+      "char_count": 176,
+      "start_char": 5361,
+      "end_char": 5537,
+      "semantic_score": 0.6,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5525,
+      "chunking_strategy": "hierarchical_balanced_structural",
+      "content_type": "code_block",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:39.614468",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 50,
+      "document_id": "5cd748671eb3",
+      "document_name": "_qdrant_examples_8.1-self-query-systems-with-langchain",
+      "source_path": "Docs\\Qdrant\\qdrant_examples\\_qdrant_examples_8.1-self-query-systems-with-langchain.md",
+      "source_filename": "_qdrant_examples_8.1-self-query-systems-with-langchain.md",
+      "source_directory": "Docs\\Qdrant\\qdrant_examples",
+      "relative_path": "Docs\\Qdrant\\qdrant_examples\\_qdrant_examples_8.1-self-query-systems-with-langchain.md",
+      "hierarchy_path": "Metadata Schema Definition",
+      "chunk_hash": "ea421f089955e050",
+      "content_digest": "ea421f089955e050",
+      "chunk_length": 176,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "self",
+          "query",
+          "metadata",
+          "schema",
+          "definition",
+          "sources",
+          "ipynb424",
+          "454",
+          "https",
+          "github",
+          "com",
+          "qdrant",
+          "examples",
+          "blob",
+          "b3c4b28f",
+          "ipynb",
+          "l424",
+          "l454"
+        ],
+        "term_weights": [
+          {
+            "term": "self",
+            "tf": 4,
+            "weight": 0.166667
+          },
+          {
+            "term": "query",
+            "tf": 4,
+            "weight": 0.166667
+          },
+          {
+            "term": "metadata",
+            "tf": 1,
+            "weight": 0.041667
+          },
+          {
+            "term": "schema",
+            "tf": 1,
+            "weight": 0.041667
+          },
+          {
+            "term": "definition",
+            "tf": 1,
+            "weight": 0.041667
+          },
+          {
+            "term": "sources",
+            "tf": 1,
+            "weight": 0.041667
+          },
+          {
+            "term": "ipynb424",
+            "tf": 1,
+            "weight": 0.041667
+          },
+          {
+            "term": "454",
+            "tf": 1,
+            "weight": 0.041667
+          },
+          {
+            "term": "https",
+            "tf": 1,
+            "weight": 0.041667
+          },
+          {
+            "term": "github",
+            "tf": 1,
+            "weight": 0.041667
+          },
+          {
+            "term": "com",
+            "tf": 1,
+            "weight": 0.041667
+          },
+          {
+            "term": "qdrant",
+            "tf": 1,
+            "weight": 0.041667
+          },
+          {
+            "term": "examples",
+            "tf": 1,
+            "weight": 0.041667
+          },
+          {
+            "term": "blob",
+            "tf": 1,
+            "weight": 0.041667
+          },
+          {
+            "term": "b3c4b28f",
+            "tf": 1,
+            "weight": 0.041667
+          },
+          {
+            "term": "ipynb",
+            "tf": 1,
+            "weight": 0.041667
+          },
+          {
+            "term": "l424",
+            "tf": 1,
+            "weight": 0.041667
+          },
+          {
+            "term": "l454",
+            "tf": 1,
+            "weight": 0.041667
+          }
+        ],
+        "unique_terms": 18,
+        "total_terms": 24
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "454",
+        "Metadata Schema Definition",
+        "definition",
+        "github",
+        "https",
+        "ipynb424",
+        "metadata",
+        "query",
+        "schema",
+        "self",
+        "sources"
+      ],
+      "collection_name": "Qdrant"
+    },
+    "advanced_scores": {
+      "semantic": 0.6,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5525,
+      "overall": 0.6841666666666667
+    }
+  },
+  {
+    "text": "## Query Translation Process\n\nThe self-query system transforms natural language into structured queries through a multi-step process involving prompt engineering, LLM reasoning, and structured output parsing.",
+    "metadata": {
+      "chunk_id": "5cd748671eb3-0007",
+      "source_file": "Docs\\Qdrant\\qdrant_examples\\_qdrant_examples_8.1-self-query-systems-with-langchain.md",
+      "filename": "_qdrant_examples_8.1-self-query-systems-with-langchain.md",
+      "file_extension": ".md",
+      "chunk_index": 7,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Query Translation Process"
+      ],
+      "heading_text": "Query Translation Process",
+      "token_count": 33,
+      "char_count": 208,
+      "start_char": 5541,
+      "end_char": 5749,
+      "semantic_score": 0.8,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.566923076923077,
+      "chunking_strategy": "hierarchical_balanced_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:39.614673",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 33,
+      "document_id": "5cd748671eb3",
+      "document_name": "_qdrant_examples_8.1-self-query-systems-with-langchain",
+      "source_path": "Docs\\Qdrant\\qdrant_examples\\_qdrant_examples_8.1-self-query-systems-with-langchain.md",
+      "source_filename": "_qdrant_examples_8.1-self-query-systems-with-langchain.md",
+      "source_directory": "Docs\\Qdrant\\qdrant_examples",
+      "relative_path": "Docs\\Qdrant\\qdrant_examples\\_qdrant_examples_8.1-self-query-systems-with-langchain.md",
+      "hierarchy_path": "Query Translation Process",
+      "chunk_hash": "1cd08dadf7e5fb25",
+      "content_digest": "1cd08dadf7e5fb25",
+      "chunk_length": 208,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "query",
+          "process",
+          "structured",
+          "translation",
+          "the",
+          "self",
+          "system",
+          "transforms",
+          "natural",
+          "language",
+          "into",
+          "queries",
+          "through",
+          "multi",
+          "step",
+          "involving",
+          "prompt",
+          "engineering",
+          "llm",
+          "reasoning"
+        ],
+        "term_weights": [
+          {
+            "term": "query",
+            "tf": 2,
+            "weight": 0.076923
+          },
+          {
+            "term": "process",
+            "tf": 2,
+            "weight": 0.076923
+          },
+          {
+            "term": "structured",
+            "tf": 2,
+            "weight": 0.076923
+          },
+          {
+            "term": "translation",
+            "tf": 1,
+            "weight": 0.038462
+          },
+          {
+            "term": "the",
+            "tf": 1,
+            "weight": 0.038462
+          },
+          {
+            "term": "self",
+            "tf": 1,
+            "weight": 0.038462
+          },
+          {
+            "term": "system",
+            "tf": 1,
+            "weight": 0.038462
+          },
+          {
+            "term": "transforms",
+            "tf": 1,
+            "weight": 0.038462
+          },
+          {
+            "term": "natural",
+            "tf": 1,
+            "weight": 0.038462
+          },
+          {
+            "term": "language",
+            "tf": 1,
+            "weight": 0.038462
+          },
+          {
+            "term": "into",
+            "tf": 1,
+            "weight": 0.038462
+          },
+          {
+            "term": "queries",
+            "tf": 1,
+            "weight": 0.038462
+          },
+          {
+            "term": "through",
+            "tf": 1,
+            "weight": 0.038462
+          },
+          {
+            "term": "multi",
+            "tf": 1,
+            "weight": 0.038462
+          },
+          {
+            "term": "step",
+            "tf": 1,
+            "weight": 0.038462
+          },
+          {
+            "term": "involving",
+            "tf": 1,
+            "weight": 0.038462
+          },
+          {
+            "term": "prompt",
+            "tf": 1,
+            "weight": 0.038462
+          },
+          {
+            "term": "engineering",
+            "tf": 1,
+            "weight": 0.038462
+          },
+          {
+            "term": "llm",
+            "tf": 1,
+            "weight": 0.038462
+          },
+          {
+            "term": "reasoning",
+            "tf": 1,
+            "weight": 0.038462
+          }
+        ],
+        "unique_terms": 23,
+        "total_terms": 26
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Query Translation Process",
+        "language",
+        "natural",
+        "process",
+        "query",
+        "self",
+        "structured",
+        "system",
+        "the",
+        "transforms",
+        "translation"
+      ],
+      "collection_name": "Qdrant"
+    },
+    "advanced_scores": {
+      "semantic": 0.8,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.566923076923077,
+      "overall": 0.7556410256410256
+    }
+  },
+  {
+    "text": "### Translation Pipeline ``` ``` **Sources**: [self-query/self-query.ipynb525-627](https://github.com/qdrant/examples/blob/b3c4b28f/self-query/self-query.ipynb#L525-L627)",
+    "metadata": {
+      "chunk_id": "5cd748671eb3-0008",
+      "source_file": "Docs\\Qdrant\\qdrant_examples\\_qdrant_examples_8.1-self-query-systems-with-langchain.md",
+      "filename": "_qdrant_examples_8.1-self-query-systems-with-langchain.md",
+      "file_extension": ".md",
+      "chunk_index": 8,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Translation Pipeline"
+      ],
+      "heading_text": "Translation Pipeline",
+      "token_count": 49,
+      "char_count": 170,
+      "start_char": 5751,
+      "end_char": 5921,
+      "semantic_score": 0.6,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5471428571428572,
+      "chunking_strategy": "hierarchical_balanced_structural",
+      "content_type": "code_block",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:39.615128",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 49,
+      "document_id": "5cd748671eb3",
+      "document_name": "_qdrant_examples_8.1-self-query-systems-with-langchain",
+      "source_path": "Docs\\Qdrant\\qdrant_examples\\_qdrant_examples_8.1-self-query-systems-with-langchain.md",
+      "source_filename": "_qdrant_examples_8.1-self-query-systems-with-langchain.md",
+      "source_directory": "Docs\\Qdrant\\qdrant_examples",
+      "relative_path": "Docs\\Qdrant\\qdrant_examples\\_qdrant_examples_8.1-self-query-systems-with-langchain.md",
+      "hierarchy_path": "Translation Pipeline",
+      "chunk_hash": "6f90f67be7d7a4a4",
+      "content_digest": "6f90f67be7d7a4a4",
+      "chunk_length": 170,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "self",
+          "query",
+          "translation",
+          "pipeline",
+          "sources",
+          "ipynb525",
+          "627",
+          "https",
+          "github",
+          "com",
+          "qdrant",
+          "examples",
+          "blob",
+          "b3c4b28f",
+          "ipynb",
+          "l525",
+          "l627"
+        ],
+        "term_weights": [
+          {
+            "term": "self",
+            "tf": 4,
+            "weight": 0.173913
+          },
+          {
+            "term": "query",
+            "tf": 4,
+            "weight": 0.173913
+          },
+          {
+            "term": "translation",
+            "tf": 1,
+            "weight": 0.043478
+          },
+          {
+            "term": "pipeline",
+            "tf": 1,
+            "weight": 0.043478
+          },
+          {
+            "term": "sources",
+            "tf": 1,
+            "weight": 0.043478
+          },
+          {
+            "term": "ipynb525",
+            "tf": 1,
+            "weight": 0.043478
+          },
+          {
+            "term": "627",
+            "tf": 1,
+            "weight": 0.043478
+          },
+          {
+            "term": "https",
+            "tf": 1,
+            "weight": 0.043478
+          },
+          {
+            "term": "github",
+            "tf": 1,
+            "weight": 0.043478
+          },
+          {
+            "term": "com",
+            "tf": 1,
+            "weight": 0.043478
+          },
+          {
+            "term": "qdrant",
+            "tf": 1,
+            "weight": 0.043478
+          },
+          {
+            "term": "examples",
+            "tf": 1,
+            "weight": 0.043478
+          },
+          {
+            "term": "blob",
+            "tf": 1,
+            "weight": 0.043478
+          },
+          {
+            "term": "b3c4b28f",
+            "tf": 1,
+            "weight": 0.043478
+          },
+          {
+            "term": "ipynb",
+            "tf": 1,
+            "weight": 0.043478
+          },
+          {
+            "term": "l525",
+            "tf": 1,
+            "weight": 0.043478
+          },
+          {
+            "term": "l627",
+            "tf": 1,
+            "weight": 0.043478
+          }
+        ],
+        "unique_terms": 17,
+        "total_terms": 23
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "627",
+        "Translation Pipeline",
+        "com",
+        "github",
+        "https",
+        "ipynb525",
+        "pipeline",
+        "query",
+        "self",
+        "sources",
+        "translation"
+      ],
+      "collection_name": "Qdrant"
+    },
+    "advanced_scores": {
+      "semantic": 0.6,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5471428571428572,
+      "overall": 0.6823809523809524
+    }
+  },
+  {
+    "text": "### Filter Construction  The system translates natural language constraints into Qdrant filter objects using logical operators and field conditions:  | Natural Language | Generated Filter                     | Qdrant Implementation                                                                 | | ---------------- | ------------------------------------ | ------------------------------------------------------------------------------------- | | \"US wines\"       | `eq(\"country\", \"US\")`                | `models.FieldCondition(key=\"metadata.country\", match=models.MatchValue(value=\"US\"))`  | | \"between $15-30\" | `gte(\"price\", 15), lte(\"price\", 30)` | `models.FieldCondition(key=\"metadata.price\", range=models.Range(gte=15.0, lte=30.0))` | | \"90+ points\"     | `gt(\"points\", 90)`                   | `models.FieldCondition(key=\"metadata.points\", range=models.Range(gte=90))`            |  **Sources**: [self-query/self-query.ipynb369-385](https://github.com/qdrant/examples/blob/b3c4b28f/self-query/self-query.ipynb#L369-L385)",
+    "metadata": {
+      "chunk_id": "5cd748671eb3-0009",
+      "source_file": "Docs\\Qdrant\\qdrant_examples\\_qdrant_examples_8.1-self-query-systems-with-langchain.md",
+      "filename": "_qdrant_examples_8.1-self-query-systems-with-langchain.md",
+      "file_extension": ".md",
+      "chunk_index": 9,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Filter Construction"
+      ],
+      "heading_text": "Filter Construction",
+      "token_count": 222,
+      "char_count": 1028,
+      "start_char": 5925,
+      "end_char": 6953,
+      "semantic_score": 0.7,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.6885915492957747,
+      "chunking_strategy": "hierarchical_balanced_structural",
+      "content_type": "code_block",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:39.617362",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 222,
+      "document_id": "5cd748671eb3",
+      "document_name": "_qdrant_examples_8.1-self-query-systems-with-langchain",
+      "source_path": "Docs\\Qdrant\\qdrant_examples\\_qdrant_examples_8.1-self-query-systems-with-langchain.md",
+      "source_filename": "_qdrant_examples_8.1-self-query-systems-with-langchain.md",
+      "source_directory": "Docs\\Qdrant\\qdrant_examples",
+      "relative_path": "Docs\\Qdrant\\qdrant_examples\\_qdrant_examples_8.1-self-query-systems-with-langchain.md",
+      "hierarchy_path": "Filter Construction",
+      "chunk_hash": "7eb02d4329e5c4a4",
+      "content_digest": "7eb02d4329e5c4a4",
+      "chunk_length": 1028,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "models",
+          "range",
+          "self",
+          "query",
+          "filter",
+          "qdrant",
+          "fieldcondition",
+          "key",
+          "metadata",
+          "gte",
+          "price",
+          "points",
+          "natural",
+          "language",
+          "country",
+          "lte",
+          "construction",
+          "the",
+          "system",
+          "translates"
+        ],
+        "term_weights": [
+          {
+            "term": "models",
+            "tf": 6,
+            "weight": 0.073171
+          },
+          {
+            "term": "range",
+            "tf": 4,
+            "weight": 0.04878
+          },
+          {
+            "term": "self",
+            "tf": 4,
+            "weight": 0.04878
+          },
+          {
+            "term": "query",
+            "tf": 4,
+            "weight": 0.04878
+          },
+          {
+            "term": "filter",
+            "tf": 3,
+            "weight": 0.036585
+          },
+          {
+            "term": "qdrant",
+            "tf": 3,
+            "weight": 0.036585
+          },
+          {
+            "term": "fieldcondition",
+            "tf": 3,
+            "weight": 0.036585
+          },
+          {
+            "term": "key",
+            "tf": 3,
+            "weight": 0.036585
+          },
+          {
+            "term": "metadata",
+            "tf": 3,
+            "weight": 0.036585
+          },
+          {
+            "term": "gte",
+            "tf": 3,
+            "weight": 0.036585
+          },
+          {
+            "term": "price",
+            "tf": 3,
+            "weight": 0.036585
+          },
+          {
+            "term": "points",
+            "tf": 3,
+            "weight": 0.036585
+          },
+          {
+            "term": "natural",
+            "tf": 2,
+            "weight": 0.02439
+          },
+          {
+            "term": "language",
+            "tf": 2,
+            "weight": 0.02439
+          },
+          {
+            "term": "country",
+            "tf": 2,
+            "weight": 0.02439
+          },
+          {
+            "term": "lte",
+            "tf": 2,
+            "weight": 0.02439
+          },
+          {
+            "term": "construction",
+            "tf": 1,
+            "weight": 0.012195
+          },
+          {
+            "term": "the",
+            "tf": 1,
+            "weight": 0.012195
+          },
+          {
+            "term": "system",
+            "tf": 1,
+            "weight": 0.012195
+          },
+          {
+            "term": "translates",
+            "tf": 1,
+            "weight": 0.012195
+          }
+        ],
+        "unique_terms": 48,
+        "total_terms": 82
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Filter Construction",
+        "fieldcondition",
+        "filter",
+        "gte",
+        "key",
+        "metadata",
+        "models",
+        "qdrant",
+        "query",
+        "range",
+        "self"
+      ],
+      "collection_name": "Qdrant"
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.6885915492957747,
+      "overall": 0.7628638497652581
+    }
+  },
+  {
+    "text": "## Implementation Example\n\nThe following demonstrates a complete query flow from natural language to structured results:",
+    "metadata": {
+      "chunk_id": "5cd748671eb3-0010",
+      "source_file": "Docs\\Qdrant\\qdrant_examples\\_qdrant_examples_8.1-self-query-systems-with-langchain.md",
+      "filename": "_qdrant_examples_8.1-self-query-systems-with-langchain.md",
+      "file_extension": ".md",
+      "chunk_index": 10,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Implementation Example"
+      ],
+      "heading_text": "Implementation Example",
+      "token_count": 18,
+      "char_count": 120,
+      "start_char": 6955,
+      "end_char": 7075,
+      "semantic_score": 0.8,
+      "structural_score": 0.7,
+      "retrieval_quality": 0.7899999999999999,
+      "chunking_strategy": "hierarchical_balanced_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:39.617757",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 18,
+      "document_id": "5cd748671eb3",
+      "document_name": "_qdrant_examples_8.1-self-query-systems-with-langchain",
+      "source_path": "Docs\\Qdrant\\qdrant_examples\\_qdrant_examples_8.1-self-query-systems-with-langchain.md",
+      "source_filename": "_qdrant_examples_8.1-self-query-systems-with-langchain.md",
+      "source_directory": "Docs\\Qdrant\\qdrant_examples",
+      "relative_path": "Docs\\Qdrant\\qdrant_examples\\_qdrant_examples_8.1-self-query-systems-with-langchain.md",
+      "hierarchy_path": "Implementation Example",
+      "chunk_hash": "700498cd702d58fd",
+      "content_digest": "700498cd702d58fd",
+      "chunk_length": 120,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "implementation",
+          "example",
+          "the",
+          "following",
+          "demonstrates",
+          "complete",
+          "query",
+          "flow",
+          "from",
+          "natural",
+          "language",
+          "structured",
+          "results"
+        ],
+        "term_weights": [
+          {
+            "term": "implementation",
+            "tf": 1,
+            "weight": 0.076923
+          },
+          {
+            "term": "example",
+            "tf": 1,
+            "weight": 0.076923
+          },
+          {
+            "term": "the",
+            "tf": 1,
+            "weight": 0.076923
+          },
+          {
+            "term": "following",
+            "tf": 1,
+            "weight": 0.076923
+          },
+          {
+            "term": "demonstrates",
+            "tf": 1,
+            "weight": 0.076923
+          },
+          {
+            "term": "complete",
+            "tf": 1,
+            "weight": 0.076923
+          },
+          {
+            "term": "query",
+            "tf": 1,
+            "weight": 0.076923
+          },
+          {
+            "term": "flow",
+            "tf": 1,
+            "weight": 0.076923
+          },
+          {
+            "term": "from",
+            "tf": 1,
+            "weight": 0.076923
+          },
+          {
+            "term": "natural",
+            "tf": 1,
+            "weight": 0.076923
+          },
+          {
+            "term": "language",
+            "tf": 1,
+            "weight": 0.076923
+          },
+          {
+            "term": "structured",
+            "tf": 1,
+            "weight": 0.076923
+          },
+          {
+            "term": "results",
+            "tf": 1,
+            "weight": 0.076923
+          }
+        ],
+        "unique_terms": 13,
+        "total_terms": 13
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Implementation Example",
+        "complete",
+        "demonstrates",
+        "example",
+        "flow",
+        "following",
+        "from",
+        "implementation",
+        "natural",
+        "query",
+        "the"
+      ],
+      "collection_name": "Qdrant"
+    },
+    "advanced_scores": {
+      "semantic": 0.8,
+      "structural": 0.7,
+      "retrieval_quality": 0.7899999999999999,
+      "overall": 0.7633333333333333
+    }
+  },
+  {
+    "text": "### Query Execution Flow ``` ``` **Sources**: [self-query/self-query.ipynb477-514](https://github.com/qdrant/examples/blob/b3c4b28f/self-query/self-query.ipynb#L477-L514)",
+    "metadata": {
+      "chunk_id": "5cd748671eb3-0011",
+      "source_file": "Docs\\Qdrant\\qdrant_examples\\_qdrant_examples_8.1-self-query-systems-with-langchain.md",
+      "filename": "_qdrant_examples_8.1-self-query-systems-with-langchain.md",
+      "file_extension": ".md",
+      "chunk_index": 11,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Query Execution Flow"
+      ],
+      "heading_text": "Query Execution Flow",
+      "token_count": 50,
+      "char_count": 170,
+      "start_char": 7077,
+      "end_char": 7247,
+      "semantic_score": 0.6,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5525,
+      "chunking_strategy": "hierarchical_balanced_structural",
+      "content_type": "code_block",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:39.618214",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 50,
+      "document_id": "5cd748671eb3",
+      "document_name": "_qdrant_examples_8.1-self-query-systems-with-langchain",
+      "source_path": "Docs\\Qdrant\\qdrant_examples\\_qdrant_examples_8.1-self-query-systems-with-langchain.md",
+      "source_filename": "_qdrant_examples_8.1-self-query-systems-with-langchain.md",
+      "source_directory": "Docs\\Qdrant\\qdrant_examples",
+      "relative_path": "Docs\\Qdrant\\qdrant_examples\\_qdrant_examples_8.1-self-query-systems-with-langchain.md",
+      "hierarchy_path": "Query Execution Flow",
+      "chunk_hash": "9f92b869d7200fbd",
+      "content_digest": "9f92b869d7200fbd",
+      "chunk_length": 170,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "query",
+          "self",
+          "execution",
+          "flow",
+          "sources",
+          "ipynb477",
+          "514",
+          "https",
+          "github",
+          "com",
+          "qdrant",
+          "examples",
+          "blob",
+          "b3c4b28f",
+          "ipynb",
+          "l477",
+          "l514"
+        ],
+        "term_weights": [
+          {
+            "term": "query",
+            "tf": 5,
+            "weight": 0.208333
+          },
+          {
+            "term": "self",
+            "tf": 4,
+            "weight": 0.166667
+          },
+          {
+            "term": "execution",
+            "tf": 1,
+            "weight": 0.041667
+          },
+          {
+            "term": "flow",
+            "tf": 1,
+            "weight": 0.041667
+          },
+          {
+            "term": "sources",
+            "tf": 1,
+            "weight": 0.041667
+          },
+          {
+            "term": "ipynb477",
+            "tf": 1,
+            "weight": 0.041667
+          },
+          {
+            "term": "514",
+            "tf": 1,
+            "weight": 0.041667
+          },
+          {
+            "term": "https",
+            "tf": 1,
+            "weight": 0.041667
+          },
+          {
+            "term": "github",
+            "tf": 1,
+            "weight": 0.041667
+          },
+          {
+            "term": "com",
+            "tf": 1,
+            "weight": 0.041667
+          },
+          {
+            "term": "qdrant",
+            "tf": 1,
+            "weight": 0.041667
+          },
+          {
+            "term": "examples",
+            "tf": 1,
+            "weight": 0.041667
+          },
+          {
+            "term": "blob",
+            "tf": 1,
+            "weight": 0.041667
+          },
+          {
+            "term": "b3c4b28f",
+            "tf": 1,
+            "weight": 0.041667
+          },
+          {
+            "term": "ipynb",
+            "tf": 1,
+            "weight": 0.041667
+          },
+          {
+            "term": "l477",
+            "tf": 1,
+            "weight": 0.041667
+          },
+          {
+            "term": "l514",
+            "tf": 1,
+            "weight": 0.041667
+          }
+        ],
+        "unique_terms": 17,
+        "total_terms": 24
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "514",
+        "Query Execution Flow",
+        "com",
+        "execution",
+        "flow",
+        "github",
+        "https",
+        "ipynb477",
+        "query",
+        "self",
+        "sources"
+      ],
+      "collection_name": "Qdrant"
+    },
+    "advanced_scores": {
+      "semantic": 0.6,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5525,
+      "overall": 0.6841666666666667
+    }
+  },
+  {
+    "text": "## System Configuration and Dependencies",
+    "metadata": {
+      "chunk_id": "5cd748671eb3-0012",
+      "source_file": "Docs\\Qdrant\\qdrant_examples\\_qdrant_examples_8.1-self-query-systems-with-langchain.md",
+      "filename": "_qdrant_examples_8.1-self-query-systems-with-langchain.md",
+      "file_extension": ".md",
+      "chunk_index": 12,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "System Configuration and Dependencies"
+      ],
+      "heading_text": "System Configuration and Dependencies",
+      "token_count": 5,
+      "char_count": 40,
+      "start_char": 7251,
+      "end_char": 7291,
+      "semantic_score": 0.8,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.59,
+      "chunking_strategy": "hierarchical_balanced_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:39.618364",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 5,
+      "document_id": "5cd748671eb3",
+      "document_name": "_qdrant_examples_8.1-self-query-systems-with-langchain",
+      "source_path": "Docs\\Qdrant\\qdrant_examples\\_qdrant_examples_8.1-self-query-systems-with-langchain.md",
+      "source_filename": "_qdrant_examples_8.1-self-query-systems-with-langchain.md",
+      "source_directory": "Docs\\Qdrant\\qdrant_examples",
+      "relative_path": "Docs\\Qdrant\\qdrant_examples\\_qdrant_examples_8.1-self-query-systems-with-langchain.md",
+      "hierarchy_path": "System Configuration and Dependencies",
+      "chunk_hash": "153a88a09b00ee1f",
+      "content_digest": "153a88a09b00ee1f",
+      "chunk_length": 40,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "system",
+          "configuration",
+          "and",
+          "dependencies"
+        ],
+        "term_weights": [
+          {
+            "term": "system",
+            "tf": 1,
+            "weight": 0.25
+          },
+          {
+            "term": "configuration",
+            "tf": 1,
+            "weight": 0.25
+          },
+          {
+            "term": "and",
+            "tf": 1,
+            "weight": 0.25
+          },
+          {
+            "term": "dependencies",
+            "tf": 1,
+            "weight": 0.25
+          }
+        ],
+        "unique_terms": 4,
+        "total_terms": 4
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "System Configuration and Dependencies",
+        "and",
+        "configuration",
+        "dependencies",
+        "system"
+      ],
+      "collection_name": "Qdrant"
+    },
+    "advanced_scores": {
+      "semantic": 0.8,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.59,
+      "overall": 0.7633333333333333
+    }
+  },
+  {
+    "text": "### Environment Setup  The system requires API keys and connection configuration for external services: ``` ``` **Sources**: [self-query/self-query.ipynb16-31](https://github.com/qdrant/examples/blob/b3c4b28f/self-query/self-query.ipynb#L16-L31) [self-query/self-query.ipynb396-415](https://github.com/qdrant/examples/blob/b3c4b28f/self-query/self-query.ipynb#L396-L415)",
+    "metadata": {
+      "chunk_id": "5cd748671eb3-0014",
+      "source_file": "Docs\\Qdrant\\qdrant_examples\\_qdrant_examples_8.1-self-query-systems-with-langchain.md",
+      "filename": "_qdrant_examples_8.1-self-query-systems-with-langchain.md",
+      "file_extension": ".md",
+      "chunk_index": 14,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Environment Setup"
+      ],
+      "heading_text": "Environment Setup",
+      "token_count": 103,
+      "char_count": 370,
+      "start_char": 7973,
+      "end_char": 8343,
+      "semantic_score": 0.6,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.7742105263157895,
+      "chunking_strategy": "hierarchical_balanced_structural",
+      "content_type": "code_block",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:39.619587",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 103,
+      "document_id": "5cd748671eb3",
+      "document_name": "_qdrant_examples_8.1-self-query-systems-with-langchain",
+      "source_path": "Docs\\Qdrant\\qdrant_examples\\_qdrant_examples_8.1-self-query-systems-with-langchain.md",
+      "source_filename": "_qdrant_examples_8.1-self-query-systems-with-langchain.md",
+      "source_directory": "Docs\\Qdrant\\qdrant_examples",
+      "relative_path": "Docs\\Qdrant\\qdrant_examples\\_qdrant_examples_8.1-self-query-systems-with-langchain.md",
+      "hierarchy_path": "Environment Setup",
+      "chunk_hash": "a64216303aa840f8",
+      "content_digest": "a64216303aa840f8",
+      "chunk_length": 370,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "self",
+          "query",
+          "https",
+          "github",
+          "com",
+          "qdrant",
+          "examples",
+          "blob",
+          "b3c4b28f",
+          "ipynb",
+          "environment",
+          "setup",
+          "the",
+          "system",
+          "requires",
+          "api",
+          "keys",
+          "and",
+          "connection",
+          "configuration"
+        ],
+        "term_weights": [
+          {
+            "term": "self",
+            "tf": 8,
+            "weight": 0.150943
+          },
+          {
+            "term": "query",
+            "tf": 8,
+            "weight": 0.150943
+          },
+          {
+            "term": "https",
+            "tf": 2,
+            "weight": 0.037736
+          },
+          {
+            "term": "github",
+            "tf": 2,
+            "weight": 0.037736
+          },
+          {
+            "term": "com",
+            "tf": 2,
+            "weight": 0.037736
+          },
+          {
+            "term": "qdrant",
+            "tf": 2,
+            "weight": 0.037736
+          },
+          {
+            "term": "examples",
+            "tf": 2,
+            "weight": 0.037736
+          },
+          {
+            "term": "blob",
+            "tf": 2,
+            "weight": 0.037736
+          },
+          {
+            "term": "b3c4b28f",
+            "tf": 2,
+            "weight": 0.037736
+          },
+          {
+            "term": "ipynb",
+            "tf": 2,
+            "weight": 0.037736
+          },
+          {
+            "term": "environment",
+            "tf": 1,
+            "weight": 0.018868
+          },
+          {
+            "term": "setup",
+            "tf": 1,
+            "weight": 0.018868
+          },
+          {
+            "term": "the",
+            "tf": 1,
+            "weight": 0.018868
+          },
+          {
+            "term": "system",
+            "tf": 1,
+            "weight": 0.018868
+          },
+          {
+            "term": "requires",
+            "tf": 1,
+            "weight": 0.018868
+          },
+          {
+            "term": "api",
+            "tf": 1,
+            "weight": 0.018868
+          },
+          {
+            "term": "keys",
+            "tf": 1,
+            "weight": 0.018868
+          },
+          {
+            "term": "and",
+            "tf": 1,
+            "weight": 0.018868
+          },
+          {
+            "term": "connection",
+            "tf": 1,
+            "weight": 0.018868
+          },
+          {
+            "term": "configuration",
+            "tf": 1,
+            "weight": 0.018868
+          }
+        ],
+        "unique_terms": 31,
+        "total_terms": 53
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Environment Setup",
+        "b3c4b28f",
+        "blob",
+        "com",
+        "examples",
+        "github",
+        "https",
+        "ipynb",
+        "qdrant",
+        "query",
+        "self"
+      ],
+      "collection_name": "Qdrant"
+    },
+    "advanced_scores": {
+      "semantic": 0.6,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.7742105263157895,
+      "overall": 0.7580701754385964
+    }
+  },
+  {
+    "text": "## Performance and Tracing\n\nThe system includes tracing capabilities to monitor query translation and execution:",
+    "metadata": {
+      "chunk_id": "5cd748671eb3-0015",
+      "source_file": "Docs\\Qdrant\\qdrant_examples\\_qdrant_examples_8.1-self-query-systems-with-langchain.md",
+      "filename": "_qdrant_examples_8.1-self-query-systems-with-langchain.md",
+      "file_extension": ".md",
+      "chunk_index": 15,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Performance and Tracing"
+      ],
+      "heading_text": "Performance and Tracing",
+      "token_count": 18,
+      "char_count": 112,
+      "start_char": 8347,
+      "end_char": 8459,
+      "semantic_score": 0.8,
+      "structural_score": 0.7,
+      "retrieval_quality": 0.55,
+      "chunking_strategy": "hierarchical_balanced_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:39.619809",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 18,
+      "document_id": "5cd748671eb3",
+      "document_name": "_qdrant_examples_8.1-self-query-systems-with-langchain",
+      "source_path": "Docs\\Qdrant\\qdrant_examples\\_qdrant_examples_8.1-self-query-systems-with-langchain.md",
+      "source_filename": "_qdrant_examples_8.1-self-query-systems-with-langchain.md",
+      "source_directory": "Docs\\Qdrant\\qdrant_examples",
+      "relative_path": "Docs\\Qdrant\\qdrant_examples\\_qdrant_examples_8.1-self-query-systems-with-langchain.md",
+      "hierarchy_path": "Performance and Tracing",
+      "chunk_hash": "ffd39725e9df3c73",
+      "content_digest": "ffd39725e9df3c73",
+      "chunk_length": 112,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "and",
+          "tracing",
+          "performance",
+          "the",
+          "system",
+          "includes",
+          "capabilities",
+          "monitor",
+          "query",
+          "translation",
+          "execution"
+        ],
+        "term_weights": [
+          {
+            "term": "and",
+            "tf": 2,
+            "weight": 0.153846
+          },
+          {
+            "term": "tracing",
+            "tf": 2,
+            "weight": 0.153846
+          },
+          {
+            "term": "performance",
+            "tf": 1,
+            "weight": 0.076923
+          },
+          {
+            "term": "the",
+            "tf": 1,
+            "weight": 0.076923
+          },
+          {
+            "term": "system",
+            "tf": 1,
+            "weight": 0.076923
+          },
+          {
+            "term": "includes",
+            "tf": 1,
+            "weight": 0.076923
+          },
+          {
+            "term": "capabilities",
+            "tf": 1,
+            "weight": 0.076923
+          },
+          {
+            "term": "monitor",
+            "tf": 1,
+            "weight": 0.076923
+          },
+          {
+            "term": "query",
+            "tf": 1,
+            "weight": 0.076923
+          },
+          {
+            "term": "translation",
+            "tf": 1,
+            "weight": 0.076923
+          },
+          {
+            "term": "execution",
+            "tf": 1,
+            "weight": 0.076923
+          }
+        ],
+        "unique_terms": 11,
+        "total_terms": 13
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Performance and Tracing",
+        "and",
+        "capabilities",
+        "includes",
+        "monitor",
+        "performance",
+        "query",
+        "system",
+        "the",
+        "tracing",
+        "translation"
+      ],
+      "collection_name": "Qdrant"
+    },
+    "advanced_scores": {
+      "semantic": 0.8,
+      "structural": 0.7,
+      "retrieval_quality": 0.55,
+      "overall": 0.6833333333333332
+    }
+  },
+  {
+    "text": "### Query Tracing Output  The `ConsoleCallbackHandler` provides detailed visibility into the query construction process, showing:  - Prompt template construction - LLM query processing with token usage - Filter generation and parsing - Final query execution  **Sources**: [self-query/self-query.ipynb525-627](https://github.com/qdrant/examples/blob/b3c4b28f/self-query/self-query.ipynb#L525-L627)  This self-query implementation demonstrates how to bridge natural language interfaces with structured vector search systems, enabling more intuitive and precise information retrieval while maintaining the performance benefits of vector similarity search combined with efficient metadata filtering. Dismiss  Refresh this wiki  Enter email to refresh",
+    "metadata": {
+      "chunk_id": "5cd748671eb3-0016",
+      "source_file": "Docs\\Qdrant\\qdrant_examples\\_qdrant_examples_8.1-self-query-systems-with-langchain.md",
+      "filename": "_qdrant_examples_8.1-self-query-systems-with-langchain.md",
+      "file_extension": ".md",
+      "chunk_index": 16,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Query Tracing Output"
+      ],
+      "heading_text": "Query Tracing Output",
+      "token_count": 141,
+      "char_count": 746,
+      "start_char": 8461,
+      "end_char": 9207,
+      "semantic_score": 0.7999999999999999,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.727037037037037,
+      "chunking_strategy": "hierarchical_balanced_structural",
+      "content_type": "list_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:39.620127",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 141,
+      "document_id": "5cd748671eb3",
+      "document_name": "_qdrant_examples_8.1-self-query-systems-with-langchain",
+      "source_path": "Docs\\Qdrant\\qdrant_examples\\_qdrant_examples_8.1-self-query-systems-with-langchain.md",
+      "source_filename": "_qdrant_examples_8.1-self-query-systems-with-langchain.md",
+      "source_directory": "Docs\\Qdrant\\qdrant_examples",
+      "relative_path": "Docs\\Qdrant\\qdrant_examples\\_qdrant_examples_8.1-self-query-systems-with-langchain.md",
+      "hierarchy_path": "Query Tracing Output",
+      "chunk_hash": "5cb1b2b4a68d925c",
+      "content_digest": "5cb1b2b4a68d925c",
+      "chunk_length": 746,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "query",
+          "self",
+          "the",
+          "with",
+          "construction",
+          "and",
+          "this",
+          "vector",
+          "search",
+          "refresh",
+          "tracing",
+          "output",
+          "consolecallbackhandler",
+          "provides",
+          "detailed",
+          "visibility",
+          "into",
+          "process",
+          "showing",
+          "prompt"
+        ],
+        "term_weights": [
+          {
+            "term": "query",
+            "tf": 9,
+            "weight": 0.096774
+          },
+          {
+            "term": "self",
+            "tf": 5,
+            "weight": 0.053763
+          },
+          {
+            "term": "the",
+            "tf": 3,
+            "weight": 0.032258
+          },
+          {
+            "term": "with",
+            "tf": 3,
+            "weight": 0.032258
+          },
+          {
+            "term": "construction",
+            "tf": 2,
+            "weight": 0.021505
+          },
+          {
+            "term": "and",
+            "tf": 2,
+            "weight": 0.021505
+          },
+          {
+            "term": "this",
+            "tf": 2,
+            "weight": 0.021505
+          },
+          {
+            "term": "vector",
+            "tf": 2,
+            "weight": 0.021505
+          },
+          {
+            "term": "search",
+            "tf": 2,
+            "weight": 0.021505
+          },
+          {
+            "term": "refresh",
+            "tf": 2,
+            "weight": 0.021505
+          },
+          {
+            "term": "tracing",
+            "tf": 1,
+            "weight": 0.010753
+          },
+          {
+            "term": "output",
+            "tf": 1,
+            "weight": 0.010753
+          },
+          {
+            "term": "consolecallbackhandler",
+            "tf": 1,
+            "weight": 0.010753
+          },
+          {
+            "term": "provides",
+            "tf": 1,
+            "weight": 0.010753
+          },
+          {
+            "term": "detailed",
+            "tf": 1,
+            "weight": 0.010753
+          },
+          {
+            "term": "visibility",
+            "tf": 1,
+            "weight": 0.010753
+          },
+          {
+            "term": "into",
+            "tf": 1,
+            "weight": 0.010753
+          },
+          {
+            "term": "process",
+            "tf": 1,
+            "weight": 0.010753
+          },
+          {
+            "term": "showing",
+            "tf": 1,
+            "weight": 0.010753
+          },
+          {
+            "term": "prompt",
+            "tf": 1,
+            "weight": 0.010753
+          }
+        ],
+        "unique_terms": 71,
+        "total_terms": 93
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Query Tracing Output",
+        "and",
+        "construction",
+        "query",
+        "refresh",
+        "search",
+        "self",
+        "the",
+        "this",
+        "vector",
+        "with"
+      ],
+      "collection_name": "Qdrant"
+    },
+    "advanced_scores": {
+      "semantic": 0.7999999999999999,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.727037037037037,
+      "overall": 0.8090123456790123
+    }
+  },
+  {
+    "text": "### On this page  - [Self-Query Systems with LangChain](#self-query-systems-with-langchain.md) - [System Overview](#system-overview.md) - [Data Preparation and Embedding Pipeline](#data-preparation-and-embedding-pipeline.md) - [Document Structure and Schema](#document-structure-and-schema.md) - [Embedding and Collection Setup](#embedding-and-collection-setup.md) - [Self-Query Retriever Architecture](#self-query-retriever-architecture.md) - [Metadata Schema Definition](#metadata-schema-definition.md) - [Query Translation Process](#query-translation-process.md) - [Translation Pipeline](#translation-pipeline.md) - [Filter Construction](#filter-construction.md) - [Implementation Example](#implementation-example.md) - [Query Execution Flow](#query-execution-flow.md) - [System Configuration and Dependencies](#system-configuration-and-dependencies.md) - [Core Dependencies](#core-dependencies.md) - [Environment Setup](#environment-setup.md) - [Performance and Tracing](#performance-and-tracing.md) - [Query Tracing Output](#query-tracing-output.md)",
+    "metadata": {
+      "chunk_id": "5cd748671eb3-0017",
+      "source_file": "Docs\\Qdrant\\qdrant_examples\\_qdrant_examples_8.1-self-query-systems-with-langchain.md",
+      "filename": "_qdrant_examples_8.1-self-query-systems-with-langchain.md",
+      "file_extension": ".md",
+      "chunk_index": 17,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "On this page"
+      ],
+      "heading_text": "On this page",
+      "token_count": 241,
+      "char_count": 1054,
+      "start_char": 9210,
+      "end_char": 10264,
+      "semantic_score": 0.7,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.6900000000000001,
+      "chunking_strategy": "hierarchical_balanced_structural",
+      "content_type": "code_block",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:39.621996",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 241,
+      "document_id": "5cd748671eb3",
+      "document_name": "_qdrant_examples_8.1-self-query-systems-with-langchain",
+      "source_path": "Docs\\Qdrant\\qdrant_examples\\_qdrant_examples_8.1-self-query-systems-with-langchain.md",
+      "source_filename": "_qdrant_examples_8.1-self-query-systems-with-langchain.md",
+      "source_directory": "Docs\\Qdrant\\qdrant_examples",
+      "relative_path": "Docs\\Qdrant\\qdrant_examples\\_qdrant_examples_8.1-self-query-systems-with-langchain.md",
+      "hierarchy_path": "On this page",
+      "chunk_hash": "c53ffe1e1776c52a",
+      "content_digest": "c53ffe1e1776c52a",
+      "chunk_length": 1054,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "query",
+          "and",
+          "self",
+          "system",
+          "embedding",
+          "pipeline",
+          "schema",
+          "setup",
+          "translation",
+          "dependencies",
+          "tracing",
+          "systems",
+          "with",
+          "langchain",
+          "overview",
+          "data",
+          "preparation",
+          "document",
+          "structure",
+          "collection"
+        ],
+        "term_weights": [
+          {
+            "term": "query",
+            "tf": 10,
+            "weight": 0.092593
+          },
+          {
+            "term": "and",
+            "tf": 10,
+            "weight": 0.092593
+          },
+          {
+            "term": "self",
+            "tf": 4,
+            "weight": 0.037037
+          },
+          {
+            "term": "system",
+            "tf": 4,
+            "weight": 0.037037
+          },
+          {
+            "term": "embedding",
+            "tf": 4,
+            "weight": 0.037037
+          },
+          {
+            "term": "pipeline",
+            "tf": 4,
+            "weight": 0.037037
+          },
+          {
+            "term": "schema",
+            "tf": 4,
+            "weight": 0.037037
+          },
+          {
+            "term": "setup",
+            "tf": 4,
+            "weight": 0.037037
+          },
+          {
+            "term": "translation",
+            "tf": 4,
+            "weight": 0.037037
+          },
+          {
+            "term": "dependencies",
+            "tf": 4,
+            "weight": 0.037037
+          },
+          {
+            "term": "tracing",
+            "tf": 4,
+            "weight": 0.037037
+          },
+          {
+            "term": "systems",
+            "tf": 2,
+            "weight": 0.018519
+          },
+          {
+            "term": "with",
+            "tf": 2,
+            "weight": 0.018519
+          },
+          {
+            "term": "langchain",
+            "tf": 2,
+            "weight": 0.018519
+          },
+          {
+            "term": "overview",
+            "tf": 2,
+            "weight": 0.018519
+          },
+          {
+            "term": "data",
+            "tf": 2,
+            "weight": 0.018519
+          },
+          {
+            "term": "preparation",
+            "tf": 2,
+            "weight": 0.018519
+          },
+          {
+            "term": "document",
+            "tf": 2,
+            "weight": 0.018519
+          },
+          {
+            "term": "structure",
+            "tf": 2,
+            "weight": 0.018519
+          },
+          {
+            "term": "collection",
+            "tf": 2,
+            "weight": 0.018519
+          }
+        ],
+        "unique_terms": 38,
+        "total_terms": 108
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "On this page",
+        "and",
+        "dependencies",
+        "embedding",
+        "pipeline",
+        "query",
+        "schema",
+        "self",
+        "setup",
+        "system",
+        "translation"
+      ],
+      "collection_name": "Qdrant"
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.6900000000000001,
+      "overall": 0.7633333333333333
+    }
+  }
+]

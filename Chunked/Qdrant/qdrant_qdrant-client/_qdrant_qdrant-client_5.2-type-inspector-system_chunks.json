@@ -1,0 +1,1871 @@
+[
+  {
+    "text": "# Type Inspector System  Relevant source files  - [qdrant\\_client/\\_pydantic\\_compat.py](https://github.com/qdrant/qdrant-client/blob/ac6f6cd2/qdrant_client/_pydantic_compat.py) - [qdrant\\_client/embed/embed\\_inspector.py](https://github.com/qdrant/qdrant-client/blob/ac6f6cd2/qdrant_client/embed/embed_inspector.py) - [qdrant\\_client/embed/schema\\_parser.py](https://github.com/qdrant/qdrant-client/blob/ac6f6cd2/qdrant_client/embed/schema_parser.py) - [qdrant\\_client/embed/type\\_inspector.py](https://github.com/qdrant/qdrant-client/blob/ac6f6cd2/qdrant_client/embed/type_inspector.py) - [tools/populate\\_inspection\\_cache.py](https://github.com/qdrant/qdrant-client/blob/ac6f6cd2/tools/populate_inspection_cache.py)  The Type Inspector System is responsible for detecting objects requiring inference (embeddings) within Pydantic models used in the Qdrant client. It analyzes model schemas to identify paths to `Document`, `Image`, and `InferenceObject` types, enabling automatic embedding generation during data operations. The system includes schema parsing, type detection, and caching mechanisms to optimize performance. For information about the actual embedding generation process, see [FastEmbed Integration](qdrant/qdrant-client/4.1-fastembed-integration.md). For details about local inference model management, see [Local Inference](qdrant/qdrant-client/4.4-local-inference.md).",
+    "metadata": {
+      "chunk_id": "6ab52a8126fd-0000",
+      "source_file": "Docs\\Qdrant\\qdrant_qdrant-client\\_qdrant_qdrant-client_5.2-type-inspector-system.md",
+      "filename": "_qdrant_qdrant-client_5.2-type-inspector-system.md",
+      "file_extension": ".md",
+      "chunk_index": 0,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Type Inspector System"
+      ],
+      "heading_text": "Type Inspector System",
+      "token_count": 352,
+      "char_count": 1390,
+      "start_char": 1978,
+      "end_char": 3368,
+      "semantic_score": 0.6,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5297758241758243,
+      "chunking_strategy": "hybrid_adaptive_structural",
+      "content_type": "list_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:44.829047",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 352,
+      "document_id": "6ab52a8126fd",
+      "document_name": "_qdrant_qdrant-client_5.2-type-inspector-system",
+      "source_path": "Docs\\Qdrant\\qdrant_qdrant-client\\_qdrant_qdrant-client_5.2-type-inspector-system.md",
+      "source_filename": "_qdrant_qdrant-client_5.2-type-inspector-system.md",
+      "source_directory": "Docs\\Qdrant\\qdrant_qdrant-client",
+      "relative_path": "Docs\\Qdrant\\qdrant_qdrant-client\\_qdrant_qdrant-client_5.2-type-inspector-system.md",
+      "hierarchy_path": "Type Inspector System",
+      "chunk_hash": "50c6c9d15d2ca4cc",
+      "content_digest": "50c6c9d15d2ca4cc",
+      "chunk_length": 1390,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "qdrant",
+          "client",
+          "embed",
+          "inspector",
+          "type",
+          "https",
+          "github",
+          "com",
+          "blob",
+          "ac6f6cd2",
+          "the",
+          "inference",
+          "system",
+          "pydantic",
+          "schema",
+          "for",
+          "local",
+          "compat",
+          "parser",
+          "tools"
+        ],
+        "term_weights": [
+          {
+            "term": "qdrant",
+            "tf": 23,
+            "weight": 0.135294
+          },
+          {
+            "term": "client",
+            "tf": 16,
+            "weight": 0.094118
+          },
+          {
+            "term": "embed",
+            "tf": 8,
+            "weight": 0.047059
+          },
+          {
+            "term": "inspector",
+            "tf": 6,
+            "weight": 0.035294
+          },
+          {
+            "term": "type",
+            "tf": 5,
+            "weight": 0.029412
+          },
+          {
+            "term": "https",
+            "tf": 5,
+            "weight": 0.029412
+          },
+          {
+            "term": "github",
+            "tf": 5,
+            "weight": 0.029412
+          },
+          {
+            "term": "com",
+            "tf": 5,
+            "weight": 0.029412
+          },
+          {
+            "term": "blob",
+            "tf": 5,
+            "weight": 0.029412
+          },
+          {
+            "term": "ac6f6cd2",
+            "tf": 5,
+            "weight": 0.029412
+          },
+          {
+            "term": "the",
+            "tf": 4,
+            "weight": 0.023529
+          },
+          {
+            "term": "inference",
+            "tf": 4,
+            "weight": 0.023529
+          },
+          {
+            "term": "system",
+            "tf": 3,
+            "weight": 0.017647
+          },
+          {
+            "term": "pydantic",
+            "tf": 3,
+            "weight": 0.017647
+          },
+          {
+            "term": "schema",
+            "tf": 3,
+            "weight": 0.017647
+          },
+          {
+            "term": "for",
+            "tf": 3,
+            "weight": 0.017647
+          },
+          {
+            "term": "local",
+            "tf": 3,
+            "weight": 0.017647
+          },
+          {
+            "term": "compat",
+            "tf": 2,
+            "weight": 0.011765
+          },
+          {
+            "term": "parser",
+            "tf": 2,
+            "weight": 0.011765
+          },
+          {
+            "term": "tools",
+            "tf": 2,
+            "weight": 0.011765
+          }
+        ],
+        "unique_terms": 67,
+        "total_terms": 170
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Type Inspector System",
+        "ac6f6cd2",
+        "blob",
+        "client",
+        "com",
+        "embed",
+        "github",
+        "https",
+        "inspector",
+        "qdrant",
+        "type"
+      ],
+      "collection_name": "Qdrant"
+    },
+    "advanced_scores": {
+      "semantic": 0.6,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5297758241758243,
+      "overall": 0.6765919413919415
+    }
+  },
+  {
+    "text": "## Core Components  The Type Inspector System consists of three main components that work together to detect inference objects in Pydantic models: ``` ``` **Sources:** [qdrant\\_client/embed/type\\_inspector.py12-23](https://github.com/qdrant/qdrant-client/blob/ac6f6cd2/qdrant_client/embed/type_inspector.py#L12-L23) [qdrant\\_client/embed/schema\\_parser.py29-69](https://github.com/qdrant/qdrant-client/blob/ac6f6cd2/qdrant_client/embed/schema_parser.py#L29-L69) [qdrant\\_client/embed/embed\\_inspector.py13-21](https://github.com/qdrant/qdrant-client/blob/ac6f6cd2/qdrant_client/embed/embed_inspector.py#L13-L21)",
+    "metadata": {
+      "chunk_id": "6ab52a8126fd-0001",
+      "source_file": "Docs\\Qdrant\\qdrant_qdrant-client\\_qdrant_qdrant-client_5.2-type-inspector-system.md",
+      "filename": "_qdrant_qdrant-client_5.2-type-inspector-system.md",
+      "file_extension": ".md",
+      "chunk_index": 1,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Core Components"
+      ],
+      "heading_text": "Core Components",
+      "token_count": 176,
+      "char_count": 611,
+      "start_char": 3371,
+      "end_char": 3982,
+      "semantic_score": 0.7,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5685714285714286,
+      "chunking_strategy": "hybrid_adaptive_structural",
+      "content_type": "code_block",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:44.830472",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 176,
+      "document_id": "6ab52a8126fd",
+      "document_name": "_qdrant_qdrant-client_5.2-type-inspector-system",
+      "source_path": "Docs\\Qdrant\\qdrant_qdrant-client\\_qdrant_qdrant-client_5.2-type-inspector-system.md",
+      "source_filename": "_qdrant_qdrant-client_5.2-type-inspector-system.md",
+      "source_directory": "Docs\\Qdrant\\qdrant_qdrant-client",
+      "relative_path": "Docs\\Qdrant\\qdrant_qdrant-client\\_qdrant_qdrant-client_5.2-type-inspector-system.md",
+      "hierarchy_path": "Core Components",
+      "chunk_hash": "a3d93c4cb125efdf",
+      "content_digest": "a3d93c4cb125efdf",
+      "chunk_length": 611,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "qdrant",
+          "client",
+          "embed",
+          "inspector",
+          "type",
+          "https",
+          "github",
+          "com",
+          "blob",
+          "ac6f6cd2",
+          "components",
+          "schema",
+          "parser",
+          "core",
+          "the",
+          "system",
+          "consists",
+          "three",
+          "main",
+          "that"
+        ],
+        "term_weights": [
+          {
+            "term": "qdrant",
+            "tf": 12,
+            "weight": 0.146341
+          },
+          {
+            "term": "client",
+            "tf": 9,
+            "weight": 0.109756
+          },
+          {
+            "term": "embed",
+            "tf": 8,
+            "weight": 0.097561
+          },
+          {
+            "term": "inspector",
+            "tf": 5,
+            "weight": 0.060976
+          },
+          {
+            "term": "type",
+            "tf": 3,
+            "weight": 0.036585
+          },
+          {
+            "term": "https",
+            "tf": 3,
+            "weight": 0.036585
+          },
+          {
+            "term": "github",
+            "tf": 3,
+            "weight": 0.036585
+          },
+          {
+            "term": "com",
+            "tf": 3,
+            "weight": 0.036585
+          },
+          {
+            "term": "blob",
+            "tf": 3,
+            "weight": 0.036585
+          },
+          {
+            "term": "ac6f6cd2",
+            "tf": 3,
+            "weight": 0.036585
+          },
+          {
+            "term": "components",
+            "tf": 2,
+            "weight": 0.02439
+          },
+          {
+            "term": "schema",
+            "tf": 2,
+            "weight": 0.02439
+          },
+          {
+            "term": "parser",
+            "tf": 2,
+            "weight": 0.02439
+          },
+          {
+            "term": "core",
+            "tf": 1,
+            "weight": 0.012195
+          },
+          {
+            "term": "the",
+            "tf": 1,
+            "weight": 0.012195
+          },
+          {
+            "term": "system",
+            "tf": 1,
+            "weight": 0.012195
+          },
+          {
+            "term": "consists",
+            "tf": 1,
+            "weight": 0.012195
+          },
+          {
+            "term": "three",
+            "tf": 1,
+            "weight": 0.012195
+          },
+          {
+            "term": "main",
+            "tf": 1,
+            "weight": 0.012195
+          },
+          {
+            "term": "that",
+            "tf": 1,
+            "weight": 0.012195
+          }
+        ],
+        "unique_terms": 37,
+        "total_terms": 82
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Core Components",
+        "ac6f6cd2",
+        "blob",
+        "client",
+        "com",
+        "embed",
+        "github",
+        "https",
+        "inspector",
+        "qdrant",
+        "type"
+      ],
+      "collection_name": "Qdrant"
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5685714285714286,
+      "overall": 0.7228571428571429
+    }
+  },
+  {
+    "text": "## Schema Parsing System  The `ModelSchemaParser` class analyzes Pydantic model JSON schemas to identify paths to inference objects. It maintains internal state including definitions, recursive references, and cached paths: ``` ``` **Sources:** [qdrant\\_client/embed/schema\\_parser.py238-287](https://github.com/qdrant/qdrant-client/blob/ac6f6cd2/qdrant_client/embed/schema_parser.py#L238-L287) [qdrant\\_client/embed/schema\\_parser.py91-151](https://github.com/qdrant/qdrant-client/blob/ac6f6cd2/qdrant_client/embed/schema_parser.py#L91-L151) [qdrant\\_client/embed/schema\\_parser.py153-236](https://github.com/qdrant/qdrant-client/blob/ac6f6cd2/qdrant_client/embed/schema_parser.py#L153-L236)",
+    "metadata": {
+      "chunk_id": "6ab52a8126fd-0002",
+      "source_file": "Docs\\Qdrant\\qdrant_qdrant-client\\_qdrant_qdrant-client_5.2-type-inspector-system.md",
+      "filename": "_qdrant_qdrant-client_5.2-type-inspector-system.md",
+      "file_extension": ".md",
+      "chunk_index": 2,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Schema Parsing System"
+      ],
+      "heading_text": "Schema Parsing System",
+      "token_count": 186,
+      "char_count": 692,
+      "start_char": 3986,
+      "end_char": 4678,
+      "semantic_score": 0.7,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5728571428571428,
+      "chunking_strategy": "hybrid_adaptive_structural",
+      "content_type": "code_block",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:44.831407",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 186,
+      "document_id": "6ab52a8126fd",
+      "document_name": "_qdrant_qdrant-client_5.2-type-inspector-system",
+      "source_path": "Docs\\Qdrant\\qdrant_qdrant-client\\_qdrant_qdrant-client_5.2-type-inspector-system.md",
+      "source_filename": "_qdrant_qdrant-client_5.2-type-inspector-system.md",
+      "source_directory": "Docs\\Qdrant\\qdrant_qdrant-client",
+      "relative_path": "Docs\\Qdrant\\qdrant_qdrant-client\\_qdrant_qdrant-client_5.2-type-inspector-system.md",
+      "hierarchy_path": "Schema Parsing System",
+      "chunk_hash": "65ca3190787e3e30",
+      "content_digest": "65ca3190787e3e30",
+      "chunk_length": 692,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "qdrant",
+          "client",
+          "schema",
+          "embed",
+          "parser",
+          "https",
+          "github",
+          "com",
+          "blob",
+          "ac6f6cd2",
+          "paths",
+          "parsing",
+          "system",
+          "the",
+          "modelschemaparser",
+          "class",
+          "analyzes",
+          "pydantic",
+          "model",
+          "json"
+        ],
+        "term_weights": [
+          {
+            "term": "qdrant",
+            "tf": 12,
+            "weight": 0.130435
+          },
+          {
+            "term": "client",
+            "tf": 9,
+            "weight": 0.097826
+          },
+          {
+            "term": "schema",
+            "tf": 7,
+            "weight": 0.076087
+          },
+          {
+            "term": "embed",
+            "tf": 6,
+            "weight": 0.065217
+          },
+          {
+            "term": "parser",
+            "tf": 6,
+            "weight": 0.065217
+          },
+          {
+            "term": "https",
+            "tf": 3,
+            "weight": 0.032609
+          },
+          {
+            "term": "github",
+            "tf": 3,
+            "weight": 0.032609
+          },
+          {
+            "term": "com",
+            "tf": 3,
+            "weight": 0.032609
+          },
+          {
+            "term": "blob",
+            "tf": 3,
+            "weight": 0.032609
+          },
+          {
+            "term": "ac6f6cd2",
+            "tf": 3,
+            "weight": 0.032609
+          },
+          {
+            "term": "paths",
+            "tf": 2,
+            "weight": 0.021739
+          },
+          {
+            "term": "parsing",
+            "tf": 1,
+            "weight": 0.01087
+          },
+          {
+            "term": "system",
+            "tf": 1,
+            "weight": 0.01087
+          },
+          {
+            "term": "the",
+            "tf": 1,
+            "weight": 0.01087
+          },
+          {
+            "term": "modelschemaparser",
+            "tf": 1,
+            "weight": 0.01087
+          },
+          {
+            "term": "class",
+            "tf": 1,
+            "weight": 0.01087
+          },
+          {
+            "term": "analyzes",
+            "tf": 1,
+            "weight": 0.01087
+          },
+          {
+            "term": "pydantic",
+            "tf": 1,
+            "weight": 0.01087
+          },
+          {
+            "term": "model",
+            "tf": 1,
+            "weight": 0.01087
+          },
+          {
+            "term": "json",
+            "tf": 1,
+            "weight": 0.01087
+          }
+        ],
+        "unique_terms": 46,
+        "total_terms": 92
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Schema Parsing System",
+        "ac6f6cd2",
+        "blob",
+        "client",
+        "com",
+        "embed",
+        "github",
+        "https",
+        "parser",
+        "qdrant",
+        "schema"
+      ],
+      "collection_name": "Qdrant"
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5728571428571428,
+      "overall": 0.7242857142857142
+    }
+  },
+  {
+    "text": "## Caching and Performance Optimization\n\nThe system implements a comprehensive caching strategy to avoid repeated schema parsing and path computation:",
+    "metadata": {
+      "chunk_id": "6ab52a8126fd-0004",
+      "source_file": "Docs\\Qdrant\\qdrant_qdrant-client\\_qdrant_qdrant-client_5.2-type-inspector-system.md",
+      "filename": "_qdrant_qdrant-client_5.2-type-inspector-system.md",
+      "file_extension": ".md",
+      "chunk_index": 4,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Caching and Performance Optimization"
+      ],
+      "heading_text": "Caching and Performance Optimization",
+      "token_count": 23,
+      "char_count": 150,
+      "start_char": 5921,
+      "end_char": 6071,
+      "semantic_score": 0.8,
+      "structural_score": 0.7,
+      "retrieval_quality": 0.56,
+      "chunking_strategy": "hybrid_adaptive_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:44.834165",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 23,
+      "document_id": "6ab52a8126fd",
+      "document_name": "_qdrant_qdrant-client_5.2-type-inspector-system",
+      "source_path": "Docs\\Qdrant\\qdrant_qdrant-client\\_qdrant_qdrant-client_5.2-type-inspector-system.md",
+      "source_filename": "_qdrant_qdrant-client_5.2-type-inspector-system.md",
+      "source_directory": "Docs\\Qdrant\\qdrant_qdrant-client",
+      "relative_path": "Docs\\Qdrant\\qdrant_qdrant-client\\_qdrant_qdrant-client_5.2-type-inspector-system.md",
+      "hierarchy_path": "Caching and Performance Optimization",
+      "chunk_hash": "a5ea736216025f79",
+      "content_digest": "a5ea736216025f79",
+      "chunk_length": 150,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "caching",
+          "and",
+          "performance",
+          "optimization",
+          "the",
+          "system",
+          "implements",
+          "comprehensive",
+          "strategy",
+          "avoid",
+          "repeated",
+          "schema",
+          "parsing",
+          "path",
+          "computation"
+        ],
+        "term_weights": [
+          {
+            "term": "caching",
+            "tf": 2,
+            "weight": 0.117647
+          },
+          {
+            "term": "and",
+            "tf": 2,
+            "weight": 0.117647
+          },
+          {
+            "term": "performance",
+            "tf": 1,
+            "weight": 0.058824
+          },
+          {
+            "term": "optimization",
+            "tf": 1,
+            "weight": 0.058824
+          },
+          {
+            "term": "the",
+            "tf": 1,
+            "weight": 0.058824
+          },
+          {
+            "term": "system",
+            "tf": 1,
+            "weight": 0.058824
+          },
+          {
+            "term": "implements",
+            "tf": 1,
+            "weight": 0.058824
+          },
+          {
+            "term": "comprehensive",
+            "tf": 1,
+            "weight": 0.058824
+          },
+          {
+            "term": "strategy",
+            "tf": 1,
+            "weight": 0.058824
+          },
+          {
+            "term": "avoid",
+            "tf": 1,
+            "weight": 0.058824
+          },
+          {
+            "term": "repeated",
+            "tf": 1,
+            "weight": 0.058824
+          },
+          {
+            "term": "schema",
+            "tf": 1,
+            "weight": 0.058824
+          },
+          {
+            "term": "parsing",
+            "tf": 1,
+            "weight": 0.058824
+          },
+          {
+            "term": "path",
+            "tf": 1,
+            "weight": 0.058824
+          },
+          {
+            "term": "computation",
+            "tf": 1,
+            "weight": 0.058824
+          }
+        ],
+        "unique_terms": 15,
+        "total_terms": 17
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Caching and Performance Optimization",
+        "and",
+        "avoid",
+        "caching",
+        "comprehensive",
+        "implements",
+        "optimization",
+        "performance",
+        "strategy",
+        "system",
+        "the"
+      ],
+      "collection_name": "Qdrant"
+    },
+    "advanced_scores": {
+      "semantic": 0.8,
+      "structural": 0.7,
+      "retrieval_quality": 0.56,
+      "overall": 0.6866666666666666
+    }
+  },
+  {
+    "text": "### Cache Population  The inspection cache is pre-populated using the `populate_inspection_cache.py` tool, which processes all Pydantic models in the `qdrant_client.models` module: ``` ``` **Sources:** [tools/populate\\_inspection\\_cache.py34-76](https://github.com/qdrant/qdrant-client/blob/ac6f6cd2/tools/populate_inspection_cache.py#L34-L76) [qdrant\\_client/embed/schema\\_parser.py74-89](https://github.com/qdrant/qdrant-client/blob/ac6f6cd2/qdrant_client/embed/schema_parser.py#L74-L89) [qdrant\\_client/embed/schema\\_parser.py289-305](https://github.com/qdrant/qdrant-client/blob/ac6f6cd2/qdrant_client/embed/schema_parser.py#L289-L305)",
+    "metadata": {
+      "chunk_id": "6ab52a8126fd-0006",
+      "source_file": "Docs\\Qdrant\\qdrant_qdrant-client\\_qdrant_qdrant-client_5.2-type-inspector-system.md",
+      "filename": "_qdrant_qdrant-client_5.2-type-inspector-system.md",
+      "file_extension": ".md",
+      "chunk_index": 6,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Cache Population"
+      ],
+      "heading_text": "Cache Population",
+      "token_count": 183,
+      "char_count": 639,
+      "start_char": 6653,
+      "end_char": 7292,
+      "semantic_score": 0.6,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5455555555555556,
+      "chunking_strategy": "hybrid_adaptive_structural",
+      "content_type": "code_block",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:44.835980",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 183,
+      "document_id": "6ab52a8126fd",
+      "document_name": "_qdrant_qdrant-client_5.2-type-inspector-system",
+      "source_path": "Docs\\Qdrant\\qdrant_qdrant-client\\_qdrant_qdrant-client_5.2-type-inspector-system.md",
+      "source_filename": "_qdrant_qdrant-client_5.2-type-inspector-system.md",
+      "source_directory": "Docs\\Qdrant\\qdrant_qdrant-client",
+      "relative_path": "Docs\\Qdrant\\qdrant_qdrant-client\\_qdrant_qdrant-client_5.2-type-inspector-system.md",
+      "hierarchy_path": "Cache Population",
+      "chunk_hash": "ce57dc483c9db949",
+      "content_digest": "ce57dc483c9db949",
+      "chunk_length": 639,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "qdrant",
+          "client",
+          "cache",
+          "inspection",
+          "embed",
+          "schema",
+          "parser",
+          "the",
+          "populate",
+          "https",
+          "github",
+          "com",
+          "blob",
+          "ac6f6cd2",
+          "models",
+          "tools",
+          "population",
+          "pre",
+          "populated",
+          "using"
+        ],
+        "term_weights": [
+          {
+            "term": "qdrant",
+            "tf": 11,
+            "weight": 0.127907
+          },
+          {
+            "term": "client",
+            "tf": 8,
+            "weight": 0.093023
+          },
+          {
+            "term": "cache",
+            "tf": 5,
+            "weight": 0.05814
+          },
+          {
+            "term": "inspection",
+            "tf": 4,
+            "weight": 0.046512
+          },
+          {
+            "term": "embed",
+            "tf": 4,
+            "weight": 0.046512
+          },
+          {
+            "term": "schema",
+            "tf": 4,
+            "weight": 0.046512
+          },
+          {
+            "term": "parser",
+            "tf": 4,
+            "weight": 0.046512
+          },
+          {
+            "term": "the",
+            "tf": 3,
+            "weight": 0.034884
+          },
+          {
+            "term": "populate",
+            "tf": 3,
+            "weight": 0.034884
+          },
+          {
+            "term": "https",
+            "tf": 3,
+            "weight": 0.034884
+          },
+          {
+            "term": "github",
+            "tf": 3,
+            "weight": 0.034884
+          },
+          {
+            "term": "com",
+            "tf": 3,
+            "weight": 0.034884
+          },
+          {
+            "term": "blob",
+            "tf": 3,
+            "weight": 0.034884
+          },
+          {
+            "term": "ac6f6cd2",
+            "tf": 3,
+            "weight": 0.034884
+          },
+          {
+            "term": "models",
+            "tf": 2,
+            "weight": 0.023256
+          },
+          {
+            "term": "tools",
+            "tf": 2,
+            "weight": 0.023256
+          },
+          {
+            "term": "population",
+            "tf": 1,
+            "weight": 0.011628
+          },
+          {
+            "term": "pre",
+            "tf": 1,
+            "weight": 0.011628
+          },
+          {
+            "term": "populated",
+            "tf": 1,
+            "weight": 0.011628
+          },
+          {
+            "term": "using",
+            "tf": 1,
+            "weight": 0.011628
+          }
+        ],
+        "unique_terms": 37,
+        "total_terms": 86
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Cache Population",
+        "cache",
+        "client",
+        "embed",
+        "https",
+        "inspection",
+        "parser",
+        "populate",
+        "qdrant",
+        "schema",
+        "the"
+      ],
+      "collection_name": "Qdrant"
+    },
+    "advanced_scores": {
+      "semantic": 0.6,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5455555555555556,
+      "overall": 0.6818518518518518
+    }
+  },
+  {
+    "text": "## Integration with FastEmbed System\n\nThe Type Inspector System integrates with the FastEmbed system by providing two inspection modes:",
+    "metadata": {
+      "chunk_id": "6ab52a8126fd-0008",
+      "source_file": "Docs\\Qdrant\\qdrant_qdrant-client\\_qdrant_qdrant-client_5.2-type-inspector-system.md",
+      "filename": "_qdrant_qdrant-client_5.2-type-inspector-system.md",
+      "file_extension": ".md",
+      "chunk_index": 8,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Integration with FastEmbed System"
+      ],
+      "heading_text": "Integration with FastEmbed System",
+      "token_count": 23,
+      "char_count": 135,
+      "start_char": 8453,
+      "end_char": 8588,
+      "semantic_score": 0.8,
+      "structural_score": 0.7,
+      "retrieval_quality": 0.5110526315789473,
+      "chunking_strategy": "hybrid_adaptive_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:44.837217",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 23,
+      "document_id": "6ab52a8126fd",
+      "document_name": "_qdrant_qdrant-client_5.2-type-inspector-system",
+      "source_path": "Docs\\Qdrant\\qdrant_qdrant-client\\_qdrant_qdrant-client_5.2-type-inspector-system.md",
+      "source_filename": "_qdrant_qdrant-client_5.2-type-inspector-system.md",
+      "source_directory": "Docs\\Qdrant\\qdrant_qdrant-client",
+      "relative_path": "Docs\\Qdrant\\qdrant_qdrant-client\\_qdrant_qdrant-client_5.2-type-inspector-system.md",
+      "hierarchy_path": "Integration with FastEmbed System",
+      "chunk_hash": "a7e714c1ece13ae4",
+      "content_digest": "a7e714c1ece13ae4",
+      "chunk_length": 135,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "system",
+          "with",
+          "fastembed",
+          "the",
+          "integration",
+          "type",
+          "inspector",
+          "integrates",
+          "providing",
+          "two",
+          "inspection",
+          "modes"
+        ],
+        "term_weights": [
+          {
+            "term": "system",
+            "tf": 3,
+            "weight": 0.176471
+          },
+          {
+            "term": "with",
+            "tf": 2,
+            "weight": 0.117647
+          },
+          {
+            "term": "fastembed",
+            "tf": 2,
+            "weight": 0.117647
+          },
+          {
+            "term": "the",
+            "tf": 2,
+            "weight": 0.117647
+          },
+          {
+            "term": "integration",
+            "tf": 1,
+            "weight": 0.058824
+          },
+          {
+            "term": "type",
+            "tf": 1,
+            "weight": 0.058824
+          },
+          {
+            "term": "inspector",
+            "tf": 1,
+            "weight": 0.058824
+          },
+          {
+            "term": "integrates",
+            "tf": 1,
+            "weight": 0.058824
+          },
+          {
+            "term": "providing",
+            "tf": 1,
+            "weight": 0.058824
+          },
+          {
+            "term": "two",
+            "tf": 1,
+            "weight": 0.058824
+          },
+          {
+            "term": "inspection",
+            "tf": 1,
+            "weight": 0.058824
+          },
+          {
+            "term": "modes",
+            "tf": 1,
+            "weight": 0.058824
+          }
+        ],
+        "unique_terms": 12,
+        "total_terms": 17
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Integration with FastEmbed System",
+        "fastembed",
+        "inspector",
+        "integrates",
+        "integration",
+        "providing",
+        "system",
+        "the",
+        "two",
+        "type",
+        "with"
+      ],
+      "collection_name": "Qdrant"
+    },
+    "advanced_scores": {
+      "semantic": 0.8,
+      "structural": 0.7,
+      "retrieval_quality": 0.5110526315789473,
+      "overall": 0.6703508771929824
+    }
+  },
+  {
+    "text": "### Detection Mode (`Inspector`)\n\nUsed to determine if any inference objects are present in a model, triggering embedding generation when needed.",
+    "metadata": {
+      "chunk_id": "6ab52a8126fd-0009",
+      "source_file": "Docs\\Qdrant\\qdrant_qdrant-client\\_qdrant_qdrant-client_5.2-type-inspector-system.md",
+      "filename": "_qdrant_qdrant-client_5.2-type-inspector-system.md",
+      "file_extension": ".md",
+      "chunk_index": 9,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Detection Mode (`Inspector`)"
+      ],
+      "heading_text": "Detection Mode (`Inspector`)",
+      "token_count": 26,
+      "char_count": 145,
+      "start_char": 8590,
+      "end_char": 8735,
+      "semantic_score": 0.8,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.59,
+      "chunking_strategy": "hybrid_adaptive_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:44.837357",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 26,
+      "document_id": "6ab52a8126fd",
+      "document_name": "_qdrant_qdrant-client_5.2-type-inspector-system",
+      "source_path": "Docs\\Qdrant\\qdrant_qdrant-client\\_qdrant_qdrant-client_5.2-type-inspector-system.md",
+      "source_filename": "_qdrant_qdrant-client_5.2-type-inspector-system.md",
+      "source_directory": "Docs\\Qdrant\\qdrant_qdrant-client",
+      "relative_path": "Docs\\Qdrant\\qdrant_qdrant-client\\_qdrant_qdrant-client_5.2-type-inspector-system.md",
+      "hierarchy_path": "Detection Mode (`Inspector`)",
+      "chunk_hash": "4d4f936bd78b83a6",
+      "content_digest": "4d4f936bd78b83a6",
+      "chunk_length": 145,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "detection",
+          "mode",
+          "inspector",
+          "used",
+          "determine",
+          "any",
+          "inference",
+          "objects",
+          "are",
+          "present",
+          "model",
+          "triggering",
+          "embedding",
+          "generation",
+          "when",
+          "needed"
+        ],
+        "term_weights": [
+          {
+            "term": "detection",
+            "tf": 1,
+            "weight": 0.0625
+          },
+          {
+            "term": "mode",
+            "tf": 1,
+            "weight": 0.0625
+          },
+          {
+            "term": "inspector",
+            "tf": 1,
+            "weight": 0.0625
+          },
+          {
+            "term": "used",
+            "tf": 1,
+            "weight": 0.0625
+          },
+          {
+            "term": "determine",
+            "tf": 1,
+            "weight": 0.0625
+          },
+          {
+            "term": "any",
+            "tf": 1,
+            "weight": 0.0625
+          },
+          {
+            "term": "inference",
+            "tf": 1,
+            "weight": 0.0625
+          },
+          {
+            "term": "objects",
+            "tf": 1,
+            "weight": 0.0625
+          },
+          {
+            "term": "are",
+            "tf": 1,
+            "weight": 0.0625
+          },
+          {
+            "term": "present",
+            "tf": 1,
+            "weight": 0.0625
+          },
+          {
+            "term": "model",
+            "tf": 1,
+            "weight": 0.0625
+          },
+          {
+            "term": "triggering",
+            "tf": 1,
+            "weight": 0.0625
+          },
+          {
+            "term": "embedding",
+            "tf": 1,
+            "weight": 0.0625
+          },
+          {
+            "term": "generation",
+            "tf": 1,
+            "weight": 0.0625
+          },
+          {
+            "term": "when",
+            "tf": 1,
+            "weight": 0.0625
+          },
+          {
+            "term": "needed",
+            "tf": 1,
+            "weight": 0.0625
+          }
+        ],
+        "unique_terms": 16,
+        "total_terms": 16
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Detection Mode (`Inspector`)",
+        "any",
+        "are",
+        "detection",
+        "determine",
+        "inference",
+        "inspector",
+        "mode",
+        "objects",
+        "present",
+        "used"
+      ],
+      "collection_name": "Qdrant"
+    },
+    "advanced_scores": {
+      "semantic": 0.8,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.59,
+      "overall": 0.7633333333333333
+    }
+  },
+  {
+    "text": "### Collection Mode (`InspectorEmbed`)  Used to collect all paths to inference objects for batch processing and embedding replacement. ``` ``` **Sources:** [qdrant\\_client/embed/type\\_inspector.py12-23](https://github.com/qdrant/qdrant-client/blob/ac6f6cd2/qdrant_client/embed/type_inspector.py#L12-L23) [qdrant\\_client/embed/embed\\_inspector.py13-21](https://github.com/qdrant/qdrant-client/blob/ac6f6cd2/qdrant_client/embed/embed_inspector.py#L13-L21) [qdrant\\_client/embed/embed\\_inspector.py23-47](https://github.com/qdrant/qdrant-client/blob/ac6f6cd2/qdrant_client/embed/embed_inspector.py#L23-L47)  Dismiss  Refresh this wiki  Enter email to refresh",
+    "metadata": {
+      "chunk_id": "6ab52a8126fd-0010",
+      "source_file": "Docs\\Qdrant\\qdrant_qdrant-client\\_qdrant_qdrant-client_5.2-type-inspector-system.md",
+      "filename": "_qdrant_qdrant-client_5.2-type-inspector-system.md",
+      "file_extension": ".md",
+      "chunk_index": 10,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Collection Mode (`InspectorEmbed`)"
+      ],
+      "heading_text": "Collection Mode (`InspectorEmbed`)",
+      "token_count": 187,
+      "char_count": 655,
+      "start_char": 8737,
+      "end_char": 9392,
+      "semantic_score": 0.6,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5525,
+      "chunking_strategy": "hybrid_adaptive_structural",
+      "content_type": "code_block",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:44.838418",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 187,
+      "document_id": "6ab52a8126fd",
+      "document_name": "_qdrant_qdrant-client_5.2-type-inspector-system",
+      "source_path": "Docs\\Qdrant\\qdrant_qdrant-client\\_qdrant_qdrant-client_5.2-type-inspector-system.md",
+      "source_filename": "_qdrant_qdrant-client_5.2-type-inspector-system.md",
+      "source_directory": "Docs\\Qdrant\\qdrant_qdrant-client",
+      "relative_path": "Docs\\Qdrant\\qdrant_qdrant-client\\_qdrant_qdrant-client_5.2-type-inspector-system.md",
+      "hierarchy_path": "Collection Mode (`InspectorEmbed`)",
+      "chunk_hash": "22392ed374e44392",
+      "content_digest": "22392ed374e44392",
+      "chunk_length": 655,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "qdrant",
+          "embed",
+          "client",
+          "inspector",
+          "https",
+          "github",
+          "com",
+          "blob",
+          "ac6f6cd2",
+          "type",
+          "l23",
+          "refresh",
+          "collection",
+          "mode",
+          "inspectorembed",
+          "used",
+          "collect",
+          "all",
+          "paths",
+          "inference"
+        ],
+        "term_weights": [
+          {
+            "term": "qdrant",
+            "tf": 12,
+            "weight": 0.139535
+          },
+          {
+            "term": "embed",
+            "tf": 10,
+            "weight": 0.116279
+          },
+          {
+            "term": "client",
+            "tf": 9,
+            "weight": 0.104651
+          },
+          {
+            "term": "inspector",
+            "tf": 6,
+            "weight": 0.069767
+          },
+          {
+            "term": "https",
+            "tf": 3,
+            "weight": 0.034884
+          },
+          {
+            "term": "github",
+            "tf": 3,
+            "weight": 0.034884
+          },
+          {
+            "term": "com",
+            "tf": 3,
+            "weight": 0.034884
+          },
+          {
+            "term": "blob",
+            "tf": 3,
+            "weight": 0.034884
+          },
+          {
+            "term": "ac6f6cd2",
+            "tf": 3,
+            "weight": 0.034884
+          },
+          {
+            "term": "type",
+            "tf": 2,
+            "weight": 0.023256
+          },
+          {
+            "term": "l23",
+            "tf": 2,
+            "weight": 0.023256
+          },
+          {
+            "term": "refresh",
+            "tf": 2,
+            "weight": 0.023256
+          },
+          {
+            "term": "collection",
+            "tf": 1,
+            "weight": 0.011628
+          },
+          {
+            "term": "mode",
+            "tf": 1,
+            "weight": 0.011628
+          },
+          {
+            "term": "inspectorembed",
+            "tf": 1,
+            "weight": 0.011628
+          },
+          {
+            "term": "used",
+            "tf": 1,
+            "weight": 0.011628
+          },
+          {
+            "term": "collect",
+            "tf": 1,
+            "weight": 0.011628
+          },
+          {
+            "term": "all",
+            "tf": 1,
+            "weight": 0.011628
+          },
+          {
+            "term": "paths",
+            "tf": 1,
+            "weight": 0.011628
+          },
+          {
+            "term": "inference",
+            "tf": 1,
+            "weight": 0.011628
+          }
+        ],
+        "unique_terms": 40,
+        "total_terms": 86
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Collection Mode (`InspectorEmbed`)",
+        "ac6f6cd2",
+        "blob",
+        "client",
+        "com",
+        "embed",
+        "github",
+        "https",
+        "inspector",
+        "qdrant",
+        "type"
+      ],
+      "collection_name": "Qdrant"
+    },
+    "advanced_scores": {
+      "semantic": 0.6,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5525,
+      "overall": 0.6841666666666667
+    }
+  },
+  {
+    "text": "### On this page  - [Type Inspector System](#type-inspector-system.md) - [Core Components](#core-components.md) - [Schema Parsing System](#schema-parsing-system.md) - [Type Detection Process](#type-detection-process.md) - [Caching and Performance Optimization](#caching-and-performance-optimization.md) - [Cache Structure](#cache-structure.md) - [Cache Population](#cache-population.md) - [Pydantic Compatibility Layer](#pydantic-compatibility-layer.md) - [Integration with FastEmbed System](#integration-with-fastembed-system.md) - [Detection Mode (\\`Inspector\\`)](#detection-mode-inspector.md) - [Collection Mode (\\`InspectorEmbed\\`)](#collection-mode-inspectorembed.md)",
+    "metadata": {
+      "chunk_id": "6ab52a8126fd-0011",
+      "source_file": "Docs\\Qdrant\\qdrant_qdrant-client\\_qdrant_qdrant-client_5.2-type-inspector-system.md",
+      "filename": "_qdrant_qdrant-client_5.2-type-inspector-system.md",
+      "file_extension": ".md",
+      "chunk_index": 11,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "On this page"
+      ],
+      "heading_text": "On this page",
+      "token_count": 165,
+      "char_count": 672,
+      "start_char": 9396,
+      "end_char": 10068,
+      "semantic_score": 0.6,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5070212765957447,
+      "chunking_strategy": "hybrid_adaptive_structural",
+      "content_type": "code_block",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:44.839488",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 165,
+      "document_id": "6ab52a8126fd",
+      "document_name": "_qdrant_qdrant-client_5.2-type-inspector-system",
+      "source_path": "Docs\\Qdrant\\qdrant_qdrant-client\\_qdrant_qdrant-client_5.2-type-inspector-system.md",
+      "source_filename": "_qdrant_qdrant-client_5.2-type-inspector-system.md",
+      "source_directory": "Docs\\Qdrant\\qdrant_qdrant-client",
+      "relative_path": "Docs\\Qdrant\\qdrant_qdrant-client\\_qdrant_qdrant-client_5.2-type-inspector-system.md",
+      "hierarchy_path": "On this page",
+      "chunk_hash": "30647ffdb2f7b36d",
+      "content_digest": "30647ffdb2f7b36d",
+      "chunk_length": 672,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "system",
+          "type",
+          "inspector",
+          "detection",
+          "cache",
+          "mode",
+          "core",
+          "components",
+          "schema",
+          "parsing",
+          "process",
+          "caching",
+          "and",
+          "performance",
+          "optimization",
+          "structure",
+          "population",
+          "pydantic",
+          "compatibility",
+          "layer"
+        ],
+        "term_weights": [
+          {
+            "term": "system",
+            "tf": 6,
+            "weight": 0.090909
+          },
+          {
+            "term": "type",
+            "tf": 4,
+            "weight": 0.060606
+          },
+          {
+            "term": "inspector",
+            "tf": 4,
+            "weight": 0.060606
+          },
+          {
+            "term": "detection",
+            "tf": 4,
+            "weight": 0.060606
+          },
+          {
+            "term": "cache",
+            "tf": 4,
+            "weight": 0.060606
+          },
+          {
+            "term": "mode",
+            "tf": 4,
+            "weight": 0.060606
+          },
+          {
+            "term": "core",
+            "tf": 2,
+            "weight": 0.030303
+          },
+          {
+            "term": "components",
+            "tf": 2,
+            "weight": 0.030303
+          },
+          {
+            "term": "schema",
+            "tf": 2,
+            "weight": 0.030303
+          },
+          {
+            "term": "parsing",
+            "tf": 2,
+            "weight": 0.030303
+          },
+          {
+            "term": "process",
+            "tf": 2,
+            "weight": 0.030303
+          },
+          {
+            "term": "caching",
+            "tf": 2,
+            "weight": 0.030303
+          },
+          {
+            "term": "and",
+            "tf": 2,
+            "weight": 0.030303
+          },
+          {
+            "term": "performance",
+            "tf": 2,
+            "weight": 0.030303
+          },
+          {
+            "term": "optimization",
+            "tf": 2,
+            "weight": 0.030303
+          },
+          {
+            "term": "structure",
+            "tf": 2,
+            "weight": 0.030303
+          },
+          {
+            "term": "population",
+            "tf": 2,
+            "weight": 0.030303
+          },
+          {
+            "term": "pydantic",
+            "tf": 2,
+            "weight": 0.030303
+          },
+          {
+            "term": "compatibility",
+            "tf": 2,
+            "weight": 0.030303
+          },
+          {
+            "term": "layer",
+            "tf": 2,
+            "weight": 0.030303
+          }
+        ],
+        "unique_terms": 27,
+        "total_terms": 66
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "On this page",
+        "cache",
+        "components",
+        "core",
+        "detection",
+        "inspector",
+        "mode",
+        "parsing",
+        "schema",
+        "system",
+        "type"
+      ],
+      "collection_name": "Qdrant"
+    },
+    "advanced_scores": {
+      "semantic": 0.6,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5070212765957447,
+      "overall": 0.6690070921985815
+    }
+  }
+]

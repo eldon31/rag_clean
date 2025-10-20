@@ -1,0 +1,2727 @@
+[
+  {
+    "text": "## Overview\n\nThe ASR Pipeline differs fundamentally from other Docling pipelines in several ways:\n\n1. **No page-based processing**: Audio files are not paginated, so the pipeline inherits directly from `BasePipeline` rather than `PaginatedPipeline`\n2. **Backend architecture**: Uses `NoOpBackend` since audio files don't require document parsing like PDFs\n3. **Output format**: Produces text-based `DoclingDocument` with conversation items containing transcribed text and optional timing information\n4. **Model dependency**: Requires the `openai-whisper` package (installable via `pip install openai-whisper` or `uv sync --extra asr`)\n\nSources: [docling/pipeline/asr\\_pipeline.py1-270](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/asr_pipeline.py#L1-L270)",
+    "metadata": {
+      "chunk_id": "1c1732d5d5d4-0001",
+      "source_file": "Docs\\Docling\\_docling-project_docling_5.5-asr-pipeline.md",
+      "filename": "_docling-project_docling_5.5-asr-pipeline.md",
+      "file_extension": ".md",
+      "chunk_index": 1,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Overview"
+      ],
+      "heading_text": "Overview",
+      "token_count": 183,
+      "char_count": 784,
+      "start_char": 6406,
+      "end_char": 7190,
+      "semantic_score": 0.7,
+      "structural_score": 0.7,
+      "retrieval_quality": 0.5680487804878049,
+      "chunking_strategy": "hierarchical_balanced_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:06.972267",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 183,
+      "document_id": "1c1732d5d5d4",
+      "document_name": "_docling-project_docling_5.5-asr-pipeline",
+      "source_path": "Docs\\Docling\\_docling-project_docling_5.5-asr-pipeline.md",
+      "source_filename": "_docling-project_docling_5.5-asr-pipeline.md",
+      "source_directory": "Docs\\Docling",
+      "relative_path": "Docs\\Docling\\_docling-project_docling_5.5-asr-pipeline.md",
+      "hierarchy_path": "Overview",
+      "chunk_hash": "a1d2682f4e8d8f54",
+      "content_digest": "a1d2682f4e8d8f54",
+      "chunk_length": 784,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "docling"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "pipeline",
+          "docling",
+          "asr",
+          "the",
+          "from",
+          "based",
+          "audio",
+          "files",
+          "text",
+          "openai",
+          "whisper",
+          "overview",
+          "differs",
+          "fundamentally",
+          "other",
+          "pipelines",
+          "several",
+          "ways",
+          "page",
+          "processing"
+        ],
+        "term_weights": [
+          {
+            "term": "pipeline",
+            "tf": 6,
+            "weight": 0.06383
+          },
+          {
+            "term": "docling",
+            "tf": 5,
+            "weight": 0.053191
+          },
+          {
+            "term": "asr",
+            "tf": 4,
+            "weight": 0.042553
+          },
+          {
+            "term": "the",
+            "tf": 3,
+            "weight": 0.031915
+          },
+          {
+            "term": "from",
+            "tf": 2,
+            "weight": 0.021277
+          },
+          {
+            "term": "based",
+            "tf": 2,
+            "weight": 0.021277
+          },
+          {
+            "term": "audio",
+            "tf": 2,
+            "weight": 0.021277
+          },
+          {
+            "term": "files",
+            "tf": 2,
+            "weight": 0.021277
+          },
+          {
+            "term": "text",
+            "tf": 2,
+            "weight": 0.021277
+          },
+          {
+            "term": "openai",
+            "tf": 2,
+            "weight": 0.021277
+          },
+          {
+            "term": "whisper",
+            "tf": 2,
+            "weight": 0.021277
+          },
+          {
+            "term": "overview",
+            "tf": 1,
+            "weight": 0.010638
+          },
+          {
+            "term": "differs",
+            "tf": 1,
+            "weight": 0.010638
+          },
+          {
+            "term": "fundamentally",
+            "tf": 1,
+            "weight": 0.010638
+          },
+          {
+            "term": "other",
+            "tf": 1,
+            "weight": 0.010638
+          },
+          {
+            "term": "pipelines",
+            "tf": 1,
+            "weight": 0.010638
+          },
+          {
+            "term": "several",
+            "tf": 1,
+            "weight": 0.010638
+          },
+          {
+            "term": "ways",
+            "tf": 1,
+            "weight": 0.010638
+          },
+          {
+            "term": "page",
+            "tf": 1,
+            "weight": 0.010638
+          },
+          {
+            "term": "processing",
+            "tf": 1,
+            "weight": 0.010638
+          }
+        ],
+        "unique_terms": 73,
+        "total_terms": 94
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Overview",
+        "asr",
+        "audio",
+        "based",
+        "docling",
+        "files",
+        "from",
+        "openai",
+        "pipeline",
+        "text",
+        "the"
+      ],
+      "collection_name": "Docling"
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.7,
+      "retrieval_quality": 0.5680487804878049,
+      "overall": 0.6560162601626016
+    }
+  },
+  {
+    "text": "## Architecture ``` ``` **Figure 1: ASR Pipeline Component Architecture**  The ASR Pipeline follows a streamlined architecture compared to document processing pipelines:  - **NoOpBackend** provides access to the audio file path or stream without parsing - **\\_NativeWhisperModel** handles the actual transcription using Whisper - **\\_ConversationItem** structures represent transcribed segments with metadata - Final output is a `DoclingDocument` populated with `TextItem` elements  Sources: [docling/pipeline/asr\\_pipeline.py1-50](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/asr_pipeline.py#L1-L50) [docling/pipeline/asr\\_pipeline.py232-270](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/asr_pipeline.py#L232-L270)",
+    "metadata": {
+      "chunk_id": "1c1732d5d5d4-0002",
+      "source_file": "Docs\\Docling\\_docling-project_docling_5.5-asr-pipeline.md",
+      "filename": "_docling-project_docling_5.5-asr-pipeline.md",
+      "file_extension": ".md",
+      "chunk_index": 2,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Architecture"
+      ],
+      "heading_text": "Architecture",
+      "token_count": 181,
+      "char_count": 773,
+      "start_char": 7192,
+      "end_char": 7965,
+      "semantic_score": 0.7,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.53375,
+      "chunking_strategy": "hierarchical_balanced_structural",
+      "content_type": "code_block",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:06.974413",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 181,
+      "document_id": "1c1732d5d5d4",
+      "document_name": "_docling-project_docling_5.5-asr-pipeline",
+      "source_path": "Docs\\Docling\\_docling-project_docling_5.5-asr-pipeline.md",
+      "source_filename": "_docling-project_docling_5.5-asr-pipeline.md",
+      "source_directory": "Docs\\Docling",
+      "relative_path": "Docs\\Docling\\_docling-project_docling_5.5-asr-pipeline.md",
+      "hierarchy_path": "Architecture",
+      "chunk_hash": "68eb5602d95bcea6",
+      "content_digest": "68eb5602d95bcea6",
+      "chunk_length": 773,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "docling"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "pipeline",
+          "docling",
+          "asr",
+          "architecture",
+          "the",
+          "with",
+          "https",
+          "github",
+          "com",
+          "project",
+          "blob",
+          "f7244a43",
+          "figure",
+          "component",
+          "follows",
+          "streamlined",
+          "compared",
+          "document",
+          "processing",
+          "pipelines"
+        ],
+        "term_weights": [
+          {
+            "term": "pipeline",
+            "tf": 10,
+            "weight": 0.116279
+          },
+          {
+            "term": "docling",
+            "tf": 8,
+            "weight": 0.093023
+          },
+          {
+            "term": "asr",
+            "tf": 6,
+            "weight": 0.069767
+          },
+          {
+            "term": "architecture",
+            "tf": 3,
+            "weight": 0.034884
+          },
+          {
+            "term": "the",
+            "tf": 3,
+            "weight": 0.034884
+          },
+          {
+            "term": "with",
+            "tf": 2,
+            "weight": 0.023256
+          },
+          {
+            "term": "https",
+            "tf": 2,
+            "weight": 0.023256
+          },
+          {
+            "term": "github",
+            "tf": 2,
+            "weight": 0.023256
+          },
+          {
+            "term": "com",
+            "tf": 2,
+            "weight": 0.023256
+          },
+          {
+            "term": "project",
+            "tf": 2,
+            "weight": 0.023256
+          },
+          {
+            "term": "blob",
+            "tf": 2,
+            "weight": 0.023256
+          },
+          {
+            "term": "f7244a43",
+            "tf": 2,
+            "weight": 0.023256
+          },
+          {
+            "term": "figure",
+            "tf": 1,
+            "weight": 0.011628
+          },
+          {
+            "term": "component",
+            "tf": 1,
+            "weight": 0.011628
+          },
+          {
+            "term": "follows",
+            "tf": 1,
+            "weight": 0.011628
+          },
+          {
+            "term": "streamlined",
+            "tf": 1,
+            "weight": 0.011628
+          },
+          {
+            "term": "compared",
+            "tf": 1,
+            "weight": 0.011628
+          },
+          {
+            "term": "document",
+            "tf": 1,
+            "weight": 0.011628
+          },
+          {
+            "term": "processing",
+            "tf": 1,
+            "weight": 0.011628
+          },
+          {
+            "term": "pipelines",
+            "tf": 1,
+            "weight": 0.011628
+          }
+        ],
+        "unique_terms": 54,
+        "total_terms": 86
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Architecture",
+        "architecture",
+        "asr",
+        "com",
+        "docling",
+        "github",
+        "https",
+        "pipeline",
+        "project",
+        "the",
+        "with"
+      ],
+      "collection_name": "Docling"
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.53375,
+      "overall": 0.71125
+    }
+  },
+  {
+    "text": "## Audio Processing Flow ``` ``` **Figure 3: ASR Pipeline Execution Sequence**  Sources: [docling/pipeline/asr\\_pipeline.py260-265](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/asr_pipeline.py#L260-L265) [docling/pipeline/asr\\_pipeline.py150-230](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/asr_pipeline.py#L150-L230)",
+    "metadata": {
+      "chunk_id": "1c1732d5d5d4-0006",
+      "source_file": "Docs\\Docling\\_docling-project_docling_5.5-asr-pipeline.md",
+      "filename": "_docling-project_docling_5.5-asr-pipeline.md",
+      "file_extension": ".md",
+      "chunk_index": 6,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Audio Processing Flow"
+      ],
+      "heading_text": "Audio Processing Flow",
+      "token_count": 106,
+      "char_count": 376,
+      "start_char": 9992,
+      "end_char": 10368,
+      "semantic_score": 0.6,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.57,
+      "chunking_strategy": "hierarchical_balanced_structural",
+      "content_type": "code_block",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:06.981053",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 106,
+      "document_id": "1c1732d5d5d4",
+      "document_name": "_docling-project_docling_5.5-asr-pipeline",
+      "source_path": "Docs\\Docling\\_docling-project_docling_5.5-asr-pipeline.md",
+      "source_filename": "_docling-project_docling_5.5-asr-pipeline.md",
+      "source_directory": "Docs\\Docling",
+      "relative_path": "Docs\\Docling\\_docling-project_docling_5.5-asr-pipeline.md",
+      "hierarchy_path": "Audio Processing Flow",
+      "chunk_hash": "333fe8b5927a7fe8",
+      "content_digest": "333fe8b5927a7fe8",
+      "chunk_length": 376,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "docling"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "pipeline",
+          "docling",
+          "asr",
+          "https",
+          "github",
+          "com",
+          "project",
+          "blob",
+          "f7244a43",
+          "audio",
+          "processing",
+          "flow",
+          "figure",
+          "execution",
+          "sequence",
+          "sources",
+          "py260",
+          "265",
+          "l260",
+          "l265"
+        ],
+        "term_weights": [
+          {
+            "term": "pipeline",
+            "tf": 9,
+            "weight": 0.183673
+          },
+          {
+            "term": "docling",
+            "tf": 8,
+            "weight": 0.163265
+          },
+          {
+            "term": "asr",
+            "tf": 5,
+            "weight": 0.102041
+          },
+          {
+            "term": "https",
+            "tf": 2,
+            "weight": 0.040816
+          },
+          {
+            "term": "github",
+            "tf": 2,
+            "weight": 0.040816
+          },
+          {
+            "term": "com",
+            "tf": 2,
+            "weight": 0.040816
+          },
+          {
+            "term": "project",
+            "tf": 2,
+            "weight": 0.040816
+          },
+          {
+            "term": "blob",
+            "tf": 2,
+            "weight": 0.040816
+          },
+          {
+            "term": "f7244a43",
+            "tf": 2,
+            "weight": 0.040816
+          },
+          {
+            "term": "audio",
+            "tf": 1,
+            "weight": 0.020408
+          },
+          {
+            "term": "processing",
+            "tf": 1,
+            "weight": 0.020408
+          },
+          {
+            "term": "flow",
+            "tf": 1,
+            "weight": 0.020408
+          },
+          {
+            "term": "figure",
+            "tf": 1,
+            "weight": 0.020408
+          },
+          {
+            "term": "execution",
+            "tf": 1,
+            "weight": 0.020408
+          },
+          {
+            "term": "sequence",
+            "tf": 1,
+            "weight": 0.020408
+          },
+          {
+            "term": "sources",
+            "tf": 1,
+            "weight": 0.020408
+          },
+          {
+            "term": "py260",
+            "tf": 1,
+            "weight": 0.020408
+          },
+          {
+            "term": "265",
+            "tf": 1,
+            "weight": 0.020408
+          },
+          {
+            "term": "l260",
+            "tf": 1,
+            "weight": 0.020408
+          },
+          {
+            "term": "l265",
+            "tf": 1,
+            "weight": 0.020408
+          }
+        ],
+        "unique_terms": 24,
+        "total_terms": 49
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Audio Processing Flow",
+        "asr",
+        "audio",
+        "blob",
+        "com",
+        "docling",
+        "f7244a43",
+        "github",
+        "https",
+        "pipeline",
+        "project"
+      ],
+      "collection_name": "Docling"
+    },
+    "advanced_scores": {
+      "semantic": 0.6,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.57,
+      "overall": 0.69
+    }
+  },
+  {
+    "text": "### Step-by-Step Processing  1. **Pipeline Entry** ([asr\\_pipeline.py260-265](https://github.com/docling-project/docling/blob/f7244a43/asr_pipeline.py#L260-L265)):     - `AsrPipeline._build_document()` is called by the base pipeline's `execute()` method    - Delegates immediately to `_NativeWhisperModel.run()`  2. **Input Handling** ([asr\\_pipeline.py150-169](https://github.com/docling-project/docling/blob/f7244a43/asr_pipeline.py#L150-L169)):     - Accesses `path_or_stream` from the `NoOpBackend`    - For `BytesIO` inputs, creates a temporary file (Whisper requires file paths)    - For `Path` inputs, uses the path directly  3. **Transcription** ([asr\\_pipeline.py171-189](https://github.com/docling-project/docling/blob/f7244a43/asr_pipeline.py#L171-L189)):     - Calls `_NativeWhisperModel.transcribe()` which invokes the Whisper model    - Whisper returns segments with text, start time, end time, and optionally word-level timestamps  4. **Document Assembly** ([asr\\_pipeline.py174-188](https://github.com/docling-project/docling/blob/f7244a43/asr_pipeline.py#L174-L188)):     - Creates a `DoclingDocument` with proper `DocumentOrigin` metadata    - Iterates through conversation items    - Each item is added as a `TextItem` with `DocItemLabel.TEXT`  5. **Cleanup** ([asr\\_pipeline.py197-205](https://github.com/docling-project/docling/blob/f7244a43/asr_pipeline.py#L197-L205)):     - Removes temporary files if created from `BytesIO` input  Sources: [docling/pipeline/asr\\_pipeline.py150-230](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/asr_pipeline.py#L150-L230)",
+    "metadata": {
+      "chunk_id": "1c1732d5d5d4-0007",
+      "source_file": "Docs\\Docling\\_docling-project_docling_5.5-asr-pipeline.md",
+      "filename": "_docling-project_docling_5.5-asr-pipeline.md",
+      "file_extension": ".md",
+      "chunk_index": 7,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Step-by-Step Processing"
+      ],
+      "heading_text": "Step-by-Step Processing",
+      "token_count": 438,
+      "char_count": 1607,
+      "start_char": 10372,
+      "end_char": 11979,
+      "semantic_score": 0.6,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5627559322033898,
+      "chunking_strategy": "hierarchical_balanced_structural",
+      "content_type": "code_block",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:06.986936",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 438,
+      "document_id": "1c1732d5d5d4",
+      "document_name": "_docling-project_docling_5.5-asr-pipeline",
+      "source_path": "Docs\\Docling\\_docling-project_docling_5.5-asr-pipeline.md",
+      "source_filename": "_docling-project_docling_5.5-asr-pipeline.md",
+      "source_directory": "Docs\\Docling",
+      "relative_path": "Docs\\Docling\\_docling-project_docling_5.5-asr-pipeline.md",
+      "hierarchy_path": "Step-by-Step Processing",
+      "chunk_hash": "7c7de389b52b313c",
+      "content_digest": "7c7de389b52b313c",
+      "chunk_length": 1607,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "docling"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "pipeline",
+          "docling",
+          "asr",
+          "https",
+          "github",
+          "com",
+          "project",
+          "blob",
+          "f7244a43",
+          "the",
+          "path",
+          "whisper",
+          "with",
+          "step",
+          "document",
+          "nativewhispermodel",
+          "input",
+          "py150",
+          "l150",
+          "from"
+        ],
+        "term_weights": [
+          {
+            "term": "pipeline",
+            "tf": 16,
+            "weight": 0.082474
+          },
+          {
+            "term": "docling",
+            "tf": 14,
+            "weight": 0.072165
+          },
+          {
+            "term": "asr",
+            "tf": 12,
+            "weight": 0.061856
+          },
+          {
+            "term": "https",
+            "tf": 6,
+            "weight": 0.030928
+          },
+          {
+            "term": "github",
+            "tf": 6,
+            "weight": 0.030928
+          },
+          {
+            "term": "com",
+            "tf": 6,
+            "weight": 0.030928
+          },
+          {
+            "term": "project",
+            "tf": 6,
+            "weight": 0.030928
+          },
+          {
+            "term": "blob",
+            "tf": 6,
+            "weight": 0.030928
+          },
+          {
+            "term": "f7244a43",
+            "tf": 6,
+            "weight": 0.030928
+          },
+          {
+            "term": "the",
+            "tf": 4,
+            "weight": 0.020619
+          },
+          {
+            "term": "path",
+            "tf": 3,
+            "weight": 0.015464
+          },
+          {
+            "term": "whisper",
+            "tf": 3,
+            "weight": 0.015464
+          },
+          {
+            "term": "with",
+            "tf": 3,
+            "weight": 0.015464
+          },
+          {
+            "term": "step",
+            "tf": 2,
+            "weight": 0.010309
+          },
+          {
+            "term": "document",
+            "tf": 2,
+            "weight": 0.010309
+          },
+          {
+            "term": "nativewhispermodel",
+            "tf": 2,
+            "weight": 0.010309
+          },
+          {
+            "term": "input",
+            "tf": 2,
+            "weight": 0.010309
+          },
+          {
+            "term": "py150",
+            "tf": 2,
+            "weight": 0.010309
+          },
+          {
+            "term": "l150",
+            "tf": 2,
+            "weight": 0.010309
+          },
+          {
+            "term": "from",
+            "tf": 2,
+            "weight": 0.010309
+          }
+        ],
+        "unique_terms": 101,
+        "total_terms": 194
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Step-by-Step Processing",
+        "asr",
+        "blob",
+        "com",
+        "docling",
+        "f7244a43",
+        "github",
+        "https",
+        "pipeline",
+        "project",
+        "the"
+      ],
+      "collection_name": "Docling"
+    },
+    "advanced_scores": {
+      "semantic": 0.6,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5627559322033898,
+      "overall": 0.6875853107344633
+    }
+  },
+  {
+    "text": "## Whisper Model Integration",
+    "metadata": {
+      "chunk_id": "1c1732d5d5d4-0008",
+      "source_file": "Docs\\Docling\\_docling-project_docling_5.5-asr-pipeline.md",
+      "filename": "_docling-project_docling_5.5-asr-pipeline.md",
+      "file_extension": ".md",
+      "chunk_index": 8,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Whisper Model Integration"
+      ],
+      "heading_text": "Whisper Model Integration",
+      "token_count": 4,
+      "char_count": 28,
+      "start_char": 11981,
+      "end_char": 12009,
+      "semantic_score": 0.8,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.59,
+      "chunking_strategy": "hierarchical_balanced_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:06.987493",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 4,
+      "document_id": "1c1732d5d5d4",
+      "document_name": "_docling-project_docling_5.5-asr-pipeline",
+      "source_path": "Docs\\Docling\\_docling-project_docling_5.5-asr-pipeline.md",
+      "source_filename": "_docling-project_docling_5.5-asr-pipeline.md",
+      "source_directory": "Docs\\Docling",
+      "relative_path": "Docs\\Docling\\_docling-project_docling_5.5-asr-pipeline.md",
+      "hierarchy_path": "Whisper Model Integration",
+      "chunk_hash": "51ae0e7ee2e27921",
+      "content_digest": "51ae0e7ee2e27921",
+      "chunk_length": 28,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "docling"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "whisper",
+          "model",
+          "integration"
+        ],
+        "term_weights": [
+          {
+            "term": "whisper",
+            "tf": 1,
+            "weight": 0.333333
+          },
+          {
+            "term": "model",
+            "tf": 1,
+            "weight": 0.333333
+          },
+          {
+            "term": "integration",
+            "tf": 1,
+            "weight": 0.333333
+          }
+        ],
+        "unique_terms": 3,
+        "total_terms": 3
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Whisper Model Integration",
+        "integration",
+        "model",
+        "whisper"
+      ],
+      "collection_name": "Docling"
+    },
+    "advanced_scores": {
+      "semantic": 0.8,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.59,
+      "overall": 0.7633333333333333
+    }
+  },
+  {
+    "text": "### Model Loading Logic ``` ``` **Figure 4: Whisper Model Loading Flow**  Sources: [docling/pipeline/asr\\_pipeline.py99-149](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/asr_pipeline.py#L99-L149)",
+    "metadata": {
+      "chunk_id": "1c1732d5d5d4-0010",
+      "source_file": "Docs\\Docling\\_docling-project_docling_5.5-asr-pipeline.md",
+      "filename": "_docling-project_docling_5.5-asr-pipeline.md",
+      "file_extension": ".md",
+      "chunk_index": 10,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Model Loading Logic"
+      ],
+      "heading_text": "Model Loading Logic",
+      "token_count": 62,
+      "char_count": 224,
+      "start_char": 12836,
+      "end_char": 13060,
+      "semantic_score": 0.6,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5257142857142857,
+      "chunking_strategy": "hierarchical_balanced_structural",
+      "content_type": "code_block",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:06.988848",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 62,
+      "document_id": "1c1732d5d5d4",
+      "document_name": "_docling-project_docling_5.5-asr-pipeline",
+      "source_path": "Docs\\Docling\\_docling-project_docling_5.5-asr-pipeline.md",
+      "source_filename": "_docling-project_docling_5.5-asr-pipeline.md",
+      "source_directory": "Docs\\Docling",
+      "relative_path": "Docs\\Docling\\_docling-project_docling_5.5-asr-pipeline.md",
+      "hierarchy_path": "Model Loading Logic",
+      "chunk_hash": "3142cea089bcfe49",
+      "content_digest": "3142cea089bcfe49",
+      "chunk_length": 224,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "docling"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "docling",
+          "pipeline",
+          "model",
+          "loading",
+          "asr",
+          "logic",
+          "figure",
+          "whisper",
+          "flow",
+          "sources",
+          "py99",
+          "149",
+          "https",
+          "github",
+          "com",
+          "project",
+          "blob",
+          "f7244a43",
+          "l99",
+          "l149"
+        ],
+        "term_weights": [
+          {
+            "term": "docling",
+            "tf": 4,
+            "weight": 0.137931
+          },
+          {
+            "term": "pipeline",
+            "tf": 4,
+            "weight": 0.137931
+          },
+          {
+            "term": "model",
+            "tf": 2,
+            "weight": 0.068966
+          },
+          {
+            "term": "loading",
+            "tf": 2,
+            "weight": 0.068966
+          },
+          {
+            "term": "asr",
+            "tf": 2,
+            "weight": 0.068966
+          },
+          {
+            "term": "logic",
+            "tf": 1,
+            "weight": 0.034483
+          },
+          {
+            "term": "figure",
+            "tf": 1,
+            "weight": 0.034483
+          },
+          {
+            "term": "whisper",
+            "tf": 1,
+            "weight": 0.034483
+          },
+          {
+            "term": "flow",
+            "tf": 1,
+            "weight": 0.034483
+          },
+          {
+            "term": "sources",
+            "tf": 1,
+            "weight": 0.034483
+          },
+          {
+            "term": "py99",
+            "tf": 1,
+            "weight": 0.034483
+          },
+          {
+            "term": "149",
+            "tf": 1,
+            "weight": 0.034483
+          },
+          {
+            "term": "https",
+            "tf": 1,
+            "weight": 0.034483
+          },
+          {
+            "term": "github",
+            "tf": 1,
+            "weight": 0.034483
+          },
+          {
+            "term": "com",
+            "tf": 1,
+            "weight": 0.034483
+          },
+          {
+            "term": "project",
+            "tf": 1,
+            "weight": 0.034483
+          },
+          {
+            "term": "blob",
+            "tf": 1,
+            "weight": 0.034483
+          },
+          {
+            "term": "f7244a43",
+            "tf": 1,
+            "weight": 0.034483
+          },
+          {
+            "term": "l99",
+            "tf": 1,
+            "weight": 0.034483
+          },
+          {
+            "term": "l149",
+            "tf": 1,
+            "weight": 0.034483
+          }
+        ],
+        "unique_terms": 20,
+        "total_terms": 29
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Model Loading Logic",
+        "asr",
+        "docling",
+        "figure",
+        "flow",
+        "loading",
+        "logic",
+        "model",
+        "pipeline",
+        "sources",
+        "whisper"
+      ],
+      "collection_name": "Docling"
+    },
+    "advanced_scores": {
+      "semantic": 0.6,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5257142857142857,
+      "overall": 0.6752380952380953
+    }
+  },
+  {
+    "text": "### Device Selection\n\nThe model automatically selects the appropriate device using `decide_device()`:\n\n1. Checks `accelerator_options.device` setting\n2. Validates against `asr_options.supported_devices`\n3. Falls back to CPU if CUDA/MPS unavailable\n4. Logs the selected device for debugging\n\nSources: [docling/pipeline/asr\\_pipeline.py126-130](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/asr_pipeline.py#L126-L130)",
+    "metadata": {
+      "chunk_id": "1c1732d5d5d4-0011",
+      "source_file": "Docs\\Docling\\_docling-project_docling_5.5-asr-pipeline.md",
+      "filename": "_docling-project_docling_5.5-asr-pipeline.md",
+      "file_extension": ".md",
+      "chunk_index": 11,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Device Selection"
+      ],
+      "heading_text": "Device Selection",
+      "token_count": 107,
+      "char_count": 443,
+      "start_char": 13064,
+      "end_char": 13507,
+      "semantic_score": 0.6,
+      "structural_score": 0.7,
+      "retrieval_quality": 0.5575675675675675,
+      "chunking_strategy": "hierarchical_balanced_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:06.989226",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 107,
+      "document_id": "1c1732d5d5d4",
+      "document_name": "_docling-project_docling_5.5-asr-pipeline",
+      "source_path": "Docs\\Docling\\_docling-project_docling_5.5-asr-pipeline.md",
+      "source_filename": "_docling-project_docling_5.5-asr-pipeline.md",
+      "source_directory": "Docs\\Docling",
+      "relative_path": "Docs\\Docling\\_docling-project_docling_5.5-asr-pipeline.md",
+      "hierarchy_path": "Device Selection",
+      "chunk_hash": "8aedadd3ca8234f6",
+      "content_digest": "8aedadd3ca8234f6",
+      "chunk_length": 443,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "docling"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "device",
+          "docling",
+          "pipeline",
+          "the",
+          "asr",
+          "options",
+          "selection",
+          "model",
+          "automatically",
+          "selects",
+          "appropriate",
+          "using",
+          "decide",
+          "checks",
+          "accelerator",
+          "setting",
+          "validates",
+          "against",
+          "supported",
+          "devices"
+        ],
+        "term_weights": [
+          {
+            "term": "device",
+            "tf": 5,
+            "weight": 0.089286
+          },
+          {
+            "term": "docling",
+            "tf": 4,
+            "weight": 0.071429
+          },
+          {
+            "term": "pipeline",
+            "tf": 4,
+            "weight": 0.071429
+          },
+          {
+            "term": "the",
+            "tf": 3,
+            "weight": 0.053571
+          },
+          {
+            "term": "asr",
+            "tf": 3,
+            "weight": 0.053571
+          },
+          {
+            "term": "options",
+            "tf": 2,
+            "weight": 0.035714
+          },
+          {
+            "term": "selection",
+            "tf": 1,
+            "weight": 0.017857
+          },
+          {
+            "term": "model",
+            "tf": 1,
+            "weight": 0.017857
+          },
+          {
+            "term": "automatically",
+            "tf": 1,
+            "weight": 0.017857
+          },
+          {
+            "term": "selects",
+            "tf": 1,
+            "weight": 0.017857
+          },
+          {
+            "term": "appropriate",
+            "tf": 1,
+            "weight": 0.017857
+          },
+          {
+            "term": "using",
+            "tf": 1,
+            "weight": 0.017857
+          },
+          {
+            "term": "decide",
+            "tf": 1,
+            "weight": 0.017857
+          },
+          {
+            "term": "checks",
+            "tf": 1,
+            "weight": 0.017857
+          },
+          {
+            "term": "accelerator",
+            "tf": 1,
+            "weight": 0.017857
+          },
+          {
+            "term": "setting",
+            "tf": 1,
+            "weight": 0.017857
+          },
+          {
+            "term": "validates",
+            "tf": 1,
+            "weight": 0.017857
+          },
+          {
+            "term": "against",
+            "tf": 1,
+            "weight": 0.017857
+          },
+          {
+            "term": "supported",
+            "tf": 1,
+            "weight": 0.017857
+          },
+          {
+            "term": "devices",
+            "tf": 1,
+            "weight": 0.017857
+          }
+        ],
+        "unique_terms": 41,
+        "total_terms": 56
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Device Selection",
+        "asr",
+        "automatically",
+        "device",
+        "docling",
+        "model",
+        "options",
+        "pipeline",
+        "selection",
+        "selects",
+        "the"
+      ],
+      "collection_name": "Docling"
+    },
+    "advanced_scores": {
+      "semantic": 0.6,
+      "structural": 0.7,
+      "retrieval_quality": 0.5575675675675675,
+      "overall": 0.6191891891891891
+    }
+  },
+  {
+    "text": "### Transcription Output Structure  The `transcribe()` method returns a list of `_ConversationItem` objects: ``` ``` Each conversation item can be formatted as: ``` [time: 0.0-5.2] [speaker:speaker-1] Transcribed text goes here ``` Sources: [docling/pipeline/asr\\_pipeline.py50-97](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/asr_pipeline.py#L50-L97) [docling/pipeline/asr\\_pipeline.py207-229](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/asr_pipeline.py#L207-L229)",
+    "metadata": {
+      "chunk_id": "1c1732d5d5d4-0012",
+      "source_file": "Docs\\Docling\\_docling-project_docling_5.5-asr-pipeline.md",
+      "filename": "_docling-project_docling_5.5-asr-pipeline.md",
+      "file_extension": ".md",
+      "chunk_index": 12,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Transcription Output Structure"
+      ],
+      "heading_text": "Transcription Output Structure",
+      "token_count": 146,
+      "char_count": 524,
+      "start_char": 13509,
+      "end_char": 14033,
+      "semantic_score": 0.7,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5635294117647058,
+      "chunking_strategy": "hierarchical_balanced_structural",
+      "content_type": "code_block",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:06.990410",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 146,
+      "document_id": "1c1732d5d5d4",
+      "document_name": "_docling-project_docling_5.5-asr-pipeline",
+      "source_path": "Docs\\Docling\\_docling-project_docling_5.5-asr-pipeline.md",
+      "source_filename": "_docling-project_docling_5.5-asr-pipeline.md",
+      "source_directory": "Docs\\Docling",
+      "relative_path": "Docs\\Docling\\_docling-project_docling_5.5-asr-pipeline.md",
+      "hierarchy_path": "Transcription Output Structure",
+      "chunk_hash": "73803d42ba156cf1",
+      "content_digest": "73803d42ba156cf1",
+      "chunk_length": 524,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "docling"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "docling",
+          "pipeline",
+          "asr",
+          "speaker",
+          "https",
+          "github",
+          "com",
+          "project",
+          "blob",
+          "f7244a43",
+          "transcription",
+          "output",
+          "structure",
+          "the",
+          "transcribe",
+          "method",
+          "returns",
+          "list",
+          "conversationitem",
+          "objects"
+        ],
+        "term_weights": [
+          {
+            "term": "docling",
+            "tf": 8,
+            "weight": 0.129032
+          },
+          {
+            "term": "pipeline",
+            "tf": 8,
+            "weight": 0.129032
+          },
+          {
+            "term": "asr",
+            "tf": 4,
+            "weight": 0.064516
+          },
+          {
+            "term": "speaker",
+            "tf": 2,
+            "weight": 0.032258
+          },
+          {
+            "term": "https",
+            "tf": 2,
+            "weight": 0.032258
+          },
+          {
+            "term": "github",
+            "tf": 2,
+            "weight": 0.032258
+          },
+          {
+            "term": "com",
+            "tf": 2,
+            "weight": 0.032258
+          },
+          {
+            "term": "project",
+            "tf": 2,
+            "weight": 0.032258
+          },
+          {
+            "term": "blob",
+            "tf": 2,
+            "weight": 0.032258
+          },
+          {
+            "term": "f7244a43",
+            "tf": 2,
+            "weight": 0.032258
+          },
+          {
+            "term": "transcription",
+            "tf": 1,
+            "weight": 0.016129
+          },
+          {
+            "term": "output",
+            "tf": 1,
+            "weight": 0.016129
+          },
+          {
+            "term": "structure",
+            "tf": 1,
+            "weight": 0.016129
+          },
+          {
+            "term": "the",
+            "tf": 1,
+            "weight": 0.016129
+          },
+          {
+            "term": "transcribe",
+            "tf": 1,
+            "weight": 0.016129
+          },
+          {
+            "term": "method",
+            "tf": 1,
+            "weight": 0.016129
+          },
+          {
+            "term": "returns",
+            "tf": 1,
+            "weight": 0.016129
+          },
+          {
+            "term": "list",
+            "tf": 1,
+            "weight": 0.016129
+          },
+          {
+            "term": "conversationitem",
+            "tf": 1,
+            "weight": 0.016129
+          },
+          {
+            "term": "objects",
+            "tf": 1,
+            "weight": 0.016129
+          }
+        ],
+        "unique_terms": 38,
+        "total_terms": 62
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Transcription Output Structure",
+        "asr",
+        "blob",
+        "com",
+        "docling",
+        "f7244a43",
+        "github",
+        "https",
+        "pipeline",
+        "project",
+        "speaker"
+      ],
+      "collection_name": "Docling"
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5635294117647058,
+      "overall": 0.7211764705882352
+    }
+  },
+  {
+    "text": "## Configuration Options",
+    "metadata": {
+      "chunk_id": "1c1732d5d5d4-0013",
+      "source_file": "Docs\\Docling\\_docling-project_docling_5.5-asr-pipeline.md",
+      "filename": "_docling-project_docling_5.5-asr-pipeline.md",
+      "file_extension": ".md",
+      "chunk_index": 13,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Configuration Options"
+      ],
+      "heading_text": "Configuration Options",
+      "token_count": 3,
+      "char_count": 24,
+      "start_char": 14039,
+      "end_char": 14063,
+      "semantic_score": 0.8,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.59,
+      "chunking_strategy": "hierarchical_balanced_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:06.990649",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 3,
+      "document_id": "1c1732d5d5d4",
+      "document_name": "_docling-project_docling_5.5-asr-pipeline",
+      "source_path": "Docs\\Docling\\_docling-project_docling_5.5-asr-pipeline.md",
+      "source_filename": "_docling-project_docling_5.5-asr-pipeline.md",
+      "source_directory": "Docs\\Docling",
+      "relative_path": "Docs\\Docling\\_docling-project_docling_5.5-asr-pipeline.md",
+      "hierarchy_path": "Configuration Options",
+      "chunk_hash": "22ab5bac4a958da1",
+      "content_digest": "22ab5bac4a958da1",
+      "chunk_length": 24,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "docling"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "configuration",
+          "options"
+        ],
+        "term_weights": [
+          {
+            "term": "configuration",
+            "tf": 1,
+            "weight": 0.5
+          },
+          {
+            "term": "options",
+            "tf": 1,
+            "weight": 0.5
+          }
+        ],
+        "unique_terms": 2,
+        "total_terms": 2
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Configuration Options",
+        "configuration",
+        "options"
+      ],
+      "collection_name": "Docling"
+    },
+    "advanced_scores": {
+      "semantic": 0.8,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.59,
+      "overall": 0.7633333333333333
+    }
+  },
+  {
+    "text": "### Default Options ``` ``` This provides default configuration when no options are explicitly specified. Sources: [docling/pipeline/asr\\_pipeline.py256-258](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/asr_pipeline.py#L256-L258)",
+    "metadata": {
+      "chunk_id": "1c1732d5d5d4-0016",
+      "source_file": "Docs\\Docling\\_docling-project_docling_5.5-asr-pipeline.md",
+      "filename": "_docling-project_docling_5.5-asr-pipeline.md",
+      "file_extension": ".md",
+      "chunk_index": 16,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Default Options"
+      ],
+      "heading_text": "Default Options",
+      "token_count": 61,
+      "char_count": 258,
+      "start_char": 15526,
+      "end_char": 15784,
+      "semantic_score": 0.6,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5370588235294117,
+      "chunking_strategy": "hierarchical_balanced_structural",
+      "content_type": "code_block",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:06.992696",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 61,
+      "document_id": "1c1732d5d5d4",
+      "document_name": "_docling-project_docling_5.5-asr-pipeline",
+      "source_path": "Docs\\Docling\\_docling-project_docling_5.5-asr-pipeline.md",
+      "source_filename": "_docling-project_docling_5.5-asr-pipeline.md",
+      "source_directory": "Docs\\Docling",
+      "relative_path": "Docs\\Docling\\_docling-project_docling_5.5-asr-pipeline.md",
+      "hierarchy_path": "Default Options",
+      "chunk_hash": "e020d6ceab62e3c0",
+      "content_digest": "e020d6ceab62e3c0",
+      "chunk_length": 258,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "docling"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "docling",
+          "pipeline",
+          "default",
+          "options",
+          "asr",
+          "this",
+          "provides",
+          "configuration",
+          "when",
+          "are",
+          "explicitly",
+          "specified",
+          "sources",
+          "py256",
+          "258",
+          "https",
+          "github",
+          "com",
+          "project",
+          "blob"
+        ],
+        "term_weights": [
+          {
+            "term": "docling",
+            "tf": 4,
+            "weight": 0.125
+          },
+          {
+            "term": "pipeline",
+            "tf": 4,
+            "weight": 0.125
+          },
+          {
+            "term": "default",
+            "tf": 2,
+            "weight": 0.0625
+          },
+          {
+            "term": "options",
+            "tf": 2,
+            "weight": 0.0625
+          },
+          {
+            "term": "asr",
+            "tf": 2,
+            "weight": 0.0625
+          },
+          {
+            "term": "this",
+            "tf": 1,
+            "weight": 0.03125
+          },
+          {
+            "term": "provides",
+            "tf": 1,
+            "weight": 0.03125
+          },
+          {
+            "term": "configuration",
+            "tf": 1,
+            "weight": 0.03125
+          },
+          {
+            "term": "when",
+            "tf": 1,
+            "weight": 0.03125
+          },
+          {
+            "term": "are",
+            "tf": 1,
+            "weight": 0.03125
+          },
+          {
+            "term": "explicitly",
+            "tf": 1,
+            "weight": 0.03125
+          },
+          {
+            "term": "specified",
+            "tf": 1,
+            "weight": 0.03125
+          },
+          {
+            "term": "sources",
+            "tf": 1,
+            "weight": 0.03125
+          },
+          {
+            "term": "py256",
+            "tf": 1,
+            "weight": 0.03125
+          },
+          {
+            "term": "258",
+            "tf": 1,
+            "weight": 0.03125
+          },
+          {
+            "term": "https",
+            "tf": 1,
+            "weight": 0.03125
+          },
+          {
+            "term": "github",
+            "tf": 1,
+            "weight": 0.03125
+          },
+          {
+            "term": "com",
+            "tf": 1,
+            "weight": 0.03125
+          },
+          {
+            "term": "project",
+            "tf": 1,
+            "weight": 0.03125
+          },
+          {
+            "term": "blob",
+            "tf": 1,
+            "weight": 0.03125
+          }
+        ],
+        "unique_terms": 23,
+        "total_terms": 32
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Default Options",
+        "are",
+        "asr",
+        "configuration",
+        "default",
+        "docling",
+        "options",
+        "pipeline",
+        "provides",
+        "this",
+        "when"
+      ],
+      "collection_name": "Docling"
+    },
+    "advanced_scores": {
+      "semantic": 0.6,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5370588235294117,
+      "overall": 0.6790196078431373
+    }
+  },
+  {
+    "text": "### NoOpBackend Usage  The ASR pipeline uses `NoOpBackend` which provides minimal functionality: ``` ``` **Figure 5: NoOpBackend Role**  The backend's role is limited to:  1. Storing the `path_or_stream` reference 2. Providing file metadata (name, size, etc.) 3. No parsing or structure extraction (unlike PDF backends)  The `is_backend_supported()` method validates this: ``` ``` Sources: [docling/pipeline/asr\\_pipeline.py268-269](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/asr_pipeline.py#L268-L269) [docling/backend/noop\\_backend.py1-20](https://github.com/docling-project/docling/blob/f7244a43/docling/backend/noop_backend.py#L1-L20) (referenced but not shown)",
+    "metadata": {
+      "chunk_id": "1c1732d5d5d4-0018",
+      "source_file": "Docs\\Docling\\_docling-project_docling_5.5-asr-pipeline.md",
+      "filename": "_docling-project_docling_5.5-asr-pipeline.md",
+      "file_extension": ".md",
+      "chunk_index": 18,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "NoOpBackend Usage"
+      ],
+      "heading_text": "NoOpBackend Usage",
+      "token_count": 189,
+      "char_count": 696,
+      "start_char": 15813,
+      "end_char": 16509,
+      "semantic_score": 0.7,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5544067796610169,
+      "chunking_strategy": "hierarchical_balanced_structural",
+      "content_type": "code_block",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:06.994523",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 189,
+      "document_id": "1c1732d5d5d4",
+      "document_name": "_docling-project_docling_5.5-asr-pipeline",
+      "source_path": "Docs\\Docling\\_docling-project_docling_5.5-asr-pipeline.md",
+      "source_filename": "_docling-project_docling_5.5-asr-pipeline.md",
+      "source_directory": "Docs\\Docling",
+      "relative_path": "Docs\\Docling\\_docling-project_docling_5.5-asr-pipeline.md",
+      "hierarchy_path": "NoOpBackend Usage",
+      "chunk_hash": "60c992135dc552c6",
+      "content_digest": "60c992135dc552c6",
+      "chunk_length": 696,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "docling"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "docling",
+          "backend",
+          "pipeline",
+          "the",
+          "noopbackend",
+          "asr",
+          "role",
+          "https",
+          "github",
+          "com",
+          "project",
+          "blob",
+          "f7244a43",
+          "noop",
+          "usage",
+          "uses",
+          "which",
+          "provides",
+          "minimal",
+          "functionality"
+        ],
+        "term_weights": [
+          {
+            "term": "docling",
+            "tf": 8,
+            "weight": 0.095238
+          },
+          {
+            "term": "backend",
+            "tf": 6,
+            "weight": 0.071429
+          },
+          {
+            "term": "pipeline",
+            "tf": 5,
+            "weight": 0.059524
+          },
+          {
+            "term": "the",
+            "tf": 4,
+            "weight": 0.047619
+          },
+          {
+            "term": "noopbackend",
+            "tf": 3,
+            "weight": 0.035714
+          },
+          {
+            "term": "asr",
+            "tf": 3,
+            "weight": 0.035714
+          },
+          {
+            "term": "role",
+            "tf": 2,
+            "weight": 0.02381
+          },
+          {
+            "term": "https",
+            "tf": 2,
+            "weight": 0.02381
+          },
+          {
+            "term": "github",
+            "tf": 2,
+            "weight": 0.02381
+          },
+          {
+            "term": "com",
+            "tf": 2,
+            "weight": 0.02381
+          },
+          {
+            "term": "project",
+            "tf": 2,
+            "weight": 0.02381
+          },
+          {
+            "term": "blob",
+            "tf": 2,
+            "weight": 0.02381
+          },
+          {
+            "term": "f7244a43",
+            "tf": 2,
+            "weight": 0.02381
+          },
+          {
+            "term": "noop",
+            "tf": 2,
+            "weight": 0.02381
+          },
+          {
+            "term": "usage",
+            "tf": 1,
+            "weight": 0.011905
+          },
+          {
+            "term": "uses",
+            "tf": 1,
+            "weight": 0.011905
+          },
+          {
+            "term": "which",
+            "tf": 1,
+            "weight": 0.011905
+          },
+          {
+            "term": "provides",
+            "tf": 1,
+            "weight": 0.011905
+          },
+          {
+            "term": "minimal",
+            "tf": 1,
+            "weight": 0.011905
+          },
+          {
+            "term": "functionality",
+            "tf": 1,
+            "weight": 0.011905
+          }
+        ],
+        "unique_terms": 53,
+        "total_terms": 84
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "NoOpBackend Usage",
+        "asr",
+        "backend",
+        "com",
+        "docling",
+        "github",
+        "https",
+        "noopbackend",
+        "pipeline",
+        "role",
+        "the"
+      ],
+      "collection_name": "Docling"
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5544067796610169,
+      "overall": 0.7181355932203389
+    }
+  },
+  {
+    "text": "## Usage Example ``` ```",
+    "metadata": {
+      "chunk_id": "1c1732d5d5d4-0026",
+      "source_file": "Docs\\Docling\\_docling-project_docling_5.5-asr-pipeline.md",
+      "filename": "_docling-project_docling_5.5-asr-pipeline.md",
+      "file_extension": ".md",
+      "chunk_index": 26,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Usage Example"
+      ],
+      "heading_text": "Usage Example",
+      "token_count": 5,
+      "char_count": 24,
+      "start_char": 19142,
+      "end_char": 19166,
+      "semantic_score": 0.8,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.53,
+      "chunking_strategy": "hierarchical_balanced_structural",
+      "content_type": "code_block",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:07.011424",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 5,
+      "document_id": "1c1732d5d5d4",
+      "document_name": "_docling-project_docling_5.5-asr-pipeline",
+      "source_path": "Docs\\Docling\\_docling-project_docling_5.5-asr-pipeline.md",
+      "source_filename": "_docling-project_docling_5.5-asr-pipeline.md",
+      "source_directory": "Docs\\Docling",
+      "relative_path": "Docs\\Docling\\_docling-project_docling_5.5-asr-pipeline.md",
+      "hierarchy_path": "Usage Example",
+      "chunk_hash": "5edb6bc3305f3f19",
+      "content_digest": "5edb6bc3305f3f19",
+      "chunk_length": 24,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "docling"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "usage",
+          "example"
+        ],
+        "term_weights": [
+          {
+            "term": "usage",
+            "tf": 1,
+            "weight": 0.5
+          },
+          {
+            "term": "example",
+            "tf": 1,
+            "weight": 0.5
+          }
+        ],
+        "unique_terms": 2,
+        "total_terms": 2
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Usage Example",
+        "example",
+        "usage"
+      ],
+      "collection_name": "Docling"
+    },
+    "advanced_scores": {
+      "semantic": 0.8,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.53,
+      "overall": 0.7433333333333333
+    }
+  },
+  {
+    "text": "## Integration with DocumentConverter  The ASR pipeline is automatically selected by `DocumentConverter` when processing audio formats: ``` ``` **Figure 8: ASR Pipeline Selection in DocumentConverter**  The format-to-pipeline mapping is configured in `DocumentConverter.format_to_options`:  - Audio formats (MP3, WAV, etc.) → `AsrPipeline` - Uses `AudioBackend` or `NoOpBackend` for file access - Pipeline options can be customized per format  Sources: [docling/pipeline/asr\\_pipeline.py232-270](https://github.com/docling-project/docling/blob/f7244a43/docling/pipeline/asr_pipeline.py#L232-L270) [docling/document\\_converter.py1-500](https://github.com/docling-project/docling/blob/f7244a43/docling/document_converter.py#L1-L500) (referenced but not shown in detail)",
+    "metadata": {
+      "chunk_id": "1c1732d5d5d4-0027",
+      "source_file": "Docs\\Docling\\_docling-project_docling_5.5-asr-pipeline.md",
+      "filename": "_docling-project_docling_5.5-asr-pipeline.md",
+      "file_extension": ".md",
+      "chunk_index": 27,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Integration with DocumentConverter"
+      ],
+      "heading_text": "Integration with DocumentConverter",
+      "token_count": 188,
+      "char_count": 767,
+      "start_char": 19169,
+      "end_char": 19936,
+      "semantic_score": 0.7,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5392307692307692,
+      "chunking_strategy": "hierarchical_balanced_structural",
+      "content_type": "code_block",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:07.013916",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 188,
+      "document_id": "1c1732d5d5d4",
+      "document_name": "_docling-project_docling_5.5-asr-pipeline",
+      "source_path": "Docs\\Docling\\_docling-project_docling_5.5-asr-pipeline.md",
+      "source_filename": "_docling-project_docling_5.5-asr-pipeline.md",
+      "source_directory": "Docs\\Docling",
+      "relative_path": "Docs\\Docling\\_docling-project_docling_5.5-asr-pipeline.md",
+      "hierarchy_path": "Integration with DocumentConverter",
+      "chunk_hash": "f91873fa93cce939",
+      "content_digest": "f91873fa93cce939",
+      "chunk_length": 767,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "docling"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "pipeline",
+          "docling",
+          "documentconverter",
+          "asr",
+          "format",
+          "the",
+          "audio",
+          "formats",
+          "options",
+          "https",
+          "github",
+          "com",
+          "project",
+          "blob",
+          "f7244a43",
+          "document",
+          "converter",
+          "integration",
+          "with",
+          "automatically"
+        ],
+        "term_weights": [
+          {
+            "term": "pipeline",
+            "tf": 8,
+            "weight": 0.091954
+          },
+          {
+            "term": "docling",
+            "tf": 8,
+            "weight": 0.091954
+          },
+          {
+            "term": "documentconverter",
+            "tf": 4,
+            "weight": 0.045977
+          },
+          {
+            "term": "asr",
+            "tf": 4,
+            "weight": 0.045977
+          },
+          {
+            "term": "format",
+            "tf": 3,
+            "weight": 0.034483
+          },
+          {
+            "term": "the",
+            "tf": 2,
+            "weight": 0.022989
+          },
+          {
+            "term": "audio",
+            "tf": 2,
+            "weight": 0.022989
+          },
+          {
+            "term": "formats",
+            "tf": 2,
+            "weight": 0.022989
+          },
+          {
+            "term": "options",
+            "tf": 2,
+            "weight": 0.022989
+          },
+          {
+            "term": "https",
+            "tf": 2,
+            "weight": 0.022989
+          },
+          {
+            "term": "github",
+            "tf": 2,
+            "weight": 0.022989
+          },
+          {
+            "term": "com",
+            "tf": 2,
+            "weight": 0.022989
+          },
+          {
+            "term": "project",
+            "tf": 2,
+            "weight": 0.022989
+          },
+          {
+            "term": "blob",
+            "tf": 2,
+            "weight": 0.022989
+          },
+          {
+            "term": "f7244a43",
+            "tf": 2,
+            "weight": 0.022989
+          },
+          {
+            "term": "document",
+            "tf": 2,
+            "weight": 0.022989
+          },
+          {
+            "term": "converter",
+            "tf": 2,
+            "weight": 0.022989
+          },
+          {
+            "term": "integration",
+            "tf": 1,
+            "weight": 0.011494
+          },
+          {
+            "term": "with",
+            "tf": 1,
+            "weight": 0.011494
+          },
+          {
+            "term": "automatically",
+            "tf": 1,
+            "weight": 0.011494
+          }
+        ],
+        "unique_terms": 53,
+        "total_terms": 87
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Integration with DocumentConverter",
+        "asr",
+        "audio",
+        "docling",
+        "documentconverter",
+        "format",
+        "formats",
+        "https",
+        "options",
+        "pipeline",
+        "the"
+      ],
+      "collection_name": "Docling"
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5392307692307692,
+      "overall": 0.713076923076923
+    }
+  },
+  {
+    "text": "### On this page  - [ASR Pipeline](#asr-pipeline.md) - [Overview](#overview.md) - [Architecture](#architecture.md) - [Pipeline Initialization](#pipeline-initialization.md) - [Class Hierarchy](#class-hierarchy.md) - [Initialization Process](#initialization-process.md) - [Audio Processing Flow](#audio-processing-flow.md) - [Step-by-Step Processing](#step-by-step-processing.md) - [Whisper Model Integration](#whisper-model-integration.md) - [Model Wrapper: \\_NativeWhisperModel](#model-wrapper-_nativewhispermodel.md) - [Model Loading Logic](#model-loading-logic.md) - [Device Selection](#device-selection.md) - [Transcription Output Structure](#transcription-output-structure.md) - [Configuration Options](#configuration-options.md) - [AsrPipelineOptions](#asrpipelineoptions.md) - [InlineAsrNativeWhisperOptions](#inlineasrnativewhisperoptions.md) - [Default Options](#default-options.md) - [Backend Integration](#backend-integration.md) - [NoOpBackend Usage](#noopbackend-usage.md) - [Input Handling: Path vs BytesIO](#input-handling-path-vs-bytesio.md) - [Output Format](#output-format.md) - [DoclingDocument Structure](#doclingdocument-structure.md) - [Text Formatting](#text-formatting.md) - [Error Handling](#error-handling.md) - [Exception Management](#exception-management.md) - [Status Determination](#status-determination.md) - [Usage Example](#usage-example.md) - [Integration with DocumentConverter](#integration-with-documentconverter.md) - [Key Differences from Other Pipelines](#key-differences-from-other-pipelines.md)",
+    "metadata": {
+      "chunk_id": "1c1732d5d5d4-0029",
+      "source_file": "Docs\\Docling\\_docling-project_docling_5.5-asr-pipeline.md",
+      "filename": "_docling-project_docling_5.5-asr-pipeline.md",
+      "file_extension": ".md",
+      "chunk_index": 29,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "On this page"
+      ],
+      "heading_text": "On this page",
+      "token_count": 385,
+      "char_count": 1535,
+      "start_char": 21244,
+      "end_char": 22779,
+      "semantic_score": 0.6,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.727621212121212,
+      "chunking_strategy": "hierarchical_balanced_structural",
+      "content_type": "code_block",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:07.018726",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 385,
+      "document_id": "1c1732d5d5d4",
+      "document_name": "_docling-project_docling_5.5-asr-pipeline",
+      "source_path": "Docs\\Docling\\_docling-project_docling_5.5-asr-pipeline.md",
+      "source_filename": "_docling-project_docling_5.5-asr-pipeline.md",
+      "source_directory": "Docs\\Docling",
+      "relative_path": "Docs\\Docling\\_docling-project_docling_5.5-asr-pipeline.md",
+      "hierarchy_path": "On this page",
+      "chunk_hash": "06858f85946d4c64",
+      "content_digest": "06858f85946d4c64",
+      "chunk_length": 1535,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "docling"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "model",
+          "integration",
+          "pipeline",
+          "initialization",
+          "processing",
+          "step",
+          "output",
+          "structure",
+          "options",
+          "usage",
+          "handling",
+          "asr",
+          "overview",
+          "architecture",
+          "class",
+          "hierarchy",
+          "process",
+          "audio",
+          "flow",
+          "whisper"
+        ],
+        "term_weights": [
+          {
+            "term": "model",
+            "tf": 6,
+            "weight": 0.044776
+          },
+          {
+            "term": "integration",
+            "tf": 6,
+            "weight": 0.044776
+          },
+          {
+            "term": "pipeline",
+            "tf": 4,
+            "weight": 0.029851
+          },
+          {
+            "term": "initialization",
+            "tf": 4,
+            "weight": 0.029851
+          },
+          {
+            "term": "processing",
+            "tf": 4,
+            "weight": 0.029851
+          },
+          {
+            "term": "step",
+            "tf": 4,
+            "weight": 0.029851
+          },
+          {
+            "term": "output",
+            "tf": 4,
+            "weight": 0.029851
+          },
+          {
+            "term": "structure",
+            "tf": 4,
+            "weight": 0.029851
+          },
+          {
+            "term": "options",
+            "tf": 4,
+            "weight": 0.029851
+          },
+          {
+            "term": "usage",
+            "tf": 4,
+            "weight": 0.029851
+          },
+          {
+            "term": "handling",
+            "tf": 4,
+            "weight": 0.029851
+          },
+          {
+            "term": "asr",
+            "tf": 2,
+            "weight": 0.014925
+          },
+          {
+            "term": "overview",
+            "tf": 2,
+            "weight": 0.014925
+          },
+          {
+            "term": "architecture",
+            "tf": 2,
+            "weight": 0.014925
+          },
+          {
+            "term": "class",
+            "tf": 2,
+            "weight": 0.014925
+          },
+          {
+            "term": "hierarchy",
+            "tf": 2,
+            "weight": 0.014925
+          },
+          {
+            "term": "process",
+            "tf": 2,
+            "weight": 0.014925
+          },
+          {
+            "term": "audio",
+            "tf": 2,
+            "weight": 0.014925
+          },
+          {
+            "term": "flow",
+            "tf": 2,
+            "weight": 0.014925
+          },
+          {
+            "term": "whisper",
+            "tf": 2,
+            "weight": 0.014925
+          }
+        ],
+        "unique_terms": 55,
+        "total_terms": 134
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "On this page",
+        "initialization",
+        "integration",
+        "model",
+        "options",
+        "output",
+        "pipeline",
+        "processing",
+        "step",
+        "structure",
+        "usage"
+      ],
+      "collection_name": "Docling"
+    },
+    "advanced_scores": {
+      "semantic": 0.6,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.727621212121212,
+      "overall": 0.7425404040404041
+    }
+  }
+]

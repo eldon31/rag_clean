@@ -1,0 +1,1700 @@
+[
+  {
+    "text": "## Data Flow and Processing Pipeline  The following diagram shows how text data flows through the different model architectures and their underlying components: ```mermaid graph LR     subgraph \"Input Processing\"         Text[\"Text Input\"]         Text --> Tokenizer[\"Tokenizer<br/>transformers.AutoTokenizer\"]         Tokenizer --> Features[\"Token Features<br/>{input_ids, attention_mask}\"]     end          subgraph \"Model Components\"         Features --> Transformer[\"Transformer<br/>sentence_transformers/models/Transformer.py\"]         Transformer --> TokenEmb[\"Token Embeddings<br/>[batch, seq_len, hidden_dim]\"]                  TokenEmb --> Pooling[\"Pooling<br/>sentence_transformers/models/Pooling.py\"]         TokenEmb --> SpladePooling[\"SpladePooling<br/>sparse_encoder/models/SpladePooling.py\"]         TokenEmb --> CrossScore[\"Classification Head<br/>transformers Model\"]     end          subgraph \"Output Processing\"         Pooling --> DenseOut[\"Dense Embeddings<br/>model.encode()\"]         SpladePooling --> SparseOut[\"Sparse Embeddings<br/>sparse_model.encode()\"]         CrossScore --> ScoreOut[\"Similarity Scores<br/>cross_model.predict()\"]     end ``` **Sources:** [sentence_transformers/models/Transformer.py:226-257](), [sentence_transformers/models/Pooling.py:135-241](), [sentence_transformers/sparse_encoder/models/SpladePooling.py](), [sentence_transformers/cross_encoder/CrossEncoder.py:341-342]()",
+    "metadata": {
+      "chunk_id": "a0c6c2023087-0000",
+      "source_file": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers\\-_1_5.51_Berlin_has_a_yearly_total_of_about_135_million_day_visitors....md",
+      "filename": "-_1_5.51_Berlin_has_a_yearly_total_of_about_135_million_day_visitors....md",
+      "file_extension": ".md",
+      "chunk_index": 0,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Data Flow and Processing Pipeline"
+      ],
+      "heading_text": "Data Flow and Processing Pipeline",
+      "token_count": 302,
+      "char_count": 1425,
+      "start_char": 170,
+      "end_char": 1595,
+      "semantic_score": 0.7,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5208325581395349,
+      "chunking_strategy": "hybrid_adaptive_structural",
+      "content_type": "code_block",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:45.045153",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 302,
+      "document_id": "a0c6c2023087",
+      "document_name": "-_1_5.51_Berlin_has_a_yearly_total_of_about_135_million_day_visitors...",
+      "source_path": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers\\-_1_5.51_Berlin_has_a_yearly_total_of_about_135_million_day_visitors....md",
+      "source_filename": "-_1_5.51_Berlin_has_a_yearly_total_of_about_135_million_day_visitors....md",
+      "source_directory": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers",
+      "relative_path": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers\\-_1_5.51_Berlin_has_a_yearly_total_of_about_135_million_day_visitors....md",
+      "hierarchy_path": "Data Flow and Processing Pipeline",
+      "chunk_hash": "84542294e7d2e5e7",
+      "content_digest": "84542294e7d2e5e7",
+      "chunk_length": 1425,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "sentence_transformer"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "transformers",
+          "model",
+          "sentence",
+          "models",
+          "transformer",
+          "pooling",
+          "spladepooling",
+          "text",
+          "tokenemb",
+          "sparse",
+          "processing",
+          "subgraph",
+          "input",
+          "tokenizer",
+          "features",
+          "end",
+          "embeddings",
+          "encoder",
+          "data",
+          "and"
+        ],
+        "term_weights": [
+          {
+            "term": "transformers",
+            "tf": 8,
+            "weight": 0.059701
+          },
+          {
+            "term": "model",
+            "tf": 6,
+            "weight": 0.044776
+          },
+          {
+            "term": "sentence",
+            "tf": 6,
+            "weight": 0.044776
+          },
+          {
+            "term": "models",
+            "tf": 6,
+            "weight": 0.044776
+          },
+          {
+            "term": "transformer",
+            "tf": 5,
+            "weight": 0.037313
+          },
+          {
+            "term": "pooling",
+            "tf": 5,
+            "weight": 0.037313
+          },
+          {
+            "term": "spladepooling",
+            "tf": 5,
+            "weight": 0.037313
+          },
+          {
+            "term": "text",
+            "tf": 4,
+            "weight": 0.029851
+          },
+          {
+            "term": "tokenemb",
+            "tf": 4,
+            "weight": 0.029851
+          },
+          {
+            "term": "sparse",
+            "tf": 4,
+            "weight": 0.029851
+          },
+          {
+            "term": "processing",
+            "tf": 3,
+            "weight": 0.022388
+          },
+          {
+            "term": "subgraph",
+            "tf": 3,
+            "weight": 0.022388
+          },
+          {
+            "term": "input",
+            "tf": 3,
+            "weight": 0.022388
+          },
+          {
+            "term": "tokenizer",
+            "tf": 3,
+            "weight": 0.022388
+          },
+          {
+            "term": "features",
+            "tf": 3,
+            "weight": 0.022388
+          },
+          {
+            "term": "end",
+            "tf": 3,
+            "weight": 0.022388
+          },
+          {
+            "term": "embeddings",
+            "tf": 3,
+            "weight": 0.022388
+          },
+          {
+            "term": "encoder",
+            "tf": 3,
+            "weight": 0.022388
+          },
+          {
+            "term": "data",
+            "tf": 2,
+            "weight": 0.014925
+          },
+          {
+            "term": "and",
+            "tf": 2,
+            "weight": 0.014925
+          }
+        ],
+        "unique_terms": 67,
+        "total_terms": 134
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Data Flow and Processing Pipeline",
+        "model",
+        "models",
+        "pooling",
+        "sentence",
+        "sparse",
+        "spladepooling",
+        "text",
+        "tokenemb",
+        "transformer",
+        "transformers"
+      ],
+      "collection_name": "Sentence_Transformer"
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5208325581395349,
+      "overall": 0.7069441860465115
+    }
+  },
+  {
+    "text": "### Typical Model Selection  | Task | Model Type | Example Model | Key Method | |------|------------|---------------|------------| | Semantic similarity | `SentenceTransformer` | `all-mpnet-base-v2` | `encode()` | | Vector database search | `SentenceTransformer` | `all-MiniLM-L6-v2` | `encode()` | | Lexical + semantic search | `SparseEncoder` | `naver/splade-cocondenser-ensembledistil` | `encode()` | | Reranking search results | `CrossEncoder` | `cross-encoder/ms-marco-MiniLM-L6-v2` | `rank()` | | Text pair classification | `CrossEncoder` | `cross-encoder/nli-MiniLM2-L6-H768` | `predict()` |",
+    "metadata": {
+      "chunk_id": "a0c6c2023087-0002",
+      "source_file": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers\\-_1_5.51_Berlin_has_a_yearly_total_of_about_135_million_day_visitors....md",
+      "filename": "-_1_5.51_Berlin_has_a_yearly_total_of_about_135_million_day_visitors....md",
+      "file_extension": ".md",
+      "chunk_index": 2,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Typical Model Selection"
+      ],
+      "heading_text": "Typical Model Selection",
+      "token_count": 169,
+      "char_count": 598,
+      "start_char": 1625,
+      "end_char": 2223,
+      "semantic_score": 0.8,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.6316666666666667,
+      "chunking_strategy": "hybrid_adaptive_structural",
+      "content_type": "table_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:45.046444",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 169,
+      "document_id": "a0c6c2023087",
+      "document_name": "-_1_5.51_Berlin_has_a_yearly_total_of_about_135_million_day_visitors...",
+      "source_path": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers\\-_1_5.51_Berlin_has_a_yearly_total_of_about_135_million_day_visitors....md",
+      "source_filename": "-_1_5.51_Berlin_has_a_yearly_total_of_about_135_million_day_visitors....md",
+      "source_directory": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers",
+      "relative_path": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers\\-_1_5.51_Berlin_has_a_yearly_total_of_about_135_million_day_visitors....md",
+      "hierarchy_path": "Typical Model Selection",
+      "chunk_hash": "d024fe27994d9c07",
+      "content_digest": "d024fe27994d9c07",
+      "chunk_length": 598,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "sentence_transformer"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "model",
+          "encode",
+          "search",
+          "semantic",
+          "sentencetransformer",
+          "all",
+          "minilm",
+          "crossencoder",
+          "cross",
+          "encoder",
+          "typical",
+          "selection",
+          "task",
+          "type",
+          "example",
+          "key",
+          "method",
+          "similarity",
+          "mpnet",
+          "base"
+        ],
+        "term_weights": [
+          {
+            "term": "model",
+            "tf": 3,
+            "weight": 0.057692
+          },
+          {
+            "term": "encode",
+            "tf": 3,
+            "weight": 0.057692
+          },
+          {
+            "term": "search",
+            "tf": 3,
+            "weight": 0.057692
+          },
+          {
+            "term": "semantic",
+            "tf": 2,
+            "weight": 0.038462
+          },
+          {
+            "term": "sentencetransformer",
+            "tf": 2,
+            "weight": 0.038462
+          },
+          {
+            "term": "all",
+            "tf": 2,
+            "weight": 0.038462
+          },
+          {
+            "term": "minilm",
+            "tf": 2,
+            "weight": 0.038462
+          },
+          {
+            "term": "crossencoder",
+            "tf": 2,
+            "weight": 0.038462
+          },
+          {
+            "term": "cross",
+            "tf": 2,
+            "weight": 0.038462
+          },
+          {
+            "term": "encoder",
+            "tf": 2,
+            "weight": 0.038462
+          },
+          {
+            "term": "typical",
+            "tf": 1,
+            "weight": 0.019231
+          },
+          {
+            "term": "selection",
+            "tf": 1,
+            "weight": 0.019231
+          },
+          {
+            "term": "task",
+            "tf": 1,
+            "weight": 0.019231
+          },
+          {
+            "term": "type",
+            "tf": 1,
+            "weight": 0.019231
+          },
+          {
+            "term": "example",
+            "tf": 1,
+            "weight": 0.019231
+          },
+          {
+            "term": "key",
+            "tf": 1,
+            "weight": 0.019231
+          },
+          {
+            "term": "method",
+            "tf": 1,
+            "weight": 0.019231
+          },
+          {
+            "term": "similarity",
+            "tf": 1,
+            "weight": 0.019231
+          },
+          {
+            "term": "mpnet",
+            "tf": 1,
+            "weight": 0.019231
+          },
+          {
+            "term": "base",
+            "tf": 1,
+            "weight": 0.019231
+          }
+        ],
+        "unique_terms": 39,
+        "total_terms": 52
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Typical Model Selection",
+        "all",
+        "cross",
+        "crossencoder",
+        "encode",
+        "encoder",
+        "minilm",
+        "model",
+        "search",
+        "semantic",
+        "sentencetransformer"
+      ],
+      "collection_name": "Sentence_Transformer"
+    },
+    "advanced_scores": {
+      "semantic": 0.8,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.6316666666666667,
+      "overall": 0.7772222222222221
+    }
+  },
+  {
+    "text": "## Next Steps  - **Model Selection**: Browse available models in [Pretrained Models](#5) or on the [Hugging Face Hub](https://huggingface.co/models?library=sentence-transformers) - **Training**: Learn to fine-tune models for your domain in [Training](#3) - **Applications**: Explore real-world use cases in [Applications](#6) - **Performance**: Optimize inference speed using techniques in [Advanced Topics](#7)  **Sources:** [index.rst:133-154](), [docs/sentence_transformer/pretrained_models.md:1-49]()",
+    "metadata": {
+      "chunk_id": "a0c6c2023087-0004",
+      "source_file": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers\\-_1_5.51_Berlin_has_a_yearly_total_of_about_135_million_day_visitors....md",
+      "filename": "-_1_5.51_Berlin_has_a_yearly_total_of_about_135_million_day_visitors....md",
+      "file_extension": ".md",
+      "chunk_index": 4,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Next Steps"
+      ],
+      "heading_text": "Next Steps",
+      "token_count": 127,
+      "char_count": 504,
+      "start_char": 3250,
+      "end_char": 3754,
+      "semantic_score": 0.7999999999999999,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.748,
+      "chunking_strategy": "hybrid_adaptive_structural",
+      "content_type": "code_block",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:45.051663",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 127,
+      "document_id": "a0c6c2023087",
+      "document_name": "-_1_5.51_Berlin_has_a_yearly_total_of_about_135_million_day_visitors...",
+      "source_path": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers\\-_1_5.51_Berlin_has_a_yearly_total_of_about_135_million_day_visitors....md",
+      "source_filename": "-_1_5.51_Berlin_has_a_yearly_total_of_about_135_million_day_visitors....md",
+      "source_directory": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers",
+      "relative_path": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers\\-_1_5.51_Berlin_has_a_yearly_total_of_about_135_million_day_visitors....md",
+      "hierarchy_path": "Next Steps",
+      "chunk_hash": "e1b63fab4ccfa9ee",
+      "content_digest": "e1b63fab4ccfa9ee",
+      "chunk_length": 504,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "sentence_transformer"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "models",
+          "pretrained",
+          "sentence",
+          "training",
+          "applications",
+          "next",
+          "steps",
+          "model",
+          "selection",
+          "browse",
+          "available",
+          "the",
+          "hugging",
+          "face",
+          "hub",
+          "https",
+          "huggingface",
+          "library",
+          "transformers",
+          "learn"
+        ],
+        "term_weights": [
+          {
+            "term": "models",
+            "tf": 5,
+            "weight": 0.09434
+          },
+          {
+            "term": "pretrained",
+            "tf": 2,
+            "weight": 0.037736
+          },
+          {
+            "term": "sentence",
+            "tf": 2,
+            "weight": 0.037736
+          },
+          {
+            "term": "training",
+            "tf": 2,
+            "weight": 0.037736
+          },
+          {
+            "term": "applications",
+            "tf": 2,
+            "weight": 0.037736
+          },
+          {
+            "term": "next",
+            "tf": 1,
+            "weight": 0.018868
+          },
+          {
+            "term": "steps",
+            "tf": 1,
+            "weight": 0.018868
+          },
+          {
+            "term": "model",
+            "tf": 1,
+            "weight": 0.018868
+          },
+          {
+            "term": "selection",
+            "tf": 1,
+            "weight": 0.018868
+          },
+          {
+            "term": "browse",
+            "tf": 1,
+            "weight": 0.018868
+          },
+          {
+            "term": "available",
+            "tf": 1,
+            "weight": 0.018868
+          },
+          {
+            "term": "the",
+            "tf": 1,
+            "weight": 0.018868
+          },
+          {
+            "term": "hugging",
+            "tf": 1,
+            "weight": 0.018868
+          },
+          {
+            "term": "face",
+            "tf": 1,
+            "weight": 0.018868
+          },
+          {
+            "term": "hub",
+            "tf": 1,
+            "weight": 0.018868
+          },
+          {
+            "term": "https",
+            "tf": 1,
+            "weight": 0.018868
+          },
+          {
+            "term": "huggingface",
+            "tf": 1,
+            "weight": 0.018868
+          },
+          {
+            "term": "library",
+            "tf": 1,
+            "weight": 0.018868
+          },
+          {
+            "term": "transformers",
+            "tf": 1,
+            "weight": 0.018868
+          },
+          {
+            "term": "learn",
+            "tf": 1,
+            "weight": 0.018868
+          }
+        ],
+        "unique_terms": 45,
+        "total_terms": 53
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Next Steps",
+        "applications",
+        "browse",
+        "model",
+        "models",
+        "next",
+        "pretrained",
+        "selection",
+        "sentence",
+        "steps",
+        "training"
+      ],
+      "collection_name": "Sentence_Transformer"
+    },
+    "advanced_scores": {
+      "semantic": 0.7999999999999999,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.748,
+      "overall": 0.8159999999999998
+    }
+  },
+  {
+    "text": "# Training     This page covers the training system architecture and common concepts shared across all model types in sentence-transformers. The training system provides a unified interface for training `SentenceTransformer`, `SparseEncoder`, and `CrossEncoder` models using PyTorch and 🤗 Transformers. For specific training guides, see [SentenceTransformer Training](#3.1), [SparseEncoder Training](#3.2), and [CrossEncoder Training](#3.3). For loss function details, see [Loss Functions for SentenceTransformer](#3.4), [Loss Functions for SparseEncoder](#3.5), and [Loss Functions for CrossEncoder](#3.6).",
+    "metadata": {
+      "chunk_id": "a0c6c2023087-0005",
+      "source_file": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers\\-_1_5.51_Berlin_has_a_yearly_total_of_about_135_million_day_visitors....md",
+      "filename": "-_1_5.51_Berlin_has_a_yearly_total_of_about_135_million_day_visitors....md",
+      "file_extension": ".md",
+      "chunk_index": 5,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Training"
+      ],
+      "heading_text": "Training",
+      "token_count": 136,
+      "char_count": 607,
+      "start_char": 3756,
+      "end_char": 4363,
+      "semantic_score": 0.7,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.701764705882353,
+      "chunking_strategy": "hybrid_adaptive_structural",
+      "content_type": "code_block",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:45.053323",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 136,
+      "document_id": "a0c6c2023087",
+      "document_name": "-_1_5.51_Berlin_has_a_yearly_total_of_about_135_million_day_visitors...",
+      "source_path": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers\\-_1_5.51_Berlin_has_a_yearly_total_of_about_135_million_day_visitors....md",
+      "source_filename": "-_1_5.51_Berlin_has_a_yearly_total_of_about_135_million_day_visitors....md",
+      "source_directory": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers",
+      "relative_path": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers\\-_1_5.51_Berlin_has_a_yearly_total_of_about_135_million_day_visitors....md",
+      "hierarchy_path": "Training",
+      "chunk_hash": "e6e691f566b6a850",
+      "content_digest": "e6e691f566b6a850",
+      "chunk_length": 607,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "sentence_transformer"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "training",
+          "for",
+          "and",
+          "loss",
+          "sentencetransformer",
+          "sparseencoder",
+          "crossencoder",
+          "functions",
+          "the",
+          "system",
+          "transformers",
+          "see",
+          "this",
+          "page",
+          "covers",
+          "architecture",
+          "common",
+          "concepts",
+          "shared",
+          "across"
+        ],
+        "term_weights": [
+          {
+            "term": "training",
+            "tf": 8,
+            "weight": 0.123077
+          },
+          {
+            "term": "for",
+            "tf": 6,
+            "weight": 0.092308
+          },
+          {
+            "term": "and",
+            "tf": 5,
+            "weight": 0.076923
+          },
+          {
+            "term": "loss",
+            "tf": 4,
+            "weight": 0.061538
+          },
+          {
+            "term": "sentencetransformer",
+            "tf": 3,
+            "weight": 0.046154
+          },
+          {
+            "term": "sparseencoder",
+            "tf": 3,
+            "weight": 0.046154
+          },
+          {
+            "term": "crossencoder",
+            "tf": 3,
+            "weight": 0.046154
+          },
+          {
+            "term": "functions",
+            "tf": 3,
+            "weight": 0.046154
+          },
+          {
+            "term": "the",
+            "tf": 2,
+            "weight": 0.030769
+          },
+          {
+            "term": "system",
+            "tf": 2,
+            "weight": 0.030769
+          },
+          {
+            "term": "transformers",
+            "tf": 2,
+            "weight": 0.030769
+          },
+          {
+            "term": "see",
+            "tf": 2,
+            "weight": 0.030769
+          },
+          {
+            "term": "this",
+            "tf": 1,
+            "weight": 0.015385
+          },
+          {
+            "term": "page",
+            "tf": 1,
+            "weight": 0.015385
+          },
+          {
+            "term": "covers",
+            "tf": 1,
+            "weight": 0.015385
+          },
+          {
+            "term": "architecture",
+            "tf": 1,
+            "weight": 0.015385
+          },
+          {
+            "term": "common",
+            "tf": 1,
+            "weight": 0.015385
+          },
+          {
+            "term": "concepts",
+            "tf": 1,
+            "weight": 0.015385
+          },
+          {
+            "term": "shared",
+            "tf": 1,
+            "weight": 0.015385
+          },
+          {
+            "term": "across",
+            "tf": 1,
+            "weight": 0.015385
+          }
+        ],
+        "unique_terms": 34,
+        "total_terms": 65
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Training",
+        "and",
+        "crossencoder",
+        "for",
+        "functions",
+        "loss",
+        "sentencetransformer",
+        "sparseencoder",
+        "system",
+        "the",
+        "training"
+      ],
+      "collection_name": "Sentence_Transformer"
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.701764705882353,
+      "overall": 0.7672549019607843
+    }
+  },
+  {
+    "text": "## Trainer Class Hierarchy  The training system uses specialized trainer classes that inherit from the 🤗 Transformers `Trainer`: ```mermaid graph TB     BaseTrainer[\"transformers.Trainer\"]          STTrainer[\"SentenceTransformerTrainer<br/>sentence_transformers/trainer.py\"]     SETrainer[\"SparseEncoderTrainer<br/>sparse_encoder/trainer.py\"]      CETrainer[\"CrossEncoderTrainer<br/>cross_encoder/trainer.py\"]          STArgs[\"SentenceTransformerTrainingArguments\"]     SEArgs[\"SparseEncoderTrainingArguments\"]     CEArgs[\"CrossEncoderTrainingArguments\"]          STDataCollator[\"SentenceTransformerDataCollator\"]     SEDataCollator[\"SparseEncoderDataCollator\"]     CEDataCollator[\"CrossEncoderDataCollator\"]          BaseTrainer --> STTrainer     BaseTrainer --> CETrainer     STTrainer --> SETrainer          STTrainer --> STArgs     SETrainer --> SEArgs     CETrainer --> CEArgs          STTrainer --> STDataCollator     SETrainer --> SEDataCollator     CETrainer --> CEDataCollator ``` **Trainer Class Hierarchy and Components**  Sources: [sentence_transformers/trainer.py:59](), [sentence_transformers/sparse_encoder/trainer.py:31](), [sentence_transformers/data_collator.py:13]()",
+    "metadata": {
+      "chunk_id": "a0c6c2023087-0007",
+      "source_file": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers\\-_1_5.51_Berlin_has_a_yearly_total_of_about_135_million_day_visitors....md",
+      "filename": "-_1_5.51_Berlin_has_a_yearly_total_of_about_135_million_day_visitors....md",
+      "file_extension": ".md",
+      "chunk_index": 7,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Trainer Class Hierarchy"
+      ],
+      "heading_text": "Trainer Class Hierarchy",
+      "token_count": 276,
+      "char_count": 1185,
+      "start_char": 5926,
+      "end_char": 7111,
+      "semantic_score": 0.7999999999999999,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5017647058823529,
+      "chunking_strategy": "hybrid_adaptive_structural",
+      "content_type": "code_block",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:45.062792",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 276,
+      "document_id": "a0c6c2023087",
+      "document_name": "-_1_5.51_Berlin_has_a_yearly_total_of_about_135_million_day_visitors...",
+      "source_path": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers\\-_1_5.51_Berlin_has_a_yearly_total_of_about_135_million_day_visitors....md",
+      "source_filename": "-_1_5.51_Berlin_has_a_yearly_total_of_about_135_million_day_visitors....md",
+      "source_directory": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers",
+      "relative_path": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers\\-_1_5.51_Berlin_has_a_yearly_total_of_about_135_million_day_visitors....md",
+      "hierarchy_path": "Trainer Class Hierarchy",
+      "chunk_hash": "d8ff2ec92a6be503",
+      "content_digest": "d8ff2ec92a6be503",
+      "chunk_length": 1185,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "sentence_transformer"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "trainer",
+          "transformers",
+          "sttrainer",
+          "sentence",
+          "setrainer",
+          "cetrainer",
+          "basetrainer",
+          "encoder",
+          "class",
+          "hierarchy",
+          "the",
+          "sparse",
+          "stargs",
+          "seargs",
+          "ceargs",
+          "stdatacollator",
+          "sedatacollator",
+          "cedatacollator",
+          "training",
+          "system"
+        ],
+        "term_weights": [
+          {
+            "term": "trainer",
+            "tf": 10,
+            "weight": 0.119048
+          },
+          {
+            "term": "transformers",
+            "tf": 6,
+            "weight": 0.071429
+          },
+          {
+            "term": "sttrainer",
+            "tf": 5,
+            "weight": 0.059524
+          },
+          {
+            "term": "sentence",
+            "tf": 4,
+            "weight": 0.047619
+          },
+          {
+            "term": "setrainer",
+            "tf": 4,
+            "weight": 0.047619
+          },
+          {
+            "term": "cetrainer",
+            "tf": 4,
+            "weight": 0.047619
+          },
+          {
+            "term": "basetrainer",
+            "tf": 3,
+            "weight": 0.035714
+          },
+          {
+            "term": "encoder",
+            "tf": 3,
+            "weight": 0.035714
+          },
+          {
+            "term": "class",
+            "tf": 2,
+            "weight": 0.02381
+          },
+          {
+            "term": "hierarchy",
+            "tf": 2,
+            "weight": 0.02381
+          },
+          {
+            "term": "the",
+            "tf": 2,
+            "weight": 0.02381
+          },
+          {
+            "term": "sparse",
+            "tf": 2,
+            "weight": 0.02381
+          },
+          {
+            "term": "stargs",
+            "tf": 2,
+            "weight": 0.02381
+          },
+          {
+            "term": "seargs",
+            "tf": 2,
+            "weight": 0.02381
+          },
+          {
+            "term": "ceargs",
+            "tf": 2,
+            "weight": 0.02381
+          },
+          {
+            "term": "stdatacollator",
+            "tf": 2,
+            "weight": 0.02381
+          },
+          {
+            "term": "sedatacollator",
+            "tf": 2,
+            "weight": 0.02381
+          },
+          {
+            "term": "cedatacollator",
+            "tf": 2,
+            "weight": 0.02381
+          },
+          {
+            "term": "training",
+            "tf": 1,
+            "weight": 0.011905
+          },
+          {
+            "term": "system",
+            "tf": 1,
+            "weight": 0.011905
+          }
+        ],
+        "unique_terms": 43,
+        "total_terms": 84
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Trainer Class Hierarchy",
+        "basetrainer",
+        "cetrainer",
+        "class",
+        "encoder",
+        "hierarchy",
+        "sentence",
+        "setrainer",
+        "sttrainer",
+        "trainer",
+        "transformers"
+      ],
+      "collection_name": "Sentence_Transformer"
+    },
+    "advanced_scores": {
+      "semantic": 0.7999999999999999,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5017647058823529,
+      "overall": 0.7339215686274508
+    }
+  },
+  {
+    "text": "### Data Collator  The `SentenceTransformerDataCollator` handles tokenization and batch preparation:  | Component | Purpose | |-----------|---------| | `tokenize_fn` | Tokenizes text inputs using the model's tokenizer | | `router_mapping` | Maps dataset columns to router tasks (e.g., \"query\", \"document\") | | `prompts` | Adds prompts to input texts before tokenization | | `valid_label_columns` | Identifies label columns (\"label\", \"score\") |  Sources: [sentence_transformers/data_collator.py:13-31]()",
+    "metadata": {
+      "chunk_id": "a0c6c2023087-0010",
+      "source_file": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers\\-_1_5.51_Berlin_has_a_yearly_total_of_about_135_million_day_visitors....md",
+      "filename": "-_1_5.51_Berlin_has_a_yearly_total_of_about_135_million_day_visitors....md",
+      "file_extension": ".md",
+      "chunk_index": 10,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Data Collator"
+      ],
+      "heading_text": "Data Collator",
+      "token_count": 120,
+      "char_count": 502,
+      "start_char": 8786,
+      "end_char": 9288,
+      "semantic_score": 0.7999999999999999,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5029032258064516,
+      "chunking_strategy": "hybrid_adaptive_structural",
+      "content_type": "table_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:45.067463",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 120,
+      "document_id": "a0c6c2023087",
+      "document_name": "-_1_5.51_Berlin_has_a_yearly_total_of_about_135_million_day_visitors...",
+      "source_path": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers\\-_1_5.51_Berlin_has_a_yearly_total_of_about_135_million_day_visitors....md",
+      "source_filename": "-_1_5.51_Berlin_has_a_yearly_total_of_about_135_million_day_visitors....md",
+      "source_directory": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers",
+      "relative_path": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers\\-_1_5.51_Berlin_has_a_yearly_total_of_about_135_million_day_visitors....md",
+      "hierarchy_path": "Data Collator",
+      "chunk_hash": "cbb1977f722ff154",
+      "content_digest": "cbb1977f722ff154",
+      "chunk_length": 502,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "sentence_transformer"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "columns",
+          "label",
+          "data",
+          "collator",
+          "the",
+          "tokenization",
+          "router",
+          "prompts",
+          "sentencetransformerdatacollator",
+          "handles",
+          "and",
+          "batch",
+          "preparation",
+          "component",
+          "purpose",
+          "tokenize",
+          "tokenizes",
+          "text",
+          "inputs",
+          "using"
+        ],
+        "term_weights": [
+          {
+            "term": "columns",
+            "tf": 3,
+            "weight": 0.0625
+          },
+          {
+            "term": "label",
+            "tf": 3,
+            "weight": 0.0625
+          },
+          {
+            "term": "data",
+            "tf": 2,
+            "weight": 0.041667
+          },
+          {
+            "term": "collator",
+            "tf": 2,
+            "weight": 0.041667
+          },
+          {
+            "term": "the",
+            "tf": 2,
+            "weight": 0.041667
+          },
+          {
+            "term": "tokenization",
+            "tf": 2,
+            "weight": 0.041667
+          },
+          {
+            "term": "router",
+            "tf": 2,
+            "weight": 0.041667
+          },
+          {
+            "term": "prompts",
+            "tf": 2,
+            "weight": 0.041667
+          },
+          {
+            "term": "sentencetransformerdatacollator",
+            "tf": 1,
+            "weight": 0.020833
+          },
+          {
+            "term": "handles",
+            "tf": 1,
+            "weight": 0.020833
+          },
+          {
+            "term": "and",
+            "tf": 1,
+            "weight": 0.020833
+          },
+          {
+            "term": "batch",
+            "tf": 1,
+            "weight": 0.020833
+          },
+          {
+            "term": "preparation",
+            "tf": 1,
+            "weight": 0.020833
+          },
+          {
+            "term": "component",
+            "tf": 1,
+            "weight": 0.020833
+          },
+          {
+            "term": "purpose",
+            "tf": 1,
+            "weight": 0.020833
+          },
+          {
+            "term": "tokenize",
+            "tf": 1,
+            "weight": 0.020833
+          },
+          {
+            "term": "tokenizes",
+            "tf": 1,
+            "weight": 0.020833
+          },
+          {
+            "term": "text",
+            "tf": 1,
+            "weight": 0.020833
+          },
+          {
+            "term": "inputs",
+            "tf": 1,
+            "weight": 0.020833
+          },
+          {
+            "term": "using",
+            "tf": 1,
+            "weight": 0.020833
+          }
+        ],
+        "unique_terms": 38,
+        "total_terms": 48
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Data Collator",
+        "collator",
+        "columns",
+        "data",
+        "handles",
+        "label",
+        "prompts",
+        "router",
+        "sentencetransformerdatacollator",
+        "the",
+        "tokenization"
+      ],
+      "collection_name": "Sentence_Transformer"
+    },
+    "advanced_scores": {
+      "semantic": 0.7999999999999999,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5029032258064516,
+      "overall": 0.7343010752688172
+    }
+  },
+  {
+    "text": "### Training Arguments  Each model type has specialized training arguments:  - `SentenceTransformerTrainingArguments` - Basic sentence transformer training - `SparseEncoderTrainingArguments` - Adds sparse-specific parameters   - `CrossEncoderTrainingArguments` - Cross encoder specific settings  Key parameters include `batch_sampler`, `multi_dataset_batch_sampler`, `router_mapping`, and `learning_rate_mapping`. Sources: [sentence_transformers/trainer.py:36-40]()",
+    "metadata": {
+      "chunk_id": "a0c6c2023087-0011",
+      "source_file": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers\\-_1_5.51_Berlin_has_a_yearly_total_of_about_135_million_day_visitors....md",
+      "filename": "-_1_5.51_Berlin_has_a_yearly_total_of_about_135_million_day_visitors....md",
+      "file_extension": ".md",
+      "chunk_index": 11,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Training Arguments"
+      ],
+      "heading_text": "Training Arguments",
+      "token_count": 88,
+      "char_count": 465,
+      "start_char": 9290,
+      "end_char": 9755,
+      "semantic_score": 0.7999999999999999,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.53,
+      "chunking_strategy": "hybrid_adaptive_structural",
+      "content_type": "list_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:45.067844",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 88,
+      "document_id": "a0c6c2023087",
+      "document_name": "-_1_5.51_Berlin_has_a_yearly_total_of_about_135_million_day_visitors...",
+      "source_path": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers\\-_1_5.51_Berlin_has_a_yearly_total_of_about_135_million_day_visitors....md",
+      "source_filename": "-_1_5.51_Berlin_has_a_yearly_total_of_about_135_million_day_visitors....md",
+      "source_directory": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers",
+      "relative_path": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers\\-_1_5.51_Berlin_has_a_yearly_total_of_about_135_million_day_visitors....md",
+      "hierarchy_path": "Training Arguments",
+      "chunk_hash": "fba0e697b342fb75",
+      "content_digest": "fba0e697b342fb75",
+      "chunk_length": 465,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "sentence_transformer"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "training",
+          "arguments",
+          "sentence",
+          "specific",
+          "parameters",
+          "batch",
+          "sampler",
+          "mapping",
+          "each",
+          "model",
+          "type",
+          "has",
+          "specialized",
+          "sentencetransformertrainingarguments",
+          "basic",
+          "transformer",
+          "sparseencodertrainingarguments",
+          "adds",
+          "sparse",
+          "crossencodertrainingarguments"
+        ],
+        "term_weights": [
+          {
+            "term": "training",
+            "tf": 3,
+            "weight": 0.069767
+          },
+          {
+            "term": "arguments",
+            "tf": 2,
+            "weight": 0.046512
+          },
+          {
+            "term": "sentence",
+            "tf": 2,
+            "weight": 0.046512
+          },
+          {
+            "term": "specific",
+            "tf": 2,
+            "weight": 0.046512
+          },
+          {
+            "term": "parameters",
+            "tf": 2,
+            "weight": 0.046512
+          },
+          {
+            "term": "batch",
+            "tf": 2,
+            "weight": 0.046512
+          },
+          {
+            "term": "sampler",
+            "tf": 2,
+            "weight": 0.046512
+          },
+          {
+            "term": "mapping",
+            "tf": 2,
+            "weight": 0.046512
+          },
+          {
+            "term": "each",
+            "tf": 1,
+            "weight": 0.023256
+          },
+          {
+            "term": "model",
+            "tf": 1,
+            "weight": 0.023256
+          },
+          {
+            "term": "type",
+            "tf": 1,
+            "weight": 0.023256
+          },
+          {
+            "term": "has",
+            "tf": 1,
+            "weight": 0.023256
+          },
+          {
+            "term": "specialized",
+            "tf": 1,
+            "weight": 0.023256
+          },
+          {
+            "term": "sentencetransformertrainingarguments",
+            "tf": 1,
+            "weight": 0.023256
+          },
+          {
+            "term": "basic",
+            "tf": 1,
+            "weight": 0.023256
+          },
+          {
+            "term": "transformer",
+            "tf": 1,
+            "weight": 0.023256
+          },
+          {
+            "term": "sparseencodertrainingarguments",
+            "tf": 1,
+            "weight": 0.023256
+          },
+          {
+            "term": "adds",
+            "tf": 1,
+            "weight": 0.023256
+          },
+          {
+            "term": "sparse",
+            "tf": 1,
+            "weight": 0.023256
+          },
+          {
+            "term": "crossencodertrainingarguments",
+            "tf": 1,
+            "weight": 0.023256
+          }
+        ],
+        "unique_terms": 34,
+        "total_terms": 43
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Training Arguments",
+        "arguments",
+        "batch",
+        "each",
+        "mapping",
+        "model",
+        "parameters",
+        "sampler",
+        "sentence",
+        "specific",
+        "training"
+      ],
+      "collection_name": "Sentence_Transformer"
+    },
+    "advanced_scores": {
+      "semantic": 0.7999999999999999,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.53,
+      "overall": 0.7433333333333332
+    }
+  },
+  {
+    "text": "### Loss Functions  Training supports both single loss functions and multi-dataset loss dictionaries: ```python",
+    "metadata": {
+      "chunk_id": "a0c6c2023087-0012",
+      "source_file": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers\\-_1_5.51_Berlin_has_a_yearly_total_of_about_135_million_day_visitors....md",
+      "filename": "-_1_5.51_Berlin_has_a_yearly_total_of_about_135_million_day_visitors....md",
+      "file_extension": ".md",
+      "chunk_index": 12,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Loss Functions"
+      ],
+      "heading_text": "Loss Functions",
+      "token_count": 19,
+      "char_count": 111,
+      "start_char": 9758,
+      "end_char": 9869,
+      "semantic_score": 0.8,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5257142857142857,
+      "chunking_strategy": "hybrid_adaptive_structural",
+      "content_type": "code_block",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:45.068276",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 19,
+      "document_id": "a0c6c2023087",
+      "document_name": "-_1_5.51_Berlin_has_a_yearly_total_of_about_135_million_day_visitors...",
+      "source_path": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers\\-_1_5.51_Berlin_has_a_yearly_total_of_about_135_million_day_visitors....md",
+      "source_filename": "-_1_5.51_Berlin_has_a_yearly_total_of_about_135_million_day_visitors....md",
+      "source_directory": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers",
+      "relative_path": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers\\-_1_5.51_Berlin_has_a_yearly_total_of_about_135_million_day_visitors....md",
+      "hierarchy_path": "Loss Functions",
+      "chunk_hash": "f782cc1ad6bb1f4b",
+      "content_digest": "f782cc1ad6bb1f4b",
+      "chunk_length": 111,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "sentence_transformer"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "loss",
+          "functions",
+          "training",
+          "supports",
+          "both",
+          "single",
+          "and",
+          "multi",
+          "dataset",
+          "dictionaries",
+          "python"
+        ],
+        "term_weights": [
+          {
+            "term": "loss",
+            "tf": 3,
+            "weight": 0.214286
+          },
+          {
+            "term": "functions",
+            "tf": 2,
+            "weight": 0.142857
+          },
+          {
+            "term": "training",
+            "tf": 1,
+            "weight": 0.071429
+          },
+          {
+            "term": "supports",
+            "tf": 1,
+            "weight": 0.071429
+          },
+          {
+            "term": "both",
+            "tf": 1,
+            "weight": 0.071429
+          },
+          {
+            "term": "single",
+            "tf": 1,
+            "weight": 0.071429
+          },
+          {
+            "term": "and",
+            "tf": 1,
+            "weight": 0.071429
+          },
+          {
+            "term": "multi",
+            "tf": 1,
+            "weight": 0.071429
+          },
+          {
+            "term": "dataset",
+            "tf": 1,
+            "weight": 0.071429
+          },
+          {
+            "term": "dictionaries",
+            "tf": 1,
+            "weight": 0.071429
+          },
+          {
+            "term": "python",
+            "tf": 1,
+            "weight": 0.071429
+          }
+        ],
+        "unique_terms": 11,
+        "total_terms": 14
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Loss Functions",
+        "and",
+        "both",
+        "dataset",
+        "dictionaries",
+        "functions",
+        "loss",
+        "multi",
+        "single",
+        "supports",
+        "training"
+      ],
+      "collection_name": "Sentence_Transformer"
+    },
+    "advanced_scores": {
+      "semantic": 0.8,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5257142857142857,
+      "overall": 0.7419047619047618
+    }
+  }
+]

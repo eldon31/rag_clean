@@ -1,0 +1,1730 @@
+[
+  {
+    "text": "# Segment Lifecycle and Construction  Relevant source files  - [lib/segment/src/entry/entry\\_point.rs](https://github.com/qdrant/qdrant/blob/48203e41/lib/segment/src/entry/entry_point.rs) - [lib/segment/src/fixtures/index\\_fixtures.rs](https://github.com/qdrant/qdrant/blob/48203e41/lib/segment/src/fixtures/index_fixtures.rs) - [lib/segment/src/segment\\_constructor/segment\\_builder.rs](https://github.com/qdrant/qdrant/blob/48203e41/lib/segment/src/segment_constructor/segment_builder.rs) - [lib/segment/src/segment\\_constructor/segment\\_constructor\\_base.rs](https://github.com/qdrant/qdrant/blob/48203e41/lib/segment/src/segment_constructor/segment_constructor_base.rs) - [lib/segment/src/vector\\_storage/vector\\_storage\\_base.rs](https://github.com/qdrant/qdrant/blob/48203e41/lib/segment/src/vector_storage/vector_storage_base.rs)  This page explains the structure, lifecycle, and construction of Segments, which are the fundamental data units in Qdrant that store vectors, payloads, and indices. This document covers segment types, component composition, creation/loading processes, and the SegmentBuilder optimization workflow. For information about how LocalShard manages segments and triggers optimization, see [Local Shard Architecture](qdrant/qdrant/2.4-local-shard-architecture.md). For details on specific index implementations, see [HNSW Index Implementation](qdrant/qdrant/3.2-hnsw-index-implementation.md) and [Field Index Types](qdrant/qdrant/4.1-field-index-types.md).",
+    "metadata": {
+      "chunk_id": "371ddc47c8aa-0000",
+      "source_file": "Docs\\Qdrant\\qdrant_qdrant\\_qdrant_qdrant_2.5-segment-lifecycle-and-construction.md",
+      "filename": "_qdrant_qdrant_2.5-segment-lifecycle-and-construction.md",
+      "file_extension": ".md",
+      "chunk_index": 0,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Segment Lifecycle and Construction"
+      ],
+      "heading_text": "Segment Lifecycle and Construction",
+      "token_count": 367,
+      "char_count": 1487,
+      "start_char": 3059,
+      "end_char": 4546,
+      "semantic_score": 0.6,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5458142857142857,
+      "chunking_strategy": "hierarchical_balanced_structural",
+      "content_type": "list_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:42.502132",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 367,
+      "document_id": "371ddc47c8aa",
+      "document_name": "_qdrant_qdrant_2.5-segment-lifecycle-and-construction",
+      "source_path": "Docs\\Qdrant\\qdrant_qdrant\\_qdrant_qdrant_2.5-segment-lifecycle-and-construction.md",
+      "source_filename": "_qdrant_qdrant_2.5-segment-lifecycle-and-construction.md",
+      "source_directory": "Docs\\Qdrant\\qdrant_qdrant",
+      "relative_path": "Docs\\Qdrant\\qdrant_qdrant\\_qdrant_qdrant_2.5-segment-lifecycle-and-construction.md",
+      "hierarchy_path": "Segment Lifecycle and Construction",
+      "chunk_hash": "43dcbebd114e4262",
+      "content_digest": "43dcbebd114e4262",
+      "chunk_length": 1487,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "segment",
+          "qdrant",
+          "lib",
+          "src",
+          "index",
+          "and",
+          "constructor",
+          "https",
+          "github",
+          "com",
+          "blob",
+          "48203e41",
+          "entry",
+          "fixtures",
+          "base",
+          "vector",
+          "storage",
+          "the",
+          "types",
+          "lifecycle"
+        ],
+        "term_weights": [
+          {
+            "term": "segment",
+            "tf": 20,
+            "weight": 0.104712
+          },
+          {
+            "term": "qdrant",
+            "tf": 17,
+            "weight": 0.089005
+          },
+          {
+            "term": "lib",
+            "tf": 10,
+            "weight": 0.052356
+          },
+          {
+            "term": "src",
+            "tf": 10,
+            "weight": 0.052356
+          },
+          {
+            "term": "index",
+            "tf": 7,
+            "weight": 0.036649
+          },
+          {
+            "term": "and",
+            "tf": 6,
+            "weight": 0.031414
+          },
+          {
+            "term": "constructor",
+            "tf": 6,
+            "weight": 0.031414
+          },
+          {
+            "term": "https",
+            "tf": 5,
+            "weight": 0.026178
+          },
+          {
+            "term": "github",
+            "tf": 5,
+            "weight": 0.026178
+          },
+          {
+            "term": "com",
+            "tf": 5,
+            "weight": 0.026178
+          },
+          {
+            "term": "blob",
+            "tf": 5,
+            "weight": 0.026178
+          },
+          {
+            "term": "48203e41",
+            "tf": 5,
+            "weight": 0.026178
+          },
+          {
+            "term": "entry",
+            "tf": 4,
+            "weight": 0.020942
+          },
+          {
+            "term": "fixtures",
+            "tf": 4,
+            "weight": 0.020942
+          },
+          {
+            "term": "base",
+            "tf": 4,
+            "weight": 0.020942
+          },
+          {
+            "term": "vector",
+            "tf": 4,
+            "weight": 0.020942
+          },
+          {
+            "term": "storage",
+            "tf": 4,
+            "weight": 0.020942
+          },
+          {
+            "term": "the",
+            "tf": 3,
+            "weight": 0.015707
+          },
+          {
+            "term": "types",
+            "tf": 3,
+            "weight": 0.015707
+          },
+          {
+            "term": "lifecycle",
+            "tf": 2,
+            "weight": 0.010471
+          }
+        ],
+        "unique_terms": 68,
+        "total_terms": 191
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Segment Lifecycle and Construction",
+        "and",
+        "com",
+        "constructor",
+        "github",
+        "https",
+        "index",
+        "lib",
+        "qdrant",
+        "segment",
+        "src"
+      ],
+      "collection_name": "Qdrant"
+    },
+    "advanced_scores": {
+      "semantic": 0.6,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5458142857142857,
+      "overall": 0.6819380952380952
+    }
+  },
+  {
+    "text": "## Segment Types ``` ``` The segment type is determined by the configuration:  - **Plain**: `segment_config.is_any_vector_indexed()` returns false - **Indexed**: `segment_config.is_any_vector_indexed()` returns true  The appendable flag determines whether the segment can accept new writes:  - **Appendable segments** use `MutableIdTracker` and accept insertions - **Immutable segments** use `ImmutableIdTracker` for better memory efficiency  **Sources:** [lib/segment/src/segment\\_constructor/segment\\_constructor\\_base.rs603-607](https://github.com/qdrant/qdrant/blob/48203e41/lib/segment/src/segment_constructor/segment_constructor_base.rs#L603-L607) [lib/segment/src/segment\\_constructor/segment\\_constructor\\_base.rs454-457](https://github.com/qdrant/qdrant/blob/48203e41/lib/segment/src/segment_constructor/segment_constructor_base.rs#L454-L457)",
+    "metadata": {
+      "chunk_id": "371ddc47c8aa-0002",
+      "source_file": "Docs\\Qdrant\\qdrant_qdrant\\_qdrant_qdrant_2.5-segment-lifecycle-and-construction.md",
+      "filename": "_qdrant_qdrant_2.5-segment-lifecycle-and-construction.md",
+      "file_extension": ".md",
+      "chunk_index": 2,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Segment Types"
+      ],
+      "heading_text": "Segment Types",
+      "token_count": 203,
+      "char_count": 851,
+      "start_char": 5236,
+      "end_char": 6087,
+      "semantic_score": 0.7,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5122222222222222,
+      "chunking_strategy": "hierarchical_balanced_structural",
+      "content_type": "code_block",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:42.507024",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 203,
+      "document_id": "371ddc47c8aa",
+      "document_name": "_qdrant_qdrant_2.5-segment-lifecycle-and-construction",
+      "source_path": "Docs\\Qdrant\\qdrant_qdrant\\_qdrant_qdrant_2.5-segment-lifecycle-and-construction.md",
+      "source_filename": "_qdrant_qdrant_2.5-segment-lifecycle-and-construction.md",
+      "source_directory": "Docs\\Qdrant\\qdrant_qdrant",
+      "relative_path": "Docs\\Qdrant\\qdrant_qdrant\\_qdrant_qdrant_2.5-segment-lifecycle-and-construction.md",
+      "hierarchy_path": "Segment Types",
+      "chunk_hash": "ac5001270f0fe604",
+      "content_digest": "ac5001270f0fe604",
+      "chunk_length": 851,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "segment",
+          "constructor",
+          "the",
+          "lib",
+          "src",
+          "base",
+          "qdrant",
+          "indexed",
+          "config",
+          "any",
+          "vector",
+          "returns",
+          "appendable",
+          "accept",
+          "segments",
+          "use",
+          "https",
+          "github",
+          "com",
+          "blob"
+        ],
+        "term_weights": [
+          {
+            "term": "segment",
+            "tf": 17,
+            "weight": 0.161905
+          },
+          {
+            "term": "constructor",
+            "tf": 8,
+            "weight": 0.07619
+          },
+          {
+            "term": "the",
+            "tf": 4,
+            "weight": 0.038095
+          },
+          {
+            "term": "lib",
+            "tf": 4,
+            "weight": 0.038095
+          },
+          {
+            "term": "src",
+            "tf": 4,
+            "weight": 0.038095
+          },
+          {
+            "term": "base",
+            "tf": 4,
+            "weight": 0.038095
+          },
+          {
+            "term": "qdrant",
+            "tf": 4,
+            "weight": 0.038095
+          },
+          {
+            "term": "indexed",
+            "tf": 3,
+            "weight": 0.028571
+          },
+          {
+            "term": "config",
+            "tf": 2,
+            "weight": 0.019048
+          },
+          {
+            "term": "any",
+            "tf": 2,
+            "weight": 0.019048
+          },
+          {
+            "term": "vector",
+            "tf": 2,
+            "weight": 0.019048
+          },
+          {
+            "term": "returns",
+            "tf": 2,
+            "weight": 0.019048
+          },
+          {
+            "term": "appendable",
+            "tf": 2,
+            "weight": 0.019048
+          },
+          {
+            "term": "accept",
+            "tf": 2,
+            "weight": 0.019048
+          },
+          {
+            "term": "segments",
+            "tf": 2,
+            "weight": 0.019048
+          },
+          {
+            "term": "use",
+            "tf": 2,
+            "weight": 0.019048
+          },
+          {
+            "term": "https",
+            "tf": 2,
+            "weight": 0.019048
+          },
+          {
+            "term": "github",
+            "tf": 2,
+            "weight": 0.019048
+          },
+          {
+            "term": "com",
+            "tf": 2,
+            "weight": 0.019048
+          },
+          {
+            "term": "blob",
+            "tf": 2,
+            "weight": 0.019048
+          }
+        ],
+        "unique_terms": 52,
+        "total_terms": 105
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Segment Types",
+        "any",
+        "base",
+        "config",
+        "constructor",
+        "indexed",
+        "lib",
+        "qdrant",
+        "segment",
+        "src",
+        "the"
+      ],
+      "collection_name": "Qdrant"
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5122222222222222,
+      "overall": 0.704074074074074
+    }
+  },
+  {
+    "text": "## Component Initialization Paths  The segment construction process involves creating and initializing each component based on the segment configuration: ``` ``` **Sources:** [lib/segment/src/segment\\_constructor/segment\\_constructor\\_base.rs436-627](https://github.com/qdrant/qdrant/blob/48203e41/lib/segment/src/segment_constructor/segment_constructor_base.rs#L436-L627) [lib/segment/src/segment\\_constructor/segment\\_constructor\\_base.rs99-223](https://github.com/qdrant/qdrant/blob/48203e41/lib/segment/src/segment_constructor/segment_constructor_base.rs#L99-L223)",
+    "metadata": {
+      "chunk_id": "371ddc47c8aa-0004",
+      "source_file": "Docs\\Qdrant\\qdrant_qdrant\\_qdrant_qdrant_2.5-segment-lifecycle-and-construction.md",
+      "filename": "_qdrant_qdrant_2.5-segment-lifecycle-and-construction.md",
+      "file_extension": ".md",
+      "chunk_index": 4,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Component Initialization Paths"
+      ],
+      "heading_text": "Component Initialization Paths",
+      "token_count": 134,
+      "char_count": 568,
+      "start_char": 6745,
+      "end_char": 7313,
+      "semantic_score": 0.7,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.54,
+      "chunking_strategy": "hierarchical_balanced_structural",
+      "content_type": "code_block",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:42.509712",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 134,
+      "document_id": "371ddc47c8aa",
+      "document_name": "_qdrant_qdrant_2.5-segment-lifecycle-and-construction",
+      "source_path": "Docs\\Qdrant\\qdrant_qdrant\\_qdrant_qdrant_2.5-segment-lifecycle-and-construction.md",
+      "source_filename": "_qdrant_qdrant_2.5-segment-lifecycle-and-construction.md",
+      "source_directory": "Docs\\Qdrant\\qdrant_qdrant",
+      "relative_path": "Docs\\Qdrant\\qdrant_qdrant\\_qdrant_qdrant_2.5-segment-lifecycle-and-construction.md",
+      "hierarchy_path": "Component Initialization Paths",
+      "chunk_hash": "3d4b9ac64dc4c53d",
+      "content_digest": "3d4b9ac64dc4c53d",
+      "chunk_length": 568,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "segment",
+          "constructor",
+          "lib",
+          "src",
+          "base",
+          "qdrant",
+          "component",
+          "the",
+          "https",
+          "github",
+          "com",
+          "blob",
+          "48203e41",
+          "initialization",
+          "paths",
+          "construction",
+          "process",
+          "involves",
+          "creating",
+          "and"
+        ],
+        "term_weights": [
+          {
+            "term": "segment",
+            "tf": 14,
+            "weight": 0.194444
+          },
+          {
+            "term": "constructor",
+            "tf": 8,
+            "weight": 0.111111
+          },
+          {
+            "term": "lib",
+            "tf": 4,
+            "weight": 0.055556
+          },
+          {
+            "term": "src",
+            "tf": 4,
+            "weight": 0.055556
+          },
+          {
+            "term": "base",
+            "tf": 4,
+            "weight": 0.055556
+          },
+          {
+            "term": "qdrant",
+            "tf": 4,
+            "weight": 0.055556
+          },
+          {
+            "term": "component",
+            "tf": 2,
+            "weight": 0.027778
+          },
+          {
+            "term": "the",
+            "tf": 2,
+            "weight": 0.027778
+          },
+          {
+            "term": "https",
+            "tf": 2,
+            "weight": 0.027778
+          },
+          {
+            "term": "github",
+            "tf": 2,
+            "weight": 0.027778
+          },
+          {
+            "term": "com",
+            "tf": 2,
+            "weight": 0.027778
+          },
+          {
+            "term": "blob",
+            "tf": 2,
+            "weight": 0.027778
+          },
+          {
+            "term": "48203e41",
+            "tf": 2,
+            "weight": 0.027778
+          },
+          {
+            "term": "initialization",
+            "tf": 1,
+            "weight": 0.013889
+          },
+          {
+            "term": "paths",
+            "tf": 1,
+            "weight": 0.013889
+          },
+          {
+            "term": "construction",
+            "tf": 1,
+            "weight": 0.013889
+          },
+          {
+            "term": "process",
+            "tf": 1,
+            "weight": 0.013889
+          },
+          {
+            "term": "involves",
+            "tf": 1,
+            "weight": 0.013889
+          },
+          {
+            "term": "creating",
+            "tf": 1,
+            "weight": 0.013889
+          },
+          {
+            "term": "and",
+            "tf": 1,
+            "weight": 0.013889
+          }
+        ],
+        "unique_terms": 33,
+        "total_terms": 72
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Component Initialization Paths",
+        "base",
+        "component",
+        "constructor",
+        "github",
+        "https",
+        "lib",
+        "qdrant",
+        "segment",
+        "src",
+        "the"
+      ],
+      "collection_name": "Qdrant"
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.54,
+      "overall": 0.7133333333333333
+    }
+  },
+  {
+    "text": "### Loading an Existing Segment  The `load_segment()` function restores a segment from disk: ``` ``` The loader handles version migrations automatically, converting old segment formats to the current version. It also supports migrating from RocksDB-based storage to newer memory-mapped storage formats when feature flags are enabled. **Sources:** [lib/segment/src/segment\\_constructor/segment\\_constructor\\_base.rs687-764](https://github.com/qdrant/qdrant/blob/48203e41/lib/segment/src/segment_constructor/segment_constructor_base.rs#L687-L764) [lib/segment/src/segment\\_constructor/segment\\_constructor\\_base.rs810-901](https://github.com/qdrant/qdrant/blob/48203e41/lib/segment/src/segment_constructor/segment_constructor_base.rs#L810-L901)",
+    "metadata": {
+      "chunk_id": "371ddc47c8aa-0007",
+      "source_file": "Docs\\Qdrant\\qdrant_qdrant\\_qdrant_qdrant_2.5-segment-lifecycle-and-construction.md",
+      "filename": "_qdrant_qdrant_2.5-segment-lifecycle-and-construction.md",
+      "file_extension": ".md",
+      "chunk_index": 7,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Loading an Existing Segment"
+      ],
+      "heading_text": "Loading an Existing Segment",
+      "token_count": 169,
+      "char_count": 742,
+      "start_char": 8747,
+      "end_char": 9489,
+      "semantic_score": 0.7,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5348979591836734,
+      "chunking_strategy": "hierarchical_balanced_structural",
+      "content_type": "code_block",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:42.512529",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 169,
+      "document_id": "371ddc47c8aa",
+      "document_name": "_qdrant_qdrant_2.5-segment-lifecycle-and-construction",
+      "source_path": "Docs\\Qdrant\\qdrant_qdrant\\_qdrant_qdrant_2.5-segment-lifecycle-and-construction.md",
+      "source_filename": "_qdrant_qdrant_2.5-segment-lifecycle-and-construction.md",
+      "source_directory": "Docs\\Qdrant\\qdrant_qdrant",
+      "relative_path": "Docs\\Qdrant\\qdrant_qdrant\\_qdrant_qdrant_2.5-segment-lifecycle-and-construction.md",
+      "hierarchy_path": "Loading an Existing Segment",
+      "chunk_hash": "3304e720c5d7b298",
+      "content_digest": "3304e720c5d7b298",
+      "chunk_length": 742,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "segment",
+          "constructor",
+          "lib",
+          "src",
+          "base",
+          "qdrant",
+          "the",
+          "from",
+          "version",
+          "formats",
+          "storage",
+          "https",
+          "github",
+          "com",
+          "blob",
+          "48203e41",
+          "loading",
+          "existing",
+          "load",
+          "function"
+        ],
+        "term_weights": [
+          {
+            "term": "segment",
+            "tf": 16,
+            "weight": 0.166667
+          },
+          {
+            "term": "constructor",
+            "tf": 8,
+            "weight": 0.083333
+          },
+          {
+            "term": "lib",
+            "tf": 4,
+            "weight": 0.041667
+          },
+          {
+            "term": "src",
+            "tf": 4,
+            "weight": 0.041667
+          },
+          {
+            "term": "base",
+            "tf": 4,
+            "weight": 0.041667
+          },
+          {
+            "term": "qdrant",
+            "tf": 4,
+            "weight": 0.041667
+          },
+          {
+            "term": "the",
+            "tf": 3,
+            "weight": 0.03125
+          },
+          {
+            "term": "from",
+            "tf": 2,
+            "weight": 0.020833
+          },
+          {
+            "term": "version",
+            "tf": 2,
+            "weight": 0.020833
+          },
+          {
+            "term": "formats",
+            "tf": 2,
+            "weight": 0.020833
+          },
+          {
+            "term": "storage",
+            "tf": 2,
+            "weight": 0.020833
+          },
+          {
+            "term": "https",
+            "tf": 2,
+            "weight": 0.020833
+          },
+          {
+            "term": "github",
+            "tf": 2,
+            "weight": 0.020833
+          },
+          {
+            "term": "com",
+            "tf": 2,
+            "weight": 0.020833
+          },
+          {
+            "term": "blob",
+            "tf": 2,
+            "weight": 0.020833
+          },
+          {
+            "term": "48203e41",
+            "tf": 2,
+            "weight": 0.020833
+          },
+          {
+            "term": "loading",
+            "tf": 1,
+            "weight": 0.010417
+          },
+          {
+            "term": "existing",
+            "tf": 1,
+            "weight": 0.010417
+          },
+          {
+            "term": "load",
+            "tf": 1,
+            "weight": 0.010417
+          },
+          {
+            "term": "function",
+            "tf": 1,
+            "weight": 0.010417
+          }
+        ],
+        "unique_terms": 51,
+        "total_terms": 96
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Loading an Existing Segment",
+        "base",
+        "constructor",
+        "formats",
+        "from",
+        "lib",
+        "qdrant",
+        "segment",
+        "src",
+        "the",
+        "version"
+      ],
+      "collection_name": "Qdrant"
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5348979591836734,
+      "overall": 0.7116326530612245
+    }
+  },
+  {
+    "text": "## Segment Construction via SegmentBuilder\n\nThe `SegmentBuilder` is used to create optimized segments by merging multiple existing segments. This is the core of the optimization process.",
+    "metadata": {
+      "chunk_id": "371ddc47c8aa-0008",
+      "source_file": "Docs\\Qdrant\\qdrant_qdrant\\_qdrant_qdrant_2.5-segment-lifecycle-and-construction.md",
+      "filename": "_qdrant_qdrant_2.5-segment-lifecycle-and-construction.md",
+      "file_extension": ".md",
+      "chunk_index": 8,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Segment Construction via SegmentBuilder"
+      ],
+      "heading_text": "Segment Construction via SegmentBuilder",
+      "token_count": 33,
+      "char_count": 186,
+      "start_char": 9494,
+      "end_char": 9680,
+      "semantic_score": 0.7,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5553846153846154,
+      "chunking_strategy": "hierarchical_balanced_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:42.512882",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 33,
+      "document_id": "371ddc47c8aa",
+      "document_name": "_qdrant_qdrant_2.5-segment-lifecycle-and-construction",
+      "source_path": "Docs\\Qdrant\\qdrant_qdrant\\_qdrant_qdrant_2.5-segment-lifecycle-and-construction.md",
+      "source_filename": "_qdrant_qdrant_2.5-segment-lifecycle-and-construction.md",
+      "source_directory": "Docs\\Qdrant\\qdrant_qdrant",
+      "relative_path": "Docs\\Qdrant\\qdrant_qdrant\\_qdrant_qdrant_2.5-segment-lifecycle-and-construction.md",
+      "hierarchy_path": "Segment Construction via SegmentBuilder",
+      "chunk_hash": "6251f98e5c3e7478",
+      "content_digest": "6251f98e5c3e7478",
+      "chunk_length": 186,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "the",
+          "segmentbuilder",
+          "segments",
+          "segment",
+          "construction",
+          "via",
+          "used",
+          "create",
+          "optimized",
+          "merging",
+          "multiple",
+          "existing",
+          "this",
+          "core",
+          "optimization",
+          "process"
+        ],
+        "term_weights": [
+          {
+            "term": "the",
+            "tf": 3,
+            "weight": 0.15
+          },
+          {
+            "term": "segmentbuilder",
+            "tf": 2,
+            "weight": 0.1
+          },
+          {
+            "term": "segments",
+            "tf": 2,
+            "weight": 0.1
+          },
+          {
+            "term": "segment",
+            "tf": 1,
+            "weight": 0.05
+          },
+          {
+            "term": "construction",
+            "tf": 1,
+            "weight": 0.05
+          },
+          {
+            "term": "via",
+            "tf": 1,
+            "weight": 0.05
+          },
+          {
+            "term": "used",
+            "tf": 1,
+            "weight": 0.05
+          },
+          {
+            "term": "create",
+            "tf": 1,
+            "weight": 0.05
+          },
+          {
+            "term": "optimized",
+            "tf": 1,
+            "weight": 0.05
+          },
+          {
+            "term": "merging",
+            "tf": 1,
+            "weight": 0.05
+          },
+          {
+            "term": "multiple",
+            "tf": 1,
+            "weight": 0.05
+          },
+          {
+            "term": "existing",
+            "tf": 1,
+            "weight": 0.05
+          },
+          {
+            "term": "this",
+            "tf": 1,
+            "weight": 0.05
+          },
+          {
+            "term": "core",
+            "tf": 1,
+            "weight": 0.05
+          },
+          {
+            "term": "optimization",
+            "tf": 1,
+            "weight": 0.05
+          },
+          {
+            "term": "process",
+            "tf": 1,
+            "weight": 0.05
+          }
+        ],
+        "unique_terms": 16,
+        "total_terms": 20
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Segment Construction via SegmentBuilder",
+        "construction",
+        "create",
+        "merging",
+        "optimized",
+        "segment",
+        "segmentbuilder",
+        "segments",
+        "the",
+        "used",
+        "via"
+      ],
+      "collection_name": "Qdrant"
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5553846153846154,
+      "overall": 0.7184615384615384
+    }
+  },
+  {
+    "text": "### SegmentBuilder Workflow  The complete optimization workflow: ``` ``` **Key optimizations:**  1. **Defragmentation**: Points with similar payload values are placed near each other in internal ID space to improve cache locality during filtered searches 2. **Index reuse**: Old indices from source segments are passed to `build_vector_index()` to speed up HNSW construction by providing good starting points 3. **Cache eviction**: After building, all caches are cleared to avoid polluting RAM with data that should stay on disk 4. **Atomic completion**: The segment is only marked as valid (version file saved) after all components are built successfully  **Sources:** [lib/segment/src/segment\\_constructor/segment\\_builder.rs287-459](https://github.com/qdrant/qdrant/blob/48203e41/lib/segment/src/segment_constructor/segment_builder.rs#L287-L459) [lib/segment/src/segment\\_constructor/segment\\_builder.rs461-691](https://github.com/qdrant/qdrant/blob/48203e41/lib/segment/src/segment_constructor/segment_builder.rs#L461-L691)",
+    "metadata": {
+      "chunk_id": "371ddc47c8aa-0010",
+      "source_file": "Docs\\Qdrant\\qdrant_qdrant\\_qdrant_qdrant_2.5-segment-lifecycle-and-construction.md",
+      "filename": "_qdrant_qdrant_2.5-segment-lifecycle-and-construction.md",
+      "file_extension": ".md",
+      "chunk_index": 10,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "SegmentBuilder Workflow"
+      ],
+      "heading_text": "SegmentBuilder Workflow",
+      "token_count": 235,
+      "char_count": 1027,
+      "start_char": 9910,
+      "end_char": 10937,
+      "semantic_score": 0.7,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.553265306122449,
+      "chunking_strategy": "hierarchical_balanced_structural",
+      "content_type": "code_block",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:42.516626",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 235,
+      "document_id": "371ddc47c8aa",
+      "document_name": "_qdrant_qdrant_2.5-segment-lifecycle-and-construction",
+      "source_path": "Docs\\Qdrant\\qdrant_qdrant\\_qdrant_qdrant_2.5-segment-lifecycle-and-construction.md",
+      "source_filename": "_qdrant_qdrant_2.5-segment-lifecycle-and-construction.md",
+      "source_directory": "Docs\\Qdrant\\qdrant_qdrant",
+      "relative_path": "Docs\\Qdrant\\qdrant_qdrant\\_qdrant_qdrant_2.5-segment-lifecycle-and-construction.md",
+      "hierarchy_path": "SegmentBuilder Workflow",
+      "chunk_hash": "171fddc05def4561",
+      "content_digest": "171fddc05def4561",
+      "chunk_length": 1027,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "segment",
+          "are",
+          "lib",
+          "src",
+          "constructor",
+          "builder",
+          "qdrant",
+          "workflow",
+          "the",
+          "points",
+          "with",
+          "cache",
+          "index",
+          "after",
+          "all",
+          "https",
+          "github",
+          "com",
+          "blob",
+          "48203e41"
+        ],
+        "term_weights": [
+          {
+            "term": "segment",
+            "tf": 13,
+            "weight": 0.1
+          },
+          {
+            "term": "are",
+            "tf": 4,
+            "weight": 0.030769
+          },
+          {
+            "term": "lib",
+            "tf": 4,
+            "weight": 0.030769
+          },
+          {
+            "term": "src",
+            "tf": 4,
+            "weight": 0.030769
+          },
+          {
+            "term": "constructor",
+            "tf": 4,
+            "weight": 0.030769
+          },
+          {
+            "term": "builder",
+            "tf": 4,
+            "weight": 0.030769
+          },
+          {
+            "term": "qdrant",
+            "tf": 4,
+            "weight": 0.030769
+          },
+          {
+            "term": "workflow",
+            "tf": 2,
+            "weight": 0.015385
+          },
+          {
+            "term": "the",
+            "tf": 2,
+            "weight": 0.015385
+          },
+          {
+            "term": "points",
+            "tf": 2,
+            "weight": 0.015385
+          },
+          {
+            "term": "with",
+            "tf": 2,
+            "weight": 0.015385
+          },
+          {
+            "term": "cache",
+            "tf": 2,
+            "weight": 0.015385
+          },
+          {
+            "term": "index",
+            "tf": 2,
+            "weight": 0.015385
+          },
+          {
+            "term": "after",
+            "tf": 2,
+            "weight": 0.015385
+          },
+          {
+            "term": "all",
+            "tf": 2,
+            "weight": 0.015385
+          },
+          {
+            "term": "https",
+            "tf": 2,
+            "weight": 0.015385
+          },
+          {
+            "term": "github",
+            "tf": 2,
+            "weight": 0.015385
+          },
+          {
+            "term": "com",
+            "tf": 2,
+            "weight": 0.015385
+          },
+          {
+            "term": "blob",
+            "tf": 2,
+            "weight": 0.015385
+          },
+          {
+            "term": "48203e41",
+            "tf": 2,
+            "weight": 0.015385
+          }
+        ],
+        "unique_terms": 87,
+        "total_terms": 130
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "SegmentBuilder Workflow",
+        "are",
+        "builder",
+        "constructor",
+        "lib",
+        "points",
+        "qdrant",
+        "segment",
+        "src",
+        "the",
+        "workflow"
+      ],
+      "collection_name": "Qdrant"
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.553265306122449,
+      "overall": 0.7177551020408163
+    }
+  },
+  {
+    "text": "### Defragmentation Strategy  The defragmentation process improves query performance by sorting points: ``` ``` The ordering value is a heuristic that groups similar payloads together. For example, if defragmenting on a `user_id` field, all points with the same `user_id` will have similar ordering values and end up adjacent in the segment. **Sources:** [lib/segment/src/segment\\_constructor/segment\\_builder.rs311-329](https://github.com/qdrant/qdrant/blob/48203e41/lib/segment/src/segment_constructor/segment_builder.rs#L311-L329) [lib/segment/src/segment\\_constructor/segment\\_builder.rs201-276](https://github.com/qdrant/qdrant/blob/48203e41/lib/segment/src/segment_constructor/segment_builder.rs#L201-L276)",
+    "metadata": {
+      "chunk_id": "371ddc47c8aa-0011",
+      "source_file": "Docs\\Qdrant\\qdrant_qdrant\\_qdrant_qdrant_2.5-segment-lifecycle-and-construction.md",
+      "filename": "_qdrant_qdrant_2.5-segment-lifecycle-and-construction.md",
+      "file_extension": ".md",
+      "chunk_index": 11,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Defragmentation Strategy"
+      ],
+      "heading_text": "Defragmentation Strategy",
+      "token_count": 174,
+      "char_count": 712,
+      "start_char": 10941,
+      "end_char": 11653,
+      "semantic_score": 0.7,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.74,
+      "chunking_strategy": "hierarchical_balanced_structural",
+      "content_type": "code_block",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:42.518547",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 174,
+      "document_id": "371ddc47c8aa",
+      "document_name": "_qdrant_qdrant_2.5-segment-lifecycle-and-construction",
+      "source_path": "Docs\\Qdrant\\qdrant_qdrant\\_qdrant_qdrant_2.5-segment-lifecycle-and-construction.md",
+      "source_filename": "_qdrant_qdrant_2.5-segment-lifecycle-and-construction.md",
+      "source_directory": "Docs\\Qdrant\\qdrant_qdrant",
+      "relative_path": "Docs\\Qdrant\\qdrant_qdrant\\_qdrant_qdrant_2.5-segment-lifecycle-and-construction.md",
+      "hierarchy_path": "Defragmentation Strategy",
+      "chunk_hash": "c04a1586850755a9",
+      "content_digest": "c04a1586850755a9",
+      "chunk_length": 712,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "segment",
+          "the",
+          "lib",
+          "src",
+          "constructor",
+          "builder",
+          "qdrant",
+          "defragmentation",
+          "points",
+          "ordering",
+          "similar",
+          "user",
+          "https",
+          "github",
+          "com",
+          "blob",
+          "48203e41",
+          "strategy",
+          "process",
+          "improves"
+        ],
+        "term_weights": [
+          {
+            "term": "segment",
+            "tf": 13,
+            "weight": 0.142857
+          },
+          {
+            "term": "the",
+            "tf": 4,
+            "weight": 0.043956
+          },
+          {
+            "term": "lib",
+            "tf": 4,
+            "weight": 0.043956
+          },
+          {
+            "term": "src",
+            "tf": 4,
+            "weight": 0.043956
+          },
+          {
+            "term": "constructor",
+            "tf": 4,
+            "weight": 0.043956
+          },
+          {
+            "term": "builder",
+            "tf": 4,
+            "weight": 0.043956
+          },
+          {
+            "term": "qdrant",
+            "tf": 4,
+            "weight": 0.043956
+          },
+          {
+            "term": "defragmentation",
+            "tf": 2,
+            "weight": 0.021978
+          },
+          {
+            "term": "points",
+            "tf": 2,
+            "weight": 0.021978
+          },
+          {
+            "term": "ordering",
+            "tf": 2,
+            "weight": 0.021978
+          },
+          {
+            "term": "similar",
+            "tf": 2,
+            "weight": 0.021978
+          },
+          {
+            "term": "user",
+            "tf": 2,
+            "weight": 0.021978
+          },
+          {
+            "term": "https",
+            "tf": 2,
+            "weight": 0.021978
+          },
+          {
+            "term": "github",
+            "tf": 2,
+            "weight": 0.021978
+          },
+          {
+            "term": "com",
+            "tf": 2,
+            "weight": 0.021978
+          },
+          {
+            "term": "blob",
+            "tf": 2,
+            "weight": 0.021978
+          },
+          {
+            "term": "48203e41",
+            "tf": 2,
+            "weight": 0.021978
+          },
+          {
+            "term": "strategy",
+            "tf": 1,
+            "weight": 0.010989
+          },
+          {
+            "term": "process",
+            "tf": 1,
+            "weight": 0.010989
+          },
+          {
+            "term": "improves",
+            "tf": 1,
+            "weight": 0.010989
+          }
+        ],
+        "unique_terms": 51,
+        "total_terms": 91
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Defragmentation Strategy",
+        "builder",
+        "constructor",
+        "defragmentation",
+        "lib",
+        "ordering",
+        "points",
+        "qdrant",
+        "segment",
+        "src",
+        "the"
+      ],
+      "collection_name": "Qdrant"
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.74,
+      "overall": 0.7799999999999999
+    }
+  },
+  {
+    "text": "## Segment Lifecycle States ``` ``` **Lifecycle summary:**  1. **Building**: Segment directory created, components being initialized. If process crashes, segment is skipped on restart (no version file). 2. **Ready**: Version file saved, segment is complete and will be loaded on restart. 3. **Loading**: On restart, `load_segment()` reads the segment from disk. 4. **Migrating**: If the stored version differs from the application version, migration routines convert the data. 5. **Loaded**: Segment is in memory and active, serving queries and updates. 6. **Optimizing**: SegmentBuilder merges this segment with others to create a new optimized segment. 7. **Deleted**: Segment directory renamed to `*.deleted` extension, will be skipped on load and eventually cleaned up. **Sources:** [lib/segment/src/segment\\_constructor/segment\\_constructor\\_base.rs782-808](https://github.com/qdrant/qdrant/blob/48203e41/lib/segment/src/segment_constructor/segment_constructor_base.rs#L782-L808) [lib/segment/src/segment\\_constructor/segment\\_constructor\\_base.rs687-736](https://github.com/qdrant/qdrant/blob/48203e41/lib/segment/src/segment_constructor/segment_constructor_base.rs#L687-L736)",
+    "metadata": {
+      "chunk_id": "371ddc47c8aa-0012",
+      "source_file": "Docs\\Qdrant\\qdrant_qdrant\\_qdrant_qdrant_2.5-segment-lifecycle-and-construction.md",
+      "filename": "_qdrant_qdrant_2.5-segment-lifecycle-and-construction.md",
+      "file_extension": ".md",
+      "chunk_index": 12,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Segment Lifecycle States"
+      ],
+      "heading_text": "Segment Lifecycle States",
+      "token_count": 279,
+      "char_count": 1182,
+      "start_char": 11658,
+      "end_char": 12840,
+      "semantic_score": 0.7,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5156637168141592,
+      "chunking_strategy": "hierarchical_balanced_structural",
+      "content_type": "code_block",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:42.527582",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 279,
+      "document_id": "371ddc47c8aa",
+      "document_name": "_qdrant_qdrant_2.5-segment-lifecycle-and-construction",
+      "source_path": "Docs\\Qdrant\\qdrant_qdrant\\_qdrant_qdrant_2.5-segment-lifecycle-and-construction.md",
+      "source_filename": "_qdrant_qdrant_2.5-segment-lifecycle-and-construction.md",
+      "source_directory": "Docs\\Qdrant\\qdrant_qdrant",
+      "relative_path": "Docs\\Qdrant\\qdrant_qdrant\\_qdrant_qdrant_2.5-segment-lifecycle-and-construction.md",
+      "hierarchy_path": "Segment Lifecycle States",
+      "chunk_hash": "d200a0afdf9d256e",
+      "content_digest": "d200a0afdf9d256e",
+      "chunk_length": 1182,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "segment",
+          "constructor",
+          "version",
+          "and",
+          "the",
+          "lib",
+          "src",
+          "base",
+          "qdrant",
+          "restart",
+          "lifecycle",
+          "directory",
+          "skipped",
+          "file",
+          "will",
+          "loaded",
+          "load",
+          "from",
+          "deleted",
+          "https"
+        ],
+        "term_weights": [
+          {
+            "term": "segment",
+            "tf": 22,
+            "weight": 0.158273
+          },
+          {
+            "term": "constructor",
+            "tf": 8,
+            "weight": 0.057554
+          },
+          {
+            "term": "version",
+            "tf": 4,
+            "weight": 0.028777
+          },
+          {
+            "term": "and",
+            "tf": 4,
+            "weight": 0.028777
+          },
+          {
+            "term": "the",
+            "tf": 4,
+            "weight": 0.028777
+          },
+          {
+            "term": "lib",
+            "tf": 4,
+            "weight": 0.028777
+          },
+          {
+            "term": "src",
+            "tf": 4,
+            "weight": 0.028777
+          },
+          {
+            "term": "base",
+            "tf": 4,
+            "weight": 0.028777
+          },
+          {
+            "term": "qdrant",
+            "tf": 4,
+            "weight": 0.028777
+          },
+          {
+            "term": "restart",
+            "tf": 3,
+            "weight": 0.021583
+          },
+          {
+            "term": "lifecycle",
+            "tf": 2,
+            "weight": 0.014388
+          },
+          {
+            "term": "directory",
+            "tf": 2,
+            "weight": 0.014388
+          },
+          {
+            "term": "skipped",
+            "tf": 2,
+            "weight": 0.014388
+          },
+          {
+            "term": "file",
+            "tf": 2,
+            "weight": 0.014388
+          },
+          {
+            "term": "will",
+            "tf": 2,
+            "weight": 0.014388
+          },
+          {
+            "term": "loaded",
+            "tf": 2,
+            "weight": 0.014388
+          },
+          {
+            "term": "load",
+            "tf": 2,
+            "weight": 0.014388
+          },
+          {
+            "term": "from",
+            "tf": 2,
+            "weight": 0.014388
+          },
+          {
+            "term": "deleted",
+            "tf": 2,
+            "weight": 0.014388
+          },
+          {
+            "term": "https",
+            "tf": 2,
+            "weight": 0.014388
+          }
+        ],
+        "unique_terms": 74,
+        "total_terms": 139
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Segment Lifecycle States",
+        "and",
+        "base",
+        "constructor",
+        "lib",
+        "qdrant",
+        "restart",
+        "segment",
+        "src",
+        "the",
+        "version"
+      ],
+      "collection_name": "Qdrant"
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5156637168141592,
+      "overall": 0.7052212389380531
+    }
+  }
+]

@@ -1,0 +1,1857 @@
+[
+  {
+    "text": "# ColBERT and Late Interaction  Relevant source files  - [fastembed/late\\_interaction/colbert.py](https://github.com/qdrant/fastembed/blob/b785640b/fastembed/late_interaction/colbert.py)  This page explains how to use FastEmbed's implementation of ColBERT for late interaction embeddings. Late interaction is a retrieval approach that defers token-to-token interaction between queries and documents until the final ranking stage, offering improved precision compared to traditional dense embeddings. For information about other embedding approaches, see [Dense Text Embeddings](qdrant/fastembed/5.1-dense-text-embeddings.md) or [Sparse Text Embeddings](qdrant/fastembed/5.2-sparse-text-embeddings.md).",
+    "metadata": {
+      "chunk_id": "bb3fa4e07a15-0000",
+      "source_file": "Docs\\Qdrant\\qdrant_fastembed\\_qdrant_fastembed_7.3-colbert-and-late-interaction.md",
+      "filename": "_qdrant_fastembed_7.3-colbert-and-late-interaction.md",
+      "file_extension": ".md",
+      "chunk_index": 0,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "ColBERT and Late Interaction"
+      ],
+      "heading_text": "ColBERT and Late Interaction",
+      "token_count": 155,
+      "char_count": 701,
+      "start_char": 2292,
+      "end_char": 2993,
+      "semantic_score": 0.7,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.7392307692307692,
+      "chunking_strategy": "hierarchical_balanced_structural",
+      "content_type": "list_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:40.581410",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 155,
+      "document_id": "bb3fa4e07a15",
+      "document_name": "_qdrant_fastembed_7.3-colbert-and-late-interaction",
+      "source_path": "Docs\\Qdrant\\qdrant_fastembed\\_qdrant_fastembed_7.3-colbert-and-late-interaction.md",
+      "source_filename": "_qdrant_fastembed_7.3-colbert-and-late-interaction.md",
+      "source_directory": "Docs\\Qdrant\\qdrant_fastembed",
+      "relative_path": "Docs\\Qdrant\\qdrant_fastembed\\_qdrant_fastembed_7.3-colbert-and-late-interaction.md",
+      "hierarchy_path": "ColBERT and Late Interaction",
+      "chunk_hash": "1c1856fb947a0614",
+      "content_digest": "1c1856fb947a0614",
+      "chunk_length": 701,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "interaction",
+          "fastembed",
+          "embeddings",
+          "late",
+          "colbert",
+          "text",
+          "qdrant",
+          "dense",
+          "and",
+          "for",
+          "token",
+          "sparse",
+          "relevant",
+          "source",
+          "files",
+          "https",
+          "github",
+          "com",
+          "blob",
+          "b785640b"
+        ],
+        "term_weights": [
+          {
+            "term": "interaction",
+            "tf": 6,
+            "weight": 0.073171
+          },
+          {
+            "term": "fastembed",
+            "tf": 6,
+            "weight": 0.073171
+          },
+          {
+            "term": "embeddings",
+            "tf": 6,
+            "weight": 0.073171
+          },
+          {
+            "term": "late",
+            "tf": 5,
+            "weight": 0.060976
+          },
+          {
+            "term": "colbert",
+            "tf": 4,
+            "weight": 0.04878
+          },
+          {
+            "term": "text",
+            "tf": 4,
+            "weight": 0.04878
+          },
+          {
+            "term": "qdrant",
+            "tf": 3,
+            "weight": 0.036585
+          },
+          {
+            "term": "dense",
+            "tf": 3,
+            "weight": 0.036585
+          },
+          {
+            "term": "and",
+            "tf": 2,
+            "weight": 0.02439
+          },
+          {
+            "term": "for",
+            "tf": 2,
+            "weight": 0.02439
+          },
+          {
+            "term": "token",
+            "tf": 2,
+            "weight": 0.02439
+          },
+          {
+            "term": "sparse",
+            "tf": 2,
+            "weight": 0.02439
+          },
+          {
+            "term": "relevant",
+            "tf": 1,
+            "weight": 0.012195
+          },
+          {
+            "term": "source",
+            "tf": 1,
+            "weight": 0.012195
+          },
+          {
+            "term": "files",
+            "tf": 1,
+            "weight": 0.012195
+          },
+          {
+            "term": "https",
+            "tf": 1,
+            "weight": 0.012195
+          },
+          {
+            "term": "github",
+            "tf": 1,
+            "weight": 0.012195
+          },
+          {
+            "term": "com",
+            "tf": 1,
+            "weight": 0.012195
+          },
+          {
+            "term": "blob",
+            "tf": 1,
+            "weight": 0.012195
+          },
+          {
+            "term": "b785640b",
+            "tf": 1,
+            "weight": 0.012195
+          }
+        ],
+        "unique_terms": 49,
+        "total_terms": 82
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "ColBERT and Late Interaction",
+        "and",
+        "colbert",
+        "dense",
+        "embeddings",
+        "fastembed",
+        "for",
+        "interaction",
+        "late",
+        "qdrant",
+        "text"
+      ],
+      "collection_name": "Qdrant"
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.7392307692307692,
+      "overall": 0.7797435897435897
+    }
+  },
+  {
+    "text": "## What is ColBERT and Late Interaction? ColBERT (Contextualized Late Interaction over BERT) is a retrieval model architecture that represents documents and queries as bags of contextualized embeddings rather than single vector representations. Unlike dense text embeddings that compress entire texts into single vectors, ColBERT preserves token-level information by:  1. Embedding each token in a document or query separately 2. Performing \"late interaction\" by computing fine-grained similarity between tokens only at retrieval time  This approach provides higher precision because it retains more context and semantic information, making it particularly effective for complex information retrieval tasks. ``` ``` Sources: [fastembed/late\\_interaction/colbert.py39-65](https://github.com/qdrant/fastembed/blob/b785640b/fastembed/late_interaction/colbert.py#L39-L65)",
+    "metadata": {
+      "chunk_id": "bb3fa4e07a15-0001",
+      "source_file": "Docs\\Qdrant\\qdrant_fastembed\\_qdrant_fastembed_7.3-colbert-and-late-interaction.md",
+      "filename": "_qdrant_fastembed_7.3-colbert-and-late-interaction.md",
+      "file_extension": ".md",
+      "chunk_index": 1,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "What is ColBERT and Late Interaction?"
+      ],
+      "heading_text": "What is ColBERT and Late Interaction?",
+      "token_count": 170,
+      "char_count": 867,
+      "start_char": 2995,
+      "end_char": 3862,
+      "semantic_score": 0.7,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5445454545454546,
+      "chunking_strategy": "hierarchical_balanced_structural",
+      "content_type": "code_block",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:40.583732",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 170,
+      "document_id": "bb3fa4e07a15",
+      "document_name": "_qdrant_fastembed_7.3-colbert-and-late-interaction",
+      "source_path": "Docs\\Qdrant\\qdrant_fastembed\\_qdrant_fastembed_7.3-colbert-and-late-interaction.md",
+      "source_filename": "_qdrant_fastembed_7.3-colbert-and-late-interaction.md",
+      "source_directory": "Docs\\Qdrant\\qdrant_fastembed",
+      "relative_path": "Docs\\Qdrant\\qdrant_fastembed\\_qdrant_fastembed_7.3-colbert-and-late-interaction.md",
+      "hierarchy_path": "What is ColBERT and Late Interaction?",
+      "chunk_hash": "f671720832126ebc",
+      "content_digest": "f671720832126ebc",
+      "chunk_length": 867,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "colbert",
+          "late",
+          "interaction",
+          "and",
+          "retrieval",
+          "information",
+          "fastembed",
+          "contextualized",
+          "that",
+          "embeddings",
+          "single",
+          "token",
+          "what",
+          "over",
+          "bert",
+          "model",
+          "architecture",
+          "represents",
+          "documents",
+          "queries"
+        ],
+        "term_weights": [
+          {
+            "term": "colbert",
+            "tf": 5,
+            "weight": 0.05
+          },
+          {
+            "term": "late",
+            "tf": 5,
+            "weight": 0.05
+          },
+          {
+            "term": "interaction",
+            "tf": 5,
+            "weight": 0.05
+          },
+          {
+            "term": "and",
+            "tf": 3,
+            "weight": 0.03
+          },
+          {
+            "term": "retrieval",
+            "tf": 3,
+            "weight": 0.03
+          },
+          {
+            "term": "information",
+            "tf": 3,
+            "weight": 0.03
+          },
+          {
+            "term": "fastembed",
+            "tf": 3,
+            "weight": 0.03
+          },
+          {
+            "term": "contextualized",
+            "tf": 2,
+            "weight": 0.02
+          },
+          {
+            "term": "that",
+            "tf": 2,
+            "weight": 0.02
+          },
+          {
+            "term": "embeddings",
+            "tf": 2,
+            "weight": 0.02
+          },
+          {
+            "term": "single",
+            "tf": 2,
+            "weight": 0.02
+          },
+          {
+            "term": "token",
+            "tf": 2,
+            "weight": 0.02
+          },
+          {
+            "term": "what",
+            "tf": 1,
+            "weight": 0.01
+          },
+          {
+            "term": "over",
+            "tf": 1,
+            "weight": 0.01
+          },
+          {
+            "term": "bert",
+            "tf": 1,
+            "weight": 0.01
+          },
+          {
+            "term": "model",
+            "tf": 1,
+            "weight": 0.01
+          },
+          {
+            "term": "architecture",
+            "tf": 1,
+            "weight": 0.01
+          },
+          {
+            "term": "represents",
+            "tf": 1,
+            "weight": 0.01
+          },
+          {
+            "term": "documents",
+            "tf": 1,
+            "weight": 0.01
+          },
+          {
+            "term": "queries",
+            "tf": 1,
+            "weight": 0.01
+          }
+        ],
+        "unique_terms": 75,
+        "total_terms": 100
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "What is ColBERT and Late Interaction?",
+        "and",
+        "colbert",
+        "contextualized",
+        "embeddings",
+        "fastembed",
+        "information",
+        "interaction",
+        "late",
+        "retrieval",
+        "that"
+      ],
+      "collection_name": "Qdrant"
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5445454545454546,
+      "overall": 0.7148484848484848
+    }
+  },
+  {
+    "text": "### Basic Usage  Here's how to use ColBERT for late interaction embeddings: ``` ``` The key difference between ColBERT and standard dense embeddings is that:  - Documents are embedded at indexing time - Queries are embedded at search time - The two never interact until the final similarity calculation",
+    "metadata": {
+      "chunk_id": "bb3fa4e07a15-0005",
+      "source_file": "Docs\\Qdrant\\qdrant_fastembed\\_qdrant_fastembed_7.3-colbert-and-late-interaction.md",
+      "filename": "_qdrant_fastembed_7.3-colbert-and-late-interaction.md",
+      "file_extension": ".md",
+      "chunk_index": 5,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Basic Usage"
+      ],
+      "heading_text": "Basic Usage",
+      "token_count": 56,
+      "char_count": 302,
+      "start_char": 5117,
+      "end_char": 5419,
+      "semantic_score": 0.8,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5287755102040816,
+      "chunking_strategy": "hierarchical_balanced_structural",
+      "content_type": "code_block",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:40.586323",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 56,
+      "document_id": "bb3fa4e07a15",
+      "document_name": "_qdrant_fastembed_7.3-colbert-and-late-interaction",
+      "source_path": "Docs\\Qdrant\\qdrant_fastembed\\_qdrant_fastembed_7.3-colbert-and-late-interaction.md",
+      "source_filename": "_qdrant_fastembed_7.3-colbert-and-late-interaction.md",
+      "source_directory": "Docs\\Qdrant\\qdrant_fastembed",
+      "relative_path": "Docs\\Qdrant\\qdrant_fastembed\\_qdrant_fastembed_7.3-colbert-and-late-interaction.md",
+      "hierarchy_path": "Basic Usage",
+      "chunk_hash": "e23c777079b2d244",
+      "content_digest": "e23c777079b2d244",
+      "chunk_length": 302,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "the",
+          "colbert",
+          "embeddings",
+          "are",
+          "embedded",
+          "time",
+          "basic",
+          "usage",
+          "here",
+          "how",
+          "use",
+          "for",
+          "late",
+          "interaction",
+          "key",
+          "difference",
+          "between",
+          "and",
+          "standard",
+          "dense"
+        ],
+        "term_weights": [
+          {
+            "term": "the",
+            "tf": 3,
+            "weight": 0.076923
+          },
+          {
+            "term": "colbert",
+            "tf": 2,
+            "weight": 0.051282
+          },
+          {
+            "term": "embeddings",
+            "tf": 2,
+            "weight": 0.051282
+          },
+          {
+            "term": "are",
+            "tf": 2,
+            "weight": 0.051282
+          },
+          {
+            "term": "embedded",
+            "tf": 2,
+            "weight": 0.051282
+          },
+          {
+            "term": "time",
+            "tf": 2,
+            "weight": 0.051282
+          },
+          {
+            "term": "basic",
+            "tf": 1,
+            "weight": 0.025641
+          },
+          {
+            "term": "usage",
+            "tf": 1,
+            "weight": 0.025641
+          },
+          {
+            "term": "here",
+            "tf": 1,
+            "weight": 0.025641
+          },
+          {
+            "term": "how",
+            "tf": 1,
+            "weight": 0.025641
+          },
+          {
+            "term": "use",
+            "tf": 1,
+            "weight": 0.025641
+          },
+          {
+            "term": "for",
+            "tf": 1,
+            "weight": 0.025641
+          },
+          {
+            "term": "late",
+            "tf": 1,
+            "weight": 0.025641
+          },
+          {
+            "term": "interaction",
+            "tf": 1,
+            "weight": 0.025641
+          },
+          {
+            "term": "key",
+            "tf": 1,
+            "weight": 0.025641
+          },
+          {
+            "term": "difference",
+            "tf": 1,
+            "weight": 0.025641
+          },
+          {
+            "term": "between",
+            "tf": 1,
+            "weight": 0.025641
+          },
+          {
+            "term": "and",
+            "tf": 1,
+            "weight": 0.025641
+          },
+          {
+            "term": "standard",
+            "tf": 1,
+            "weight": 0.025641
+          },
+          {
+            "term": "dense",
+            "tf": 1,
+            "weight": 0.025641
+          }
+        ],
+        "unique_terms": 32,
+        "total_terms": 39
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Basic Usage",
+        "are",
+        "basic",
+        "colbert",
+        "embedded",
+        "embeddings",
+        "here",
+        "how",
+        "the",
+        "time",
+        "usage"
+      ],
+      "collection_name": "Qdrant"
+    },
+    "advanced_scores": {
+      "semantic": 0.8,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5287755102040816,
+      "overall": 0.7429251700680272
+    }
+  },
+  {
+    "text": "### ColBERT Embedding Process ``` ``` Sources: [fastembed/late\\_interaction/colbert.py67-104](https://github.com/qdrant/fastembed/blob/b785640b/fastembed/late_interaction/colbert.py#L67-L104) [fastembed/late\\_interaction/colbert.py205-249](https://github.com/qdrant/fastembed/blob/b785640b/fastembed/late_interaction/colbert.py#L205-L249)",
+    "metadata": {
+      "chunk_id": "bb3fa4e07a15-0006",
+      "source_file": "Docs\\Qdrant\\qdrant_fastembed\\_qdrant_fastembed_7.3-colbert-and-late-interaction.md",
+      "filename": "_qdrant_fastembed_7.3-colbert-and-late-interaction.md",
+      "file_extension": ".md",
+      "chunk_index": 6,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "ColBERT Embedding Process"
+      ],
+      "heading_text": "ColBERT Embedding Process",
+      "token_count": 98,
+      "char_count": 338,
+      "start_char": 5423,
+      "end_char": 5761,
+      "semantic_score": 0.6,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5566666666666666,
+      "chunking_strategy": "hierarchical_balanced_structural",
+      "content_type": "code_block",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:40.586877",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 98,
+      "document_id": "bb3fa4e07a15",
+      "document_name": "_qdrant_fastembed_7.3-colbert-and-late-interaction",
+      "source_path": "Docs\\Qdrant\\qdrant_fastembed\\_qdrant_fastembed_7.3-colbert-and-late-interaction.md",
+      "source_filename": "_qdrant_fastembed_7.3-colbert-and-late-interaction.md",
+      "source_directory": "Docs\\Qdrant\\qdrant_fastembed",
+      "relative_path": "Docs\\Qdrant\\qdrant_fastembed\\_qdrant_fastembed_7.3-colbert-and-late-interaction.md",
+      "hierarchy_path": "ColBERT Embedding Process",
+      "chunk_hash": "a4767ce9a9d2f0ed",
+      "content_digest": "a4767ce9a9d2f0ed",
+      "chunk_length": 338,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "fastembed",
+          "colbert",
+          "late",
+          "interaction",
+          "https",
+          "github",
+          "com",
+          "qdrant",
+          "blob",
+          "b785640b",
+          "embedding",
+          "process",
+          "sources",
+          "py67",
+          "104",
+          "l67",
+          "l104",
+          "py205",
+          "249",
+          "l205"
+        ],
+        "term_weights": [
+          {
+            "term": "fastembed",
+            "tf": 6,
+            "weight": 0.142857
+          },
+          {
+            "term": "colbert",
+            "tf": 5,
+            "weight": 0.119048
+          },
+          {
+            "term": "late",
+            "tf": 4,
+            "weight": 0.095238
+          },
+          {
+            "term": "interaction",
+            "tf": 4,
+            "weight": 0.095238
+          },
+          {
+            "term": "https",
+            "tf": 2,
+            "weight": 0.047619
+          },
+          {
+            "term": "github",
+            "tf": 2,
+            "weight": 0.047619
+          },
+          {
+            "term": "com",
+            "tf": 2,
+            "weight": 0.047619
+          },
+          {
+            "term": "qdrant",
+            "tf": 2,
+            "weight": 0.047619
+          },
+          {
+            "term": "blob",
+            "tf": 2,
+            "weight": 0.047619
+          },
+          {
+            "term": "b785640b",
+            "tf": 2,
+            "weight": 0.047619
+          },
+          {
+            "term": "embedding",
+            "tf": 1,
+            "weight": 0.02381
+          },
+          {
+            "term": "process",
+            "tf": 1,
+            "weight": 0.02381
+          },
+          {
+            "term": "sources",
+            "tf": 1,
+            "weight": 0.02381
+          },
+          {
+            "term": "py67",
+            "tf": 1,
+            "weight": 0.02381
+          },
+          {
+            "term": "104",
+            "tf": 1,
+            "weight": 0.02381
+          },
+          {
+            "term": "l67",
+            "tf": 1,
+            "weight": 0.02381
+          },
+          {
+            "term": "l104",
+            "tf": 1,
+            "weight": 0.02381
+          },
+          {
+            "term": "py205",
+            "tf": 1,
+            "weight": 0.02381
+          },
+          {
+            "term": "249",
+            "tf": 1,
+            "weight": 0.02381
+          },
+          {
+            "term": "l205",
+            "tf": 1,
+            "weight": 0.02381
+          }
+        ],
+        "unique_terms": 21,
+        "total_terms": 42
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "ColBERT Embedding Process",
+        "b785640b",
+        "blob",
+        "colbert",
+        "com",
+        "fastembed",
+        "github",
+        "https",
+        "interaction",
+        "late",
+        "qdrant"
+      ],
+      "collection_name": "Qdrant"
+    },
+    "advanced_scores": {
+      "semantic": 0.6,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5566666666666666,
+      "overall": 0.6855555555555556
+    }
+  },
+  {
+    "text": "## Implementation Details",
+    "metadata": {
+      "chunk_id": "bb3fa4e07a15-0007",
+      "source_file": "Docs\\Qdrant\\qdrant_fastembed\\_qdrant_fastembed_7.3-colbert-and-late-interaction.md",
+      "filename": "_qdrant_fastembed_7.3-colbert-and-late-interaction.md",
+      "file_extension": ".md",
+      "chunk_index": 7,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Implementation Details"
+      ],
+      "heading_text": "Implementation Details",
+      "token_count": 3,
+      "char_count": 25,
+      "start_char": 5765,
+      "end_char": 5790,
+      "semantic_score": 0.8,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.59,
+      "chunking_strategy": "hierarchical_balanced_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:40.587051",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 3,
+      "document_id": "bb3fa4e07a15",
+      "document_name": "_qdrant_fastembed_7.3-colbert-and-late-interaction",
+      "source_path": "Docs\\Qdrant\\qdrant_fastembed\\_qdrant_fastembed_7.3-colbert-and-late-interaction.md",
+      "source_filename": "_qdrant_fastembed_7.3-colbert-and-late-interaction.md",
+      "source_directory": "Docs\\Qdrant\\qdrant_fastembed",
+      "relative_path": "Docs\\Qdrant\\qdrant_fastembed\\_qdrant_fastembed_7.3-colbert-and-late-interaction.md",
+      "hierarchy_path": "Implementation Details",
+      "chunk_hash": "812a10c977ea5550",
+      "content_digest": "812a10c977ea5550",
+      "chunk_length": 25,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "implementation",
+          "details"
+        ],
+        "term_weights": [
+          {
+            "term": "implementation",
+            "tf": 1,
+            "weight": 0.5
+          },
+          {
+            "term": "details",
+            "tf": 1,
+            "weight": 0.5
+          }
+        ],
+        "unique_terms": 2,
+        "total_terms": 2
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Implementation Details",
+        "details",
+        "implementation"
+      ],
+      "collection_name": "Qdrant"
+    },
+    "advanced_scores": {
+      "semantic": 0.8,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.59,
+      "overall": 0.7633333333333333
+    }
+  },
+  {
+    "text": "### Special Token Handling  ColBERT uses different marker tokens for queries and documents to help the model distinguish their roles:  - `QUERY_MARKER_TOKEN_ID = 1` - Added to queries - `DOCUMENT_MARKER_TOKEN_ID = 2` - Added to documents  For queries, ColBERT also pads shorter queries with mask tokens up to a minimum length (31 tokens) to improve retrieval performance through query augmentation. Sources: [fastembed/late\\_interaction/colbert.py40-43](https://github.com/qdrant/fastembed/blob/b785640b/fastembed/late_interaction/colbert.py#L40-L43) [fastembed/late\\_interaction/colbert.py86-104](https://github.com/qdrant/fastembed/blob/b785640b/fastembed/late_interaction/colbert.py#L86-L104)",
+    "metadata": {
+      "chunk_id": "bb3fa4e07a15-0008",
+      "source_file": "Docs\\Qdrant\\qdrant_fastembed\\_qdrant_fastembed_7.3-colbert-and-late-interaction.md",
+      "filename": "_qdrant_fastembed_7.3-colbert-and-late-interaction.md",
+      "file_extension": ".md",
+      "chunk_index": 8,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Special Token Handling"
+      ],
+      "heading_text": "Special Token Handling",
+      "token_count": 172,
+      "char_count": 695,
+      "start_char": 5792,
+      "end_char": 6487,
+      "semantic_score": 0.7,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5185714285714286,
+      "chunking_strategy": "hierarchical_balanced_structural",
+      "content_type": "list_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:40.587387",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 172,
+      "document_id": "bb3fa4e07a15",
+      "document_name": "_qdrant_fastembed_7.3-colbert-and-late-interaction",
+      "source_path": "Docs\\Qdrant\\qdrant_fastembed\\_qdrant_fastembed_7.3-colbert-and-late-interaction.md",
+      "source_filename": "_qdrant_fastembed_7.3-colbert-and-late-interaction.md",
+      "source_directory": "Docs\\Qdrant\\qdrant_fastembed",
+      "relative_path": "Docs\\Qdrant\\qdrant_fastembed\\_qdrant_fastembed_7.3-colbert-and-late-interaction.md",
+      "hierarchy_path": "Special Token Handling",
+      "chunk_hash": "d28ff8d4e3721705",
+      "content_digest": "d28ff8d4e3721705",
+      "chunk_length": 695,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "colbert",
+          "fastembed",
+          "queries",
+          "late",
+          "interaction",
+          "token",
+          "marker",
+          "tokens",
+          "for",
+          "documents",
+          "query",
+          "added",
+          "https",
+          "github",
+          "com",
+          "qdrant",
+          "blob",
+          "b785640b",
+          "special",
+          "handling"
+        ],
+        "term_weights": [
+          {
+            "term": "colbert",
+            "tf": 6,
+            "weight": 0.070588
+          },
+          {
+            "term": "fastembed",
+            "tf": 6,
+            "weight": 0.070588
+          },
+          {
+            "term": "queries",
+            "tf": 4,
+            "weight": 0.047059
+          },
+          {
+            "term": "late",
+            "tf": 4,
+            "weight": 0.047059
+          },
+          {
+            "term": "interaction",
+            "tf": 4,
+            "weight": 0.047059
+          },
+          {
+            "term": "token",
+            "tf": 3,
+            "weight": 0.035294
+          },
+          {
+            "term": "marker",
+            "tf": 3,
+            "weight": 0.035294
+          },
+          {
+            "term": "tokens",
+            "tf": 3,
+            "weight": 0.035294
+          },
+          {
+            "term": "for",
+            "tf": 2,
+            "weight": 0.023529
+          },
+          {
+            "term": "documents",
+            "tf": 2,
+            "weight": 0.023529
+          },
+          {
+            "term": "query",
+            "tf": 2,
+            "weight": 0.023529
+          },
+          {
+            "term": "added",
+            "tf": 2,
+            "weight": 0.023529
+          },
+          {
+            "term": "https",
+            "tf": 2,
+            "weight": 0.023529
+          },
+          {
+            "term": "github",
+            "tf": 2,
+            "weight": 0.023529
+          },
+          {
+            "term": "com",
+            "tf": 2,
+            "weight": 0.023529
+          },
+          {
+            "term": "qdrant",
+            "tf": 2,
+            "weight": 0.023529
+          },
+          {
+            "term": "blob",
+            "tf": 2,
+            "weight": 0.023529
+          },
+          {
+            "term": "b785640b",
+            "tf": 2,
+            "weight": 0.023529
+          },
+          {
+            "term": "special",
+            "tf": 1,
+            "weight": 0.011765
+          },
+          {
+            "term": "handling",
+            "tf": 1,
+            "weight": 0.011765
+          }
+        ],
+        "unique_terms": 50,
+        "total_terms": 85
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Special Token Handling",
+        "colbert",
+        "documents",
+        "fastembed",
+        "for",
+        "interaction",
+        "late",
+        "marker",
+        "queries",
+        "token",
+        "tokens"
+      ],
+      "collection_name": "Qdrant"
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5185714285714286,
+      "overall": 0.7061904761904761
+    }
+  },
+  {
+    "text": "### Document Embedding Post-Processing  A key aspect of ColBERT is how document embeddings are post-processed:  1. Punctuation and padding tokens are masked out (attention mask set to 0) 2. The attention mask is applied to the model output 3. Token embeddings are normalized to unit length ``` ``` Sources: [fastembed/late\\_interaction/colbert.py45-65](https://github.com/qdrant/fastembed/blob/b785640b/fastembed/late_interaction/colbert.py#L45-L65)",
+    "metadata": {
+      "chunk_id": "bb3fa4e07a15-0009",
+      "source_file": "Docs\\Qdrant\\qdrant_fastembed\\_qdrant_fastembed_7.3-colbert-and-late-interaction.md",
+      "filename": "_qdrant_fastembed_7.3-colbert-and-late-interaction.md",
+      "file_extension": ".md",
+      "chunk_index": 9,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Document Embedding Post-Processing"
+      ],
+      "heading_text": "Document Embedding Post-Processing",
+      "token_count": 113,
+      "char_count": 449,
+      "start_char": 6490,
+      "end_char": 6939,
+      "semantic_score": 0.7,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.53,
+      "chunking_strategy": "hierarchical_balanced_structural",
+      "content_type": "code_block",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:40.588770",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 113,
+      "document_id": "bb3fa4e07a15",
+      "document_name": "_qdrant_fastembed_7.3-colbert-and-late-interaction",
+      "source_path": "Docs\\Qdrant\\qdrant_fastembed\\_qdrant_fastembed_7.3-colbert-and-late-interaction.md",
+      "source_filename": "_qdrant_fastembed_7.3-colbert-and-late-interaction.md",
+      "source_directory": "Docs\\Qdrant\\qdrant_fastembed",
+      "relative_path": "Docs\\Qdrant\\qdrant_fastembed\\_qdrant_fastembed_7.3-colbert-and-late-interaction.md",
+      "hierarchy_path": "Document Embedding Post-Processing",
+      "chunk_hash": "7323b2019c1e8b44",
+      "content_digest": "7323b2019c1e8b44",
+      "chunk_length": 449,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "colbert",
+          "are",
+          "fastembed",
+          "document",
+          "post",
+          "embeddings",
+          "attention",
+          "mask",
+          "the",
+          "late",
+          "interaction",
+          "embedding",
+          "processing",
+          "key",
+          "aspect",
+          "how",
+          "processed",
+          "punctuation",
+          "and",
+          "padding"
+        ],
+        "term_weights": [
+          {
+            "term": "colbert",
+            "tf": 3,
+            "weight": 0.054545
+          },
+          {
+            "term": "are",
+            "tf": 3,
+            "weight": 0.054545
+          },
+          {
+            "term": "fastembed",
+            "tf": 3,
+            "weight": 0.054545
+          },
+          {
+            "term": "document",
+            "tf": 2,
+            "weight": 0.036364
+          },
+          {
+            "term": "post",
+            "tf": 2,
+            "weight": 0.036364
+          },
+          {
+            "term": "embeddings",
+            "tf": 2,
+            "weight": 0.036364
+          },
+          {
+            "term": "attention",
+            "tf": 2,
+            "weight": 0.036364
+          },
+          {
+            "term": "mask",
+            "tf": 2,
+            "weight": 0.036364
+          },
+          {
+            "term": "the",
+            "tf": 2,
+            "weight": 0.036364
+          },
+          {
+            "term": "late",
+            "tf": 2,
+            "weight": 0.036364
+          },
+          {
+            "term": "interaction",
+            "tf": 2,
+            "weight": 0.036364
+          },
+          {
+            "term": "embedding",
+            "tf": 1,
+            "weight": 0.018182
+          },
+          {
+            "term": "processing",
+            "tf": 1,
+            "weight": 0.018182
+          },
+          {
+            "term": "key",
+            "tf": 1,
+            "weight": 0.018182
+          },
+          {
+            "term": "aspect",
+            "tf": 1,
+            "weight": 0.018182
+          },
+          {
+            "term": "how",
+            "tf": 1,
+            "weight": 0.018182
+          },
+          {
+            "term": "processed",
+            "tf": 1,
+            "weight": 0.018182
+          },
+          {
+            "term": "punctuation",
+            "tf": 1,
+            "weight": 0.018182
+          },
+          {
+            "term": "and",
+            "tf": 1,
+            "weight": 0.018182
+          },
+          {
+            "term": "padding",
+            "tf": 1,
+            "weight": 0.018182
+          }
+        ],
+        "unique_terms": 41,
+        "total_terms": 55
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Document Embedding Post-Processing",
+        "are",
+        "attention",
+        "colbert",
+        "document",
+        "embeddings",
+        "fastembed",
+        "late",
+        "mask",
+        "post",
+        "the"
+      ],
+      "collection_name": "Qdrant"
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.53,
+      "overall": 0.71
+    }
+  },
+  {
+    "text": "### Tokenization Process\n\nThe tokenization process differs between queries and documents:\n\n1. **Documents**: Standard tokenization with truncation\n2. **Queries**: Tokenized and padded with `[MASK]` tokens to a minimum length\n\nThe tokenizer also handles special considerations like truncation to avoid overflow after adding marker tokens.\n\nSources: [fastembed/late\\_interaction/colbert.py79-108](https://github.com/qdrant/fastembed/blob/b785640b/fastembed/late_interaction/colbert.py#L79-L108) [fastembed/late\\_interaction/colbert.py195-203](https://github.com/qdrant/fastembed/blob/b785640b/fastembed/late_interaction/colbert.py#L195-L203)",
+    "metadata": {
+      "chunk_id": "bb3fa4e07a15-0010",
+      "source_file": "Docs\\Qdrant\\qdrant_fastembed\\_qdrant_fastembed_7.3-colbert-and-late-interaction.md",
+      "filename": "_qdrant_fastembed_7.3-colbert-and-late-interaction.md",
+      "file_extension": ".md",
+      "chunk_index": 10,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Tokenization Process"
+      ],
+      "heading_text": "Tokenization Process",
+      "token_count": 154,
+      "char_count": 639,
+      "start_char": 6943,
+      "end_char": 7582,
+      "semantic_score": 0.7,
+      "structural_score": 0.7,
+      "retrieval_quality": 0.538936170212766,
+      "chunking_strategy": "hierarchical_balanced_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:40.589360",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 154,
+      "document_id": "bb3fa4e07a15",
+      "document_name": "_qdrant_fastembed_7.3-colbert-and-late-interaction",
+      "source_path": "Docs\\Qdrant\\qdrant_fastembed\\_qdrant_fastembed_7.3-colbert-and-late-interaction.md",
+      "source_filename": "_qdrant_fastembed_7.3-colbert-and-late-interaction.md",
+      "source_directory": "Docs\\Qdrant\\qdrant_fastembed",
+      "relative_path": "Docs\\Qdrant\\qdrant_fastembed\\_qdrant_fastembed_7.3-colbert-and-late-interaction.md",
+      "hierarchy_path": "Tokenization Process",
+      "chunk_hash": "d6e256b134cd4e4f",
+      "content_digest": "d6e256b134cd4e4f",
+      "chunk_length": 639,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "fastembed",
+          "late",
+          "interaction",
+          "colbert",
+          "tokenization",
+          "process",
+          "the",
+          "queries",
+          "and",
+          "documents",
+          "with",
+          "truncation",
+          "tokens",
+          "https",
+          "github",
+          "com",
+          "qdrant",
+          "blob",
+          "b785640b",
+          "differs"
+        ],
+        "term_weights": [
+          {
+            "term": "fastembed",
+            "tf": 6,
+            "weight": 0.077922
+          },
+          {
+            "term": "late",
+            "tf": 4,
+            "weight": 0.051948
+          },
+          {
+            "term": "interaction",
+            "tf": 4,
+            "weight": 0.051948
+          },
+          {
+            "term": "colbert",
+            "tf": 4,
+            "weight": 0.051948
+          },
+          {
+            "term": "tokenization",
+            "tf": 3,
+            "weight": 0.038961
+          },
+          {
+            "term": "process",
+            "tf": 2,
+            "weight": 0.025974
+          },
+          {
+            "term": "the",
+            "tf": 2,
+            "weight": 0.025974
+          },
+          {
+            "term": "queries",
+            "tf": 2,
+            "weight": 0.025974
+          },
+          {
+            "term": "and",
+            "tf": 2,
+            "weight": 0.025974
+          },
+          {
+            "term": "documents",
+            "tf": 2,
+            "weight": 0.025974
+          },
+          {
+            "term": "with",
+            "tf": 2,
+            "weight": 0.025974
+          },
+          {
+            "term": "truncation",
+            "tf": 2,
+            "weight": 0.025974
+          },
+          {
+            "term": "tokens",
+            "tf": 2,
+            "weight": 0.025974
+          },
+          {
+            "term": "https",
+            "tf": 2,
+            "weight": 0.025974
+          },
+          {
+            "term": "github",
+            "tf": 2,
+            "weight": 0.025974
+          },
+          {
+            "term": "com",
+            "tf": 2,
+            "weight": 0.025974
+          },
+          {
+            "term": "qdrant",
+            "tf": 2,
+            "weight": 0.025974
+          },
+          {
+            "term": "blob",
+            "tf": 2,
+            "weight": 0.025974
+          },
+          {
+            "term": "b785640b",
+            "tf": 2,
+            "weight": 0.025974
+          },
+          {
+            "term": "differs",
+            "tf": 1,
+            "weight": 0.012987
+          }
+        ],
+        "unique_terms": 47,
+        "total_terms": 77
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Tokenization Process",
+        "and",
+        "colbert",
+        "documents",
+        "fastembed",
+        "interaction",
+        "late",
+        "process",
+        "queries",
+        "the",
+        "tokenization"
+      ],
+      "collection_name": "Qdrant"
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.7,
+      "retrieval_quality": 0.538936170212766,
+      "overall": 0.6463120567375886
+    }
+  },
+  {
+    "text": "## Performance Considerations\n\nThe ColBERT approach offers higher precision but comes with trade-offs:\n\n1. **Storage**: Requires more storage than dense embeddings (token-level vs. single vector)\n2. **Computation**: Late interaction calculation is more computationally intensive at search time\n3. **Memory**: Uses more memory during search due to token-level operations\n\nFor optimal performance, FastEmbed implements ColBERT using ONNX Runtime for efficient inference and supports parallel processing for batch embedding.\n\nSources: [fastembed/late\\_interaction/colbert.py205-237](https://github.com/qdrant/fastembed/blob/b785640b/fastembed/late_interaction/colbert.py#L205-L237)",
+    "metadata": {
+      "chunk_id": "bb3fa4e07a15-0011",
+      "source_file": "Docs\\Qdrant\\qdrant_fastembed\\_qdrant_fastembed_7.3-colbert-and-late-interaction.md",
+      "filename": "_qdrant_fastembed_7.3-colbert-and-late-interaction.md",
+      "file_extension": ".md",
+      "chunk_index": 11,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Performance Considerations"
+      ],
+      "heading_text": "Performance Considerations",
+      "token_count": 141,
+      "char_count": 678,
+      "start_char": 7584,
+      "end_char": 8262,
+      "semantic_score": 0.7,
+      "structural_score": 0.7,
+      "retrieval_quality": 0.5639130434782609,
+      "chunking_strategy": "hierarchical_balanced_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:40.589710",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 141,
+      "document_id": "bb3fa4e07a15",
+      "document_name": "_qdrant_fastembed_7.3-colbert-and-late-interaction",
+      "source_path": "Docs\\Qdrant\\qdrant_fastembed\\_qdrant_fastembed_7.3-colbert-and-late-interaction.md",
+      "source_filename": "_qdrant_fastembed_7.3-colbert-and-late-interaction.md",
+      "source_directory": "Docs\\Qdrant\\qdrant_fastembed",
+      "relative_path": "Docs\\Qdrant\\qdrant_fastembed\\_qdrant_fastembed_7.3-colbert-and-late-interaction.md",
+      "hierarchy_path": "Performance Considerations",
+      "chunk_hash": "38c351cc88acafcb",
+      "content_digest": "38c351cc88acafcb",
+      "chunk_length": 678,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "colbert",
+          "fastembed",
+          "more",
+          "late",
+          "interaction",
+          "for",
+          "performance",
+          "storage",
+          "token",
+          "level",
+          "search",
+          "memory",
+          "considerations",
+          "the",
+          "approach",
+          "offers",
+          "higher",
+          "precision",
+          "but",
+          "comes"
+        ],
+        "term_weights": [
+          {
+            "term": "colbert",
+            "tf": 4,
+            "weight": 0.04878
+          },
+          {
+            "term": "fastembed",
+            "tf": 4,
+            "weight": 0.04878
+          },
+          {
+            "term": "more",
+            "tf": 3,
+            "weight": 0.036585
+          },
+          {
+            "term": "late",
+            "tf": 3,
+            "weight": 0.036585
+          },
+          {
+            "term": "interaction",
+            "tf": 3,
+            "weight": 0.036585
+          },
+          {
+            "term": "for",
+            "tf": 3,
+            "weight": 0.036585
+          },
+          {
+            "term": "performance",
+            "tf": 2,
+            "weight": 0.02439
+          },
+          {
+            "term": "storage",
+            "tf": 2,
+            "weight": 0.02439
+          },
+          {
+            "term": "token",
+            "tf": 2,
+            "weight": 0.02439
+          },
+          {
+            "term": "level",
+            "tf": 2,
+            "weight": 0.02439
+          },
+          {
+            "term": "search",
+            "tf": 2,
+            "weight": 0.02439
+          },
+          {
+            "term": "memory",
+            "tf": 2,
+            "weight": 0.02439
+          },
+          {
+            "term": "considerations",
+            "tf": 1,
+            "weight": 0.012195
+          },
+          {
+            "term": "the",
+            "tf": 1,
+            "weight": 0.012195
+          },
+          {
+            "term": "approach",
+            "tf": 1,
+            "weight": 0.012195
+          },
+          {
+            "term": "offers",
+            "tf": 1,
+            "weight": 0.012195
+          },
+          {
+            "term": "higher",
+            "tf": 1,
+            "weight": 0.012195
+          },
+          {
+            "term": "precision",
+            "tf": 1,
+            "weight": 0.012195
+          },
+          {
+            "term": "but",
+            "tf": 1,
+            "weight": 0.012195
+          },
+          {
+            "term": "comes",
+            "tf": 1,
+            "weight": 0.012195
+          }
+        ],
+        "unique_terms": 62,
+        "total_terms": 82
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Performance Considerations",
+        "colbert",
+        "fastembed",
+        "for",
+        "interaction",
+        "late",
+        "level",
+        "more",
+        "performance",
+        "storage",
+        "token"
+      ],
+      "collection_name": "Qdrant"
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.7,
+      "retrieval_quality": 0.5639130434782609,
+      "overall": 0.6546376811594202
+    }
+  }
+]

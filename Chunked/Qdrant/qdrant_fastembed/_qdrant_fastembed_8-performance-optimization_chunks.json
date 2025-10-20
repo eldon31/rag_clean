@@ -1,0 +1,4930 @@
+[
+  {
+    "text": "# Performance Optimization  Relevant source files  - [docs/examples/ColBERT\\_with\\_FastEmbed.ipynb](https://github.com/qdrant/fastembed/blob/b785640b/docs/examples/ColBERT_with_FastEmbed.ipynb) - [docs/examples/FastEmbed\\_vs\\_HF\\_Comparison.ipynb](https://github.com/qdrant/fastembed/blob/b785640b/docs/examples/FastEmbed_vs_HF_Comparison.ipynb) - [docs/examples/Hybrid\\_Search.ipynb](https://github.com/qdrant/fastembed/blob/b785640b/docs/examples/Hybrid_Search.ipynb) - [docs/qdrant/Retrieval\\_with\\_FastEmbed.ipynb](https://github.com/qdrant/fastembed/blob/b785640b/docs/qdrant/Retrieval_with_FastEmbed.ipynb) - [fastembed/text/onnx\\_embedding.py](https://github.com/qdrant/fastembed/blob/b785640b/fastembed/text/onnx_embedding.py)  FastEmbed is designed for high performance and efficient embedding generation. This page covers the various optimization techniques implemented in the library and how to configure them to maximize performance for your specific use case. For information about the overall architecture of FastEmbed, see [Architecture](qdrant/fastembed/4-architecture.md). For detailed information about ONNX Runtime integration, see [ONNX Runtime Integration](qdrant/fastembed/4.2-onnx-runtime-integration.md). For specific information about parallel processing implementation, see [Parallel Processing](qdrant/fastembed/4.3-parallel-processing.md).",
+    "metadata": {
+      "chunk_id": "3f356414bef5-0000",
+      "source_file": "Docs\\Qdrant\\qdrant_fastembed\\_qdrant_fastembed_8-performance-optimization.md",
+      "filename": "_qdrant_fastembed_8-performance-optimization.md",
+      "file_extension": ".md",
+      "chunk_index": 0,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Performance Optimization"
+      ],
+      "heading_text": "Performance Optimization",
+      "token_count": 335,
+      "char_count": 1367,
+      "start_char": 2288,
+      "end_char": 3655,
+      "semantic_score": 0.7,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.7153148148148148,
+      "chunking_strategy": "hierarchical_balanced_structural",
+      "content_type": "list_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:40.631982",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 335,
+      "document_id": "3f356414bef5",
+      "document_name": "_qdrant_fastembed_8-performance-optimization",
+      "source_path": "Docs\\Qdrant\\qdrant_fastembed\\_qdrant_fastembed_8-performance-optimization.md",
+      "source_filename": "_qdrant_fastembed_8-performance-optimization.md",
+      "source_directory": "Docs\\Qdrant\\qdrant_fastembed",
+      "relative_path": "Docs\\Qdrant\\qdrant_fastembed\\_qdrant_fastembed_8-performance-optimization.md",
+      "hierarchy_path": "Performance Optimization",
+      "chunk_hash": "3b475673cb2e9753",
+      "content_digest": "3b475673cb2e9753",
+      "chunk_length": 1367,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "fastembed",
+          "qdrant",
+          "docs",
+          "ipynb",
+          "examples",
+          "https",
+          "github",
+          "com",
+          "blob",
+          "b785640b",
+          "onnx",
+          "for",
+          "with",
+          "performance",
+          "embedding",
+          "the",
+          "information",
+          "about",
+          "architecture",
+          "see"
+        ],
+        "term_weights": [
+          {
+            "term": "fastembed",
+            "tf": 18,
+            "weight": 0.109756
+          },
+          {
+            "term": "qdrant",
+            "tf": 10,
+            "weight": 0.060976
+          },
+          {
+            "term": "docs",
+            "tf": 8,
+            "weight": 0.04878
+          },
+          {
+            "term": "ipynb",
+            "tf": 8,
+            "weight": 0.04878
+          },
+          {
+            "term": "examples",
+            "tf": 6,
+            "weight": 0.036585
+          },
+          {
+            "term": "https",
+            "tf": 5,
+            "weight": 0.030488
+          },
+          {
+            "term": "github",
+            "tf": 5,
+            "weight": 0.030488
+          },
+          {
+            "term": "com",
+            "tf": 5,
+            "weight": 0.030488
+          },
+          {
+            "term": "blob",
+            "tf": 5,
+            "weight": 0.030488
+          },
+          {
+            "term": "b785640b",
+            "tf": 5,
+            "weight": 0.030488
+          },
+          {
+            "term": "onnx",
+            "tf": 5,
+            "weight": 0.030488
+          },
+          {
+            "term": "for",
+            "tf": 5,
+            "weight": 0.030488
+          },
+          {
+            "term": "with",
+            "tf": 4,
+            "weight": 0.02439
+          },
+          {
+            "term": "performance",
+            "tf": 3,
+            "weight": 0.018293
+          },
+          {
+            "term": "embedding",
+            "tf": 3,
+            "weight": 0.018293
+          },
+          {
+            "term": "the",
+            "tf": 3,
+            "weight": 0.018293
+          },
+          {
+            "term": "information",
+            "tf": 3,
+            "weight": 0.018293
+          },
+          {
+            "term": "about",
+            "tf": 3,
+            "weight": 0.018293
+          },
+          {
+            "term": "architecture",
+            "tf": 3,
+            "weight": 0.018293
+          },
+          {
+            "term": "see",
+            "tf": 3,
+            "weight": 0.018293
+          }
+        ],
+        "unique_terms": 57,
+        "total_terms": 164
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Performance Optimization",
+        "b785640b",
+        "blob",
+        "com",
+        "docs",
+        "examples",
+        "fastembed",
+        "github",
+        "https",
+        "ipynb",
+        "qdrant"
+      ],
+      "collection_name": "Qdrant"
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.7153148148148148,
+      "overall": 0.7717716049382716
+    }
+  },
+  {
+    "text": "## Key Performance Features  FastEmbed incorporates several key performance optimization techniques that allow it to generate embeddings significantly faster than traditional embedding methods:  1. **ONNX Runtime Integration**: Accelerated inference through ONNX optimization 2. **Parallel Processing**: Multi-core utilization for faster embedding generation 3. **Lazy Loading**: Efficient memory management for multiple models 4. **Batch Processing**: Optimized throughput through batched operations 5. **Hardware Acceleration**: Support for both CPU and GPU (CUDA) execution 6. **Model Caching**: Efficient model storage and retrieval ``` ``` Sources: [fastembed/text/onnx\\_embedding.py198-229](https://github.com/qdrant/fastembed/blob/b785640b/fastembed/text/onnx_embedding.py#L198-L229)",
+    "metadata": {
+      "chunk_id": "3f356414bef5-0001",
+      "source_file": "Docs\\Qdrant\\qdrant_fastembed\\_qdrant_fastembed_8-performance-optimization.md",
+      "filename": "_qdrant_fastembed_8-performance-optimization.md",
+      "file_extension": ".md",
+      "chunk_index": 1,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Key Performance Features"
+      ],
+      "heading_text": "Key Performance Features",
+      "token_count": 159,
+      "char_count": 790,
+      "start_char": 3658,
+      "end_char": 4448,
+      "semantic_score": 0.7,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5455555555555556,
+      "chunking_strategy": "hierarchical_balanced_structural",
+      "content_type": "code_block",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:40.634822",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 159,
+      "document_id": "3f356414bef5",
+      "document_name": "_qdrant_fastembed_8-performance-optimization",
+      "source_path": "Docs\\Qdrant\\qdrant_fastembed\\_qdrant_fastembed_8-performance-optimization.md",
+      "source_filename": "_qdrant_fastembed_8-performance-optimization.md",
+      "source_directory": "Docs\\Qdrant\\qdrant_fastembed",
+      "relative_path": "Docs\\Qdrant\\qdrant_fastembed\\_qdrant_fastembed_8-performance-optimization.md",
+      "hierarchy_path": "Key Performance Features",
+      "chunk_hash": "b0214cf135783182",
+      "content_digest": "b0214cf135783182",
+      "chunk_length": 790,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "fastembed",
+          "embedding",
+          "onnx",
+          "for",
+          "key",
+          "performance",
+          "optimization",
+          "faster",
+          "through",
+          "processing",
+          "efficient",
+          "and",
+          "model",
+          "text",
+          "features",
+          "incorporates",
+          "several",
+          "techniques",
+          "that",
+          "allow"
+        ],
+        "term_weights": [
+          {
+            "term": "fastembed",
+            "tf": 4,
+            "weight": 0.044944
+          },
+          {
+            "term": "embedding",
+            "tf": 4,
+            "weight": 0.044944
+          },
+          {
+            "term": "onnx",
+            "tf": 4,
+            "weight": 0.044944
+          },
+          {
+            "term": "for",
+            "tf": 3,
+            "weight": 0.033708
+          },
+          {
+            "term": "key",
+            "tf": 2,
+            "weight": 0.022472
+          },
+          {
+            "term": "performance",
+            "tf": 2,
+            "weight": 0.022472
+          },
+          {
+            "term": "optimization",
+            "tf": 2,
+            "weight": 0.022472
+          },
+          {
+            "term": "faster",
+            "tf": 2,
+            "weight": 0.022472
+          },
+          {
+            "term": "through",
+            "tf": 2,
+            "weight": 0.022472
+          },
+          {
+            "term": "processing",
+            "tf": 2,
+            "weight": 0.022472
+          },
+          {
+            "term": "efficient",
+            "tf": 2,
+            "weight": 0.022472
+          },
+          {
+            "term": "and",
+            "tf": 2,
+            "weight": 0.022472
+          },
+          {
+            "term": "model",
+            "tf": 2,
+            "weight": 0.022472
+          },
+          {
+            "term": "text",
+            "tf": 2,
+            "weight": 0.022472
+          },
+          {
+            "term": "features",
+            "tf": 1,
+            "weight": 0.011236
+          },
+          {
+            "term": "incorporates",
+            "tf": 1,
+            "weight": 0.011236
+          },
+          {
+            "term": "several",
+            "tf": 1,
+            "weight": 0.011236
+          },
+          {
+            "term": "techniques",
+            "tf": 1,
+            "weight": 0.011236
+          },
+          {
+            "term": "that",
+            "tf": 1,
+            "weight": 0.011236
+          },
+          {
+            "term": "allow",
+            "tf": 1,
+            "weight": 0.011236
+          }
+        ],
+        "unique_terms": 68,
+        "total_terms": 89
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Key Performance Features",
+        "embedding",
+        "fastembed",
+        "faster",
+        "for",
+        "key",
+        "onnx",
+        "optimization",
+        "performance",
+        "processing",
+        "through"
+      ],
+      "collection_name": "Qdrant"
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5455555555555556,
+      "overall": 0.715185185185185
+    }
+  },
+  {
+    "text": "## ONNX Runtime Integration\n\nFastEmbed uses ONNX Runtime as its inference engine, which provides significant performance improvements over traditional PyTorch or TensorFlow implementations. ONNX (Open Neural Network Exchange) is an open standard for machine learning model representation that enables model interoperability between different frameworks.",
+    "metadata": {
+      "chunk_id": "3f356414bef5-0002",
+      "source_file": "Docs\\Qdrant\\qdrant_fastembed\\_qdrant_fastembed_8-performance-optimization.md",
+      "filename": "_qdrant_fastembed_8-performance-optimization.md",
+      "file_extension": ".md",
+      "chunk_index": 2,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "ONNX Runtime Integration"
+      ],
+      "heading_text": "ONNX Runtime Integration",
+      "token_count": 57,
+      "char_count": 353,
+      "start_char": 4452,
+      "end_char": 4805,
+      "semantic_score": 0.7999999999999999,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5627272727272727,
+      "chunking_strategy": "hierarchical_balanced_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:40.635247",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 57,
+      "document_id": "3f356414bef5",
+      "document_name": "_qdrant_fastembed_8-performance-optimization",
+      "source_path": "Docs\\Qdrant\\qdrant_fastembed\\_qdrant_fastembed_8-performance-optimization.md",
+      "source_filename": "_qdrant_fastembed_8-performance-optimization.md",
+      "source_directory": "Docs\\Qdrant\\qdrant_fastembed",
+      "relative_path": "Docs\\Qdrant\\qdrant_fastembed\\_qdrant_fastembed_8-performance-optimization.md",
+      "hierarchy_path": "ONNX Runtime Integration",
+      "chunk_hash": "5f93fa85e399b916",
+      "content_digest": "5f93fa85e399b916",
+      "chunk_length": 353,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "onnx",
+          "runtime",
+          "open",
+          "model",
+          "integration",
+          "fastembed",
+          "uses",
+          "its",
+          "inference",
+          "engine",
+          "which",
+          "provides",
+          "significant",
+          "performance",
+          "improvements",
+          "over",
+          "traditional",
+          "pytorch",
+          "tensorflow",
+          "implementations"
+        ],
+        "term_weights": [
+          {
+            "term": "onnx",
+            "tf": 3,
+            "weight": 0.076923
+          },
+          {
+            "term": "runtime",
+            "tf": 2,
+            "weight": 0.051282
+          },
+          {
+            "term": "open",
+            "tf": 2,
+            "weight": 0.051282
+          },
+          {
+            "term": "model",
+            "tf": 2,
+            "weight": 0.051282
+          },
+          {
+            "term": "integration",
+            "tf": 1,
+            "weight": 0.025641
+          },
+          {
+            "term": "fastembed",
+            "tf": 1,
+            "weight": 0.025641
+          },
+          {
+            "term": "uses",
+            "tf": 1,
+            "weight": 0.025641
+          },
+          {
+            "term": "its",
+            "tf": 1,
+            "weight": 0.025641
+          },
+          {
+            "term": "inference",
+            "tf": 1,
+            "weight": 0.025641
+          },
+          {
+            "term": "engine",
+            "tf": 1,
+            "weight": 0.025641
+          },
+          {
+            "term": "which",
+            "tf": 1,
+            "weight": 0.025641
+          },
+          {
+            "term": "provides",
+            "tf": 1,
+            "weight": 0.025641
+          },
+          {
+            "term": "significant",
+            "tf": 1,
+            "weight": 0.025641
+          },
+          {
+            "term": "performance",
+            "tf": 1,
+            "weight": 0.025641
+          },
+          {
+            "term": "improvements",
+            "tf": 1,
+            "weight": 0.025641
+          },
+          {
+            "term": "over",
+            "tf": 1,
+            "weight": 0.025641
+          },
+          {
+            "term": "traditional",
+            "tf": 1,
+            "weight": 0.025641
+          },
+          {
+            "term": "pytorch",
+            "tf": 1,
+            "weight": 0.025641
+          },
+          {
+            "term": "tensorflow",
+            "tf": 1,
+            "weight": 0.025641
+          },
+          {
+            "term": "implementations",
+            "tf": 1,
+            "weight": 0.025641
+          }
+        ],
+        "unique_terms": 34,
+        "total_terms": 39
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "ONNX Runtime Integration",
+        "engine",
+        "fastembed",
+        "inference",
+        "integration",
+        "its",
+        "model",
+        "onnx",
+        "open",
+        "runtime",
+        "uses"
+      ],
+      "collection_name": "Qdrant"
+    },
+    "advanced_scores": {
+      "semantic": 0.7999999999999999,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5627272727272727,
+      "overall": 0.7542424242424243
+    }
+  },
+  {
+    "text": "### Benefits of ONNX Runtime  - **Optimized inference**: ONNX Runtime includes various optimizations specific to the hardware and platform - **Reduced memory usage**: More efficient memory management compared to PyTorch/TensorFlow - **Cross-platform compatibility**: Same model works across different environments",
+    "metadata": {
+      "chunk_id": "3f356414bef5-0003",
+      "source_file": "Docs\\Qdrant\\qdrant_fastembed\\_qdrant_fastembed_8-performance-optimization.md",
+      "filename": "_qdrant_fastembed_8-performance-optimization.md",
+      "file_extension": ".md",
+      "chunk_index": 3,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Benefits of ONNX Runtime"
+      ],
+      "heading_text": "Benefits of ONNX Runtime",
+      "token_count": 56,
+      "char_count": 313,
+      "start_char": 4807,
+      "end_char": 5120,
+      "semantic_score": 0.8,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5438461538461539,
+      "chunking_strategy": "hierarchical_balanced_structural",
+      "content_type": "list_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:40.635412",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 56,
+      "document_id": "3f356414bef5",
+      "document_name": "_qdrant_fastembed_8-performance-optimization",
+      "source_path": "Docs\\Qdrant\\qdrant_fastembed\\_qdrant_fastembed_8-performance-optimization.md",
+      "source_filename": "_qdrant_fastembed_8-performance-optimization.md",
+      "source_directory": "Docs\\Qdrant\\qdrant_fastembed",
+      "relative_path": "Docs\\Qdrant\\qdrant_fastembed\\_qdrant_fastembed_8-performance-optimization.md",
+      "hierarchy_path": "Benefits of ONNX Runtime",
+      "chunk_hash": "64969ba8def29d22",
+      "content_digest": "64969ba8def29d22",
+      "chunk_length": 313,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "onnx",
+          "runtime",
+          "platform",
+          "memory",
+          "benefits",
+          "optimized",
+          "inference",
+          "includes",
+          "various",
+          "optimizations",
+          "specific",
+          "the",
+          "hardware",
+          "and",
+          "reduced",
+          "usage",
+          "more",
+          "efficient",
+          "management",
+          "compared"
+        ],
+        "term_weights": [
+          {
+            "term": "onnx",
+            "tf": 2,
+            "weight": 0.058824
+          },
+          {
+            "term": "runtime",
+            "tf": 2,
+            "weight": 0.058824
+          },
+          {
+            "term": "platform",
+            "tf": 2,
+            "weight": 0.058824
+          },
+          {
+            "term": "memory",
+            "tf": 2,
+            "weight": 0.058824
+          },
+          {
+            "term": "benefits",
+            "tf": 1,
+            "weight": 0.029412
+          },
+          {
+            "term": "optimized",
+            "tf": 1,
+            "weight": 0.029412
+          },
+          {
+            "term": "inference",
+            "tf": 1,
+            "weight": 0.029412
+          },
+          {
+            "term": "includes",
+            "tf": 1,
+            "weight": 0.029412
+          },
+          {
+            "term": "various",
+            "tf": 1,
+            "weight": 0.029412
+          },
+          {
+            "term": "optimizations",
+            "tf": 1,
+            "weight": 0.029412
+          },
+          {
+            "term": "specific",
+            "tf": 1,
+            "weight": 0.029412
+          },
+          {
+            "term": "the",
+            "tf": 1,
+            "weight": 0.029412
+          },
+          {
+            "term": "hardware",
+            "tf": 1,
+            "weight": 0.029412
+          },
+          {
+            "term": "and",
+            "tf": 1,
+            "weight": 0.029412
+          },
+          {
+            "term": "reduced",
+            "tf": 1,
+            "weight": 0.029412
+          },
+          {
+            "term": "usage",
+            "tf": 1,
+            "weight": 0.029412
+          },
+          {
+            "term": "more",
+            "tf": 1,
+            "weight": 0.029412
+          },
+          {
+            "term": "efficient",
+            "tf": 1,
+            "weight": 0.029412
+          },
+          {
+            "term": "management",
+            "tf": 1,
+            "weight": 0.029412
+          },
+          {
+            "term": "compared",
+            "tf": 1,
+            "weight": 0.029412
+          }
+        ],
+        "unique_terms": 30,
+        "total_terms": 34
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Benefits of ONNX Runtime",
+        "benefits",
+        "includes",
+        "inference",
+        "memory",
+        "onnx",
+        "optimizations",
+        "optimized",
+        "platform",
+        "runtime",
+        "various"
+      ],
+      "collection_name": "Qdrant"
+    },
+    "advanced_scores": {
+      "semantic": 0.8,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5438461538461539,
+      "overall": 0.747948717948718
+    }
+  },
+  {
+    "text": "### Configuration Options  When initializing an embedding model, you can configure ONNX Runtime execution parameters: ``` ``` Sources: [fastembed/text/onnx\\_embedding.py199-246](https://github.com/qdrant/fastembed/blob/b785640b/fastembed/text/onnx_embedding.py#L199-L246)",
+    "metadata": {
+      "chunk_id": "3f356414bef5-0004",
+      "source_file": "Docs\\Qdrant\\qdrant_fastembed\\_qdrant_fastembed_8-performance-optimization.md",
+      "filename": "_qdrant_fastembed_8-performance-optimization.md",
+      "file_extension": ".md",
+      "chunk_index": 4,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Configuration Options"
+      ],
+      "heading_text": "Configuration Options",
+      "token_count": 63,
+      "char_count": 271,
+      "start_char": 5122,
+      "end_char": 5393,
+      "semantic_score": 0.7,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5742105263157895,
+      "chunking_strategy": "hierarchical_balanced_structural",
+      "content_type": "code_block",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:40.636425",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 63,
+      "document_id": "3f356414bef5",
+      "document_name": "_qdrant_fastembed_8-performance-optimization",
+      "source_path": "Docs\\Qdrant\\qdrant_fastembed\\_qdrant_fastembed_8-performance-optimization.md",
+      "source_filename": "_qdrant_fastembed_8-performance-optimization.md",
+      "source_directory": "Docs\\Qdrant\\qdrant_fastembed",
+      "relative_path": "Docs\\Qdrant\\qdrant_fastembed\\_qdrant_fastembed_8-performance-optimization.md",
+      "hierarchy_path": "Configuration Options",
+      "chunk_hash": "c0badfec240eaba0",
+      "content_digest": "c0badfec240eaba0",
+      "chunk_length": 271,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "embedding",
+          "onnx",
+          "fastembed",
+          "text",
+          "configuration",
+          "options",
+          "when",
+          "initializing",
+          "model",
+          "you",
+          "can",
+          "configure",
+          "runtime",
+          "execution",
+          "parameters",
+          "sources",
+          "py199",
+          "246",
+          "https",
+          "github"
+        ],
+        "term_weights": [
+          {
+            "term": "embedding",
+            "tf": 3,
+            "weight": 0.090909
+          },
+          {
+            "term": "onnx",
+            "tf": 3,
+            "weight": 0.090909
+          },
+          {
+            "term": "fastembed",
+            "tf": 3,
+            "weight": 0.090909
+          },
+          {
+            "term": "text",
+            "tf": 2,
+            "weight": 0.060606
+          },
+          {
+            "term": "configuration",
+            "tf": 1,
+            "weight": 0.030303
+          },
+          {
+            "term": "options",
+            "tf": 1,
+            "weight": 0.030303
+          },
+          {
+            "term": "when",
+            "tf": 1,
+            "weight": 0.030303
+          },
+          {
+            "term": "initializing",
+            "tf": 1,
+            "weight": 0.030303
+          },
+          {
+            "term": "model",
+            "tf": 1,
+            "weight": 0.030303
+          },
+          {
+            "term": "you",
+            "tf": 1,
+            "weight": 0.030303
+          },
+          {
+            "term": "can",
+            "tf": 1,
+            "weight": 0.030303
+          },
+          {
+            "term": "configure",
+            "tf": 1,
+            "weight": 0.030303
+          },
+          {
+            "term": "runtime",
+            "tf": 1,
+            "weight": 0.030303
+          },
+          {
+            "term": "execution",
+            "tf": 1,
+            "weight": 0.030303
+          },
+          {
+            "term": "parameters",
+            "tf": 1,
+            "weight": 0.030303
+          },
+          {
+            "term": "sources",
+            "tf": 1,
+            "weight": 0.030303
+          },
+          {
+            "term": "py199",
+            "tf": 1,
+            "weight": 0.030303
+          },
+          {
+            "term": "246",
+            "tf": 1,
+            "weight": 0.030303
+          },
+          {
+            "term": "https",
+            "tf": 1,
+            "weight": 0.030303
+          },
+          {
+            "term": "github",
+            "tf": 1,
+            "weight": 0.030303
+          }
+        ],
+        "unique_terms": 26,
+        "total_terms": 33
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Configuration Options",
+        "configuration",
+        "embedding",
+        "fastembed",
+        "initializing",
+        "model",
+        "onnx",
+        "options",
+        "text",
+        "when",
+        "you"
+      ],
+      "collection_name": "Qdrant"
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5742105263157895,
+      "overall": 0.7247368421052632
+    }
+  },
+  {
+    "text": "## Parallel Processing\n\nFastEmbed implements data-parallel processing to distribute embedding workloads across multiple CPU cores or GPU devices, enabling significant speedups for large dataset processing.",
+    "metadata": {
+      "chunk_id": "3f356414bef5-0005",
+      "source_file": "Docs\\Qdrant\\qdrant_fastembed\\_qdrant_fastembed_8-performance-optimization.md",
+      "filename": "_qdrant_fastembed_8-performance-optimization.md",
+      "file_extension": ".md",
+      "chunk_index": 5,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Parallel Processing"
+      ],
+      "heading_text": "Parallel Processing",
+      "token_count": 33,
+      "char_count": 205,
+      "start_char": 5397,
+      "end_char": 5602,
+      "semantic_score": 0.8,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.578,
+      "chunking_strategy": "hierarchical_balanced_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:40.636746",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 33,
+      "document_id": "3f356414bef5",
+      "document_name": "_qdrant_fastembed_8-performance-optimization",
+      "source_path": "Docs\\Qdrant\\qdrant_fastembed\\_qdrant_fastembed_8-performance-optimization.md",
+      "source_filename": "_qdrant_fastembed_8-performance-optimization.md",
+      "source_directory": "Docs\\Qdrant\\qdrant_fastembed",
+      "relative_path": "Docs\\Qdrant\\qdrant_fastembed\\_qdrant_fastembed_8-performance-optimization.md",
+      "hierarchy_path": "Parallel Processing",
+      "chunk_hash": "0a1f5a65a9f62392",
+      "content_digest": "0a1f5a65a9f62392",
+      "chunk_length": 205,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "processing",
+          "parallel",
+          "fastembed",
+          "implements",
+          "data",
+          "distribute",
+          "embedding",
+          "workloads",
+          "across",
+          "multiple",
+          "cpu",
+          "cores",
+          "gpu",
+          "devices",
+          "enabling",
+          "significant",
+          "speedups",
+          "for",
+          "large",
+          "dataset"
+        ],
+        "term_weights": [
+          {
+            "term": "processing",
+            "tf": 3,
+            "weight": 0.130435
+          },
+          {
+            "term": "parallel",
+            "tf": 2,
+            "weight": 0.086957
+          },
+          {
+            "term": "fastembed",
+            "tf": 1,
+            "weight": 0.043478
+          },
+          {
+            "term": "implements",
+            "tf": 1,
+            "weight": 0.043478
+          },
+          {
+            "term": "data",
+            "tf": 1,
+            "weight": 0.043478
+          },
+          {
+            "term": "distribute",
+            "tf": 1,
+            "weight": 0.043478
+          },
+          {
+            "term": "embedding",
+            "tf": 1,
+            "weight": 0.043478
+          },
+          {
+            "term": "workloads",
+            "tf": 1,
+            "weight": 0.043478
+          },
+          {
+            "term": "across",
+            "tf": 1,
+            "weight": 0.043478
+          },
+          {
+            "term": "multiple",
+            "tf": 1,
+            "weight": 0.043478
+          },
+          {
+            "term": "cpu",
+            "tf": 1,
+            "weight": 0.043478
+          },
+          {
+            "term": "cores",
+            "tf": 1,
+            "weight": 0.043478
+          },
+          {
+            "term": "gpu",
+            "tf": 1,
+            "weight": 0.043478
+          },
+          {
+            "term": "devices",
+            "tf": 1,
+            "weight": 0.043478
+          },
+          {
+            "term": "enabling",
+            "tf": 1,
+            "weight": 0.043478
+          },
+          {
+            "term": "significant",
+            "tf": 1,
+            "weight": 0.043478
+          },
+          {
+            "term": "speedups",
+            "tf": 1,
+            "weight": 0.043478
+          },
+          {
+            "term": "for",
+            "tf": 1,
+            "weight": 0.043478
+          },
+          {
+            "term": "large",
+            "tf": 1,
+            "weight": 0.043478
+          },
+          {
+            "term": "dataset",
+            "tf": 1,
+            "weight": 0.043478
+          }
+        ],
+        "unique_terms": 20,
+        "total_terms": 23
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Parallel Processing",
+        "across",
+        "data",
+        "distribute",
+        "embedding",
+        "fastembed",
+        "implements",
+        "multiple",
+        "parallel",
+        "processing",
+        "workloads"
+      ],
+      "collection_name": "Qdrant"
+    },
+    "advanced_scores": {
+      "semantic": 0.8,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.578,
+      "overall": 0.7593333333333333
+    }
+  },
+  {
+    "text": "### How Parallel Processing Works in FastEmbed ``` ```",
+    "metadata": {
+      "chunk_id": "3f356414bef5-0006",
+      "source_file": "Docs\\Qdrant\\qdrant_fastembed\\_qdrant_fastembed_8-performance-optimization.md",
+      "filename": "_qdrant_fastembed_8-performance-optimization.md",
+      "file_extension": ".md",
+      "chunk_index": 6,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "How Parallel Processing Works in FastEmbed"
+      ],
+      "heading_text": "How Parallel Processing Works in FastEmbed",
+      "token_count": 10,
+      "char_count": 54,
+      "start_char": 5604,
+      "end_char": 5658,
+      "semantic_score": 0.8,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5566666666666666,
+      "chunking_strategy": "hierarchical_balanced_structural",
+      "content_type": "code_block",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:40.636904",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 10,
+      "document_id": "3f356414bef5",
+      "document_name": "_qdrant_fastembed_8-performance-optimization",
+      "source_path": "Docs\\Qdrant\\qdrant_fastembed\\_qdrant_fastembed_8-performance-optimization.md",
+      "source_filename": "_qdrant_fastembed_8-performance-optimization.md",
+      "source_directory": "Docs\\Qdrant\\qdrant_fastembed",
+      "relative_path": "Docs\\Qdrant\\qdrant_fastembed\\_qdrant_fastembed_8-performance-optimization.md",
+      "hierarchy_path": "How Parallel Processing Works in FastEmbed",
+      "chunk_hash": "6bd20effd1f7bc34",
+      "content_digest": "6bd20effd1f7bc34",
+      "chunk_length": 54,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "how",
+          "parallel",
+          "processing",
+          "works",
+          "fastembed"
+        ],
+        "term_weights": [
+          {
+            "term": "how",
+            "tf": 1,
+            "weight": 0.2
+          },
+          {
+            "term": "parallel",
+            "tf": 1,
+            "weight": 0.2
+          },
+          {
+            "term": "processing",
+            "tf": 1,
+            "weight": 0.2
+          },
+          {
+            "term": "works",
+            "tf": 1,
+            "weight": 0.2
+          },
+          {
+            "term": "fastembed",
+            "tf": 1,
+            "weight": 0.2
+          }
+        ],
+        "unique_terms": 5,
+        "total_terms": 5
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "How Parallel Processing Works in FastEmbed",
+        "fastembed",
+        "how",
+        "parallel",
+        "processing",
+        "works"
+      ],
+      "collection_name": "Qdrant"
+    },
+    "advanced_scores": {
+      "semantic": 0.8,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5566666666666666,
+      "overall": 0.7522222222222222
+    }
+  },
+  {
+    "text": "### Configuring Parallel Processing  When calling the `embed()` method, you can specify the level of parallelism: ``` ``` The `parallel` parameter accepts:  - A positive integer: Use the specified number of workers - 0: Use all available cores - None: Don't use data parallel processing (use default ONNX Runtime threading)  Performance benchmarks from example notebooks demonstrate significant speedups using parallel processing:  | Processing Mode | User Time | System Time | Wall Clock Time | Speedup | | --------------- | --------- | ----------- | --------------- | ------- | | Sequential      | 16min 23s | 31.7s       | 3min            | 1x      | | Parallel        | 6min 19s  | 22s         | 1min 37s        | \\~2x    |  Sources: [docs/examples/Hybrid\\_Search.ipynb726-739](https://github.com/qdrant/fastembed/blob/b785640b/docs/examples/Hybrid_Search.ipynb#L726-L739)",
+    "metadata": {
+      "chunk_id": "3f356414bef5-0007",
+      "source_file": "Docs\\Qdrant\\qdrant_fastembed\\_qdrant_fastembed_8-performance-optimization.md",
+      "filename": "_qdrant_fastembed_8-performance-optimization.md",
+      "file_extension": ".md",
+      "chunk_index": 7,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Configuring Parallel Processing"
+      ],
+      "heading_text": "Configuring Parallel Processing",
+      "token_count": 218,
+      "char_count": 876,
+      "start_char": 5661,
+      "end_char": 6537,
+      "semantic_score": 0.7999999999999999,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.6856521739130436,
+      "chunking_strategy": "hierarchical_balanced_structural",
+      "content_type": "code_block",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:40.639920",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 218,
+      "document_id": "3f356414bef5",
+      "document_name": "_qdrant_fastembed_8-performance-optimization",
+      "source_path": "Docs\\Qdrant\\qdrant_fastembed\\_qdrant_fastembed_8-performance-optimization.md",
+      "source_filename": "_qdrant_fastembed_8-performance-optimization.md",
+      "source_directory": "Docs\\Qdrant\\qdrant_fastembed",
+      "relative_path": "Docs\\Qdrant\\qdrant_fastembed\\_qdrant_fastembed_8-performance-optimization.md",
+      "hierarchy_path": "Configuring Parallel Processing",
+      "chunk_hash": "68253e670cf0dce2",
+      "content_digest": "68253e670cf0dce2",
+      "chunk_length": 876,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "parallel",
+          "processing",
+          "the",
+          "use",
+          "time",
+          "docs",
+          "examples",
+          "hybrid",
+          "search",
+          "configuring",
+          "when",
+          "calling",
+          "embed",
+          "method",
+          "you",
+          "can",
+          "specify",
+          "level",
+          "parallelism",
+          "parameter"
+        ],
+        "term_weights": [
+          {
+            "term": "parallel",
+            "tf": 5,
+            "weight": 0.054348
+          },
+          {
+            "term": "processing",
+            "tf": 4,
+            "weight": 0.043478
+          },
+          {
+            "term": "the",
+            "tf": 4,
+            "weight": 0.043478
+          },
+          {
+            "term": "use",
+            "tf": 4,
+            "weight": 0.043478
+          },
+          {
+            "term": "time",
+            "tf": 3,
+            "weight": 0.032609
+          },
+          {
+            "term": "docs",
+            "tf": 2,
+            "weight": 0.021739
+          },
+          {
+            "term": "examples",
+            "tf": 2,
+            "weight": 0.021739
+          },
+          {
+            "term": "hybrid",
+            "tf": 2,
+            "weight": 0.021739
+          },
+          {
+            "term": "search",
+            "tf": 2,
+            "weight": 0.021739
+          },
+          {
+            "term": "configuring",
+            "tf": 1,
+            "weight": 0.01087
+          },
+          {
+            "term": "when",
+            "tf": 1,
+            "weight": 0.01087
+          },
+          {
+            "term": "calling",
+            "tf": 1,
+            "weight": 0.01087
+          },
+          {
+            "term": "embed",
+            "tf": 1,
+            "weight": 0.01087
+          },
+          {
+            "term": "method",
+            "tf": 1,
+            "weight": 0.01087
+          },
+          {
+            "term": "you",
+            "tf": 1,
+            "weight": 0.01087
+          },
+          {
+            "term": "can",
+            "tf": 1,
+            "weight": 0.01087
+          },
+          {
+            "term": "specify",
+            "tf": 1,
+            "weight": 0.01087
+          },
+          {
+            "term": "level",
+            "tf": 1,
+            "weight": 0.01087
+          },
+          {
+            "term": "parallelism",
+            "tf": 1,
+            "weight": 0.01087
+          },
+          {
+            "term": "parameter",
+            "tf": 1,
+            "weight": 0.01087
+          }
+        ],
+        "unique_terms": 73,
+        "total_terms": 92
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Configuring Parallel Processing",
+        "configuring",
+        "docs",
+        "examples",
+        "hybrid",
+        "parallel",
+        "processing",
+        "search",
+        "the",
+        "time",
+        "use"
+      ],
+      "collection_name": "Qdrant"
+    },
+    "advanced_scores": {
+      "semantic": 0.7999999999999999,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.6856521739130436,
+      "overall": 0.7952173913043478
+    }
+  },
+  {
+    "text": "## Lazy Loading\n\nLazy loading allows you to instantiate models without immediately loading their weights into memory, which can be useful when working with multiple models or in resource-constrained environments.",
+    "metadata": {
+      "chunk_id": "3f356414bef5-0008",
+      "source_file": "Docs\\Qdrant\\qdrant_fastembed\\_qdrant_fastembed_8-performance-optimization.md",
+      "filename": "_qdrant_fastembed_8-performance-optimization.md",
+      "file_extension": ".md",
+      "chunk_index": 8,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Lazy Loading"
+      ],
+      "heading_text": "Lazy Loading",
+      "token_count": 35,
+      "char_count": 212,
+      "start_char": 6541,
+      "end_char": 6753,
+      "semantic_score": 0.8,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.55,
+      "chunking_strategy": "hierarchical_balanced_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:40.640325",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 35,
+      "document_id": "3f356414bef5",
+      "document_name": "_qdrant_fastembed_8-performance-optimization",
+      "source_path": "Docs\\Qdrant\\qdrant_fastembed\\_qdrant_fastembed_8-performance-optimization.md",
+      "source_filename": "_qdrant_fastembed_8-performance-optimization.md",
+      "source_directory": "Docs\\Qdrant\\qdrant_fastembed",
+      "relative_path": "Docs\\Qdrant\\qdrant_fastembed\\_qdrant_fastembed_8-performance-optimization.md",
+      "hierarchy_path": "Lazy Loading",
+      "chunk_hash": "12c126d8bb68088d",
+      "content_digest": "12c126d8bb68088d",
+      "chunk_length": 212,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "loading",
+          "lazy",
+          "models",
+          "allows",
+          "you",
+          "instantiate",
+          "without",
+          "immediately",
+          "their",
+          "weights",
+          "into",
+          "memory",
+          "which",
+          "can",
+          "useful",
+          "when",
+          "working",
+          "with",
+          "multiple",
+          "resource"
+        ],
+        "term_weights": [
+          {
+            "term": "loading",
+            "tf": 3,
+            "weight": 0.115385
+          },
+          {
+            "term": "lazy",
+            "tf": 2,
+            "weight": 0.076923
+          },
+          {
+            "term": "models",
+            "tf": 2,
+            "weight": 0.076923
+          },
+          {
+            "term": "allows",
+            "tf": 1,
+            "weight": 0.038462
+          },
+          {
+            "term": "you",
+            "tf": 1,
+            "weight": 0.038462
+          },
+          {
+            "term": "instantiate",
+            "tf": 1,
+            "weight": 0.038462
+          },
+          {
+            "term": "without",
+            "tf": 1,
+            "weight": 0.038462
+          },
+          {
+            "term": "immediately",
+            "tf": 1,
+            "weight": 0.038462
+          },
+          {
+            "term": "their",
+            "tf": 1,
+            "weight": 0.038462
+          },
+          {
+            "term": "weights",
+            "tf": 1,
+            "weight": 0.038462
+          },
+          {
+            "term": "into",
+            "tf": 1,
+            "weight": 0.038462
+          },
+          {
+            "term": "memory",
+            "tf": 1,
+            "weight": 0.038462
+          },
+          {
+            "term": "which",
+            "tf": 1,
+            "weight": 0.038462
+          },
+          {
+            "term": "can",
+            "tf": 1,
+            "weight": 0.038462
+          },
+          {
+            "term": "useful",
+            "tf": 1,
+            "weight": 0.038462
+          },
+          {
+            "term": "when",
+            "tf": 1,
+            "weight": 0.038462
+          },
+          {
+            "term": "working",
+            "tf": 1,
+            "weight": 0.038462
+          },
+          {
+            "term": "with",
+            "tf": 1,
+            "weight": 0.038462
+          },
+          {
+            "term": "multiple",
+            "tf": 1,
+            "weight": 0.038462
+          },
+          {
+            "term": "resource",
+            "tf": 1,
+            "weight": 0.038462
+          }
+        ],
+        "unique_terms": 22,
+        "total_terms": 26
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Lazy Loading",
+        "allows",
+        "immediately",
+        "instantiate",
+        "lazy",
+        "loading",
+        "models",
+        "their",
+        "weights",
+        "without",
+        "you"
+      ],
+      "collection_name": "Qdrant"
+    },
+    "advanced_scores": {
+      "semantic": 0.8,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.55,
+      "overall": 0.75
+    }
+  },
+  {
+    "text": "### How to Enable Lazy Loading ``` ``` When lazy loading is enabled, the model weights are only loaded when the first embedding request is made, reducing initial memory usage and startup time. Sources: [fastembed/text/onnx\\_embedding.py221-222](https://github.com/qdrant/fastembed/blob/b785640b/fastembed/text/onnx_embedding.py#L221-L222) [fastembed/text/onnx\\_embedding.py255-258](https://github.com/qdrant/fastembed/blob/b785640b/fastembed/text/onnx_embedding.py#L255-L258)",
+    "metadata": {
+      "chunk_id": "3f356414bef5-0009",
+      "source_file": "Docs\\Qdrant\\qdrant_fastembed\\_qdrant_fastembed_8-performance-optimization.md",
+      "filename": "_qdrant_fastembed_8-performance-optimization.md",
+      "file_extension": ".md",
+      "chunk_index": 9,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "How to Enable Lazy Loading"
+      ],
+      "heading_text": "How to Enable Lazy Loading",
+      "token_count": 118,
+      "char_count": 475,
+      "start_char": 6755,
+      "end_char": 7230,
+      "semantic_score": 0.6,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.74,
+      "chunking_strategy": "hierarchical_balanced_structural",
+      "content_type": "code_block",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:40.641105",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 118,
+      "document_id": "3f356414bef5",
+      "document_name": "_qdrant_fastembed_8-performance-optimization",
+      "source_path": "Docs\\Qdrant\\qdrant_fastembed\\_qdrant_fastembed_8-performance-optimization.md",
+      "source_filename": "_qdrant_fastembed_8-performance-optimization.md",
+      "source_directory": "Docs\\Qdrant\\qdrant_fastembed",
+      "relative_path": "Docs\\Qdrant\\qdrant_fastembed\\_qdrant_fastembed_8-performance-optimization.md",
+      "hierarchy_path": "How to Enable Lazy Loading",
+      "chunk_hash": "fe1363dac3db3b4d",
+      "content_digest": "fe1363dac3db3b4d",
+      "chunk_length": 475,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "fastembed",
+          "embedding",
+          "text",
+          "onnx",
+          "lazy",
+          "loading",
+          "when",
+          "the",
+          "https",
+          "github",
+          "com",
+          "qdrant",
+          "blob",
+          "b785640b",
+          "how",
+          "enable",
+          "enabled",
+          "model",
+          "weights",
+          "are"
+        ],
+        "term_weights": [
+          {
+            "term": "fastembed",
+            "tf": 6,
+            "weight": 0.090909
+          },
+          {
+            "term": "embedding",
+            "tf": 5,
+            "weight": 0.075758
+          },
+          {
+            "term": "text",
+            "tf": 4,
+            "weight": 0.060606
+          },
+          {
+            "term": "onnx",
+            "tf": 4,
+            "weight": 0.060606
+          },
+          {
+            "term": "lazy",
+            "tf": 2,
+            "weight": 0.030303
+          },
+          {
+            "term": "loading",
+            "tf": 2,
+            "weight": 0.030303
+          },
+          {
+            "term": "when",
+            "tf": 2,
+            "weight": 0.030303
+          },
+          {
+            "term": "the",
+            "tf": 2,
+            "weight": 0.030303
+          },
+          {
+            "term": "https",
+            "tf": 2,
+            "weight": 0.030303
+          },
+          {
+            "term": "github",
+            "tf": 2,
+            "weight": 0.030303
+          },
+          {
+            "term": "com",
+            "tf": 2,
+            "weight": 0.030303
+          },
+          {
+            "term": "qdrant",
+            "tf": 2,
+            "weight": 0.030303
+          },
+          {
+            "term": "blob",
+            "tf": 2,
+            "weight": 0.030303
+          },
+          {
+            "term": "b785640b",
+            "tf": 2,
+            "weight": 0.030303
+          },
+          {
+            "term": "how",
+            "tf": 1,
+            "weight": 0.015152
+          },
+          {
+            "term": "enable",
+            "tf": 1,
+            "weight": 0.015152
+          },
+          {
+            "term": "enabled",
+            "tf": 1,
+            "weight": 0.015152
+          },
+          {
+            "term": "model",
+            "tf": 1,
+            "weight": 0.015152
+          },
+          {
+            "term": "weights",
+            "tf": 1,
+            "weight": 0.015152
+          },
+          {
+            "term": "are",
+            "tf": 1,
+            "weight": 0.015152
+          }
+        ],
+        "unique_terms": 41,
+        "total_terms": 66
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "How to Enable Lazy Loading",
+        "embedding",
+        "fastembed",
+        "github",
+        "https",
+        "lazy",
+        "loading",
+        "onnx",
+        "text",
+        "the",
+        "when"
+      ],
+      "collection_name": "Qdrant"
+    },
+    "advanced_scores": {
+      "semantic": 0.6,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.74,
+      "overall": 0.7466666666666667
+    }
+  },
+  {
+    "text": "## Batch Processing\n\nFastEmbed optimizes throughput by processing inputs in batches, which enables more efficient hardware utilization and minimizes overhead.",
+    "metadata": {
+      "chunk_id": "3f356414bef5-0010",
+      "source_file": "Docs\\Qdrant\\qdrant_fastembed\\_qdrant_fastembed_8-performance-optimization.md",
+      "filename": "_qdrant_fastembed_8-performance-optimization.md",
+      "file_extension": ".md",
+      "chunk_index": 10,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Batch Processing"
+      ],
+      "heading_text": "Batch Processing",
+      "token_count": 26,
+      "char_count": 158,
+      "start_char": 7235,
+      "end_char": 7393,
+      "semantic_score": 0.8,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.575,
+      "chunking_strategy": "hierarchical_balanced_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:40.641352",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 26,
+      "document_id": "3f356414bef5",
+      "document_name": "_qdrant_fastembed_8-performance-optimization",
+      "source_path": "Docs\\Qdrant\\qdrant_fastembed\\_qdrant_fastembed_8-performance-optimization.md",
+      "source_filename": "_qdrant_fastembed_8-performance-optimization.md",
+      "source_directory": "Docs\\Qdrant\\qdrant_fastembed",
+      "relative_path": "Docs\\Qdrant\\qdrant_fastembed\\_qdrant_fastembed_8-performance-optimization.md",
+      "hierarchy_path": "Batch Processing",
+      "chunk_hash": "1f99aa0b7ad4d642",
+      "content_digest": "1f99aa0b7ad4d642",
+      "chunk_length": 158,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "processing",
+          "batch",
+          "fastembed",
+          "optimizes",
+          "throughput",
+          "inputs",
+          "batches",
+          "which",
+          "enables",
+          "more",
+          "efficient",
+          "hardware",
+          "utilization",
+          "and",
+          "minimizes",
+          "overhead"
+        ],
+        "term_weights": [
+          {
+            "term": "processing",
+            "tf": 2,
+            "weight": 0.117647
+          },
+          {
+            "term": "batch",
+            "tf": 1,
+            "weight": 0.058824
+          },
+          {
+            "term": "fastembed",
+            "tf": 1,
+            "weight": 0.058824
+          },
+          {
+            "term": "optimizes",
+            "tf": 1,
+            "weight": 0.058824
+          },
+          {
+            "term": "throughput",
+            "tf": 1,
+            "weight": 0.058824
+          },
+          {
+            "term": "inputs",
+            "tf": 1,
+            "weight": 0.058824
+          },
+          {
+            "term": "batches",
+            "tf": 1,
+            "weight": 0.058824
+          },
+          {
+            "term": "which",
+            "tf": 1,
+            "weight": 0.058824
+          },
+          {
+            "term": "enables",
+            "tf": 1,
+            "weight": 0.058824
+          },
+          {
+            "term": "more",
+            "tf": 1,
+            "weight": 0.058824
+          },
+          {
+            "term": "efficient",
+            "tf": 1,
+            "weight": 0.058824
+          },
+          {
+            "term": "hardware",
+            "tf": 1,
+            "weight": 0.058824
+          },
+          {
+            "term": "utilization",
+            "tf": 1,
+            "weight": 0.058824
+          },
+          {
+            "term": "and",
+            "tf": 1,
+            "weight": 0.058824
+          },
+          {
+            "term": "minimizes",
+            "tf": 1,
+            "weight": 0.058824
+          },
+          {
+            "term": "overhead",
+            "tf": 1,
+            "weight": 0.058824
+          }
+        ],
+        "unique_terms": 16,
+        "total_terms": 17
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Batch Processing",
+        "batch",
+        "batches",
+        "enables",
+        "fastembed",
+        "inputs",
+        "more",
+        "optimizes",
+        "processing",
+        "throughput",
+        "which"
+      ],
+      "collection_name": "Qdrant"
+    },
+    "advanced_scores": {
+      "semantic": 0.8,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.575,
+      "overall": 0.7583333333333333
+    }
+  },
+  {
+    "text": "### Configuring Batch Size  You can adjust the batch size when calling the `embed()` method: ``` ``` Optimal batch size depends on:  - Available memory - Input document length - Model size - Hardware characteristics  For large datasets, combining batch processing with parallel processing can provide the best performance. Sources: [fastembed/text/onnx\\_embedding.py260-292](https://github.com/qdrant/fastembed/blob/b785640b/fastembed/text/onnx_embedding.py#L260-L292)",
+    "metadata": {
+      "chunk_id": "3f356414bef5-0011",
+      "source_file": "Docs\\Qdrant\\qdrant_fastembed\\_qdrant_fastembed_8-performance-optimization.md",
+      "filename": "_qdrant_fastembed_8-performance-optimization.md",
+      "file_extension": ".md",
+      "chunk_index": 11,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Configuring Batch Size"
+      ],
+      "heading_text": "Configuring Batch Size",
+      "token_count": 102,
+      "char_count": 468,
+      "start_char": 7395,
+      "end_char": 7863,
+      "semantic_score": 0.7,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5076470588235293,
+      "chunking_strategy": "hierarchical_balanced_structural",
+      "content_type": "code_block",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:40.642496",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 102,
+      "document_id": "3f356414bef5",
+      "document_name": "_qdrant_fastembed_8-performance-optimization",
+      "source_path": "Docs\\Qdrant\\qdrant_fastembed\\_qdrant_fastembed_8-performance-optimization.md",
+      "source_filename": "_qdrant_fastembed_8-performance-optimization.md",
+      "source_directory": "Docs\\Qdrant\\qdrant_fastembed",
+      "relative_path": "Docs\\Qdrant\\qdrant_fastembed\\_qdrant_fastembed_8-performance-optimization.md",
+      "hierarchy_path": "Configuring Batch Size",
+      "chunk_hash": "216c9ec56b72531d",
+      "content_digest": "216c9ec56b72531d",
+      "chunk_length": 468,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "batch",
+          "size",
+          "the",
+          "fastembed",
+          "can",
+          "processing",
+          "text",
+          "onnx",
+          "embedding",
+          "configuring",
+          "you",
+          "adjust",
+          "when",
+          "calling",
+          "embed",
+          "method",
+          "optimal",
+          "depends",
+          "available",
+          "memory"
+        ],
+        "term_weights": [
+          {
+            "term": "batch",
+            "tf": 4,
+            "weight": 0.065574
+          },
+          {
+            "term": "size",
+            "tf": 4,
+            "weight": 0.065574
+          },
+          {
+            "term": "the",
+            "tf": 3,
+            "weight": 0.04918
+          },
+          {
+            "term": "fastembed",
+            "tf": 3,
+            "weight": 0.04918
+          },
+          {
+            "term": "can",
+            "tf": 2,
+            "weight": 0.032787
+          },
+          {
+            "term": "processing",
+            "tf": 2,
+            "weight": 0.032787
+          },
+          {
+            "term": "text",
+            "tf": 2,
+            "weight": 0.032787
+          },
+          {
+            "term": "onnx",
+            "tf": 2,
+            "weight": 0.032787
+          },
+          {
+            "term": "embedding",
+            "tf": 2,
+            "weight": 0.032787
+          },
+          {
+            "term": "configuring",
+            "tf": 1,
+            "weight": 0.016393
+          },
+          {
+            "term": "you",
+            "tf": 1,
+            "weight": 0.016393
+          },
+          {
+            "term": "adjust",
+            "tf": 1,
+            "weight": 0.016393
+          },
+          {
+            "term": "when",
+            "tf": 1,
+            "weight": 0.016393
+          },
+          {
+            "term": "calling",
+            "tf": 1,
+            "weight": 0.016393
+          },
+          {
+            "term": "embed",
+            "tf": 1,
+            "weight": 0.016393
+          },
+          {
+            "term": "method",
+            "tf": 1,
+            "weight": 0.016393
+          },
+          {
+            "term": "optimal",
+            "tf": 1,
+            "weight": 0.016393
+          },
+          {
+            "term": "depends",
+            "tf": 1,
+            "weight": 0.016393
+          },
+          {
+            "term": "available",
+            "tf": 1,
+            "weight": 0.016393
+          },
+          {
+            "term": "memory",
+            "tf": 1,
+            "weight": 0.016393
+          }
+        ],
+        "unique_terms": 46,
+        "total_terms": 61
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Configuring Batch Size",
+        "batch",
+        "can",
+        "configuring",
+        "embedding",
+        "fastembed",
+        "onnx",
+        "processing",
+        "size",
+        "text",
+        "the"
+      ],
+      "collection_name": "Qdrant"
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5076470588235293,
+      "overall": 0.7025490196078431
+    }
+  },
+  {
+    "text": "## Hardware Acceleration\n\nFastEmbed supports both CPU and GPU execution, allowing you to leverage available hardware for maximum performance.",
+    "metadata": {
+      "chunk_id": "3f356414bef5-0012",
+      "source_file": "Docs\\Qdrant\\qdrant_fastembed\\_qdrant_fastembed_8-performance-optimization.md",
+      "filename": "_qdrant_fastembed_8-performance-optimization.md",
+      "file_extension": ".md",
+      "chunk_index": 12,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Hardware Acceleration"
+      ],
+      "heading_text": "Hardware Acceleration",
+      "token_count": 24,
+      "char_count": 141,
+      "start_char": 7868,
+      "end_char": 8009,
+      "semantic_score": 0.8,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5742105263157895,
+      "chunking_strategy": "hierarchical_balanced_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:40.642730",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 24,
+      "document_id": "3f356414bef5",
+      "document_name": "_qdrant_fastembed_8-performance-optimization",
+      "source_path": "Docs\\Qdrant\\qdrant_fastembed\\_qdrant_fastembed_8-performance-optimization.md",
+      "source_filename": "_qdrant_fastembed_8-performance-optimization.md",
+      "source_directory": "Docs\\Qdrant\\qdrant_fastembed",
+      "relative_path": "Docs\\Qdrant\\qdrant_fastembed\\_qdrant_fastembed_8-performance-optimization.md",
+      "hierarchy_path": "Hardware Acceleration",
+      "chunk_hash": "08c7246d4d7eb2f8",
+      "content_digest": "08c7246d4d7eb2f8",
+      "chunk_length": 141,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "hardware",
+          "acceleration",
+          "fastembed",
+          "supports",
+          "both",
+          "cpu",
+          "and",
+          "gpu",
+          "execution",
+          "allowing",
+          "you",
+          "leverage",
+          "available",
+          "for",
+          "maximum",
+          "performance"
+        ],
+        "term_weights": [
+          {
+            "term": "hardware",
+            "tf": 2,
+            "weight": 0.117647
+          },
+          {
+            "term": "acceleration",
+            "tf": 1,
+            "weight": 0.058824
+          },
+          {
+            "term": "fastembed",
+            "tf": 1,
+            "weight": 0.058824
+          },
+          {
+            "term": "supports",
+            "tf": 1,
+            "weight": 0.058824
+          },
+          {
+            "term": "both",
+            "tf": 1,
+            "weight": 0.058824
+          },
+          {
+            "term": "cpu",
+            "tf": 1,
+            "weight": 0.058824
+          },
+          {
+            "term": "and",
+            "tf": 1,
+            "weight": 0.058824
+          },
+          {
+            "term": "gpu",
+            "tf": 1,
+            "weight": 0.058824
+          },
+          {
+            "term": "execution",
+            "tf": 1,
+            "weight": 0.058824
+          },
+          {
+            "term": "allowing",
+            "tf": 1,
+            "weight": 0.058824
+          },
+          {
+            "term": "you",
+            "tf": 1,
+            "weight": 0.058824
+          },
+          {
+            "term": "leverage",
+            "tf": 1,
+            "weight": 0.058824
+          },
+          {
+            "term": "available",
+            "tf": 1,
+            "weight": 0.058824
+          },
+          {
+            "term": "for",
+            "tf": 1,
+            "weight": 0.058824
+          },
+          {
+            "term": "maximum",
+            "tf": 1,
+            "weight": 0.058824
+          },
+          {
+            "term": "performance",
+            "tf": 1,
+            "weight": 0.058824
+          }
+        ],
+        "unique_terms": 16,
+        "total_terms": 17
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Hardware Acceleration",
+        "acceleration",
+        "allowing",
+        "and",
+        "both",
+        "cpu",
+        "execution",
+        "fastembed",
+        "gpu",
+        "hardware",
+        "supports"
+      ],
+      "collection_name": "Qdrant"
+    },
+    "advanced_scores": {
+      "semantic": 0.8,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5742105263157895,
+      "overall": 0.7580701754385964
+    }
+  },
+  {
+    "text": "### CPU Optimization  When running on CPU, you can specify the number of threads to use: ``` ```",
+    "metadata": {
+      "chunk_id": "3f356414bef5-0013",
+      "source_file": "Docs\\Qdrant\\qdrant_fastembed\\_qdrant_fastembed_8-performance-optimization.md",
+      "filename": "_qdrant_fastembed_8-performance-optimization.md",
+      "file_extension": ".md",
+      "chunk_index": 13,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "CPU Optimization"
+      ],
+      "heading_text": "CPU Optimization",
+      "token_count": 21,
+      "char_count": 96,
+      "start_char": 8011,
+      "end_char": 8107,
+      "semantic_score": 0.8,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5733333333333334,
+      "chunking_strategy": "hierarchical_balanced_structural",
+      "content_type": "code_block",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:40.643030",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 21,
+      "document_id": "3f356414bef5",
+      "document_name": "_qdrant_fastembed_8-performance-optimization",
+      "source_path": "Docs\\Qdrant\\qdrant_fastembed\\_qdrant_fastembed_8-performance-optimization.md",
+      "source_filename": "_qdrant_fastembed_8-performance-optimization.md",
+      "source_directory": "Docs\\Qdrant\\qdrant_fastembed",
+      "relative_path": "Docs\\Qdrant\\qdrant_fastembed\\_qdrant_fastembed_8-performance-optimization.md",
+      "hierarchy_path": "CPU Optimization",
+      "chunk_hash": "34e179ac75b75c88",
+      "content_digest": "34e179ac75b75c88",
+      "chunk_length": 96,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "cpu",
+          "optimization",
+          "when",
+          "running",
+          "you",
+          "can",
+          "specify",
+          "the",
+          "number",
+          "threads",
+          "use"
+        ],
+        "term_weights": [
+          {
+            "term": "cpu",
+            "tf": 2,
+            "weight": 0.166667
+          },
+          {
+            "term": "optimization",
+            "tf": 1,
+            "weight": 0.083333
+          },
+          {
+            "term": "when",
+            "tf": 1,
+            "weight": 0.083333
+          },
+          {
+            "term": "running",
+            "tf": 1,
+            "weight": 0.083333
+          },
+          {
+            "term": "you",
+            "tf": 1,
+            "weight": 0.083333
+          },
+          {
+            "term": "can",
+            "tf": 1,
+            "weight": 0.083333
+          },
+          {
+            "term": "specify",
+            "tf": 1,
+            "weight": 0.083333
+          },
+          {
+            "term": "the",
+            "tf": 1,
+            "weight": 0.083333
+          },
+          {
+            "term": "number",
+            "tf": 1,
+            "weight": 0.083333
+          },
+          {
+            "term": "threads",
+            "tf": 1,
+            "weight": 0.083333
+          },
+          {
+            "term": "use",
+            "tf": 1,
+            "weight": 0.083333
+          }
+        ],
+        "unique_terms": 11,
+        "total_terms": 12
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "CPU Optimization",
+        "can",
+        "cpu",
+        "number",
+        "optimization",
+        "running",
+        "specify",
+        "the",
+        "threads",
+        "when",
+        "you"
+      ],
+      "collection_name": "Qdrant"
+    },
+    "advanced_scores": {
+      "semantic": 0.8,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5733333333333334,
+      "overall": 0.7577777777777778
+    }
+  },
+  {
+    "text": "### GPU Acceleration  To use GPU acceleration (if available): ``` ``` When using multiple GPUs with `device_ids`, FastEmbed will automatically distribute the workload across the specified devices when parallel processing is enabled. Sources: [fastembed/text/onnx\\_embedding.py202-246](https://github.com/qdrant/fastembed/blob/b785640b/fastembed/text/onnx_embedding.py#L202-L246)",
+    "metadata": {
+      "chunk_id": "3f356414bef5-0014",
+      "source_file": "Docs\\Qdrant\\qdrant_fastembed\\_qdrant_fastembed_8-performance-optimization.md",
+      "filename": "_qdrant_fastembed_8-performance-optimization.md",
+      "file_extension": ".md",
+      "chunk_index": 14,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "GPU Acceleration"
+      ],
+      "heading_text": "GPU Acceleration",
+      "token_count": 83,
+      "char_count": 378,
+      "start_char": 8110,
+      "end_char": 8488,
+      "semantic_score": 0.7,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5458823529411765,
+      "chunking_strategy": "hierarchical_balanced_structural",
+      "content_type": "code_block",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:40.643854",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 83,
+      "document_id": "3f356414bef5",
+      "document_name": "_qdrant_fastembed_8-performance-optimization",
+      "source_path": "Docs\\Qdrant\\qdrant_fastembed\\_qdrant_fastembed_8-performance-optimization.md",
+      "source_filename": "_qdrant_fastembed_8-performance-optimization.md",
+      "source_directory": "Docs\\Qdrant\\qdrant_fastembed",
+      "relative_path": "Docs\\Qdrant\\qdrant_fastembed\\_qdrant_fastembed_8-performance-optimization.md",
+      "hierarchy_path": "GPU Acceleration",
+      "chunk_hash": "033eef06c53fa16b",
+      "content_digest": "033eef06c53fa16b",
+      "chunk_length": 378,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "fastembed",
+          "gpu",
+          "acceleration",
+          "when",
+          "the",
+          "text",
+          "onnx",
+          "embedding",
+          "use",
+          "available",
+          "using",
+          "multiple",
+          "gpus",
+          "with",
+          "device",
+          "ids",
+          "will",
+          "automatically",
+          "distribute",
+          "workload"
+        ],
+        "term_weights": [
+          {
+            "term": "fastembed",
+            "tf": 4,
+            "weight": 0.085106
+          },
+          {
+            "term": "gpu",
+            "tf": 2,
+            "weight": 0.042553
+          },
+          {
+            "term": "acceleration",
+            "tf": 2,
+            "weight": 0.042553
+          },
+          {
+            "term": "when",
+            "tf": 2,
+            "weight": 0.042553
+          },
+          {
+            "term": "the",
+            "tf": 2,
+            "weight": 0.042553
+          },
+          {
+            "term": "text",
+            "tf": 2,
+            "weight": 0.042553
+          },
+          {
+            "term": "onnx",
+            "tf": 2,
+            "weight": 0.042553
+          },
+          {
+            "term": "embedding",
+            "tf": 2,
+            "weight": 0.042553
+          },
+          {
+            "term": "use",
+            "tf": 1,
+            "weight": 0.021277
+          },
+          {
+            "term": "available",
+            "tf": 1,
+            "weight": 0.021277
+          },
+          {
+            "term": "using",
+            "tf": 1,
+            "weight": 0.021277
+          },
+          {
+            "term": "multiple",
+            "tf": 1,
+            "weight": 0.021277
+          },
+          {
+            "term": "gpus",
+            "tf": 1,
+            "weight": 0.021277
+          },
+          {
+            "term": "with",
+            "tf": 1,
+            "weight": 0.021277
+          },
+          {
+            "term": "device",
+            "tf": 1,
+            "weight": 0.021277
+          },
+          {
+            "term": "ids",
+            "tf": 1,
+            "weight": 0.021277
+          },
+          {
+            "term": "will",
+            "tf": 1,
+            "weight": 0.021277
+          },
+          {
+            "term": "automatically",
+            "tf": 1,
+            "weight": 0.021277
+          },
+          {
+            "term": "distribute",
+            "tf": 1,
+            "weight": 0.021277
+          },
+          {
+            "term": "workload",
+            "tf": 1,
+            "weight": 0.021277
+          }
+        ],
+        "unique_terms": 37,
+        "total_terms": 47
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "GPU Acceleration",
+        "acceleration",
+        "available",
+        "embedding",
+        "fastembed",
+        "gpu",
+        "onnx",
+        "text",
+        "the",
+        "use",
+        "when"
+      ],
+      "collection_name": "Qdrant"
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5458823529411765,
+      "overall": 0.7152941176470587
+    }
+  },
+  {
+    "text": "## Performance Comparison  FastEmbed significantly outperforms traditional embedding libraries by combining ONNX optimization with efficient parallel processing. ``` ```",
+    "metadata": {
+      "chunk_id": "3f356414bef5-0015",
+      "source_file": "Docs\\Qdrant\\qdrant_fastembed\\_qdrant_fastembed_8-performance-optimization.md",
+      "filename": "_qdrant_fastembed_8-performance-optimization.md",
+      "file_extension": ".md",
+      "chunk_index": 15,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Performance Comparison"
+      ],
+      "heading_text": "Performance Comparison",
+      "token_count": 25,
+      "char_count": 169,
+      "start_char": 8493,
+      "end_char": 8662,
+      "semantic_score": 0.8,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5742105263157895,
+      "chunking_strategy": "hierarchical_balanced_structural",
+      "content_type": "code_block",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:40.644298",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 25,
+      "document_id": "3f356414bef5",
+      "document_name": "_qdrant_fastembed_8-performance-optimization",
+      "source_path": "Docs\\Qdrant\\qdrant_fastembed\\_qdrant_fastembed_8-performance-optimization.md",
+      "source_filename": "_qdrant_fastembed_8-performance-optimization.md",
+      "source_directory": "Docs\\Qdrant\\qdrant_fastembed",
+      "relative_path": "Docs\\Qdrant\\qdrant_fastembed\\_qdrant_fastembed_8-performance-optimization.md",
+      "hierarchy_path": "Performance Comparison",
+      "chunk_hash": "abae720125c884b8",
+      "content_digest": "abae720125c884b8",
+      "chunk_length": 169,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "performance",
+          "comparison",
+          "fastembed",
+          "significantly",
+          "outperforms",
+          "traditional",
+          "embedding",
+          "libraries",
+          "combining",
+          "onnx",
+          "optimization",
+          "with",
+          "efficient",
+          "parallel",
+          "processing"
+        ],
+        "term_weights": [
+          {
+            "term": "performance",
+            "tf": 1,
+            "weight": 0.066667
+          },
+          {
+            "term": "comparison",
+            "tf": 1,
+            "weight": 0.066667
+          },
+          {
+            "term": "fastembed",
+            "tf": 1,
+            "weight": 0.066667
+          },
+          {
+            "term": "significantly",
+            "tf": 1,
+            "weight": 0.066667
+          },
+          {
+            "term": "outperforms",
+            "tf": 1,
+            "weight": 0.066667
+          },
+          {
+            "term": "traditional",
+            "tf": 1,
+            "weight": 0.066667
+          },
+          {
+            "term": "embedding",
+            "tf": 1,
+            "weight": 0.066667
+          },
+          {
+            "term": "libraries",
+            "tf": 1,
+            "weight": 0.066667
+          },
+          {
+            "term": "combining",
+            "tf": 1,
+            "weight": 0.066667
+          },
+          {
+            "term": "onnx",
+            "tf": 1,
+            "weight": 0.066667
+          },
+          {
+            "term": "optimization",
+            "tf": 1,
+            "weight": 0.066667
+          },
+          {
+            "term": "with",
+            "tf": 1,
+            "weight": 0.066667
+          },
+          {
+            "term": "efficient",
+            "tf": 1,
+            "weight": 0.066667
+          },
+          {
+            "term": "parallel",
+            "tf": 1,
+            "weight": 0.066667
+          },
+          {
+            "term": "processing",
+            "tf": 1,
+            "weight": 0.066667
+          }
+        ],
+        "unique_terms": 15,
+        "total_terms": 15
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Performance Comparison",
+        "combining",
+        "comparison",
+        "embedding",
+        "fastembed",
+        "libraries",
+        "onnx",
+        "outperforms",
+        "performance",
+        "significantly",
+        "traditional"
+      ],
+      "collection_name": "Qdrant"
+    },
+    "advanced_scores": {
+      "semantic": 0.8,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5742105263157895,
+      "overall": 0.7580701754385964
+    }
+  },
+  {
+    "text": "### Benchmark Results  From comparing FastEmbed vs. Hugging Face Transformers (using the same BGE-small-en-v1.5 model):  | Library                   | Avg Processing Time | Chars/Second | Relative Performance | | ------------------------- | ------------------- | ------------ | -------------------- | | Hugging Face Transformers | 0.047s              | \\~811        | 1x (baseline)        | | FastEmbed                 | 0.044s              | \\~871        | \\~1.07x faster       |  For large datasets, the performance gap widens significantly due to parallel processing capabilities:  | Dataset Size  | Traditional Library | FastEmbed | Speedup | | ------------- | ------------------- | --------- | ------- | | Small (10s)   | 1x                  | 1-2x      | 1-2x    | | Medium (100s) | 1x                  | 2-3x      | 2-3x    | | Large (1000s) | 1x                  | 3-5x      | 3-5x    |  Sources: [docs/examples/FastEmbed\\_vs\\_HF\\_Comparison.ipynb245-278](https://github.com/qdrant/fastembed/blob/b785640b/docs/examples/FastEmbed_vs_HF_Comparison.ipynb#L245-L278)",
+    "metadata": {
+      "chunk_id": "3f356414bef5-0016",
+      "source_file": "Docs\\Qdrant\\qdrant_fastembed\\_qdrant_fastembed_8-performance-optimization.md",
+      "filename": "_qdrant_fastembed_8-performance-optimization.md",
+      "file_extension": ".md",
+      "chunk_index": 16,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Benchmark Results"
+      ],
+      "heading_text": "Benchmark Results",
+      "token_count": 285,
+      "char_count": 1071,
+      "start_char": 8665,
+      "end_char": 9736,
+      "semantic_score": 0.7,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.641219512195122,
+      "chunking_strategy": "hierarchical_balanced_structural",
+      "content_type": "table_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:40.644959",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 285,
+      "document_id": "3f356414bef5",
+      "document_name": "_qdrant_fastembed_8-performance-optimization",
+      "source_path": "Docs\\Qdrant\\qdrant_fastembed\\_qdrant_fastembed_8-performance-optimization.md",
+      "source_filename": "_qdrant_fastembed_8-performance-optimization.md",
+      "source_directory": "Docs\\Qdrant\\qdrant_fastembed",
+      "relative_path": "Docs\\Qdrant\\qdrant_fastembed\\_qdrant_fastembed_8-performance-optimization.md",
+      "hierarchy_path": "Benchmark Results",
+      "chunk_hash": "3d86702e4fbb4617",
+      "content_digest": "3d86702e4fbb4617",
+      "chunk_length": 1071,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "fastembed",
+          "hugging",
+          "face",
+          "transformers",
+          "the",
+          "small",
+          "library",
+          "processing",
+          "performance",
+          "large",
+          "docs",
+          "examples",
+          "comparison",
+          "benchmark",
+          "results",
+          "from",
+          "comparing",
+          "using",
+          "same",
+          "bge"
+        ],
+        "term_weights": [
+          {
+            "term": "fastembed",
+            "tf": 6,
+            "weight": 0.076923
+          },
+          {
+            "term": "hugging",
+            "tf": 2,
+            "weight": 0.025641
+          },
+          {
+            "term": "face",
+            "tf": 2,
+            "weight": 0.025641
+          },
+          {
+            "term": "transformers",
+            "tf": 2,
+            "weight": 0.025641
+          },
+          {
+            "term": "the",
+            "tf": 2,
+            "weight": 0.025641
+          },
+          {
+            "term": "small",
+            "tf": 2,
+            "weight": 0.025641
+          },
+          {
+            "term": "library",
+            "tf": 2,
+            "weight": 0.025641
+          },
+          {
+            "term": "processing",
+            "tf": 2,
+            "weight": 0.025641
+          },
+          {
+            "term": "performance",
+            "tf": 2,
+            "weight": 0.025641
+          },
+          {
+            "term": "large",
+            "tf": 2,
+            "weight": 0.025641
+          },
+          {
+            "term": "docs",
+            "tf": 2,
+            "weight": 0.025641
+          },
+          {
+            "term": "examples",
+            "tf": 2,
+            "weight": 0.025641
+          },
+          {
+            "term": "comparison",
+            "tf": 2,
+            "weight": 0.025641
+          },
+          {
+            "term": "benchmark",
+            "tf": 1,
+            "weight": 0.012821
+          },
+          {
+            "term": "results",
+            "tf": 1,
+            "weight": 0.012821
+          },
+          {
+            "term": "from",
+            "tf": 1,
+            "weight": 0.012821
+          },
+          {
+            "term": "comparing",
+            "tf": 1,
+            "weight": 0.012821
+          },
+          {
+            "term": "using",
+            "tf": 1,
+            "weight": 0.012821
+          },
+          {
+            "term": "same",
+            "tf": 1,
+            "weight": 0.012821
+          },
+          {
+            "term": "bge",
+            "tf": 1,
+            "weight": 0.012821
+          }
+        ],
+        "unique_terms": 61,
+        "total_terms": 78
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Benchmark Results",
+        "face",
+        "fastembed",
+        "hugging",
+        "large",
+        "library",
+        "performance",
+        "processing",
+        "small",
+        "the",
+        "transformers"
+      ],
+      "collection_name": "Qdrant"
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.641219512195122,
+      "overall": 0.7470731707317073
+    }
+  },
+  {
+    "text": "## Best Practices for Performance Optimization",
+    "metadata": {
+      "chunk_id": "3f356414bef5-0018",
+      "source_file": "Docs\\Qdrant\\qdrant_fastembed\\_qdrant_fastembed_8-performance-optimization.md",
+      "filename": "_qdrant_fastembed_8-performance-optimization.md",
+      "file_extension": ".md",
+      "chunk_index": 18,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Best Practices for Performance Optimization"
+      ],
+      "heading_text": "Best Practices for Performance Optimization",
+      "token_count": 6,
+      "char_count": 46,
+      "start_char": 11334,
+      "end_char": 11380,
+      "semantic_score": 0.8,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.7899999999999999,
+      "chunking_strategy": "hierarchical_balanced_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:40.646335",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 6,
+      "document_id": "3f356414bef5",
+      "document_name": "_qdrant_fastembed_8-performance-optimization",
+      "source_path": "Docs\\Qdrant\\qdrant_fastembed\\_qdrant_fastembed_8-performance-optimization.md",
+      "source_filename": "_qdrant_fastembed_8-performance-optimization.md",
+      "source_directory": "Docs\\Qdrant\\qdrant_fastembed",
+      "relative_path": "Docs\\Qdrant\\qdrant_fastembed\\_qdrant_fastembed_8-performance-optimization.md",
+      "hierarchy_path": "Best Practices for Performance Optimization",
+      "chunk_hash": "34e7e8cf0c289c22",
+      "content_digest": "34e7e8cf0c289c22",
+      "chunk_length": 46,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "best",
+          "practices",
+          "for",
+          "performance",
+          "optimization"
+        ],
+        "term_weights": [
+          {
+            "term": "best",
+            "tf": 1,
+            "weight": 0.2
+          },
+          {
+            "term": "practices",
+            "tf": 1,
+            "weight": 0.2
+          },
+          {
+            "term": "for",
+            "tf": 1,
+            "weight": 0.2
+          },
+          {
+            "term": "performance",
+            "tf": 1,
+            "weight": 0.2
+          },
+          {
+            "term": "optimization",
+            "tf": 1,
+            "weight": 0.2
+          }
+        ],
+        "unique_terms": 5,
+        "total_terms": 5
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Best Practices for Performance Optimization",
+        "best",
+        "for",
+        "optimization",
+        "performance",
+        "practices"
+      ],
+      "collection_name": "Qdrant"
+    },
+    "advanced_scores": {
+      "semantic": 0.8,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.7899999999999999,
+      "overall": 0.83
+    }
+  },
+  {
+    "text": "### Model Selection  - Smaller models (like BGE-small) are faster but may be less accurate - Larger models provide better quality but require more resources - Select the smallest model that meets your quality requirements",
+    "metadata": {
+      "chunk_id": "3f356414bef5-0019",
+      "source_file": "Docs\\Qdrant\\qdrant_fastembed\\_qdrant_fastembed_8-performance-optimization.md",
+      "filename": "_qdrant_fastembed_8-performance-optimization.md",
+      "file_extension": ".md",
+      "chunk_index": 19,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Model Selection"
+      ],
+      "heading_text": "Model Selection",
+      "token_count": 41,
+      "char_count": 221,
+      "start_char": 11382,
+      "end_char": 11603,
+      "semantic_score": 0.8,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5385714285714286,
+      "chunking_strategy": "hierarchical_balanced_structural",
+      "content_type": "list_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:40.646465",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 41,
+      "document_id": "3f356414bef5",
+      "document_name": "_qdrant_fastembed_8-performance-optimization",
+      "source_path": "Docs\\Qdrant\\qdrant_fastembed\\_qdrant_fastembed_8-performance-optimization.md",
+      "source_filename": "_qdrant_fastembed_8-performance-optimization.md",
+      "source_directory": "Docs\\Qdrant\\qdrant_fastembed",
+      "relative_path": "Docs\\Qdrant\\qdrant_fastembed\\_qdrant_fastembed_8-performance-optimization.md",
+      "hierarchy_path": "Model Selection",
+      "chunk_hash": "7c7bf8936bc08416",
+      "content_digest": "7c7bf8936bc08416",
+      "chunk_length": 221,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "model",
+          "models",
+          "but",
+          "quality",
+          "selection",
+          "smaller",
+          "like",
+          "bge",
+          "small",
+          "are",
+          "faster",
+          "may",
+          "less",
+          "accurate",
+          "larger",
+          "provide",
+          "better",
+          "require",
+          "more",
+          "resources"
+        ],
+        "term_weights": [
+          {
+            "term": "model",
+            "tf": 2,
+            "weight": 0.064516
+          },
+          {
+            "term": "models",
+            "tf": 2,
+            "weight": 0.064516
+          },
+          {
+            "term": "but",
+            "tf": 2,
+            "weight": 0.064516
+          },
+          {
+            "term": "quality",
+            "tf": 2,
+            "weight": 0.064516
+          },
+          {
+            "term": "selection",
+            "tf": 1,
+            "weight": 0.032258
+          },
+          {
+            "term": "smaller",
+            "tf": 1,
+            "weight": 0.032258
+          },
+          {
+            "term": "like",
+            "tf": 1,
+            "weight": 0.032258
+          },
+          {
+            "term": "bge",
+            "tf": 1,
+            "weight": 0.032258
+          },
+          {
+            "term": "small",
+            "tf": 1,
+            "weight": 0.032258
+          },
+          {
+            "term": "are",
+            "tf": 1,
+            "weight": 0.032258
+          },
+          {
+            "term": "faster",
+            "tf": 1,
+            "weight": 0.032258
+          },
+          {
+            "term": "may",
+            "tf": 1,
+            "weight": 0.032258
+          },
+          {
+            "term": "less",
+            "tf": 1,
+            "weight": 0.032258
+          },
+          {
+            "term": "accurate",
+            "tf": 1,
+            "weight": 0.032258
+          },
+          {
+            "term": "larger",
+            "tf": 1,
+            "weight": 0.032258
+          },
+          {
+            "term": "provide",
+            "tf": 1,
+            "weight": 0.032258
+          },
+          {
+            "term": "better",
+            "tf": 1,
+            "weight": 0.032258
+          },
+          {
+            "term": "require",
+            "tf": 1,
+            "weight": 0.032258
+          },
+          {
+            "term": "more",
+            "tf": 1,
+            "weight": 0.032258
+          },
+          {
+            "term": "resources",
+            "tf": 1,
+            "weight": 0.032258
+          }
+        ],
+        "unique_terms": 27,
+        "total_terms": 31
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Model Selection",
+        "are",
+        "bge",
+        "but",
+        "like",
+        "model",
+        "models",
+        "quality",
+        "selection",
+        "small",
+        "smaller"
+      ],
+      "collection_name": "Qdrant"
+    },
+    "advanced_scores": {
+      "semantic": 0.8,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5385714285714286,
+      "overall": 0.7461904761904762
+    }
+  },
+  {
+    "text": "### Processing Configuration  1. **Enable parallel processing for large datasets**    ```    ``` 2. **Optimize batch size**    ```    ``` 3. **Use GPU acceleration when available**    ```    ``` 4. **Combine strategies for maximum performance**    ```    ```",
+    "metadata": {
+      "chunk_id": "3f356414bef5-0020",
+      "source_file": "Docs\\Qdrant\\qdrant_fastembed\\_qdrant_fastembed_8-performance-optimization.md",
+      "filename": "_qdrant_fastembed_8-performance-optimization.md",
+      "file_extension": ".md",
+      "chunk_index": 20,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Processing Configuration"
+      ],
+      "heading_text": "Processing Configuration",
+      "token_count": 60,
+      "char_count": 258,
+      "start_char": 11605,
+      "end_char": 11863,
+      "semantic_score": 0.6,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5105882352941177,
+      "chunking_strategy": "hierarchical_balanced_structural",
+      "content_type": "code_block",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:40.647331",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 60,
+      "document_id": "3f356414bef5",
+      "document_name": "_qdrant_fastembed_8-performance-optimization",
+      "source_path": "Docs\\Qdrant\\qdrant_fastembed\\_qdrant_fastembed_8-performance-optimization.md",
+      "source_filename": "_qdrant_fastembed_8-performance-optimization.md",
+      "source_directory": "Docs\\Qdrant\\qdrant_fastembed",
+      "relative_path": "Docs\\Qdrant\\qdrant_fastembed\\_qdrant_fastembed_8-performance-optimization.md",
+      "hierarchy_path": "Processing Configuration",
+      "chunk_hash": "efcac9ffb106d41e",
+      "content_digest": "efcac9ffb106d41e",
+      "chunk_length": 258,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "processing",
+          "for",
+          "configuration",
+          "enable",
+          "parallel",
+          "large",
+          "datasets",
+          "optimize",
+          "batch",
+          "size",
+          "use",
+          "gpu",
+          "acceleration",
+          "when",
+          "available",
+          "combine",
+          "strategies",
+          "maximum",
+          "performance"
+        ],
+        "term_weights": [
+          {
+            "term": "processing",
+            "tf": 2,
+            "weight": 0.095238
+          },
+          {
+            "term": "for",
+            "tf": 2,
+            "weight": 0.095238
+          },
+          {
+            "term": "configuration",
+            "tf": 1,
+            "weight": 0.047619
+          },
+          {
+            "term": "enable",
+            "tf": 1,
+            "weight": 0.047619
+          },
+          {
+            "term": "parallel",
+            "tf": 1,
+            "weight": 0.047619
+          },
+          {
+            "term": "large",
+            "tf": 1,
+            "weight": 0.047619
+          },
+          {
+            "term": "datasets",
+            "tf": 1,
+            "weight": 0.047619
+          },
+          {
+            "term": "optimize",
+            "tf": 1,
+            "weight": 0.047619
+          },
+          {
+            "term": "batch",
+            "tf": 1,
+            "weight": 0.047619
+          },
+          {
+            "term": "size",
+            "tf": 1,
+            "weight": 0.047619
+          },
+          {
+            "term": "use",
+            "tf": 1,
+            "weight": 0.047619
+          },
+          {
+            "term": "gpu",
+            "tf": 1,
+            "weight": 0.047619
+          },
+          {
+            "term": "acceleration",
+            "tf": 1,
+            "weight": 0.047619
+          },
+          {
+            "term": "when",
+            "tf": 1,
+            "weight": 0.047619
+          },
+          {
+            "term": "available",
+            "tf": 1,
+            "weight": 0.047619
+          },
+          {
+            "term": "combine",
+            "tf": 1,
+            "weight": 0.047619
+          },
+          {
+            "term": "strategies",
+            "tf": 1,
+            "weight": 0.047619
+          },
+          {
+            "term": "maximum",
+            "tf": 1,
+            "weight": 0.047619
+          },
+          {
+            "term": "performance",
+            "tf": 1,
+            "weight": 0.047619
+          }
+        ],
+        "unique_terms": 19,
+        "total_terms": 21
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Processing Configuration",
+        "batch",
+        "configuration",
+        "datasets",
+        "enable",
+        "for",
+        "large",
+        "optimize",
+        "parallel",
+        "processing",
+        "size"
+      ],
+      "collection_name": "Qdrant"
+    },
+    "advanced_scores": {
+      "semantic": 0.6,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5105882352941177,
+      "overall": 0.6701960784313726
+    }
+  },
+  {
+    "text": "### Performance Debugging\n\nIf you encounter performance issues:\n\n1. Try reducing batch size if you're running out of memory\n2. Reduce the number of parallel workers if you experience excessive CPU/GPU contention\n3. Try a smaller model if speed is more important than quality\n4. Enable lazy loading if working with multiple models to manage memory more efficiently\n\nSources: [fastembed/text/onnx\\_embedding.py260-292](https://github.com/qdrant/fastembed/blob/b785640b/fastembed/text/onnx_embedding.py#L260-L292) [docs/examples/Hybrid\\_Search.ipynb726-739](https://github.com/qdrant/fastembed/blob/b785640b/docs/examples/Hybrid_Search.ipynb#L726-L739)",
+    "metadata": {
+      "chunk_id": "3f356414bef5-0021",
+      "source_file": "Docs\\Qdrant\\qdrant_fastembed\\_qdrant_fastembed_8-performance-optimization.md",
+      "filename": "_qdrant_fastembed_8-performance-optimization.md",
+      "file_extension": ".md",
+      "chunk_index": 21,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Performance Debugging"
+      ],
+      "heading_text": "Performance Debugging",
+      "token_count": 156,
+      "char_count": 649,
+      "start_char": 11872,
+      "end_char": 12521,
+      "semantic_score": 0.6,
+      "structural_score": 0.7,
+      "retrieval_quality": 0.7408196721311475,
+      "chunking_strategy": "hierarchical_balanced_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:40.647832",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 156,
+      "document_id": "3f356414bef5",
+      "document_name": "_qdrant_fastembed_8-performance-optimization",
+      "source_path": "Docs\\Qdrant\\qdrant_fastembed\\_qdrant_fastembed_8-performance-optimization.md",
+      "source_filename": "_qdrant_fastembed_8-performance-optimization.md",
+      "source_directory": "Docs\\Qdrant\\qdrant_fastembed",
+      "relative_path": "Docs\\Qdrant\\qdrant_fastembed\\_qdrant_fastembed_8-performance-optimization.md",
+      "hierarchy_path": "Performance Debugging",
+      "chunk_hash": "aba8aded58b5ad95",
+      "content_digest": "aba8aded58b5ad95",
+      "chunk_length": 649,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "fastembed",
+          "you",
+          "performance",
+          "try",
+          "memory",
+          "more",
+          "text",
+          "onnx",
+          "embedding",
+          "https",
+          "github",
+          "com",
+          "qdrant",
+          "blob",
+          "b785640b",
+          "docs",
+          "examples",
+          "hybrid",
+          "search",
+          "debugging"
+        ],
+        "term_weights": [
+          {
+            "term": "fastembed",
+            "tf": 4,
+            "weight": 0.047619
+          },
+          {
+            "term": "you",
+            "tf": 3,
+            "weight": 0.035714
+          },
+          {
+            "term": "performance",
+            "tf": 2,
+            "weight": 0.02381
+          },
+          {
+            "term": "try",
+            "tf": 2,
+            "weight": 0.02381
+          },
+          {
+            "term": "memory",
+            "tf": 2,
+            "weight": 0.02381
+          },
+          {
+            "term": "more",
+            "tf": 2,
+            "weight": 0.02381
+          },
+          {
+            "term": "text",
+            "tf": 2,
+            "weight": 0.02381
+          },
+          {
+            "term": "onnx",
+            "tf": 2,
+            "weight": 0.02381
+          },
+          {
+            "term": "embedding",
+            "tf": 2,
+            "weight": 0.02381
+          },
+          {
+            "term": "https",
+            "tf": 2,
+            "weight": 0.02381
+          },
+          {
+            "term": "github",
+            "tf": 2,
+            "weight": 0.02381
+          },
+          {
+            "term": "com",
+            "tf": 2,
+            "weight": 0.02381
+          },
+          {
+            "term": "qdrant",
+            "tf": 2,
+            "weight": 0.02381
+          },
+          {
+            "term": "blob",
+            "tf": 2,
+            "weight": 0.02381
+          },
+          {
+            "term": "b785640b",
+            "tf": 2,
+            "weight": 0.02381
+          },
+          {
+            "term": "docs",
+            "tf": 2,
+            "weight": 0.02381
+          },
+          {
+            "term": "examples",
+            "tf": 2,
+            "weight": 0.02381
+          },
+          {
+            "term": "hybrid",
+            "tf": 2,
+            "weight": 0.02381
+          },
+          {
+            "term": "search",
+            "tf": 2,
+            "weight": 0.02381
+          },
+          {
+            "term": "debugging",
+            "tf": 1,
+            "weight": 0.011905
+          }
+        ],
+        "unique_terms": 62,
+        "total_terms": 84
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Performance Debugging",
+        "embedding",
+        "fastembed",
+        "https",
+        "memory",
+        "more",
+        "onnx",
+        "performance",
+        "text",
+        "try",
+        "you"
+      ],
+      "collection_name": "Qdrant"
+    },
+    "advanced_scores": {
+      "semantic": 0.6,
+      "structural": 0.7,
+      "retrieval_quality": 0.7408196721311475,
+      "overall": 0.6802732240437157
+    }
+  },
+  {
+    "text": "## Late Interaction Models and Performance  Late interaction models like ColBERT require special consideration for performance optimization: ``` ``` Due to their computational requirements, consider using late interaction models like ColBERT in a two-stage pipeline:  1. **First stage**: Use a faster dense embedding model to retrieve candidate documents (100-500) 2. **Second stage**: Use the more resource-intensive late interaction model to rerank results for higher precision  This approach balances speed and accuracy, leveraging the strengths of both approaches. Sources: [docs/examples/ColBERT\\_with\\_FastEmbed.ipynb373-398](https://github.com/qdrant/fastembed/blob/b785640b/docs/examples/ColBERT_with_FastEmbed.ipynb#L373-L398)",
+    "metadata": {
+      "chunk_id": "3f356414bef5-0022",
+      "source_file": "Docs\\Qdrant\\qdrant_fastembed\\_qdrant_fastembed_8-performance-optimization.md",
+      "filename": "_qdrant_fastembed_8-performance-optimization.md",
+      "file_extension": ".md",
+      "chunk_index": 22,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Late Interaction Models and Performance"
+      ],
+      "heading_text": "Late Interaction Models and Performance",
+      "token_count": 154,
+      "char_count": 735,
+      "start_char": 12523,
+      "end_char": 13258,
+      "semantic_score": 0.7,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.710253164556962,
+      "chunking_strategy": "hierarchical_balanced_structural",
+      "content_type": "code_block",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:40.649937",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 154,
+      "document_id": "3f356414bef5",
+      "document_name": "_qdrant_fastembed_8-performance-optimization",
+      "source_path": "Docs\\Qdrant\\qdrant_fastembed\\_qdrant_fastembed_8-performance-optimization.md",
+      "source_filename": "_qdrant_fastembed_8-performance-optimization.md",
+      "source_directory": "Docs\\Qdrant\\qdrant_fastembed",
+      "relative_path": "Docs\\Qdrant\\qdrant_fastembed\\_qdrant_fastembed_8-performance-optimization.md",
+      "hierarchy_path": "Late Interaction Models and Performance",
+      "chunk_hash": "f8d3b24981f52a7a",
+      "content_digest": "f8d3b24981f52a7a",
+      "chunk_length": 735,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "late",
+          "interaction",
+          "colbert",
+          "models",
+          "stage",
+          "fastembed",
+          "and",
+          "performance",
+          "like",
+          "for",
+          "use",
+          "model",
+          "the",
+          "docs",
+          "examples",
+          "with",
+          "require",
+          "special",
+          "consideration",
+          "optimization"
+        ],
+        "term_weights": [
+          {
+            "term": "late",
+            "tf": 4,
+            "weight": 0.043956
+          },
+          {
+            "term": "interaction",
+            "tf": 4,
+            "weight": 0.043956
+          },
+          {
+            "term": "colbert",
+            "tf": 4,
+            "weight": 0.043956
+          },
+          {
+            "term": "models",
+            "tf": 3,
+            "weight": 0.032967
+          },
+          {
+            "term": "stage",
+            "tf": 3,
+            "weight": 0.032967
+          },
+          {
+            "term": "fastembed",
+            "tf": 3,
+            "weight": 0.032967
+          },
+          {
+            "term": "and",
+            "tf": 2,
+            "weight": 0.021978
+          },
+          {
+            "term": "performance",
+            "tf": 2,
+            "weight": 0.021978
+          },
+          {
+            "term": "like",
+            "tf": 2,
+            "weight": 0.021978
+          },
+          {
+            "term": "for",
+            "tf": 2,
+            "weight": 0.021978
+          },
+          {
+            "term": "use",
+            "tf": 2,
+            "weight": 0.021978
+          },
+          {
+            "term": "model",
+            "tf": 2,
+            "weight": 0.021978
+          },
+          {
+            "term": "the",
+            "tf": 2,
+            "weight": 0.021978
+          },
+          {
+            "term": "docs",
+            "tf": 2,
+            "weight": 0.021978
+          },
+          {
+            "term": "examples",
+            "tf": 2,
+            "weight": 0.021978
+          },
+          {
+            "term": "with",
+            "tf": 2,
+            "weight": 0.021978
+          },
+          {
+            "term": "require",
+            "tf": 1,
+            "weight": 0.010989
+          },
+          {
+            "term": "special",
+            "tf": 1,
+            "weight": 0.010989
+          },
+          {
+            "term": "consideration",
+            "tf": 1,
+            "weight": 0.010989
+          },
+          {
+            "term": "optimization",
+            "tf": 1,
+            "weight": 0.010989
+          }
+        ],
+        "unique_terms": 66,
+        "total_terms": 91
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Late Interaction Models and Performance",
+        "and",
+        "colbert",
+        "fastembed",
+        "for",
+        "interaction",
+        "late",
+        "like",
+        "models",
+        "performance",
+        "stage"
+      ],
+      "collection_name": "Qdrant"
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.710253164556962,
+      "overall": 0.770084388185654
+    }
+  },
+  {
+    "text": "## Summary\n\nFastEmbed offers multiple performance optimization techniques that can be combined to achieve significant speedups in embedding generation. By choosing the right configuration for your specific use case, you can achieve optimal performance while maintaining high-quality embeddings.\n\nFor most cases, enabling parallel processing (`parallel=0`) with an appropriate batch size and GPU acceleration (if available) will provide the best balance of performance and resource utilization.\n\nDismiss\n\nRefresh this wiki\n\nEnter email to refresh",
+    "metadata": {
+      "chunk_id": "3f356414bef5-0023",
+      "source_file": "Docs\\Qdrant\\qdrant_fastembed\\_qdrant_fastembed_8-performance-optimization.md",
+      "filename": "_qdrant_fastembed_8-performance-optimization.md",
+      "file_extension": ".md",
+      "chunk_index": 23,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Summary"
+      ],
+      "heading_text": "Summary",
+      "token_count": 90,
+      "char_count": 545,
+      "start_char": 13263,
+      "end_char": 13808,
+      "semantic_score": 0.7999999999999999,
+      "structural_score": 0.7,
+      "retrieval_quality": 0.5530136986301369,
+      "chunking_strategy": "hierarchical_balanced_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:40.650379",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 90,
+      "document_id": "3f356414bef5",
+      "document_name": "_qdrant_fastembed_8-performance-optimization",
+      "source_path": "Docs\\Qdrant\\qdrant_fastembed\\_qdrant_fastembed_8-performance-optimization.md",
+      "source_filename": "_qdrant_fastembed_8-performance-optimization.md",
+      "source_directory": "Docs\\Qdrant\\qdrant_fastembed",
+      "relative_path": "Docs\\Qdrant\\qdrant_fastembed\\_qdrant_fastembed_8-performance-optimization.md",
+      "hierarchy_path": "Summary",
+      "chunk_hash": "2456adb00e972211",
+      "content_digest": "2456adb00e972211",
+      "chunk_length": 545,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "performance",
+          "can",
+          "achieve",
+          "the",
+          "for",
+          "parallel",
+          "and",
+          "refresh",
+          "summary",
+          "fastembed",
+          "offers",
+          "multiple",
+          "optimization",
+          "techniques",
+          "that",
+          "combined",
+          "significant",
+          "speedups",
+          "embedding",
+          "generation"
+        ],
+        "term_weights": [
+          {
+            "term": "performance",
+            "tf": 3,
+            "weight": 0.046154
+          },
+          {
+            "term": "can",
+            "tf": 2,
+            "weight": 0.030769
+          },
+          {
+            "term": "achieve",
+            "tf": 2,
+            "weight": 0.030769
+          },
+          {
+            "term": "the",
+            "tf": 2,
+            "weight": 0.030769
+          },
+          {
+            "term": "for",
+            "tf": 2,
+            "weight": 0.030769
+          },
+          {
+            "term": "parallel",
+            "tf": 2,
+            "weight": 0.030769
+          },
+          {
+            "term": "and",
+            "tf": 2,
+            "weight": 0.030769
+          },
+          {
+            "term": "refresh",
+            "tf": 2,
+            "weight": 0.030769
+          },
+          {
+            "term": "summary",
+            "tf": 1,
+            "weight": 0.015385
+          },
+          {
+            "term": "fastembed",
+            "tf": 1,
+            "weight": 0.015385
+          },
+          {
+            "term": "offers",
+            "tf": 1,
+            "weight": 0.015385
+          },
+          {
+            "term": "multiple",
+            "tf": 1,
+            "weight": 0.015385
+          },
+          {
+            "term": "optimization",
+            "tf": 1,
+            "weight": 0.015385
+          },
+          {
+            "term": "techniques",
+            "tf": 1,
+            "weight": 0.015385
+          },
+          {
+            "term": "that",
+            "tf": 1,
+            "weight": 0.015385
+          },
+          {
+            "term": "combined",
+            "tf": 1,
+            "weight": 0.015385
+          },
+          {
+            "term": "significant",
+            "tf": 1,
+            "weight": 0.015385
+          },
+          {
+            "term": "speedups",
+            "tf": 1,
+            "weight": 0.015385
+          },
+          {
+            "term": "embedding",
+            "tf": 1,
+            "weight": 0.015385
+          },
+          {
+            "term": "generation",
+            "tf": 1,
+            "weight": 0.015385
+          }
+        ],
+        "unique_terms": 56,
+        "total_terms": 65
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Summary",
+        "achieve",
+        "and",
+        "can",
+        "fastembed",
+        "for",
+        "parallel",
+        "performance",
+        "refresh",
+        "summary",
+        "the"
+      ],
+      "collection_name": "Qdrant"
+    },
+    "advanced_scores": {
+      "semantic": 0.7999999999999999,
+      "structural": 0.7,
+      "retrieval_quality": 0.5530136986301369,
+      "overall": 0.684337899543379
+    }
+  },
+  {
+    "text": "### On this page  - [Performance Optimization](#performance-optimization.md) - [Key Performance Features](#key-performance-features.md) - [ONNX Runtime Integration](#onnx-runtime-integration.md) - [Benefits of ONNX Runtime](#benefits-of-onnx-runtime.md) - [Configuration Options](#configuration-options.md) - [Parallel Processing](#parallel-processing.md) - [How Parallel Processing Works in FastEmbed](#how-parallel-processing-works-in-fastembed.md) - [Configuring Parallel Processing](#configuring-parallel-processing.md) - [Lazy Loading](#lazy-loading.md) - [How to Enable Lazy Loading](#how-to-enable-lazy-loading.md) - [Batch Processing](#batch-processing.md) - [Configuring Batch Size](#configuring-batch-size.md) - [Hardware Acceleration](#hardware-acceleration.md) - [CPU Optimization](#cpu-optimization.md) - [GPU Acceleration](#gpu-acceleration.md) - [Performance Comparison](#performance-comparison.md) - [Benchmark Results](#benchmark-results.md) - [Advanced Configuration Parameters](#advanced-configuration-parameters.md) - [Best Practices for Performance Optimization](#best-practices-for-performance-optimization.md) - [Model Selection](#model-selection.md) - [Processing Configuration](#processing-configuration.md) - [Performance Debugging](#performance-debugging.md) - [Late Interaction Models and Performance](#late-interaction-models-and-performance.md) - [Summary](#summary.md)",
+    "metadata": {
+      "chunk_id": "3f356414bef5-0024",
+      "source_file": "Docs\\Qdrant\\qdrant_fastembed\\_qdrant_fastembed_8-performance-optimization.md",
+      "filename": "_qdrant_fastembed_8-performance-optimization.md",
+      "file_extension": ".md",
+      "chunk_index": 24,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "On this page"
+      ],
+      "heading_text": "On this page",
+      "token_count": 322,
+      "char_count": 1399,
+      "start_char": 13810,
+      "end_char": 15209,
+      "semantic_score": 0.6,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.705021052631579,
+      "chunking_strategy": "hierarchical_balanced_structural",
+      "content_type": "code_block",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:40.651934",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 322,
+      "document_id": "3f356414bef5",
+      "document_name": "_qdrant_fastembed_8-performance-optimization",
+      "source_path": "Docs\\Qdrant\\qdrant_fastembed\\_qdrant_fastembed_8-performance-optimization.md",
+      "source_filename": "_qdrant_fastembed_8-performance-optimization.md",
+      "source_directory": "Docs\\Qdrant\\qdrant_fastembed",
+      "relative_path": "Docs\\Qdrant\\qdrant_fastembed\\_qdrant_fastembed_8-performance-optimization.md",
+      "hierarchy_path": "On this page",
+      "chunk_hash": "31354708aff8cc6a",
+      "content_digest": "31354708aff8cc6a",
+      "chunk_length": 1399,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "performance",
+          "processing",
+          "optimization",
+          "configuration",
+          "parallel",
+          "onnx",
+          "runtime",
+          "how",
+          "configuring",
+          "lazy",
+          "loading",
+          "batch",
+          "acceleration",
+          "key",
+          "features",
+          "integration",
+          "benefits",
+          "options",
+          "works",
+          "fastembed"
+        ],
+        "term_weights": [
+          {
+            "term": "performance",
+            "tf": 12,
+            "weight": 0.092308
+          },
+          {
+            "term": "processing",
+            "tf": 10,
+            "weight": 0.076923
+          },
+          {
+            "term": "optimization",
+            "tf": 6,
+            "weight": 0.046154
+          },
+          {
+            "term": "configuration",
+            "tf": 6,
+            "weight": 0.046154
+          },
+          {
+            "term": "parallel",
+            "tf": 6,
+            "weight": 0.046154
+          },
+          {
+            "term": "onnx",
+            "tf": 4,
+            "weight": 0.030769
+          },
+          {
+            "term": "runtime",
+            "tf": 4,
+            "weight": 0.030769
+          },
+          {
+            "term": "how",
+            "tf": 4,
+            "weight": 0.030769
+          },
+          {
+            "term": "configuring",
+            "tf": 4,
+            "weight": 0.030769
+          },
+          {
+            "term": "lazy",
+            "tf": 4,
+            "weight": 0.030769
+          },
+          {
+            "term": "loading",
+            "tf": 4,
+            "weight": 0.030769
+          },
+          {
+            "term": "batch",
+            "tf": 4,
+            "weight": 0.030769
+          },
+          {
+            "term": "acceleration",
+            "tf": 4,
+            "weight": 0.030769
+          },
+          {
+            "term": "key",
+            "tf": 2,
+            "weight": 0.015385
+          },
+          {
+            "term": "features",
+            "tf": 2,
+            "weight": 0.015385
+          },
+          {
+            "term": "integration",
+            "tf": 2,
+            "weight": 0.015385
+          },
+          {
+            "term": "benefits",
+            "tf": 2,
+            "weight": 0.015385
+          },
+          {
+            "term": "options",
+            "tf": 2,
+            "weight": 0.015385
+          },
+          {
+            "term": "works",
+            "tf": 2,
+            "weight": 0.015385
+          },
+          {
+            "term": "fastembed",
+            "tf": 2,
+            "weight": 0.015385
+          }
+        ],
+        "unique_terms": 43,
+        "total_terms": 130
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "On this page",
+        "configuration",
+        "configuring",
+        "how",
+        "lazy",
+        "onnx",
+        "optimization",
+        "parallel",
+        "performance",
+        "processing",
+        "runtime"
+      ],
+      "collection_name": "Qdrant"
+    },
+    "advanced_scores": {
+      "semantic": 0.6,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.705021052631579,
+      "overall": 0.7350070175438597
+    }
+  }
+]

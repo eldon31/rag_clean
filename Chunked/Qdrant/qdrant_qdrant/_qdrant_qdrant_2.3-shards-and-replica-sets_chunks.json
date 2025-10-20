@@ -1,0 +1,1652 @@
+[
+  {
+    "text": "## Purpose and Scope\n\nThis document describes the `ShardReplicaSet` abstraction, which coordinates replicas of a single shard across multiple peers in a Qdrant cluster. It covers replica state management, write ordering guarantees, local vs remote shard coordination, and consistency mechanisms.\n\nFor information about the internal implementation of local shards (segments, WAL, optimization), see [Local Shard Architecture](qdrant/qdrant/2.4-local-shard-architecture.md). For information about collection-level shard distribution and routing, see [Collections and Table of Content](qdrant/qdrant/2.2-collections-and-table-of-content.md). For information about shard transfer operations and resharding, see [Shard Transfers and Resharding](qdrant/qdrant/7.2-shard-transfers-and-resharding.md).\n\n---",
+    "metadata": {
+      "chunk_id": "6fbf469ab00c-0001",
+      "source_file": "Docs\\Qdrant\\qdrant_qdrant\\_qdrant_qdrant_2.3-shards-and-replica-sets.md",
+      "filename": "_qdrant_qdrant_2.3-shards-and-replica-sets.md",
+      "file_extension": ".md",
+      "chunk_index": 1,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Purpose and Scope"
+      ],
+      "heading_text": "Purpose and Scope",
+      "token_count": 173,
+      "char_count": 798,
+      "start_char": 4135,
+      "end_char": 4933,
+      "semantic_score": 0.7,
+      "structural_score": 0.7999999999999998,
+      "retrieval_quality": 0.5114285714285715,
+      "chunking_strategy": "hierarchical_precise_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:42.358664",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 173,
+      "document_id": "6fbf469ab00c",
+      "document_name": "_qdrant_qdrant_2.3-shards-and-replica-sets",
+      "source_path": "Docs\\Qdrant\\qdrant_qdrant\\_qdrant_qdrant_2.3-shards-and-replica-sets.md",
+      "source_filename": "_qdrant_qdrant_2.3-shards-and-replica-sets.md",
+      "source_directory": "Docs\\Qdrant\\qdrant_qdrant",
+      "relative_path": "Docs\\Qdrant\\qdrant_qdrant\\_qdrant_qdrant_2.3-shards-and-replica-sets.md",
+      "hierarchy_path": "Purpose and Scope",
+      "chunk_hash": "e37337b8fbef4f33",
+      "content_digest": "e37337b8fbef4f33",
+      "chunk_length": 798,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "and",
+          "shard",
+          "qdrant",
+          "local",
+          "for",
+          "information",
+          "about",
+          "see",
+          "resharding",
+          "the",
+          "architecture",
+          "collections",
+          "table",
+          "content",
+          "transfers",
+          "purpose",
+          "scope",
+          "this",
+          "document",
+          "describes"
+        ],
+        "term_weights": [
+          {
+            "term": "and",
+            "tf": 8,
+            "weight": 0.086957
+          },
+          {
+            "term": "shard",
+            "tf": 8,
+            "weight": 0.086957
+          },
+          {
+            "term": "qdrant",
+            "tf": 7,
+            "weight": 0.076087
+          },
+          {
+            "term": "local",
+            "tf": 4,
+            "weight": 0.043478
+          },
+          {
+            "term": "for",
+            "tf": 3,
+            "weight": 0.032609
+          },
+          {
+            "term": "information",
+            "tf": 3,
+            "weight": 0.032609
+          },
+          {
+            "term": "about",
+            "tf": 3,
+            "weight": 0.032609
+          },
+          {
+            "term": "see",
+            "tf": 3,
+            "weight": 0.032609
+          },
+          {
+            "term": "resharding",
+            "tf": 3,
+            "weight": 0.032609
+          },
+          {
+            "term": "the",
+            "tf": 2,
+            "weight": 0.021739
+          },
+          {
+            "term": "architecture",
+            "tf": 2,
+            "weight": 0.021739
+          },
+          {
+            "term": "collections",
+            "tf": 2,
+            "weight": 0.021739
+          },
+          {
+            "term": "table",
+            "tf": 2,
+            "weight": 0.021739
+          },
+          {
+            "term": "content",
+            "tf": 2,
+            "weight": 0.021739
+          },
+          {
+            "term": "transfers",
+            "tf": 2,
+            "weight": 0.021739
+          },
+          {
+            "term": "purpose",
+            "tf": 1,
+            "weight": 0.01087
+          },
+          {
+            "term": "scope",
+            "tf": 1,
+            "weight": 0.01087
+          },
+          {
+            "term": "this",
+            "tf": 1,
+            "weight": 0.01087
+          },
+          {
+            "term": "document",
+            "tf": 1,
+            "weight": 0.01087
+          },
+          {
+            "term": "describes",
+            "tf": 1,
+            "weight": 0.01087
+          }
+        ],
+        "unique_terms": 53,
+        "total_terms": 92
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Purpose and Scope",
+        "about",
+        "and",
+        "for",
+        "information",
+        "local",
+        "qdrant",
+        "resharding",
+        "see",
+        "shard",
+        "the"
+      ],
+      "collection_name": "Qdrant"
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.7999999999999998,
+      "retrieval_quality": 0.5114285714285715,
+      "overall": 0.6704761904761903
+    }
+  },
+  {
+    "text": "### Local vs Remote Shards  The replica set distinguishes between local and remote shards: ``` ``` **Local Shard Variants:**  - **`Shard::Local(LocalShard)`**: Fully functional local shard with segments, WAL, and indices - **`Shard::Dummy(DummyShard)`**: Placeholder when in recovery mode or after load failure - **`Shard::QueueProxy`**: Temporary proxy during snapshot creation, queues updates  **Remote Shards:**  - **`RemoteShard`**: Proxy that forwards operations to other peers via internal gRPC  **Sources:** [lib/collection/src/shards/replica\\_set/mod.rs91-92](https://github.com/qdrant/qdrant/blob/48203e41/lib/collection/src/shards/replica_set/mod.rs#L91-L92) [lib/collection/src/shards/replica\\_set/mod.rs400-413](https://github.com/qdrant/qdrant/blob/48203e41/lib/collection/src/shards/replica_set/mod.rs#L400-L413)  ---",
+    "metadata": {
+      "chunk_id": "6fbf469ab00c-0004",
+      "source_file": "Docs\\Qdrant\\qdrant_qdrant\\_qdrant_qdrant_2.3-shards-and-replica-sets.md",
+      "filename": "_qdrant_qdrant_2.3-shards-and-replica-sets.md",
+      "file_extension": ".md",
+      "chunk_index": 4,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Local vs Remote Shards"
+      ],
+      "heading_text": "Local vs Remote Shards",
+      "token_count": 226,
+      "char_count": 831,
+      "start_char": 6990,
+      "end_char": 7821,
+      "semantic_score": 0.7,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5458823529411765,
+      "chunking_strategy": "hierarchical_precise_structural",
+      "content_type": "code_block",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:42.366485",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 226,
+      "document_id": "6fbf469ab00c",
+      "document_name": "_qdrant_qdrant_2.3-shards-and-replica-sets",
+      "source_path": "Docs\\Qdrant\\qdrant_qdrant\\_qdrant_qdrant_2.3-shards-and-replica-sets.md",
+      "source_filename": "_qdrant_qdrant_2.3-shards-and-replica-sets.md",
+      "source_directory": "Docs\\Qdrant\\qdrant_qdrant",
+      "relative_path": "Docs\\Qdrant\\qdrant_qdrant\\_qdrant_qdrant_2.3-shards-and-replica-sets.md",
+      "hierarchy_path": "Local vs Remote Shards",
+      "chunk_hash": "40f434d3a5cb5744",
+      "content_digest": "40f434d3a5cb5744",
+      "chunk_length": 831,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "shards",
+          "local",
+          "replica",
+          "set",
+          "shard",
+          "lib",
+          "collection",
+          "src",
+          "mod",
+          "qdrant",
+          "remote",
+          "and",
+          "proxy",
+          "https",
+          "github",
+          "com",
+          "blob",
+          "48203e41",
+          "the",
+          "distinguishes"
+        ],
+        "term_weights": [
+          {
+            "term": "shards",
+            "tf": 7,
+            "weight": 0.064815
+          },
+          {
+            "term": "local",
+            "tf": 5,
+            "weight": 0.046296
+          },
+          {
+            "term": "replica",
+            "tf": 5,
+            "weight": 0.046296
+          },
+          {
+            "term": "set",
+            "tf": 5,
+            "weight": 0.046296
+          },
+          {
+            "term": "shard",
+            "tf": 5,
+            "weight": 0.046296
+          },
+          {
+            "term": "lib",
+            "tf": 4,
+            "weight": 0.037037
+          },
+          {
+            "term": "collection",
+            "tf": 4,
+            "weight": 0.037037
+          },
+          {
+            "term": "src",
+            "tf": 4,
+            "weight": 0.037037
+          },
+          {
+            "term": "mod",
+            "tf": 4,
+            "weight": 0.037037
+          },
+          {
+            "term": "qdrant",
+            "tf": 4,
+            "weight": 0.037037
+          },
+          {
+            "term": "remote",
+            "tf": 3,
+            "weight": 0.027778
+          },
+          {
+            "term": "and",
+            "tf": 2,
+            "weight": 0.018519
+          },
+          {
+            "term": "proxy",
+            "tf": 2,
+            "weight": 0.018519
+          },
+          {
+            "term": "https",
+            "tf": 2,
+            "weight": 0.018519
+          },
+          {
+            "term": "github",
+            "tf": 2,
+            "weight": 0.018519
+          },
+          {
+            "term": "com",
+            "tf": 2,
+            "weight": 0.018519
+          },
+          {
+            "term": "blob",
+            "tf": 2,
+            "weight": 0.018519
+          },
+          {
+            "term": "48203e41",
+            "tf": 2,
+            "weight": 0.018519
+          },
+          {
+            "term": "the",
+            "tf": 1,
+            "weight": 0.009259
+          },
+          {
+            "term": "distinguishes",
+            "tf": 1,
+            "weight": 0.009259
+          }
+        ],
+        "unique_terms": 62,
+        "total_terms": 108
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Local vs Remote Shards",
+        "collection",
+        "lib",
+        "local",
+        "mod",
+        "qdrant",
+        "replica",
+        "set",
+        "shard",
+        "shards",
+        "src"
+      ],
+      "collection_name": "Qdrant"
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5458823529411765,
+      "overall": 0.7152941176470587
+    }
+  },
+  {
+    "text": "### Shard Selection for Queries  Read operations prefer local shards for performance: ``` ``` **Sources:** [lib/collection/src/shards/replica\\_set/execute\\_read\\_operation.rs](https://github.com/qdrant/qdrant/blob/48203e41/lib/collection/src/shards/replica_set/execute_read_operation.rs) (implied from replica\\_set structure)  The methods `peer_is_active()` and `is_locally_disabled()` determine which replicas can serve reads:  **Sources:** [lib/collection/src/shards/replica\\_set/mod.rs1007-1018](https://github.com/qdrant/qdrant/blob/48203e41/lib/collection/src/shards/replica_set/mod.rs#L1007-L1018)  ---",
+    "metadata": {
+      "chunk_id": "6fbf469ab00c-0016",
+      "source_file": "Docs\\Qdrant\\qdrant_qdrant\\_qdrant_qdrant_2.3-shards-and-replica-sets.md",
+      "filename": "_qdrant_qdrant_2.3-shards-and-replica-sets.md",
+      "file_extension": ".md",
+      "chunk_index": 16,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Shard Selection for Queries"
+      ],
+      "heading_text": "Shard Selection for Queries",
+      "token_count": 164,
+      "char_count": 608,
+      "start_char": 14446,
+      "end_char": 15054,
+      "semantic_score": 0.7,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5635294117647058,
+      "chunking_strategy": "hierarchical_precise_structural",
+      "content_type": "code_block",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:42.385868",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 164,
+      "document_id": "6fbf469ab00c",
+      "document_name": "_qdrant_qdrant_2.3-shards-and-replica-sets",
+      "source_path": "Docs\\Qdrant\\qdrant_qdrant\\_qdrant_qdrant_2.3-shards-and-replica-sets.md",
+      "source_filename": "_qdrant_qdrant_2.3-shards-and-replica-sets.md",
+      "source_directory": "Docs\\Qdrant\\qdrant_qdrant",
+      "relative_path": "Docs\\Qdrant\\qdrant_qdrant\\_qdrant_qdrant_2.3-shards-and-replica-sets.md",
+      "hierarchy_path": "Shard Selection for Queries",
+      "chunk_hash": "dc5de402dcf06054",
+      "content_digest": "dc5de402dcf06054",
+      "chunk_length": 608,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "shards",
+          "replica",
+          "set",
+          "lib",
+          "collection",
+          "src",
+          "qdrant",
+          "read",
+          "for",
+          "sources",
+          "execute",
+          "operation",
+          "https",
+          "github",
+          "com",
+          "blob",
+          "48203e41",
+          "mod",
+          "shard",
+          "selection"
+        ],
+        "term_weights": [
+          {
+            "term": "shards",
+            "tf": 5,
+            "weight": 0.061728
+          },
+          {
+            "term": "replica",
+            "tf": 5,
+            "weight": 0.061728
+          },
+          {
+            "term": "set",
+            "tf": 5,
+            "weight": 0.061728
+          },
+          {
+            "term": "lib",
+            "tf": 4,
+            "weight": 0.049383
+          },
+          {
+            "term": "collection",
+            "tf": 4,
+            "weight": 0.049383
+          },
+          {
+            "term": "src",
+            "tf": 4,
+            "weight": 0.049383
+          },
+          {
+            "term": "qdrant",
+            "tf": 4,
+            "weight": 0.049383
+          },
+          {
+            "term": "read",
+            "tf": 3,
+            "weight": 0.037037
+          },
+          {
+            "term": "for",
+            "tf": 2,
+            "weight": 0.024691
+          },
+          {
+            "term": "sources",
+            "tf": 2,
+            "weight": 0.024691
+          },
+          {
+            "term": "execute",
+            "tf": 2,
+            "weight": 0.024691
+          },
+          {
+            "term": "operation",
+            "tf": 2,
+            "weight": 0.024691
+          },
+          {
+            "term": "https",
+            "tf": 2,
+            "weight": 0.024691
+          },
+          {
+            "term": "github",
+            "tf": 2,
+            "weight": 0.024691
+          },
+          {
+            "term": "com",
+            "tf": 2,
+            "weight": 0.024691
+          },
+          {
+            "term": "blob",
+            "tf": 2,
+            "weight": 0.024691
+          },
+          {
+            "term": "48203e41",
+            "tf": 2,
+            "weight": 0.024691
+          },
+          {
+            "term": "mod",
+            "tf": 2,
+            "weight": 0.024691
+          },
+          {
+            "term": "shard",
+            "tf": 1,
+            "weight": 0.012346
+          },
+          {
+            "term": "selection",
+            "tf": 1,
+            "weight": 0.012346
+          }
+        ],
+        "unique_terms": 45,
+        "total_terms": 81
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Shard Selection for Queries",
+        "collection",
+        "for",
+        "lib",
+        "qdrant",
+        "read",
+        "replica",
+        "set",
+        "shards",
+        "sources",
+        "src"
+      ],
+      "collection_name": "Qdrant"
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5635294117647058,
+      "overall": 0.7211764705882352
+    }
+  },
+  {
+    "text": "## Key Methods and Operations",
+    "metadata": {
+      "chunk_id": "6fbf469ab00c-0021",
+      "source_file": "Docs\\Qdrant\\qdrant_qdrant\\_qdrant_qdrant_2.3-shards-and-replica-sets.md",
+      "filename": "_qdrant_qdrant_2.3-shards-and-replica-sets.md",
+      "file_extension": ".md",
+      "chunk_index": 21,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Key Methods and Operations"
+      ],
+      "heading_text": "Key Methods and Operations",
+      "token_count": 5,
+      "char_count": 29,
+      "start_char": 16686,
+      "end_char": 16715,
+      "semantic_score": 0.8,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.59,
+      "chunking_strategy": "hierarchical_precise_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:42.390032",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 5,
+      "document_id": "6fbf469ab00c",
+      "document_name": "_qdrant_qdrant_2.3-shards-and-replica-sets",
+      "source_path": "Docs\\Qdrant\\qdrant_qdrant\\_qdrant_qdrant_2.3-shards-and-replica-sets.md",
+      "source_filename": "_qdrant_qdrant_2.3-shards-and-replica-sets.md",
+      "source_directory": "Docs\\Qdrant\\qdrant_qdrant",
+      "relative_path": "Docs\\Qdrant\\qdrant_qdrant\\_qdrant_qdrant_2.3-shards-and-replica-sets.md",
+      "hierarchy_path": "Key Methods and Operations",
+      "chunk_hash": "dd67791235b6e7a1",
+      "content_digest": "dd67791235b6e7a1",
+      "chunk_length": 29,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "key",
+          "methods",
+          "and",
+          "operations"
+        ],
+        "term_weights": [
+          {
+            "term": "key",
+            "tf": 1,
+            "weight": 0.25
+          },
+          {
+            "term": "methods",
+            "tf": 1,
+            "weight": 0.25
+          },
+          {
+            "term": "and",
+            "tf": 1,
+            "weight": 0.25
+          },
+          {
+            "term": "operations",
+            "tf": 1,
+            "weight": 0.25
+          }
+        ],
+        "unique_terms": 4,
+        "total_terms": 4
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Key Methods and Operations",
+        "and",
+        "key",
+        "methods",
+        "operations"
+      ],
+      "collection_name": "Qdrant"
+    },
+    "advanced_scores": {
+      "semantic": 0.8,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.59,
+      "overall": 0.7633333333333333
+    }
+  },
+  {
+    "text": "### Waiting for States ``` wait_for_local_state(state, timeout) -> CollectionResult<()> wait_for_state(peer_id, state, timeout) -> Future<CollectionResult<()>> ``` These methods block until a replica reaches the desired state or timeout occurs. Used during transfer operations. **Sources:** [lib/collection/src/shards/replica\\_set/mod.rs474-559](https://github.com/qdrant/qdrant/blob/48203e41/lib/collection/src/shards/replica_set/mod.rs#L474-L559)  ---",
+    "metadata": {
+      "chunk_id": "6fbf469ab00c-0026",
+      "source_file": "Docs\\Qdrant\\qdrant_qdrant\\_qdrant_qdrant_2.3-shards-and-replica-sets.md",
+      "filename": "_qdrant_qdrant_2.3-shards-and-replica-sets.md",
+      "file_extension": ".md",
+      "chunk_index": 26,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Waiting for States"
+      ],
+      "heading_text": "Waiting for States",
+      "token_count": 112,
+      "char_count": 453,
+      "start_char": 19671,
+      "end_char": 20124,
+      "semantic_score": 0.7,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5642857142857143,
+      "chunking_strategy": "hierarchical_precise_structural",
+      "content_type": "code_block",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:42.395749",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 112,
+      "document_id": "6fbf469ab00c",
+      "document_name": "_qdrant_qdrant_2.3-shards-and-replica-sets",
+      "source_path": "Docs\\Qdrant\\qdrant_qdrant\\_qdrant_qdrant_2.3-shards-and-replica-sets.md",
+      "source_filename": "_qdrant_qdrant_2.3-shards-and-replica-sets.md",
+      "source_directory": "Docs\\Qdrant\\qdrant_qdrant",
+      "relative_path": "Docs\\Qdrant\\qdrant_qdrant\\_qdrant_qdrant_2.3-shards-and-replica-sets.md",
+      "hierarchy_path": "Waiting for States",
+      "chunk_hash": "4d4c487db3108406",
+      "content_digest": "4d4c487db3108406",
+      "chunk_length": 453,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "state",
+          "for",
+          "timeout",
+          "replica",
+          "wait",
+          "collectionresult",
+          "lib",
+          "collection",
+          "src",
+          "shards",
+          "set",
+          "mod",
+          "qdrant",
+          "waiting",
+          "states",
+          "local",
+          "peer",
+          "future",
+          "these",
+          "methods"
+        ],
+        "term_weights": [
+          {
+            "term": "state",
+            "tf": 5,
+            "weight": 0.084746
+          },
+          {
+            "term": "for",
+            "tf": 3,
+            "weight": 0.050847
+          },
+          {
+            "term": "timeout",
+            "tf": 3,
+            "weight": 0.050847
+          },
+          {
+            "term": "replica",
+            "tf": 3,
+            "weight": 0.050847
+          },
+          {
+            "term": "wait",
+            "tf": 2,
+            "weight": 0.033898
+          },
+          {
+            "term": "collectionresult",
+            "tf": 2,
+            "weight": 0.033898
+          },
+          {
+            "term": "lib",
+            "tf": 2,
+            "weight": 0.033898
+          },
+          {
+            "term": "collection",
+            "tf": 2,
+            "weight": 0.033898
+          },
+          {
+            "term": "src",
+            "tf": 2,
+            "weight": 0.033898
+          },
+          {
+            "term": "shards",
+            "tf": 2,
+            "weight": 0.033898
+          },
+          {
+            "term": "set",
+            "tf": 2,
+            "weight": 0.033898
+          },
+          {
+            "term": "mod",
+            "tf": 2,
+            "weight": 0.033898
+          },
+          {
+            "term": "qdrant",
+            "tf": 2,
+            "weight": 0.033898
+          },
+          {
+            "term": "waiting",
+            "tf": 1,
+            "weight": 0.016949
+          },
+          {
+            "term": "states",
+            "tf": 1,
+            "weight": 0.016949
+          },
+          {
+            "term": "local",
+            "tf": 1,
+            "weight": 0.016949
+          },
+          {
+            "term": "peer",
+            "tf": 1,
+            "weight": 0.016949
+          },
+          {
+            "term": "future",
+            "tf": 1,
+            "weight": 0.016949
+          },
+          {
+            "term": "these",
+            "tf": 1,
+            "weight": 0.016949
+          },
+          {
+            "term": "methods",
+            "tf": 1,
+            "weight": 0.016949
+          }
+        ],
+        "unique_terms": 40,
+        "total_terms": 59
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Waiting for States",
+        "collection",
+        "collectionresult",
+        "for",
+        "lib",
+        "replica",
+        "shards",
+        "src",
+        "state",
+        "timeout",
+        "wait"
+      ],
+      "collection_name": "Qdrant"
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5642857142857143,
+      "overall": 0.7214285714285714
+    }
+  },
+  {
+    "text": "### Applying State from Consensus  When consensus updates the cluster state: ``` collection.set_shard_replica_state(     shard_id,     peer_id,     new_state,     from_state: Option<ReplicaState> ) -> CollectionResult<()> ``` This method:  1. Validates peer exists and `from_state` matches current state 2. Prevents deactivating last active replica 3. Updates replica state via `ensure_replica_with_state()` 4. Aborts transfers if replica becomes `Dead` 5. Triggers collection initialization check  **Sources:** [lib/collection/src/collection/mod.rs386-512](https://github.com/qdrant/qdrant/blob/48203e41/lib/collection/src/collection/mod.rs#L386-L512)",
+    "metadata": {
+      "chunk_id": "6fbf469ab00c-0028",
+      "source_file": "Docs\\Qdrant\\qdrant_qdrant\\_qdrant_qdrant_2.3-shards-and-replica-sets.md",
+      "filename": "_qdrant_qdrant_2.3-shards-and-replica-sets.md",
+      "file_extension": ".md",
+      "chunk_index": 28,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Applying State from Consensus"
+      ],
+      "heading_text": "Applying State from Consensus",
+      "token_count": 161,
+      "char_count": 652,
+      "start_char": 20406,
+      "end_char": 21058,
+      "semantic_score": 0.7,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5544067796610169,
+      "chunking_strategy": "hierarchical_precise_structural",
+      "content_type": "code_block",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:42.398354",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 161,
+      "document_id": "6fbf469ab00c",
+      "document_name": "_qdrant_qdrant_2.3-shards-and-replica-sets",
+      "source_path": "Docs\\Qdrant\\qdrant_qdrant\\_qdrant_qdrant_2.3-shards-and-replica-sets.md",
+      "source_filename": "_qdrant_qdrant_2.3-shards-and-replica-sets.md",
+      "source_directory": "Docs\\Qdrant\\qdrant_qdrant",
+      "relative_path": "Docs\\Qdrant\\qdrant_qdrant\\_qdrant_qdrant_2.3-shards-and-replica-sets.md",
+      "hierarchy_path": "Applying State from Consensus",
+      "chunk_hash": "b24f6860c3f80932",
+      "content_digest": "b24f6860c3f80932",
+      "chunk_length": 652,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "state",
+          "collection",
+          "replica",
+          "from",
+          "consensus",
+          "updates",
+          "shard",
+          "peer",
+          "lib",
+          "src",
+          "mod",
+          "qdrant",
+          "applying",
+          "when",
+          "the",
+          "cluster",
+          "set",
+          "new",
+          "option",
+          "replicastate"
+        ],
+        "term_weights": [
+          {
+            "term": "state",
+            "tf": 9,
+            "weight": 0.113924
+          },
+          {
+            "term": "collection",
+            "tf": 6,
+            "weight": 0.075949
+          },
+          {
+            "term": "replica",
+            "tf": 5,
+            "weight": 0.063291
+          },
+          {
+            "term": "from",
+            "tf": 3,
+            "weight": 0.037975
+          },
+          {
+            "term": "consensus",
+            "tf": 2,
+            "weight": 0.025316
+          },
+          {
+            "term": "updates",
+            "tf": 2,
+            "weight": 0.025316
+          },
+          {
+            "term": "shard",
+            "tf": 2,
+            "weight": 0.025316
+          },
+          {
+            "term": "peer",
+            "tf": 2,
+            "weight": 0.025316
+          },
+          {
+            "term": "lib",
+            "tf": 2,
+            "weight": 0.025316
+          },
+          {
+            "term": "src",
+            "tf": 2,
+            "weight": 0.025316
+          },
+          {
+            "term": "mod",
+            "tf": 2,
+            "weight": 0.025316
+          },
+          {
+            "term": "qdrant",
+            "tf": 2,
+            "weight": 0.025316
+          },
+          {
+            "term": "applying",
+            "tf": 1,
+            "weight": 0.012658
+          },
+          {
+            "term": "when",
+            "tf": 1,
+            "weight": 0.012658
+          },
+          {
+            "term": "the",
+            "tf": 1,
+            "weight": 0.012658
+          },
+          {
+            "term": "cluster",
+            "tf": 1,
+            "weight": 0.012658
+          },
+          {
+            "term": "set",
+            "tf": 1,
+            "weight": 0.012658
+          },
+          {
+            "term": "new",
+            "tf": 1,
+            "weight": 0.012658
+          },
+          {
+            "term": "option",
+            "tf": 1,
+            "weight": 0.012658
+          },
+          {
+            "term": "replicastate",
+            "tf": 1,
+            "weight": 0.012658
+          }
+        ],
+        "unique_terms": 52,
+        "total_terms": 79
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Applying State from Consensus",
+        "collection",
+        "consensus",
+        "from",
+        "lib",
+        "peer",
+        "replica",
+        "shard",
+        "src",
+        "state",
+        "updates"
+      ],
+      "collection_name": "Qdrant"
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5544067796610169,
+      "overall": 0.7181355932203389
+    }
+  },
+  {
+    "text": "## Summary  The `ShardReplicaSet` is the core abstraction for managing replica consistency in Qdrant:  - **Coordinates local and remote shards** across multiple peers - **Manages replica states** through a persisted state machine - **Provides write ordering guarantees** (Weak, Medium, Strong) via leader selection and serialization - **Uses logical clocks** to establish causality and detect outdated operations - **Handles replica failures** with locally disabled peers and consensus notification - **Integrates with shard transfers** to support data migration and recovery - **Prefers local shards** for read operations to minimize latency - **Enforces write consistency factor** to ensure sufficient replica agreement  All state changes are coordinated through the consensus layer (Raft), ensuring cluster-wide consistency while allowing optimistic local operations for performance. Dismiss  Refresh this wiki  Enter email to refresh",
+    "metadata": {
+      "chunk_id": "6fbf469ab00c-0030",
+      "source_file": "Docs\\Qdrant\\qdrant_qdrant\\_qdrant_qdrant_2.3-shards-and-replica-sets.md",
+      "filename": "_qdrant_qdrant_2.3-shards-and-replica-sets.md",
+      "file_extension": ".md",
+      "chunk_index": 30,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Summary"
+      ],
+      "heading_text": "Summary",
+      "token_count": 172,
+      "char_count": 937,
+      "start_char": 21582,
+      "end_char": 22519,
+      "semantic_score": 0.7999999999999999,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5042857142857142,
+      "chunking_strategy": "hierarchical_precise_structural",
+      "content_type": "list_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:42.400885",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 172,
+      "document_id": "6fbf469ab00c",
+      "document_name": "_qdrant_qdrant_2.3-shards-and-replica-sets",
+      "source_path": "Docs\\Qdrant\\qdrant_qdrant\\_qdrant_qdrant_2.3-shards-and-replica-sets.md",
+      "source_filename": "_qdrant_qdrant_2.3-shards-and-replica-sets.md",
+      "source_directory": "Docs\\Qdrant\\qdrant_qdrant",
+      "relative_path": "Docs\\Qdrant\\qdrant_qdrant\\_qdrant_qdrant_2.3-shards-and-replica-sets.md",
+      "hierarchy_path": "Summary",
+      "chunk_hash": "4c401c0f7a034ca6",
+      "content_digest": "4c401c0f7a034ca6",
+      "chunk_length": 937,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "and",
+          "replica",
+          "the",
+          "for",
+          "consistency",
+          "local",
+          "operations",
+          "shards",
+          "peers",
+          "through",
+          "state",
+          "write",
+          "with",
+          "consensus",
+          "refresh",
+          "summary",
+          "shardreplicaset",
+          "core",
+          "abstraction",
+          "managing"
+        ],
+        "term_weights": [
+          {
+            "term": "and",
+            "tf": 5,
+            "weight": 0.045455
+          },
+          {
+            "term": "replica",
+            "tf": 4,
+            "weight": 0.036364
+          },
+          {
+            "term": "the",
+            "tf": 3,
+            "weight": 0.027273
+          },
+          {
+            "term": "for",
+            "tf": 3,
+            "weight": 0.027273
+          },
+          {
+            "term": "consistency",
+            "tf": 3,
+            "weight": 0.027273
+          },
+          {
+            "term": "local",
+            "tf": 3,
+            "weight": 0.027273
+          },
+          {
+            "term": "operations",
+            "tf": 3,
+            "weight": 0.027273
+          },
+          {
+            "term": "shards",
+            "tf": 2,
+            "weight": 0.018182
+          },
+          {
+            "term": "peers",
+            "tf": 2,
+            "weight": 0.018182
+          },
+          {
+            "term": "through",
+            "tf": 2,
+            "weight": 0.018182
+          },
+          {
+            "term": "state",
+            "tf": 2,
+            "weight": 0.018182
+          },
+          {
+            "term": "write",
+            "tf": 2,
+            "weight": 0.018182
+          },
+          {
+            "term": "with",
+            "tf": 2,
+            "weight": 0.018182
+          },
+          {
+            "term": "consensus",
+            "tf": 2,
+            "weight": 0.018182
+          },
+          {
+            "term": "refresh",
+            "tf": 2,
+            "weight": 0.018182
+          },
+          {
+            "term": "summary",
+            "tf": 1,
+            "weight": 0.009091
+          },
+          {
+            "term": "shardreplicaset",
+            "tf": 1,
+            "weight": 0.009091
+          },
+          {
+            "term": "core",
+            "tf": 1,
+            "weight": 0.009091
+          },
+          {
+            "term": "abstraction",
+            "tf": 1,
+            "weight": 0.009091
+          },
+          {
+            "term": "managing",
+            "tf": 1,
+            "weight": 0.009091
+          }
+        ],
+        "unique_terms": 85,
+        "total_terms": 110
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Summary",
+        "and",
+        "consistency",
+        "for",
+        "local",
+        "operations",
+        "peers",
+        "replica",
+        "shards",
+        "the",
+        "through"
+      ],
+      "collection_name": "Qdrant"
+    },
+    "advanced_scores": {
+      "semantic": 0.7999999999999999,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5042857142857142,
+      "overall": 0.7347619047619046
+    }
+  },
+  {
+    "text": "### On this page  - [Shards and Replica Sets](#shards-and-replica-sets.md) - [Purpose and Scope](#purpose-and-scope.md) - [Core Abstraction](#core-abstraction.md) - [ShardReplicaSet Structure](#shardreplicaset-structure.md) - [Local vs Remote Shards](#local-vs-remote-shards.md) - [Replica State Management](#replica-state-management.md) - [Replica States](#replica-states.md) - [ReplicaSetState Persistence](#replicasetstate-persistence.md) - [Locally Disabled Peers](#locally-disabled-peers.md) - [Write Coordination and Consistency](#write-coordination-and-consistency.md) - [WriteOrdering Levels](#writeordering-levels.md) - [Clock-Based Consistency](#clock-based-consistency.md) - [Update Flow with Retry Logic](#update-flow-with-retry-logic.md) - [Write Consistency Factor](#write-consistency-factor.md) - [Handling Failed Replicas](#handling-failed-replicas.md) - [Read Operations](#read-operations.md) - [Shard Selection for Queries](#shard-selection-for-queries.md) - [Shard Transfer Integration](#shard-transfer-integration.md) - [Transfer Lifecycle in Replica Set](#transfer-lifecycle-in-replica-set.md) - [Transfer Method and Initial State](#transfer-method-and-initial-state.md) - [Transfer Abortion](#transfer-abortion.md) - [Key Methods and Operations](#key-methods-and-operations.md) - [Building a Replica Set](#building-a-replica-set.md) - [Loading a Replica Set](#loading-a-replica-set.md) - [State Management](#state-management.md) - [Replica Management](#replica-management.md) - [Waiting for States](#waiting-for-states.md) - [Integration with Collection](#integration-with-collection.md) - [Applying State from Consensus](#applying-state-from-consensus.md) - [Syncing Local State to Consensus](#syncing-local-state-to-consensus.md) - [Summary](#summary.md)",
+    "metadata": {
+      "chunk_id": "6fbf469ab00c-0031",
+      "source_file": "Docs\\Qdrant\\qdrant_qdrant\\_qdrant_qdrant_2.3-shards-and-replica-sets.md",
+      "filename": "_qdrant_qdrant_2.3-shards-and-replica-sets.md",
+      "file_extension": ".md",
+      "chunk_index": 31,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "On this page"
+      ],
+      "heading_text": "On this page",
+      "token_count": 467,
+      "char_count": 1778,
+      "start_char": 22522,
+      "end_char": 24300,
+      "semantic_score": 0.6,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5310090909090909,
+      "chunking_strategy": "hierarchical_precise_structural",
+      "content_type": "code_block",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:42.403380",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 467,
+      "document_id": "6fbf469ab00c",
+      "document_name": "_qdrant_qdrant_2.3-shards-and-replica-sets",
+      "source_path": "Docs\\Qdrant\\qdrant_qdrant\\_qdrant_qdrant_2.3-shards-and-replica-sets.md",
+      "source_filename": "_qdrant_qdrant_2.3-shards-and-replica-sets.md",
+      "source_directory": "Docs\\Qdrant\\qdrant_qdrant",
+      "relative_path": "Docs\\Qdrant\\qdrant_qdrant\\_qdrant_qdrant_2.3-shards-and-replica-sets.md",
+      "hierarchy_path": "On this page",
+      "chunk_hash": "945dc4cd6cb01013",
+      "content_digest": "945dc4cd6cb01013",
+      "chunk_length": 1778,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "replica",
+          "and",
+          "state",
+          "transfer",
+          "management",
+          "consistency",
+          "set",
+          "shards",
+          "local",
+          "states",
+          "write",
+          "with",
+          "operations",
+          "shard",
+          "for",
+          "integration",
+          "consensus",
+          "sets",
+          "purpose",
+          "scope"
+        ],
+        "term_weights": [
+          {
+            "term": "replica",
+            "tf": 14,
+            "weight": 0.074468
+          },
+          {
+            "term": "and",
+            "tf": 10,
+            "weight": 0.053191
+          },
+          {
+            "term": "state",
+            "tf": 10,
+            "weight": 0.053191
+          },
+          {
+            "term": "transfer",
+            "tf": 8,
+            "weight": 0.042553
+          },
+          {
+            "term": "management",
+            "tf": 6,
+            "weight": 0.031915
+          },
+          {
+            "term": "consistency",
+            "tf": 6,
+            "weight": 0.031915
+          },
+          {
+            "term": "set",
+            "tf": 6,
+            "weight": 0.031915
+          },
+          {
+            "term": "shards",
+            "tf": 4,
+            "weight": 0.021277
+          },
+          {
+            "term": "local",
+            "tf": 4,
+            "weight": 0.021277
+          },
+          {
+            "term": "states",
+            "tf": 4,
+            "weight": 0.021277
+          },
+          {
+            "term": "write",
+            "tf": 4,
+            "weight": 0.021277
+          },
+          {
+            "term": "with",
+            "tf": 4,
+            "weight": 0.021277
+          },
+          {
+            "term": "operations",
+            "tf": 4,
+            "weight": 0.021277
+          },
+          {
+            "term": "shard",
+            "tf": 4,
+            "weight": 0.021277
+          },
+          {
+            "term": "for",
+            "tf": 4,
+            "weight": 0.021277
+          },
+          {
+            "term": "integration",
+            "tf": 4,
+            "weight": 0.021277
+          },
+          {
+            "term": "consensus",
+            "tf": 4,
+            "weight": 0.021277
+          },
+          {
+            "term": "sets",
+            "tf": 2,
+            "weight": 0.010638
+          },
+          {
+            "term": "purpose",
+            "tf": 2,
+            "weight": 0.010638
+          },
+          {
+            "term": "scope",
+            "tf": 2,
+            "weight": 0.010638
+          }
+        ],
+        "unique_terms": 62,
+        "total_terms": 188
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "On this page",
+        "and",
+        "consistency",
+        "local",
+        "management",
+        "replica",
+        "set",
+        "shards",
+        "state",
+        "states",
+        "transfer"
+      ],
+      "collection_name": "Qdrant"
+    },
+    "advanced_scores": {
+      "semantic": 0.6,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5310090909090909,
+      "overall": 0.6770030303030303
+    }
+  }
+]

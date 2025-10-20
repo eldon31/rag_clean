@@ -1,0 +1,1694 @@
+[
+  {
+    "text": "# Write Consistency and Replication  Relevant source files  - [lib/collection/src/collection/collection\\_ops.rs](https://github.com/qdrant/qdrant/blob/48203e41/lib/collection/src/collection/collection_ops.rs) - [lib/collection/src/collection/mod.rs](https://github.com/qdrant/qdrant/blob/48203e41/lib/collection/src/collection/mod.rs) - [lib/collection/src/collection/shard\\_transfer.rs](https://github.com/qdrant/qdrant/blob/48203e41/lib/collection/src/collection/shard_transfer.rs) - [lib/collection/src/collection/sharding\\_keys.rs](https://github.com/qdrant/qdrant/blob/48203e41/lib/collection/src/collection/sharding_keys.rs) - [lib/collection/src/shards/replica\\_set/mod.rs](https://github.com/qdrant/qdrant/blob/48203e41/lib/collection/src/shards/replica_set/mod.rs) - [lib/collection/src/shards/replica\\_set/update.rs](https://github.com/qdrant/qdrant/blob/48203e41/lib/collection/src/shards/replica_set/update.rs) - [lib/storage/src/content\\_manager/toc/collection\\_meta\\_ops.rs](https://github.com/qdrant/qdrant/blob/48203e41/lib/storage/src/content_manager/toc/collection_meta_ops.rs)  This document explains how Qdrant ensures consistency across replicas when processing write operations. It covers write ordering guarantees, leader-based coordination, logical clock mechanisms, and failure handling strategies that enable Qdrant to maintain data consistency across distributed shard replicas. For information about the update processing pipeline and WAL persistence, see [Update Processing Pipeline](qdrant/qdrant/6.1-update-processing-pipeline.md). For distributed consensus and metadata operations, see [Raft Consensus Protocol](qdrant/qdrant/7.1-raft-consensus-protocol.md). ---",
+    "metadata": {
+      "chunk_id": "964dce06fd80-0000",
+      "source_file": "Docs\\Qdrant\\qdrant_qdrant\\_qdrant_qdrant_6.2-write-consistency-and-replication.md",
+      "filename": "_qdrant_qdrant_6.2-write-consistency-and-replication.md",
+      "file_extension": ".md",
+      "chunk_index": 0,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Write Consistency and Replication"
+      ],
+      "heading_text": "Write Consistency and Replication",
+      "token_count": 424,
+      "char_count": 1694,
+      "start_char": 3058,
+      "end_char": 4752,
+      "semantic_score": 0.6,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5530823529411765,
+      "chunking_strategy": "hierarchical_balanced_structural",
+      "content_type": "list_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:43.459106",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 424,
+      "document_id": "964dce06fd80",
+      "document_name": "_qdrant_qdrant_6.2-write-consistency-and-replication",
+      "source_path": "Docs\\Qdrant\\qdrant_qdrant\\_qdrant_qdrant_6.2-write-consistency-and-replication.md",
+      "source_filename": "_qdrant_qdrant_6.2-write-consistency-and-replication.md",
+      "source_directory": "Docs\\Qdrant\\qdrant_qdrant",
+      "relative_path": "Docs\\Qdrant\\qdrant_qdrant\\_qdrant_qdrant_6.2-write-consistency-and-replication.md",
+      "hierarchy_path": "Write Consistency and Replication",
+      "chunk_hash": "4b3b3ea38fb4c979",
+      "content_digest": "4b3b3ea38fb4c979",
+      "chunk_length": 1694,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "collection",
+          "qdrant",
+          "lib",
+          "src",
+          "https",
+          "github",
+          "com",
+          "blob",
+          "48203e41",
+          "update",
+          "and",
+          "ops",
+          "mod",
+          "shards",
+          "replica",
+          "set",
+          "processing",
+          "write",
+          "consistency",
+          "shard"
+        ],
+        "term_weights": [
+          {
+            "term": "collection",
+            "tf": 24,
+            "weight": 0.109589
+          },
+          {
+            "term": "qdrant",
+            "tf": 20,
+            "weight": 0.091324
+          },
+          {
+            "term": "lib",
+            "tf": 14,
+            "weight": 0.063927
+          },
+          {
+            "term": "src",
+            "tf": 14,
+            "weight": 0.063927
+          },
+          {
+            "term": "https",
+            "tf": 7,
+            "weight": 0.031963
+          },
+          {
+            "term": "github",
+            "tf": 7,
+            "weight": 0.031963
+          },
+          {
+            "term": "com",
+            "tf": 7,
+            "weight": 0.031963
+          },
+          {
+            "term": "blob",
+            "tf": 7,
+            "weight": 0.031963
+          },
+          {
+            "term": "48203e41",
+            "tf": 7,
+            "weight": 0.031963
+          },
+          {
+            "term": "update",
+            "tf": 5,
+            "weight": 0.022831
+          },
+          {
+            "term": "and",
+            "tf": 4,
+            "weight": 0.018265
+          },
+          {
+            "term": "ops",
+            "tf": 4,
+            "weight": 0.018265
+          },
+          {
+            "term": "mod",
+            "tf": 4,
+            "weight": 0.018265
+          },
+          {
+            "term": "shards",
+            "tf": 4,
+            "weight": 0.018265
+          },
+          {
+            "term": "replica",
+            "tf": 4,
+            "weight": 0.018265
+          },
+          {
+            "term": "set",
+            "tf": 4,
+            "weight": 0.018265
+          },
+          {
+            "term": "processing",
+            "tf": 4,
+            "weight": 0.018265
+          },
+          {
+            "term": "write",
+            "tf": 3,
+            "weight": 0.013699
+          },
+          {
+            "term": "consistency",
+            "tf": 3,
+            "weight": 0.013699
+          },
+          {
+            "term": "shard",
+            "tf": 3,
+            "weight": 0.013699
+          }
+        ],
+        "unique_terms": 70,
+        "total_terms": 219
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "48203e41",
+        "Write Consistency and Replication",
+        "blob",
+        "collection",
+        "com",
+        "github",
+        "https",
+        "lib",
+        "qdrant",
+        "src",
+        "update"
+      ],
+      "collection_name": "Qdrant"
+    },
+    "advanced_scores": {
+      "semantic": 0.6,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5530823529411765,
+      "overall": 0.6843607843137255
+    }
+  },
+  {
+    "text": "## Purpose and Scope  When a collection has multiple replicas of a shard distributed across peers, write operations must be coordinated to maintain consistency. This page describes:  - **Write ordering levels** (`Weak`, `Medium`, `Strong`) and their consistency guarantees - **Leader-based replication** for coordinating updates across replicas - **Logical clock mechanisms** (`ClockTag`, `ClockSet`) for detecting and resolving conflicts - **Write consistency factor** configuration and enforcement - **Failure detection** and automatic replica deactivation - **Rate limiting** for write operations in strict mode  The core implementation resides in `ShardReplicaSet::update_with_consistency` and `ShardReplicaSet::update_impl`, which orchestrate parallel replica updates while enforcing consistency guarantees. ---",
+    "metadata": {
+      "chunk_id": "964dce06fd80-0001",
+      "source_file": "Docs\\Qdrant\\qdrant_qdrant\\_qdrant_qdrant_6.2-write-consistency-and-replication.md",
+      "filename": "_qdrant_qdrant_6.2-write-consistency-and-replication.md",
+      "file_extension": ".md",
+      "chunk_index": 1,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Purpose and Scope"
+      ],
+      "heading_text": "Purpose and Scope",
+      "token_count": 152,
+      "char_count": 816,
+      "start_char": 4756,
+      "end_char": 5572,
+      "semantic_score": 0.7999999999999999,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5195918367346939,
+      "chunking_strategy": "hierarchical_balanced_structural",
+      "content_type": "list_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:43.460283",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 152,
+      "document_id": "964dce06fd80",
+      "document_name": "_qdrant_qdrant_6.2-write-consistency-and-replication",
+      "source_path": "Docs\\Qdrant\\qdrant_qdrant\\_qdrant_qdrant_6.2-write-consistency-and-replication.md",
+      "source_filename": "_qdrant_qdrant_6.2-write-consistency-and-replication.md",
+      "source_directory": "Docs\\Qdrant\\qdrant_qdrant",
+      "relative_path": "Docs\\Qdrant\\qdrant_qdrant\\_qdrant_qdrant_6.2-write-consistency-and-replication.md",
+      "hierarchy_path": "Purpose and Scope",
+      "chunk_hash": "5db77c0f17c26611",
+      "content_digest": "5db77c0f17c26611",
+      "chunk_length": 816,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "and",
+          "consistency",
+          "write",
+          "for",
+          "replicas",
+          "across",
+          "operations",
+          "guarantees",
+          "updates",
+          "replica",
+          "shardreplicaset",
+          "update",
+          "purpose",
+          "scope",
+          "when",
+          "collection",
+          "has",
+          "multiple",
+          "shard",
+          "distributed"
+        ],
+        "term_weights": [
+          {
+            "term": "and",
+            "tf": 6,
+            "weight": 0.067416
+          },
+          {
+            "term": "consistency",
+            "tf": 5,
+            "weight": 0.05618
+          },
+          {
+            "term": "write",
+            "tf": 4,
+            "weight": 0.044944
+          },
+          {
+            "term": "for",
+            "tf": 3,
+            "weight": 0.033708
+          },
+          {
+            "term": "replicas",
+            "tf": 2,
+            "weight": 0.022472
+          },
+          {
+            "term": "across",
+            "tf": 2,
+            "weight": 0.022472
+          },
+          {
+            "term": "operations",
+            "tf": 2,
+            "weight": 0.022472
+          },
+          {
+            "term": "guarantees",
+            "tf": 2,
+            "weight": 0.022472
+          },
+          {
+            "term": "updates",
+            "tf": 2,
+            "weight": 0.022472
+          },
+          {
+            "term": "replica",
+            "tf": 2,
+            "weight": 0.022472
+          },
+          {
+            "term": "shardreplicaset",
+            "tf": 2,
+            "weight": 0.022472
+          },
+          {
+            "term": "update",
+            "tf": 2,
+            "weight": 0.022472
+          },
+          {
+            "term": "purpose",
+            "tf": 1,
+            "weight": 0.011236
+          },
+          {
+            "term": "scope",
+            "tf": 1,
+            "weight": 0.011236
+          },
+          {
+            "term": "when",
+            "tf": 1,
+            "weight": 0.011236
+          },
+          {
+            "term": "collection",
+            "tf": 1,
+            "weight": 0.011236
+          },
+          {
+            "term": "has",
+            "tf": 1,
+            "weight": 0.011236
+          },
+          {
+            "term": "multiple",
+            "tf": 1,
+            "weight": 0.011236
+          },
+          {
+            "term": "shard",
+            "tf": 1,
+            "weight": 0.011236
+          },
+          {
+            "term": "distributed",
+            "tf": 1,
+            "weight": 0.011236
+          }
+        ],
+        "unique_terms": 67,
+        "total_terms": 89
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Purpose and Scope",
+        "across",
+        "and",
+        "consistency",
+        "for",
+        "guarantees",
+        "operations",
+        "replica",
+        "replicas",
+        "updates",
+        "write"
+      ],
+      "collection_name": "Qdrant"
+    },
+    "advanced_scores": {
+      "semantic": 0.7999999999999999,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5195918367346939,
+      "overall": 0.7398639455782311
+    }
+  },
+  {
+    "text": "### Configuration  The `write_consistency_factor` is configured in collection parameters and defaults to 1: ``` ```",
+    "metadata": {
+      "chunk_id": "964dce06fd80-0013",
+      "source_file": "Docs\\Qdrant\\qdrant_qdrant\\_qdrant_qdrant_6.2-write-consistency-and-replication.md",
+      "filename": "_qdrant_qdrant_6.2-write-consistency-and-replication.md",
+      "file_extension": ".md",
+      "chunk_index": 13,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Configuration"
+      ],
+      "heading_text": "Configuration",
+      "token_count": 23,
+      "char_count": 115,
+      "start_char": 11981,
+      "end_char": 12096,
+      "semantic_score": 0.8,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.57,
+      "chunking_strategy": "hierarchical_balanced_structural",
+      "content_type": "code_block",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:43.471036",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 23,
+      "document_id": "964dce06fd80",
+      "document_name": "_qdrant_qdrant_6.2-write-consistency-and-replication",
+      "source_path": "Docs\\Qdrant\\qdrant_qdrant\\_qdrant_qdrant_6.2-write-consistency-and-replication.md",
+      "source_filename": "_qdrant_qdrant_6.2-write-consistency-and-replication.md",
+      "source_directory": "Docs\\Qdrant\\qdrant_qdrant",
+      "relative_path": "Docs\\Qdrant\\qdrant_qdrant\\_qdrant_qdrant_6.2-write-consistency-and-replication.md",
+      "hierarchy_path": "Configuration",
+      "chunk_hash": "69c4f43369facc99",
+      "content_digest": "69c4f43369facc99",
+      "chunk_length": 115,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "configuration",
+          "the",
+          "write",
+          "consistency",
+          "factor",
+          "configured",
+          "collection",
+          "parameters",
+          "and",
+          "defaults"
+        ],
+        "term_weights": [
+          {
+            "term": "configuration",
+            "tf": 1,
+            "weight": 0.1
+          },
+          {
+            "term": "the",
+            "tf": 1,
+            "weight": 0.1
+          },
+          {
+            "term": "write",
+            "tf": 1,
+            "weight": 0.1
+          },
+          {
+            "term": "consistency",
+            "tf": 1,
+            "weight": 0.1
+          },
+          {
+            "term": "factor",
+            "tf": 1,
+            "weight": 0.1
+          },
+          {
+            "term": "configured",
+            "tf": 1,
+            "weight": 0.1
+          },
+          {
+            "term": "collection",
+            "tf": 1,
+            "weight": 0.1
+          },
+          {
+            "term": "parameters",
+            "tf": 1,
+            "weight": 0.1
+          },
+          {
+            "term": "and",
+            "tf": 1,
+            "weight": 0.1
+          },
+          {
+            "term": "defaults",
+            "tf": 1,
+            "weight": 0.1
+          }
+        ],
+        "unique_terms": 10,
+        "total_terms": 10
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Configuration",
+        "and",
+        "collection",
+        "configuration",
+        "configured",
+        "consistency",
+        "defaults",
+        "factor",
+        "parameters",
+        "the",
+        "write"
+      ],
+      "collection_name": "Qdrant"
+    },
+    "advanced_scores": {
+      "semantic": 0.8,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.57,
+      "overall": 0.7566666666666667
+    }
+  },
+  {
+    "text": "### Consensus Synchronization  The `sync_local_state` method periodically reports locally disabled peers to consensus:  1. `locally_disabled_peers.notify_elapsed()` returns peers ready to be reported 2. `notify_peer_failure_cb` is called for each failed peer 3. Consensus proposes a `SetShardReplicaState` operation to mark the peer as `Dead` 4. Related shard transfers are aborted  **Sources:**  - [lib/collection/src/shards/replica\\_set/mod.rs872-896](https://github.com/qdrant/qdrant/blob/48203e41/lib/collection/src/shards/replica_set/mod.rs#L872-L896) - [lib/collection/src/collection/mod.rs595-646](https://github.com/qdrant/qdrant/blob/48203e41/lib/collection/src/collection/mod.rs#L595-L646)  ---",
+    "metadata": {
+      "chunk_id": "964dce06fd80-0020",
+      "source_file": "Docs\\Qdrant\\qdrant_qdrant\\_qdrant_qdrant_6.2-write-consistency-and-replication.md",
+      "filename": "_qdrant_qdrant_6.2-write-consistency-and-replication.md",
+      "file_extension": ".md",
+      "chunk_index": 20,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Consensus Synchronization"
+      ],
+      "heading_text": "Consensus Synchronization",
+      "token_count": 191,
+      "char_count": 704,
+      "start_char": 15865,
+      "end_char": 16569,
+      "semantic_score": 0.6,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.550377358490566,
+      "chunking_strategy": "hierarchical_balanced_structural",
+      "content_type": "list_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:43.483444",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 191,
+      "document_id": "964dce06fd80",
+      "document_name": "_qdrant_qdrant_6.2-write-consistency-and-replication",
+      "source_path": "Docs\\Qdrant\\qdrant_qdrant\\_qdrant_qdrant_6.2-write-consistency-and-replication.md",
+      "source_filename": "_qdrant_qdrant_6.2-write-consistency-and-replication.md",
+      "source_directory": "Docs\\Qdrant\\qdrant_qdrant",
+      "relative_path": "Docs\\Qdrant\\qdrant_qdrant\\_qdrant_qdrant_6.2-write-consistency-and-replication.md",
+      "hierarchy_path": "Consensus Synchronization",
+      "chunk_hash": "6db1bacc006c9ea6",
+      "content_digest": "6db1bacc006c9ea6",
+      "chunk_length": 704,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "collection",
+          "lib",
+          "src",
+          "mod",
+          "qdrant",
+          "consensus",
+          "peers",
+          "peer",
+          "the",
+          "locally",
+          "disabled",
+          "notify",
+          "shards",
+          "replica",
+          "set",
+          "https",
+          "github",
+          "com",
+          "blob",
+          "48203e41"
+        ],
+        "term_weights": [
+          {
+            "term": "collection",
+            "tf": 6,
+            "weight": 0.066667
+          },
+          {
+            "term": "lib",
+            "tf": 4,
+            "weight": 0.044444
+          },
+          {
+            "term": "src",
+            "tf": 4,
+            "weight": 0.044444
+          },
+          {
+            "term": "mod",
+            "tf": 4,
+            "weight": 0.044444
+          },
+          {
+            "term": "qdrant",
+            "tf": 4,
+            "weight": 0.044444
+          },
+          {
+            "term": "consensus",
+            "tf": 3,
+            "weight": 0.033333
+          },
+          {
+            "term": "peers",
+            "tf": 3,
+            "weight": 0.033333
+          },
+          {
+            "term": "peer",
+            "tf": 3,
+            "weight": 0.033333
+          },
+          {
+            "term": "the",
+            "tf": 2,
+            "weight": 0.022222
+          },
+          {
+            "term": "locally",
+            "tf": 2,
+            "weight": 0.022222
+          },
+          {
+            "term": "disabled",
+            "tf": 2,
+            "weight": 0.022222
+          },
+          {
+            "term": "notify",
+            "tf": 2,
+            "weight": 0.022222
+          },
+          {
+            "term": "shards",
+            "tf": 2,
+            "weight": 0.022222
+          },
+          {
+            "term": "replica",
+            "tf": 2,
+            "weight": 0.022222
+          },
+          {
+            "term": "set",
+            "tf": 2,
+            "weight": 0.022222
+          },
+          {
+            "term": "https",
+            "tf": 2,
+            "weight": 0.022222
+          },
+          {
+            "term": "github",
+            "tf": 2,
+            "weight": 0.022222
+          },
+          {
+            "term": "com",
+            "tf": 2,
+            "weight": 0.022222
+          },
+          {
+            "term": "blob",
+            "tf": 2,
+            "weight": 0.022222
+          },
+          {
+            "term": "48203e41",
+            "tf": 2,
+            "weight": 0.022222
+          }
+        ],
+        "unique_terms": 55,
+        "total_terms": 90
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Consensus Synchronization",
+        "collection",
+        "consensus",
+        "lib",
+        "locally",
+        "mod",
+        "peer",
+        "peers",
+        "qdrant",
+        "src",
+        "the"
+      ],
+      "collection_name": "Qdrant"
+    },
+    "advanced_scores": {
+      "semantic": 0.6,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.550377358490566,
+      "overall": 0.6834591194968554
+    }
+  },
+  {
+    "text": "### Write Rate Limiter  The `write_rate_limiter` is configured per replica set: ``` ``` The rate limiter is initialized from collection configuration: ``` ``` **Sources:**  - [lib/collection/src/shards/replica\\_set/mod.rs117](https://github.com/qdrant/qdrant/blob/48203e41/lib/collection/src/shards/replica_set/mod.rs#L117-L117) - [lib/collection/src/shards/replica\\_set/mod.rs196-204](https://github.com/qdrant/qdrant/blob/48203e41/lib/collection/src/shards/replica_set/mod.rs#L196-L204)",
+    "metadata": {
+      "chunk_id": "964dce06fd80-0022",
+      "source_file": "Docs\\Qdrant\\qdrant_qdrant\\_qdrant_qdrant_6.2-write-consistency-and-replication.md",
+      "filename": "_qdrant_qdrant_6.2-write-consistency-and-replication.md",
+      "file_extension": ".md",
+      "chunk_index": 22,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Write Rate Limiter"
+      ],
+      "heading_text": "Write Rate Limiter",
+      "token_count": 141,
+      "char_count": 488,
+      "start_char": 16675,
+      "end_char": 17163,
+      "semantic_score": 0.7,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5042857142857142,
+      "chunking_strategy": "hierarchical_balanced_structural",
+      "content_type": "code_block",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:43.486111",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 141,
+      "document_id": "964dce06fd80",
+      "document_name": "_qdrant_qdrant_6.2-write-consistency-and-replication",
+      "source_path": "Docs\\Qdrant\\qdrant_qdrant\\_qdrant_qdrant_6.2-write-consistency-and-replication.md",
+      "source_filename": "_qdrant_qdrant_6.2-write-consistency-and-replication.md",
+      "source_directory": "Docs\\Qdrant\\qdrant_qdrant",
+      "relative_path": "Docs\\Qdrant\\qdrant_qdrant\\_qdrant_qdrant_6.2-write-consistency-and-replication.md",
+      "hierarchy_path": "Write Rate Limiter",
+      "chunk_hash": "73bb47a22d13849e",
+      "content_digest": "73bb47a22d13849e",
+      "chunk_length": 488,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "replica",
+          "set",
+          "collection",
+          "lib",
+          "src",
+          "shards",
+          "mod",
+          "qdrant",
+          "rate",
+          "limiter",
+          "write",
+          "the",
+          "https",
+          "github",
+          "com",
+          "blob",
+          "48203e41",
+          "l117",
+          "configured",
+          "per"
+        ],
+        "term_weights": [
+          {
+            "term": "replica",
+            "tf": 5,
+            "weight": 0.073529
+          },
+          {
+            "term": "set",
+            "tf": 5,
+            "weight": 0.073529
+          },
+          {
+            "term": "collection",
+            "tf": 5,
+            "weight": 0.073529
+          },
+          {
+            "term": "lib",
+            "tf": 4,
+            "weight": 0.058824
+          },
+          {
+            "term": "src",
+            "tf": 4,
+            "weight": 0.058824
+          },
+          {
+            "term": "shards",
+            "tf": 4,
+            "weight": 0.058824
+          },
+          {
+            "term": "mod",
+            "tf": 4,
+            "weight": 0.058824
+          },
+          {
+            "term": "qdrant",
+            "tf": 4,
+            "weight": 0.058824
+          },
+          {
+            "term": "rate",
+            "tf": 3,
+            "weight": 0.044118
+          },
+          {
+            "term": "limiter",
+            "tf": 3,
+            "weight": 0.044118
+          },
+          {
+            "term": "write",
+            "tf": 2,
+            "weight": 0.029412
+          },
+          {
+            "term": "the",
+            "tf": 2,
+            "weight": 0.029412
+          },
+          {
+            "term": "https",
+            "tf": 2,
+            "weight": 0.029412
+          },
+          {
+            "term": "github",
+            "tf": 2,
+            "weight": 0.029412
+          },
+          {
+            "term": "com",
+            "tf": 2,
+            "weight": 0.029412
+          },
+          {
+            "term": "blob",
+            "tf": 2,
+            "weight": 0.029412
+          },
+          {
+            "term": "48203e41",
+            "tf": 2,
+            "weight": 0.029412
+          },
+          {
+            "term": "l117",
+            "tf": 2,
+            "weight": 0.029412
+          },
+          {
+            "term": "configured",
+            "tf": 1,
+            "weight": 0.014706
+          },
+          {
+            "term": "per",
+            "tf": 1,
+            "weight": 0.014706
+          }
+        ],
+        "unique_terms": 29,
+        "total_terms": 68
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Write Rate Limiter",
+        "collection",
+        "lib",
+        "limiter",
+        "mod",
+        "qdrant",
+        "rate",
+        "replica",
+        "set",
+        "shards",
+        "src"
+      ],
+      "collection_name": "Qdrant"
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5042857142857142,
+      "overall": 0.7014285714285714
+    }
+  },
+  {
+    "text": "### Failure Recovery Example ``` ``` **Sources:**  - [lib/collection/src/shards/replica\\_set/update.rs432-495](https://github.com/qdrant/qdrant/blob/48203e41/lib/collection/src/shards/replica_set/update.rs#L432-L495) - [lib/collection/src/shards/replica\\_set/mod.rs872-896](https://github.com/qdrant/qdrant/blob/48203e41/lib/collection/src/shards/replica_set/mod.rs#L872-L896) - [lib/collection/src/collection/mod.rs595-646](https://github.com/qdrant/qdrant/blob/48203e41/lib/collection/src/collection/mod.rs#L595-L646)  ---",
+    "metadata": {
+      "chunk_id": "964dce06fd80-0027",
+      "source_file": "Docs\\Qdrant\\qdrant_qdrant\\_qdrant_qdrant_6.2-write-consistency-and-replication.md",
+      "filename": "_qdrant_qdrant_6.2-write-consistency-and-replication.md",
+      "file_extension": ".md",
+      "chunk_index": 27,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Failure Recovery Example"
+      ],
+      "heading_text": "Failure Recovery Example",
+      "token_count": 162,
+      "char_count": 524,
+      "start_char": 18970,
+      "end_char": 19494,
+      "semantic_score": 0.6,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5257142857142857,
+      "chunking_strategy": "hierarchical_balanced_structural",
+      "content_type": "code_block",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:43.493628",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 162,
+      "document_id": "964dce06fd80",
+      "document_name": "_qdrant_qdrant_6.2-write-consistency-and-replication",
+      "source_path": "Docs\\Qdrant\\qdrant_qdrant\\_qdrant_qdrant_6.2-write-consistency-and-replication.md",
+      "source_filename": "_qdrant_qdrant_6.2-write-consistency-and-replication.md",
+      "source_directory": "Docs\\Qdrant\\qdrant_qdrant",
+      "relative_path": "Docs\\Qdrant\\qdrant_qdrant\\_qdrant_qdrant_6.2-write-consistency-and-replication.md",
+      "hierarchy_path": "Failure Recovery Example",
+      "chunk_hash": "033e4c16e8f17838",
+      "content_digest": "033e4c16e8f17838",
+      "chunk_length": 524,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "collection",
+          "lib",
+          "src",
+          "qdrant",
+          "shards",
+          "replica",
+          "set",
+          "mod",
+          "https",
+          "github",
+          "com",
+          "blob",
+          "48203e41",
+          "update",
+          "failure",
+          "recovery",
+          "example",
+          "sources",
+          "rs432",
+          "495"
+        ],
+        "term_weights": [
+          {
+            "term": "collection",
+            "tf": 8,
+            "weight": 0.106667
+          },
+          {
+            "term": "lib",
+            "tf": 6,
+            "weight": 0.08
+          },
+          {
+            "term": "src",
+            "tf": 6,
+            "weight": 0.08
+          },
+          {
+            "term": "qdrant",
+            "tf": 6,
+            "weight": 0.08
+          },
+          {
+            "term": "shards",
+            "tf": 4,
+            "weight": 0.053333
+          },
+          {
+            "term": "replica",
+            "tf": 4,
+            "weight": 0.053333
+          },
+          {
+            "term": "set",
+            "tf": 4,
+            "weight": 0.053333
+          },
+          {
+            "term": "mod",
+            "tf": 4,
+            "weight": 0.053333
+          },
+          {
+            "term": "https",
+            "tf": 3,
+            "weight": 0.04
+          },
+          {
+            "term": "github",
+            "tf": 3,
+            "weight": 0.04
+          },
+          {
+            "term": "com",
+            "tf": 3,
+            "weight": 0.04
+          },
+          {
+            "term": "blob",
+            "tf": 3,
+            "weight": 0.04
+          },
+          {
+            "term": "48203e41",
+            "tf": 3,
+            "weight": 0.04
+          },
+          {
+            "term": "update",
+            "tf": 2,
+            "weight": 0.026667
+          },
+          {
+            "term": "failure",
+            "tf": 1,
+            "weight": 0.013333
+          },
+          {
+            "term": "recovery",
+            "tf": 1,
+            "weight": 0.013333
+          },
+          {
+            "term": "example",
+            "tf": 1,
+            "weight": 0.013333
+          },
+          {
+            "term": "sources",
+            "tf": 1,
+            "weight": 0.013333
+          },
+          {
+            "term": "rs432",
+            "tf": 1,
+            "weight": 0.013333
+          },
+          {
+            "term": "495",
+            "tf": 1,
+            "weight": 0.013333
+          }
+        ],
+        "unique_terms": 30,
+        "total_terms": 75
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Failure Recovery Example",
+        "collection",
+        "github",
+        "https",
+        "lib",
+        "mod",
+        "qdrant",
+        "replica",
+        "set",
+        "shards",
+        "src"
+      ],
+      "collection_name": "Qdrant"
+    },
+    "advanced_scores": {
+      "semantic": 0.6,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5257142857142857,
+      "overall": 0.6752380952380953
+    }
+  },
+  {
+    "text": "## Key Takeaways  1. **Three ordering levels:** Weak (eventual), Medium (leader-based, alive peers), Strong (leader-based, all peers)  2. **Logical clocks:** Every operation receives a `ClockTag` with monotonically increasing ticks to detect conflicts  3. **Write consistency factor:** Configurable number of replicas that must successfully apply an update  4. **Automatic failure recovery:** Failed replicas are marked locally disabled, reported to consensus, and automatically recovered via shard transfer  5. **Rate limiting:** Optional per-minute write rate limits in strict mode, with cost based on affected points  6. **Parallel execution:** Updates are sent to all replicas in parallel (with optional concurrency limit), reducing latency  7. **Retry mechanism:** Clock-rejected operations are retried up to 3 times with fresh clocks  The combination of these mechanisms enables Qdrant to provide tunable consistency guarantees while maintaining high availability and performance across distributed replicas. **Sources:**  - [lib/collection/src/shards/replica\\_set/update.rs1-686](https://github.com/qdrant/qdrant/blob/48203e41/lib/collection/src/shards/replica_set/update.rs#L1-L686) - [lib/collection/src/shards/replica\\_set/mod.rs1-1690](https://github.com/qdrant/qdrant/blob/48203e41/lib/collection/src/shards/replica_set/mod.rs#L1-L1690) - [lib/collection/src/collection/mod.rs595-646](https://github.com/qdrant/qdrant/blob/48203e41/lib/collection/src/collection/mod.rs#L595-L646)  Dismiss  Refresh this wiki  Enter email to refresh",
+    "metadata": {
+      "chunk_id": "964dce06fd80-0028",
+      "source_file": "Docs\\Qdrant\\qdrant_qdrant\\_qdrant_qdrant_6.2-write-consistency-and-replication.md",
+      "filename": "_qdrant_qdrant_6.2-write-consistency-and-replication.md",
+      "file_extension": ".md",
+      "chunk_index": 28,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Key Takeaways"
+      ],
+      "heading_text": "Key Takeaways",
+      "token_count": 370,
+      "char_count": 1543,
+      "start_char": 19498,
+      "end_char": 21041,
+      "semantic_score": 0.7,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5687181208053691,
+      "chunking_strategy": "hierarchical_balanced_structural",
+      "content_type": "list_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:43.495365",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 370,
+      "document_id": "964dce06fd80",
+      "document_name": "_qdrant_qdrant_6.2-write-consistency-and-replication",
+      "source_path": "Docs\\Qdrant\\qdrant_qdrant\\_qdrant_qdrant_6.2-write-consistency-and-replication.md",
+      "source_filename": "_qdrant_qdrant_6.2-write-consistency-and-replication.md",
+      "source_directory": "Docs\\Qdrant\\qdrant_qdrant",
+      "relative_path": "Docs\\Qdrant\\qdrant_qdrant\\_qdrant_qdrant_6.2-write-consistency-and-replication.md",
+      "hierarchy_path": "Key Takeaways",
+      "chunk_hash": "10e3cb8180f2d5d0",
+      "content_digest": "10e3cb8180f2d5d0",
+      "chunk_length": 1543,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "collection",
+          "qdrant",
+          "lib",
+          "src",
+          "with",
+          "replicas",
+          "shards",
+          "replica",
+          "set",
+          "mod",
+          "based",
+          "update",
+          "are",
+          "https",
+          "github",
+          "com",
+          "blob",
+          "48203e41",
+          "leader",
+          "peers"
+        ],
+        "term_weights": [
+          {
+            "term": "collection",
+            "tf": 8,
+            "weight": 0.041451
+          },
+          {
+            "term": "qdrant",
+            "tf": 7,
+            "weight": 0.036269
+          },
+          {
+            "term": "lib",
+            "tf": 6,
+            "weight": 0.031088
+          },
+          {
+            "term": "src",
+            "tf": 6,
+            "weight": 0.031088
+          },
+          {
+            "term": "with",
+            "tf": 4,
+            "weight": 0.020725
+          },
+          {
+            "term": "replicas",
+            "tf": 4,
+            "weight": 0.020725
+          },
+          {
+            "term": "shards",
+            "tf": 4,
+            "weight": 0.020725
+          },
+          {
+            "term": "replica",
+            "tf": 4,
+            "weight": 0.020725
+          },
+          {
+            "term": "set",
+            "tf": 4,
+            "weight": 0.020725
+          },
+          {
+            "term": "mod",
+            "tf": 4,
+            "weight": 0.020725
+          },
+          {
+            "term": "based",
+            "tf": 3,
+            "weight": 0.015544
+          },
+          {
+            "term": "update",
+            "tf": 3,
+            "weight": 0.015544
+          },
+          {
+            "term": "are",
+            "tf": 3,
+            "weight": 0.015544
+          },
+          {
+            "term": "https",
+            "tf": 3,
+            "weight": 0.015544
+          },
+          {
+            "term": "github",
+            "tf": 3,
+            "weight": 0.015544
+          },
+          {
+            "term": "com",
+            "tf": 3,
+            "weight": 0.015544
+          },
+          {
+            "term": "blob",
+            "tf": 3,
+            "weight": 0.015544
+          },
+          {
+            "term": "48203e41",
+            "tf": 3,
+            "weight": 0.015544
+          },
+          {
+            "term": "leader",
+            "tf": 2,
+            "weight": 0.010363
+          },
+          {
+            "term": "peers",
+            "tf": 2,
+            "weight": 0.010363
+          }
+        ],
+        "unique_terms": 124,
+        "total_terms": 193
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Key Takeaways",
+        "collection",
+        "lib",
+        "mod",
+        "qdrant",
+        "replica",
+        "replicas",
+        "set",
+        "shards",
+        "src",
+        "with"
+      ],
+      "collection_name": "Qdrant"
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5687181208053691,
+      "overall": 0.7229060402684563
+    }
+  },
+  {
+    "text": "### On this page  - [Write Consistency and Replication](#write-consistency-and-replication.md) - [Purpose and Scope](#purpose-and-scope.md) - [Write Ordering Levels](#write-ordering-levels.md) - [WriteOrdering and Leader Selection](#writeordering-and-leader-selection.md) - [Implementation Details](#implementation-details.md) - [Replica Coordination and Leader Selection](#replica-coordination-and-leader-selection.md) - [Leader-Based Update Flow](#leader-based-update-flow.md) - [Forwarding to Leader](#forwarding-to-leader.md) - [Clock-Based Consistency](#clock-based-consistency.md) - [ClockTag Structure](#clocktag-structure.md) - [Clock Rejection and Retry](#clock-rejection-and-retry.md) - [Clock Advancement](#clock-advancement.md) - [Write Consistency Factor](#write-consistency-factor.md) - [Configuration](#configuration.md) - [Success Criteria](#success-criteria.md) - [Handling Partial Failures](#handling-partial-failures.md) - [Failure Handling and Recovery](#failure-handling-and-recovery.md) - [Locally Disabled Peers](#locally-disabled-peers.md) - [Failure Detection Flow](#failure-detection-flow.md) - [Replica State Transitions](#replica-state-transitions.md) - [Consensus Synchronization](#consensus-synchronization.md) - [Rate Limiting](#rate-limiting.md) - [Write Rate Limiter](#write-rate-limiter.md) - [Rate Limit Enforcement](#rate-limit-enforcement.md) - [Exemptions](#exemptions.md) - [Complete Update Flow](#complete-update-flow.md) - [End-to-End Write Path with Consistency](#end-to-end-write-path-with-consistency.md) - [Failure Recovery Example](#failure-recovery-example.md) - [Key Takeaways](#key-takeaways.md)",
+    "metadata": {
+      "chunk_id": "964dce06fd80-0029",
+      "source_file": "Docs\\Qdrant\\qdrant_qdrant\\_qdrant_qdrant_6.2-write-consistency-and-replication.md",
+      "filename": "_qdrant_qdrant_6.2-write-consistency-and-replication.md",
+      "file_extension": ".md",
+      "chunk_index": 29,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "On this page"
+      ],
+      "heading_text": "On this page",
+      "token_count": 422,
+      "char_count": 1644,
+      "start_char": 21044,
+      "end_char": 22688,
+      "semantic_score": 0.6,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.7128068965517242,
+      "chunking_strategy": "hierarchical_balanced_structural",
+      "content_type": "code_block",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:43.499580",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 422,
+      "document_id": "964dce06fd80",
+      "document_name": "_qdrant_qdrant_6.2-write-consistency-and-replication",
+      "source_path": "Docs\\Qdrant\\qdrant_qdrant\\_qdrant_qdrant_6.2-write-consistency-and-replication.md",
+      "source_filename": "_qdrant_qdrant_6.2-write-consistency-and-replication.md",
+      "source_directory": "Docs\\Qdrant\\qdrant_qdrant",
+      "relative_path": "Docs\\Qdrant\\qdrant_qdrant\\_qdrant_qdrant_6.2-write-consistency-and-replication.md",
+      "hierarchy_path": "On this page",
+      "chunk_hash": "84d673f399f7c15c",
+      "content_digest": "84d673f399f7c15c",
+      "chunk_length": 1644,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "qdrant"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "and",
+          "write",
+          "consistency",
+          "leader",
+          "flow",
+          "clock",
+          "failure",
+          "rate",
+          "selection",
+          "replica",
+          "based",
+          "update",
+          "handling",
+          "recovery",
+          "end",
+          "replication",
+          "purpose",
+          "scope",
+          "ordering",
+          "levels"
+        ],
+        "term_weights": [
+          {
+            "term": "and",
+            "tf": 12,
+            "weight": 0.069767
+          },
+          {
+            "term": "write",
+            "tf": 10,
+            "weight": 0.05814
+          },
+          {
+            "term": "consistency",
+            "tf": 8,
+            "weight": 0.046512
+          },
+          {
+            "term": "leader",
+            "tf": 8,
+            "weight": 0.046512
+          },
+          {
+            "term": "flow",
+            "tf": 6,
+            "weight": 0.034884
+          },
+          {
+            "term": "clock",
+            "tf": 6,
+            "weight": 0.034884
+          },
+          {
+            "term": "failure",
+            "tf": 6,
+            "weight": 0.034884
+          },
+          {
+            "term": "rate",
+            "tf": 6,
+            "weight": 0.034884
+          },
+          {
+            "term": "selection",
+            "tf": 4,
+            "weight": 0.023256
+          },
+          {
+            "term": "replica",
+            "tf": 4,
+            "weight": 0.023256
+          },
+          {
+            "term": "based",
+            "tf": 4,
+            "weight": 0.023256
+          },
+          {
+            "term": "update",
+            "tf": 4,
+            "weight": 0.023256
+          },
+          {
+            "term": "handling",
+            "tf": 4,
+            "weight": 0.023256
+          },
+          {
+            "term": "recovery",
+            "tf": 4,
+            "weight": 0.023256
+          },
+          {
+            "term": "end",
+            "tf": 4,
+            "weight": 0.023256
+          },
+          {
+            "term": "replication",
+            "tf": 2,
+            "weight": 0.011628
+          },
+          {
+            "term": "purpose",
+            "tf": 2,
+            "weight": 0.011628
+          },
+          {
+            "term": "scope",
+            "tf": 2,
+            "weight": 0.011628
+          },
+          {
+            "term": "ordering",
+            "tf": 2,
+            "weight": 0.011628
+          },
+          {
+            "term": "levels",
+            "tf": 2,
+            "weight": 0.011628
+          }
+        ],
+        "unique_terms": 57,
+        "total_terms": 172
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "On this page",
+        "and",
+        "clock",
+        "consistency",
+        "failure",
+        "flow",
+        "leader",
+        "rate",
+        "replica",
+        "selection",
+        "write"
+      ],
+      "collection_name": "Qdrant"
+    },
+    "advanced_scores": {
+      "semantic": 0.6,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.7128068965517242,
+      "overall": 0.7376022988505747
+    }
+  }
+]

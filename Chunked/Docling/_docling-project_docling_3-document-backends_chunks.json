@@ -1,0 +1,1961 @@
+[
+  {
+    "text": "## Backend Architecture Overview  The backend system uses a hierarchical class structure to handle different document types with specialized parsing logic. All backends inherit from abstract base classes that define common interfaces for document processing. ``` ``` **Backend Class Hierarchy**  The architecture distinguishes between two main backend categories:  - **PaginatedDocumentBackend**: Backends that process documents page-by-page, typically for PDFs and images - **DeclarativeDocumentBackend**: Backends that can directly convert structured documents to `DoclingDocument` format  Sources: [docling/backend/abstract\\_backend.py13-64](https://github.com/docling-project/docling/blob/f7244a43/docling/backend/abstract_backend.py#L13-L64) [docling/document\\_converter.py16-29](https://github.com/docling-project/docling/blob/f7244a43/docling/document_converter.py#L16-L29)",
+    "metadata": {
+      "chunk_id": "b871941e9de1-0001",
+      "source_file": "Docs\\Docling\\_docling-project_docling_3-document-backends.md",
+      "filename": "_docling-project_docling_3-document-backends.md",
+      "file_extension": ".md",
+      "chunk_index": 1,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Backend Architecture Overview"
+      ],
+      "heading_text": "Backend Architecture Overview",
+      "token_count": 185,
+      "char_count": 880,
+      "start_char": 7330,
+      "end_char": 8210,
+      "semantic_score": 0.7,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.53,
+      "chunking_strategy": "hierarchical_balanced_structural",
+      "content_type": "code_block",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:06.003205",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 185,
+      "document_id": "b871941e9de1",
+      "document_name": "_docling-project_docling_3-document-backends",
+      "source_path": "Docs\\Docling\\_docling-project_docling_3-document-backends.md",
+      "source_filename": "_docling-project_docling_3-document-backends.md",
+      "source_directory": "Docs\\Docling",
+      "relative_path": "Docs\\Docling\\_docling-project_docling_3-document-backends.md",
+      "hierarchy_path": "Backend Architecture Overview",
+      "chunk_hash": "df3c02e8831f7aa0",
+      "content_digest": "df3c02e8831f7aa0",
+      "chunk_length": 880,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "docling"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "backend",
+          "docling",
+          "document",
+          "backends",
+          "abstract",
+          "that",
+          "architecture",
+          "the",
+          "class",
+          "for",
+          "documents",
+          "page",
+          "https",
+          "github",
+          "com",
+          "project",
+          "blob",
+          "f7244a43",
+          "converter",
+          "overview"
+        ],
+        "term_weights": [
+          {
+            "term": "backend",
+            "tf": 8,
+            "weight": 0.078431
+          },
+          {
+            "term": "docling",
+            "tf": 8,
+            "weight": 0.078431
+          },
+          {
+            "term": "document",
+            "tf": 4,
+            "weight": 0.039216
+          },
+          {
+            "term": "backends",
+            "tf": 3,
+            "weight": 0.029412
+          },
+          {
+            "term": "abstract",
+            "tf": 3,
+            "weight": 0.029412
+          },
+          {
+            "term": "that",
+            "tf": 3,
+            "weight": 0.029412
+          },
+          {
+            "term": "architecture",
+            "tf": 2,
+            "weight": 0.019608
+          },
+          {
+            "term": "the",
+            "tf": 2,
+            "weight": 0.019608
+          },
+          {
+            "term": "class",
+            "tf": 2,
+            "weight": 0.019608
+          },
+          {
+            "term": "for",
+            "tf": 2,
+            "weight": 0.019608
+          },
+          {
+            "term": "documents",
+            "tf": 2,
+            "weight": 0.019608
+          },
+          {
+            "term": "page",
+            "tf": 2,
+            "weight": 0.019608
+          },
+          {
+            "term": "https",
+            "tf": 2,
+            "weight": 0.019608
+          },
+          {
+            "term": "github",
+            "tf": 2,
+            "weight": 0.019608
+          },
+          {
+            "term": "com",
+            "tf": 2,
+            "weight": 0.019608
+          },
+          {
+            "term": "project",
+            "tf": 2,
+            "weight": 0.019608
+          },
+          {
+            "term": "blob",
+            "tf": 2,
+            "weight": 0.019608
+          },
+          {
+            "term": "f7244a43",
+            "tf": 2,
+            "weight": 0.019608
+          },
+          {
+            "term": "converter",
+            "tf": 2,
+            "weight": 0.019608
+          },
+          {
+            "term": "overview",
+            "tf": 1,
+            "weight": 0.009804
+          }
+        ],
+        "unique_terms": 66,
+        "total_terms": 102
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Backend Architecture Overview",
+        "abstract",
+        "architecture",
+        "backend",
+        "backends",
+        "class",
+        "docling",
+        "document",
+        "for",
+        "that",
+        "the"
+      ],
+      "collection_name": "Docling"
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.53,
+      "overall": 0.71
+    }
+  },
+  {
+    "text": "## Format Detection and Backend Selection  The system automatically detects document formats and selects appropriate backends through a sophisticated detection process implemented in `_DocumentConversionInput`. ``` ``` **Format Detection and Backend Selection Flow**  The detection process handles complex scenarios like ZIP-based Office formats and ambiguous MIME types through multi-stage analysis. Sources: [docling/datamodel/document.py280-374](https://github.com/docling-project/docling/blob/f7244a43/docling/datamodel/document.py#L280-L374) [docling/datamodel/base\\_models.py85-139](https://github.com/docling-project/docling/blob/f7244a43/docling/datamodel/base_models.py#L85-L139)",
+    "metadata": {
+      "chunk_id": "b871941e9de1-0002",
+      "source_file": "Docs\\Docling\\_docling-project_docling_3-document-backends.md",
+      "filename": "_docling-project_docling_3-document-backends.md",
+      "file_extension": ".md",
+      "chunk_index": 2,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Format Detection and Backend Selection"
+      ],
+      "heading_text": "Format Detection and Backend Selection",
+      "token_count": 142,
+      "char_count": 688,
+      "start_char": 8214,
+      "end_char": 8902,
+      "semantic_score": 0.7,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.515,
+      "chunking_strategy": "hierarchical_balanced_structural",
+      "content_type": "code_block",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:06.004656",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 142,
+      "document_id": "b871941e9de1",
+      "document_name": "_docling-project_docling_3-document-backends",
+      "source_path": "Docs\\Docling\\_docling-project_docling_3-document-backends.md",
+      "source_filename": "_docling-project_docling_3-document-backends.md",
+      "source_directory": "Docs\\Docling",
+      "relative_path": "Docs\\Docling\\_docling-project_docling_3-document-backends.md",
+      "hierarchy_path": "Format Detection and Backend Selection",
+      "chunk_hash": "f37d4712148a8461",
+      "content_digest": "f37d4712148a8461",
+      "chunk_length": 688,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "docling"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "docling",
+          "detection",
+          "and",
+          "datamodel",
+          "document",
+          "format",
+          "backend",
+          "selection",
+          "the",
+          "formats",
+          "through",
+          "process",
+          "https",
+          "github",
+          "com",
+          "project",
+          "blob",
+          "f7244a43",
+          "base",
+          "models"
+        ],
+        "term_weights": [
+          {
+            "term": "docling",
+            "tf": 8,
+            "weight": 0.094118
+          },
+          {
+            "term": "detection",
+            "tf": 4,
+            "weight": 0.047059
+          },
+          {
+            "term": "and",
+            "tf": 4,
+            "weight": 0.047059
+          },
+          {
+            "term": "datamodel",
+            "tf": 4,
+            "weight": 0.047059
+          },
+          {
+            "term": "document",
+            "tf": 3,
+            "weight": 0.035294
+          },
+          {
+            "term": "format",
+            "tf": 2,
+            "weight": 0.023529
+          },
+          {
+            "term": "backend",
+            "tf": 2,
+            "weight": 0.023529
+          },
+          {
+            "term": "selection",
+            "tf": 2,
+            "weight": 0.023529
+          },
+          {
+            "term": "the",
+            "tf": 2,
+            "weight": 0.023529
+          },
+          {
+            "term": "formats",
+            "tf": 2,
+            "weight": 0.023529
+          },
+          {
+            "term": "through",
+            "tf": 2,
+            "weight": 0.023529
+          },
+          {
+            "term": "process",
+            "tf": 2,
+            "weight": 0.023529
+          },
+          {
+            "term": "https",
+            "tf": 2,
+            "weight": 0.023529
+          },
+          {
+            "term": "github",
+            "tf": 2,
+            "weight": 0.023529
+          },
+          {
+            "term": "com",
+            "tf": 2,
+            "weight": 0.023529
+          },
+          {
+            "term": "project",
+            "tf": 2,
+            "weight": 0.023529
+          },
+          {
+            "term": "blob",
+            "tf": 2,
+            "weight": 0.023529
+          },
+          {
+            "term": "f7244a43",
+            "tf": 2,
+            "weight": 0.023529
+          },
+          {
+            "term": "base",
+            "tf": 2,
+            "weight": 0.023529
+          },
+          {
+            "term": "models",
+            "tf": 2,
+            "weight": 0.023529
+          }
+        ],
+        "unique_terms": 52,
+        "total_terms": 85
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Format Detection and Backend Selection",
+        "and",
+        "backend",
+        "datamodel",
+        "detection",
+        "docling",
+        "document",
+        "format",
+        "formats",
+        "selection",
+        "the"
+      ],
+      "collection_name": "Docling"
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.515,
+      "overall": 0.705
+    }
+  },
+  {
+    "text": "## PDF Processing Backends\n\nPDF backends represent the most sophisticated document processing capabilities in Docling, with multiple implementation options for different use cases.",
+    "metadata": {
+      "chunk_id": "b871941e9de1-0003",
+      "source_file": "Docs\\Docling\\_docling-project_docling_3-document-backends.md",
+      "filename": "_docling-project_docling_3-document-backends.md",
+      "file_extension": ".md",
+      "chunk_index": 3,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "PDF Processing Backends"
+      ],
+      "heading_text": "PDF Processing Backends",
+      "token_count": 29,
+      "char_count": 180,
+      "start_char": 8907,
+      "end_char": 9087,
+      "semantic_score": 0.8,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5508695652173913,
+      "chunking_strategy": "hierarchical_balanced_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:06.004970",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 29,
+      "document_id": "b871941e9de1",
+      "document_name": "_docling-project_docling_3-document-backends",
+      "source_path": "Docs\\Docling\\_docling-project_docling_3-document-backends.md",
+      "source_filename": "_docling-project_docling_3-document-backends.md",
+      "source_directory": "Docs\\Docling",
+      "relative_path": "Docs\\Docling\\_docling-project_docling_3-document-backends.md",
+      "hierarchy_path": "PDF Processing Backends",
+      "chunk_hash": "01fe785d62029833",
+      "content_digest": "01fe785d62029833",
+      "chunk_length": 180,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "docling"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "pdf",
+          "processing",
+          "backends",
+          "represent",
+          "the",
+          "most",
+          "sophisticated",
+          "document",
+          "capabilities",
+          "docling",
+          "with",
+          "multiple",
+          "implementation",
+          "options",
+          "for",
+          "different",
+          "use",
+          "cases"
+        ],
+        "term_weights": [
+          {
+            "term": "pdf",
+            "tf": 2,
+            "weight": 0.095238
+          },
+          {
+            "term": "processing",
+            "tf": 2,
+            "weight": 0.095238
+          },
+          {
+            "term": "backends",
+            "tf": 2,
+            "weight": 0.095238
+          },
+          {
+            "term": "represent",
+            "tf": 1,
+            "weight": 0.047619
+          },
+          {
+            "term": "the",
+            "tf": 1,
+            "weight": 0.047619
+          },
+          {
+            "term": "most",
+            "tf": 1,
+            "weight": 0.047619
+          },
+          {
+            "term": "sophisticated",
+            "tf": 1,
+            "weight": 0.047619
+          },
+          {
+            "term": "document",
+            "tf": 1,
+            "weight": 0.047619
+          },
+          {
+            "term": "capabilities",
+            "tf": 1,
+            "weight": 0.047619
+          },
+          {
+            "term": "docling",
+            "tf": 1,
+            "weight": 0.047619
+          },
+          {
+            "term": "with",
+            "tf": 1,
+            "weight": 0.047619
+          },
+          {
+            "term": "multiple",
+            "tf": 1,
+            "weight": 0.047619
+          },
+          {
+            "term": "implementation",
+            "tf": 1,
+            "weight": 0.047619
+          },
+          {
+            "term": "options",
+            "tf": 1,
+            "weight": 0.047619
+          },
+          {
+            "term": "for",
+            "tf": 1,
+            "weight": 0.047619
+          },
+          {
+            "term": "different",
+            "tf": 1,
+            "weight": 0.047619
+          },
+          {
+            "term": "use",
+            "tf": 1,
+            "weight": 0.047619
+          },
+          {
+            "term": "cases",
+            "tf": 1,
+            "weight": 0.047619
+          }
+        ],
+        "unique_terms": 18,
+        "total_terms": 21
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "PDF Processing Backends",
+        "backends",
+        "capabilities",
+        "docling",
+        "document",
+        "most",
+        "pdf",
+        "processing",
+        "represent",
+        "sophisticated",
+        "the"
+      ],
+      "collection_name": "Docling"
+    },
+    "advanced_scores": {
+      "semantic": 0.8,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5508695652173913,
+      "overall": 0.7502898550724638
+    }
+  },
+  {
+    "text": "### DoclingParseV4DocumentBackend  The primary PDF backend using the latest version of the docling-parse library for advanced PDF processing. ``` ``` **DoclingParseV4 Backend Processing Flow**  Sources: [docling/backend/docling\\_parse\\_v4\\_backend.py](https://github.com/docling-project/docling/blob/f7244a43/docling/backend/docling_parse_v4_backend.py) (referenced but not shown in files), [docling/document\\_converter.py118-124](https://github.com/docling-project/docling/blob/f7244a43/docling/document_converter.py#L118-L124)",
+    "metadata": {
+      "chunk_id": "b871941e9de1-0004",
+      "source_file": "Docs\\Docling\\_docling-project_docling_3-document-backends.md",
+      "filename": "_docling-project_docling_3-document-backends.md",
+      "file_extension": ".md",
+      "chunk_index": 4,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "DoclingParseV4DocumentBackend"
+      ],
+      "heading_text": "DoclingParseV4DocumentBackend",
+      "token_count": 130,
+      "char_count": 528,
+      "start_char": 9089,
+      "end_char": 9617,
+      "semantic_score": 0.7,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5445454545454546,
+      "chunking_strategy": "hierarchical_balanced_structural",
+      "content_type": "code_block",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:06.006101",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 130,
+      "document_id": "b871941e9de1",
+      "document_name": "_docling-project_docling_3-document-backends",
+      "source_path": "Docs\\Docling\\_docling-project_docling_3-document-backends.md",
+      "source_filename": "_docling-project_docling_3-document-backends.md",
+      "source_directory": "Docs\\Docling",
+      "relative_path": "Docs\\Docling\\_docling-project_docling_3-document-backends.md",
+      "hierarchy_path": "DoclingParseV4DocumentBackend",
+      "chunk_hash": "9ecfe02422b52280",
+      "content_digest": "9ecfe02422b52280",
+      "chunk_length": 528,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "docling"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "docling",
+          "backend",
+          "the",
+          "parse",
+          "pdf",
+          "processing",
+          "https",
+          "github",
+          "com",
+          "project",
+          "blob",
+          "f7244a43",
+          "document",
+          "converter",
+          "doclingparsev4documentbackend",
+          "primary",
+          "using",
+          "latest",
+          "version",
+          "library"
+        ],
+        "term_weights": [
+          {
+            "term": "docling",
+            "tf": 11,
+            "weight": 0.174603
+          },
+          {
+            "term": "backend",
+            "tf": 6,
+            "weight": 0.095238
+          },
+          {
+            "term": "the",
+            "tf": 3,
+            "weight": 0.047619
+          },
+          {
+            "term": "parse",
+            "tf": 3,
+            "weight": 0.047619
+          },
+          {
+            "term": "pdf",
+            "tf": 2,
+            "weight": 0.031746
+          },
+          {
+            "term": "processing",
+            "tf": 2,
+            "weight": 0.031746
+          },
+          {
+            "term": "https",
+            "tf": 2,
+            "weight": 0.031746
+          },
+          {
+            "term": "github",
+            "tf": 2,
+            "weight": 0.031746
+          },
+          {
+            "term": "com",
+            "tf": 2,
+            "weight": 0.031746
+          },
+          {
+            "term": "project",
+            "tf": 2,
+            "weight": 0.031746
+          },
+          {
+            "term": "blob",
+            "tf": 2,
+            "weight": 0.031746
+          },
+          {
+            "term": "f7244a43",
+            "tf": 2,
+            "weight": 0.031746
+          },
+          {
+            "term": "document",
+            "tf": 2,
+            "weight": 0.031746
+          },
+          {
+            "term": "converter",
+            "tf": 2,
+            "weight": 0.031746
+          },
+          {
+            "term": "doclingparsev4documentbackend",
+            "tf": 1,
+            "weight": 0.015873
+          },
+          {
+            "term": "primary",
+            "tf": 1,
+            "weight": 0.015873
+          },
+          {
+            "term": "using",
+            "tf": 1,
+            "weight": 0.015873
+          },
+          {
+            "term": "latest",
+            "tf": 1,
+            "weight": 0.015873
+          },
+          {
+            "term": "version",
+            "tf": 1,
+            "weight": 0.015873
+          },
+          {
+            "term": "library",
+            "tf": 1,
+            "weight": 0.015873
+          }
+        ],
+        "unique_terms": 34,
+        "total_terms": 63
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "DoclingParseV4DocumentBackend",
+        "backend",
+        "com",
+        "docling",
+        "github",
+        "https",
+        "parse",
+        "pdf",
+        "processing",
+        "project",
+        "the"
+      ],
+      "collection_name": "Docling"
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5445454545454546,
+      "overall": 0.7148484848484848
+    }
+  },
+  {
+    "text": "### Legacy DoclingParse Backends\n\nThe system maintains backward compatibility with older docling-parse versions through dedicated backend implementations.\n\nSources: [docling/backend/docling\\_parse\\_backend.py200-238](https://github.com/docling-project/docling/blob/f7244a43/docling/backend/docling_parse_backend.py#L200-L238) [docling/backend/docling\\_parse\\_v2\\_backend.py228-277](https://github.com/docling-project/docling/blob/f7244a43/docling/backend/docling_parse_v2_backend.py#L228-L277)",
+    "metadata": {
+      "chunk_id": "b871941e9de1-0006",
+      "source_file": "Docs\\Docling\\_docling-project_docling_3-document-backends.md",
+      "filename": "_docling-project_docling_3-document-backends.md",
+      "file_extension": ".md",
+      "chunk_index": 6,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Legacy DoclingParse Backends"
+      ],
+      "heading_text": "Legacy DoclingParse Backends",
+      "token_count": 119,
+      "char_count": 493,
+      "start_char": 10678,
+      "end_char": 11171,
+      "semantic_score": 0.7,
+      "structural_score": 0.7,
+      "retrieval_quality": 0.59,
+      "chunking_strategy": "hierarchical_balanced_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:06.007211",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 119,
+      "document_id": "b871941e9de1",
+      "document_name": "_docling-project_docling_3-document-backends",
+      "source_path": "Docs\\Docling\\_docling-project_docling_3-document-backends.md",
+      "source_filename": "_docling-project_docling_3-document-backends.md",
+      "source_directory": "Docs\\Docling",
+      "relative_path": "Docs\\Docling\\_docling-project_docling_3-document-backends.md",
+      "hierarchy_path": "Legacy DoclingParse Backends",
+      "chunk_hash": "7b8dd3fcc527059b",
+      "content_digest": "7b8dd3fcc527059b",
+      "chunk_length": 493,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "docling"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "docling",
+          "backend",
+          "parse",
+          "https",
+          "github",
+          "com",
+          "project",
+          "blob",
+          "f7244a43",
+          "legacy",
+          "doclingparse",
+          "backends",
+          "the",
+          "system",
+          "maintains",
+          "backward",
+          "compatibility",
+          "with",
+          "older",
+          "versions"
+        ],
+        "term_weights": [
+          {
+            "term": "docling",
+            "tf": 13,
+            "weight": 0.209677
+          },
+          {
+            "term": "backend",
+            "tf": 9,
+            "weight": 0.145161
+          },
+          {
+            "term": "parse",
+            "tf": 5,
+            "weight": 0.080645
+          },
+          {
+            "term": "https",
+            "tf": 2,
+            "weight": 0.032258
+          },
+          {
+            "term": "github",
+            "tf": 2,
+            "weight": 0.032258
+          },
+          {
+            "term": "com",
+            "tf": 2,
+            "weight": 0.032258
+          },
+          {
+            "term": "project",
+            "tf": 2,
+            "weight": 0.032258
+          },
+          {
+            "term": "blob",
+            "tf": 2,
+            "weight": 0.032258
+          },
+          {
+            "term": "f7244a43",
+            "tf": 2,
+            "weight": 0.032258
+          },
+          {
+            "term": "legacy",
+            "tf": 1,
+            "weight": 0.016129
+          },
+          {
+            "term": "doclingparse",
+            "tf": 1,
+            "weight": 0.016129
+          },
+          {
+            "term": "backends",
+            "tf": 1,
+            "weight": 0.016129
+          },
+          {
+            "term": "the",
+            "tf": 1,
+            "weight": 0.016129
+          },
+          {
+            "term": "system",
+            "tf": 1,
+            "weight": 0.016129
+          },
+          {
+            "term": "maintains",
+            "tf": 1,
+            "weight": 0.016129
+          },
+          {
+            "term": "backward",
+            "tf": 1,
+            "weight": 0.016129
+          },
+          {
+            "term": "compatibility",
+            "tf": 1,
+            "weight": 0.016129
+          },
+          {
+            "term": "with",
+            "tf": 1,
+            "weight": 0.016129
+          },
+          {
+            "term": "older",
+            "tf": 1,
+            "weight": 0.016129
+          },
+          {
+            "term": "versions",
+            "tf": 1,
+            "weight": 0.016129
+          }
+        ],
+        "unique_terms": 32,
+        "total_terms": 62
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Legacy DoclingParse Backends",
+        "backend",
+        "blob",
+        "com",
+        "docling",
+        "f7244a43",
+        "github",
+        "https",
+        "legacy",
+        "parse",
+        "project"
+      ],
+      "collection_name": "Docling"
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.7,
+      "retrieval_quality": 0.59,
+      "overall": 0.6633333333333332
+    }
+  },
+  {
+    "text": "## Office Document Backends  Office document backends handle Microsoft Office formats through direct parsing of the underlying XML structures. ``` ``` **Office Document Backend Processing**  Office backends extend `DeclarativeDocumentBackend` and implement direct conversion to `DoclingDocument` without requiring AI/ML pipeline processing. Sources: [docling/document\\_converter.py76-88](https://github.com/docling-project/docling/blob/f7244a43/docling/document_converter.py#L76-L88) [docling/document\\_converter.py132-144](https://github.com/docling-project/docling/blob/f7244a43/docling/document_converter.py#L132-L144)",
+    "metadata": {
+      "chunk_id": "b871941e9de1-0007",
+      "source_file": "Docs\\Docling\\_docling-project_docling_3-document-backends.md",
+      "filename": "_docling-project_docling_3-document-backends.md",
+      "file_extension": ".md",
+      "chunk_index": 7,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Office Document Backends"
+      ],
+      "heading_text": "Office Document Backends",
+      "token_count": 137,
+      "char_count": 621,
+      "start_char": 11173,
+      "end_char": 11794,
+      "semantic_score": 0.7,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5272093023255814,
+      "chunking_strategy": "hierarchical_balanced_structural",
+      "content_type": "code_block",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:06.008448",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 137,
+      "document_id": "b871941e9de1",
+      "document_name": "_docling-project_docling_3-document-backends",
+      "source_path": "Docs\\Docling\\_docling-project_docling_3-document-backends.md",
+      "source_filename": "_docling-project_docling_3-document-backends.md",
+      "source_directory": "Docs\\Docling",
+      "relative_path": "Docs\\Docling\\_docling-project_docling_3-document-backends.md",
+      "hierarchy_path": "Office Document Backends",
+      "chunk_hash": "b82b0a353abe68e5",
+      "content_digest": "b82b0a353abe68e5",
+      "chunk_length": 621,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "docling"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "docling",
+          "document",
+          "office",
+          "converter",
+          "backends",
+          "direct",
+          "processing",
+          "https",
+          "github",
+          "com",
+          "project",
+          "blob",
+          "f7244a43",
+          "handle",
+          "microsoft",
+          "formats",
+          "through",
+          "parsing",
+          "the",
+          "underlying"
+        ],
+        "term_weights": [
+          {
+            "term": "docling",
+            "tf": 8,
+            "weight": 0.114286
+          },
+          {
+            "term": "document",
+            "tf": 7,
+            "weight": 0.1
+          },
+          {
+            "term": "office",
+            "tf": 5,
+            "weight": 0.071429
+          },
+          {
+            "term": "converter",
+            "tf": 4,
+            "weight": 0.057143
+          },
+          {
+            "term": "backends",
+            "tf": 3,
+            "weight": 0.042857
+          },
+          {
+            "term": "direct",
+            "tf": 2,
+            "weight": 0.028571
+          },
+          {
+            "term": "processing",
+            "tf": 2,
+            "weight": 0.028571
+          },
+          {
+            "term": "https",
+            "tf": 2,
+            "weight": 0.028571
+          },
+          {
+            "term": "github",
+            "tf": 2,
+            "weight": 0.028571
+          },
+          {
+            "term": "com",
+            "tf": 2,
+            "weight": 0.028571
+          },
+          {
+            "term": "project",
+            "tf": 2,
+            "weight": 0.028571
+          },
+          {
+            "term": "blob",
+            "tf": 2,
+            "weight": 0.028571
+          },
+          {
+            "term": "f7244a43",
+            "tf": 2,
+            "weight": 0.028571
+          },
+          {
+            "term": "handle",
+            "tf": 1,
+            "weight": 0.014286
+          },
+          {
+            "term": "microsoft",
+            "tf": 1,
+            "weight": 0.014286
+          },
+          {
+            "term": "formats",
+            "tf": 1,
+            "weight": 0.014286
+          },
+          {
+            "term": "through",
+            "tf": 1,
+            "weight": 0.014286
+          },
+          {
+            "term": "parsing",
+            "tf": 1,
+            "weight": 0.014286
+          },
+          {
+            "term": "the",
+            "tf": 1,
+            "weight": 0.014286
+          },
+          {
+            "term": "underlying",
+            "tf": 1,
+            "weight": 0.014286
+          }
+        ],
+        "unique_terms": 40,
+        "total_terms": 70
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Office Document Backends",
+        "backends",
+        "com",
+        "converter",
+        "direct",
+        "docling",
+        "document",
+        "github",
+        "https",
+        "office",
+        "processing"
+      ],
+      "collection_name": "Docling"
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5272093023255814,
+      "overall": 0.7090697674418603
+    }
+  },
+  {
+    "text": "### Structured Data Backends ``` ``` **Structured Data Backend Processing**  Sources: [docling/document\\_converter.py71-74](https://github.com/docling-project/docling/blob/f7244a43/docling/document_converter.py#L71-L74) [docling/document\\_converter.py169-171](https://github.com/docling-project/docling/blob/f7244a43/docling/document_converter.py#L169-L171)",
+    "metadata": {
+      "chunk_id": "b871941e9de1-0010",
+      "source_file": "Docs\\Docling\\_docling-project_docling_3-document-backends.md",
+      "filename": "_docling-project_docling_3-document-backends.md",
+      "file_extension": ".md",
+      "chunk_index": 10,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Structured Data Backends"
+      ],
+      "heading_text": "Structured Data Backends",
+      "token_count": 91,
+      "char_count": 357,
+      "start_char": 12479,
+      "end_char": 12836,
+      "semantic_score": 0.6,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5438461538461539,
+      "chunking_strategy": "hierarchical_balanced_structural",
+      "content_type": "code_block",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:06.009859",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 91,
+      "document_id": "b871941e9de1",
+      "document_name": "_docling-project_docling_3-document-backends",
+      "source_path": "Docs\\Docling\\_docling-project_docling_3-document-backends.md",
+      "source_filename": "_docling-project_docling_3-document-backends.md",
+      "source_directory": "Docs\\Docling",
+      "relative_path": "Docs\\Docling\\_docling-project_docling_3-document-backends.md",
+      "hierarchy_path": "Structured Data Backends",
+      "chunk_hash": "ecf57b3d861f6519",
+      "content_digest": "ecf57b3d861f6519",
+      "chunk_length": 357,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "docling"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "docling",
+          "document",
+          "converter",
+          "structured",
+          "data",
+          "https",
+          "github",
+          "com",
+          "project",
+          "blob",
+          "f7244a43",
+          "backends",
+          "backend",
+          "processing",
+          "sources",
+          "py71",
+          "l71",
+          "l74",
+          "py169",
+          "171"
+        ],
+        "term_weights": [
+          {
+            "term": "docling",
+            "tf": 8,
+            "weight": 0.186047
+          },
+          {
+            "term": "document",
+            "tf": 4,
+            "weight": 0.093023
+          },
+          {
+            "term": "converter",
+            "tf": 4,
+            "weight": 0.093023
+          },
+          {
+            "term": "structured",
+            "tf": 2,
+            "weight": 0.046512
+          },
+          {
+            "term": "data",
+            "tf": 2,
+            "weight": 0.046512
+          },
+          {
+            "term": "https",
+            "tf": 2,
+            "weight": 0.046512
+          },
+          {
+            "term": "github",
+            "tf": 2,
+            "weight": 0.046512
+          },
+          {
+            "term": "com",
+            "tf": 2,
+            "weight": 0.046512
+          },
+          {
+            "term": "project",
+            "tf": 2,
+            "weight": 0.046512
+          },
+          {
+            "term": "blob",
+            "tf": 2,
+            "weight": 0.046512
+          },
+          {
+            "term": "f7244a43",
+            "tf": 2,
+            "weight": 0.046512
+          },
+          {
+            "term": "backends",
+            "tf": 1,
+            "weight": 0.023256
+          },
+          {
+            "term": "backend",
+            "tf": 1,
+            "weight": 0.023256
+          },
+          {
+            "term": "processing",
+            "tf": 1,
+            "weight": 0.023256
+          },
+          {
+            "term": "sources",
+            "tf": 1,
+            "weight": 0.023256
+          },
+          {
+            "term": "py71",
+            "tf": 1,
+            "weight": 0.023256
+          },
+          {
+            "term": "l71",
+            "tf": 1,
+            "weight": 0.023256
+          },
+          {
+            "term": "l74",
+            "tf": 1,
+            "weight": 0.023256
+          },
+          {
+            "term": "py169",
+            "tf": 1,
+            "weight": 0.023256
+          },
+          {
+            "term": "171",
+            "tf": 1,
+            "weight": 0.023256
+          }
+        ],
+        "unique_terms": 22,
+        "total_terms": 43
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Structured Data Backends",
+        "blob",
+        "com",
+        "converter",
+        "data",
+        "docling",
+        "document",
+        "github",
+        "https",
+        "project",
+        "structured"
+      ],
+      "collection_name": "Docling"
+    },
+    "advanced_scores": {
+      "semantic": 0.6,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5438461538461539,
+      "overall": 0.6812820512820513
+    }
+  },
+  {
+    "text": "### Audio Processing Backend\n\nThe `NoOpBackend` serves as a placeholder for audio files, which are processed entirely through the ASR pipeline rather than traditional document parsing.\n\nSources: [docling/document\\_converter.py126-129](https://github.com/docling-project/docling/blob/f7244a43/docling/document_converter.py#L126-L129) [docling/document\\_converter.py154-172](https://github.com/docling-project/docling/blob/f7244a43/docling/document_converter.py#L154-L172)",
+    "metadata": {
+      "chunk_id": "b871941e9de1-0013",
+      "source_file": "Docs\\Docling\\_docling-project_docling_3-document-backends.md",
+      "filename": "_docling-project_docling_3-document-backends.md",
+      "file_extension": ".md",
+      "chunk_index": 13,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Audio Processing Backend"
+      ],
+      "heading_text": "Audio Processing Backend",
+      "token_count": 110,
+      "char_count": 470,
+      "start_char": 13045,
+      "end_char": 13515,
+      "semantic_score": 0.6,
+      "structural_score": 0.7,
+      "retrieval_quality": 0.5693103448275862,
+      "chunking_strategy": "hierarchical_balanced_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:06.010615",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 110,
+      "document_id": "b871941e9de1",
+      "document_name": "_docling-project_docling_3-document-backends",
+      "source_path": "Docs\\Docling\\_docling-project_docling_3-document-backends.md",
+      "source_filename": "_docling-project_docling_3-document-backends.md",
+      "source_directory": "Docs\\Docling",
+      "relative_path": "Docs\\Docling\\_docling-project_docling_3-document-backends.md",
+      "hierarchy_path": "Audio Processing Backend",
+      "chunk_hash": "0d7fe33d150d76a0",
+      "content_digest": "0d7fe33d150d76a0",
+      "chunk_length": 470,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "docling"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "docling",
+          "document",
+          "converter",
+          "audio",
+          "the",
+          "https",
+          "github",
+          "com",
+          "project",
+          "blob",
+          "f7244a43",
+          "processing",
+          "backend",
+          "noopbackend",
+          "serves",
+          "placeholder",
+          "for",
+          "files",
+          "which",
+          "are"
+        ],
+        "term_weights": [
+          {
+            "term": "docling",
+            "tf": 8,
+            "weight": 0.133333
+          },
+          {
+            "term": "document",
+            "tf": 5,
+            "weight": 0.083333
+          },
+          {
+            "term": "converter",
+            "tf": 4,
+            "weight": 0.066667
+          },
+          {
+            "term": "audio",
+            "tf": 2,
+            "weight": 0.033333
+          },
+          {
+            "term": "the",
+            "tf": 2,
+            "weight": 0.033333
+          },
+          {
+            "term": "https",
+            "tf": 2,
+            "weight": 0.033333
+          },
+          {
+            "term": "github",
+            "tf": 2,
+            "weight": 0.033333
+          },
+          {
+            "term": "com",
+            "tf": 2,
+            "weight": 0.033333
+          },
+          {
+            "term": "project",
+            "tf": 2,
+            "weight": 0.033333
+          },
+          {
+            "term": "blob",
+            "tf": 2,
+            "weight": 0.033333
+          },
+          {
+            "term": "f7244a43",
+            "tf": 2,
+            "weight": 0.033333
+          },
+          {
+            "term": "processing",
+            "tf": 1,
+            "weight": 0.016667
+          },
+          {
+            "term": "backend",
+            "tf": 1,
+            "weight": 0.016667
+          },
+          {
+            "term": "noopbackend",
+            "tf": 1,
+            "weight": 0.016667
+          },
+          {
+            "term": "serves",
+            "tf": 1,
+            "weight": 0.016667
+          },
+          {
+            "term": "placeholder",
+            "tf": 1,
+            "weight": 0.016667
+          },
+          {
+            "term": "for",
+            "tf": 1,
+            "weight": 0.016667
+          },
+          {
+            "term": "files",
+            "tf": 1,
+            "weight": 0.016667
+          },
+          {
+            "term": "which",
+            "tf": 1,
+            "weight": 0.016667
+          },
+          {
+            "term": "are",
+            "tf": 1,
+            "weight": 0.016667
+          }
+        ],
+        "unique_terms": 38,
+        "total_terms": 60
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Audio Processing Backend",
+        "audio",
+        "blob",
+        "com",
+        "converter",
+        "docling",
+        "document",
+        "github",
+        "https",
+        "project",
+        "the"
+      ],
+      "collection_name": "Docling"
+    },
+    "advanced_scores": {
+      "semantic": 0.6,
+      "structural": 0.7,
+      "retrieval_quality": 0.5693103448275862,
+      "overall": 0.6231034482758621
+    }
+  },
+  {
+    "text": "## Backend Lifecycle and Integration  Document backends follow a structured lifecycle within the conversion process, managed by the `DocumentConverter` class. ``` ``` **Backend Lifecycle in Document Conversion**  The lifecycle ensures proper resource management and error handling throughout the conversion process. Sources: [docling/datamodel/document.py183-191](https://github.com/docling-project/docling/blob/f7244a43/docling/datamodel/document.py#L183-L191) [docling/document\\_converter.py376-428](https://github.com/docling-project/docling/blob/f7244a43/docling/document_converter.py#L376-L428)",
+    "metadata": {
+      "chunk_id": "b871941e9de1-0014",
+      "source_file": "Docs\\Docling\\_docling-project_docling_3-document-backends.md",
+      "filename": "_docling-project_docling_3-document-backends.md",
+      "file_extension": ".md",
+      "chunk_index": 14,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Backend Lifecycle and Integration"
+      ],
+      "heading_text": "Backend Lifecycle and Integration",
+      "token_count": 128,
+      "char_count": 599,
+      "start_char": 13517,
+      "end_char": 14116,
+      "semantic_score": 0.7,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5202325581395348,
+      "chunking_strategy": "hierarchical_balanced_structural",
+      "content_type": "code_block",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:06.011889",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 128,
+      "document_id": "b871941e9de1",
+      "document_name": "_docling-project_docling_3-document-backends",
+      "source_path": "Docs\\Docling\\_docling-project_docling_3-document-backends.md",
+      "source_filename": "_docling-project_docling_3-document-backends.md",
+      "source_directory": "Docs\\Docling",
+      "relative_path": "Docs\\Docling\\_docling-project_docling_3-document-backends.md",
+      "hierarchy_path": "Backend Lifecycle and Integration",
+      "chunk_hash": "71a5a78afc126159",
+      "content_digest": "71a5a78afc126159",
+      "chunk_length": 599,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "docling"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "docling",
+          "document",
+          "lifecycle",
+          "the",
+          "conversion",
+          "backend",
+          "and",
+          "process",
+          "datamodel",
+          "https",
+          "github",
+          "com",
+          "project",
+          "blob",
+          "f7244a43",
+          "converter",
+          "integration",
+          "backends",
+          "follow",
+          "structured"
+        ],
+        "term_weights": [
+          {
+            "term": "docling",
+            "tf": 8,
+            "weight": 0.112676
+          },
+          {
+            "term": "document",
+            "tf": 6,
+            "weight": 0.084507
+          },
+          {
+            "term": "lifecycle",
+            "tf": 4,
+            "weight": 0.056338
+          },
+          {
+            "term": "the",
+            "tf": 4,
+            "weight": 0.056338
+          },
+          {
+            "term": "conversion",
+            "tf": 3,
+            "weight": 0.042254
+          },
+          {
+            "term": "backend",
+            "tf": 2,
+            "weight": 0.028169
+          },
+          {
+            "term": "and",
+            "tf": 2,
+            "weight": 0.028169
+          },
+          {
+            "term": "process",
+            "tf": 2,
+            "weight": 0.028169
+          },
+          {
+            "term": "datamodel",
+            "tf": 2,
+            "weight": 0.028169
+          },
+          {
+            "term": "https",
+            "tf": 2,
+            "weight": 0.028169
+          },
+          {
+            "term": "github",
+            "tf": 2,
+            "weight": 0.028169
+          },
+          {
+            "term": "com",
+            "tf": 2,
+            "weight": 0.028169
+          },
+          {
+            "term": "project",
+            "tf": 2,
+            "weight": 0.028169
+          },
+          {
+            "term": "blob",
+            "tf": 2,
+            "weight": 0.028169
+          },
+          {
+            "term": "f7244a43",
+            "tf": 2,
+            "weight": 0.028169
+          },
+          {
+            "term": "converter",
+            "tf": 2,
+            "weight": 0.028169
+          },
+          {
+            "term": "integration",
+            "tf": 1,
+            "weight": 0.014085
+          },
+          {
+            "term": "backends",
+            "tf": 1,
+            "weight": 0.014085
+          },
+          {
+            "term": "follow",
+            "tf": 1,
+            "weight": 0.014085
+          },
+          {
+            "term": "structured",
+            "tf": 1,
+            "weight": 0.014085
+          }
+        ],
+        "unique_terms": 40,
+        "total_terms": 71
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Backend Lifecycle and Integration",
+        "and",
+        "backend",
+        "conversion",
+        "datamodel",
+        "docling",
+        "document",
+        "https",
+        "lifecycle",
+        "process",
+        "the"
+      ],
+      "collection_name": "Docling"
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5202325581395348,
+      "overall": 0.7067441860465116
+    }
+  }
+]

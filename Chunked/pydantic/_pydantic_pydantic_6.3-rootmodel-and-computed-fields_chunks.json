@@ -1,0 +1,2459 @@
+[
+  {
+    "text": "## Overview\n\n**RootModel** enables validation of types that don't naturally fit into Pydantic's field-based structure. Instead of defining multiple fields, a RootModel wraps a single root value of any type (primitives, collections, custom types, etc.).\n\n**Computed Fields** are dynamic properties decorated with `@computed_field` that are calculated on-access and automatically included in serialization output. Unlike regular properties, computed fields appear in `model_dump()`, `model_dump_json()`, and JSON schema generation.\n\n---",
+    "metadata": {
+      "chunk_id": "3040997d7aba-0001",
+      "source_file": "Docs\\pydantic\\_pydantic_pydantic_6.3-rootmodel-and-computed-fields.md",
+      "filename": "_pydantic_pydantic_6.3-rootmodel-and-computed-fields.md",
+      "file_extension": ".md",
+      "chunk_index": 1,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Overview"
+      ],
+      "heading_text": "Overview",
+      "token_count": 104,
+      "char_count": 534,
+      "start_char": 4848,
+      "end_char": 5382,
+      "semantic_score": 0.7999999999999999,
+      "structural_score": 0.7999999999999998,
+      "retrieval_quality": 0.5586567164179105,
+      "chunking_strategy": "hybrid_adaptive_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:12.899766",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 104,
+      "document_id": "3040997d7aba",
+      "document_name": "_pydantic_pydantic_6.3-rootmodel-and-computed-fields",
+      "source_path": "Docs\\pydantic\\_pydantic_pydantic_6.3-rootmodel-and-computed-fields.md",
+      "source_filename": "_pydantic_pydantic_6.3-rootmodel-and-computed-fields.md",
+      "source_directory": "Docs\\pydantic",
+      "relative_path": "Docs\\pydantic\\_pydantic_pydantic_6.3-rootmodel-and-computed-fields.md",
+      "hierarchy_path": "Overview",
+      "chunk_hash": "15dca3a3391d01f5",
+      "content_digest": "15dca3a3391d01f5",
+      "chunk_length": 534,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "pydantic"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "fields",
+          "computed",
+          "rootmodel",
+          "types",
+          "that",
+          "field",
+          "are",
+          "properties",
+          "and",
+          "model",
+          "dump",
+          "json",
+          "overview",
+          "enables",
+          "validation",
+          "don",
+          "naturally",
+          "fit",
+          "into",
+          "pydantic"
+        ],
+        "term_weights": [
+          {
+            "term": "fields",
+            "tf": 3,
+            "weight": 0.047619
+          },
+          {
+            "term": "computed",
+            "tf": 3,
+            "weight": 0.047619
+          },
+          {
+            "term": "rootmodel",
+            "tf": 2,
+            "weight": 0.031746
+          },
+          {
+            "term": "types",
+            "tf": 2,
+            "weight": 0.031746
+          },
+          {
+            "term": "that",
+            "tf": 2,
+            "weight": 0.031746
+          },
+          {
+            "term": "field",
+            "tf": 2,
+            "weight": 0.031746
+          },
+          {
+            "term": "are",
+            "tf": 2,
+            "weight": 0.031746
+          },
+          {
+            "term": "properties",
+            "tf": 2,
+            "weight": 0.031746
+          },
+          {
+            "term": "and",
+            "tf": 2,
+            "weight": 0.031746
+          },
+          {
+            "term": "model",
+            "tf": 2,
+            "weight": 0.031746
+          },
+          {
+            "term": "dump",
+            "tf": 2,
+            "weight": 0.031746
+          },
+          {
+            "term": "json",
+            "tf": 2,
+            "weight": 0.031746
+          },
+          {
+            "term": "overview",
+            "tf": 1,
+            "weight": 0.015873
+          },
+          {
+            "term": "enables",
+            "tf": 1,
+            "weight": 0.015873
+          },
+          {
+            "term": "validation",
+            "tf": 1,
+            "weight": 0.015873
+          },
+          {
+            "term": "don",
+            "tf": 1,
+            "weight": 0.015873
+          },
+          {
+            "term": "naturally",
+            "tf": 1,
+            "weight": 0.015873
+          },
+          {
+            "term": "fit",
+            "tf": 1,
+            "weight": 0.015873
+          },
+          {
+            "term": "into",
+            "tf": 1,
+            "weight": 0.015873
+          },
+          {
+            "term": "pydantic",
+            "tf": 1,
+            "weight": 0.015873
+          }
+        ],
+        "unique_terms": 49,
+        "total_terms": 63
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Overview",
+        "and",
+        "are",
+        "computed",
+        "field",
+        "fields",
+        "model",
+        "properties",
+        "rootmodel",
+        "that",
+        "types"
+      ],
+      "collection_name": "pydantic"
+    },
+    "advanced_scores": {
+      "semantic": 0.7999999999999999,
+      "structural": 0.7999999999999998,
+      "retrieval_quality": 0.5586567164179105,
+      "overall": 0.71955223880597
+    }
+  },
+  {
+    "text": "## RootModel",
+    "metadata": {
+      "chunk_id": "3040997d7aba-0002",
+      "source_file": "Docs\\pydantic\\_pydantic_pydantic_6.3-rootmodel-and-computed-fields.md",
+      "filename": "_pydantic_pydantic_6.3-rootmodel-and-computed-fields.md",
+      "file_extension": ".md",
+      "chunk_index": 2,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "RootModel"
+      ],
+      "heading_text": "RootModel",
+      "token_count": 3,
+      "char_count": 12,
+      "start_char": 5384,
+      "end_char": 5396,
+      "semantic_score": 0.8,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.59,
+      "chunking_strategy": "hybrid_adaptive_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:12.899848",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 3,
+      "document_id": "3040997d7aba",
+      "document_name": "_pydantic_pydantic_6.3-rootmodel-and-computed-fields",
+      "source_path": "Docs\\pydantic\\_pydantic_pydantic_6.3-rootmodel-and-computed-fields.md",
+      "source_filename": "_pydantic_pydantic_6.3-rootmodel-and-computed-fields.md",
+      "source_directory": "Docs\\pydantic",
+      "relative_path": "Docs\\pydantic\\_pydantic_pydantic_6.3-rootmodel-and-computed-fields.md",
+      "hierarchy_path": "RootModel",
+      "chunk_hash": "7c37077cbbbbf598",
+      "content_digest": "7c37077cbbbbf598",
+      "chunk_length": 12,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "pydantic"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "rootmodel"
+        ],
+        "term_weights": [
+          {
+            "term": "rootmodel",
+            "tf": 1,
+            "weight": 1.0
+          }
+        ],
+        "unique_terms": 1,
+        "total_terms": 1
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "RootModel",
+        "rootmodel"
+      ],
+      "collection_name": "pydantic"
+    },
+    "advanced_scores": {
+      "semantic": 0.8,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.59,
+      "overall": 0.7633333333333333
+    }
+  },
+  {
+    "text": "### Purpose and Design  RootModel provides a way to validate and serialize root-level values that are not traditional models with named fields. This is useful for:  - Wrapping primitive types with validation logic - Validating collection types (lists, dicts) at the root level - Creating type aliases with custom validation - Building discriminated union handlers - Parsing configuration formats where the entire structure is a single type  **Sources:** [pydantic/root\\_model.py1-155](https://github.com/pydantic/pydantic/blob/76ef0b08/pydantic/root_model.py#L1-L155)",
+    "metadata": {
+      "chunk_id": "3040997d7aba-0003",
+      "source_file": "Docs\\pydantic\\_pydantic_pydantic_6.3-rootmodel-and-computed-fields.md",
+      "filename": "_pydantic_pydantic_6.3-rootmodel-and-computed-fields.md",
+      "file_extension": ".md",
+      "chunk_index": 3,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Purpose and Design"
+      ],
+      "heading_text": "Purpose and Design",
+      "token_count": 124,
+      "char_count": 567,
+      "start_char": 5398,
+      "end_char": 5965,
+      "semantic_score": 0.7,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5334782608695652,
+      "chunking_strategy": "hybrid_adaptive_structural",
+      "content_type": "list_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:12.900108",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 124,
+      "document_id": "3040997d7aba",
+      "document_name": "_pydantic_pydantic_6.3-rootmodel-and-computed-fields",
+      "source_path": "Docs\\pydantic\\_pydantic_pydantic_6.3-rootmodel-and-computed-fields.md",
+      "source_filename": "_pydantic_pydantic_6.3-rootmodel-and-computed-fields.md",
+      "source_directory": "Docs\\pydantic",
+      "relative_path": "Docs\\pydantic\\_pydantic_pydantic_6.3-rootmodel-and-computed-fields.md",
+      "hierarchy_path": "Purpose and Design",
+      "chunk_hash": "85375d501888d408",
+      "content_digest": "85375d501888d408",
+      "chunk_length": 567,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "pydantic"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "root",
+          "pydantic",
+          "with",
+          "and",
+          "level",
+          "types",
+          "validation",
+          "the",
+          "type",
+          "model",
+          "purpose",
+          "design",
+          "rootmodel",
+          "provides",
+          "way",
+          "validate",
+          "serialize",
+          "values",
+          "that",
+          "are"
+        ],
+        "term_weights": [
+          {
+            "term": "root",
+            "tf": 4,
+            "weight": 0.054795
+          },
+          {
+            "term": "pydantic",
+            "tf": 4,
+            "weight": 0.054795
+          },
+          {
+            "term": "with",
+            "tf": 3,
+            "weight": 0.041096
+          },
+          {
+            "term": "and",
+            "tf": 2,
+            "weight": 0.027397
+          },
+          {
+            "term": "level",
+            "tf": 2,
+            "weight": 0.027397
+          },
+          {
+            "term": "types",
+            "tf": 2,
+            "weight": 0.027397
+          },
+          {
+            "term": "validation",
+            "tf": 2,
+            "weight": 0.027397
+          },
+          {
+            "term": "the",
+            "tf": 2,
+            "weight": 0.027397
+          },
+          {
+            "term": "type",
+            "tf": 2,
+            "weight": 0.027397
+          },
+          {
+            "term": "model",
+            "tf": 2,
+            "weight": 0.027397
+          },
+          {
+            "term": "purpose",
+            "tf": 1,
+            "weight": 0.013699
+          },
+          {
+            "term": "design",
+            "tf": 1,
+            "weight": 0.013699
+          },
+          {
+            "term": "rootmodel",
+            "tf": 1,
+            "weight": 0.013699
+          },
+          {
+            "term": "provides",
+            "tf": 1,
+            "weight": 0.013699
+          },
+          {
+            "term": "way",
+            "tf": 1,
+            "weight": 0.013699
+          },
+          {
+            "term": "validate",
+            "tf": 1,
+            "weight": 0.013699
+          },
+          {
+            "term": "serialize",
+            "tf": 1,
+            "weight": 0.013699
+          },
+          {
+            "term": "values",
+            "tf": 1,
+            "weight": 0.013699
+          },
+          {
+            "term": "that",
+            "tf": 1,
+            "weight": 0.013699
+          },
+          {
+            "term": "are",
+            "tf": 1,
+            "weight": 0.013699
+          }
+        ],
+        "unique_terms": 58,
+        "total_terms": 73
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Purpose and Design",
+        "and",
+        "level",
+        "model",
+        "pydantic",
+        "root",
+        "the",
+        "type",
+        "types",
+        "validation",
+        "with"
+      ],
+      "collection_name": "pydantic"
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5334782608695652,
+      "overall": 0.7111594202898551
+    }
+  },
+  {
+    "text": "### Core Architecture ``` ``` **Sources:** [pydantic/root\\_model.py32-155](https://github.com/pydantic/pydantic/blob/76ef0b08/pydantic/root_model.py#L32-L155) [pydantic/\\_internal/\\_model\\_construction.py](https://github.com/pydantic/pydantic/blob/76ef0b08/pydantic/_internal/_model_construction.py)",
+    "metadata": {
+      "chunk_id": "3040997d7aba-0004",
+      "source_file": "Docs\\pydantic\\_pydantic_pydantic_6.3-rootmodel-and-computed-fields.md",
+      "filename": "_pydantic_pydantic_6.3-rootmodel-and-computed-fields.md",
+      "file_extension": ".md",
+      "chunk_index": 4,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Core Architecture"
+      ],
+      "heading_text": "Core Architecture",
+      "token_count": 91,
+      "char_count": 299,
+      "start_char": 5967,
+      "end_char": 6266,
+      "semantic_score": 0.6,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5525,
+      "chunking_strategy": "hybrid_adaptive_structural",
+      "content_type": "code_block",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:12.900817",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 91,
+      "document_id": "3040997d7aba",
+      "document_name": "_pydantic_pydantic_6.3-rootmodel-and-computed-fields",
+      "source_path": "Docs\\pydantic\\_pydantic_pydantic_6.3-rootmodel-and-computed-fields.md",
+      "source_filename": "_pydantic_pydantic_6.3-rootmodel-and-computed-fields.md",
+      "source_directory": "Docs\\pydantic",
+      "relative_path": "Docs\\pydantic\\_pydantic_pydantic_6.3-rootmodel-and-computed-fields.md",
+      "hierarchy_path": "Core Architecture",
+      "chunk_hash": "bc482b132ecff8b1",
+      "content_digest": "bc482b132ecff8b1",
+      "chunk_length": 299,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "pydantic"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "pydantic",
+          "model",
+          "root",
+          "https",
+          "github",
+          "com",
+          "blob",
+          "76ef0b08",
+          "internal",
+          "construction",
+          "core",
+          "architecture",
+          "sources",
+          "py32",
+          "155",
+          "l32",
+          "l155"
+        ],
+        "term_weights": [
+          {
+            "term": "pydantic",
+            "tf": 8,
+            "weight": 0.228571
+          },
+          {
+            "term": "model",
+            "tf": 4,
+            "weight": 0.114286
+          },
+          {
+            "term": "root",
+            "tf": 2,
+            "weight": 0.057143
+          },
+          {
+            "term": "https",
+            "tf": 2,
+            "weight": 0.057143
+          },
+          {
+            "term": "github",
+            "tf": 2,
+            "weight": 0.057143
+          },
+          {
+            "term": "com",
+            "tf": 2,
+            "weight": 0.057143
+          },
+          {
+            "term": "blob",
+            "tf": 2,
+            "weight": 0.057143
+          },
+          {
+            "term": "76ef0b08",
+            "tf": 2,
+            "weight": 0.057143
+          },
+          {
+            "term": "internal",
+            "tf": 2,
+            "weight": 0.057143
+          },
+          {
+            "term": "construction",
+            "tf": 2,
+            "weight": 0.057143
+          },
+          {
+            "term": "core",
+            "tf": 1,
+            "weight": 0.028571
+          },
+          {
+            "term": "architecture",
+            "tf": 1,
+            "weight": 0.028571
+          },
+          {
+            "term": "sources",
+            "tf": 1,
+            "weight": 0.028571
+          },
+          {
+            "term": "py32",
+            "tf": 1,
+            "weight": 0.028571
+          },
+          {
+            "term": "155",
+            "tf": 1,
+            "weight": 0.028571
+          },
+          {
+            "term": "l32",
+            "tf": 1,
+            "weight": 0.028571
+          },
+          {
+            "term": "l155",
+            "tf": 1,
+            "weight": 0.028571
+          }
+        ],
+        "unique_terms": 17,
+        "total_terms": 35
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "76ef0b08",
+        "Core Architecture",
+        "blob",
+        "com",
+        "construction",
+        "github",
+        "https",
+        "internal",
+        "model",
+        "pydantic",
+        "root"
+      ],
+      "collection_name": "pydantic"
+    },
+    "advanced_scores": {
+      "semantic": 0.6,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5525,
+      "overall": 0.6841666666666667
+    }
+  },
+  {
+    "text": "### Basic Usage  The `root` field contains the validated value. RootModel can be instantiated with either a positional argument or keyword arguments: ``` ``` **Sources:** [pydantic/root\\_model.py60-69](https://github.com/pydantic/pydantic/blob/76ef0b08/pydantic/root_model.py#L60-L69) [tests/test\\_root\\_model.py](https://github.com/pydantic/pydantic/blob/76ef0b08/tests/test_root_model.py)",
+    "metadata": {
+      "chunk_id": "3040997d7aba-0005",
+      "source_file": "Docs\\pydantic\\_pydantic_pydantic_6.3-rootmodel-and-computed-fields.md",
+      "filename": "_pydantic_pydantic_6.3-rootmodel-and-computed-fields.md",
+      "file_extension": ".md",
+      "chunk_index": 5,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Basic Usage"
+      ],
+      "heading_text": "Basic Usage",
+      "token_count": 106,
+      "char_count": 390,
+      "start_char": 6270,
+      "end_char": 6660,
+      "semantic_score": 0.6,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5677777777777778,
+      "chunking_strategy": "hybrid_adaptive_structural",
+      "content_type": "code_block",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:12.901779",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 106,
+      "document_id": "3040997d7aba",
+      "document_name": "_pydantic_pydantic_6.3-rootmodel-and-computed-fields",
+      "source_path": "Docs\\pydantic\\_pydantic_pydantic_6.3-rootmodel-and-computed-fields.md",
+      "source_filename": "_pydantic_pydantic_6.3-rootmodel-and-computed-fields.md",
+      "source_directory": "Docs\\pydantic",
+      "relative_path": "Docs\\pydantic\\_pydantic_pydantic_6.3-rootmodel-and-computed-fields.md",
+      "hierarchy_path": "Basic Usage",
+      "chunk_hash": "2c59df2b351ab7ca",
+      "content_digest": "2c59df2b351ab7ca",
+      "chunk_length": 390,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "pydantic"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "pydantic",
+          "root",
+          "model",
+          "the",
+          "https",
+          "github",
+          "com",
+          "blob",
+          "76ef0b08",
+          "tests",
+          "test",
+          "basic",
+          "usage",
+          "field",
+          "contains",
+          "validated",
+          "value",
+          "rootmodel",
+          "can",
+          "instantiated"
+        ],
+        "term_weights": [
+          {
+            "term": "pydantic",
+            "tf": 6,
+            "weight": 0.12
+          },
+          {
+            "term": "root",
+            "tf": 5,
+            "weight": 0.1
+          },
+          {
+            "term": "model",
+            "tf": 4,
+            "weight": 0.08
+          },
+          {
+            "term": "the",
+            "tf": 2,
+            "weight": 0.04
+          },
+          {
+            "term": "https",
+            "tf": 2,
+            "weight": 0.04
+          },
+          {
+            "term": "github",
+            "tf": 2,
+            "weight": 0.04
+          },
+          {
+            "term": "com",
+            "tf": 2,
+            "weight": 0.04
+          },
+          {
+            "term": "blob",
+            "tf": 2,
+            "weight": 0.04
+          },
+          {
+            "term": "76ef0b08",
+            "tf": 2,
+            "weight": 0.04
+          },
+          {
+            "term": "tests",
+            "tf": 2,
+            "weight": 0.04
+          },
+          {
+            "term": "test",
+            "tf": 2,
+            "weight": 0.04
+          },
+          {
+            "term": "basic",
+            "tf": 1,
+            "weight": 0.02
+          },
+          {
+            "term": "usage",
+            "tf": 1,
+            "weight": 0.02
+          },
+          {
+            "term": "field",
+            "tf": 1,
+            "weight": 0.02
+          },
+          {
+            "term": "contains",
+            "tf": 1,
+            "weight": 0.02
+          },
+          {
+            "term": "validated",
+            "tf": 1,
+            "weight": 0.02
+          },
+          {
+            "term": "value",
+            "tf": 1,
+            "weight": 0.02
+          },
+          {
+            "term": "rootmodel",
+            "tf": 1,
+            "weight": 0.02
+          },
+          {
+            "term": "can",
+            "tf": 1,
+            "weight": 0.02
+          },
+          {
+            "term": "instantiated",
+            "tf": 1,
+            "weight": 0.02
+          }
+        ],
+        "unique_terms": 30,
+        "total_terms": 50
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "76ef0b08",
+        "Basic Usage",
+        "blob",
+        "com",
+        "github",
+        "https",
+        "model",
+        "pydantic",
+        "root",
+        "tests",
+        "the"
+      ],
+      "collection_name": "pydantic"
+    },
+    "advanced_scores": {
+      "semantic": 0.6,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5677777777777778,
+      "overall": 0.6892592592592592
+    }
+  },
+  {
+    "text": "### Initialization Flow ``` ``` **Sources:** [pydantic/root\\_model.py60-69](https://github.com/pydantic/pydantic/blob/76ef0b08/pydantic/root_model.py#L60-L69) [pydantic/main.py](https://github.com/pydantic/pydantic/blob/76ef0b08/pydantic/main.py)",
+    "metadata": {
+      "chunk_id": "3040997d7aba-0007",
+      "source_file": "Docs\\pydantic\\_pydantic_pydantic_6.3-rootmodel-and-computed-fields.md",
+      "filename": "_pydantic_pydantic_6.3-rootmodel-and-computed-fields.md",
+      "file_extension": ".md",
+      "chunk_index": 7,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Initialization Flow"
+      ],
+      "heading_text": "Initialization Flow",
+      "token_count": 79,
+      "char_count": 246,
+      "start_char": 7916,
+      "end_char": 8162,
+      "semantic_score": 0.6,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5525,
+      "chunking_strategy": "hybrid_adaptive_structural",
+      "content_type": "code_block",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:12.903178",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 79,
+      "document_id": "3040997d7aba",
+      "document_name": "_pydantic_pydantic_6.3-rootmodel-and-computed-fields",
+      "source_path": "Docs\\pydantic\\_pydantic_pydantic_6.3-rootmodel-and-computed-fields.md",
+      "source_filename": "_pydantic_pydantic_6.3-rootmodel-and-computed-fields.md",
+      "source_directory": "Docs\\pydantic",
+      "relative_path": "Docs\\pydantic\\_pydantic_pydantic_6.3-rootmodel-and-computed-fields.md",
+      "hierarchy_path": "Initialization Flow",
+      "chunk_hash": "af7ac287bd087795",
+      "content_digest": "af7ac287bd087795",
+      "chunk_length": 246,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "pydantic"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "pydantic",
+          "root",
+          "model",
+          "https",
+          "github",
+          "com",
+          "blob",
+          "76ef0b08",
+          "main",
+          "initialization",
+          "flow",
+          "sources",
+          "py60",
+          "l60",
+          "l69"
+        ],
+        "term_weights": [
+          {
+            "term": "pydantic",
+            "tf": 8,
+            "weight": 0.266667
+          },
+          {
+            "term": "root",
+            "tf": 2,
+            "weight": 0.066667
+          },
+          {
+            "term": "model",
+            "tf": 2,
+            "weight": 0.066667
+          },
+          {
+            "term": "https",
+            "tf": 2,
+            "weight": 0.066667
+          },
+          {
+            "term": "github",
+            "tf": 2,
+            "weight": 0.066667
+          },
+          {
+            "term": "com",
+            "tf": 2,
+            "weight": 0.066667
+          },
+          {
+            "term": "blob",
+            "tf": 2,
+            "weight": 0.066667
+          },
+          {
+            "term": "76ef0b08",
+            "tf": 2,
+            "weight": 0.066667
+          },
+          {
+            "term": "main",
+            "tf": 2,
+            "weight": 0.066667
+          },
+          {
+            "term": "initialization",
+            "tf": 1,
+            "weight": 0.033333
+          },
+          {
+            "term": "flow",
+            "tf": 1,
+            "weight": 0.033333
+          },
+          {
+            "term": "sources",
+            "tf": 1,
+            "weight": 0.033333
+          },
+          {
+            "term": "py60",
+            "tf": 1,
+            "weight": 0.033333
+          },
+          {
+            "term": "l60",
+            "tf": 1,
+            "weight": 0.033333
+          },
+          {
+            "term": "l69",
+            "tf": 1,
+            "weight": 0.033333
+          }
+        ],
+        "unique_terms": 15,
+        "total_terms": 30
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "76ef0b08",
+        "Initialization Flow",
+        "blob",
+        "com",
+        "github",
+        "https",
+        "initialization",
+        "main",
+        "model",
+        "pydantic",
+        "root"
+      ],
+      "collection_name": "pydantic"
+    },
+    "advanced_scores": {
+      "semantic": 0.6,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5525,
+      "overall": 0.6841666666666667
+    }
+  },
+  {
+    "text": "### Construction and Copying  RootModel provides special methods for construction and copying:  **model\\_construct**: Creates instances without validation ``` ``` **Copy operations**: Shallow and deep copy support via `__copy__` and `__deepcopy__`  **Pickle support**: Via `__getstate__` and `__setstate__` for serialization  **Sources:** [pydantic/root\\_model.py72-114](https://github.com/pydantic/pydantic/blob/76ef0b08/pydantic/root_model.py#L72-L114) [tests/test\\_construction.py](https://github.com/pydantic/pydantic/blob/76ef0b08/tests/test_construction.py)",
+    "metadata": {
+      "chunk_id": "3040997d7aba-0008",
+      "source_file": "Docs\\pydantic\\_pydantic_pydantic_6.3-rootmodel-and-computed-fields.md",
+      "filename": "_pydantic_pydantic_6.3-rootmodel-and-computed-fields.md",
+      "file_extension": ".md",
+      "chunk_index": 8,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Construction and Copying"
+      ],
+      "heading_text": "Construction and Copying",
+      "token_count": 148,
+      "char_count": 563,
+      "start_char": 8166,
+      "end_char": 8729,
+      "semantic_score": 0.7,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5314634146341464,
+      "chunking_strategy": "hybrid_adaptive_structural",
+      "content_type": "code_block",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:12.904407",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 148,
+      "document_id": "3040997d7aba",
+      "document_name": "_pydantic_pydantic_6.3-rootmodel-and-computed-fields",
+      "source_path": "Docs\\pydantic\\_pydantic_pydantic_6.3-rootmodel-and-computed-fields.md",
+      "source_filename": "_pydantic_pydantic_6.3-rootmodel-and-computed-fields.md",
+      "source_directory": "Docs\\pydantic",
+      "relative_path": "Docs\\pydantic\\_pydantic_pydantic_6.3-rootmodel-and-computed-fields.md",
+      "hierarchy_path": "Construction and Copying",
+      "chunk_hash": "cab8a56a48cd70ab",
+      "content_digest": "cab8a56a48cd70ab",
+      "chunk_length": 563,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "pydantic"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "pydantic",
+          "and",
+          "construction",
+          "model",
+          "copy",
+          "copying",
+          "for",
+          "support",
+          "via",
+          "root",
+          "https",
+          "github",
+          "com",
+          "blob",
+          "76ef0b08",
+          "tests",
+          "test",
+          "rootmodel",
+          "provides",
+          "special"
+        ],
+        "term_weights": [
+          {
+            "term": "pydantic",
+            "tf": 6,
+            "weight": 0.089552
+          },
+          {
+            "term": "and",
+            "tf": 5,
+            "weight": 0.074627
+          },
+          {
+            "term": "construction",
+            "tf": 4,
+            "weight": 0.059701
+          },
+          {
+            "term": "model",
+            "tf": 3,
+            "weight": 0.044776
+          },
+          {
+            "term": "copy",
+            "tf": 3,
+            "weight": 0.044776
+          },
+          {
+            "term": "copying",
+            "tf": 2,
+            "weight": 0.029851
+          },
+          {
+            "term": "for",
+            "tf": 2,
+            "weight": 0.029851
+          },
+          {
+            "term": "support",
+            "tf": 2,
+            "weight": 0.029851
+          },
+          {
+            "term": "via",
+            "tf": 2,
+            "weight": 0.029851
+          },
+          {
+            "term": "root",
+            "tf": 2,
+            "weight": 0.029851
+          },
+          {
+            "term": "https",
+            "tf": 2,
+            "weight": 0.029851
+          },
+          {
+            "term": "github",
+            "tf": 2,
+            "weight": 0.029851
+          },
+          {
+            "term": "com",
+            "tf": 2,
+            "weight": 0.029851
+          },
+          {
+            "term": "blob",
+            "tf": 2,
+            "weight": 0.029851
+          },
+          {
+            "term": "76ef0b08",
+            "tf": 2,
+            "weight": 0.029851
+          },
+          {
+            "term": "tests",
+            "tf": 2,
+            "weight": 0.029851
+          },
+          {
+            "term": "test",
+            "tf": 2,
+            "weight": 0.029851
+          },
+          {
+            "term": "rootmodel",
+            "tf": 1,
+            "weight": 0.014925
+          },
+          {
+            "term": "provides",
+            "tf": 1,
+            "weight": 0.014925
+          },
+          {
+            "term": "special",
+            "tf": 1,
+            "weight": 0.014925
+          }
+        ],
+        "unique_terms": 39,
+        "total_terms": 67
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Construction and Copying",
+        "and",
+        "construction",
+        "copy",
+        "copying",
+        "for",
+        "model",
+        "pydantic",
+        "root",
+        "support",
+        "via"
+      ],
+      "collection_name": "pydantic"
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5314634146341464,
+      "overall": 0.7104878048780487
+    }
+  },
+  {
+    "text": "### Serialization Behavior  Unlike regular models, RootModel's `model_dump()` returns the root value directly, not a dictionary: ``` ``` This behavior is controlled by the model's serialization schema and differs from BaseModel to match the semantic meaning of a \"root\" value. **Sources:** [pydantic/root\\_model.py116-144](https://github.com/pydantic/pydantic/blob/76ef0b08/pydantic/root_model.py#L116-L144) [tests/test\\_root\\_model.py](https://github.com/pydantic/pydantic/blob/76ef0b08/tests/test_root_model.py)  ---",
+    "metadata": {
+      "chunk_id": "3040997d7aba-0009",
+      "source_file": "Docs\\pydantic\\_pydantic_pydantic_6.3-rootmodel-and-computed-fields.md",
+      "filename": "_pydantic_pydantic_6.3-rootmodel-and-computed-fields.md",
+      "file_extension": ".md",
+      "chunk_index": 9,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Serialization Behavior"
+      ],
+      "heading_text": "Serialization Behavior",
+      "token_count": 131,
+      "char_count": 518,
+      "start_char": 8733,
+      "end_char": 9251,
+      "semantic_score": 0.7,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5490909090909091,
+      "chunking_strategy": "hybrid_adaptive_structural",
+      "content_type": "code_block",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:12.905845",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 131,
+      "document_id": "3040997d7aba",
+      "document_name": "_pydantic_pydantic_6.3-rootmodel-and-computed-fields",
+      "source_path": "Docs\\pydantic\\_pydantic_pydantic_6.3-rootmodel-and-computed-fields.md",
+      "source_filename": "_pydantic_pydantic_6.3-rootmodel-and-computed-fields.md",
+      "source_directory": "Docs\\pydantic",
+      "relative_path": "Docs\\pydantic\\_pydantic_pydantic_6.3-rootmodel-and-computed-fields.md",
+      "hierarchy_path": "Serialization Behavior",
+      "chunk_hash": "e7e487eee51c1f79",
+      "content_digest": "e7e487eee51c1f79",
+      "chunk_length": 518,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "pydantic"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "model",
+          "root",
+          "pydantic",
+          "the",
+          "serialization",
+          "behavior",
+          "value",
+          "https",
+          "github",
+          "com",
+          "blob",
+          "76ef0b08",
+          "tests",
+          "test",
+          "unlike",
+          "regular",
+          "models",
+          "rootmodel",
+          "dump",
+          "returns"
+        ],
+        "term_weights": [
+          {
+            "term": "model",
+            "tf": 6,
+            "weight": 0.092308
+          },
+          {
+            "term": "root",
+            "tf": 6,
+            "weight": 0.092308
+          },
+          {
+            "term": "pydantic",
+            "tf": 6,
+            "weight": 0.092308
+          },
+          {
+            "term": "the",
+            "tf": 3,
+            "weight": 0.046154
+          },
+          {
+            "term": "serialization",
+            "tf": 2,
+            "weight": 0.030769
+          },
+          {
+            "term": "behavior",
+            "tf": 2,
+            "weight": 0.030769
+          },
+          {
+            "term": "value",
+            "tf": 2,
+            "weight": 0.030769
+          },
+          {
+            "term": "https",
+            "tf": 2,
+            "weight": 0.030769
+          },
+          {
+            "term": "github",
+            "tf": 2,
+            "weight": 0.030769
+          },
+          {
+            "term": "com",
+            "tf": 2,
+            "weight": 0.030769
+          },
+          {
+            "term": "blob",
+            "tf": 2,
+            "weight": 0.030769
+          },
+          {
+            "term": "76ef0b08",
+            "tf": 2,
+            "weight": 0.030769
+          },
+          {
+            "term": "tests",
+            "tf": 2,
+            "weight": 0.030769
+          },
+          {
+            "term": "test",
+            "tf": 2,
+            "weight": 0.030769
+          },
+          {
+            "term": "unlike",
+            "tf": 1,
+            "weight": 0.015385
+          },
+          {
+            "term": "regular",
+            "tf": 1,
+            "weight": 0.015385
+          },
+          {
+            "term": "models",
+            "tf": 1,
+            "weight": 0.015385
+          },
+          {
+            "term": "rootmodel",
+            "tf": 1,
+            "weight": 0.015385
+          },
+          {
+            "term": "dump",
+            "tf": 1,
+            "weight": 0.015385
+          },
+          {
+            "term": "returns",
+            "tf": 1,
+            "weight": 0.015385
+          }
+        ],
+        "unique_terms": 38,
+        "total_terms": 65
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Serialization Behavior",
+        "behavior",
+        "com",
+        "github",
+        "https",
+        "model",
+        "pydantic",
+        "root",
+        "serialization",
+        "the",
+        "value"
+      ],
+      "collection_name": "pydantic"
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5490909090909091,
+      "overall": 0.7163636363636363
+    }
+  },
+  {
+    "text": "### Purpose and Design  Computed fields are dynamic properties that:  1. Are calculated on-access (not stored in `__dict__`) 2. Automatically appear in serialization (`model_dump()`, `model_dump_json()`) 3. Generate JSON schema with `readOnly: true` 4. Can have custom serializers applied 5. Support property setters and deleters  They bridge the gap between regular properties (not serialized) and model fields (stored and validated). **Sources:** [pydantic/fields.py](https://github.com/pydantic/pydantic/blob/76ef0b08/pydantic/fields.py) [tests/test\\_computed\\_fields.py27-66](https://github.com/pydantic/pydantic/blob/76ef0b08/tests/test_computed_fields.py#L27-L66)",
+    "metadata": {
+      "chunk_id": "3040997d7aba-0011",
+      "source_file": "Docs\\pydantic\\_pydantic_pydantic_6.3-rootmodel-and-computed-fields.md",
+      "filename": "_pydantic_pydantic_6.3-rootmodel-and-computed-fields.md",
+      "file_extension": ".md",
+      "chunk_index": 11,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Purpose and Design"
+      ],
+      "heading_text": "Purpose and Design",
+      "token_count": 173,
+      "char_count": 669,
+      "start_char": 9276,
+      "end_char": 9945,
+      "semantic_score": 0.6,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5512903225806451,
+      "chunking_strategy": "hybrid_adaptive_structural",
+      "content_type": "code_block",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:12.907531",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 173,
+      "document_id": "3040997d7aba",
+      "document_name": "_pydantic_pydantic_6.3-rootmodel-and-computed-fields",
+      "source_path": "Docs\\pydantic\\_pydantic_pydantic_6.3-rootmodel-and-computed-fields.md",
+      "source_filename": "_pydantic_pydantic_6.3-rootmodel-and-computed-fields.md",
+      "source_directory": "Docs\\pydantic",
+      "relative_path": "Docs\\pydantic\\_pydantic_pydantic_6.3-rootmodel-and-computed-fields.md",
+      "hierarchy_path": "Purpose and Design",
+      "chunk_hash": "7018a5ef444a5075",
+      "content_digest": "7018a5ef444a5075",
+      "chunk_length": 669,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "pydantic"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "fields",
+          "pydantic",
+          "and",
+          "computed",
+          "model",
+          "are",
+          "properties",
+          "not",
+          "stored",
+          "dump",
+          "json",
+          "https",
+          "github",
+          "com",
+          "blob",
+          "76ef0b08",
+          "tests",
+          "test",
+          "purpose",
+          "design"
+        ],
+        "term_weights": [
+          {
+            "term": "fields",
+            "tf": 6,
+            "weight": 0.071429
+          },
+          {
+            "term": "pydantic",
+            "tf": 6,
+            "weight": 0.071429
+          },
+          {
+            "term": "and",
+            "tf": 4,
+            "weight": 0.047619
+          },
+          {
+            "term": "computed",
+            "tf": 3,
+            "weight": 0.035714
+          },
+          {
+            "term": "model",
+            "tf": 3,
+            "weight": 0.035714
+          },
+          {
+            "term": "are",
+            "tf": 2,
+            "weight": 0.02381
+          },
+          {
+            "term": "properties",
+            "tf": 2,
+            "weight": 0.02381
+          },
+          {
+            "term": "not",
+            "tf": 2,
+            "weight": 0.02381
+          },
+          {
+            "term": "stored",
+            "tf": 2,
+            "weight": 0.02381
+          },
+          {
+            "term": "dump",
+            "tf": 2,
+            "weight": 0.02381
+          },
+          {
+            "term": "json",
+            "tf": 2,
+            "weight": 0.02381
+          },
+          {
+            "term": "https",
+            "tf": 2,
+            "weight": 0.02381
+          },
+          {
+            "term": "github",
+            "tf": 2,
+            "weight": 0.02381
+          },
+          {
+            "term": "com",
+            "tf": 2,
+            "weight": 0.02381
+          },
+          {
+            "term": "blob",
+            "tf": 2,
+            "weight": 0.02381
+          },
+          {
+            "term": "76ef0b08",
+            "tf": 2,
+            "weight": 0.02381
+          },
+          {
+            "term": "tests",
+            "tf": 2,
+            "weight": 0.02381
+          },
+          {
+            "term": "test",
+            "tf": 2,
+            "weight": 0.02381
+          },
+          {
+            "term": "purpose",
+            "tf": 1,
+            "weight": 0.011905
+          },
+          {
+            "term": "design",
+            "tf": 1,
+            "weight": 0.011905
+          }
+        ],
+        "unique_terms": 54,
+        "total_terms": 84
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Purpose and Design",
+        "and",
+        "are",
+        "computed",
+        "dump",
+        "fields",
+        "model",
+        "not",
+        "properties",
+        "pydantic",
+        "stored"
+      ],
+      "collection_name": "pydantic"
+    },
+    "advanced_scores": {
+      "semantic": 0.6,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5512903225806451,
+      "overall": 0.683763440860215
+    }
+  },
+  {
+    "text": "### Field Metadata and Configuration  Computed fields support the same metadata as regular fields:  | Parameter           | Type   | Purpose                                 | Example                         | | ------------------- | ------ | --------------------------------------- | ------------------------------- | | `title`             | `str`  | JSON schema title                       | `title='Area'`                  | | `description`       | `str`  | Documentation                           | `description='Calculated area'` | | `examples`          | `list` | Example values                          | `examples=[100, 200]`           | | `json_schema_extra` | `dict` | Additional JSON schema properties       | `json_schema_extra={'foo': 42}` | | `alias`             | `str`  | Serialization alias                     | `alias='the_area'`              | | `repr`              | `bool` | Include in `__repr__` (default: `True`) | `repr=False`                    | | `return_type`       | `type` | Override inferred return type           | `return_type=float`             |  **Sources:** [tests/test\\_computed\\_fields.py68-121](https://github.com/pydantic/pydantic/blob/76ef0b08/tests/test_computed_fields.py#L68-L121) [pydantic/fields.py](https://github.com/pydantic/pydantic/blob/76ef0b08/pydantic/fields.py)",
+    "metadata": {
+      "chunk_id": "3040997d7aba-0014",
+      "source_file": "Docs\\pydantic\\_pydantic_pydantic_6.3-rootmodel-and-computed-fields.md",
+      "filename": "_pydantic_pydantic_6.3-rootmodel-and-computed-fields.md",
+      "file_extension": ".md",
+      "chunk_index": 14,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Field Metadata and Configuration"
+      ],
+      "heading_text": "Field Metadata and Configuration",
+      "token_count": 298,
+      "char_count": 1317,
+      "start_char": 10595,
+      "end_char": 11912,
+      "semantic_score": 0.7999999999999999,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.6569565217391303,
+      "chunking_strategy": "hybrid_adaptive_structural",
+      "content_type": "table_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:12.909893",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 298,
+      "document_id": "3040997d7aba",
+      "document_name": "_pydantic_pydantic_6.3-rootmodel-and-computed-fields",
+      "source_path": "Docs\\pydantic\\_pydantic_pydantic_6.3-rootmodel-and-computed-fields.md",
+      "source_filename": "_pydantic_pydantic_6.3-rootmodel-and-computed-fields.md",
+      "source_directory": "Docs\\pydantic",
+      "relative_path": "Docs\\pydantic\\_pydantic_pydantic_6.3-rootmodel-and-computed-fields.md",
+      "hierarchy_path": "Field Metadata and Configuration",
+      "chunk_hash": "7e7fabc97a07b13f",
+      "content_digest": "7e7fabc97a07b13f",
+      "chunk_length": 1317,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "pydantic"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "fields",
+          "pydantic",
+          "type",
+          "json",
+          "schema",
+          "computed",
+          "title",
+          "str",
+          "area",
+          "alias",
+          "repr",
+          "return",
+          "metadata",
+          "the",
+          "example",
+          "description",
+          "examples",
+          "extra",
+          "tests",
+          "test"
+        ],
+        "term_weights": [
+          {
+            "term": "fields",
+            "tf": 6,
+            "weight": 0.057692
+          },
+          {
+            "term": "pydantic",
+            "tf": 6,
+            "weight": 0.057692
+          },
+          {
+            "term": "type",
+            "tf": 5,
+            "weight": 0.048077
+          },
+          {
+            "term": "json",
+            "tf": 4,
+            "weight": 0.038462
+          },
+          {
+            "term": "schema",
+            "tf": 4,
+            "weight": 0.038462
+          },
+          {
+            "term": "computed",
+            "tf": 3,
+            "weight": 0.028846
+          },
+          {
+            "term": "title",
+            "tf": 3,
+            "weight": 0.028846
+          },
+          {
+            "term": "str",
+            "tf": 3,
+            "weight": 0.028846
+          },
+          {
+            "term": "area",
+            "tf": 3,
+            "weight": 0.028846
+          },
+          {
+            "term": "alias",
+            "tf": 3,
+            "weight": 0.028846
+          },
+          {
+            "term": "repr",
+            "tf": 3,
+            "weight": 0.028846
+          },
+          {
+            "term": "return",
+            "tf": 3,
+            "weight": 0.028846
+          },
+          {
+            "term": "metadata",
+            "tf": 2,
+            "weight": 0.019231
+          },
+          {
+            "term": "the",
+            "tf": 2,
+            "weight": 0.019231
+          },
+          {
+            "term": "example",
+            "tf": 2,
+            "weight": 0.019231
+          },
+          {
+            "term": "description",
+            "tf": 2,
+            "weight": 0.019231
+          },
+          {
+            "term": "examples",
+            "tf": 2,
+            "weight": 0.019231
+          },
+          {
+            "term": "extra",
+            "tf": 2,
+            "weight": 0.019231
+          },
+          {
+            "term": "tests",
+            "tf": 2,
+            "weight": 0.019231
+          },
+          {
+            "term": "test",
+            "tf": 2,
+            "weight": 0.019231
+          }
+        ],
+        "unique_terms": 57,
+        "total_terms": 104
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Field Metadata and Configuration",
+        "alias",
+        "area",
+        "computed",
+        "fields",
+        "json",
+        "pydantic",
+        "schema",
+        "str",
+        "title",
+        "type"
+      ],
+      "collection_name": "pydantic"
+    },
+    "advanced_scores": {
+      "semantic": 0.7999999999999999,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.6569565217391303,
+      "overall": 0.7856521739130433
+    }
+  },
+  {
+    "text": "### Serialization Customization  Computed fields can be customized with `@field_serializer`: ``` ``` **Sources:** [tests/test\\_computed\\_fields.py123-150](https://github.com/pydantic/pydantic/blob/76ef0b08/tests/test_computed_fields.py#L123-L150) [pydantic/functional\\_serializers.py](https://github.com/pydantic/pydantic/blob/76ef0b08/pydantic/functional_serializers.py)",
+    "metadata": {
+      "chunk_id": "3040997d7aba-0017",
+      "source_file": "Docs\\pydantic\\_pydantic_pydantic_6.3-rootmodel-and-computed-fields.md",
+      "filename": "_pydantic_pydantic_6.3-rootmodel-and-computed-fields.md",
+      "file_extension": ".md",
+      "chunk_index": 17,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Serialization Customization"
+      ],
+      "heading_text": "Serialization Customization",
+      "token_count": 100,
+      "char_count": 371,
+      "start_char": 12494,
+      "end_char": 12865,
+      "semantic_score": 0.7,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.57,
+      "chunking_strategy": "hybrid_adaptive_structural",
+      "content_type": "code_block",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:12.912109",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 100,
+      "document_id": "3040997d7aba",
+      "document_name": "_pydantic_pydantic_6.3-rootmodel-and-computed-fields",
+      "source_path": "Docs\\pydantic\\_pydantic_pydantic_6.3-rootmodel-and-computed-fields.md",
+      "source_filename": "_pydantic_pydantic_6.3-rootmodel-and-computed-fields.md",
+      "source_directory": "Docs\\pydantic",
+      "relative_path": "Docs\\pydantic\\_pydantic_pydantic_6.3-rootmodel-and-computed-fields.md",
+      "hierarchy_path": "Serialization Customization",
+      "chunk_hash": "ddd441b27d97e1cb",
+      "content_digest": "ddd441b27d97e1cb",
+      "chunk_length": 371,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "pydantic"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "pydantic",
+          "computed",
+          "fields",
+          "tests",
+          "test",
+          "https",
+          "github",
+          "com",
+          "blob",
+          "76ef0b08",
+          "functional",
+          "serializers",
+          "serialization",
+          "customization",
+          "can",
+          "customized",
+          "with",
+          "field",
+          "serializer",
+          "sources"
+        ],
+        "term_weights": [
+          {
+            "term": "pydantic",
+            "tf": 6,
+            "weight": 0.142857
+          },
+          {
+            "term": "computed",
+            "tf": 3,
+            "weight": 0.071429
+          },
+          {
+            "term": "fields",
+            "tf": 3,
+            "weight": 0.071429
+          },
+          {
+            "term": "tests",
+            "tf": 2,
+            "weight": 0.047619
+          },
+          {
+            "term": "test",
+            "tf": 2,
+            "weight": 0.047619
+          },
+          {
+            "term": "https",
+            "tf": 2,
+            "weight": 0.047619
+          },
+          {
+            "term": "github",
+            "tf": 2,
+            "weight": 0.047619
+          },
+          {
+            "term": "com",
+            "tf": 2,
+            "weight": 0.047619
+          },
+          {
+            "term": "blob",
+            "tf": 2,
+            "weight": 0.047619
+          },
+          {
+            "term": "76ef0b08",
+            "tf": 2,
+            "weight": 0.047619
+          },
+          {
+            "term": "functional",
+            "tf": 2,
+            "weight": 0.047619
+          },
+          {
+            "term": "serializers",
+            "tf": 2,
+            "weight": 0.047619
+          },
+          {
+            "term": "serialization",
+            "tf": 1,
+            "weight": 0.02381
+          },
+          {
+            "term": "customization",
+            "tf": 1,
+            "weight": 0.02381
+          },
+          {
+            "term": "can",
+            "tf": 1,
+            "weight": 0.02381
+          },
+          {
+            "term": "customized",
+            "tf": 1,
+            "weight": 0.02381
+          },
+          {
+            "term": "with",
+            "tf": 1,
+            "weight": 0.02381
+          },
+          {
+            "term": "field",
+            "tf": 1,
+            "weight": 0.02381
+          },
+          {
+            "term": "serializer",
+            "tf": 1,
+            "weight": 0.02381
+          },
+          {
+            "term": "sources",
+            "tf": 1,
+            "weight": 0.02381
+          }
+        ],
+        "unique_terms": 24,
+        "total_terms": 42
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "76ef0b08",
+        "Serialization Customization",
+        "blob",
+        "com",
+        "computed",
+        "fields",
+        "github",
+        "https",
+        "pydantic",
+        "test",
+        "tests"
+      ],
+      "collection_name": "pydantic"
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.57,
+      "overall": 0.7233333333333333
+    }
+  },
+  {
+    "text": "### Cached Properties  Computed fields work with `functools.cached_property` for performance: ``` ``` **Sources:** [tests/test\\_computed\\_fields.py178-214](https://github.com/pydantic/pydantic/blob/76ef0b08/tests/test_computed_fields.py#L178-L214)",
+    "metadata": {
+      "chunk_id": "3040997d7aba-0018",
+      "source_file": "Docs\\pydantic\\_pydantic_pydantic_6.3-rootmodel-and-computed-fields.md",
+      "filename": "_pydantic_pydantic_6.3-rootmodel-and-computed-fields.md",
+      "file_extension": ".md",
+      "chunk_index": 18,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Cached Properties"
+      ],
+      "heading_text": "Cached Properties",
+      "token_count": 66,
+      "char_count": 247,
+      "start_char": 12869,
+      "end_char": 13116,
+      "semantic_score": 0.6,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5685714285714286,
+      "chunking_strategy": "hybrid_adaptive_structural",
+      "content_type": "code_block",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:12.912792",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 66,
+      "document_id": "3040997d7aba",
+      "document_name": "_pydantic_pydantic_6.3-rootmodel-and-computed-fields",
+      "source_path": "Docs\\pydantic\\_pydantic_pydantic_6.3-rootmodel-and-computed-fields.md",
+      "source_filename": "_pydantic_pydantic_6.3-rootmodel-and-computed-fields.md",
+      "source_directory": "Docs\\pydantic",
+      "relative_path": "Docs\\pydantic\\_pydantic_pydantic_6.3-rootmodel-and-computed-fields.md",
+      "hierarchy_path": "Cached Properties",
+      "chunk_hash": "2ae94eeb2cff2361",
+      "content_digest": "2ae94eeb2cff2361",
+      "chunk_length": 247,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "pydantic"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "computed",
+          "fields",
+          "cached",
+          "tests",
+          "test",
+          "pydantic",
+          "properties",
+          "work",
+          "with",
+          "functools",
+          "property",
+          "for",
+          "performance",
+          "sources",
+          "py178",
+          "214",
+          "https",
+          "github",
+          "com",
+          "blob"
+        ],
+        "term_weights": [
+          {
+            "term": "computed",
+            "tf": 3,
+            "weight": 0.096774
+          },
+          {
+            "term": "fields",
+            "tf": 3,
+            "weight": 0.096774
+          },
+          {
+            "term": "cached",
+            "tf": 2,
+            "weight": 0.064516
+          },
+          {
+            "term": "tests",
+            "tf": 2,
+            "weight": 0.064516
+          },
+          {
+            "term": "test",
+            "tf": 2,
+            "weight": 0.064516
+          },
+          {
+            "term": "pydantic",
+            "tf": 2,
+            "weight": 0.064516
+          },
+          {
+            "term": "properties",
+            "tf": 1,
+            "weight": 0.032258
+          },
+          {
+            "term": "work",
+            "tf": 1,
+            "weight": 0.032258
+          },
+          {
+            "term": "with",
+            "tf": 1,
+            "weight": 0.032258
+          },
+          {
+            "term": "functools",
+            "tf": 1,
+            "weight": 0.032258
+          },
+          {
+            "term": "property",
+            "tf": 1,
+            "weight": 0.032258
+          },
+          {
+            "term": "for",
+            "tf": 1,
+            "weight": 0.032258
+          },
+          {
+            "term": "performance",
+            "tf": 1,
+            "weight": 0.032258
+          },
+          {
+            "term": "sources",
+            "tf": 1,
+            "weight": 0.032258
+          },
+          {
+            "term": "py178",
+            "tf": 1,
+            "weight": 0.032258
+          },
+          {
+            "term": "214",
+            "tf": 1,
+            "weight": 0.032258
+          },
+          {
+            "term": "https",
+            "tf": 1,
+            "weight": 0.032258
+          },
+          {
+            "term": "github",
+            "tf": 1,
+            "weight": 0.032258
+          },
+          {
+            "term": "com",
+            "tf": 1,
+            "weight": 0.032258
+          },
+          {
+            "term": "blob",
+            "tf": 1,
+            "weight": 0.032258
+          }
+        ],
+        "unique_terms": 23,
+        "total_terms": 31
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Cached Properties",
+        "cached",
+        "computed",
+        "fields",
+        "functools",
+        "properties",
+        "pydantic",
+        "test",
+        "tests",
+        "with",
+        "work"
+      ],
+      "collection_name": "pydantic"
+    },
+    "advanced_scores": {
+      "semantic": 0.6,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5685714285714286,
+      "overall": 0.6895238095238095
+    }
+  }
+]

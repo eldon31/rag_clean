@@ -1,0 +1,2461 @@
+[
+  {
+    "text": "## Overview  StreamableHTTP transport implements the MCP protocol over HTTP using a hybrid approach: clients send messages via HTTP POST requests, while servers respond using either JSON responses or SSE streams. The transport supports both stateful sessions with resumability and stateless request-response patterns. **Key Features:**  - HTTP POST requests for client-to-server communication - SSE streaming for server-to-client communication - Session management with unique session IDs - Optional resumability via `EventStore` interface - Authentication support through `httpx.Auth` - DNS rebinding protection via `TransportSecurityMiddleware` - Both stateful and stateless operation modes  Sources: [src/mcp/client/streamable\\_http.py1-8](https://github.com/modelcontextprotocol/python-sdk/blob/146d7efb/src/mcp/client/streamable_http.py#L1-L8) [src/mcp/server/streamable\\_http.py1-8](https://github.com/modelcontextprotocol/python-sdk/blob/146d7efb/src/mcp/server/streamable_http.py#L1-L8)",
+    "metadata": {
+      "chunk_id": "3c15ccb1cd01-0001",
+      "source_file": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_5.1-streamablehttp-transport.md",
+      "filename": "_modelcontextprotocol_python-sdk_5.1-streamablehttp-transport.md",
+      "file_extension": ".md",
+      "chunk_index": 1,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Overview"
+      ],
+      "heading_text": "Overview",
+      "token_count": 215,
+      "char_count": 994,
+      "start_char": 5172,
+      "end_char": 6166,
+      "semantic_score": 0.7,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5117391304347826,
+      "chunking_strategy": "hybrid_adaptive_structural",
+      "content_type": "list_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:10.920212",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 215,
+      "document_id": "3c15ccb1cd01",
+      "document_name": "_modelcontextprotocol_python-sdk_5.1-streamablehttp-transport",
+      "source_path": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_5.1-streamablehttp-transport.md",
+      "source_filename": "_modelcontextprotocol_python-sdk_5.1-streamablehttp-transport.md",
+      "source_directory": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk",
+      "relative_path": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_5.1-streamablehttp-transport.md",
+      "hierarchy_path": "Overview",
+      "chunk_hash": "c47b8d336ecd2689",
+      "content_digest": "c47b8d336ecd2689",
+      "chunk_length": 994,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "fast_docs"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "http",
+          "mcp",
+          "client",
+          "server",
+          "src",
+          "streamable",
+          "via",
+          "transport",
+          "the",
+          "using",
+          "post",
+          "requests",
+          "sse",
+          "both",
+          "stateful",
+          "with",
+          "resumability",
+          "and",
+          "stateless",
+          "for"
+        ],
+        "term_weights": [
+          {
+            "term": "http",
+            "tf": 7,
+            "weight": 0.057377
+          },
+          {
+            "term": "mcp",
+            "tf": 5,
+            "weight": 0.040984
+          },
+          {
+            "term": "client",
+            "tf": 4,
+            "weight": 0.032787
+          },
+          {
+            "term": "server",
+            "tf": 4,
+            "weight": 0.032787
+          },
+          {
+            "term": "src",
+            "tf": 4,
+            "weight": 0.032787
+          },
+          {
+            "term": "streamable",
+            "tf": 4,
+            "weight": 0.032787
+          },
+          {
+            "term": "via",
+            "tf": 3,
+            "weight": 0.02459
+          },
+          {
+            "term": "transport",
+            "tf": 2,
+            "weight": 0.016393
+          },
+          {
+            "term": "the",
+            "tf": 2,
+            "weight": 0.016393
+          },
+          {
+            "term": "using",
+            "tf": 2,
+            "weight": 0.016393
+          },
+          {
+            "term": "post",
+            "tf": 2,
+            "weight": 0.016393
+          },
+          {
+            "term": "requests",
+            "tf": 2,
+            "weight": 0.016393
+          },
+          {
+            "term": "sse",
+            "tf": 2,
+            "weight": 0.016393
+          },
+          {
+            "term": "both",
+            "tf": 2,
+            "weight": 0.016393
+          },
+          {
+            "term": "stateful",
+            "tf": 2,
+            "weight": 0.016393
+          },
+          {
+            "term": "with",
+            "tf": 2,
+            "weight": 0.016393
+          },
+          {
+            "term": "resumability",
+            "tf": 2,
+            "weight": 0.016393
+          },
+          {
+            "term": "and",
+            "tf": 2,
+            "weight": 0.016393
+          },
+          {
+            "term": "stateless",
+            "tf": 2,
+            "weight": 0.016393
+          },
+          {
+            "term": "for",
+            "tf": 2,
+            "weight": 0.016393
+          }
+        ],
+        "unique_terms": 74,
+        "total_terms": 122
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Overview",
+        "client",
+        "http",
+        "mcp",
+        "server",
+        "src",
+        "streamable",
+        "the",
+        "transport",
+        "using",
+        "via"
+      ],
+      "collection_name": "FAST_DOCS"
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5117391304347826,
+      "overall": 0.7039130434782609
+    }
+  },
+  {
+    "text": "## Architecture Overview ``` ``` **StreamableHTTP Transport Architecture**  Sources: [src/mcp/client/streamable\\_http.py74-108](https://github.com/modelcontextprotocol/python-sdk/blob/146d7efb/src/mcp/client/streamable_http.py#L74-L108) [src/mcp/server/streamable\\_http.py122-175](https://github.com/modelcontextprotocol/python-sdk/blob/146d7efb/src/mcp/server/streamable_http.py#L122-L175) [src/mcp/server/streamable\\_http\\_manager.py29-79](https://github.com/modelcontextprotocol/python-sdk/blob/146d7efb/src/mcp/server/streamable_http_manager.py#L29-L79)",
+    "metadata": {
+      "chunk_id": "3c15ccb1cd01-0002",
+      "source_file": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_5.1-streamablehttp-transport.md",
+      "filename": "_modelcontextprotocol_python-sdk_5.1-streamablehttp-transport.md",
+      "file_extension": ".md",
+      "chunk_index": 2,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Architecture Overview"
+      ],
+      "heading_text": "Architecture Overview",
+      "token_count": 150,
+      "char_count": 557,
+      "start_char": 6169,
+      "end_char": 6726,
+      "semantic_score": 0.6,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.565,
+      "chunking_strategy": "hybrid_adaptive_structural",
+      "content_type": "code_block",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:10.921320",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 150,
+      "document_id": "3c15ccb1cd01",
+      "document_name": "_modelcontextprotocol_python-sdk_5.1-streamablehttp-transport",
+      "source_path": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_5.1-streamablehttp-transport.md",
+      "source_filename": "_modelcontextprotocol_python-sdk_5.1-streamablehttp-transport.md",
+      "source_directory": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk",
+      "relative_path": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_5.1-streamablehttp-transport.md",
+      "hierarchy_path": "Architecture Overview",
+      "chunk_hash": "95393f9b69a66ecd",
+      "content_digest": "95393f9b69a66ecd",
+      "chunk_length": 557,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "fast_docs"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "src",
+          "mcp",
+          "streamable",
+          "http",
+          "server",
+          "https",
+          "github",
+          "com",
+          "modelcontextprotocol",
+          "python",
+          "sdk",
+          "blob",
+          "146d7efb",
+          "architecture",
+          "client",
+          "manager",
+          "overview",
+          "streamablehttp",
+          "transport",
+          "sources"
+        ],
+        "term_weights": [
+          {
+            "term": "src",
+            "tf": 6,
+            "weight": 0.082192
+          },
+          {
+            "term": "mcp",
+            "tf": 6,
+            "weight": 0.082192
+          },
+          {
+            "term": "streamable",
+            "tf": 6,
+            "weight": 0.082192
+          },
+          {
+            "term": "http",
+            "tf": 6,
+            "weight": 0.082192
+          },
+          {
+            "term": "server",
+            "tf": 4,
+            "weight": 0.054795
+          },
+          {
+            "term": "https",
+            "tf": 3,
+            "weight": 0.041096
+          },
+          {
+            "term": "github",
+            "tf": 3,
+            "weight": 0.041096
+          },
+          {
+            "term": "com",
+            "tf": 3,
+            "weight": 0.041096
+          },
+          {
+            "term": "modelcontextprotocol",
+            "tf": 3,
+            "weight": 0.041096
+          },
+          {
+            "term": "python",
+            "tf": 3,
+            "weight": 0.041096
+          },
+          {
+            "term": "sdk",
+            "tf": 3,
+            "weight": 0.041096
+          },
+          {
+            "term": "blob",
+            "tf": 3,
+            "weight": 0.041096
+          },
+          {
+            "term": "146d7efb",
+            "tf": 3,
+            "weight": 0.041096
+          },
+          {
+            "term": "architecture",
+            "tf": 2,
+            "weight": 0.027397
+          },
+          {
+            "term": "client",
+            "tf": 2,
+            "weight": 0.027397
+          },
+          {
+            "term": "manager",
+            "tf": 2,
+            "weight": 0.027397
+          },
+          {
+            "term": "overview",
+            "tf": 1,
+            "weight": 0.013699
+          },
+          {
+            "term": "streamablehttp",
+            "tf": 1,
+            "weight": 0.013699
+          },
+          {
+            "term": "transport",
+            "tf": 1,
+            "weight": 0.013699
+          },
+          {
+            "term": "sources",
+            "tf": 1,
+            "weight": 0.013699
+          }
+        ],
+        "unique_terms": 31,
+        "total_terms": 73
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Architecture Overview",
+        "com",
+        "github",
+        "http",
+        "https",
+        "mcp",
+        "modelcontextprotocol",
+        "python",
+        "server",
+        "src",
+        "streamable"
+      ],
+      "collection_name": "FAST_DOCS"
+    },
+    "advanced_scores": {
+      "semantic": 0.6,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.565,
+      "overall": 0.6883333333333334
+    }
+  },
+  {
+    "text": "## Client-Side Implementation  The client-side implementation centers around the `StreamableHTTPTransport` class and the `streamablehttp_client` async context manager.",
+    "metadata": {
+      "chunk_id": "3c15ccb1cd01-0003",
+      "source_file": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_5.1-streamablehttp-transport.md",
+      "filename": "_modelcontextprotocol_python-sdk_5.1-streamablehttp-transport.md",
+      "file_extension": ".md",
+      "chunk_index": 3,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Client-Side Implementation"
+      ],
+      "heading_text": "Client-Side Implementation",
+      "token_count": 32,
+      "char_count": 167,
+      "start_char": 6730,
+      "end_char": 6897,
+      "semantic_score": 0.8,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5194117647058824,
+      "chunking_strategy": "hybrid_adaptive_structural",
+      "content_type": "code_block",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:10.922041",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 32,
+      "document_id": "3c15ccb1cd01",
+      "document_name": "_modelcontextprotocol_python-sdk_5.1-streamablehttp-transport",
+      "source_path": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_5.1-streamablehttp-transport.md",
+      "source_filename": "_modelcontextprotocol_python-sdk_5.1-streamablehttp-transport.md",
+      "source_directory": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk",
+      "relative_path": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_5.1-streamablehttp-transport.md",
+      "hierarchy_path": "Client-Side Implementation",
+      "chunk_hash": "584819a254bfb67f",
+      "content_digest": "584819a254bfb67f",
+      "chunk_length": 167,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "fast_docs"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "client",
+          "the",
+          "side",
+          "implementation",
+          "centers",
+          "around",
+          "streamablehttptransport",
+          "class",
+          "and",
+          "streamablehttp",
+          "async",
+          "context",
+          "manager"
+        ],
+        "term_weights": [
+          {
+            "term": "client",
+            "tf": 3,
+            "weight": 0.157895
+          },
+          {
+            "term": "the",
+            "tf": 3,
+            "weight": 0.157895
+          },
+          {
+            "term": "side",
+            "tf": 2,
+            "weight": 0.105263
+          },
+          {
+            "term": "implementation",
+            "tf": 2,
+            "weight": 0.105263
+          },
+          {
+            "term": "centers",
+            "tf": 1,
+            "weight": 0.052632
+          },
+          {
+            "term": "around",
+            "tf": 1,
+            "weight": 0.052632
+          },
+          {
+            "term": "streamablehttptransport",
+            "tf": 1,
+            "weight": 0.052632
+          },
+          {
+            "term": "class",
+            "tf": 1,
+            "weight": 0.052632
+          },
+          {
+            "term": "and",
+            "tf": 1,
+            "weight": 0.052632
+          },
+          {
+            "term": "streamablehttp",
+            "tf": 1,
+            "weight": 0.052632
+          },
+          {
+            "term": "async",
+            "tf": 1,
+            "weight": 0.052632
+          },
+          {
+            "term": "context",
+            "tf": 1,
+            "weight": 0.052632
+          },
+          {
+            "term": "manager",
+            "tf": 1,
+            "weight": 0.052632
+          }
+        ],
+        "unique_terms": 13,
+        "total_terms": 19
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Client-Side Implementation",
+        "and",
+        "around",
+        "centers",
+        "class",
+        "client",
+        "implementation",
+        "side",
+        "streamablehttp",
+        "streamablehttptransport",
+        "the"
+      ],
+      "collection_name": "FAST_DOCS"
+    },
+    "advanced_scores": {
+      "semantic": 0.8,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5194117647058824,
+      "overall": 0.7398039215686274
+    }
+  },
+  {
+    "text": "### Message Flow Patterns ``` ``` **StreamableHTTP Message Flow**  Sources: [src/mcp/client/streamable\\_http.py366-422](https://github.com/modelcontextprotocol/python-sdk/blob/146d7efb/src/mcp/client/streamable_http.py#L366-L422) [src/mcp/client/streamable\\_http.py192-218](https://github.com/modelcontextprotocol/python-sdk/blob/146d7efb/src/mcp/client/streamable_http.py#L192-L218) [src/mcp/client/streamable\\_http.py423-438](https://github.com/modelcontextprotocol/python-sdk/blob/146d7efb/src/mcp/client/streamable_http.py#L423-L438) [src/mcp/server/streamable\\_http.py309-507](https://github.com/modelcontextprotocol/python-sdk/blob/146d7efb/src/mcp/server/streamable_http.py#L309-L507) [src/mcp/server/streamable\\_http.py508-599](https://github.com/modelcontextprotocol/python-sdk/blob/146d7efb/src/mcp/server/streamable_http.py#L508-L599) [src/mcp/server/streamable\\_http.py600-622](https://github.com/modelcontextprotocol/python-sdk/blob/146d7efb/src/mcp/server/streamable_http.py#L600-L622)",
+    "metadata": {
+      "chunk_id": "3c15ccb1cd01-0005",
+      "source_file": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_5.1-streamablehttp-transport.md",
+      "filename": "_modelcontextprotocol_python-sdk_5.1-streamablehttp-transport.md",
+      "file_extension": ".md",
+      "chunk_index": 5,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Message Flow Patterns"
+      ],
+      "heading_text": "Message Flow Patterns",
+      "token_count": 280,
+      "char_count": 999,
+      "start_char": 8032,
+      "end_char": 9031,
+      "semantic_score": 0.6,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5525,
+      "chunking_strategy": "hybrid_adaptive_structural",
+      "content_type": "code_block",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:10.923791",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 280,
+      "document_id": "3c15ccb1cd01",
+      "document_name": "_modelcontextprotocol_python-sdk_5.1-streamablehttp-transport",
+      "source_path": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_5.1-streamablehttp-transport.md",
+      "source_filename": "_modelcontextprotocol_python-sdk_5.1-streamablehttp-transport.md",
+      "source_directory": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk",
+      "relative_path": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_5.1-streamablehttp-transport.md",
+      "hierarchy_path": "Message Flow Patterns",
+      "chunk_hash": "6723ee89d7a6431e",
+      "content_digest": "6723ee89d7a6431e",
+      "chunk_length": 999,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "fast_docs"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "src",
+          "mcp",
+          "streamable",
+          "http",
+          "client",
+          "https",
+          "github",
+          "com",
+          "modelcontextprotocol",
+          "python",
+          "sdk",
+          "blob",
+          "146d7efb",
+          "server",
+          "message",
+          "flow",
+          "patterns",
+          "streamablehttp",
+          "sources",
+          "py366"
+        ],
+        "term_weights": [
+          {
+            "term": "src",
+            "tf": 12,
+            "weight": 0.086331
+          },
+          {
+            "term": "mcp",
+            "tf": 12,
+            "weight": 0.086331
+          },
+          {
+            "term": "streamable",
+            "tf": 12,
+            "weight": 0.086331
+          },
+          {
+            "term": "http",
+            "tf": 12,
+            "weight": 0.086331
+          },
+          {
+            "term": "client",
+            "tf": 6,
+            "weight": 0.043165
+          },
+          {
+            "term": "https",
+            "tf": 6,
+            "weight": 0.043165
+          },
+          {
+            "term": "github",
+            "tf": 6,
+            "weight": 0.043165
+          },
+          {
+            "term": "com",
+            "tf": 6,
+            "weight": 0.043165
+          },
+          {
+            "term": "modelcontextprotocol",
+            "tf": 6,
+            "weight": 0.043165
+          },
+          {
+            "term": "python",
+            "tf": 6,
+            "weight": 0.043165
+          },
+          {
+            "term": "sdk",
+            "tf": 6,
+            "weight": 0.043165
+          },
+          {
+            "term": "blob",
+            "tf": 6,
+            "weight": 0.043165
+          },
+          {
+            "term": "146d7efb",
+            "tf": 6,
+            "weight": 0.043165
+          },
+          {
+            "term": "server",
+            "tf": 6,
+            "weight": 0.043165
+          },
+          {
+            "term": "message",
+            "tf": 2,
+            "weight": 0.014388
+          },
+          {
+            "term": "flow",
+            "tf": 2,
+            "weight": 0.014388
+          },
+          {
+            "term": "patterns",
+            "tf": 1,
+            "weight": 0.007194
+          },
+          {
+            "term": "streamablehttp",
+            "tf": 1,
+            "weight": 0.007194
+          },
+          {
+            "term": "sources",
+            "tf": 1,
+            "weight": 0.007194
+          },
+          {
+            "term": "py366",
+            "tf": 1,
+            "weight": 0.007194
+          }
+        ],
+        "unique_terms": 43,
+        "total_terms": 139
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Message Flow Patterns",
+        "client",
+        "com",
+        "github",
+        "http",
+        "https",
+        "mcp",
+        "modelcontextprotocol",
+        "python",
+        "src",
+        "streamable"
+      ],
+      "collection_name": "FAST_DOCS"
+    },
+    "advanced_scores": {
+      "semantic": 0.6,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5525,
+      "overall": 0.6841666666666667
+    }
+  },
+  {
+    "text": "### Client Context Manager Usage  The primary client interface is the `streamablehttp_client` async context manager: ``` ``` Sources: [src/mcp/client/streamable\\_http.py444-514](https://github.com/modelcontextprotocol/python-sdk/blob/146d7efb/src/mcp/client/streamable_http.py#L444-L514)",
+    "metadata": {
+      "chunk_id": "3c15ccb1cd01-0006",
+      "source_file": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_5.1-streamablehttp-transport.md",
+      "filename": "_modelcontextprotocol_python-sdk_5.1-streamablehttp-transport.md",
+      "file_extension": ".md",
+      "chunk_index": 6,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Client Context Manager Usage"
+      ],
+      "heading_text": "Client Context Manager Usage",
+      "token_count": 70,
+      "char_count": 287,
+      "start_char": 9035,
+      "end_char": 9322,
+      "semantic_score": 0.7,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5268421052631579,
+      "chunking_strategy": "hybrid_adaptive_structural",
+      "content_type": "code_block",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:10.924938",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 70,
+      "document_id": "3c15ccb1cd01",
+      "document_name": "_modelcontextprotocol_python-sdk_5.1-streamablehttp-transport",
+      "source_path": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_5.1-streamablehttp-transport.md",
+      "source_filename": "_modelcontextprotocol_python-sdk_5.1-streamablehttp-transport.md",
+      "source_directory": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk",
+      "relative_path": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_5.1-streamablehttp-transport.md",
+      "hierarchy_path": "Client Context Manager Usage",
+      "chunk_hash": "7f65d05f5ed33d9d",
+      "content_digest": "7f65d05f5ed33d9d",
+      "chunk_length": 287,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "fast_docs"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "client",
+          "context",
+          "manager",
+          "the",
+          "src",
+          "mcp",
+          "streamable",
+          "http",
+          "usage",
+          "primary",
+          "interface",
+          "streamablehttp",
+          "async",
+          "sources",
+          "py444",
+          "514",
+          "https",
+          "github",
+          "com",
+          "modelcontextprotocol"
+        ],
+        "term_weights": [
+          {
+            "term": "client",
+            "tf": 5,
+            "weight": 0.135135
+          },
+          {
+            "term": "context",
+            "tf": 2,
+            "weight": 0.054054
+          },
+          {
+            "term": "manager",
+            "tf": 2,
+            "weight": 0.054054
+          },
+          {
+            "term": "the",
+            "tf": 2,
+            "weight": 0.054054
+          },
+          {
+            "term": "src",
+            "tf": 2,
+            "weight": 0.054054
+          },
+          {
+            "term": "mcp",
+            "tf": 2,
+            "weight": 0.054054
+          },
+          {
+            "term": "streamable",
+            "tf": 2,
+            "weight": 0.054054
+          },
+          {
+            "term": "http",
+            "tf": 2,
+            "weight": 0.054054
+          },
+          {
+            "term": "usage",
+            "tf": 1,
+            "weight": 0.027027
+          },
+          {
+            "term": "primary",
+            "tf": 1,
+            "weight": 0.027027
+          },
+          {
+            "term": "interface",
+            "tf": 1,
+            "weight": 0.027027
+          },
+          {
+            "term": "streamablehttp",
+            "tf": 1,
+            "weight": 0.027027
+          },
+          {
+            "term": "async",
+            "tf": 1,
+            "weight": 0.027027
+          },
+          {
+            "term": "sources",
+            "tf": 1,
+            "weight": 0.027027
+          },
+          {
+            "term": "py444",
+            "tf": 1,
+            "weight": 0.027027
+          },
+          {
+            "term": "514",
+            "tf": 1,
+            "weight": 0.027027
+          },
+          {
+            "term": "https",
+            "tf": 1,
+            "weight": 0.027027
+          },
+          {
+            "term": "github",
+            "tf": 1,
+            "weight": 0.027027
+          },
+          {
+            "term": "com",
+            "tf": 1,
+            "weight": 0.027027
+          },
+          {
+            "term": "modelcontextprotocol",
+            "tf": 1,
+            "weight": 0.027027
+          }
+        ],
+        "unique_terms": 26,
+        "total_terms": 37
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Client Context Manager Usage",
+        "client",
+        "context",
+        "http",
+        "manager",
+        "mcp",
+        "primary",
+        "src",
+        "streamable",
+        "the",
+        "usage"
+      ],
+      "collection_name": "FAST_DOCS"
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5268421052631579,
+      "overall": 0.7089473684210525
+    }
+  },
+  {
+    "text": "## Server-Side Implementation\n\nThe server-side implementation provides two main components: `StreamableHTTPServerTransport` for individual connections and `StreamableHTTPSessionManager` for managing multiple sessions.",
+    "metadata": {
+      "chunk_id": "3c15ccb1cd01-0007",
+      "source_file": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_5.1-streamablehttp-transport.md",
+      "filename": "_modelcontextprotocol_python-sdk_5.1-streamablehttp-transport.md",
+      "file_extension": ".md",
+      "chunk_index": 7,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Server-Side Implementation"
+      ],
+      "heading_text": "Server-Side Implementation",
+      "token_count": 38,
+      "char_count": 217,
+      "start_char": 9326,
+      "end_char": 9543,
+      "semantic_score": 0.8,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.545,
+      "chunking_strategy": "hybrid_adaptive_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:10.925228",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 38,
+      "document_id": "3c15ccb1cd01",
+      "document_name": "_modelcontextprotocol_python-sdk_5.1-streamablehttp-transport",
+      "source_path": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_5.1-streamablehttp-transport.md",
+      "source_filename": "_modelcontextprotocol_python-sdk_5.1-streamablehttp-transport.md",
+      "source_directory": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk",
+      "relative_path": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_5.1-streamablehttp-transport.md",
+      "hierarchy_path": "Server-Side Implementation",
+      "chunk_hash": "e6996fad7ebaa738",
+      "content_digest": "e6996fad7ebaa738",
+      "chunk_length": 217,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "fast_docs"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "server",
+          "side",
+          "implementation",
+          "for",
+          "the",
+          "provides",
+          "two",
+          "main",
+          "components",
+          "streamablehttpservertransport",
+          "individual",
+          "connections",
+          "and",
+          "streamablehttpsessionmanager",
+          "managing",
+          "multiple",
+          "sessions"
+        ],
+        "term_weights": [
+          {
+            "term": "server",
+            "tf": 2,
+            "weight": 0.095238
+          },
+          {
+            "term": "side",
+            "tf": 2,
+            "weight": 0.095238
+          },
+          {
+            "term": "implementation",
+            "tf": 2,
+            "weight": 0.095238
+          },
+          {
+            "term": "for",
+            "tf": 2,
+            "weight": 0.095238
+          },
+          {
+            "term": "the",
+            "tf": 1,
+            "weight": 0.047619
+          },
+          {
+            "term": "provides",
+            "tf": 1,
+            "weight": 0.047619
+          },
+          {
+            "term": "two",
+            "tf": 1,
+            "weight": 0.047619
+          },
+          {
+            "term": "main",
+            "tf": 1,
+            "weight": 0.047619
+          },
+          {
+            "term": "components",
+            "tf": 1,
+            "weight": 0.047619
+          },
+          {
+            "term": "streamablehttpservertransport",
+            "tf": 1,
+            "weight": 0.047619
+          },
+          {
+            "term": "individual",
+            "tf": 1,
+            "weight": 0.047619
+          },
+          {
+            "term": "connections",
+            "tf": 1,
+            "weight": 0.047619
+          },
+          {
+            "term": "and",
+            "tf": 1,
+            "weight": 0.047619
+          },
+          {
+            "term": "streamablehttpsessionmanager",
+            "tf": 1,
+            "weight": 0.047619
+          },
+          {
+            "term": "managing",
+            "tf": 1,
+            "weight": 0.047619
+          },
+          {
+            "term": "multiple",
+            "tf": 1,
+            "weight": 0.047619
+          },
+          {
+            "term": "sessions",
+            "tf": 1,
+            "weight": 0.047619
+          }
+        ],
+        "unique_terms": 17,
+        "total_terms": 21
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Server-Side Implementation",
+        "components",
+        "for",
+        "implementation",
+        "main",
+        "provides",
+        "server",
+        "side",
+        "streamablehttpservertransport",
+        "the",
+        "two"
+      ],
+      "collection_name": "FAST_DOCS"
+    },
+    "advanced_scores": {
+      "semantic": 0.8,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.545,
+      "overall": 0.7483333333333334
+    }
+  },
+  {
+    "text": "### Session Management Architecture ``` ``` **Session Management Components**  Sources: [src/mcp/server/streamable\\_http\\_manager.py70-79](https://github.com/modelcontextprotocol/python-sdk/blob/146d7efb/src/mcp/server/streamable_http_manager.py#L70-L79) [src/mcp/server/streamable\\_http\\_manager.py146-194](https://github.com/modelcontextprotocol/python-sdk/blob/146d7efb/src/mcp/server/streamable_http_manager.py#L146-L194) [src/mcp/server/streamable\\_http\\_manager.py195-280](https://github.com/modelcontextprotocol/python-sdk/blob/146d7efb/src/mcp/server/streamable_http_manager.py#L195-L280)",
+    "metadata": {
+      "chunk_id": "3c15ccb1cd01-0009",
+      "source_file": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_5.1-streamablehttp-transport.md",
+      "filename": "_modelcontextprotocol_python-sdk_5.1-streamablehttp-transport.md",
+      "file_extension": ".md",
+      "chunk_index": 9,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Session Management Architecture"
+      ],
+      "heading_text": "Session Management Architecture",
+      "token_count": 155,
+      "char_count": 596,
+      "start_char": 10479,
+      "end_char": 11075,
+      "semantic_score": 0.6,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5438461538461539,
+      "chunking_strategy": "hybrid_adaptive_structural",
+      "content_type": "code_block",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:10.928116",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 155,
+      "document_id": "3c15ccb1cd01",
+      "document_name": "_modelcontextprotocol_python-sdk_5.1-streamablehttp-transport",
+      "source_path": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_5.1-streamablehttp-transport.md",
+      "source_filename": "_modelcontextprotocol_python-sdk_5.1-streamablehttp-transport.md",
+      "source_directory": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk",
+      "relative_path": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_5.1-streamablehttp-transport.md",
+      "hierarchy_path": "Session Management Architecture",
+      "chunk_hash": "f021167c043fa130",
+      "content_digest": "f021167c043fa130",
+      "chunk_length": 596,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "fast_docs"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "src",
+          "mcp",
+          "server",
+          "streamable",
+          "http",
+          "manager",
+          "https",
+          "github",
+          "com",
+          "modelcontextprotocol",
+          "python",
+          "sdk",
+          "blob",
+          "146d7efb",
+          "session",
+          "management",
+          "architecture",
+          "components",
+          "sources",
+          "py70"
+        ],
+        "term_weights": [
+          {
+            "term": "src",
+            "tf": 6,
+            "weight": 0.076923
+          },
+          {
+            "term": "mcp",
+            "tf": 6,
+            "weight": 0.076923
+          },
+          {
+            "term": "server",
+            "tf": 6,
+            "weight": 0.076923
+          },
+          {
+            "term": "streamable",
+            "tf": 6,
+            "weight": 0.076923
+          },
+          {
+            "term": "http",
+            "tf": 6,
+            "weight": 0.076923
+          },
+          {
+            "term": "manager",
+            "tf": 6,
+            "weight": 0.076923
+          },
+          {
+            "term": "https",
+            "tf": 3,
+            "weight": 0.038462
+          },
+          {
+            "term": "github",
+            "tf": 3,
+            "weight": 0.038462
+          },
+          {
+            "term": "com",
+            "tf": 3,
+            "weight": 0.038462
+          },
+          {
+            "term": "modelcontextprotocol",
+            "tf": 3,
+            "weight": 0.038462
+          },
+          {
+            "term": "python",
+            "tf": 3,
+            "weight": 0.038462
+          },
+          {
+            "term": "sdk",
+            "tf": 3,
+            "weight": 0.038462
+          },
+          {
+            "term": "blob",
+            "tf": 3,
+            "weight": 0.038462
+          },
+          {
+            "term": "146d7efb",
+            "tf": 3,
+            "weight": 0.038462
+          },
+          {
+            "term": "session",
+            "tf": 2,
+            "weight": 0.025641
+          },
+          {
+            "term": "management",
+            "tf": 2,
+            "weight": 0.025641
+          },
+          {
+            "term": "architecture",
+            "tf": 1,
+            "weight": 0.012821
+          },
+          {
+            "term": "components",
+            "tf": 1,
+            "weight": 0.012821
+          },
+          {
+            "term": "sources",
+            "tf": 1,
+            "weight": 0.012821
+          },
+          {
+            "term": "py70",
+            "tf": 1,
+            "weight": 0.012821
+          }
+        ],
+        "unique_terms": 30,
+        "total_terms": 78
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Session Management Architecture",
+        "com",
+        "github",
+        "http",
+        "https",
+        "manager",
+        "mcp",
+        "modelcontextprotocol",
+        "server",
+        "src",
+        "streamable"
+      ],
+      "collection_name": "FAST_DOCS"
+    },
+    "advanced_scores": {
+      "semantic": 0.6,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5438461538461539,
+      "overall": 0.6812820512820513
+    }
+  },
+  {
+    "text": "### EventStore Interface ``` ``` **Event Storage Architecture**  **Resumption Flow:**  1. Client includes `Last-Event-ID` header in GET request via `LAST_EVENT_ID_HEADER` 2. Server calls `EventStore.replay_events_after()` in `_replay_events()` 3. Missed events are replayed via SSE using `_create_event_data()` 4. New events continue from current point with automatic event ID generation  **Stream Management:**  - Events are stored per `StreamId` (either request ID or `GET_STREAM_KEY`) - Message router distributes events to appropriate streams based on request correlation - Event IDs are generated by the `EventStore` implementation  Sources: [src/mcp/server/streamable\\_http.py84-120](https://github.com/modelcontextprotocol/python-sdk/blob/146d7efb/src/mcp/server/streamable_http.py#L84-L120) [src/mcp/server/streamable\\_http.py728-798](https://github.com/modelcontextprotocol/python-sdk/blob/146d7efb/src/mcp/server/streamable_http.py#L728-L798) [src/mcp/server/streamable\\_http.py829-880](https://github.com/modelcontextprotocol/python-sdk/blob/146d7efb/src/mcp/server/streamable_http.py#L829-L880)",
+    "metadata": {
+      "chunk_id": "3c15ccb1cd01-0012",
+      "source_file": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_5.1-streamablehttp-transport.md",
+      "filename": "_modelcontextprotocol_python-sdk_5.1-streamablehttp-transport.md",
+      "file_extension": ".md",
+      "chunk_index": 12,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "EventStore Interface"
+      ],
+      "heading_text": "EventStore Interface",
+      "token_count": 274,
+      "char_count": 1106,
+      "start_char": 12066,
+      "end_char": 13172,
+      "semantic_score": 0.7,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5405882352941177,
+      "chunking_strategy": "hybrid_adaptive_structural",
+      "content_type": "code_block",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:10.931161",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 274,
+      "document_id": "3c15ccb1cd01",
+      "document_name": "_modelcontextprotocol_python-sdk_5.1-streamablehttp-transport",
+      "source_path": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_5.1-streamablehttp-transport.md",
+      "source_filename": "_modelcontextprotocol_python-sdk_5.1-streamablehttp-transport.md",
+      "source_directory": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk",
+      "relative_path": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_5.1-streamablehttp-transport.md",
+      "hierarchy_path": "EventStore Interface",
+      "chunk_hash": "7a07fc3b96f6292b",
+      "content_digest": "7a07fc3b96f6292b",
+      "chunk_length": 1106,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "fast_docs"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "server",
+          "event",
+          "events",
+          "src",
+          "mcp",
+          "streamable",
+          "http",
+          "eventstore",
+          "request",
+          "are",
+          "https",
+          "github",
+          "com",
+          "modelcontextprotocol",
+          "python",
+          "sdk",
+          "blob",
+          "146d7efb",
+          "last",
+          "header"
+        ],
+        "term_weights": [
+          {
+            "term": "server",
+            "tf": 7,
+            "weight": 0.049645
+          },
+          {
+            "term": "event",
+            "tf": 6,
+            "weight": 0.042553
+          },
+          {
+            "term": "events",
+            "tf": 6,
+            "weight": 0.042553
+          },
+          {
+            "term": "src",
+            "tf": 6,
+            "weight": 0.042553
+          },
+          {
+            "term": "mcp",
+            "tf": 6,
+            "weight": 0.042553
+          },
+          {
+            "term": "streamable",
+            "tf": 6,
+            "weight": 0.042553
+          },
+          {
+            "term": "http",
+            "tf": 6,
+            "weight": 0.042553
+          },
+          {
+            "term": "eventstore",
+            "tf": 3,
+            "weight": 0.021277
+          },
+          {
+            "term": "request",
+            "tf": 3,
+            "weight": 0.021277
+          },
+          {
+            "term": "are",
+            "tf": 3,
+            "weight": 0.021277
+          },
+          {
+            "term": "https",
+            "tf": 3,
+            "weight": 0.021277
+          },
+          {
+            "term": "github",
+            "tf": 3,
+            "weight": 0.021277
+          },
+          {
+            "term": "com",
+            "tf": 3,
+            "weight": 0.021277
+          },
+          {
+            "term": "modelcontextprotocol",
+            "tf": 3,
+            "weight": 0.021277
+          },
+          {
+            "term": "python",
+            "tf": 3,
+            "weight": 0.021277
+          },
+          {
+            "term": "sdk",
+            "tf": 3,
+            "weight": 0.021277
+          },
+          {
+            "term": "blob",
+            "tf": 3,
+            "weight": 0.021277
+          },
+          {
+            "term": "146d7efb",
+            "tf": 3,
+            "weight": 0.021277
+          },
+          {
+            "term": "last",
+            "tf": 2,
+            "weight": 0.014184
+          },
+          {
+            "term": "header",
+            "tf": 2,
+            "weight": 0.014184
+          }
+        ],
+        "unique_terms": 77,
+        "total_terms": 141
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "EventStore Interface",
+        "are",
+        "event",
+        "events",
+        "eventstore",
+        "http",
+        "mcp",
+        "request",
+        "server",
+        "src",
+        "streamable"
+      ],
+      "collection_name": "FAST_DOCS"
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5405882352941177,
+      "overall": 0.7135294117647059
+    }
+  },
+  {
+    "text": "### Security Validation  The transport validates incoming requests against security policies via `TransportSecurityMiddleware`:  | Validation     | Scope         | Purpose                                      | | -------------- | ------------- | -------------------------------------------- | | Host Header    | All requests  | Prevent DNS rebinding attacks                | | Origin Header  | CORS requests | Validate request origin                      | | Content-Type   | POST requests | Ensure proper JSON content                   | | Accept Headers | POST requests | Validate client accepts required media types |  **Security Integration:**  - `TransportSecurityMiddleware` is instantiated in `StreamableHTTPServerTransport.__init__()` - Validation occurs in `handle_request()` via `_security.validate_request()` - Failed validation returns error responses before processing  **Configuration Example:** ``` ``` Sources: [src/mcp/server/streamable\\_http.py27-30](https://github.com/modelcontextprotocol/python-sdk/blob/146d7efb/src/mcp/server/streamable_http.py#L27-L30) [src/mcp/server/streamable\\_http.py166](https://github.com/modelcontextprotocol/python-sdk/blob/146d7efb/src/mcp/server/streamable_http.py#L166-L166) [src/mcp/server/streamable\\_http.py268-272](https://github.com/modelcontextprotocol/python-sdk/blob/146d7efb/src/mcp/server/streamable_http.py#L268-L272)",
+    "metadata": {
+      "chunk_id": "3c15ccb1cd01-0014",
+      "source_file": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_5.1-streamablehttp-transport.md",
+      "filename": "_modelcontextprotocol_python-sdk_5.1-streamablehttp-transport.md",
+      "file_extension": ".md",
+      "chunk_index": 14,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Security Validation"
+      ],
+      "heading_text": "Security Validation",
+      "token_count": 281,
+      "char_count": 1380,
+      "start_char": 13301,
+      "end_char": 14681,
+      "semantic_score": 0.7,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.6767924528301886,
+      "chunking_strategy": "hybrid_adaptive_structural",
+      "content_type": "code_block",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:10.934563",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 281,
+      "document_id": "3c15ccb1cd01",
+      "document_name": "_modelcontextprotocol_python-sdk_5.1-streamablehttp-transport",
+      "source_path": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_5.1-streamablehttp-transport.md",
+      "source_filename": "_modelcontextprotocol_python-sdk_5.1-streamablehttp-transport.md",
+      "source_directory": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk",
+      "relative_path": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_5.1-streamablehttp-transport.md",
+      "hierarchy_path": "Security Validation",
+      "chunk_hash": "a2c340d1a0986e28",
+      "content_digest": "a2c340d1a0986e28",
+      "chunk_length": 1380,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "fast_docs"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "src",
+          "mcp",
+          "server",
+          "streamable",
+          "http",
+          "requests",
+          "security",
+          "validation",
+          "validate",
+          "request",
+          "https",
+          "github",
+          "com",
+          "modelcontextprotocol",
+          "python",
+          "sdk",
+          "blob",
+          "146d7efb",
+          "via",
+          "transportsecuritymiddleware"
+        ],
+        "term_weights": [
+          {
+            "term": "src",
+            "tf": 6,
+            "weight": 0.044118
+          },
+          {
+            "term": "mcp",
+            "tf": 6,
+            "weight": 0.044118
+          },
+          {
+            "term": "server",
+            "tf": 6,
+            "weight": 0.044118
+          },
+          {
+            "term": "streamable",
+            "tf": 6,
+            "weight": 0.044118
+          },
+          {
+            "term": "http",
+            "tf": 6,
+            "weight": 0.044118
+          },
+          {
+            "term": "requests",
+            "tf": 5,
+            "weight": 0.036765
+          },
+          {
+            "term": "security",
+            "tf": 4,
+            "weight": 0.029412
+          },
+          {
+            "term": "validation",
+            "tf": 4,
+            "weight": 0.029412
+          },
+          {
+            "term": "validate",
+            "tf": 3,
+            "weight": 0.022059
+          },
+          {
+            "term": "request",
+            "tf": 3,
+            "weight": 0.022059
+          },
+          {
+            "term": "https",
+            "tf": 3,
+            "weight": 0.022059
+          },
+          {
+            "term": "github",
+            "tf": 3,
+            "weight": 0.022059
+          },
+          {
+            "term": "com",
+            "tf": 3,
+            "weight": 0.022059
+          },
+          {
+            "term": "modelcontextprotocol",
+            "tf": 3,
+            "weight": 0.022059
+          },
+          {
+            "term": "python",
+            "tf": 3,
+            "weight": 0.022059
+          },
+          {
+            "term": "sdk",
+            "tf": 3,
+            "weight": 0.022059
+          },
+          {
+            "term": "blob",
+            "tf": 3,
+            "weight": 0.022059
+          },
+          {
+            "term": "146d7efb",
+            "tf": 3,
+            "weight": 0.022059
+          },
+          {
+            "term": "via",
+            "tf": 2,
+            "weight": 0.014706
+          },
+          {
+            "term": "transportsecuritymiddleware",
+            "tf": 2,
+            "weight": 0.014706
+          }
+        ],
+        "unique_terms": 74,
+        "total_terms": 136
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Security Validation",
+        "http",
+        "mcp",
+        "request",
+        "requests",
+        "security",
+        "server",
+        "src",
+        "streamable",
+        "validate",
+        "validation"
+      ],
+      "collection_name": "FAST_DOCS"
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.6767924528301886,
+      "overall": 0.7589308176100628
+    }
+  },
+  {
+    "text": "## Protocol Implementation Details",
+    "metadata": {
+      "chunk_id": "3c15ccb1cd01-0015",
+      "source_file": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_5.1-streamablehttp-transport.md",
+      "filename": "_modelcontextprotocol_python-sdk_5.1-streamablehttp-transport.md",
+      "file_extension": ".md",
+      "chunk_index": 15,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Protocol Implementation Details"
+      ],
+      "heading_text": "Protocol Implementation Details",
+      "token_count": 4,
+      "char_count": 34,
+      "start_char": 14685,
+      "end_char": 14719,
+      "semantic_score": 0.8,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.59,
+      "chunking_strategy": "hybrid_adaptive_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:10.934949",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 4,
+      "document_id": "3c15ccb1cd01",
+      "document_name": "_modelcontextprotocol_python-sdk_5.1-streamablehttp-transport",
+      "source_path": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_5.1-streamablehttp-transport.md",
+      "source_filename": "_modelcontextprotocol_python-sdk_5.1-streamablehttp-transport.md",
+      "source_directory": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk",
+      "relative_path": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_5.1-streamablehttp-transport.md",
+      "hierarchy_path": "Protocol Implementation Details",
+      "chunk_hash": "6222e44cc5714fac",
+      "content_digest": "6222e44cc5714fac",
+      "chunk_length": 34,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "fast_docs"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "protocol",
+          "implementation",
+          "details"
+        ],
+        "term_weights": [
+          {
+            "term": "protocol",
+            "tf": 1,
+            "weight": 0.333333
+          },
+          {
+            "term": "implementation",
+            "tf": 1,
+            "weight": 0.333333
+          },
+          {
+            "term": "details",
+            "tf": 1,
+            "weight": 0.333333
+          }
+        ],
+        "unique_terms": 3,
+        "total_terms": 3
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Protocol Implementation Details",
+        "details",
+        "implementation",
+        "protocol"
+      ],
+      "collection_name": "FAST_DOCS"
+    },
+    "advanced_scores": {
+      "semantic": 0.8,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.59,
+      "overall": 0.7633333333333333
+    }
+  },
+  {
+    "text": "### Headers and Content Types  | Header                 | Constant                      | Purpose                | Example                               | | ---------------------- | ----------------------------- | ---------------------- | ------------------------------------- | | `mcp-session-id`       | `MCP_SESSION_ID_HEADER`       | Session identification | `abc123def456...`                     | | `mcp-protocol-version` | `MCP_PROTOCOL_VERSION_HEADER` | Protocol version       | `2025-03-26`                          | | `last-event-id`        | `LAST_EVENT_ID_HEADER`        | Resumption token       | `event-123`                           | | `content-type`         | `CONTENT_TYPE`                | Request format         | `application/json`                    | | `accept`               | `ACCEPT`                      | Response formats       | `application/json, text/event-stream` |  **Content Type Constants:**  - `CONTENT_TYPE_JSON` = `\"application/json\"` - `CONTENT_TYPE_SSE` = `\"text/event-stream\"` - `JSON` = `\"application/json\"` (client) - `SSE` = `\"text/event-stream\"` (client)  **Session ID Validation:**  - Pattern: `SESSION_ID_PATTERN` validates visible ASCII characters (0x21-0x7E) - Generated using `uuid4().hex` for new sessions - Validated on transport initialization and request processing  Sources: [src/mcp/server/streamable\\_http.py50-64](https://github.com/modelcontextprotocol/python-sdk/blob/146d7efb/src/mcp/server/streamable_http.py#L50-L64) [src/mcp/client/streamable\\_http.py42-51](https://github.com/modelcontextprotocol/python-sdk/blob/146d7efb/src/mcp/client/streamable_http.py#L42-L51) [src/mcp/server/streamable\\_http.py62-64](https://github.com/modelcontextprotocol/python-sdk/blob/146d7efb/src/mcp/server/streamable_http.py#L62-L64)",
+    "metadata": {
+      "chunk_id": "3c15ccb1cd01-0018",
+      "source_file": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_5.1-streamablehttp-transport.md",
+      "filename": "_modelcontextprotocol_python-sdk_5.1-streamablehttp-transport.md",
+      "file_extension": ".md",
+      "chunk_index": 18,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Headers and Content Types"
+      ],
+      "heading_text": "Headers and Content Types",
+      "token_count": 410,
+      "char_count": 1780,
+      "start_char": 15252,
+      "end_char": 17032,
+      "semantic_score": 0.7999999999999999,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.7030000000000001,
+      "chunking_strategy": "hybrid_adaptive_structural",
+      "content_type": "table_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:10.937072",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 410,
+      "document_id": "3c15ccb1cd01",
+      "document_name": "_modelcontextprotocol_python-sdk_5.1-streamablehttp-transport",
+      "source_path": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_5.1-streamablehttp-transport.md",
+      "source_filename": "_modelcontextprotocol_python-sdk_5.1-streamablehttp-transport.md",
+      "source_directory": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk",
+      "relative_path": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_5.1-streamablehttp-transport.md",
+      "hierarchy_path": "Headers and Content Types",
+      "chunk_hash": "e39d1c74d2b08071",
+      "content_digest": "e39d1c74d2b08071",
+      "chunk_length": 1780,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "fast_docs"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "mcp",
+          "content",
+          "event",
+          "json",
+          "src",
+          "streamable",
+          "http",
+          "session",
+          "type",
+          "header",
+          "application",
+          "client",
+          "server",
+          "protocol",
+          "version",
+          "text",
+          "stream",
+          "https",
+          "github",
+          "com"
+        ],
+        "term_weights": [
+          {
+            "term": "mcp",
+            "tf": 10,
+            "weight": 0.06135
+          },
+          {
+            "term": "content",
+            "tf": 6,
+            "weight": 0.03681
+          },
+          {
+            "term": "event",
+            "tf": 6,
+            "weight": 0.03681
+          },
+          {
+            "term": "json",
+            "tf": 6,
+            "weight": 0.03681
+          },
+          {
+            "term": "src",
+            "tf": 6,
+            "weight": 0.03681
+          },
+          {
+            "term": "streamable",
+            "tf": 6,
+            "weight": 0.03681
+          },
+          {
+            "term": "http",
+            "tf": 6,
+            "weight": 0.03681
+          },
+          {
+            "term": "session",
+            "tf": 5,
+            "weight": 0.030675
+          },
+          {
+            "term": "type",
+            "tf": 5,
+            "weight": 0.030675
+          },
+          {
+            "term": "header",
+            "tf": 4,
+            "weight": 0.02454
+          },
+          {
+            "term": "application",
+            "tf": 4,
+            "weight": 0.02454
+          },
+          {
+            "term": "client",
+            "tf": 4,
+            "weight": 0.02454
+          },
+          {
+            "term": "server",
+            "tf": 4,
+            "weight": 0.02454
+          },
+          {
+            "term": "protocol",
+            "tf": 3,
+            "weight": 0.018405
+          },
+          {
+            "term": "version",
+            "tf": 3,
+            "weight": 0.018405
+          },
+          {
+            "term": "text",
+            "tf": 3,
+            "weight": 0.018405
+          },
+          {
+            "term": "stream",
+            "tf": 3,
+            "weight": 0.018405
+          },
+          {
+            "term": "https",
+            "tf": 3,
+            "weight": 0.018405
+          },
+          {
+            "term": "github",
+            "tf": 3,
+            "weight": 0.018405
+          },
+          {
+            "term": "com",
+            "tf": 3,
+            "weight": 0.018405
+          }
+        ],
+        "unique_terms": 73,
+        "total_terms": 163
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Headers and Content Types",
+        "content",
+        "event",
+        "header",
+        "http",
+        "json",
+        "mcp",
+        "session",
+        "src",
+        "streamable",
+        "type"
+      ],
+      "collection_name": "FAST_DOCS"
+    },
+    "advanced_scores": {
+      "semantic": 0.7999999999999999,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.7030000000000001,
+      "overall": 0.8009999999999998
+    }
+  },
+  {
+    "text": "## Integration with ASGI  StreamableHTTP transport integrates with ASGI applications through the session manager: ``` ``` The session manager's `run()` method provides lifecycle management for all sessions and can only be called once per instance. Sources: [src/mcp/server/streamable\\_http\\_manager.py80-120](https://github.com/modelcontextprotocol/python-sdk/blob/146d7efb/src/mcp/server/streamable_http_manager.py#L80-L120) [src/mcp/server/streamable\\_http\\_manager.py121-145](https://github.com/modelcontextprotocol/python-sdk/blob/146d7efb/src/mcp/server/streamable_http_manager.py#L121-L145)  Dismiss  Refresh this wiki  Enter email to refresh",
+    "metadata": {
+      "chunk_id": "3c15ccb1cd01-0019",
+      "source_file": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_5.1-streamablehttp-transport.md",
+      "filename": "_modelcontextprotocol_python-sdk_5.1-streamablehttp-transport.md",
+      "file_extension": ".md",
+      "chunk_index": 19,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Integration with ASGI"
+      ],
+      "heading_text": "Integration with ASGI",
+      "token_count": 153,
+      "char_count": 648,
+      "start_char": 17034,
+      "end_char": 17682,
+      "semantic_score": 0.7,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5508695652173913,
+      "chunking_strategy": "hybrid_adaptive_structural",
+      "content_type": "code_block",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:10.939001",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 153,
+      "document_id": "3c15ccb1cd01",
+      "document_name": "_modelcontextprotocol_python-sdk_5.1-streamablehttp-transport",
+      "source_path": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_5.1-streamablehttp-transport.md",
+      "source_filename": "_modelcontextprotocol_python-sdk_5.1-streamablehttp-transport.md",
+      "source_directory": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk",
+      "relative_path": "Docs\\FAST_DOCS\\modelcontextprotocol_python-sdk\\_modelcontextprotocol_python-sdk_5.1-streamablehttp-transport.md",
+      "hierarchy_path": "Integration with ASGI",
+      "chunk_hash": "475499ef2786048b",
+      "content_digest": "475499ef2786048b",
+      "chunk_length": 648,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "fast_docs"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "manager",
+          "src",
+          "mcp",
+          "server",
+          "streamable",
+          "http",
+          "with",
+          "asgi",
+          "the",
+          "session",
+          "https",
+          "github",
+          "com",
+          "modelcontextprotocol",
+          "python",
+          "sdk",
+          "blob",
+          "146d7efb",
+          "refresh",
+          "integration"
+        ],
+        "term_weights": [
+          {
+            "term": "manager",
+            "tf": 6,
+            "weight": 0.068966
+          },
+          {
+            "term": "src",
+            "tf": 4,
+            "weight": 0.045977
+          },
+          {
+            "term": "mcp",
+            "tf": 4,
+            "weight": 0.045977
+          },
+          {
+            "term": "server",
+            "tf": 4,
+            "weight": 0.045977
+          },
+          {
+            "term": "streamable",
+            "tf": 4,
+            "weight": 0.045977
+          },
+          {
+            "term": "http",
+            "tf": 4,
+            "weight": 0.045977
+          },
+          {
+            "term": "with",
+            "tf": 2,
+            "weight": 0.022989
+          },
+          {
+            "term": "asgi",
+            "tf": 2,
+            "weight": 0.022989
+          },
+          {
+            "term": "the",
+            "tf": 2,
+            "weight": 0.022989
+          },
+          {
+            "term": "session",
+            "tf": 2,
+            "weight": 0.022989
+          },
+          {
+            "term": "https",
+            "tf": 2,
+            "weight": 0.022989
+          },
+          {
+            "term": "github",
+            "tf": 2,
+            "weight": 0.022989
+          },
+          {
+            "term": "com",
+            "tf": 2,
+            "weight": 0.022989
+          },
+          {
+            "term": "modelcontextprotocol",
+            "tf": 2,
+            "weight": 0.022989
+          },
+          {
+            "term": "python",
+            "tf": 2,
+            "weight": 0.022989
+          },
+          {
+            "term": "sdk",
+            "tf": 2,
+            "weight": 0.022989
+          },
+          {
+            "term": "blob",
+            "tf": 2,
+            "weight": 0.022989
+          },
+          {
+            "term": "146d7efb",
+            "tf": 2,
+            "weight": 0.022989
+          },
+          {
+            "term": "refresh",
+            "tf": 2,
+            "weight": 0.022989
+          },
+          {
+            "term": "integration",
+            "tf": 1,
+            "weight": 0.011494
+          }
+        ],
+        "unique_terms": 54,
+        "total_terms": 87
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Integration with ASGI",
+        "asgi",
+        "http",
+        "manager",
+        "mcp",
+        "server",
+        "session",
+        "src",
+        "streamable",
+        "the",
+        "with"
+      ],
+      "collection_name": "FAST_DOCS"
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5508695652173913,
+      "overall": 0.7169565217391304
+    }
+  }
+]

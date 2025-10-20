@@ -112,18 +112,10 @@ class ModelConfig:
     memory_efficient: bool = True
     supports_flash_attention: bool = False
     
-# Kaggle T4 x2 Optimized Models (15.83GB VRAM each)
+# V5 Model Registry - Qdrant-Optimized Models ONLY
+# Based on notes/V5_MODEL_CONFIGURATIONS.md
 KAGGLE_OPTIMIZED_MODELS = {
-    # Primary: Best for Kaggle T4 x2
-    "nomic-coderank": ModelConfig(
-        name="nomic-coderank",
-        hf_model_id="nomic-ai/CodeRankEmbed",
-        vector_dim=768,
-        max_tokens=2048,
-        query_prefix="Represent this query for searching relevant code: ",
-        recommended_batch_size=64,  # Larger batch for smaller model
-        memory_efficient=True
-    ),
+    # PRIMARY: Code-optimized (Main model for code embedding)
     "jina-code-embeddings-1.5b": ModelConfig(
         name="jina-code-embeddings-1.5b",
         hf_model_id="jinaai/jina-code-embeddings-1.5b",
@@ -134,85 +126,28 @@ KAGGLE_OPTIMIZED_MODELS = {
         memory_efficient=True
     ),
     
+    # SECONDARY: Multi-modal retrieval
     "bge-m3": ModelConfig(
         name="bge-m3",
-        hf_model_id="BAAI/bge-m3", 
+        hf_model_id="BAAI/bge-m3",
         vector_dim=1024,
         max_tokens=8192,
         recommended_batch_size=32,
         memory_efficient=True
     ),
     
-    "gte-large": ModelConfig(
-        name="gte-large",
-        hf_model_id="thenlper/gte-large",
-        vector_dim=1024,
-        max_tokens=512,
-        recommended_batch_size=32,
-        memory_efficient=True
-    ),
-    
-    # Advanced: For larger VRAM budgets
-    "gte-qwen2-1.5b": ModelConfig(
-        name="gte-qwen2-1.5b", 
-        hf_model_id="Alibaba-NLP/gte-Qwen2-1.5B-instruct",
-        vector_dim=1536,
-        max_tokens=8192,
-        query_prefix="Instruct: Given a web search query, retrieve relevant passages that answer the query\nQuery: ",
-        recommended_batch_size=16,  # Smaller batch for larger model
-        supports_flash_attention=True
-    ),
-    
-    "e5-mistral-7b": ModelConfig(
-        name="e5-mistral-7b",
-        hf_model_id="intfloat/e5-mistral-7b-instruct",
-        vector_dim=4096, 
-        max_tokens=32768,
-        query_prefix="Instruct: Given a web search query, retrieve relevant passages that answer the query\nQuery: ",
-        recommended_batch_size=8,   # Very small batch for 7B model
-        supports_flash_attention=True
-    ),
-    
-    # Speed: Ultra-fast for testing
-    "all-miniLM-l6": ModelConfig(
-        name="all-miniLM-l6",
-        hf_model_id="sentence-transformers/all-MiniLM-L6-v2",
-        vector_dim=384,
-        max_tokens=256,
-        recommended_batch_size=128,  # Large batch for tiny model
-        memory_efficient=True
-    ),
-    
-    # Additional models from V3
-    "gte-qwen2-7b": ModelConfig(
-        name="gte-qwen2-7b",
-        hf_model_id="Alibaba-NLP/gte-Qwen2-7B-instruct", 
-        vector_dim=3584,
-        max_tokens=32768,
-        query_prefix="Instruct: Given a web search query, retrieve relevant passages that answer the query\nQuery: ",
-        recommended_batch_size=4,  # Very small for 7B model
-        supports_flash_attention=True
-    ),
-    
-    "bge-small": ModelConfig(
-        name="bge-small", 
-        hf_model_id="BAAI/bge-small-en-v1.5",
-        vector_dim=384,
-        max_tokens=512,
-        recommended_batch_size=64,
-        memory_efficient=True
-    ),
-
+    # TERTIARY: Jina Embeddings V4 (Multi-vector + Matryoshka support)
     "jina-embeddings-v4": ModelConfig(
         name="jina-embeddings-v4",
         hf_model_id="jinaai/jina-embeddings-v4",
-        vector_dim=2048,
+        vector_dim=2048,  # Full dimension (Matryoshka: 128-2048)
         max_tokens=32768,
+        query_prefix="",
         recommended_batch_size=16,
         memory_efficient=True
     ),
     
-    # Qdrant-optimized models (V5)
+    # QUATERNARY: Qdrant ONNX-optimized (Ultra-fast inference)
     "qdrant-minilm-onnx": ModelConfig(
         name="qdrant-minilm-onnx",
         hf_model_id="Qdrant/all-MiniLM-L6-v2-onnx",
@@ -220,7 +155,17 @@ KAGGLE_OPTIMIZED_MODELS = {
         max_tokens=256,
         recommended_batch_size=128,  # Large batch for tiny model
         memory_efficient=True
-    )
+    ),
+    
+    # ALTERNATIVE: Regular MiniLM (fallback if ONNX unavailable)
+    "all-miniLM-l6": ModelConfig(
+        name="all-miniLM-l6",
+        hf_model_id="sentence-transformers/all-MiniLM-L6-v2",
+        vector_dim=384,
+        max_tokens=256,
+        recommended_batch_size=128,
+        memory_efficient=True
+    ),
 }
 
 # SPARSE EMBEDDING MODELS (V5)
@@ -244,20 +189,11 @@ SPARSE_MODELS = {
     }
 }
 
-# CROSSENCODER RERANKING MODELS (Production Ready)
+# V5 RERANKING MODEL (From V5_MODEL_CONFIGURATIONS.md)
 RERANKING_MODELS = {
-    # Primary: Jina Reranker V3 (0.6B params, 131K token context, 256D output)
-    "jina-reranker-v3": "jinaai/jina-reranker-v3",  # Default: Best quality, long context
-    
-    # Fast and efficient rerankers for T4 x2
-    "ms-marco-v2": "cross-encoder/ms-marco-MiniLM-L-6-v2",  # Fast, good quality
-    "ms-marco-v3": "cross-encoder/ms-marco-MiniLM-L-12-v2", # Better quality
-    "sbert-distil": "cross-encoder/stsb-distilroberta-base", # General purpose
-    "msmarco-distil": "cross-encoder/ms-marco-TinyBERT-L-2-v2", # Ultra fast
-    
-    # Advanced rerankers
-    "bge-reranker-v2": "BAAI/bge-reranker-v2-m3",  # State-of-the-art
-    "jina-reranker-v1": "jinaai/jina-reranker-v1-turbo-en"  # Fast multilingual
+    # QUATERNARY: Jina Reranker V3 (0.6B params, 131K token context, 256D output)
+    # Listwise reranking with multilingual support and code search capability
+    "jina-reranker-v3": "jinaai/jina-reranker-v3",
 }
 
 @dataclass
@@ -383,22 +319,6 @@ class RerankingConfig:
 
 @dataclass
 class AdvancedPreprocessingConfig:
-    """Advanced document preprocessing with caching"""
-    # Text preprocessing
-    enable_text_caching: bool = True
-    normalize_whitespace: bool = True
-    remove_excessive_newlines: bool = True
-    trim_long_sequences: bool = True
-    
-    # Token optimization
-    enable_tokenizer_caching: bool = True
-    max_cache_size: int = 10000
-    cache_hit_threshold: float = 0.8
-    
-    # Memory scaling
-    enable_memory_scaling: bool = True
-    memory_scale_factor: float = 0.8
-    adaptive_batch_sizing: bool = True
     """Advanced document preprocessing with caching"""
     # Text preprocessing
     enable_text_caching: bool = True
@@ -610,9 +530,7 @@ class UltimateKaggleEmbedderV4:
         self.primary_model: Optional[SentenceTransformer] = None
         self.reranker = None  # CrossEncoder reranking model
 
-        # Dense companion models (e.g., bge-small alongside CodeRank)
-        if companion_dense_models is None and model_name == "nomic-coderank":
-            companion_dense_models = ["bge-small"]
+        # V5: Dense companion models (auto-configure based on V5_MODEL_CONFIGURATIONS.md)
         self.companion_dense_model_names: List[str] = companion_dense_models or []
         self.companion_models: Dict[str, SentenceTransformer] = {}
         self.companion_model_configs: Dict[str, ModelConfig] = {}
@@ -801,8 +719,8 @@ class UltimateKaggleEmbedderV4:
         """Initialize CrossEncoder for reranking"""
         
         if not self.reranking_config.model_name in RERANKING_MODELS:
-            logger.warning(f"Unknown reranker {self.reranking_config.model_name}, defaulting to ms-marco-v2")
-            self.reranking_config.model_name = "ms-marco-v2"
+            logger.warning(f"Unknown reranker {self.reranking_config.model_name}, defaulting to jina-reranker-v3")
+            self.reranking_config.model_name = "jina-reranker-v3"
         
         reranker_model = RERANKING_MODELS[self.reranking_config.model_name]
         logger.info(f"Loading reranking model: {reranker_model}")
@@ -1996,11 +1914,94 @@ class UltimateKaggleEmbedderV4:
         return results
     
     def _encode_with_backend(self, texts: List[str], batch_size: int) -> np.ndarray:
-        """Encode with alternative backend (ONNX, etc.)"""
-        # Placeholder for backend-specific encoding
-        # Would implement ONNX/TensorRT specific logic here
-        logger.warning("Backend encoding not implemented, using fallback")
-        return np.random.rand(len(texts), self.model_config.vector_dim).astype(np.float32)
+        """Encode with alternative backend (ONNX/TensorRT)"""
+        
+        if self.primary_model is None:
+            raise RuntimeError("No backend model loaded")
+        
+        # Check if model has encode method (ONNX models from optimum)
+        if hasattr(self.primary_model, 'encode'):
+            try:
+                logger.debug(f"Encoding {len(texts)} texts with ONNX backend (batch_size={batch_size})")
+                
+                embeddings = self.primary_model.encode(
+                    texts,
+                    batch_size=batch_size,
+                    show_progress_bar=False,
+                    convert_to_numpy=True,
+                    normalize_embeddings=True,
+                )
+                
+                # Ensure correct dtype
+                if embeddings.dtype != np.float32:
+                    embeddings = embeddings.astype(np.float32)
+                
+                logger.debug(f"ONNX encoding complete: shape={embeddings.shape}")
+                return embeddings
+                
+            except Exception as e:
+                logger.error(f"ONNX encoding failed: {e}")
+                raise RuntimeError(f"Backend encoding failed: {e}")
+        
+        # If no encode method, try direct inference (for pure ONNX models)
+        elif hasattr(self.primary_model, 'forward') or hasattr(self.primary_model, '__call__'):
+            try:
+                logger.debug(f"Encoding {len(texts)} texts with direct ONNX inference")
+                
+                # Tokenize inputs
+                from transformers import AutoTokenizer
+                tokenizer = AutoTokenizer.from_pretrained(self.model_config.hf_model_id)
+                
+                all_embeddings = []
+                for i in range(0, len(texts), batch_size):
+                    batch_texts = texts[i:i + batch_size]
+                    
+                    # Tokenize
+                    inputs = tokenizer(
+                        batch_texts,
+                        padding=True,
+                        truncation=True,
+                        max_length=self.model_config.max_tokens,
+                        return_tensors="pt"
+                    )
+                    
+                    # Forward pass
+                    if hasattr(self.primary_model, 'forward'):
+                        outputs = self.primary_model.forward(**inputs)
+                    else:
+                        outputs = self.primary_model(**inputs)
+                    
+                    # Extract embeddings (usually from last_hidden_state)
+                    if hasattr(outputs, 'last_hidden_state'):
+                        # Mean pooling
+                        attention_mask = inputs['attention_mask']
+                        token_embeddings = outputs.last_hidden_state
+                        input_mask_expanded = attention_mask.unsqueeze(-1).expand(token_embeddings.size()).float()
+                        embeddings = torch.sum(token_embeddings * input_mask_expanded, 1) / torch.clamp(input_mask_expanded.sum(1), min=1e-9)
+                    else:
+                        # Fallback: use first output
+                        embeddings = outputs[0] if isinstance(outputs, tuple) else outputs
+                    
+                    # Normalize
+                    embeddings = torch.nn.functional.normalize(embeddings, p=2, dim=1)
+                    
+                    # Convert to numpy
+                    batch_embeddings = embeddings.detach().cpu().numpy().astype(np.float32)
+                    all_embeddings.append(batch_embeddings)
+                
+                final_embeddings = np.vstack(all_embeddings)
+                logger.debug(f"ONNX direct inference complete: shape={final_embeddings.shape}")
+                return final_embeddings
+                
+            except Exception as e:
+                logger.error(f"ONNX direct inference failed: {e}")
+                raise RuntimeError(f"Backend encoding failed: {e}")
+        
+        else:
+            raise RuntimeError(
+                "Backend model does not support encoding. "
+                "Model must have either 'encode()' method or 'forward()' method."
+            )
 
     def _ensure_embedding_dimension(
         self,
@@ -2701,15 +2702,15 @@ def main():
         compress_embeddings=True
     )
     
-    # V4 Feature Configurations
+    # V5 Feature Configurations (using V5-specified models)
     ensemble_config = EnsembleConfig(
-        ensemble_models=["nomic-coderank", "bge-m3"],
+        ensemble_models=["jina-code-embeddings-1.5b", "bge-m3"],
         weighting_strategy="equal",
         aggregation_method="weighted_average"
     )
     
     reranking_config = RerankingConfig(
-        model_name="ms-marco-v2",
+        model_name="jina-reranker-v3",
         enable_reranking=True,
         top_k_candidates=100,
         rerank_top_k=20
@@ -2727,9 +2728,9 @@ def main():
         logger.info(f"\nTesting {config['name']}")
         
         try:
-            # Initialize embedder with V4 features
+            # Initialize embedder with V5 features
             embedder = UltimateKaggleEmbedderV4(
-                model_name="nomic-coderank",
+                model_name="jina-code-embeddings-1.5b",
                 gpu_config=gpu_config,
                 export_config=export_config,
                 enable_ensemble=config["ensemble"],

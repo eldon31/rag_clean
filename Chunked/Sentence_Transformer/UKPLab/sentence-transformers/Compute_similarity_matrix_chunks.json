@@ -1,0 +1,2704 @@
+[
+  {
+    "text": "## Model Training Evolution\n\nThe MS MARCO models have evolved through multiple versions with different training methodologies:",
+    "metadata": {
+      "chunk_id": "5cd4e52b8c62-0000",
+      "source_file": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers\\Compute_similarity_matrix.md",
+      "filename": "Compute_similarity_matrix.md",
+      "file_extension": ".md",
+      "chunk_index": 0,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Model Training Evolution"
+      ],
+      "heading_text": "Model Training Evolution",
+      "token_count": 20,
+      "char_count": 126,
+      "start_char": 187,
+      "end_char": 313,
+      "semantic_score": 0.8,
+      "structural_score": 0.7,
+      "retrieval_quality": 0.5723529411764706,
+      "chunking_strategy": "hybrid_adaptive_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:45.230623",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 20,
+      "document_id": "5cd4e52b8c62",
+      "document_name": "Compute_similarity_matrix",
+      "source_path": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers\\Compute_similarity_matrix.md",
+      "source_filename": "Compute_similarity_matrix.md",
+      "source_directory": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers",
+      "relative_path": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers\\Compute_similarity_matrix.md",
+      "hierarchy_path": "Model Training Evolution",
+      "chunk_hash": "012f05022e27267c",
+      "content_digest": "012f05022e27267c",
+      "chunk_length": 126,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "sentence_transformer"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "training",
+          "model",
+          "evolution",
+          "the",
+          "marco",
+          "models",
+          "have",
+          "evolved",
+          "through",
+          "multiple",
+          "versions",
+          "with",
+          "different",
+          "methodologies"
+        ],
+        "term_weights": [
+          {
+            "term": "training",
+            "tf": 2,
+            "weight": 0.133333
+          },
+          {
+            "term": "model",
+            "tf": 1,
+            "weight": 0.066667
+          },
+          {
+            "term": "evolution",
+            "tf": 1,
+            "weight": 0.066667
+          },
+          {
+            "term": "the",
+            "tf": 1,
+            "weight": 0.066667
+          },
+          {
+            "term": "marco",
+            "tf": 1,
+            "weight": 0.066667
+          },
+          {
+            "term": "models",
+            "tf": 1,
+            "weight": 0.066667
+          },
+          {
+            "term": "have",
+            "tf": 1,
+            "weight": 0.066667
+          },
+          {
+            "term": "evolved",
+            "tf": 1,
+            "weight": 0.066667
+          },
+          {
+            "term": "through",
+            "tf": 1,
+            "weight": 0.066667
+          },
+          {
+            "term": "multiple",
+            "tf": 1,
+            "weight": 0.066667
+          },
+          {
+            "term": "versions",
+            "tf": 1,
+            "weight": 0.066667
+          },
+          {
+            "term": "with",
+            "tf": 1,
+            "weight": 0.066667
+          },
+          {
+            "term": "different",
+            "tf": 1,
+            "weight": 0.066667
+          },
+          {
+            "term": "methodologies",
+            "tf": 1,
+            "weight": 0.066667
+          }
+        ],
+        "unique_terms": 14,
+        "total_terms": 15
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Model Training Evolution",
+        "evolution",
+        "evolved",
+        "have",
+        "marco",
+        "model",
+        "models",
+        "multiple",
+        "the",
+        "through",
+        "training"
+      ],
+      "collection_name": "Sentence_Transformer"
+    },
+    "advanced_scores": {
+      "semantic": 0.8,
+      "structural": 0.7,
+      "retrieval_quality": 0.5723529411764706,
+      "overall": 0.6907843137254902
+    }
+  },
+  {
+    "text": "### Version 3 Hard Negative Mining Process\n\nThe v3 models used an automated hard negative mining pipeline implemented with sentence-transformers utilities:\n\n1. **Initial Retrieval**: v2 `SentenceTransformer` models encoded queries and retrieved similar passages\n2. **Cross-Encoder Scoring**: `CrossEncoder(\"cross-encoder/ms-marco-electra-base\")` scored query-passage pairs\n3. **Hard Negative Mining**: `util.mine_hard_negatives()` identified passages with high bi-encoder similarity but low cross-encoder relevance scores\n4. **Retraining**: Models trained with `MultipleNegativesRankingLoss` using the mined hard negatives",
+    "metadata": {
+      "chunk_id": "5cd4e52b8c62-0002",
+      "source_file": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers\\Compute_similarity_matrix.md",
+      "filename": "Compute_similarity_matrix.md",
+      "file_extension": ".md",
+      "chunk_index": 2,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Version 3 Hard Negative Mining Process"
+      ],
+      "heading_text": "Version 3 Hard Negative Mining Process",
+      "token_count": 132,
+      "char_count": 622,
+      "start_char": 1350,
+      "end_char": 1972,
+      "semantic_score": 0.7,
+      "structural_score": 0.7,
+      "retrieval_quality": 0.5407462686567164,
+      "chunking_strategy": "hybrid_adaptive_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:45.232851",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 132,
+      "document_id": "5cd4e52b8c62",
+      "document_name": "Compute_similarity_matrix",
+      "source_path": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers\\Compute_similarity_matrix.md",
+      "source_filename": "Compute_similarity_matrix.md",
+      "source_directory": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers",
+      "relative_path": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers\\Compute_similarity_matrix.md",
+      "hierarchy_path": "Version 3 Hard Negative Mining Process",
+      "chunk_hash": "582d09120a95186c",
+      "content_digest": "582d09120a95186c",
+      "chunk_length": 622,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "sentence_transformer"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "hard",
+          "encoder",
+          "negative",
+          "mining",
+          "models",
+          "with",
+          "cross",
+          "the",
+          "passages",
+          "negatives",
+          "version",
+          "process",
+          "used",
+          "automated",
+          "pipeline",
+          "implemented",
+          "sentence",
+          "transformers",
+          "utilities",
+          "initial"
+        ],
+        "term_weights": [
+          {
+            "term": "hard",
+            "tf": 5,
+            "weight": 0.071429
+          },
+          {
+            "term": "encoder",
+            "tf": 4,
+            "weight": 0.057143
+          },
+          {
+            "term": "negative",
+            "tf": 3,
+            "weight": 0.042857
+          },
+          {
+            "term": "mining",
+            "tf": 3,
+            "weight": 0.042857
+          },
+          {
+            "term": "models",
+            "tf": 3,
+            "weight": 0.042857
+          },
+          {
+            "term": "with",
+            "tf": 3,
+            "weight": 0.042857
+          },
+          {
+            "term": "cross",
+            "tf": 3,
+            "weight": 0.042857
+          },
+          {
+            "term": "the",
+            "tf": 2,
+            "weight": 0.028571
+          },
+          {
+            "term": "passages",
+            "tf": 2,
+            "weight": 0.028571
+          },
+          {
+            "term": "negatives",
+            "tf": 2,
+            "weight": 0.028571
+          },
+          {
+            "term": "version",
+            "tf": 1,
+            "weight": 0.014286
+          },
+          {
+            "term": "process",
+            "tf": 1,
+            "weight": 0.014286
+          },
+          {
+            "term": "used",
+            "tf": 1,
+            "weight": 0.014286
+          },
+          {
+            "term": "automated",
+            "tf": 1,
+            "weight": 0.014286
+          },
+          {
+            "term": "pipeline",
+            "tf": 1,
+            "weight": 0.014286
+          },
+          {
+            "term": "implemented",
+            "tf": 1,
+            "weight": 0.014286
+          },
+          {
+            "term": "sentence",
+            "tf": 1,
+            "weight": 0.014286
+          },
+          {
+            "term": "transformers",
+            "tf": 1,
+            "weight": 0.014286
+          },
+          {
+            "term": "utilities",
+            "tf": 1,
+            "weight": 0.014286
+          },
+          {
+            "term": "initial",
+            "tf": 1,
+            "weight": 0.014286
+          }
+        ],
+        "unique_terms": 50,
+        "total_terms": 70
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Version 3 Hard Negative Mining Process",
+        "cross",
+        "encoder",
+        "hard",
+        "mining",
+        "models",
+        "negative",
+        "negatives",
+        "passages",
+        "the",
+        "with"
+      ],
+      "collection_name": "Sentence_Transformer"
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.7,
+      "retrieval_quality": 0.5407462686567164,
+      "overall": 0.6469154228855721
+    }
+  },
+  {
+    "text": "## Model Selection Guidelines",
+    "metadata": {
+      "chunk_id": "5cd4e52b8c62-0004",
+      "source_file": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers\\Compute_similarity_matrix.md",
+      "filename": "Compute_similarity_matrix.md",
+      "file_extension": ".md",
+      "chunk_index": 4,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Model Selection Guidelines"
+      ],
+      "heading_text": "Model Selection Guidelines",
+      "token_count": 4,
+      "char_count": 29,
+      "start_char": 2536,
+      "end_char": 2565,
+      "semantic_score": 0.8,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.7899999999999999,
+      "chunking_strategy": "hybrid_adaptive_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:45.233429",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 4,
+      "document_id": "5cd4e52b8c62",
+      "document_name": "Compute_similarity_matrix",
+      "source_path": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers\\Compute_similarity_matrix.md",
+      "source_filename": "Compute_similarity_matrix.md",
+      "source_directory": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers",
+      "relative_path": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers\\Compute_similarity_matrix.md",
+      "hierarchy_path": "Model Selection Guidelines",
+      "chunk_hash": "01d249a713ad3e0f",
+      "content_digest": "01d249a713ad3e0f",
+      "chunk_length": 29,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "sentence_transformer"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "model",
+          "selection",
+          "guidelines"
+        ],
+        "term_weights": [
+          {
+            "term": "model",
+            "tf": 1,
+            "weight": 0.333333
+          },
+          {
+            "term": "selection",
+            "tf": 1,
+            "weight": 0.333333
+          },
+          {
+            "term": "guidelines",
+            "tf": 1,
+            "weight": 0.333333
+          }
+        ],
+        "unique_terms": 3,
+        "total_terms": 3
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Model Selection Guidelines",
+        "guidelines",
+        "model",
+        "selection"
+      ],
+      "collection_name": "Sentence_Transformer"
+    },
+    "advanced_scores": {
+      "semantic": 0.8,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.7899999999999999,
+      "overall": 0.83
+    }
+  },
+  {
+    "text": "### Choose Based on Similarity Method  - **Cosine Similarity Models**: Use when you need normalized similarity scores and prefer shorter, focused passages - **Dot Product Models**: Use when longer, comprehensive passages are preferred and unnormalized scores are acceptable",
+    "metadata": {
+      "chunk_id": "5cd4e52b8c62-0005",
+      "source_file": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers\\Compute_similarity_matrix.md",
+      "filename": "Compute_similarity_matrix.md",
+      "file_extension": ".md",
+      "chunk_index": 5,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Choose Based on Similarity Method"
+      ],
+      "heading_text": "Choose Based on Similarity Method",
+      "token_count": 49,
+      "char_count": 273,
+      "start_char": 2567,
+      "end_char": 2840,
+      "semantic_score": 0.8,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5110526315789473,
+      "chunking_strategy": "hybrid_adaptive_structural",
+      "content_type": "list_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:45.233587",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 49,
+      "document_id": "5cd4e52b8c62",
+      "document_name": "Compute_similarity_matrix",
+      "source_path": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers\\Compute_similarity_matrix.md",
+      "source_filename": "Compute_similarity_matrix.md",
+      "source_directory": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers",
+      "relative_path": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers\\Compute_similarity_matrix.md",
+      "hierarchy_path": "Choose Based on Similarity Method",
+      "chunk_hash": "9d420b0a179e99d0",
+      "content_digest": "9d420b0a179e99d0",
+      "chunk_length": 273,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "sentence_transformer"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "similarity",
+          "models",
+          "use",
+          "when",
+          "scores",
+          "and",
+          "passages",
+          "are",
+          "choose",
+          "based",
+          "method",
+          "cosine",
+          "you",
+          "need",
+          "normalized",
+          "prefer",
+          "shorter",
+          "focused",
+          "dot",
+          "product"
+        ],
+        "term_weights": [
+          {
+            "term": "similarity",
+            "tf": 3,
+            "weight": 0.088235
+          },
+          {
+            "term": "models",
+            "tf": 2,
+            "weight": 0.058824
+          },
+          {
+            "term": "use",
+            "tf": 2,
+            "weight": 0.058824
+          },
+          {
+            "term": "when",
+            "tf": 2,
+            "weight": 0.058824
+          },
+          {
+            "term": "scores",
+            "tf": 2,
+            "weight": 0.058824
+          },
+          {
+            "term": "and",
+            "tf": 2,
+            "weight": 0.058824
+          },
+          {
+            "term": "passages",
+            "tf": 2,
+            "weight": 0.058824
+          },
+          {
+            "term": "are",
+            "tf": 2,
+            "weight": 0.058824
+          },
+          {
+            "term": "choose",
+            "tf": 1,
+            "weight": 0.029412
+          },
+          {
+            "term": "based",
+            "tf": 1,
+            "weight": 0.029412
+          },
+          {
+            "term": "method",
+            "tf": 1,
+            "weight": 0.029412
+          },
+          {
+            "term": "cosine",
+            "tf": 1,
+            "weight": 0.029412
+          },
+          {
+            "term": "you",
+            "tf": 1,
+            "weight": 0.029412
+          },
+          {
+            "term": "need",
+            "tf": 1,
+            "weight": 0.029412
+          },
+          {
+            "term": "normalized",
+            "tf": 1,
+            "weight": 0.029412
+          },
+          {
+            "term": "prefer",
+            "tf": 1,
+            "weight": 0.029412
+          },
+          {
+            "term": "shorter",
+            "tf": 1,
+            "weight": 0.029412
+          },
+          {
+            "term": "focused",
+            "tf": 1,
+            "weight": 0.029412
+          },
+          {
+            "term": "dot",
+            "tf": 1,
+            "weight": 0.029412
+          },
+          {
+            "term": "product",
+            "tf": 1,
+            "weight": 0.029412
+          }
+        ],
+        "unique_terms": 25,
+        "total_terms": 34
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Choose Based on Similarity Method",
+        "and",
+        "are",
+        "based",
+        "choose",
+        "models",
+        "passages",
+        "scores",
+        "similarity",
+        "use",
+        "when"
+      ],
+      "collection_name": "Sentence_Transformer"
+    },
+    "advanced_scores": {
+      "semantic": 0.8,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5110526315789473,
+      "overall": 0.7370175438596491
+    }
+  },
+  {
+    "text": "### Choose Based on Architecture ```mermaid graph TD     RETRIEVAL_TASK[\"Retrieval Task\"]          RETRIEVAL_TASK --> FIRST_STAGE[\"First Stage Retrieval<br/>encode() + similarity search\"]     RETRIEVAL_TASK --> SECOND_STAGE[\"Second Stage Reranking<br/>predict() on pairs\"]          FIRST_STAGE --> ST_CLASS[\"SentenceTransformer class\"]     SECOND_STAGE --> CE_CLASS[\"CrossEncoder class\"]          ST_CLASS --> ST_FAST[\"Fast: msmarco-MiniLM-L6-v3<br/>18k queries/sec GPU\"]     ST_CLASS --> ST_BALANCED[\"Balanced: msmarco-distilbert-base-v4<br/>7k queries/sec, 70.24 NDCG@10\"]     ST_CLASS --> ST_ACCURATE[\"Accurate: msmarco-distilbert-base-tas-b<br/>71.04 NDCG@10, 34.43 MRR@10\"]          CE_CLASS --> CE_FAST[\"Fast: cross-encoder/ms-marco-TinyBERT-L2-v2<br/>9k docs/sec\"]     CE_CLASS --> CE_ACCURATE[\"Accurate: cross-encoder/ms-marco-MiniLM-L6-v2<br/>74.30 NDCG@10, 39.01 MRR@10\"]          subgraph \"Integration Methods\"         UTIL_COS[\"util.cos_sim()\"]         UTIL_DOT[\"util.dot_score()\"]          PREDICT_METHOD[\"predict() method\"]     end          ST_FAST --> UTIL_COS     ST_BALANCED --> UTIL_COS     ST_ACCURATE --> UTIL_DOT     CE_FAST --> PREDICT_METHOD     CE_ACCURATE --> PREDICT_METHOD ```",
+    "metadata": {
+      "chunk_id": "5cd4e52b8c62-0006",
+      "source_file": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers\\Compute_similarity_matrix.md",
+      "filename": "Compute_similarity_matrix.md",
+      "file_extension": ".md",
+      "chunk_index": 6,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Choose Based on Architecture"
+      ],
+      "heading_text": "Choose Based on Architecture",
+      "token_count": 348,
+      "char_count": 1203,
+      "start_char": 2842,
+      "end_char": 4045,
+      "semantic_score": 0.7999999999999999,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5235011235955056,
+      "chunking_strategy": "hybrid_adaptive_structural",
+      "content_type": "code_block",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:45.235383",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 348,
+      "document_id": "5cd4e52b8c62",
+      "document_name": "Compute_similarity_matrix",
+      "source_path": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers\\Compute_similarity_matrix.md",
+      "source_filename": "Compute_similarity_matrix.md",
+      "source_directory": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers",
+      "relative_path": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers\\Compute_similarity_matrix.md",
+      "hierarchy_path": "Choose Based on Architecture",
+      "chunk_hash": "008c5abf5ce58ae4",
+      "content_digest": "008c5abf5ce58ae4",
+      "chunk_length": 1203,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "sentence_transformer"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "class",
+          "util",
+          "stage",
+          "fast",
+          "accurate",
+          "retrieval",
+          "predict",
+          "task",
+          "cos",
+          "method",
+          "first",
+          "second",
+          "msmarco",
+          "sec",
+          "balanced",
+          "ndcg",
+          "dot",
+          "minilm",
+          "queries",
+          "distilbert"
+        ],
+        "term_weights": [
+          {
+            "term": "class",
+            "tf": 9,
+            "weight": 0.077586
+          },
+          {
+            "term": "util",
+            "tf": 7,
+            "weight": 0.060345
+          },
+          {
+            "term": "stage",
+            "tf": 6,
+            "weight": 0.051724
+          },
+          {
+            "term": "fast",
+            "tf": 6,
+            "weight": 0.051724
+          },
+          {
+            "term": "accurate",
+            "tf": 6,
+            "weight": 0.051724
+          },
+          {
+            "term": "retrieval",
+            "tf": 5,
+            "weight": 0.043103
+          },
+          {
+            "term": "predict",
+            "tf": 5,
+            "weight": 0.043103
+          },
+          {
+            "term": "task",
+            "tf": 4,
+            "weight": 0.034483
+          },
+          {
+            "term": "cos",
+            "tf": 4,
+            "weight": 0.034483
+          },
+          {
+            "term": "method",
+            "tf": 4,
+            "weight": 0.034483
+          },
+          {
+            "term": "first",
+            "tf": 3,
+            "weight": 0.025862
+          },
+          {
+            "term": "second",
+            "tf": 3,
+            "weight": 0.025862
+          },
+          {
+            "term": "msmarco",
+            "tf": 3,
+            "weight": 0.025862
+          },
+          {
+            "term": "sec",
+            "tf": 3,
+            "weight": 0.025862
+          },
+          {
+            "term": "balanced",
+            "tf": 3,
+            "weight": 0.025862
+          },
+          {
+            "term": "ndcg",
+            "tf": 3,
+            "weight": 0.025862
+          },
+          {
+            "term": "dot",
+            "tf": 3,
+            "weight": 0.025862
+          },
+          {
+            "term": "minilm",
+            "tf": 2,
+            "weight": 0.017241
+          },
+          {
+            "term": "queries",
+            "tf": 2,
+            "weight": 0.017241
+          },
+          {
+            "term": "distilbert",
+            "tf": 2,
+            "weight": 0.017241
+          }
+        ],
+        "unique_terms": 48,
+        "total_terms": 116
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Choose Based on Architecture",
+        "accurate",
+        "class",
+        "cos",
+        "fast",
+        "method",
+        "predict",
+        "retrieval",
+        "stage",
+        "task",
+        "util"
+      ],
+      "collection_name": "Sentence_Transformer"
+    },
+    "advanced_scores": {
+      "semantic": 0.7999999999999999,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5235011235955056,
+      "overall": 0.7411670411985017
+    }
+  },
+  {
+    "text": "### Performance vs Speed Trade-offs  - **Fastest**: `msmarco-MiniLM-L6-v3` (18,000 queries/sec GPU) - **Best Balance**: `msmarco-distilbert-base-v4` (7,000 queries/sec GPU, highest accuracy) - **Highest Quality**: `msmarco-distilbert-base-tas-b` (34.43 MRR@10)  **Sources:** [docs/pretrained-models/msmarco-v3.md:45-50]()",
+    "metadata": {
+      "chunk_id": "5cd4e52b8c62-0007",
+      "source_file": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers\\Compute_similarity_matrix.md",
+      "filename": "Compute_similarity_matrix.md",
+      "file_extension": ".md",
+      "chunk_index": 7,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Performance vs Speed Trade-offs"
+      ],
+      "heading_text": "Performance vs Speed Trade-offs",
+      "token_count": 106,
+      "char_count": 321,
+      "start_char": 4048,
+      "end_char": 4369,
+      "semantic_score": 0.7,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5578571428571428,
+      "chunking_strategy": "hybrid_adaptive_structural",
+      "content_type": "code_block",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:45.237012",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 106,
+      "document_id": "5cd4e52b8c62",
+      "document_name": "Compute_similarity_matrix",
+      "source_path": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers\\Compute_similarity_matrix.md",
+      "source_filename": "Compute_similarity_matrix.md",
+      "source_directory": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers",
+      "relative_path": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers\\Compute_similarity_matrix.md",
+      "hierarchy_path": "Performance vs Speed Trade-offs",
+      "chunk_hash": "2a5150b8d8b66ac6",
+      "content_digest": "2a5150b8d8b66ac6",
+      "chunk_length": 321,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "sentence_transformer"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "msmarco",
+          "000",
+          "queries",
+          "sec",
+          "gpu",
+          "distilbert",
+          "base",
+          "highest",
+          "performance",
+          "speed",
+          "trade",
+          "offs",
+          "fastest",
+          "minilm",
+          "best",
+          "balance",
+          "accuracy",
+          "quality",
+          "tas",
+          "mrr"
+        ],
+        "term_weights": [
+          {
+            "term": "msmarco",
+            "tf": 4,
+            "weight": 0.117647
+          },
+          {
+            "term": "000",
+            "tf": 2,
+            "weight": 0.058824
+          },
+          {
+            "term": "queries",
+            "tf": 2,
+            "weight": 0.058824
+          },
+          {
+            "term": "sec",
+            "tf": 2,
+            "weight": 0.058824
+          },
+          {
+            "term": "gpu",
+            "tf": 2,
+            "weight": 0.058824
+          },
+          {
+            "term": "distilbert",
+            "tf": 2,
+            "weight": 0.058824
+          },
+          {
+            "term": "base",
+            "tf": 2,
+            "weight": 0.058824
+          },
+          {
+            "term": "highest",
+            "tf": 2,
+            "weight": 0.058824
+          },
+          {
+            "term": "performance",
+            "tf": 1,
+            "weight": 0.029412
+          },
+          {
+            "term": "speed",
+            "tf": 1,
+            "weight": 0.029412
+          },
+          {
+            "term": "trade",
+            "tf": 1,
+            "weight": 0.029412
+          },
+          {
+            "term": "offs",
+            "tf": 1,
+            "weight": 0.029412
+          },
+          {
+            "term": "fastest",
+            "tf": 1,
+            "weight": 0.029412
+          },
+          {
+            "term": "minilm",
+            "tf": 1,
+            "weight": 0.029412
+          },
+          {
+            "term": "best",
+            "tf": 1,
+            "weight": 0.029412
+          },
+          {
+            "term": "balance",
+            "tf": 1,
+            "weight": 0.029412
+          },
+          {
+            "term": "accuracy",
+            "tf": 1,
+            "weight": 0.029412
+          },
+          {
+            "term": "quality",
+            "tf": 1,
+            "weight": 0.029412
+          },
+          {
+            "term": "tas",
+            "tf": 1,
+            "weight": 0.029412
+          },
+          {
+            "term": "mrr",
+            "tf": 1,
+            "weight": 0.029412
+          }
+        ],
+        "unique_terms": 24,
+        "total_terms": 34
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "000",
+        "Performance vs Speed Trade-offs",
+        "base",
+        "distilbert",
+        "gpu",
+        "highest",
+        "msmarco",
+        "performance",
+        "queries",
+        "sec",
+        "speed"
+      ],
+      "collection_name": "Sentence_Transformer"
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5578571428571428,
+      "overall": 0.7192857142857143
+    }
+  },
+  {
+    "text": "## Integration with Search Systems  MS MARCO models integrate with various search architectures for production deployment. For detailed integration patterns, see [Retrieve & Rerank Architecture](#6.3) and [Semantic Search](#6.1). **Sources:** [docs/pretrained-models/msmarco-v3.md:19](), [docs/cross_encoder/pretrained_models.md:44]()",
+    "metadata": {
+      "chunk_id": "5cd4e52b8c62-0008",
+      "source_file": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers\\Compute_similarity_matrix.md",
+      "filename": "Compute_similarity_matrix.md",
+      "file_extension": ".md",
+      "chunk_index": 8,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Integration with Search Systems"
+      ],
+      "heading_text": "Integration with Search Systems",
+      "token_count": 79,
+      "char_count": 334,
+      "start_char": 4371,
+      "end_char": 4705,
+      "semantic_score": 0.7,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5512903225806451,
+      "chunking_strategy": "hybrid_adaptive_structural",
+      "content_type": "code_block",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:45.237900",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 79,
+      "document_id": "5cd4e52b8c62",
+      "document_name": "Compute_similarity_matrix",
+      "source_path": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers\\Compute_similarity_matrix.md",
+      "source_filename": "Compute_similarity_matrix.md",
+      "source_directory": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers",
+      "relative_path": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers\\Compute_similarity_matrix.md",
+      "hierarchy_path": "Integration with Search Systems",
+      "chunk_hash": "6672b5551094df73",
+      "content_digest": "6672b5551094df73",
+      "chunk_length": 334,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "sentence_transformer"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "search",
+          "models",
+          "integration",
+          "with",
+          "for",
+          "docs",
+          "pretrained",
+          "systems",
+          "marco",
+          "integrate",
+          "various",
+          "architectures",
+          "production",
+          "deployment",
+          "detailed",
+          "patterns",
+          "see",
+          "retrieve",
+          "rerank",
+          "architecture"
+        ],
+        "term_weights": [
+          {
+            "term": "search",
+            "tf": 3,
+            "weight": 0.085714
+          },
+          {
+            "term": "models",
+            "tf": 3,
+            "weight": 0.085714
+          },
+          {
+            "term": "integration",
+            "tf": 2,
+            "weight": 0.057143
+          },
+          {
+            "term": "with",
+            "tf": 2,
+            "weight": 0.057143
+          },
+          {
+            "term": "for",
+            "tf": 2,
+            "weight": 0.057143
+          },
+          {
+            "term": "docs",
+            "tf": 2,
+            "weight": 0.057143
+          },
+          {
+            "term": "pretrained",
+            "tf": 2,
+            "weight": 0.057143
+          },
+          {
+            "term": "systems",
+            "tf": 1,
+            "weight": 0.028571
+          },
+          {
+            "term": "marco",
+            "tf": 1,
+            "weight": 0.028571
+          },
+          {
+            "term": "integrate",
+            "tf": 1,
+            "weight": 0.028571
+          },
+          {
+            "term": "various",
+            "tf": 1,
+            "weight": 0.028571
+          },
+          {
+            "term": "architectures",
+            "tf": 1,
+            "weight": 0.028571
+          },
+          {
+            "term": "production",
+            "tf": 1,
+            "weight": 0.028571
+          },
+          {
+            "term": "deployment",
+            "tf": 1,
+            "weight": 0.028571
+          },
+          {
+            "term": "detailed",
+            "tf": 1,
+            "weight": 0.028571
+          },
+          {
+            "term": "patterns",
+            "tf": 1,
+            "weight": 0.028571
+          },
+          {
+            "term": "see",
+            "tf": 1,
+            "weight": 0.028571
+          },
+          {
+            "term": "retrieve",
+            "tf": 1,
+            "weight": 0.028571
+          },
+          {
+            "term": "rerank",
+            "tf": 1,
+            "weight": 0.028571
+          },
+          {
+            "term": "architecture",
+            "tf": 1,
+            "weight": 0.028571
+          }
+        ],
+        "unique_terms": 26,
+        "total_terms": 35
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Integration with Search Systems",
+        "docs",
+        "for",
+        "integrate",
+        "integration",
+        "marco",
+        "models",
+        "pretrained",
+        "search",
+        "systems",
+        "with"
+      ],
+      "collection_name": "Sentence_Transformer"
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5512903225806451,
+      "overall": 0.7170967741935484
+    }
+  },
+  {
+    "text": "# Applications\n\n\n\n\nThis page provides an overview of real-world applications and integration patterns using sentence-transformers models. It covers how the three core model types (`SentenceTransformer`, `SparseEncoder`, and `CrossEncoder`) are deployed in production systems for semantic search, retrieval, reranking, and other natural language processing tasks.\n\nFor specific implementation details of individual applications, see [Semantic Search](#6.1), [Sparse Search Integration](#6.2), [Retrieve & Rerank Architecture](#6.3), [Semantic Textual Similarity](#6.4), and [Multimodal Applications](#6.5). For information about available pretrained models optimized for specific applications, see [Pretrained Models](#5).",
+    "metadata": {
+      "chunk_id": "5cd4e52b8c62-0009",
+      "source_file": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers\\Compute_similarity_matrix.md",
+      "filename": "Compute_similarity_matrix.md",
+      "file_extension": ".md",
+      "chunk_index": 9,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Applications"
+      ],
+      "heading_text": "Applications",
+      "token_count": 148,
+      "char_count": 721,
+      "start_char": 4708,
+      "end_char": 5429,
+      "semantic_score": 0.7,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.545,
+      "chunking_strategy": "hybrid_adaptive_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:45.238435",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 148,
+      "document_id": "5cd4e52b8c62",
+      "document_name": "Compute_similarity_matrix",
+      "source_path": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers\\Compute_similarity_matrix.md",
+      "source_filename": "Compute_similarity_matrix.md",
+      "source_directory": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers",
+      "relative_path": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers\\Compute_similarity_matrix.md",
+      "hierarchy_path": "Applications",
+      "chunk_hash": "aab5346126af7bc5",
+      "content_digest": "aab5346126af7bc5",
+      "chunk_length": 721,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "sentence_transformer"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "applications",
+          "and",
+          "for",
+          "models",
+          "semantic",
+          "search",
+          "integration",
+          "specific",
+          "see",
+          "pretrained",
+          "this",
+          "page",
+          "provides",
+          "overview",
+          "real",
+          "world",
+          "patterns",
+          "using",
+          "sentence",
+          "transformers"
+        ],
+        "term_weights": [
+          {
+            "term": "applications",
+            "tf": 5,
+            "weight": 0.066667
+          },
+          {
+            "term": "and",
+            "tf": 4,
+            "weight": 0.053333
+          },
+          {
+            "term": "for",
+            "tf": 4,
+            "weight": 0.053333
+          },
+          {
+            "term": "models",
+            "tf": 3,
+            "weight": 0.04
+          },
+          {
+            "term": "semantic",
+            "tf": 3,
+            "weight": 0.04
+          },
+          {
+            "term": "search",
+            "tf": 3,
+            "weight": 0.04
+          },
+          {
+            "term": "integration",
+            "tf": 2,
+            "weight": 0.026667
+          },
+          {
+            "term": "specific",
+            "tf": 2,
+            "weight": 0.026667
+          },
+          {
+            "term": "see",
+            "tf": 2,
+            "weight": 0.026667
+          },
+          {
+            "term": "pretrained",
+            "tf": 2,
+            "weight": 0.026667
+          },
+          {
+            "term": "this",
+            "tf": 1,
+            "weight": 0.013333
+          },
+          {
+            "term": "page",
+            "tf": 1,
+            "weight": 0.013333
+          },
+          {
+            "term": "provides",
+            "tf": 1,
+            "weight": 0.013333
+          },
+          {
+            "term": "overview",
+            "tf": 1,
+            "weight": 0.013333
+          },
+          {
+            "term": "real",
+            "tf": 1,
+            "weight": 0.013333
+          },
+          {
+            "term": "world",
+            "tf": 1,
+            "weight": 0.013333
+          },
+          {
+            "term": "patterns",
+            "tf": 1,
+            "weight": 0.013333
+          },
+          {
+            "term": "using",
+            "tf": 1,
+            "weight": 0.013333
+          },
+          {
+            "term": "sentence",
+            "tf": 1,
+            "weight": 0.013333
+          },
+          {
+            "term": "transformers",
+            "tf": 1,
+            "weight": 0.013333
+          }
+        ],
+        "unique_terms": 55,
+        "total_terms": 75
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Applications",
+        "and",
+        "applications",
+        "for",
+        "integration",
+        "models",
+        "pretrained",
+        "search",
+        "see",
+        "semantic",
+        "specific"
+      ],
+      "collection_name": "Sentence_Transformer"
+    },
+    "advanced_scores": {
+      "semantic": 0.7,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.545,
+      "overall": 0.715
+    }
+  },
+  {
+    "text": "## Core Application Categories\n\nThe sentence-transformers library enables three primary categories of applications, each leveraging different model architectures optimized for specific use cases:",
+    "metadata": {
+      "chunk_id": "5cd4e52b8c62-0010",
+      "source_file": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers\\Compute_similarity_matrix.md",
+      "filename": "Compute_similarity_matrix.md",
+      "file_extension": ".md",
+      "chunk_index": 10,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Core Application Categories"
+      ],
+      "heading_text": "Core Application Categories",
+      "token_count": 28,
+      "char_count": 195,
+      "start_char": 5431,
+      "end_char": 5626,
+      "semantic_score": 0.8,
+      "structural_score": 0.7,
+      "retrieval_quality": 0.5769565217391305,
+      "chunking_strategy": "hybrid_adaptive_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:45.238583",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 28,
+      "document_id": "5cd4e52b8c62",
+      "document_name": "Compute_similarity_matrix",
+      "source_path": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers\\Compute_similarity_matrix.md",
+      "source_filename": "Compute_similarity_matrix.md",
+      "source_directory": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers",
+      "relative_path": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers\\Compute_similarity_matrix.md",
+      "hierarchy_path": "Core Application Categories",
+      "chunk_hash": "4cc40b377b3b3a9b",
+      "content_digest": "4cc40b377b3b3a9b",
+      "chunk_length": 195,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "sentence_transformer"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "categories",
+          "core",
+          "application",
+          "the",
+          "sentence",
+          "transformers",
+          "library",
+          "enables",
+          "three",
+          "primary",
+          "applications",
+          "each",
+          "leveraging",
+          "different",
+          "model",
+          "architectures",
+          "optimized",
+          "for",
+          "specific",
+          "use"
+        ],
+        "term_weights": [
+          {
+            "term": "categories",
+            "tf": 2,
+            "weight": 0.090909
+          },
+          {
+            "term": "core",
+            "tf": 1,
+            "weight": 0.045455
+          },
+          {
+            "term": "application",
+            "tf": 1,
+            "weight": 0.045455
+          },
+          {
+            "term": "the",
+            "tf": 1,
+            "weight": 0.045455
+          },
+          {
+            "term": "sentence",
+            "tf": 1,
+            "weight": 0.045455
+          },
+          {
+            "term": "transformers",
+            "tf": 1,
+            "weight": 0.045455
+          },
+          {
+            "term": "library",
+            "tf": 1,
+            "weight": 0.045455
+          },
+          {
+            "term": "enables",
+            "tf": 1,
+            "weight": 0.045455
+          },
+          {
+            "term": "three",
+            "tf": 1,
+            "weight": 0.045455
+          },
+          {
+            "term": "primary",
+            "tf": 1,
+            "weight": 0.045455
+          },
+          {
+            "term": "applications",
+            "tf": 1,
+            "weight": 0.045455
+          },
+          {
+            "term": "each",
+            "tf": 1,
+            "weight": 0.045455
+          },
+          {
+            "term": "leveraging",
+            "tf": 1,
+            "weight": 0.045455
+          },
+          {
+            "term": "different",
+            "tf": 1,
+            "weight": 0.045455
+          },
+          {
+            "term": "model",
+            "tf": 1,
+            "weight": 0.045455
+          },
+          {
+            "term": "architectures",
+            "tf": 1,
+            "weight": 0.045455
+          },
+          {
+            "term": "optimized",
+            "tf": 1,
+            "weight": 0.045455
+          },
+          {
+            "term": "for",
+            "tf": 1,
+            "weight": 0.045455
+          },
+          {
+            "term": "specific",
+            "tf": 1,
+            "weight": 0.045455
+          },
+          {
+            "term": "use",
+            "tf": 1,
+            "weight": 0.045455
+          }
+        ],
+        "unique_terms": 21,
+        "total_terms": 22
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Core Application Categories",
+        "application",
+        "categories",
+        "core",
+        "enables",
+        "library",
+        "primary",
+        "sentence",
+        "the",
+        "three",
+        "transformers"
+      ],
+      "collection_name": "Sentence_Transformer"
+    },
+    "advanced_scores": {
+      "semantic": 0.8,
+      "structural": 0.7,
+      "retrieval_quality": 0.5769565217391305,
+      "overall": 0.6923188405797102
+    }
+  },
+  {
+    "text": "### Application Architecture Overview ```mermaid graph TB     subgraph \"Dense Embedding Applications\"         ST[\"SentenceTransformer\"]         ST --> SemanticSearch[\"Semantic Search\"]         ST --> Clustering[\"Document Clustering\"]         ST --> STS[\"Semantic Textual Similarity\"]         ST --> Recommendation[\"Content Recommendation\"]     end          subgraph \"Sparse Embedding Applications\"          SE[\"SparseEncoder\"]         SE --> NeuralLexical[\"Neural Lexical Search\"]         SE --> HybridRetrieval[\"Hybrid Dense-Sparse Retrieval\"]         SE --> KeywordSearch[\"Enhanced Keyword Search\"]     end          subgraph \"Cross-Attention Applications\"         CE[\"CrossEncoder\"]         CE --> Reranking[\"Search Result Reranking\"]         CE --> Classification[\"Text Pair Classification\"]         CE --> ScoreRegression[\"Similarity Score Regression\"]     end          subgraph \"Output Formats\"         SemanticSearch --> DenseVectors[\"Dense Vectors (384-1024 dim)\"]         NeuralLexical --> SparseVectors[\"Sparse Vectors (30k+ dim)\"]         Reranking --> SimilarityScores[\"Similarity Scores (0-1)\"]     end ``` **Dense embedding applications** use `SentenceTransformer` models to convert text into fixed-size dense vectors that capture semantic meaning. These applications excel at finding semantically similar content even when lexical overlap is minimal. **Sparse embedding applications** use `SparseEncoder` models to generate high-dimensional sparse vectors that preserve lexical information while adding semantic understanding. These applications bridge the gap between traditional keyword search and semantic search. **Cross-attention applications** use `CrossEncoder` models that jointly process text pairs to produce precise similarity scores. These applications provide the highest accuracy for ranking and classification tasks but with higher computational cost. Sources: [docs/pretrained-models/msmarco-v2.md:1-39]()",
+    "metadata": {
+      "chunk_id": "5cd4e52b8c62-0011",
+      "source_file": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers\\Compute_similarity_matrix.md",
+      "filename": "Compute_similarity_matrix.md",
+      "file_extension": ".md",
+      "chunk_index": 11,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Application Architecture Overview"
+      ],
+      "heading_text": "Application Architecture Overview",
+      "token_count": 377,
+      "char_count": 1935,
+      "start_char": 5628,
+      "end_char": 7563,
+      "semantic_score": 0.7999999999999999,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5205468085106383,
+      "chunking_strategy": "hybrid_adaptive_structural",
+      "content_type": "code_block",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:45.243468",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 377,
+      "document_id": "5cd4e52b8c62",
+      "document_name": "Compute_similarity_matrix",
+      "source_path": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers\\Compute_similarity_matrix.md",
+      "source_filename": "Compute_similarity_matrix.md",
+      "source_directory": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers",
+      "relative_path": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers\\Compute_similarity_matrix.md",
+      "hierarchy_path": "Application Architecture Overview",
+      "chunk_hash": "617accbd1e595b89",
+      "content_digest": "617accbd1e595b89",
+      "chunk_length": 1935,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "sentence_transformer"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "applications",
+          "search",
+          "dense",
+          "semantic",
+          "sparse",
+          "subgraph",
+          "embedding",
+          "similarity",
+          "end",
+          "vectors",
+          "models",
+          "lexical",
+          "reranking",
+          "classification",
+          "text",
+          "use",
+          "that",
+          "these",
+          "sentencetransformer",
+          "semanticsearch"
+        ],
+        "term_weights": [
+          {
+            "term": "applications",
+            "tf": 9,
+            "weight": 0.050562
+          },
+          {
+            "term": "search",
+            "tf": 6,
+            "weight": 0.033708
+          },
+          {
+            "term": "dense",
+            "tf": 5,
+            "weight": 0.02809
+          },
+          {
+            "term": "semantic",
+            "tf": 5,
+            "weight": 0.02809
+          },
+          {
+            "term": "sparse",
+            "tf": 5,
+            "weight": 0.02809
+          },
+          {
+            "term": "subgraph",
+            "tf": 4,
+            "weight": 0.022472
+          },
+          {
+            "term": "embedding",
+            "tf": 4,
+            "weight": 0.022472
+          },
+          {
+            "term": "similarity",
+            "tf": 4,
+            "weight": 0.022472
+          },
+          {
+            "term": "end",
+            "tf": 4,
+            "weight": 0.022472
+          },
+          {
+            "term": "vectors",
+            "tf": 4,
+            "weight": 0.022472
+          },
+          {
+            "term": "models",
+            "tf": 4,
+            "weight": 0.022472
+          },
+          {
+            "term": "lexical",
+            "tf": 3,
+            "weight": 0.016854
+          },
+          {
+            "term": "reranking",
+            "tf": 3,
+            "weight": 0.016854
+          },
+          {
+            "term": "classification",
+            "tf": 3,
+            "weight": 0.016854
+          },
+          {
+            "term": "text",
+            "tf": 3,
+            "weight": 0.016854
+          },
+          {
+            "term": "use",
+            "tf": 3,
+            "weight": 0.016854
+          },
+          {
+            "term": "that",
+            "tf": 3,
+            "weight": 0.016854
+          },
+          {
+            "term": "these",
+            "tf": 3,
+            "weight": 0.016854
+          },
+          {
+            "term": "sentencetransformer",
+            "tf": 2,
+            "weight": 0.011236
+          },
+          {
+            "term": "semanticsearch",
+            "tf": 2,
+            "weight": 0.011236
+          }
+        ],
+        "unique_terms": 106,
+        "total_terms": 178
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Application Architecture Overview",
+        "applications",
+        "dense",
+        "embedding",
+        "end",
+        "search",
+        "semantic",
+        "similarity",
+        "sparse",
+        "subgraph",
+        "vectors"
+      ],
+      "collection_name": "Sentence_Transformer"
+    },
+    "advanced_scores": {
+      "semantic": 0.7999999999999999,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5205468085106383,
+      "overall": 0.740182269503546
+    }
+  },
+  {
+    "text": "## Integration Patterns\n\nProduction systems typically integrate sentence-transformers models through several common patterns, each optimized for different scalability and accuracy requirements:",
+    "metadata": {
+      "chunk_id": "5cd4e52b8c62-0012",
+      "source_file": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers\\Compute_similarity_matrix.md",
+      "filename": "Compute_similarity_matrix.md",
+      "file_extension": ".md",
+      "chunk_index": 12,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Integration Patterns"
+      ],
+      "heading_text": "Integration Patterns",
+      "token_count": 26,
+      "char_count": 193,
+      "start_char": 7570,
+      "end_char": 7763,
+      "semantic_score": 0.8,
+      "structural_score": 0.7,
+      "retrieval_quality": 0.59,
+      "chunking_strategy": "hybrid_adaptive_semchunk",
+      "content_type": "prose_section",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:45.244063",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 26,
+      "document_id": "5cd4e52b8c62",
+      "document_name": "Compute_similarity_matrix",
+      "source_path": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers\\Compute_similarity_matrix.md",
+      "source_filename": "Compute_similarity_matrix.md",
+      "source_directory": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers",
+      "relative_path": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers\\Compute_similarity_matrix.md",
+      "hierarchy_path": "Integration Patterns",
+      "chunk_hash": "e2457b600a7b82a0",
+      "content_digest": "e2457b600a7b82a0",
+      "chunk_length": 193,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "sentence_transformer"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "patterns",
+          "integration",
+          "production",
+          "systems",
+          "typically",
+          "integrate",
+          "sentence",
+          "transformers",
+          "models",
+          "through",
+          "several",
+          "common",
+          "each",
+          "optimized",
+          "for",
+          "different",
+          "scalability",
+          "and",
+          "accuracy",
+          "requirements"
+        ],
+        "term_weights": [
+          {
+            "term": "patterns",
+            "tf": 2,
+            "weight": 0.095238
+          },
+          {
+            "term": "integration",
+            "tf": 1,
+            "weight": 0.047619
+          },
+          {
+            "term": "production",
+            "tf": 1,
+            "weight": 0.047619
+          },
+          {
+            "term": "systems",
+            "tf": 1,
+            "weight": 0.047619
+          },
+          {
+            "term": "typically",
+            "tf": 1,
+            "weight": 0.047619
+          },
+          {
+            "term": "integrate",
+            "tf": 1,
+            "weight": 0.047619
+          },
+          {
+            "term": "sentence",
+            "tf": 1,
+            "weight": 0.047619
+          },
+          {
+            "term": "transformers",
+            "tf": 1,
+            "weight": 0.047619
+          },
+          {
+            "term": "models",
+            "tf": 1,
+            "weight": 0.047619
+          },
+          {
+            "term": "through",
+            "tf": 1,
+            "weight": 0.047619
+          },
+          {
+            "term": "several",
+            "tf": 1,
+            "weight": 0.047619
+          },
+          {
+            "term": "common",
+            "tf": 1,
+            "weight": 0.047619
+          },
+          {
+            "term": "each",
+            "tf": 1,
+            "weight": 0.047619
+          },
+          {
+            "term": "optimized",
+            "tf": 1,
+            "weight": 0.047619
+          },
+          {
+            "term": "for",
+            "tf": 1,
+            "weight": 0.047619
+          },
+          {
+            "term": "different",
+            "tf": 1,
+            "weight": 0.047619
+          },
+          {
+            "term": "scalability",
+            "tf": 1,
+            "weight": 0.047619
+          },
+          {
+            "term": "and",
+            "tf": 1,
+            "weight": 0.047619
+          },
+          {
+            "term": "accuracy",
+            "tf": 1,
+            "weight": 0.047619
+          },
+          {
+            "term": "requirements",
+            "tf": 1,
+            "weight": 0.047619
+          }
+        ],
+        "unique_terms": 20,
+        "total_terms": 21
+      },
+      "modal_hint": "prose",
+      "content_flags": {
+        "has_code_block": false,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Integration Patterns",
+        "integrate",
+        "integration",
+        "models",
+        "patterns",
+        "production",
+        "sentence",
+        "systems",
+        "through",
+        "transformers",
+        "typically"
+      ],
+      "collection_name": "Sentence_Transformer"
+    },
+    "advanced_scores": {
+      "semantic": 0.8,
+      "structural": 0.7,
+      "retrieval_quality": 0.59,
+      "overall": 0.6966666666666667
+    }
+  },
+  {
+    "text": "### System Integration Architecture ```mermaid graph LR     subgraph \"Data Sources\"         Documents[\"Document Corpus\"]         Queries[\"User Queries\"]         TextPairs[\"Text Pairs\"]     end          subgraph \"sentence_transformers\"         STModel[\"SentenceTransformer.encode()\"]         SEModel[\"SparseEncoder.encode_query()\"]         CEModel[\"CrossEncoder.predict()\"]     end          subgraph \"Storage Systems\"         VectorDB[\"Vector Databases<br/>Pinecone, Weaviate, Qdrant\"]         SearchEngines[\"Search Engines<br/>Elasticsearch, OpenSearch\"]         Cache[\"Embedding Cache<br/>Redis, Memcached\"]     end          subgraph \"Application Layer\"         SearchAPI[\"Search API\"]         RerankAPI[\"Reranking API\"]         SimilarityAPI[\"Similarity API\"]     end          Documents --> STModel     Documents --> SEModel     STModel --> VectorDB     SEModel --> SearchEngines          Queries --> STModel     Queries --> SEModel     Queries --> CEModel          VectorDB --> SearchAPI     SearchEngines --> SearchAPI     Cache --> SearchAPI          TextPairs --> CEModel     CEModel --> RerankAPI     CEModel --> SimilarityAPI          SearchAPI --> RerankAPI ``` **Vector database integration** stores dense embeddings from `SentenceTransformer.encode()` in specialized vector databases optimized for similarity search. Common databases include Pinecone, Weaviate, and Qdrant, which provide approximate nearest neighbor search capabilities. **Search engine integration** indexes sparse embeddings from `SparseEncoder.encode_query()` and `SparseEncoder.encode_document()` in traditional search engines like Elasticsearch or OpenSearch, enabling hybrid lexical-semantic search. **API-based reranking** uses `CrossEncoder.predict()` to refine initial retrieval results, typically processing the top-k candidates from a faster first-stage retrieval system. Sources: [docs/pretrained-models/msmarco-v2.md:7-16]()",
+    "metadata": {
+      "chunk_id": "5cd4e52b8c62-0013",
+      "source_file": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers\\Compute_similarity_matrix.md",
+      "filename": "Compute_similarity_matrix.md",
+      "file_extension": ".md",
+      "chunk_index": 13,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "System Integration Architecture"
+      ],
+      "heading_text": "System Integration Architecture",
+      "token_count": 393,
+      "char_count": 1915,
+      "start_char": 7765,
+      "end_char": 9680,
+      "semantic_score": 0.7999999999999999,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5300951219512196,
+      "chunking_strategy": "hybrid_adaptive_structural",
+      "content_type": "code_block",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:45.247867",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 393,
+      "document_id": "5cd4e52b8c62",
+      "document_name": "Compute_similarity_matrix",
+      "source_path": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers\\Compute_similarity_matrix.md",
+      "source_filename": "Compute_similarity_matrix.md",
+      "source_directory": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers",
+      "relative_path": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers\\Compute_similarity_matrix.md",
+      "hierarchy_path": "System Integration Architecture",
+      "chunk_hash": "e337a91ce6bdfd61",
+      "content_digest": "e337a91ce6bdfd61",
+      "chunk_length": 1915,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "sentence_transformer"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "search",
+          "queries",
+          "encode",
+          "cemodel",
+          "searchapi",
+          "subgraph",
+          "end",
+          "stmodel",
+          "semodel",
+          "api",
+          "integration",
+          "documents",
+          "sparseencoder",
+          "vectordb",
+          "vector",
+          "databases",
+          "searchengines",
+          "cache",
+          "rerankapi",
+          "from"
+        ],
+        "term_weights": [
+          {
+            "term": "search",
+            "tf": 7,
+            "weight": 0.04023
+          },
+          {
+            "term": "queries",
+            "tf": 5,
+            "weight": 0.028736
+          },
+          {
+            "term": "encode",
+            "tf": 5,
+            "weight": 0.028736
+          },
+          {
+            "term": "cemodel",
+            "tf": 5,
+            "weight": 0.028736
+          },
+          {
+            "term": "searchapi",
+            "tf": 5,
+            "weight": 0.028736
+          },
+          {
+            "term": "subgraph",
+            "tf": 4,
+            "weight": 0.022989
+          },
+          {
+            "term": "end",
+            "tf": 4,
+            "weight": 0.022989
+          },
+          {
+            "term": "stmodel",
+            "tf": 4,
+            "weight": 0.022989
+          },
+          {
+            "term": "semodel",
+            "tf": 4,
+            "weight": 0.022989
+          },
+          {
+            "term": "api",
+            "tf": 4,
+            "weight": 0.022989
+          },
+          {
+            "term": "integration",
+            "tf": 3,
+            "weight": 0.017241
+          },
+          {
+            "term": "documents",
+            "tf": 3,
+            "weight": 0.017241
+          },
+          {
+            "term": "sparseencoder",
+            "tf": 3,
+            "weight": 0.017241
+          },
+          {
+            "term": "vectordb",
+            "tf": 3,
+            "weight": 0.017241
+          },
+          {
+            "term": "vector",
+            "tf": 3,
+            "weight": 0.017241
+          },
+          {
+            "term": "databases",
+            "tf": 3,
+            "weight": 0.017241
+          },
+          {
+            "term": "searchengines",
+            "tf": 3,
+            "weight": 0.017241
+          },
+          {
+            "term": "cache",
+            "tf": 3,
+            "weight": 0.017241
+          },
+          {
+            "term": "rerankapi",
+            "tf": 3,
+            "weight": 0.017241
+          },
+          {
+            "term": "from",
+            "tf": 3,
+            "weight": 0.017241
+          }
+        ],
+        "unique_terms": 97,
+        "total_terms": 174
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "System Integration Architecture",
+        "api",
+        "cemodel",
+        "encode",
+        "end",
+        "queries",
+        "search",
+        "searchapi",
+        "semodel",
+        "stmodel",
+        "subgraph"
+      ],
+      "collection_name": "Sentence_Transformer"
+    },
+    "advanced_scores": {
+      "semantic": 0.7999999999999999,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5300951219512196,
+      "overall": 0.7433650406504064
+    }
+  },
+  {
+    "text": "### Two-Stage Retrieval Architecture  The most common production pattern combines fast retrieval with precise reranking: ```mermaid graph TD     UserQuery[\"User Query\"]          subgraph \"Stage 1: Fast Retrieval\"         BiEncoder[\"SentenceTransformer<br/>or SparseEncoder\"]         CandidateRetrieval[\"Retrieve Top-100<br/>Candidates\"]     end          subgraph \"Stage 2: Precise Reranking\"         CrossEncoder[\"CrossEncoder.predict()\"]         FinalRanking[\"Return Top-10<br/>Results\"]     end          UserQuery --> BiEncoder     BiEncoder --> CandidateRetrieval     CandidateRetrieval --> CrossEncoder     CrossEncoder --> FinalRanking ``` This architecture balances computational efficiency with accuracy by using fast bi-encoder models for initial retrieval and slower but more accurate cross-encoder models for final ranking.",
+    "metadata": {
+      "chunk_id": "5cd4e52b8c62-0015",
+      "source_file": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers\\Compute_similarity_matrix.md",
+      "filename": "Compute_similarity_matrix.md",
+      "file_extension": ".md",
+      "chunk_index": 15,
+      "document_level": 1,
+      "parent_chunk_id": null,
+      "child_chunk_ids": [],
+      "section_path": [
+        "Two-Stage Retrieval Architecture"
+      ],
+      "heading_text": "Two-Stage Retrieval Architecture",
+      "token_count": 171,
+      "char_count": 833,
+      "start_char": 9722,
+      "end_char": 10555,
+      "semantic_score": 0.7999999999999999,
+      "structural_score": 0.8999999999999999,
+      "retrieval_quality": 0.5198701298701298,
+      "chunking_strategy": "hybrid_adaptive_structural",
+      "content_type": "code_block",
+      "embedding_model": "jina-code-embeddings-1.5b",
+      "embedding_dimension": 1536,
+      "processing_timestamp": "2025-10-20T16:07:45.249978",
+      "model_aware_chunking": true,
+      "within_token_limit": true,
+      "estimated_tokens": 171,
+      "document_id": "5cd4e52b8c62",
+      "document_name": "Compute_similarity_matrix",
+      "source_path": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers\\Compute_similarity_matrix.md",
+      "source_filename": "Compute_similarity_matrix.md",
+      "source_directory": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers",
+      "relative_path": "Docs\\Sentence_Transformer\\UKPLab\\sentence-transformers\\Compute_similarity_matrix.md",
+      "hierarchy_path": "Two-Stage Retrieval Architecture",
+      "chunk_hash": "bb8e7b6c5c8e1ded",
+      "content_digest": "bb8e7b6c5c8e1ded",
+      "chunk_length": 833,
+      "payload_version": "1.3",
+      "collection_hints": [
+        "sentence_transformer"
+      ],
+      "target_model": "jina-code-embeddings-1.5b",
+      "chunker_version": "v5_unified",
+      "chunk_size_tokens": 26214,
+      "chunk_overlap_tokens": 2621,
+      "chunk_size_chars": 104856,
+      "chunk_overlap_chars": 10484,
+      "safety_margin": 0.8,
+      "model_hf_id": "jinaai/jina-code-embeddings-1.5b",
+      "model_max_tokens": 32768,
+      "model_vector_dim": 1536,
+      "matryoshka_dimension": 1536,
+      "recommended_batch_size": 16,
+      "backend": "pytorch",
+      "memory_efficient": true,
+      "query_prefix": "Encode this code snippet for semantic retrieval: ",
+      "sparse_features": {
+        "version": "1.0",
+        "weighting": "tf-normalized",
+        "top_terms": [
+          "retrieval",
+          "crossencoder",
+          "stage",
+          "fast",
+          "biencoder",
+          "candidateretrieval",
+          "architecture",
+          "with",
+          "precise",
+          "reranking",
+          "userquery",
+          "subgraph",
+          "top",
+          "end",
+          "finalranking",
+          "encoder",
+          "models",
+          "for",
+          "two",
+          "the"
+        ],
+        "term_weights": [
+          {
+            "term": "retrieval",
+            "tf": 4,
+            "weight": 0.051282
+          },
+          {
+            "term": "crossencoder",
+            "tf": 4,
+            "weight": 0.051282
+          },
+          {
+            "term": "stage",
+            "tf": 3,
+            "weight": 0.038462
+          },
+          {
+            "term": "fast",
+            "tf": 3,
+            "weight": 0.038462
+          },
+          {
+            "term": "biencoder",
+            "tf": 3,
+            "weight": 0.038462
+          },
+          {
+            "term": "candidateretrieval",
+            "tf": 3,
+            "weight": 0.038462
+          },
+          {
+            "term": "architecture",
+            "tf": 2,
+            "weight": 0.025641
+          },
+          {
+            "term": "with",
+            "tf": 2,
+            "weight": 0.025641
+          },
+          {
+            "term": "precise",
+            "tf": 2,
+            "weight": 0.025641
+          },
+          {
+            "term": "reranking",
+            "tf": 2,
+            "weight": 0.025641
+          },
+          {
+            "term": "userquery",
+            "tf": 2,
+            "weight": 0.025641
+          },
+          {
+            "term": "subgraph",
+            "tf": 2,
+            "weight": 0.025641
+          },
+          {
+            "term": "top",
+            "tf": 2,
+            "weight": 0.025641
+          },
+          {
+            "term": "end",
+            "tf": 2,
+            "weight": 0.025641
+          },
+          {
+            "term": "finalranking",
+            "tf": 2,
+            "weight": 0.025641
+          },
+          {
+            "term": "encoder",
+            "tf": 2,
+            "weight": 0.025641
+          },
+          {
+            "term": "models",
+            "tf": 2,
+            "weight": 0.025641
+          },
+          {
+            "term": "for",
+            "tf": 2,
+            "weight": 0.025641
+          },
+          {
+            "term": "two",
+            "tf": 1,
+            "weight": 0.012821
+          },
+          {
+            "term": "the",
+            "tf": 1,
+            "weight": 0.012821
+          }
+        ],
+        "unique_terms": 52,
+        "total_terms": 78
+      },
+      "modal_hint": "code",
+      "content_flags": {
+        "has_code_block": true,
+        "has_table": false,
+        "has_list": false,
+        "has_json": false,
+        "has_formula": false
+      },
+      "search_keywords": [
+        "Two-Stage Retrieval Architecture",
+        "architecture",
+        "biencoder",
+        "candidateretrieval",
+        "crossencoder",
+        "fast",
+        "precise",
+        "reranking",
+        "retrieval",
+        "stage",
+        "with"
+      ],
+      "collection_name": "Sentence_Transformer"
+    },
+    "advanced_scores": {
+      "semantic": 0.7999999999999999,
+      "structural": 0.8999999999999999,
+      "retrieval_quality": 0.5198701298701298,
+      "overall": 0.7399567099567098
+    }
+  }
+]
