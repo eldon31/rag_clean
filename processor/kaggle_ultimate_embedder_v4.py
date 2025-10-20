@@ -62,7 +62,16 @@ from functools import lru_cache
 import math
 import textwrap
 
-from huggingface_hub import LocalEntryNotFoundError, snapshot_download
+from huggingface_hub import snapshot_download
+
+try:
+    from huggingface_hub import LocalEntryNotFoundError  # type: ignore[attr-defined]
+except ImportError:
+    try:
+        from huggingface_hub.utils import LocalEntryNotFoundError  # type: ignore[attr-defined]
+    except ImportError:  # pragma: no cover - legacy hub versions
+        LocalEntryNotFoundError = FileNotFoundError  # type: ignore[assignment]
+
 LocalEntryNotFoundErrorType = cast(Type[Exception], LocalEntryNotFoundError)
 
 # Core ML libraries
