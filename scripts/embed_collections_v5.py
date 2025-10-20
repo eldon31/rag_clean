@@ -30,7 +30,7 @@ import logging
 import shutil
 import sys
 from pathlib import Path
-from typing import Dict, List
+from typing import Dict, List, Set
 
 import torch
 
@@ -66,6 +66,7 @@ try:
         KaggleExportConfig,
         KaggleGPUConfig,
         UltimateKaggleEmbedderV4,
+        KAGGLE_OPTIMIZED_MODELS,
     )
     print("✓ Successfully imported UltimateKaggleEmbedderV4")
 except Exception as e:
@@ -250,7 +251,39 @@ def _run_for_collection(
         enable_ensemble=enable_ensemble,
         matryoshka_dim=matryoshka_dim,  # V5: Support Matryoshka dimensions
     )
-    
+
+    primary_key = embedder.model_name
+    expected_models: Set[str] = {primary_key}
+    if embedder.enable_ensemble and embedder.ensemble_config:
+        expected_models.update(embedder.ensemble_config.ensemble_models)
+    if embedder.companion_models:
+        expected_models.update(embedder.companion_models.keys())
+
+    print("\nModel availability snapshot:")
+    model_lines = []
+    missing_models: List[str] = []
+    for name in sorted(expected_models):
+        model_obj = (
+            embedder.models.get(name)
+            or embedder.companion_models.get(name)
+        )
+        config = KAGGLE_OPTIMIZED_MODELS.get(name)
+        hf_id = config.hf_model_id if config else "unknown"
+        vector_dim = config.vector_dim if config else "?"
+        status = "✓ loaded" if model_obj is not None else "✗ missing"
+        model_lines.append(f"   - {name}: {status} ({hf_id}, {vector_dim}D)")
+        if model_obj is None:
+            missing_models.append(name)
+
+    print(f"✓ Active embedding model: {primary_key}")
+    for line in model_lines:
+        print(line)
+    if missing_models:
+        print(f"⚠️  Missing models: {', '.join(missing_models)}")
+    else:
+        print("✓ All expected models are loaded for this collection")
+    print()
+
     LOGGER.info(
         "Resolved embedder model=%s vector_dim=%s backend=%s matryoshka=%s",
         getattr(embedder, "model_name", "<unknown>"),
