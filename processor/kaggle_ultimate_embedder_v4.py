@@ -594,6 +594,53 @@ class UltimateKaggleEmbedderV4:
         if self.embeddings is None:
             raise RuntimeError("Embeddings have not been generated yet")
         return self.embeddings
+    
+    def _unwrap_model(self, model: Any) -> Any:
+        """
+        Unwrap torch.compile and DataParallel wrappers to get the base model.
+        
+        This handles the nested wrapper structure:
+        torch.compile(DataParallel(SentenceTransformer)) -> SentenceTransformer
+        
+        Args:
+            model: Potentially wrapped model
+            
+        Returns:
+            Base model with encode() method
+        """
+        original_type = type(model).__name__
+        wrapper_layers = []
+        
+        # First unwrap torch.compile if present (has _orig_mod attribute)
+        if hasattr(model, '_orig_mod'):
+            wrapper_layers.append("torch.compile")
+            logger.info(f"🔧 Unwrapping torch.compile wrapper (type: {type(model).__name__})")
+            model = model._orig_mod
+            logger.info(f"   → After torch.compile unwrap: {type(model).__name__}")
+        
+        # Then unwrap DataParallel if present
+        if isinstance(model, torch.nn.DataParallel):
+            wrapper_layers.append("DataParallel")
+            logger.info(f"🔧 Unwrapping DataParallel wrapper")
+            logger.info(f"   → DataParallel devices: {model.device_ids if hasattr(model, 'device_ids') else 'unknown'}")
+            model = model.module
+            logger.info(f"   → After DataParallel unwrap: {type(model).__name__}")
+        
+        final_type = type(model).__name__
+        
+        # Verify the unwrapped model has encode method
+        has_encode = hasattr(model, 'encode')
+        logger.info(f"✅ Model unwrapping complete:")
+        logger.info(f"   → Original: {original_type}")
+        logger.info(f"   → Wrappers removed: {wrapper_layers if wrapper_layers else ['None']}")
+        logger.info(f"   → Final: {final_type}")
+        logger.info(f"   → Has encode(): {has_encode}")
+        
+        if not has_encode:
+            logger.error(f"❌ WARNING: Unwrapped model ({final_type}) does not have encode() method!")
+            logger.error(f"   Available methods: {[m for m in dir(model) if not m.startswith('_')][:10]}")
+        
+        return model
 
     def _initialize_embedding_models(self):
         """Initialize embedding models with advanced optimization"""
@@ -811,13 +858,9 @@ class UltimateKaggleEmbedderV4:
             logger.debug("Ensemble not enabled, using primary model only")
             primary_model = self._get_primary_model()
             
-            # Log model type before unwrapping
-            logger.debug(f"Primary model type: {type(primary_model).__name__}")
-            logger.debug(f"Is DataParallel: {isinstance(primary_model, torch.nn.DataParallel)}")
-            
-            # Handle DataParallel wrapper
-            encode_model = primary_model.module if isinstance(primary_model, torch.nn.DataParallel) else primary_model
-            logger.debug(f"Encode model type after unwrap: {type(encode_model).__name__}")
+            # Unwrap all wrappers (torch.compile + DataParallel)
+            encode_model = self._unwrap_model(primary_model)
+            logger.debug(f"Unwrapped model type: {type(encode_model).__name__}")
             
             return encode_model.encode(
                 texts,
@@ -834,8 +877,8 @@ class UltimateKaggleEmbedderV4:
             try:
                 logger.debug(f"Generating embeddings with {model_name}")
                 
-                # Handle DataParallel wrapper
-                encode_model = model.module if isinstance(model, torch.nn.DataParallel) else model
+                # Unwrap all wrappers (torch.compile + DataParallel)
+                encode_model = self._unwrap_model(model)
                 
                 embeddings = encode_model.encode(
                     texts,
@@ -861,8 +904,8 @@ class UltimateKaggleEmbedderV4:
             logger.error("No ensemble models generated embeddings successfully - falling back to primary model")
             # Fallback to primary model only
             primary_model = self._get_primary_model()
-            # Handle DataParallel wrapper
-            encode_model = primary_model.module if isinstance(primary_model, torch.nn.DataParallel) else primary_model
+            # Unwrap all wrappers (torch.compile + DataParallel)
+            encode_model = self._unwrap_model(primary_model)
             return encode_model.encode(
                 texts,
                 convert_to_numpy=True,
@@ -927,8 +970,8 @@ class UltimateKaggleEmbedderV4:
         
         # Step 1: Generate query embedding
         primary_model = self._get_primary_model()
-        # Handle DataParallel wrapper
-        encode_model = primary_model.module if isinstance(primary_model, torch.nn.DataParallel) else primary_model
+        # Unwrap all wrappers (torch.compile + DataParallel)
+        encode_model = self._unwrap_model(primary_model)
         query_embedding = encode_model.encode(
             [query],
             convert_to_numpy=True,
@@ -990,8 +1033,8 @@ class UltimateKaggleEmbedderV4:
         """Fallback search using only embedding similarity"""
         
         primary_model = self._get_primary_model()
-        # Handle DataParallel wrapper
-        encode_model = primary_model.module if isinstance(primary_model, torch.nn.DataParallel) else primary_model
+        # Unwrap all wrappers (torch.compile + DataParallel)
+        encode_model = self._unwrap_model(primary_model)
         query_embedding = encode_model.encode(
             [query],
             convert_to_numpy=True,
@@ -1039,14 +1082,27 @@ class UltimateKaggleEmbedderV4:
         if self.device_count > 1:
             logger.info(f"Setting up multi-GPU processing ({self.device_count} GPUs)")
             if self.gpu_config.strategy == "data_parallel":
+                logger.info(f"📦 Applying DataParallel wrapper to {type(model).__name__}")
+                logger.info(f"   → Model before wrap has encode(): {hasattr(model, 'encode')}")
                 model = torch.nn.DataParallel(model)
-                logger.info("Data parallel enabled")
+                logger.info(f"   → Model after wrap type: {type(model).__name__}")
+                logger.info(f"   → Wrapped model has encode(): {hasattr(model, 'encode')}")
+                logger.info(f"   → Wrapped model.module has encode(): {hasattr(model.module, 'encode')}")
+                logger.info("✅ Data parallel enabled")
         
         # PyTorch 2.0 compilation (if available)
         if self.gpu_config.enable_torch_compile and hasattr(torch, 'compile'):
             try:
+                logger.info(f"🚀 Applying torch.compile to {type(model).__name__}")
+                logger.info(f"   → Model before compile has encode(): {hasattr(model, 'encode')}")
                 model = torch.compile(model, mode="reduce-overhead")
-                logger.info("PyTorch 2.0 compilation enabled")
+                logger.info(f"   → Model after compile type: {type(model).__name__}")
+                logger.info(f"   → Compiled model has encode(): {hasattr(model, 'encode')}")
+                logger.info(f"   → Compiled model has _orig_mod: {hasattr(model, '_orig_mod')}")
+                if hasattr(model, '_orig_mod'):
+                    logger.info(f"   → _orig_mod type: {type(model._orig_mod).__name__}")
+                    logger.info(f"   → _orig_mod has encode(): {hasattr(model._orig_mod, 'encode')}")
+                logger.info("✅ PyTorch 2.0 compilation enabled")
             except Exception as e:
                 logger.warning(f"PyTorch compilation failed: {e}")
         
@@ -1802,8 +1858,9 @@ class UltimateKaggleEmbedderV4:
                         # Log before unwrapping
                         logger.debug(f"Primary model type: {type(primary_model).__name__}")
                         
-                        encode_model = primary_model.module if isinstance(primary_model, torch.nn.DataParallel) else primary_model
-                        logger.debug(f"Encode model type: {type(encode_model).__name__}")
+                        # Unwrap all wrappers (torch.compile + DataParallel)
+                        encode_model = self._unwrap_model(primary_model)
+                        logger.debug(f"Unwrapped model type: {type(encode_model).__name__}")
                         
                         if hasattr(encode_model, 'encode'):
                             logger.debug("Using encode() method")
@@ -1826,8 +1883,8 @@ class UltimateKaggleEmbedderV4:
 
                     for companion_name, companion_model in self.companion_models.items():
                         comp_batch_size = self.companion_batch_sizes.get(companion_name, optimal_batch)
-                        # Handle DataParallel wrapper
-                        encode_companion = companion_model.module if isinstance(companion_model, torch.nn.DataParallel) else companion_model
+                        # Unwrap all wrappers (torch.compile + DataParallel)
+                        encode_companion = self._unwrap_model(companion_model)
                         companion_outputs[companion_name] = encode_companion.encode(
                             batch_texts,
                             batch_size=comp_batch_size,
@@ -1992,9 +2049,8 @@ class UltimateKaggleEmbedderV4:
         if self.primary_model is None:
             raise RuntimeError("No backend model loaded")
         
-        # Check if model has encode method (ONNX models from optimum)
-        # Handle DataParallel wrapper if present
-        encode_model = self.primary_model.module if isinstance(self.primary_model, torch.nn.DataParallel) else self.primary_model
+        # Unwrap all wrappers (torch.compile + DataParallel)
+        encode_model = self._unwrap_model(self.primary_model)
         
         if hasattr(encode_model, 'encode'):
             try:
