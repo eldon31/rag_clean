@@ -39,11 +39,18 @@ KAGGLE_DEFAULTS = {
     "zip_output": True,
 }
 
-from processor.kaggle_ultimate_embedder_v4 import (
-    KaggleExportConfig,
-    KaggleGPUConfig,
-    UltimateKaggleEmbedderV4,
-)
+try:
+    from processor.kaggle_ultimate_embedder_v4 import (
+        KaggleExportConfig,
+        KaggleGPUConfig,
+        UltimateKaggleEmbedderV4,
+    )
+    print("✓ Successfully imported UltimateKaggleEmbedderV4")
+except Exception as e:
+    print(f"✗ CRITICAL: Failed to import embedder module: {e}")
+    import traceback
+    traceback.print_exc()
+    sys.exit(1)
 
 LOGGER = logging.getLogger("embedder_v4_batch")
 
@@ -238,6 +245,10 @@ def _run_for_collection(
 
 
 def main(argv: List[str]) -> int:
+    print("=" * 80)
+    print("ULTIMATE KAGGLE EMBEDDER V4 - BATCH RUNNER")
+    print("=" * 80)
+    
     if SENTINEL_PATH.exists():
         try:
             SENTINEL_PATH.unlink()
@@ -250,6 +261,16 @@ def main(argv: List[str]) -> int:
             )
 
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
+    
+    print(f"\n✓ Logging initialized")
+    print(f"✓ Python executable: {sys.executable}")
+    print(f"✓ Kaggle environment: {IS_KAGGLE}")
+    print(f"✓ CUDA available: {torch.cuda.is_available()}")
+    if torch.cuda.is_available():
+        print(f"✓ CUDA device count: {torch.cuda.device_count()}")
+        for i in range(torch.cuda.device_count()):
+            print(f"  - GPU {i}: {torch.cuda.get_device_name(i)}")
+    print()
 
     args = _parse_args(argv)
     chunks_root = Path(args.chunks_root).resolve()
