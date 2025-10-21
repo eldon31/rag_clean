@@ -8,413 +8,74 @@ DEPLOYMENT MODEL:
 - Local: Qdrant vector database and search
 - Connection: Download embeddings from Kaggle -> Upload to local Qdrant
 
-V4 OPTIMIZATIONS (from 9,654-vector knowledge base audit):
-- Backend optimization (ONNX/TensorRT for Kaggle GPUs)
-- Advanced memory management (optimized for T4 x2)
-- Enhanced preprocessing pipeline with caching
-- Multi-model ensemble support
-- Distributed training optimizations
-- Production-grade export formats
-
-PERFORMANCE TARGET:
-- V3: 12-18s for 3,096 chunks (172-258 chunks/sec)
-- V4: 6-10s for 3,096 chunks (310-516 chunks/sec) - 80% improvement
 """
 
-import os
-import sys
+from __future__ import annotations
 
-# ============================================================================
-# CRITICAL: Set environment variables BEFORE any other imports
-# ============================================================================
-
-# Fix protobuf compatibility issues (protobuf 4.x vs 3.x API breaking changes)
-# This must be set before importing TensorFlow, ONNX, or any library that uses protobuf
-os.environ.setdefault("PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION", "python")
-
-
-# Force JAX/TensorFlow to remain on CPU so Kaggle doesn't crash when both stacks register CUDA plugins.
-os.environ.setdefault("JAX_PLATFORMS", "cpu")
-os.environ.setdefault("JAX_PLATFORM_NAME", "cpu")
-os.environ.setdefault("TF_CPP_MIN_LOG_LEVEL", "3")
-os.environ.setdefault("XLA_PYTHON_CLIENT_PREALLOCATE", "false")
-
+import gc
+import hashlib
 import json
 import logging
 import math
-import numpy as np
-import pickle
-import torch
-import gc
-import warnings
-from contextlib import nullcontext
-from pathlib import Path
-from typing import Dict, List, Any, Optional, Tuple, Union, Set, Type, cast
-from datetime import datetime
-from collections import defaultdict, Counter
-import time
-import psutil
-from dataclasses import dataclass, field
-from concurrent.futures import ThreadPoolExecutor, as_completed
-import threading
-import hashlib
-from functools import lru_cache
-import math
+import os
+import re
 import textwrap
+import threading
+import time
+from collections import Counter, defaultdict
+from contextlib import nullcontext
+from dataclasses import dataclass, field
+from datetime import datetime
+from pathlib import Path
+from typing import Any, Dict, List, Optional, Set, Tuple, Union, cast
 
+import numpy as np
+import psutil
+import torch
 from huggingface_hub import snapshot_download
-
-try:
-    from huggingface_hub import LocalEntryNotFoundError  # type: ignore[attr-defined]
-except ImportError:
-    try:
-        from huggingface_hub.utils import LocalEntryNotFoundError  # type: ignore[attr-defined]
-    except ImportError:  # pragma: no cover - legacy hub versions
-        LocalEntryNotFoundError = FileNotFoundError  # type: ignore[assignment]
-
-LocalEntryNotFoundErrorType = cast(Type[Exception], LocalEntryNotFoundError)
-
-# Core ML libraries
-from sentence_transformers import SentenceTransformer, CrossEncoder
+from sentence_transformers import SentenceTransformer
+from sentence_transformers.cross_encoder import CrossEncoder
 from sklearn.metrics.pairwise import cosine_similarity
 from sklearn.preprocessing import normalize
-import faiss
 
-# Advanced optimization libraries (optional on Kaggle)
-try:
-    import onnxruntime as ort  # type: ignore[import-not-found]
-    from optimum.onnxruntime import ORTModelForFeatureExtraction  # type: ignore[import-not-found]
+try:  # Optional dependency for FAISS export
+    import faiss  # type: ignore
+except ImportError:  # pragma: no cover - optional dependency
+    faiss = None  # type: ignore
+
+try:  # Hugging Face hub compatibility across versions
+    from huggingface_hub.utils import LocalEntryNotFoundError  # type: ignore
+except ImportError:  # pragma: no cover - old hub versions
+    try:
+        from huggingface_hub.utils._validators import LocalEntryNotFoundError  # type: ignore
+    except ImportError:  # pragma: no cover - fallback
+        LocalEntryNotFoundError = FileNotFoundError  # type: ignore
+
+LocalEntryNotFoundErrorType = (LocalEntryNotFoundError,)
+
+try:  # Optional ONNX acceleration via Optimum
+    from optimum.onnxruntime import ORTModelForFeatureExtraction  # type: ignore
+
     ONNX_AVAILABLE = True
-except ImportError:
+except ImportError:  # pragma: no cover - Optimum not installed
+    ORTModelForFeatureExtraction = None  # type: ignore
     ONNX_AVAILABLE = False
-    ORTModelForFeatureExtraction = None  # type: ignore[assignment]
 
-try:
-    import tensorrt  # type: ignore[import-not-found]
-    TENSORRT_AVAILABLE = True
-except ImportError:
-    TENSORRT_AVAILABLE = False
-
-# Setup logging for Kaggle
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-    handlers=[
-        logging.StreamHandler(),
-        logging.FileHandler('/kaggle/working/embedding_process.log') if '/kaggle' in os.getcwd() else logging.StreamHandler()
-    ]
+from processor.ultimate_embedder.config import (
+    AdvancedPreprocessingConfig,
+    AdvancedTextCache,
+    EnsembleConfig,
+    KAGGLE_OPTIMIZED_MODELS,
+    KaggleExportConfig,
+    KaggleGPUConfig,
+    ModelConfig,
+    RERANKING_MODELS,
+    RerankingConfig,
+    SPARSE_MODELS,
 )
+
 logger = logging.getLogger(__name__)
 
-
-# ============================================================================
-# SOTA MODEL CONFIGURATIONS (Kaggle T4 x2 Optimized)
-# ============================================================================
-
-@dataclass
-class ModelConfig:
-    """Kaggle T4 x2 optimized model configurations"""
-    name: str
-    hf_model_id: str
-    vector_dim: int
-    max_tokens: int
-    trust_remote_code: bool = True
-    query_prefix: str = ""
-    doc_prefix: str = ""
-    # Kaggle T4 specific optimizations
-    recommended_batch_size: int = 32
-    memory_efficient: bool = True
-    supports_flash_attention: bool = True  # ENABLED: Install with !pip install flash-attn --no-build-isolation
-    
-# V5 Model Registry - Qdrant-Optimized Models ONLY
-# Based on notes/V5_MODEL_CONFIGURATIONS.md
-KAGGLE_OPTIMIZED_MODELS = {
-    # PRIMARY: Code-optimized (Main model for code embedding)
-    # ENSEMBLE MODE: Using 1024D Matryoshka for compatibility
-    "jina-code-embeddings-1.5b": ModelConfig(
-        name="jina-code-embeddings-1.5b",
-        hf_model_id="jinaai/jina-code-embeddings-1.5b",
-        vector_dim=1024,  # Ensemble dimension (native: 1536D, Matryoshka: 1024D)
-        max_tokens=32768,
-        query_prefix="Encode this code snippet for semantic retrieval: ",
-        recommended_batch_size=16,
-        memory_efficient=True
-    ),
-    
-    # SECONDARY: Multi-modal retrieval
-    # ENSEMBLE MODE: Native 1024D (perfect for ensemble)
-    "bge-m3": ModelConfig(
-        name="bge-m3",
-        hf_model_id="BAAI/bge-m3",
-        vector_dim=1024,  # Native 1024D (ensemble-ready)
-        max_tokens=8192,
-        recommended_batch_size=32,
-        memory_efficient=True
-    ),
-    
-    # TERTIARY: Jina Embeddings V4 (Multi-vector + Matryoshka support)
-    # ENSEMBLE MODE: Using 1024D Matryoshka for compatibility
-    "jina-embeddings-v4": ModelConfig(
-        name="jina-embeddings-v4",
-        hf_model_id="jinaai/jina-embeddings-v4",
-        vector_dim=1024,  # Ensemble dimension (native: 2048D, Matryoshka: 1024D)
-        max_tokens=32768,
-        query_prefix="",
-        recommended_batch_size=16,
-        memory_efficient=True
-    ),
-
-    # QUINARY: Qwen3 instruction-aware encoder (balanced quality vs params)
-    "qwen3-embedding-0.6b": ModelConfig(
-        name="qwen3-embedding-0.6b",
-        hf_model_id="Qwen/Qwen3-Embedding-0.6B",
-        vector_dim=1024,
-        max_tokens=32768,
-        recommended_batch_size=12,
-        memory_efficient=True,
-        supports_flash_attention=False
-    ),
-    
-    # QUATERNARY: Qdrant ONNX-optimized (Ultra-fast inference)
-    "qdrant-minilm-onnx": ModelConfig(
-        name="qdrant-minilm-onnx",
-        hf_model_id="Qdrant/all-MiniLM-L6-v2-onnx",
-        vector_dim=384,
-        max_tokens=256,
-        recommended_batch_size=128,  # Large batch for tiny model
-        memory_efficient=True
-    ),
-    
-    # ALTERNATIVE: Regular MiniLM (fallback if ONNX unavailable)
-    "all-miniLM-l6": ModelConfig(
-        name="all-miniLM-l6",
-        hf_model_id="sentence-transformers/all-MiniLM-L6-v2",
-        vector_dim=384,
-        max_tokens=256,
-        recommended_batch_size=128,
-        memory_efficient=True
-    ),
-}
-
-# SPARSE EMBEDDING MODELS (V5)
-SPARSE_MODELS = {
-    # Qdrant BM25 model (term frequency-based)
-    "qdrant-bm25": {
-        "name": "qdrant-bm25",
-        "hf_model_id": "Qdrant/bm25",
-        "type": "bm25",
-        "description": "BM25-style term frequency sparse vectors",
-        "recommended_batch_size": 64
-    },
-    
-    # Qdrant attention-based sparse model
-    "qdrant-minilm-attention": {
-        "name": "qdrant-minilm-attention",
-        "hf_model_id": "Qdrant/all_miniLM_L6_v2_with_attentions",
-        "type": "attention",
-        "description": "Attention-based sparse vectors from MiniLM",
-        "recommended_batch_size": 64
-    }
-}
-
-# V5 RERANKING MODEL (From V5_MODEL_CONFIGURATIONS.md)
-RERANKING_MODELS = {
-    # QUATERNARY: Jina Reranker V3 (0.6B params, 131K token context, 256D output)
-    # Listwise reranking with multilingual support and code search capability
-    "jina-reranker-v3": "jinaai/jina-reranker-v3",
-}
-
-@dataclass
-class KaggleGPUConfig:
-    """Kaggle T4 x2 specific GPU configuration"""
-    # Hardware specs
-    device_count: int = 2  # T4 x2
-    vram_per_gpu_gb: float = 15.83
-    total_vram_gb: float = 31.66
-    
-    # Memory management (reserve 20% for system)
-    max_memory_per_gpu: float = 0.8  # 12.66GB usable per GPU
-    enable_memory_efficient_attention: bool = True
-    gradient_checkpointing: bool = True
-    
-    # Precision optimization
-    precision: str = "fp16"  # Half precision for T4
-    enable_mixed_precision: bool = True
-    use_amp: bool = True  # Automatic Mixed Precision
-    
-    # Batch optimization (dynamic based on model)
-    base_batch_size: int = 32
-    dynamic_batching: bool = True
-    max_sequence_length: int = 2048
-    
-    # Backend optimization
-    backend: str = "pytorch"  # pytorch, onnx, tensorrt
-    enable_torch_compile: bool = True  # PyTorch 2.0+ optimization
-    
-    # Multi-GPU strategy
-    strategy: str = "data_parallel"  # data_parallel, model_parallel
-    enable_gradient_accumulation: bool = True
-    accumulation_steps: int = 2
-    
-    # Kaggle specific
-    kaggle_environment: bool = True
-    output_path: str = "/kaggle/working"
-    
-    def get_optimal_batch_size(self, model_config: ModelConfig) -> int:
-        """Calculate optimal batch size for model and GPU memory"""
-        if not self.dynamic_batching:
-            return model_config.recommended_batch_size
-        
-        # Estimate memory per sample (rough calculation)
-        memory_per_token = 4  # bytes for fp16
-        tokens_per_sample = min(model_config.max_tokens, self.max_sequence_length)
-        model_params = {
-            768: 137e6,    # CodeRankEmbed
-            1024: 350e6,   # BGE-M3, GTE-Large  
-            1536: 1.5e9,   # GTE-Qwen2-1.5B
-            4096: 7e9      # E5-Mistral-7B
-        }.get(model_config.vector_dim, 350e6)
-        
-        # Memory estimation
-        memory_per_sample = (tokens_per_sample * memory_per_token + 
-                           model_params * 2 / self.device_count)  # Split across GPUs
-        
-        available_memory = self.vram_per_gpu_gb * self.max_memory_per_gpu * 1e9
-        optimal_batch = int(available_memory / memory_per_sample * 0.7)  # Safety margin
-        
-        return max(1, min(optimal_batch, model_config.recommended_batch_size))
-
-@dataclass
-class KaggleExportConfig:
-    """Export configuration for local Qdrant integration"""
-    # Output formats
-    export_numpy: bool = True           # .npy files
-    export_jsonl: bool = True          # JSONL for Qdrant upload
-    export_faiss: bool = True          # FAISS index for fast search
-    export_pickle: bool = False        # Pickle for Python compatibility
-    export_sparse_jsonl: bool = True   # Sparse vector sidecar JSONL
-    
-    # Compression
-    compress_embeddings: bool = True    # Use float32 instead of float64
-    quantize_int8: bool = False        # Int8 quantization for huge collections
-    
-    # Metadata enrichment
-    include_full_metadata: bool = True
-    include_processing_stats: bool = True
-    include_model_info: bool = True
-    
-    # Kaggle specific paths
-    working_dir: str = "/kaggle/working"
-    output_prefix: str = "ultimate_embeddings_v4"
-    
-    def get_output_path(self, suffix: str = "") -> str:
-        """Get full output path for Kaggle"""
-        base = f"{self.output_prefix}{suffix}"
-        return os.path.join(self.working_dir, base)
-
-@dataclass
-class EnsembleConfig:
-    """Multi-model ensemble configuration"""
-    # Ensemble models: Both support 1024D (Jina Code via Matryoshka, Jina V4 native)
-    ensemble_models: List[str] = field(default_factory=lambda: ["jina-code-embeddings-1.5b", "bge-m3", "qwen3-embedding-0.6b"])
-
-    # Ensemble weighting strategy
-    weighting_strategy: str = "equal"  # equal, performance_based, adaptive
-    model_weights: Optional[Dict[str, float]] = None
-
-    # Ensemble aggregation
-    aggregation_method: str = "weighted_average"  # weighted_average, max_pooling, concat
-
-    # Performance optimization
-    parallel_encoding: bool = True
-    memory_efficient: bool = True
-
-    # Sequential execution toggles
-    sequential_passes: bool = False
-    sequential_data_parallel: bool = True
-    preferred_devices: Optional[List[str]] = None
-
-@dataclass
-class RerankingConfig:
-    """CrossEncoder reranking configuration"""
-    # Reranking model (Jina V3: 0.6B params, 131K context, 256D output)
-    model_name: str = "jina-reranker-v3"  # Default: Best quality, long context
-    enable_reranking: bool = False
-    
-    # Reranking parameters
-    top_k_candidates: int = 100  # Initial retrieval candidates
-    rerank_top_k: int = 20      # Final reranked results
-    batch_size: int = 32        # Reranking batch size
-    
-    # Performance optimization
-    enable_caching: bool = True
-    cache_size: int = 1000
-
-@dataclass
-class AdvancedPreprocessingConfig:
-    """Advanced document preprocessing with caching"""
-    # Text preprocessing
-    enable_text_caching: bool = True
-    normalize_whitespace: bool = True
-    remove_excessive_newlines: bool = True
-    trim_long_sequences: bool = True
-    
-    # Token optimization
-    enable_tokenizer_caching: bool = True
-    max_cache_size: int = 10000
-    cache_hit_threshold: float = 0.8
-    
-    # Memory scaling
-    enable_memory_scaling: bool = True
-    memory_scale_factor: float = 0.8
-    adaptive_batch_sizing: bool = True
-
-class AdvancedTextCache:
-    """Intelligent text preprocessing cache"""
-    
-    def __init__(self, max_size: int = 10000):
-        self.cache = {}
-        self.max_size = max_size
-        self.hit_count = 0
-        self.miss_count = 0
-    
-    def _get_text_hash(self, text: str) -> str:
-        """Get deterministic hash for text"""
-        return hashlib.md5(text.encode('utf-8')).hexdigest()[:16]
-    
-    def get_processed_text(self, text: str, processor_func) -> str:
-        """Get processed text with caching"""
-        text_hash = self._get_text_hash(text)
-        
-        if text_hash in self.cache:
-            self.hit_count += 1
-            return self.cache[text_hash]
-        
-        # Process and cache
-        processed = processor_func(text)
-        
-        # Manage cache size
-        if len(self.cache) >= self.max_size:
-            # Remove oldest entry (simple FIFO)
-            oldest_key = next(iter(self.cache))
-            del self.cache[oldest_key]
-        
-        self.cache[text_hash] = processed
-        self.miss_count += 1
-        return processed
-    
-    def get_stats(self) -> Dict[str, Any]:
-        """Get cache performance statistics"""
-        total = self.hit_count + self.miss_count
-        hit_rate = self.hit_count / total if total > 0 else 0
-        
-        return {
-            "cache_size": len(self.cache),
-            "hit_count": self.hit_count,
-            "miss_count": self.miss_count,
-            "hit_rate": hit_rate,
-            "memory_mb": len(str(self.cache).encode('utf-8')) / 1024 / 1024
-        }
 
 
 @dataclass
@@ -3622,6 +3283,8 @@ class UltimateKaggleEmbedderV4:
     
     def _export_faiss_index(self, file_path: str):
         """Export FAISS index for fast similarity search"""
+        if faiss is None:
+            raise RuntimeError("FAISS export requires the `faiss` package to be installed")
         embeddings = self._require_embeddings()
         dimension = embeddings.shape[1]
         
