@@ -1,6 +1,6 @@
 ---
 description: 'Debug your application to find and fix a bug'
-tools: ['edit', 'search', 'runCommands', 'my-knowledge/*', 'filesystem/*', 'code-reasoning/*', 'sequential-thinking/*', 'usages', 'problems', 'testFailure', 'fetch', 'githubRepo', 'runTests']
+tools: ['edit', 'runNotebooks', 'search', 'new', 'runCommands', 'runTasks', 'my-knowledge/*', 'filesystem/*', 'code-reasoning/*', 'sequential-thinking/*']
 ---
 
 # Debug Mode Instructions
