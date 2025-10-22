@@ -353,6 +353,13 @@ class UltimateKaggleEmbedderV4:
         if sequential_dp_env and self.ensemble_config:
             self.ensemble_config.sequential_data_parallel = sequential_dp_env.strip().lower() in {"1", "true", "yes", "on"}
 
+        # Check environment for exclusive ensemble mode
+        exclusive_env = os.environ.get("EMBEDDER_EXCLUSIVE_ENSEMBLE")
+        if exclusive_env and self.ensemble_config:
+            self.ensemble_config.exclusive_mode = exclusive_env.strip().lower() in {"1", "true", "yes", "on"}
+            if self.ensemble_config.exclusive_mode:
+                logger.info("Exclusive ensemble mode enabled via environment variable")
+
         self._initialize_embedding_models()
         self._initialize_companion_models()
         if self.enable_sparse:

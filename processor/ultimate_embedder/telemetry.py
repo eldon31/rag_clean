@@ -75,6 +75,7 @@ class TelemetryTracker:
 		self.batch_progress_events: List[Dict[str, Any]] = []
 		self.gpu_snapshot_history: List[Dict[str, Any]] = []
 		self.latest_gpu_snapshots: Dict[int, GPUMemorySnapshot] = {}
+		self.gpu_lease_events: List[Dict[str, Any]] = []
 
 	def record_mitigation(self, event_type: str, **details: Any) -> None:
 		"""Track mitigation events for diagnostics."""
@@ -186,6 +187,30 @@ class TelemetryTracker:
 
 		self.latest_gpu_snapshots = snapshots
 
+	def record_gpu_lease_event(
+		self,
+		*,
+		event_type: str,
+		model: str,
+		device_ids: List[int],
+		vram_snapshots: Dict[int, GPUMemorySnapshot],
+	) -> None:
+		"""Record GPU lease lifecycle events (acquire/release)."""
+
+		payload: Dict[str, Any] = {
+			"timestamp": time.time(),
+			"event_type": event_type,
+			"model": model,
+			"device_ids": device_ids,
+			"vram": {
+				device_id: snapshot.to_dict()
+				for device_id, snapshot in vram_snapshots.items()
+			},
+		}
+
+		self.gpu_lease_events.append(payload)
+		self._logger.debug("GPU lease event captured: %s", payload)
+
 	def summarize_gpu_history(self) -> Dict[str, Any]:
 		"""Return a condensed view of recent GPU telemetry."""
 
@@ -214,6 +239,7 @@ class TelemetryTracker:
 		self.mitigation_events.clear()
 		self.rotation_events.clear()
 		self.batch_progress_events.clear()
+		self.gpu_lease_events.clear()
 		self.rotation_overflow_count = 0
 
 

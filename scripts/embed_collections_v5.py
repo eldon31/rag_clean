@@ -233,6 +233,12 @@ def _parse_args(argv: List[str]) -> argparse.Namespace:
         default=KAGGLE_DEFAULTS.get("sequential_devices") if IS_KAGGLE else None,
         help="Preferred device order for sequential ensemble (comma-separated, e.g., 'cuda:1,cuda:0,cpu').",
     )
+    parser.add_argument(
+        "--exclusive-ensemble",
+        action="store_true",
+        default=KAGGLE_DEFAULTS.get("exclusive_ensemble", False) if IS_KAGGLE else False,
+        help="Enable exclusive ensemble mode: lease both GPUs per model for larger batch sizes.",
+    )
     return parser.parse_args(argv)
 
 
@@ -348,6 +354,7 @@ def _run_for_collection(
     sequential_devices: Optional[List[str]],
     zip_output: bool,
     matryoshka_dim: int | None = None,
+    exclusive_ensemble: bool = False,
 ) -> CollectionRunResult:
     print(f"\n{'=' * 80}")
     print(f"Initializing Embedder for Collection: {collection_dir.name}")
@@ -385,6 +392,8 @@ def _run_for_collection(
         ensemble_config.sequential_data_parallel = sequential_data_parallel
         if sequential_devices:
             ensemble_config.preferred_devices = sequential_devices
+        # Wire exclusive mode flag from CLI
+        ensemble_config.exclusive_mode = exclusive_ensemble
 
     if requested_mode == "auto":
         display_mode = "sequential" if sequential_requested else ("parallel" if effective_enable else "disabled")
@@ -793,6 +802,7 @@ def main(argv: List[str]) -> int:
                 sequential_devices=sequential_devices,
                 zip_output=args.zip_output,
                 matryoshka_dim=args.matryoshka_dim,
+                exclusive_ensemble=args.exclusive_ensemble,
             )
             print(f"Collection {collection_dir.name} completed successfully")
             run_summaries.append(summary)

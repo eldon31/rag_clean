@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import logging
 from pathlib import Path
-from typing import TYPE_CHECKING, Any, Dict, Optional
+from typing import TYPE_CHECKING, Any, Dict, List, Optional
 
 import torch
 from huggingface_hub import snapshot_download
@@ -110,6 +110,16 @@ class ModelManager:
             self._maybe_enable_transformer_checkpointing(embedder.primary_model)
 
         embedder.models[embedder.model_name] = embedder.primary_model
+
+        # Stage primary model to CPU if exclusive ensemble mode is enabled
+        if (
+            embedder.enable_ensemble
+            and embedder.ensemble_config
+            and embedder.ensemble_config.exclusive_mode
+            and embedder.device == "cuda"
+        ):
+            logger.info("Exclusive ensemble mode: staging primary model to CPU")
+            self.stage_model_to_cpu(embedder.model_name)
 
         if embedder.enable_ensemble:
             self._initialize_ensemble_models()
@@ -434,6 +444,9 @@ class ModelManager:
 
         logger.info("Loading ensemble models: %s", embedder.ensemble_config.ensemble_models)
 
+        # Determine initial device: CPU if exclusive mode, GPU otherwise
+        initial_device = "cpu" if embedder.ensemble_config.exclusive_mode else embedder.device
+
         for model_name in embedder.ensemble_config.ensemble_models:
             if model_name not in KAGGLE_OPTIMIZED_MODELS:
                 logger.warning("Unknown ensemble model %s, skipping", model_name)
@@ -443,21 +456,120 @@ class ModelManager:
 
             try:
                 model_config = KAGGLE_OPTIMIZED_MODELS[model_name]
-                logger.info("Loading ensemble model: %s", model_config.hf_model_id)
+                logger.info("Loading ensemble model: %s on device %s", model_config.hf_model_id, initial_device)
 
                 ensemble_model = SentenceTransformer(
                     model_config.hf_model_id,
                     trust_remote_code=model_config.trust_remote_code,
-                    device=embedder.device,
+                    device=initial_device,
                 )
 
-                if embedder.gpu_config.precision == "fp16" and embedder.device == "cuda":
+                if embedder.gpu_config.precision == "fp16" and initial_device != "cpu":
                     ensemble_model = ensemble_model.half()
 
                 embedder.models[model_name] = ensemble_model
-                logger.info("Ensemble model %s loaded", model_name)
+                logger.info("Ensemble model %s loaded on %s", model_name, initial_device)
             except Exception as exc:  # pragma: no cover - defensive logging
                 logger.error("Failed to load ensemble model %s: %s", model_name, exc)
+
+    # ------------------------------------------------------------------
+    # Exclusive ensemble mode: staging and hydration
+    # ------------------------------------------------------------------
+
+    def stage_model_to_cpu(self, model_name: str) -> None:
+        """Move an ensemble model to CPU to free GPU memory."""
+        embedder = self.embedder
+        logger = self.logger
+
+        model = embedder.models.get(model_name)
+        if model is None:
+            logger.warning("Cannot stage %s: model not loaded", model_name)
+            return
+
+        # Optional warm-cache: retain model on device to avoid rehydration cost
+        if (
+            embedder.ensemble_config
+            and embedder.ensemble_config.exclusive_mode
+            and embedder.ensemble_config.warm_cache_after_release
+        ):
+            logger.info("Warm cache active; retaining %s on current device", model_name)
+            return
+
+        # Unwrap DataParallel if present
+        if isinstance(model, torch.nn.DataParallel):
+            logger.debug("Unwrapping DataParallel for %s before staging to CPU", model_name)
+            embedder.models[model_name] = model.module
+            model = model.module
+
+        # Move to CPU
+        if hasattr(model, "to"):
+            model = model.to("cpu")
+            embedder.models[model_name] = model
+            logger.info("Model %s staged to CPU", model_name)
+        else:
+            logger.warning("Model %s does not support .to() method", model_name)
+
+    def hydrate_model_to_gpus(
+        self,
+        model_name: str,
+        device_ids: Optional[List[int]] = None,
+    ) -> Any:
+        """Hydrate an ensemble model from CPU onto leased GPUs.
+
+        Returns the model ready for encoding, potentially wrapped in DataParallel.
+        """
+        embedder = self.embedder
+        logger = self.logger
+
+        model = embedder.models.get(model_name)
+        if model is None:
+            logger.warning("Cannot hydrate %s: model not loaded", model_name)
+            return None
+
+        # Unwrap DataParallel if it was previously wrapped
+        if isinstance(model, torch.nn.DataParallel):
+            logger.debug("Unwrapping existing DataParallel for %s", model_name)
+            model = model.module
+
+        # Determine target device
+        if device_ids is None:
+            device_ids = list(range(embedder.device_count))
+
+        if not device_ids:
+            logger.warning("Cannot hydrate %s: no device IDs provided", model_name)
+            return model
+
+        if embedder.device == "cuda" and device_ids:
+            primary_device = f"cuda:{device_ids[0]}"
+        elif embedder.device == "cuda":
+            primary_device = "cuda:0"
+        else:
+            primary_device = embedder.device or "cpu"
+
+        # Move to primary device
+        if hasattr(model, "to"):
+            model = model.to(primary_device)
+            logger.debug("Model %s moved to %s", model_name, primary_device)
+
+            if embedder.gpu_config.precision == "fp16" and embedder.device == "cuda":
+                model = model.half()
+                logger.debug("Model %s converted to FP16", model_name)
+
+            # Rewrap with DataParallel if multiple GPUs are leased
+            if (
+                len(device_ids) > 1
+                and embedder.ensemble_config
+                and embedder.ensemble_config.sequential_data_parallel
+            ):
+                logger.debug("Wrapping %s with DataParallel on devices %s", model_name, device_ids)
+                model = torch.nn.DataParallel(model, device_ids=device_ids)
+
+            embedder.models[model_name] = model
+            logger.info("Model %s hydrated to GPUs %s", model_name, device_ids)
+            return model
+        else:
+            logger.warning("Model %s does not support .to() method", model_name)
+            return model
 
 
 __all__ = ["ModelManager"]

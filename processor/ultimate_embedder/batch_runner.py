@@ -523,6 +523,16 @@ class BatchRunner:
         embedder = self.embedder
         logger = self.logger
 
+        # Detect exclusive ensemble mode
+        if (
+            embedder.enable_ensemble
+            and embedder.ensemble_config
+            and embedder.ensemble_config.exclusive_mode
+        ):
+            logger.info("Exclusive ensemble mode detected; delegating to model-first iteration")
+            return self.run_exclusive_ensemble(enable_monitoring, save_intermediate)
+
+        # Standard batch-first mode continues below
         total_chunks = len(embedder.chunk_texts)
         logger.info("Starting Kaggle T4 x2 optimized embedding generation")
         logger.info("Total chunks: %s", total_chunks)
@@ -964,6 +974,276 @@ class BatchRunner:
                 for name, memory in companion_memory_mb.items()
             )
             logger.info("Companion dense embeddings: %s", formatted)
+
+        return results
+
+    def run_exclusive_ensemble(
+        self,
+        enable_monitoring: bool,
+        save_intermediate: bool,
+    ) -> Dict[str, Any]:
+        """Run exclusive ensemble mode: iterate by model, leasing GPUs for each pass."""
+        embedder = self.embedder
+        logger = self.logger
+
+        if not embedder.ensemble_config or not embedder.ensemble_config.exclusive_mode:
+            raise ValueError("Exclusive ensemble mode not enabled in config")
+
+        total_chunks = len(embedder.chunk_texts)
+        logger.info("Starting EXCLUSIVE ensemble embedding generation")
+        logger.info("Total chunks: %s", total_chunks)
+        logger.info("Models: %s", embedder.ensemble_config.ensemble_models)
+
+        # Prepare ordered model list
+        ordered_models: List[str] = []
+        seen: Set[str] = set()
+        for candidate in [embedder.model_name, *embedder.ensemble_config.ensemble_models]:
+            if candidate not in seen:
+                ordered_models.append(candidate)
+                seen.add(candidate)
+
+        logger.info("Model execution order: %s", ordered_models)
+
+        embedder.embeddings_by_model = {}
+        embedder.telemetry.reset_runtime_state()
+        embedder.processing_stats.clear()
+
+        if enable_monitoring:
+            embedder._start_performance_monitoring()
+
+        start_time = time.time()
+        per_model_embeddings: Dict[str, np.ndarray] = {}
+        model_weights: Dict[str, float] = {}
+
+        target_dim = embedder.matryoshka_dim or embedder.model_config.vector_dim
+
+        try:
+            # Import lease helper
+            from processor.ultimate_embedder.gpu_lease import lease_gpus
+
+            for model_idx, model_name in enumerate(ordered_models):
+                model_start = time.time()
+                logger.info(
+                    "=" * 70
+                )
+                logger.info(
+                    "MODEL PASS %d/%d: %s",
+                    model_idx + 1,
+                    len(ordered_models),
+                    model_name,
+                )
+                logger.info("=" * 70)
+
+                # Stage previous models to CPU if not the first model
+                if model_idx > 0:
+                    prev_model = ordered_models[model_idx - 1]
+                    embedder.model_manager.stage_model_to_cpu(prev_model)
+                    logger.info("Staged %s to CPU", prev_model)
+
+                # Acquire GPU lease
+                with lease_gpus(embedder, model_name, logger) as lease:
+                    # Hydrate model onto leased GPUs
+                    model = embedder.model_manager.hydrate_model_to_gpus(
+                        model_name,
+                        device_ids=lease.device_ids,
+                    )
+
+                    if model is None:
+                        logger.warning("Failed to hydrate %s, skipping", model_name)
+                        continue
+
+                    # Reset adaptive controller for this model pass
+                    batch_hint = embedder._get_batch_hint_for_model(model_name)
+                    controller: Optional[AdaptiveBatchController] = None
+                    if embedder.device == "cuda":
+                        controller = AdaptiveBatchController(
+                            primary_batch=batch_hint,
+                            device_count=len(lease.device_ids),
+                            gpu0_soft_limit_bytes=embedder.gpu0_soft_limit_bytes,
+                            companion_enabled=False,  # No companions in exclusive mode
+                        )
+                        logger.info(
+                            "Adaptive batch controller enabled for %s (initial batch: %d)",
+                            model_name,
+                            batch_hint,
+                        )
+
+                    # Progress tracker for this model
+                    est_batches = max(1, math.ceil(total_chunks / batch_hint))
+                    progress_tracker = _BatchProgressTracker(total_chunks, batch_hint)
+
+                    # Batch iteration for this model
+                    model_embeddings: List[np.ndarray] = []
+                    batch_index = 0
+                    executed_batches = 0
+
+                    while batch_index < total_chunks:
+                        current_batch = controller.primary_batch if controller else batch_hint
+                        batch_end = min(batch_index + current_batch, total_chunks)
+                        batch_texts = embedder.chunk_texts[batch_index:batch_end]
+
+                        if not batch_texts:
+                            break
+
+                        progress_label = embedder._get_batch_progress_label(batch_index, batch_end)
+                        progress_context = progress_tracker.build_context(progress_label)
+
+                        # Check memory and adapt
+                        if controller and embedder.device == "cuda":
+                            snapshots = embedder._collect_gpu_snapshots()
+                            mitigation = controller.register_snapshot(snapshots)
+                            if mitigation:
+                                event_type = mitigation.pop("type", "adaptive_action")
+                                embedder._record_mitigation(event_type, model=model_name, **mitigation)
+                                torch.cuda.empty_cache()
+                                gc.collect()
+                                continue
+
+                        # Encode batch
+                        try:
+                            target_device = (
+                                f"cuda:{lease.device_ids[0]}"
+                                if embedder.device == "cuda" and lease.device_ids
+                                else embedder.device
+                            )
+                            batch_embeddings = embedder._call_encode(
+                                model,
+                                batch_texts,
+                                batch_size=current_batch,
+                                device=target_device,
+                                progress_context=progress_context,
+                            )
+                            batch_embeddings = embedder._normalize_embedding_matrix(
+                                batch_embeddings,
+                                model_name,
+                            )
+
+                            # Ensure dimension and truncate if needed
+                            batch_embeddings, _ = embedder._ensure_embedding_dimension(
+                                batch_embeddings,
+                                expected_dim=target_dim,
+                            )
+
+                            model_embeddings.append(batch_embeddings)
+                            executed_batches += 1
+                            progress_tracker.mark_completed()
+
+                            self._record_progress_event(
+                                progress_context,
+                                status="completed",
+                                model=model_name,
+                                device=target_device,
+                                metadata={
+                                    "mode": "exclusive",
+                                    "model_pass": model_idx + 1,
+                                    "total_passes": len(ordered_models),
+                                },
+                            )
+
+                            logger.info(
+                                "[%s] Batch %d/%d completed (chunks %d-%d)",
+                                model_name,
+                                executed_batches,
+                                est_batches,
+                                batch_index,
+                                batch_end,
+                            )
+
+                            batch_index = batch_end
+
+                        except RuntimeError as exc:
+                            if "out of memory" in str(exc).lower() and controller:
+                                mitigation = controller.register_oom(companion_active=False)
+                                if mitigation:
+                                    event_type = mitigation.pop("type", "adaptive_oom")
+                                    embedder._record_mitigation(event_type, model=model_name, **mitigation)
+                                    torch.cuda.empty_cache()
+                                    gc.collect()
+                                    continue
+                            raise
+
+                    # Aggregate model embeddings
+                    if model_embeddings:
+                        full_embeddings = np.vstack(model_embeddings)
+                        per_model_embeddings[model_name] = full_embeddings
+                        model_weights[model_name] = (
+                            embedder.ensemble_config.model_weights.get(model_name, 1.0)
+                            if embedder.ensemble_config.model_weights
+                            else 1.0
+                        )
+
+                        logger.info(
+                            "[%s] Pass completed: %d embeddings, %.2fs",
+                            model_name,
+                            len(full_embeddings),
+                            time.time() - model_start,
+                        )
+
+                        # Log lease summary
+                        lease_summary = lease.summarize()
+                        logger.info("[%s] GPU lease summary: %s", model_name, lease_summary)
+                    else:
+                        logger.warning("[%s] No embeddings generated", model_name)
+
+                # Lease released automatically here
+
+            # Aggregate across models
+            if not per_model_embeddings:
+                raise RuntimeError("No embeddings generated across all models")
+
+            if len(per_model_embeddings) == 1:
+                final_embeddings = list(per_model_embeddings.values())[0]
+            else:
+                weight_values = np.array(
+                    [model_weights.get(name, 1.0) for name in per_model_embeddings.keys()],
+                    dtype=np.float32,
+                )
+                weight_values = weight_values / weight_values.sum()
+                stacked = np.stack(list(per_model_embeddings.values()), axis=0)
+                final_embeddings = np.tensordot(weight_values, stacked, axes=1)
+
+            final_embeddings = normalize(final_embeddings, norm="l2", axis=1)
+            embedder.embeddings = final_embeddings
+            embedder.embeddings_by_model[embedder.model_name] = final_embeddings
+
+        except Exception as exc:
+            logger.error("Exclusive ensemble generation failed: %s", exc)
+            raise
+        finally:
+            if enable_monitoring:
+                embedder._stop_performance_monitoring()
+
+        total_time = time.time() - start_time
+        chunks_per_second = total_chunks / total_time if total_time else 0.0
+
+        embeddings = embedder._require_embeddings()
+        embedding_memory_mb = embeddings.nbytes / 1024 / 1024
+        memory_per_chunk_kb = (embedding_memory_mb * 1024) / total_chunks
+
+        results: Dict[str, Any] = {
+            "total_embeddings_generated": len(embeddings),
+            "embedding_dimension": embeddings.shape[1],
+            "processing_time_seconds": total_time,
+            "chunks_per_second": chunks_per_second,
+            "gpu_count": embedder.device_count,
+            "model_used": embedder.model_name,
+            "backend": embedder.gpu_config.backend,
+            "precision": embedder.gpu_config.precision,
+            "embedding_memory_mb": embedding_memory_mb,
+            "memory_per_chunk_kb": memory_per_chunk_kb,
+            "ensemble_mode": "exclusive",
+            "models_executed": list(per_model_embeddings.keys()),
+            "lease_events": embedder.telemetry.gpu_lease_events,
+        }
+
+        logger.info("=" * 70)
+        logger.info("EXCLUSIVE ENSEMBLE COMPLETE")
+        logger.info("Generated %s embeddings", results["total_embeddings_generated"])
+        logger.info("Dimension: %s", results["embedding_dimension"])
+        logger.info("Total time: %.2fs", results["processing_time_seconds"])
+        logger.info("Speed: %.1f chunks/second", results["chunks_per_second"])
+        logger.info("Models executed: %s", results["models_executed"])
+        logger.info("=" * 70)
 
         return results
 

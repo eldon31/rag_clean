@@ -290,6 +290,11 @@ class ExportRuntime:
         if progress_events:
             stats["batch_progress"] = progress_events
 
+        # Include GPU lease events for exclusive ensemble mode
+        lease_events = getattr(embedder.telemetry, "gpu_lease_events", None)
+        if lease_events:
+            stats["gpu_lease_events"] = lease_events
+
         if embedder.sparse_vectors:
             available = sum(1 for vector in embedder.sparse_vectors if vector)
             stats["sparse_vector_stats"] = {

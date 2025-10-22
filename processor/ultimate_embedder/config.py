@@ -200,6 +200,8 @@ class EnsembleConfig:
     sequential_passes: bool = False
     sequential_data_parallel: bool = True
     preferred_devices: Optional[List[str]] = None
+    exclusive_mode: bool = False  # Lease both GPUs exclusively per model
+    warm_cache_after_release: bool = False  # Keep one model resident between passes
 
 
 @dataclass
