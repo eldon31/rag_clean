@@ -494,8 +494,8 @@ class UltimateKaggleEmbedderV4:
         if encode_callable is None:
             raise AttributeError(f"Model {type(model).__name__} does not expose encode()")
 
+        call_args: List[Any] = [texts]
         call_kwargs: Dict[str, Any] = {
-            "texts": texts,
             "batch_size": batch_size,
             "show_progress_bar": show_progress,
             "convert_to_numpy": True,
@@ -508,12 +508,12 @@ class UltimateKaggleEmbedderV4:
             call_kwargs["tqdm_kwargs"] = {"desc": f"Batches({progress_label})"}
 
         try:
-            return encode_callable(**call_kwargs)
+            return encode_callable(*call_args, **call_kwargs)
         except Exception as primary_exc:
             if progress_requested:
                 call_kwargs.pop("tqdm_kwargs", None)
                 try:
-                    return encode_callable(**call_kwargs)
+                    return encode_callable(*call_args, **call_kwargs)
                 except Exception:
                     raise primary_exc
             raise
