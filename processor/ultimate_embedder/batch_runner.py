@@ -31,6 +31,7 @@ class BatchRunner:
         texts: List[str],
         batch_slice: Optional[slice] = None,
         batch_index: Optional[int] = None,
+        progress_label: Optional[str] = None,
     ) -> np.ndarray:
         """Generate embeddings using the configured ensemble pipeline."""
 
@@ -48,6 +49,7 @@ class BatchRunner:
                 texts,
                 batch_size=primary_batch,
                 device=embedder.device,
+                progress_label=progress_label,
             )
             result = embedder._normalize_embedding_matrix(result, embedder.model_name)
             embedder._log_gpu_memory("Primary encode (non-ensemble) - after")
@@ -99,6 +101,7 @@ class BatchRunner:
                         texts,
                         batch_size=batch_hint,
                         device=embedder.device,
+                        progress_label=progress_label,
                     )
                     embeddings = embedder._normalize_embedding_matrix(embeddings, model_name)
                     embedder._log_gpu_memory(
@@ -223,6 +226,7 @@ class BatchRunner:
                             texts,
                             batch_size=current_batch_hint,
                             device=current_device,
+                            progress_label=progress_label,
                         )
                         embeddings = embedder._normalize_embedding_matrix(embeddings, model_name)
                         embedder._log_gpu_memory(
@@ -513,6 +517,8 @@ class BatchRunner:
                     if not batch_texts:
                         break
 
+                    progress_label = embedder._get_batch_progress_label(batch_index, batch_end)
+
                     if controller and embedder.device == "cuda":
                         snapshots = embedder._collect_gpu_snapshots()
                         mitigation = controller.register_snapshot(snapshots)
@@ -544,6 +550,7 @@ class BatchRunner:
                                     batch_texts,
                                     batch_slice=batch_slice,
                                     batch_index=executed_batches,
+                                    progress_label=progress_label,
                                 )
                             elif embedder.primary_model is not None:
                                 logger.debug("Batch %s: Using primary model", executed_batches + 1)
@@ -553,6 +560,7 @@ class BatchRunner:
                                     batch_texts,
                                     batch_size=primary_batch,
                                     device=embedder.device,
+                                    progress_label=progress_label,
                                 )
                                 batch_embeddings = embedder._normalize_embedding_matrix(
                                     batch_embeddings,
@@ -579,6 +587,7 @@ class BatchRunner:
                                     batch_texts,
                                     batch_size=comp_batch_size,
                                     device=companion_device,
+                                    progress_label=progress_label,
                                 )
                                 temp_outputs[companion_name] = embedder._normalize_embedding_matrix(
                                     companion_matrix,
