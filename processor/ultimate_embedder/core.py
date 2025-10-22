@@ -494,32 +494,28 @@ class UltimateKaggleEmbedderV4:
         if encode_callable is None:
             raise AttributeError(f"Model {type(model).__name__} does not expose encode()")
 
-        extra_kwargs: Dict[str, Any] = {}
-        if show_progress and progress_label:
-            extra_kwargs["tqdm_kwargs"] = {"desc": f"Batches({progress_label})"}
+        call_kwargs: Dict[str, Any] = {
+            "texts": texts,
+            "batch_size": batch_size,
+            "show_progress_bar": show_progress,
+            "convert_to_numpy": True,
+            "normalize_embeddings": True,
+            "device": device,
+        }
+
+        progress_requested = bool(show_progress and progress_label)
+        if progress_requested:
+            call_kwargs["tqdm_kwargs"] = {"desc": f"Batches({progress_label})"}
 
         try:
-            return encode_callable(
-                texts,
-                batch_size=batch_size,
-                show_progress_bar=show_progress,
-                convert_to_numpy=True,
-                normalize_embeddings=True,
-                device=device,
-                **extra_kwargs,
-            )
-        except TypeError:
-            if "tqdm_kwargs" in extra_kwargs:
-                extra_kwargs.pop("tqdm_kwargs", None)
-                return encode_callable(
-                    texts,
-                    batch_size=batch_size,
-                    show_progress_bar=show_progress,
-                    convert_to_numpy=True,
-                    normalize_embeddings=True,
-                    device=device,
-                    **extra_kwargs,
-                )
+            return encode_callable(**call_kwargs)
+        except Exception as primary_exc:
+            if progress_requested:
+                call_kwargs.pop("tqdm_kwargs", None)
+                try:
+                    return encode_callable(**call_kwargs)
+                except Exception:
+                    raise primary_exc
             raise
 
     def _normalize_embedding_matrix(self, matrix: Any, model_name: str) -> np.ndarray:
