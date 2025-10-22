@@ -41,7 +41,6 @@ os.environ.setdefault("TF_CPP_MIN_LOG_LEVEL", "3")
 os.environ.setdefault("XLA_PYTHON_CLIENT_PREALLOCATE", "false")
 
 import gc
-import importlib
 import logging
 import re
 from collections import Counter, defaultdict
@@ -70,9 +69,6 @@ def snapshot_download(*args: Any, **kwargs: Any) -> str:
     return _snapshot_download(*args, **kwargs)
 
 # Core ML libraries
-from contextlib import contextmanager
-from functools import wraps
-
 from sentence_transformers import CrossEncoder, SentenceTransformer
 from sklearn.metrics.pairwise import cosine_similarity
 
@@ -476,47 +472,6 @@ class UltimateKaggleEmbedderV4:
 
             current = candidate
 
-    @contextmanager
-    def _override_tqdm_desc(self, label: str):
-        """Temporarily override tqdm descriptions emitted by sentence-transformers."""
-
-        patch_desc = f"Batches({label})"
-        modules_to_patch: List[Tuple[Any, str]] = []
-        for module_name in ("tqdm", "tqdm.auto", "tqdm.autonotebook"):
-            try:
-                module = importlib.import_module(module_name)
-            except ImportError:
-                continue
-            modules_to_patch.append((module, "tqdm"))
-            modules_to_patch.append((module, "trange"))
-
-        patched: List[Tuple[Any, str, Any]] = []
-
-        for module, attr in modules_to_patch:
-            original = getattr(module, attr, None)
-            if original is None:
-                continue
-
-            @wraps(original)
-            def wrapper(*args: Any, __func: Any = original, **kwargs: Any):
-                desc_value = kwargs.get("desc")
-                if (
-                    not desc_value
-                    or desc_value == "Batches"
-                    or (isinstance(desc_value, str) and desc_value.startswith("Batches"))
-                ):
-                    kwargs["desc"] = patch_desc
-                return __func(*args, **kwargs)
-
-            setattr(module, attr, wrapper)
-            patched.append((module, attr, original))
-
-        try:
-            yield
-        finally:
-            for module, attr, original in reversed(patched):
-                setattr(module, attr, original)
-    
     def _call_encode(
         self,
         model: Any,
@@ -539,8 +494,23 @@ class UltimateKaggleEmbedderV4:
         if encode_callable is None:
             raise AttributeError(f"Model {type(model).__name__} does not expose encode()")
 
+        extra_kwargs: Dict[str, Any] = {}
         if show_progress and progress_label:
-            with self._override_tqdm_desc(progress_label):
+            extra_kwargs["tqdm_kwargs"] = {"desc": f"Batches({progress_label})"}
+
+        try:
+            return encode_callable(
+                texts,
+                batch_size=batch_size,
+                show_progress_bar=show_progress,
+                convert_to_numpy=True,
+                normalize_embeddings=True,
+                device=device,
+                **extra_kwargs,
+            )
+        except TypeError:
+            if "tqdm_kwargs" in extra_kwargs:
+                extra_kwargs.pop("tqdm_kwargs", None)
                 return encode_callable(
                     texts,
                     batch_size=batch_size,
@@ -548,16 +518,9 @@ class UltimateKaggleEmbedderV4:
                     convert_to_numpy=True,
                     normalize_embeddings=True,
                     device=device,
+                    **extra_kwargs,
                 )
-
-        return encode_callable(
-            texts,
-            batch_size=batch_size,
-            show_progress_bar=show_progress,
-            convert_to_numpy=True,
-            normalize_embeddings=True,
-            device=device,
-        )
+            raise
 
     def _normalize_embedding_matrix(self, matrix: Any, model_name: str) -> np.ndarray:
         """Ensure embedding outputs are 2D float32 arrays with consistent dimensions."""
