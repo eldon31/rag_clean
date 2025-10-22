@@ -57,18 +57,22 @@ class TelemetryTracker:
 		*,
 		rotation_sample_limit: int = 5,
 		rotation_payload_limit: int = 500,
+		batch_progress_limit: int = 1000,
 		history_limit: int = 50,
 		logger: Optional[logging.Logger] = None,
 	) -> None:
 		self._logger = logger or logging.getLogger(__name__)
 		self.rotation_sample_limit = rotation_sample_limit
 		self.rotation_payload_limit = rotation_payload_limit
+		self.batch_progress_limit = max(1, batch_progress_limit)
 		self.history_limit = max(1, history_limit)
 		self.rotation_overflow_count = 0
+		self._progress_label_limit = 96
 
 		self.mitigation_events: List[Dict[str, Any]] = []
 		self.rotation_events: List[Dict[str, Any]] = []
 		self.cache_events: List[Dict[str, Any]] = []
+		self.batch_progress_events: List[Dict[str, Any]] = []
 		self.gpu_snapshot_history: List[Dict[str, Any]] = []
 		self.latest_gpu_snapshots: Dict[int, GPUMemorySnapshot] = {}
 
@@ -111,6 +115,44 @@ class TelemetryTracker:
 
 		event.setdefault("timestamp", time.time())
 		self.cache_events.append(event)
+
+	def record_batch_progress(
+		self,
+		*,
+		batch_index: int,
+		total_batches: int,
+		label: Optional[str] = None,
+		status: str = "completed",
+		model: Optional[str] = None,
+		device: Optional[str] = None,
+		attempt: Optional[int] = None,
+		metadata: Optional[Dict[str, Any]] = None,
+	) -> None:
+		"""Capture batch-level progress telemetry with bounded payload."""
+
+		if len(self.batch_progress_events) >= self.batch_progress_limit:
+			return
+
+		payload: Dict[str, Any] = {
+			"timestamp": time.time(),
+			"batch_index": max(0, batch_index),
+			"total_batches": max(1, total_batches),
+			"status": status,
+		}
+
+		if label:
+			payload["label"] = label[: self._progress_label_limit]
+		if model:
+			payload["model"] = model
+		if device:
+			payload["device"] = device
+		if attempt is not None:
+			payload["attempt"] = attempt
+		if metadata:
+			payload["metadata"] = metadata
+
+		self.batch_progress_events.append(payload)
+		self._logger.debug("Batch progress captured: %s", payload)
 
 	def record_gpu_snapshot(
 		self,
@@ -171,6 +213,7 @@ class TelemetryTracker:
 
 		self.mitigation_events.clear()
 		self.rotation_events.clear()
+		self.batch_progress_events.clear()
 		self.rotation_overflow_count = 0
 
 

@@ -13,10 +13,37 @@ import numpy as np
 import torch
 
 from processor.ultimate_embedder.controllers import AdaptiveBatchController
+from processor.ultimate_embedder.progress import BatchProgressContext
 from sklearn.preprocessing import normalize
 
 if TYPE_CHECKING:  # pragma: no cover
     from processor.ultimate_embedder.core import UltimateKaggleEmbedderV4
+
+
+class _BatchProgressTracker:
+    """Track batch progress indices and total counts for a run."""
+
+    def __init__(self, total_chunks: int, initial_total_batch: int) -> None:
+        estimate = 1
+        if total_chunks > 0 and initial_total_batch > 0:
+            estimate = max(1, math.ceil(total_chunks / initial_total_batch))
+        self.completed: int = 0
+        self.total_batches: int = estimate
+
+    def ensure_capacity(self, pending_batches: int) -> None:
+        required_total = self.completed + max(1, pending_batches)
+        if required_total > self.total_batches:
+            self.total_batches = required_total
+
+    def build_context(self, label: Optional[str]) -> BatchProgressContext:
+        return BatchProgressContext(
+            batch_index=self.completed,
+            total_batches=self.total_batches,
+            label=label,
+        )
+
+    def mark_completed(self) -> None:
+        self.completed += 1
 
 
 class BatchRunner:
@@ -26,12 +53,37 @@ class BatchRunner:
         self.embedder = embedder
         self.logger = logger
 
+    def _record_progress_event(
+        self,
+        context: Optional[BatchProgressContext],
+        *,
+        status: str,
+        model: str,
+        device: Optional[str] = None,
+        attempt: Optional[int] = None,
+        metadata: Optional[Dict[str, Any]] = None,
+    ) -> None:
+        if context is None:
+            return
+
+        telemetry = self.embedder.telemetry
+        telemetry.record_batch_progress(
+            batch_index=context.batch_index,
+            total_batches=context.total_batches,
+            label=context.label,
+            status=status,
+            model=model,
+            device=device,
+            attempt=attempt,
+            metadata=metadata,
+        )
+
     def generate_ensemble_embeddings(
         self,
         texts: List[str],
         batch_slice: Optional[slice] = None,
         batch_index: Optional[int] = None,
-        progress_label: Optional[str] = None,
+        progress_context: Optional[BatchProgressContext] = None,
     ) -> np.ndarray:
         """Generate embeddings using the configured ensemble pipeline."""
 
@@ -44,15 +96,33 @@ class BatchRunner:
             primary_batch = embedder._get_batch_hint_for_model(embedder.model_name)
 
             embedder._log_gpu_memory("Primary encode (non-ensemble) - before")
-            result = embedder._call_encode(
-                primary_model,
-                texts,
-                batch_size=primary_batch,
-                device=embedder.device,
-                progress_label=progress_label,
-            )
-            result = embedder._normalize_embedding_matrix(result, embedder.model_name)
-            embedder._log_gpu_memory("Primary encode (non-ensemble) - after")
+            try:
+                result = embedder._call_encode(
+                    primary_model,
+                    texts,
+                    batch_size=primary_batch,
+                    device=embedder.device,
+                    progress_context=progress_context,
+                )
+                result = embedder._normalize_embedding_matrix(result, embedder.model_name)
+            except Exception as exc:
+                self._record_progress_event(
+                    progress_context,
+                    status="failed",
+                    model=embedder.model_name,
+                    device=embedder.device,
+                    metadata={"error": str(exc)[:200]},
+                )
+                embedder._log_gpu_memory("Primary encode (non-ensemble) - after")
+                raise
+            else:
+                embedder._log_gpu_memory("Primary encode (non-ensemble) - after")
+                self._record_progress_event(
+                    progress_context,
+                    status="completed",
+                    model=embedder.model_name,
+                    device=embedder.device,
+                )
 
             if embedder.device == "cuda":
                 torch.cuda.empty_cache()
@@ -101,14 +171,28 @@ class BatchRunner:
                         texts,
                         batch_size=batch_hint,
                         device=embedder.device,
-                        progress_label=progress_label,
+                        progress_context=progress_context,
                     )
                     embeddings = embedder._normalize_embedding_matrix(embeddings, model_name)
                     embedder._log_gpu_memory(
                         f"Ensemble encode after {model_name} | chunks={slice_summary}"
                     )
+                    self._record_progress_event(
+                        progress_context,
+                        status="completed",
+                        model=model_name,
+                        device=embedder.device,
+                        metadata={"mode": "parallel"},
+                    )
                 except Exception as exc:
                     logger.warning("Failed to generate embeddings with %s: %s", model_name, exc)
+                    self._record_progress_event(
+                        progress_context,
+                        status="failed",
+                        model=model_name,
+                        device=embedder.device,
+                        metadata={"mode": "parallel", "error": str(exc)[:200]},
+                    )
                     continue
 
                 embeddings, adjusted = embedder._ensure_embedding_dimension(
@@ -226,7 +310,7 @@ class BatchRunner:
                             texts,
                             batch_size=current_batch_hint,
                             device=current_device,
-                            progress_label=progress_label,
+                            progress_context=progress_context,
                         )
                         embeddings = embedder._normalize_embedding_matrix(embeddings, model_name)
                         embedder._log_gpu_memory(
@@ -329,6 +413,13 @@ class BatchRunner:
                         "retries": retries,
                     }
                     embedder._record_rotation_event(failure_event)
+                    self._record_progress_event(
+                        progress_context,
+                        status="failed",
+                        model=model_name,
+                        device=current_device,
+                        metadata={"mode": "sequential", "retries": retries},
+                    )
                     logger.error(
                         "[ENSEMBLE] %s pass aborted | device=%s | chunks=%s",
                         model_name,
@@ -347,6 +438,13 @@ class BatchRunner:
                     duration=pass_duration,
                     batch_size=current_batch_hint,
                     **mitigation_payload,
+                )
+                self._record_progress_event(
+                    progress_context,
+                    status="completed",
+                    model=model_name,
+                    device=current_device,
+                    metadata={"mode": "sequential", "duration": round(pass_duration, 3), "retries": retries},
                 )
                 embedder.ensemble_device_map[model_name] = current_device
 
@@ -463,6 +561,8 @@ class BatchRunner:
             else initial_primary_batch
         )
 
+        progress_tracker = _BatchProgressTracker(total_chunks, max(1, base_total_batch_size))
+
         batch_unit = "per GPU" if embedder.device == "cuda" else "per device"
         logger.info(
             "Initial primary batch size: %s (%s), total %s",
@@ -518,6 +618,12 @@ class BatchRunner:
                         break
 
                     progress_label = embedder._get_batch_progress_label(batch_index, batch_end)
+                    remaining_after_batch = max(0, total_chunks - batch_end)
+                    pending_batches = 1 + math.ceil(
+                        remaining_after_batch / max(1, current_total_batch)
+                    )
+                    progress_tracker.ensure_capacity(pending_batches)
+                    progress_context = progress_tracker.build_context(progress_label)
 
                     if controller and embedder.device == "cuda":
                         snapshots = embedder._collect_gpu_snapshots()
@@ -550,29 +656,65 @@ class BatchRunner:
                                     batch_texts,
                                     batch_slice=batch_slice,
                                     batch_index=executed_batches,
-                                    progress_label=progress_label,
+                                    progress_context=progress_context,
                                 )
                             elif embedder.primary_model is not None:
                                 logger.debug("Batch %s: Using primary model", executed_batches + 1)
                                 primary_model = embedder._get_primary_model()
-                                batch_embeddings = embedder._call_encode(
-                                    primary_model,
-                                    batch_texts,
-                                    batch_size=primary_batch,
-                                    device=embedder.device,
-                                    progress_label=progress_label,
-                                )
-                                batch_embeddings = embedder._normalize_embedding_matrix(
-                                    batch_embeddings,
-                                    embedder.model_name,
-                                )
+                                try:
+                                    batch_embeddings = embedder._call_encode(
+                                        primary_model,
+                                        batch_texts,
+                                        batch_size=primary_batch,
+                                        device=embedder.device,
+                                        progress_context=progress_context,
+                                    )
+                                    batch_embeddings = embedder._normalize_embedding_matrix(
+                                        batch_embeddings,
+                                        embedder.model_name,
+                                    )
+                                except Exception as exc:
+                                    self._record_progress_event(
+                                        progress_context,
+                                        status="failed",
+                                        model=embedder.model_name,
+                                        device=embedder.device,
+                                        metadata={"mode": "primary", "error": str(exc)[:200]},
+                                    )
+                                    raise
+                                else:
+                                    self._record_progress_event(
+                                        progress_context,
+                                        status="completed",
+                                        model=embedder.model_name,
+                                        device=embedder.device,
+                                        metadata={"mode": "primary"},
+                                    )
                             else:
                                 logger.debug("Batch %s: Using backend", executed_batches + 1)
-                                batch_embeddings = embedder._encode_with_backend(batch_texts, primary_batch)
-                                batch_embeddings = embedder._normalize_embedding_matrix(
-                                    batch_embeddings,
-                                    embedder.model_name,
-                                )
+                                try:
+                                    batch_embeddings = embedder._encode_with_backend(batch_texts, primary_batch)
+                                    batch_embeddings = embedder._normalize_embedding_matrix(
+                                        batch_embeddings,
+                                        embedder.model_name,
+                                    )
+                                except Exception as exc:
+                                    self._record_progress_event(
+                                        progress_context,
+                                        status="failed",
+                                        model=embedder.embedding_backend,
+                                        device=embedder.device,
+                                        metadata={"mode": "backend", "error": str(exc)[:200]},
+                                    )
+                                    raise
+                                else:
+                                    self._record_progress_event(
+                                        progress_context,
+                                        status="completed",
+                                        model=embedder.embedding_backend,
+                                        device=embedder.device,
+                                        metadata={"mode": "backend"},
+                                    )
 
                             temp_outputs: Dict[str, np.ndarray] = {}
                             companion_devices_used.clear()
@@ -587,7 +729,7 @@ class BatchRunner:
                                     batch_texts,
                                     batch_size=comp_batch_size,
                                     device=companion_device,
-                                    progress_label=progress_label,
+                                    progress_context=progress_context,
                                 )
                                 temp_outputs[companion_name] = embedder._normalize_embedding_matrix(
                                     companion_matrix,
@@ -626,6 +768,7 @@ class BatchRunner:
 
                 embedder._log_batch_sources(executed_batches + 1, batch_index, batch_end)
                 executed_batches += 1
+                progress_tracker.mark_completed()
                 progress = (batch_end / total_chunks) * 100
                 remaining_chunks = max(0, total_chunks - batch_end)
                 est_remaining_batches = math.ceil(remaining_chunks / max(1, current_total_batch))
@@ -727,6 +870,9 @@ class BatchRunner:
         embedding_memory_mb = embeddings.nbytes / 1024 / 1024
         memory_per_chunk_kb = (embedding_memory_mb * 1024) / total_chunks
 
+        if embedder.telemetry.batch_progress_events:
+            embedder.processing_stats["batch_progress"] = list(embedder.telemetry.batch_progress_events)
+
         companion_memory_mb: Dict[str, float] = {}
         companion_dimensions: Dict[str, int] = {}
         for companion_name, companion_array in embedder.embeddings_by_model.items():
@@ -761,6 +907,9 @@ class BatchRunner:
             "gpu_snapshot_summary": embedder.telemetry.summarize_gpu_history(),
             "cache_events": list(embedder.telemetry.cache_events),
         }
+
+        if embedder.telemetry.batch_progress_events:
+            results["batch_progress"] = list(embedder.telemetry.batch_progress_events)
 
         if embedder.telemetry.rotation_overflow_count:
             results["ensemble_rotation_overflow"] = embedder.telemetry.rotation_overflow_count

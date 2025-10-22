@@ -41,10 +41,12 @@ os.environ.setdefault("TF_CPP_MIN_LOG_LEVEL", "3")
 os.environ.setdefault("XLA_PYTHON_CLIENT_PREALLOCATE", "false")
 
 import gc
+import inspect
 import logging
 import re
 from collections import Counter, defaultdict
 from pathlib import Path
+from functools import lru_cache
 from typing import Any, Dict, List, Optional, Set, Tuple, Type, Union, cast
 
 import numpy as np
@@ -94,6 +96,7 @@ logger = logging.getLogger(__name__)
 
 # Module extractions
 from processor.ultimate_embedder.batch_runner import BatchRunner
+from processor.ultimate_embedder.progress import BatchProgressContext
 from processor.ultimate_embedder.chunk_loader import ChunkLoader
 from processor.ultimate_embedder.controllers import (
     AdaptiveBatchController,
@@ -472,6 +475,26 @@ class UltimateKaggleEmbedderV4:
 
             current = candidate
 
+    @staticmethod
+    @lru_cache(maxsize=128)
+    def _encode_supports_kwarg(callable_target: Any, kwarg_name: str) -> bool:
+        """Feature-detect optional keyword support on encode callables."""
+
+        try:
+            signature = inspect.signature(callable_target)
+        except (TypeError, ValueError):
+            return True
+
+        parameters = signature.parameters
+        if kwarg_name in parameters:
+            return True
+
+        for parameter in parameters.values():
+            if parameter.kind == inspect.Parameter.VAR_KEYWORD:
+                return True
+
+        return False
+
     def _call_encode(
         self,
         model: Any,
@@ -479,7 +502,7 @@ class UltimateKaggleEmbedderV4:
         batch_size: int,
         device: str,
         show_progress: bool = True,
-        progress_label: Optional[str] = None,
+        progress_context: Optional[BatchProgressContext] = None,
     ) -> np.ndarray:
         """Invoke encode() against SentenceTransformer or compatible wrappers."""
 
@@ -503,9 +526,14 @@ class UltimateKaggleEmbedderV4:
             "device": device,
         }
 
-        progress_requested = bool(show_progress and progress_label)
-        if progress_requested:
-            call_kwargs["tqdm_kwargs"] = {"desc": f"Batches({progress_label})"}
+        progress_requested = False
+        if show_progress and progress_context:
+            desc = progress_context.tqdm_description()
+            if desc:
+                callable_target = getattr(encode_callable, "__func__", encode_callable)
+                if self._encode_supports_kwarg(callable_target, "tqdm_kwargs"):
+                    call_kwargs["tqdm_kwargs"] = {"desc": desc}
+                    progress_requested = True
 
         try:
             return encode_callable(*call_args, **call_kwargs)
@@ -889,7 +917,7 @@ class UltimateKaggleEmbedderV4:
         texts: List[str],
         batch_slice: Optional[slice] = None,
         batch_index: Optional[int] = None,
-        progress_label: Optional[str] = None,
+        progress_context: Optional[BatchProgressContext] = None,
     ) -> np.ndarray:
         """Delegate ensemble embedding generation to the batch runner service."""
 
@@ -897,7 +925,7 @@ class UltimateKaggleEmbedderV4:
             texts,
             batch_slice=batch_slice,
             batch_index=batch_index,
-            progress_label=progress_label,
+            progress_context=progress_context,
         )
     
     def search_with_reranking(

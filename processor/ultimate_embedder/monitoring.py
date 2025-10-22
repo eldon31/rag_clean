@@ -44,6 +44,9 @@ class PerformanceMonitor:
         if self._thread:
             self._thread.join(timeout=3)
             self._thread = None
+        telemetry = getattr(self.embedder, "telemetry", None)
+        if telemetry and getattr(telemetry, "batch_progress_events", None):
+            self.embedder.processing_stats["batch_progress"] = list(telemetry.batch_progress_events)
         self.logger.info("Performance monitoring stopped")
 
     def _monitor_loop(self) -> None:

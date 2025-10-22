@@ -1,6 +1,6 @@
 import sys
 from pathlib import Path
-from typing import Callable
+from typing import Any, Callable, Dict, Optional
 
 import numpy as np
 import pytest
@@ -24,6 +24,8 @@ class FakeSentenceTransformer:
         self.hf_model_id = hf_model_id
         self._device = "cpu"
         self.fail_next = False
+        self.fail_on_tqdm_once = False
+        self.last_tqdm_kwargs: Optional[Dict[str, Any]] = None
 
     def encode(
         self,
@@ -33,7 +35,14 @@ class FakeSentenceTransformer:
         convert_to_numpy: bool = True,
         normalize_embeddings: bool = True,
         device: str | None = None,
+        tqdm_kwargs: Optional[Dict[str, Any]] = None,
+        **_: Any,
     ):
+        self.last_tqdm_kwargs = tqdm_kwargs
+        if self.fail_on_tqdm_once and tqdm_kwargs:
+            self.fail_on_tqdm_once = False
+            raise RuntimeError("forced tqdm failure for retry test")
+
         if self.fail_next:
             self.fail_next = False
             raise RuntimeError("forced failure for instrumentation test")

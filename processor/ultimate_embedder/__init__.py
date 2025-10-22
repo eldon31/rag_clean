@@ -20,6 +20,7 @@ from .rerank_pipeline import RerankPipeline
 from .sparse_pipeline import build_sparse_vector_from_metadata, infer_modal_hint
 from .core import UltimateKaggleEmbedderV4, main
 from .telemetry import TelemetryTracker, resolve_rotation_payload_limit
+from .progress import BatchProgressContext
 
 __all__ = [
     "AdvancedPreprocessingConfig",
@@ -45,4 +46,5 @@ __all__ = [
     "BatchRunner",
     "ExportRuntime",
     "PerformanceMonitor",
+    "BatchProgressContext",
 ]

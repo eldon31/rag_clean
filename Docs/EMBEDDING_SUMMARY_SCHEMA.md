@@ -17,7 +17,32 @@ Every summary entry contains:
 - `mitigation_events` / `cache_events` – Lists of mitigation and cache telemetry emitted by the embedder. Only present when events exist.
 - `gpu_snapshot_summary` – Aggregated GPU utilisation telemetry when GPU monitoring is active.
 - `rotation_events` – Sequential ensemble rotation telemetry (optional; see below).
+- `batch_progress` – Ordered batch progress telemetry capturing tqdm labels, per-batch status, and device assignments. Present when progress reporting is enabled.
 - `error` / `skip_reason` – Present only when a failure or skip occurs.
+
+## Batch Progress Telemetry Payload
+
+Interactive tqdm updates and run summaries consume the `batch_progress` array. Each event contains:
+
+| Field | Description |
+| --- | --- |
+| `batch_index` | Zero-based batch ordinal reported at encode time. |
+| `total_batches` | Total number of batches planned for the run after adaptive adjustments. |
+| `label` | Primary source label shown in tqdm (for example `Docs.md +2 more`). |
+| `model` | Encoder identity; in sequential ensembles this differentiates per-model passes. |
+| `device` | Device string (`cpu`, `cuda:0`, etc.). |
+| `status` | `completed`, `failed`, or `started` (rare; emitted before long operations). |
+| `attempt` | Present when adaptive retries occur (for example after an OOM reduction). |
+| `metadata` | Additional structured context such as `mode` (`sequential`/`parallel`) or retry counts. |
+| `timestamp` | Epoch seconds when the record was captured. |
+
+The embedder enforces a cap (default `1000`) and truncates overly long labels to 96 characters to guarantee consistent payload sizes.
+
+### Consumer Guidance
+
+- Treat the event list as append-only; sort by `timestamp` when you need strict ordering.
+- Use the final event’s `total_batches` to confirm tqdm alignment and determine completion percentage.
+- Operators can correlate CLI output with run summaries using the shared `label` and `model` fields.
 
 ## Rotation Telemetry Payload
 

@@ -61,6 +61,15 @@ KAGGLE_OPTIMIZED_MODELS: Dict[str, ModelConfig] = {
         memory_efficient=True,
         supports_flash_attention=False,
     ),
+    "nomic-coderank": ModelConfig(
+        name="nomic-coderank",
+        hf_model_id="nomic-ai/CodeRankEmbed",
+        vector_dim=768,
+        max_tokens=2048,
+        recommended_batch_size=64,
+        memory_efficient=True,
+        supports_flash_attention=False,
+    ),
     "qdrant-minilm-onnx": ModelConfig(
         name="qdrant-minilm-onnx",
         hf_model_id="Qdrant/all-MiniLM-L6-v2-onnx",

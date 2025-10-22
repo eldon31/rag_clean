@@ -41,3 +41,30 @@ def test_log_batch_sources_emits_info(build_embedder, caplog):
 
     assert any("Batch 2 sources" in message for message in caplog.messages)
     assert any("one.md" in message for message in caplog.messages)
+
+
+def test_get_batch_progress_label_single_source(build_embedder):
+    embedder = build_embedder()
+    embedder.chunks_metadata = [
+        {"source_path": "docs/alpha.md"},
+        {"source_path": "docs/alpha.md"},
+    ]
+
+    label = embedder._get_batch_progress_label(0, 2)
+
+    assert label == "alpha.md"
+
+
+def test_get_batch_progress_label_multi_source(build_embedder):
+    embedder = build_embedder()
+    embedder.chunks_metadata = [
+        {"source_path": "docs/alpha.md"},
+        {"source_path": "docs/beta.md"},
+        {"source_path": "docs/alpha.md"},
+        {"source_path": "docs/gamma.md"},
+    ]
+
+    label = embedder._get_batch_progress_label(0, 4)
+
+    assert label.startswith("alpha.md")
+    assert "+" in label

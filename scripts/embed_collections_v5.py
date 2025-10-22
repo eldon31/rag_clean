@@ -105,6 +105,7 @@ class CollectionRunResult:
     gpu_snapshot_summary: Optional[Dict[str, Any]] = None
     cache_events: Optional[List[Dict[str, Any]]] = None
     rotation_events: Optional[List[Dict[str, Any]]] = None
+    batch_progress: Optional[List[Dict[str, Any]]] = None
 
     def to_dict(self) -> Dict[str, Any]:
         payload: Dict[str, Any] = {
@@ -131,6 +132,8 @@ class CollectionRunResult:
             payload["cache_events"] = self.cache_events
         if self.rotation_events is not None:
             payload["rotation_events"] = self.rotation_events
+        if self.batch_progress is not None:
+            payload["batch_progress"] = self.batch_progress
         if self.error is not None:
             payload["error"] = self.error
         if self.skip_reason is not None:
@@ -537,6 +540,29 @@ def _run_for_collection(
             limit_display,
             rotation_overflow,
         )
+    batch_progress_events = perf.get("batch_progress") or []
+    if batch_progress_events:
+        completed_batches = sum(1 for event in batch_progress_events if event.get("status") == "completed")
+        total_batches = batch_progress_events[-1].get("total_batches")
+        print(
+            f"   Batch progress telemetry: {completed_batches} completed event(s)"
+            f" out of {total_batches if total_batches is not None else 'unknown'} batches"
+        )
+        preview_slice = batch_progress_events[-min(3, len(batch_progress_events)) :]
+        for event in preview_slice:
+            index = event.get("batch_index")
+            ordinal = int(index) + 1 if isinstance(index, int) else index
+            label = event.get("label") or "n/a"
+            status = event.get("status")
+            model = event.get("model") or "primary"
+            device = event.get("device") or "unknown"
+            print(
+                f"     - batch={ordinal}/{total_batches} label={label} status={status} model={model} device={device}"
+            )
+        remaining = len(batch_progress_events) - len(preview_slice)
+        if remaining > 0:
+            print(f"     ... {remaining} additional batch progress events suppressed for brevity")
+        LOGGER.info("Batch progress telemetry captured: %d entries", len(batch_progress_events))
     
     print(f"\n5. Exporting embeddings...")
     exports = embedder.export_for_local_qdrant()
@@ -566,7 +592,8 @@ def _run_for_collection(
         mitigation_events=mitigation_events or None,
         gpu_snapshot_summary=gpu_snapshot_summary,
         cache_events=cache_events or None,
-        rotation_events=rotation_events or None,
+            rotation_events=rotation_events or None,
+            batch_progress=batch_progress_events or None,
     )
 
     del embedder

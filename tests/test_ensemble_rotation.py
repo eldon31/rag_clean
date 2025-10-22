@@ -28,12 +28,26 @@ def test_rotation_events_capture_every_model(build_embedder):
         assert event.get("chunk_count") == len(embedder.chunk_texts)
         assert event.get("chunk_samples"), "chunk samples should be included"
 
+    progress_events = results.get("batch_progress")
+    assert progress_events, "batch progress telemetry should be captured"
+    progress_models = {event.get("model") for event in progress_events}
+    assert progress_models == expected_models
+    assert all(event.get("status") == "completed" for event in progress_events)
+    assert all(isinstance(event.get("batch_index"), int) for event in progress_events)
+    assert all(event.get("label") for event in progress_events)
+    assert {event.get("device") for event in progress_events}
+
 
 def test_rotation_failure_raises_and_logs(build_embedder):
     embedder = build_embedder()
 
-    # Force the third ensemble model to fail on its next encode call.
-    embedder.models["qwen3-embedding-0.6b"].fail_next = True
+    # Force the third ensemble model to fail on every encode attempt.
+    target_model = embedder.models["qwen3-embedding-0.6b"]
+
+    def _boom(*_, **__):
+        raise RuntimeError("forced ensemble failure")
+
+    target_model.encode = _boom  # type: ignore[assignment]
 
     with pytest.raises(RuntimeError):
         embedder.generate_embeddings_kaggle_optimized(
@@ -46,3 +60,20 @@ def test_rotation_failure_raises_and_logs(build_embedder):
     assert failure_event["model"] == "qwen3-embedding-0.6b"
     assert failure_event["status"] == "failed"
     assert failure_event.get("batch_index") == 0
+
+
+def test_progress_fallback_avoids_duplicate_tqdm(build_embedder):
+    embedder = build_embedder()
+    embedder.models[embedder.model_name].fail_on_tqdm_once = True
+
+    results = embedder.generate_embeddings_kaggle_optimized(
+        enable_monitoring=False,
+        save_intermediate=False,
+    )
+
+    progress_events = results.get("batch_progress") or []
+    assert progress_events, "batch progress telemetry should exist after fallback"
+    assert all(event.get("status") == "completed" for event in progress_events)
+
+    primary_model = embedder.models[embedder.model_name]
+    assert primary_model.last_tqdm_kwargs is None

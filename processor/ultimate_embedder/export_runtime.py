@@ -286,6 +286,10 @@ class ExportRuntime:
             "export_timestamp": datetime.now().isoformat(),
         }
 
+        progress_events = getattr(embedder.telemetry, "batch_progress_events", None)
+        if progress_events:
+            stats["batch_progress"] = progress_events
+
         if embedder.sparse_vectors:
             available = sum(1 for vector in embedder.sparse_vectors if vector)
             stats["sparse_vector_stats"] = {
