@@ -10,7 +10,7 @@ from pathlib import Path
 # Add parent directory to path
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from processor.kaggle_ultimate_embedder_v4 import UltimateKaggleEmbedderV4, KaggleGPUConfig
+from processor.ultimate_embedder import UltimateKaggleEmbedderV4, KaggleGPUConfig
 
 def diagnose():
     print("="*70)

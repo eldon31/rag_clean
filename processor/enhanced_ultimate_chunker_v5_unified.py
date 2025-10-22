@@ -66,7 +66,7 @@ except ImportError:
 
 # Model registry integration
 try:
-    from processor.kaggle_ultimate_embedder_v4 import KAGGLE_OPTIMIZED_MODELS, ModelConfig
+    from processor.ultimate_embedder import KAGGLE_OPTIMIZED_MODELS, ModelConfig
 except ImportError:
     KAGGLE_OPTIMIZED_MODELS = {}
     ModelConfig = None

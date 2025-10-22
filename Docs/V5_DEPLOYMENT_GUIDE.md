@@ -116,7 +116,7 @@ print("✓ V5 chunker initialized successfully")
 
 ### 1. Model Registry Configuration
 
-Edit `processor/kaggle_ultimate_embedder_v4.py` to add custom models:
+Edit `processor/ultimate_embedder/config.py` to add custom models (the legacy `processor/kaggle_ultimate_embedder_v4.py` module now re-exports from the modular package and emits a deprecation warning):
 
 ```python
 KAGGLE_OPTIMIZED_MODELS = {
@@ -166,6 +166,23 @@ config = ChunkerConfig(
     preserve_hierarchy=True
 )
 ```
+
+### 3. Ultimate Embedder Modular Layout
+
+The Kaggle V4 embedder now lives in the `processor/ultimate_embedder/` package with clear service boundaries so each concern can evolve independently. The most important modules are:
+
+- `core.py` – Orchestrates the end-to-end batch run, wiring the helper services together while preserving the legacy facade API.
+- `chunk_loader.py` – Streams chunk batches from disk, enriches metadata, and validates chunk counts before encoding.
+- `model_manager.py` – Resolves model configs, handles ensemble rotation, and manages device placement plus caching for warmed models.
+- `backend_encoder.py` – Provides a thin adapter over the active embedding backend (Transformers, ONNX, TensorRT) used by the batch runner.
+- `batch_runner.py` – Coordinates adaptive batching via `AdaptiveBatchController`, runs the ensemble aggregation loop, captures telemetry, and retries failed batches when safe.
+- `sparse_pipeline.py` & `rerank_pipeline.py` – Build optional sparse vectors and reranker scores on demand without bloating the core loop.
+- `export_runtime.py` & `monitoring.py` – Emit export artifacts, archive bundles, and runtime telemetry; `export.py` remains as a shim for old imports.
+- `telemetry.py` – Centralises logging helpers and GPU snapshots consumed by the summary writer.
+
+When extending the embedder, prefer adding a new helper module or injecting alternate implementations via the `UltimateKaggleEmbedderV4` constructor. Direct changes to `core.py` should remain thin wrappers so the executable-line guard stays green and responsibilities remain clear.
+
+> **Guardrail:** `tests/test_core_line_limit.py` enforces that `core.py` stays under 800 executable lines using the baseline stored at `openspec/changes/refactor-ultimate-embedder-core/artifacts/core_executable_line_baseline.json`. Update the baseline after meaningful refactors, but only once the executable line count remains below the cap.
 
 ---
 

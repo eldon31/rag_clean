@@ -9,7 +9,7 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from processor.kaggle_ultimate_embedder_v4 import (  # noqa: E402
+from processor.ultimate_embedder import (  # noqa: E402
     EnsembleConfig,
     KaggleExportConfig,
     KaggleGPUConfig,
@@ -55,11 +55,19 @@ class FakeSentenceTransformer:
 @pytest.fixture(autouse=True)
 def _patch_sentence_transformer(monkeypatch, tmp_path):
     monkeypatch.setattr(
-        "processor.kaggle_ultimate_embedder_v4.SentenceTransformer",
+        "processor.ultimate_embedder.core.SentenceTransformer",
         FakeSentenceTransformer,
     )
     monkeypatch.setattr(
-        "processor.kaggle_ultimate_embedder_v4.snapshot_download",
+        "processor.ultimate_embedder.model_manager.SentenceTransformer",
+        FakeSentenceTransformer,
+    )
+    monkeypatch.setattr(
+        "processor.ultimate_embedder.core.snapshot_download",
+        lambda *args, **kwargs: str(tmp_path),
+    )
+    monkeypatch.setattr(
+        "processor.ultimate_embedder.model_manager.snapshot_download",
         lambda *args, **kwargs: str(tmp_path),
     )
     monkeypatch.setattr("torch.cuda.is_available", lambda: False)

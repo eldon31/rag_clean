@@ -1,6 +1,6 @@
 ---
 description: 'Debug your application to find and fix a bug'
-tools: ['edit', 'runNotebooks', 'search', 'new', 'runCommands', 'runTasks', 'my-knowledge/*', 'filesystem/*', 'code-reasoning/*', 'sequential-thinking/*']
+tools: ['edit', 'runNotebooks', 'search', 'new', 'runCommands', 'runTasks', 'code-reasoning/*', 'sequential-thinking/*', 'my-knowledge/*', 'pylance mcp server/*', 'executePrompt', 'usages', 'vscodeAPI', 'problems', 'changes', 'testFailure', 'openSimpleBrowser', 'fetch', 'githubRepo', 'ms-python.python/getPythonEnvironmentInfo', 'ms-python.python/getPythonExecutableCommand', 'ms-python.python/installPythonPackage', 'ms-python.python/configurePythonEnvironment', 'extensions', 'todos', 'runTests']
 ---
 
 # Debug Mode Instructions

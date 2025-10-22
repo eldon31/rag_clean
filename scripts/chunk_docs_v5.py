@@ -21,7 +21,7 @@ project_root = Path(__file__).parent.parent
 sys.path.insert(0, str(project_root))
 
 from processor.enhanced_ultimate_chunker_v5_unified import EnhancedUltimateChunkerV5Unified
-from processor.kaggle_ultimate_embedder_v4 import KAGGLE_OPTIMIZED_MODELS
+from processor.ultimate_embedder import KAGGLE_OPTIMIZED_MODELS
 import logging
 
 # Diagnose existing logging configuration before reconfiguring

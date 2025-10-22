@@ -1,6 +1,6 @@
 # Embedding Run Summary Schema
 
-The batch embedding runner writes a summary JSON payload (default name `embedding_summary.json`) for every collection. Each `CollectionRunResult` entry describes the status of a processed collection and the telemetry that accompanies it.
+The batch embedding runner writes a summary JSON payload (default name `embedding_summary.json`) for every collection. Each `CollectionRunResult` entry describes the status of a processed collection and the telemetry that accompanies it. Starting with the V5 modular refactor, summary generation is handled by `processor/ultimate_embedder/core.py` with telemetry helpers in `processor/ultimate_embedder/telemetry.py`; the legacy `processor/kaggle_ultimate_embedder_v4.py` module remains as a compatibility shim that re-exports the new package and emits a deprecation warning.
 
 ## Base Fields
 

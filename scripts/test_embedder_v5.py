@@ -17,7 +17,7 @@ if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
 from scripts.embed_collections_v5 import _discover_collections, _run_for_collection
-from processor.kaggle_ultimate_embedder_v4 import UltimateKaggleEmbedderV4, KaggleGPUConfig, KaggleExportConfig
+from processor.ultimate_embedder import UltimateKaggleEmbedderV4, KaggleGPUConfig, KaggleExportConfig
 import logging
 
 logging.basicConfig(level=logging.INFO)
@@ -35,16 +35,19 @@ def test_collection_discovery():
         print("✗ Chunked directory not found")
         return False
     
-    collections = _discover_collections(chunks_root, None)
-    
-    if not collections:
+    discoveries, skipped = _discover_collections(chunks_root, None)
+
+    if not discoveries:
         print("✗ No collections discovered")
+        if skipped:
+            for entry in skipped:
+                print(f"   - Skipped {entry.collection}: {entry.skip_reason}")
         return False
     
-    print(f"✓ Discovered {len(collections)} collections:")
-    for col in collections:
-        chunk_count = len(list(col.rglob("*_chunks.json")))
-        print(f"   - {col.name}: {chunk_count} chunk files")
+    print(f"✓ Discovered {len(discoveries)} collections:")
+    for discovery in discoveries:
+        chunk_count = len(list(discovery.path.rglob("*_chunks.json")))
+        print(f"   - {discovery.path.name}: {chunk_count} chunk files")
     
     return True
 
@@ -56,14 +59,17 @@ def test_chunk_loading():
     print("="*70)
     
     chunks_root = Path("Chunked")
-    collections = _discover_collections(chunks_root, None)
-    
-    if not collections:
+    discoveries, skipped = _discover_collections(chunks_root, None)
+
+    if not discoveries:
         print("✗ No collections to test")
+        if skipped:
+            for entry in skipped:
+                print(f"   - Skipped {entry.collection}: {entry.skip_reason}")
         return False
     
     # Test first collection
-    test_collection = collections[0]
+    test_collection: Path = discoveries[0].path
     print(f"Testing collection: {test_collection.name}")
     
     try:
@@ -118,14 +124,17 @@ def test_embedding_generation():
     print("="*70)
     
     chunks_root = Path("Chunked")
-    collections = _discover_collections(chunks_root, None)
-    
-    if not collections:
+    discoveries, skipped = _discover_collections(chunks_root, None)
+
+    if not discoveries:
         print("✗ No collections to test")
+        if skipped:
+            for entry in skipped:
+                print(f"   - Skipped {entry.collection}: {entry.skip_reason}")
         return False
     
     # Test first collection with small sample
-    test_collection = collections[0]
+    test_collection: Path = discoveries[0].path
     print(f"Testing collection: {test_collection.name}")
     
     try:

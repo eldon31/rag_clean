@@ -12,14 +12,14 @@ CHANGES FROM V4:
 
 STRUCTURE:
 Chunked/
-  ├── Collection1/
-  │   ├── subdir1/
-  │   │   ├── doc1_chunks.json
-  │   │   └── doc2_chunks.json
-  │   └── subdir2/
-  │       └── doc3_chunks.json
+    - Collection1/
+        - subdir1/
+            - doc1_chunks.json
+            - doc2_chunks.json
+        - subdir2/
+            - doc3_chunks.json
 
-Compatible with processor/kaggle_ultimate_embedder_v4.py
+Compatible with processor/ultimate_embedder/core.py
 """
 
 from __future__ import annotations
@@ -61,10 +61,12 @@ KAGGLE_DEFAULTS = {
     "skip_existing": True,
     "summary": "embedding_summary.json",
     "zip_output": True,
+    "sequential_data_parallel": True,
+    "sequential_devices": "cuda:1,cuda:0,cpu",
 }
 
 try:
-    from processor.kaggle_ultimate_embedder_v4 import (
+    from processor.ultimate_embedder import (
         EnsembleConfig,
         KaggleExportConfig,
         KaggleGPUConfig,
@@ -72,9 +74,8 @@ try:
         KAGGLE_OPTIMIZED_MODELS,
     )
     from processor.chunk_utils import find_chunk_files
-    print("✓ Successfully imported UltimateKaggleEmbedderV4")
 except Exception as e:
-    print(f"✗ CRITICAL: Failed to import embedder module: {e}")
+    print(f"CRITICAL: Failed to import embedder module: {e}")
     import traceback
     traceback.print_exc()
     sys.exit(1)
@@ -132,8 +133,8 @@ class CollectionRunResult:
             payload["rotation_events"] = self.rotation_events
         if self.error is not None:
             payload["error"] = self.error
-            if self.skip_reason is not None:
-                payload["skip_reason"] = self.skip_reason
+        if self.skip_reason is not None:
+            payload["skip_reason"] = self.skip_reason
         return payload
 
 
@@ -221,10 +222,12 @@ def _parse_args(argv: List[str]) -> argparse.Namespace:
     parser.add_argument(
         "--sequential-data-parallel",
         action="store_true",
+        default=KAGGLE_DEFAULTS.get("sequential_data_parallel", False) if IS_KAGGLE else False,
         help="Wrap sequential ensemble passes with torch.nn.DataParallel when multiple GPUs are available.",
     )
     parser.add_argument(
         "--sequential-devices",
+        default=KAGGLE_DEFAULTS.get("sequential_devices") if IS_KAGGLE else None,
         help="Preferred device order for sequential ensemble (comma-separated, e.g., 'cuda:1,cuda:0,cpu').",
     )
     return parser.parse_args(argv)
@@ -343,9 +346,9 @@ def _run_for_collection(
     zip_output: bool,
     matryoshka_dim: int | None = None,
 ) -> CollectionRunResult:
-    print(f"\n{'─'*80}")
+    print(f"\n{'=' * 80}")
     print(f"Initializing Embedder for Collection: {collection_dir.name}")
-    print(f"{'─'*80}")
+    print(f"{'=' * 80}")
     
     export_config = _build_export_config(export_dir, collection_dir.name, model_name)
     gpu_config = KaggleGPUConfig()
@@ -403,7 +406,7 @@ def _run_for_collection(
         matryoshka_dim=matryoshka_dim,
         force_cpu=force_cpu,
     )
-    print(f"✓ Embedder instance created")
+    print("   Embedder instance created")
 
     primary_key = embedder.model_name
     expected_models: Set[str] = {primary_key}
@@ -424,16 +427,16 @@ def _run_for_collection(
         config = KAGGLE_OPTIMIZED_MODELS.get(name)
         hf_id = config.hf_model_id if config else "unknown"
         vector_dim = config.vector_dim if config else "?"
-        status = "✓ loaded" if model_obj is not None else "✗ MISSING"
+        status = "loaded" if model_obj is not None else "MISSING"
         model_lines.append(f"   - {name}: {status}")
-        model_lines.append(f"     └─ HF ID: {hf_id}")
-        model_lines.append(f"     └─ Dimension: {vector_dim}D")
+        model_lines.append(f"     - HF ID: {hf_id}")
+        model_lines.append(f"     - Dimension: {vector_dim}D")
         if model_obj is None:
             missing_models.append(name)
 
-    print(f"\n   ✓ PRIMARY MODEL: {primary_key}")
+    print(f"\n   Primary model: {primary_key}")
     if config := KAGGLE_OPTIMIZED_MODELS.get(primary_key):
-        print(f"     └─ {config.hf_model_id} ({config.vector_dim}D)")
+        print(f"     - {config.hf_model_id} ({config.vector_dim}D)")
         
     if len(expected_models) > 1:
         print(f"\n   Additional models ({len(expected_models) - 1}):")
@@ -442,14 +445,14 @@ def _run_for_collection(
                 print(line)
     
     if missing_models:
-        print(f"\n   ⚠️  WARNING: {len(missing_models)} model(s) not loaded:")
+        print(f"\n   WARNING: {len(missing_models)} model(s) not loaded:")
         for missing in missing_models:
             print(f"     - {missing}")
         print(f"   This may affect ensemble quality if ensemble mode is enabled.")
     else:
-        print(f"\n   ✓ All expected models loaded successfully")
+        print("\n   All expected models loaded successfully")
     
-    print(f"{'─'*80}\n")
+    print(f"{'=' * 80}\n")
 
     LOGGER.info(
         "Resolved embedder model=%s vector_dim=%s backend=%s matryoshka=%s",
@@ -468,7 +471,7 @@ def _run_for_collection(
     
     if total_chunks == 0:
         LOGGER.warning("Collection %s has no chunks; skipping", collection_dir.name)
-        print(f"   ⚠️  No chunks found - skipping collection\n")
+        print("   Warning: No chunks found - skipping collection\n")
         return CollectionRunResult(
             collection=collection_dir.name,
             status="skipped_no_chunks",
@@ -476,7 +479,7 @@ def _run_for_collection(
             skip_reason="no_chunk_files",
         )
     
-    print(f"   ✓ Loaded {total_chunks:,} chunks")
+    print(f"   Loaded {total_chunks:,} chunks")
 
     # Log V5-specific metadata from chunks
     if embedder.chunks_metadata:
@@ -492,25 +495,25 @@ def _run_for_collection(
     
     print(f"\n4. Generating embeddings...")
     perf = embedder.generate_embeddings_kaggle_optimized()
-    print(f"   ✓ Generated {perf.get('total_embeddings_generated', 0):,} embeddings")
-    print(f"   ✓ Speed: {perf.get('chunks_per_second', 0):.1f} chunks/sec")
-    print(f"   ✓ Time: {perf.get('processing_time_seconds', 0):.2f}s")
+    print(f"   Generated {perf.get('total_embeddings_generated', 0):,} embeddings")
+    print(f"   Speed: {perf.get('chunks_per_second', 0):.1f} chunks/sec")
+    print(f"   Time: {perf.get('processing_time_seconds', 0):.2f}s")
     mitigation_events = perf.get("mitigation_events") or []
     if mitigation_events:
-        print(f"   ✓ Mitigation events: {len(mitigation_events)} logged")
+        print(f"   Mitigation events: {len(mitigation_events)} logged")
     gpu_snapshot_summary = perf.get("gpu_snapshot_summary")
     if gpu_snapshot_summary:
         peak = gpu_snapshot_summary.get("peak_allocation")
         if peak is not None:
-            print(f"   ✓ Peak VRAM observed: {peak / (1024**3):.2f} GB")
+            print(f"   Peak VRAM observed: {peak / (1024**3):.2f} GB")
     cache_events = perf.get("cache_events") or []
     if cache_events:
-        print(f"   ✓ Cache events: {len(cache_events)} recorded")
+        print(f"   Cache events: {len(cache_events)} recorded")
     rotation_events = perf.get("ensemble_rotation") or []
     rotation_limit = perf.get("ensemble_rotation_limit")
     rotation_overflow = perf.get("ensemble_rotation_overflow", 0)
     if rotation_events:
-        print(f"   ✓ Ensemble rotation telemetry: {len(rotation_events)} pass entries")
+        print(f"   Ensemble rotation telemetry: {len(rotation_events)} pass entries")
         preview_count = min(6, len(rotation_events))
         for event in rotation_events[:preview_count]:
             batch_id = event.get("batch_index")
@@ -522,12 +525,12 @@ def _run_for_collection(
             print(f"     - batch={batch_id} model={model_key} status={status} device={device} duration={duration_str}")
         if len(rotation_events) > preview_count:
             remaining = len(rotation_events) - preview_count
-            print(f"     … {remaining} additional rotation events suppressed for brevity")
+            print(f"     ... {remaining} additional rotation events suppressed for brevity")
         LOGGER.info("Ensemble rotation telemetry captured: %d entries", len(rotation_events))
     if rotation_overflow:
         limit_display = rotation_limit if rotation_limit is not None else "unknown"
         print(
-            f"     … truncated {rotation_overflow} rotation event(s) beyond limit {limit_display}"
+            f"     ... truncated {rotation_overflow} rotation event(s) beyond limit {limit_display}"
         )
         LOGGER.warning(
             "Rotation telemetry truncated after %s entries; %d event(s) discarded",
@@ -537,7 +540,7 @@ def _run_for_collection(
     
     print(f"\n5. Exporting embeddings...")
     exports = embedder.export_for_local_qdrant()
-    print(f"   ✓ Exported {len(exports)} file(s)")
+    print(f"   Exported {len(exports)} file(s)")
     target_collection = embedder.get_target_collection_name()
 
     archive_path: Path | None = None
@@ -580,37 +583,37 @@ def main(argv: List[str]) -> int:
     if SENTINEL_PATH.exists():
         try:
             SENTINEL_PATH.unlink()
-            print(f"✓ Removed sentinel file: {SENTINEL_PATH}")
+            print(f"Removed sentinel file: {SENTINEL_PATH}")
             print("Continuing with embedding pipeline...")
         except Exception as e:
             print(
-                f"⚠️ Warning: Could not remove sentinel file at {SENTINEL_PATH}: {e}\n"
+                f"Warning: Could not remove sentinel file at {SENTINEL_PATH}: {e}\n"
                 "Manual removal may be required if the pipeline fails."
             )
 
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
     
-    print(f"\n✓ Logging initialized")
-    print(f"✓ Python executable: {sys.executable}")
-    print(f"✓ Kaggle environment: {IS_KAGGLE}")
-    print(f"✓ CUDA available: {torch.cuda.is_available()}")
+    print("\nLogging initialized")
+    print(f"Python executable: {sys.executable}")
+    print(f"Kaggle environment: {IS_KAGGLE}")
+    print(f"CUDA available: {torch.cuda.is_available()}")
     if torch.cuda.is_available():
-        print(f"✓ CUDA device count: {torch.cuda.device_count()}")
+        print(f"CUDA device count: {torch.cuda.device_count()}")
         for i in range(torch.cuda.device_count()):
             print(f"  - GPU {i}: {torch.cuda.get_device_name(i)}")
     print()
 
     print("Parsing command-line arguments...")
     args = _parse_args(argv)
-    print(f"✓ Arguments parsed")
+    print("Arguments parsed")
     
     chunks_root = Path(args.chunks_root).resolve()
     output_root = Path(args.output_root).resolve()
-    print(f"✓ Chunks root: {chunks_root}")
-    print(f"✓ Output root: {output_root}")
+    print(f"Chunks root: {chunks_root}")
+    print(f"Output root: {output_root}")
     
     if args.matryoshka_dim:
-        print(f"✓ Matryoshka dimension: {args.matryoshka_dim}")
+        print(f"Matryoshka dimension: {args.matryoshka_dim}")
 
     ensemble_models_override: Optional[List[str]] = None
     if args.ensemble_models:
@@ -633,11 +636,11 @@ def main(argv: List[str]) -> int:
     if args.sequential_devices:
         sequential_devices = [device.strip() for device in args.sequential_devices.split(",") if device.strip()]
         if sequential_devices:
-            print(f"✓ Sequential device preference: {sequential_devices}")
+            print(f"Sequential device preference: {sequential_devices}")
     
     print(f"Creating output directory...")
     output_root.mkdir(parents=True, exist_ok=True)
-    print(f"✓ Output directory ready")
+    print("Output directory ready")
 
     print(f"\nResolving collections to process...")
     requested_collections = args.collections
@@ -651,28 +654,28 @@ def main(argv: List[str]) -> int:
         collections, skipped_discoveries = _discover_collections(
             chunks_root, requested_collections
         )
-        print(f"✓ Collection discovery complete")
+        print("Collection discovery complete")
     except Exception as e:
-        print(f"✗ Collection discovery failed: {e}")
+        print(f"ERROR: Collection discovery failed: {e}")
         import traceback
         traceback.print_exc()
         return 1
     
     if not collections:
         LOGGER.error("No collections found under %s", chunks_root)
-        print(f"✗ No collections found!")
+        print("ERROR: No collections found!")
         print(f"   Chunks root exists: {chunks_root.exists()}")
         if chunks_root.exists():
             print(f"   Contents: {list(chunks_root.iterdir())[:10]}")
         return 1
 
     if skipped_discoveries:
-        print(f"⚠️  {len(skipped_discoveries)} collection(s) skipped during discovery")
+        print(f"Warning: {len(skipped_discoveries)} collection(s) skipped during discovery")
         for skipped in skipped_discoveries:
             reason = skipped.skip_reason or "unknown"
             print(f"   - {skipped.collection}: {reason}")
     LOGGER.info("Found %d collection(s) to embed", len(collections))
-    print(f"✓ Found {len(collections)} collection(s):")
+    print(f"Found {len(collections)} collection(s):")
     for discovery in collections:
         print(f"   - {discovery.path.name} ({discovery.chunk_count} chunk files)")
     print()
@@ -685,7 +688,7 @@ def main(argv: List[str]) -> int:
     # Check if model is available in registry
     if args.model in KAGGLE_OPTIMIZED_MODELS:
         model_config = KAGGLE_OPTIMIZED_MODELS[args.model]
-        print(f"✓ Model found in registry")
+        print("Model found in registry")
         print(f"  - HuggingFace ID: {model_config.hf_model_id}")
         print(f"  - Vector dimension: {model_config.vector_dim}")
         print(f"  - Max tokens: {model_config.max_tokens}")
@@ -695,12 +698,12 @@ def main(argv: List[str]) -> int:
         print(f"  - Memory efficient: {model_config.memory_efficient}")
         print(f"  - Flash attention: {model_config.supports_flash_attention}")
     else:
-        print(f"⚠️  Model '{args.model}' not found in KAGGLE_OPTIMIZED_MODELS registry")
+        print(f"Warning: Model '{args.model}' not found in KAGGLE_OPTIMIZED_MODELS registry")
         print(f"   Available models: {', '.join(KAGGLE_OPTIMIZED_MODELS.keys())}")
     
     # Display ensemble configuration if enabled
     if args.enable_ensemble:
-        print(f"\n✓ Ensemble mode: ENABLED")
+        print("\nEnsemble mode: ENABLED")
         print(f"  Multi-model embedding will be used for enhanced quality")
     else:
         print(f"\n  Ensemble mode: disabled (single model)")
@@ -718,7 +721,7 @@ def main(argv: List[str]) -> int:
     # Display all available models in registry
     print(f"\nAvailable models in registry ({len(KAGGLE_OPTIMIZED_MODELS)} total):")
     for model_key, model_cfg in KAGGLE_OPTIMIZED_MODELS.items():
-        status = "✓ SELECTED" if model_key == args.model else "  available"
+        status = "SELECTED" if model_key == args.model else "  available"
         print(f"  {status} - {model_key}")
         print(f"      {model_cfg.hf_model_id} ({model_cfg.vector_dim}D)")
     
@@ -764,10 +767,10 @@ def main(argv: List[str]) -> int:
                 zip_output=args.zip_output,
                 matryoshka_dim=args.matryoshka_dim,
             )
-            print(f"✓ Collection {collection_dir.name} completed successfully")
+            print(f"Collection {collection_dir.name} completed successfully")
             run_summaries.append(summary)
         except Exception as exc:
-            print(f"✗ FAILED: Collection {collection_dir.name}")
+            print(f"ERROR: Collection {collection_dir.name} failed")
             print(f"   Error: {exc}")
             LOGGER.exception("Embedding failed for %s", collection_dir.name)
             import traceback
@@ -794,10 +797,10 @@ def main(argv: List[str]) -> int:
 
     failures = [item for item in run_summaries if item.status == "failed"]
     if failures:
-        print(f"\n⚠️  {len(failures)} collection(s) failed")
+        print(f"\nWarning: {len(failures)} collection(s) failed")
         return 1
 
-    print(f"\n✓ All collections processed successfully")
+    print("\nAll collections processed successfully")
     return 0
 
 

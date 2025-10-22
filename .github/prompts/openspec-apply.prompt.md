@@ -1,4 +1,5 @@
 ---
+mode: 'gpt-5-beast-mode'
 description: Implement an approved OpenSpec change and keep tasks in sync.
 ---
 

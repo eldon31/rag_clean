@@ -40,7 +40,7 @@ KAGGLE_DEFAULTS = {
 }
 
 try:
-    from processor.kaggle_ultimate_embedder_v4 import (
+    from processor.ultimate_embedder import (
         KaggleExportConfig,
         KaggleGPUConfig,
         UltimateKaggleEmbedderV4,

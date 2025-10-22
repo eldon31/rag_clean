@@ -360,6 +360,26 @@ for i, vectors in enumerate(named_vectors):
     })
 ```
 
+### Ultimate Embedder Services
+
+The Kaggle-oriented embedder facade in `processor/ultimate_embedder/` keeps the legacy `UltimateKaggleEmbedderV4` API but routes work through lightweight service modules. Use the map below to find the right extension point:
+
+| Module | Key Types | Responsibility |
+| --- | --- | --- |
+| `core.py` | `UltimateKaggleEmbedderV4` | Public facade; wires helpers, exposes CLI entry points, and maintains backward compatible methods. |
+| `chunk_loader.py` | `ChunkLoader`, `ChunkLoadResult` | Streams chunk JSONL files, enriches metadata, and validates batch sizing before encoding. |
+| `model_manager.py` | `ModelManager` | Resolves primary/ensemble/companion models, handles device placement, and caches loaded weights. |
+| `backend_encoder.py` | `encode_with_backend()` | Reusable helper for non-standard backends (TensorRT/ONNX/HF) invoked when the facade falls back to custom models. |
+| `controllers.py` | `AdaptiveBatchController`, `GPUMemorySnapshot` | Tracks GPU utilisation, adjusts batch sizes, and reports mitigation events. |
+| `batch_runner.py` | `BatchRunner` | Coordinates the adaptive loop, retries failed batches, and writes embeddings/named vectors back to the facade. |
+| `sparse_pipeline.py` | `build_sparse_vector_from_metadata()` | Normalises sparse vector payloads and modal hints emitted by the chunker for hybrid search. |
+| `rerank_pipeline.py` | `RerankPipeline` | Optional CrossEncoder reranking wrapper with embedding-only fallback. |
+| `monitoring.py` | `PerformanceMonitor` | Periodically samples GPU/CPU stats and surfaces live progress to logs. |
+| `export_runtime.py` | `ExportRuntime` | Generates Qdrant JSONL, NumPy dumps, FAISS indexes, and helper scripts while respecting export config. |
+| `telemetry.py` | `TelemetryTracker`, `resolve_rotation_payload_limit()` | Central store for mitigation, rotation, cache, and GPU telemetry tracked during runs. |
+
+To customise behaviour, inject alternative helpers via the `UltimateKaggleEmbedderV4` constructor (for example, supply a patched `ModelManager` or turn off rerankers). Avoid expanding `core.py` directly—its executable-line guard enforces that orchestration remains slim.
+
 ---
 
 ## Sparse Vector API
@@ -519,7 +539,7 @@ class ChunkerConfig:
 
 ### `ModelConfig`
 
-Model registry configuration (in `kaggle_ultimate_embedder_v4.py`).
+Model registry configuration (now located in `processor/ultimate_embedder/config.py`; the legacy `processor/kaggle_ultimate_embedder_v4.py` shim re-exports the same symbols).
 
 ```python
 @dataclass
