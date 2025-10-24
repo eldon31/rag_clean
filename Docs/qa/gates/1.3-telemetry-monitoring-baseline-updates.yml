@@ -1,0 +1,60 @@
+schema: 1
+story: '1.3'
+story_title: 'Telemetry & Monitoring Baseline Updates'
+gate: PASS
+status_reason: 'Story 1.4 consolidation complete with verifiable artifacts: telemetry baselines (docs/qa/assets/), CLI smoke matrix evidence (docs/qa/assessments/1.4-telemetry-smoke-evidence/), and alerting delivered. Epic 1 unblocked.'
+reviewer: 'Quinn (Test Architect)'
+updated: '2025-10-25T21:53:00Z'
+
+waiver: { active: false }
+
+top_issues: []
+
+risk_summary:
+  totals: { critical: 0, high: 0, medium: 0, low: 0 }
+  recommendations:
+    must_fix: []
+    monitor:
+      - 'Track GPU alert firing patterns in production to validate thresholds.'
+      - 'Monitor sparse coverage ratio for degradation trends.'
+
+quality_score: 98
+expires: '2025-11-08T00:00:00Z'
+
+evidence:
+  tests_reviewed: 26
+  risks_identified: 0
+  trace:
+    ac_covered: [1, 2, 3]
+    ac_gaps: []
+  story_1_4_consolidation:
+    - docs/qa/assessments/1.4-baselines-20251025.md
+    - docs/qa/assessments/1.4-telemetry-smoke-20251025.md
+    - docs/qa/assessments/1.4-telemetry-smoke-evidence/ (10 artifacts: 5 CLI logs + 5 JSON summaries)
+    - docs/qa/assets/ (2 ASCII chart exports: staging-latency-timeline.txt + gpu-peak-memory-by-stage.txt)
+    - docs/architecture/observability.md
+    - docs/telemetry/rerank_sparse_signals.md
+
+nfr_validation:
+  security:
+    status: PASS
+    notes: 'Telemetry outputs remain sanitized; no new data exposure.'
+  performance:
+    status: PASS
+    notes: 'Staging latency/VRAM baselines validated with verifiable artifacts. P50/P95 within thresholds. ASCII charts at docs/qa/assets/, telemetry smoke evidence at docs/qa/assessments/1.4-telemetry-smoke-evidence/.'
+  reliability:
+    status: PASS
+    notes: 'Alerting workflow validated end-to-end. CLI smoke matrix comprehensive with 5 toggle combinations archived (CLI logs + JSON summaries). Toggle provenance tracked.'
+  maintainability:
+    status: PASS
+    notes: 'Instrumentation and documentation structure sound; evidence attachments complete.'
+
+recommendations:
+  immediate: []
+  future:
+    - action: 'Augment Grafana dashboards with alert timeline panel after production deployment.'
+      refs:
+        - 'docs/architecture/observability.md'
+    - action: 'Add automated alert threshold validation to CI pipeline.'
+      refs:
+        - 'tests/test_telemetry_smoke.py'

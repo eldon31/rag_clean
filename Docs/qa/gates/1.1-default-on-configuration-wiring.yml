@@ -1,0 +1,53 @@
+schema: 1
+story: '1.1'
+story_title: 'Default-On Configuration Wiring'
+gate: PASS
+status_reason: 'Story 1.4 consolidation complete with verifiable artifacts: staging baselines (docs/qa/assets/), telemetry smoke evidence (docs/qa/assessments/1.4-telemetry-smoke-evidence/), and alert automation delivered. Epic 1 unblocked.'
+reviewer: 'Quinn (Test Architect)'
+updated: '2025-10-25T21:50:00Z'
+top_issues: []
+waiver:
+  active: false
+risk_summary:
+  totals:
+    critical: 0
+    high: 0
+    medium: 0
+    low: 0
+  recommendations:
+    must_fix: []
+    monitor:
+      - 'Track telemetry baseline fidelity across future releases.'
+nfr_validation:
+  _assessed: [security, performance, reliability, maintainability]
+  security:
+    status: PASS
+    notes: 'Overrides remain authoritative; no new exposure introduced.'
+  performance:
+    status: PASS
+    notes: 'Staging latency/VRAM baselines validated in Story 1.4. See docs/qa/assessments/1.4-baselines-20251025.md (ASCII charts at docs/qa/assets/) and telemetry smoke artifacts at docs/qa/assessments/1.4-telemetry-smoke-evidence/.'
+  reliability:
+    status: PASS
+    notes: 'processing_summary chunk totals align with loader/runtime totals. Toggle matrix evidence archived with 5 CLI logs + 5 JSON summaries covering all combinations.'
+  maintainability:
+    status: PASS
+    notes: 'CLI parser now locked by unit tests covering defaults, opt-outs, and provenance.'
+evidence:
+  tests_reviewed: 3
+  risks_identified: 0
+  trace:
+    ac_covered: [1, 2, 3]
+    ac_gaps: []
+  story_1_4_consolidation:
+    - docs/qa/assessments/1.4-baselines-20251025.md
+    - docs/qa/assessments/1.4-telemetry-smoke-20251025.md
+    - docs/architecture/observability.md
+    - docs/telemetry/rerank_sparse_signals.md
+quality_score: 98
+recommendations:
+  immediate: []
+  future:
+    - action: 'Maintain CLI regression coverage as new toggles or provenance fields are introduced.'
+      refs:
+        - tests/test_embed_collections_cli.py
+        - processor/ultimate_embedder/runtime_config.py

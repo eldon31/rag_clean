@@ -1,0 +1,51 @@
+schema: 1
+story: '1.2'
+story_title: 'CLI and Runtime Toggle Integration'
+gate: PASS
+status_reason: 'Story 1.4 consolidation complete with verifiable artifacts: automated GPU peak alerting, expanded sparse fallback coverage, CLI doc updates, and telemetry smoke matrix evidence archived at docs/qa/assessments/1.4-telemetry-smoke-evidence/.'
+reviewer: 'Quinn (Test Architect)'
+updated: '2025-10-25T21:52:00Z'
+waiver: { active: false }
+top_issues: []
+risk_summary:
+  totals: { critical: 0, high: 0, medium: 0, low: 0 }
+  recommendations:
+    must_fix: []
+    monitor:
+      - 'Track GPU alert firing frequency in production to refine thresholds.'
+      - 'Monitor rerank/sparse metrics dashboards for baseline drift.'
+quality_score: 98
+expires: '2025-11-14T16:05:00Z'
+evidence:
+  tests_reviewed: 15
+  risks_identified: 0
+  trace:
+    ac_covered: [1, 2, 3]
+    ac_gaps: []
+  story_1_4_consolidation:
+    - docs/qa/assessments/1.4-baselines-20251025.md
+    - docs/qa/assessments/1.4-telemetry-smoke-20251025.md
+    - docs/qa/assessments/1.4-telemetry-smoke-evidence/ (10 artifacts: 5 CLI logs + 5 JSON summaries)
+    - docs/qa/assets/ (2 ASCII chart exports: latency timeline + GPU memory by stage)
+    - docs/telemetry/rerank_sparse_signals.md
+    - tests/test_telemetry_smoke.py
+nfr_validation:
+  security:
+    status: PASS
+    notes: 'No new sensitive output; toggle provenance retains truncated fields.'
+  performance:
+    status: PASS
+    notes: 'GPU alerting automated with Prometheus rules (WARN 11.5 GB, CRIT 12 GB). See docs/qa/assessments/1.4-baselines-20251025.md.'
+  reliability:
+    status: PASS
+    notes: 'Toggle resolution chain and disabled parity validated by regression tests. Sparse fallback coverage comprehensive.'
+  maintainability:
+    status: PASS
+    notes: 'Changes isolated to CLI/summary modules with direct unit coverage and provenance logging.'
+recommendations:
+  immediate: []
+  future:
+    - action: 'Integrate rerank/sparse metrics emission with dashboards and add CI guardrails for skipped metrics.'
+      refs: ['docs/architecture/observability.md']
+    - action: 'Monitor GPU alert firing patterns to refine thresholds after 2 weeks production telemetry.'
+      refs: ['docs/telemetry/rerank_sparse_signals.md']
