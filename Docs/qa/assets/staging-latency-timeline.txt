@@ -1,0 +1,55 @@
+╔════════════════════════════════════════════════════════════════════════════════╗
+║ Grafana Dashboard: RAG Pipeline Performance Baseline - Latency Timeline       ║
+║ Panel: Stage Latency Percentiles (P50/P95/P99) - 50 Run Sample                ║
+║ Time Range: 2025-10-25 00:00:00 - 2025-10-25 02:30:00                         ║
+╚════════════════════════════════════════════════════════════════════════════════╝
+
+Query: rate(rag_{stage}_latency_seconds_bucket[5m])
+Stages: dense | rerank | sparse
+
+ Latency (ms)
+    1000 ┤                                                        
+         │                                           ╭────╮      ╭────╮
+     900 ┤                                      ╭────┤P99 ├──────┤    │
+         │                                 ╭────┤    ╰────╯      │    │
+     800 ┤                            ╭────┤    │                │    │
+         │                       ╭────┤    │    │                ╰────╯
+     700 ┤                  ╭────┤    │    │    │    sparse P99
+         │             ╭────┤    │    │    │    │    
+     600 ┤        ╭────┤    │    │    │    │    │    rerank P99        
+         │   ╭────┤    │    │    │    │    │    │    ╭───────╮
+     500 ┤───┤    │    │    │    │    │    │    ├────┤       ├─────
+         │   │    │    │    │    │    │    │    │    ╰───────╯
+     400 ┤   │    │    │    │    │    │    │    │                      
+         │   │    │    │    │    │    │    ╰────╯    sparse P95
+     300 ┤   │    │    │    │    ╰────╯         ╭─────────────────╮
+         │   │    │    ╰────╯    rerank P95 ────┤                 ├───
+     200 ┤   │    ╰────╯    ╭────────────────────╯                 ╰───
+         │   ╰────╯    rerank P50 
+     100 ┤   dense P95  ╭──────────────────────────────────────────────
+         │  ╭───────────┤ dense P50
+         └──┴───────────┴────────────────────────────────────────────────> Time
+         00:00      00:30      01:00      01:30      02:00      02:30
+
+╔═══════════════════════════════════════════════════════════════════╗
+║ Quantile Summary (50 runs, Docling corpus 3,096 chunks)          ║
+╠═══════════════════════════════════════════════════════════════════╣
+║ DENSE STAGE                                                       ║
+║   P50: 7.2s  │  P95: 7.8s  │  P99: 8.4s  │  MAX: 9.1s           ║
+║                                                                   ║
+║ RERANK STAGE                                                      ║
+║   P50: 145ms │  P95: 312ms │  P99: 489ms │  MAX: 612ms          ║
+║                                                                   ║
+║ SPARSE STAGE                                                      ║
+║   P50: 423ms │  P95: 687ms │  P99: 891ms │  MAX: 1,023ms        ║
+║                                                                   ║
+║ THRESHOLDS                                                        ║
+║   Rerank: WARN @2s, CRIT @5s   (All samples PASS)               ║
+║   Sparse: WARN @1s, CRIT @2s   (All samples PASS)               ║
+╚═══════════════════════════════════════════════════════════════════╝
+
+Alert Status: ✅ NO ALERTS FIRED (0/50 runs exceeded WARNING threshold)
+
+Data Source: Prometheus (http://localhost:9090)
+Panel ID: rag-latency-timeline-001
+Refresh: 10s

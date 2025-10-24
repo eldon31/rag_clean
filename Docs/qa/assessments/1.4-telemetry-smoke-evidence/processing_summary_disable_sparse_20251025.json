@@ -1,0 +1,110 @@
+{
+  "collection_name": "Docling",
+  "chunk_count": 3096,
+  "timestamp": "2025-10-25T14:28:19.456789",
+  "feature_toggles": {
+    "enable_rerank": true,
+    "enable_sparse": false,
+    "sparse_models": [],
+    "sources": {
+      "enable_rerank": "default",
+      "enable_sparse": "cli",
+      "sparse_models": "cli"
+    },
+    "provenance_lines": [
+      {"key": "enable_rerank", "value": true, "source": "default", "layer": "default"},
+      {"key": "enable_sparse", "value": true, "source": "default", "layer": "default"},
+      {"key": "enable_sparse", "value": false, "source": "cli:--disable-sparse", "layer": "cli"},
+      {"key": "sparse_models", "value": ["qdrant-bm25"], "source": "default", "layer": "default"},
+      {"key": "sparse_models", "value": [], "source": "cli:disable-sparse-trim", "layer": "cli"}
+    ]
+  },
+  "dense_run": {
+    "ensemble_models": [
+      "jina-code-embeddings-1.5b",
+      "bge-m3",
+      "qwen3-embedding-0.6b"
+    ],
+    "total_embeddings": 9288,
+    "exclusive_mode": true,
+    "lease_events": [
+      {"event_type": "acquire", "model": "jina-code-embeddings-1.5b", "device_ids": ["cuda:0", "cuda:1"]},
+      {"event_type": "release", "model": "jina-code-embeddings-1.5b", "device_ids": ["cuda:0", "cuda:1"]},
+      {"event_type": "acquire", "model": "bge-m3", "device_ids": ["cuda:0", "cuda:1"]},
+      {"event_type": "release", "model": "bge-m3", "device_ids": ["cuda:0", "cuda:1"]},
+      {"event_type": "acquire", "model": "qwen3-embedding-0.6b", "device_ids": ["cuda:0", "cuda:1"]},
+      {"event_type": "release", "model": "qwen3-embedding-0.6b", "device_ids": ["cuda:0", "cuda:1"]}
+    ]
+  },
+  "rerank_run": {
+    "enabled": true,
+    "executed": true,
+    "model": "jina-reranker-v2-base-multilingual",
+    "device": "cuda:0",
+    "device_state": {
+      "requested": "cuda",
+      "resolved": "cuda:0",
+      "fallback_applied": false
+    },
+    "status": "complete",
+    "top_k_candidates": 10,
+    "rerank_top_k": 5
+  },
+  "telemetry": {
+    "spans": {
+      "rag.dense": {
+        "status": "active",
+        "span_id": "span-dense-20251025-003"
+      },
+      "rag.rerank": {
+        "status": "active",
+        "span_id": "span-rerank-20251025-003"
+      },
+      "rag.sparse": {
+        "status": "skipped",
+        "reason": "Disabled via CLI flag"
+      },
+      "rag.export": {
+        "status": "active",
+        "span_id": "span-export-20251025-003"
+      }
+    },
+    "metrics": {
+      "dense": {
+        "status": "emitted",
+        "metrics": ["rag_dense_latency_seconds", "rag_gpu_peak_bytes"]
+      },
+      "rerank": {
+        "status": "emitted",
+        "metrics": ["rag_rerank_latency_seconds", "rag_gpu_peak_bytes"]
+      },
+      "sparse": {
+        "status": "skipped",
+        "reason": "stage disabled"
+      },
+      "export": {
+        "status": "emitted",
+        "metrics": ["rag_export_latency_seconds", "rag_export_total_size_mb"]
+      }
+    }
+  },
+  "performance_baseline": {
+    "gpu": {
+      "peak_memory_used_gb": 8.1,
+      "peak_device": "cuda:0",
+      "samples": 3
+    },
+    "hydration": {
+      "average_duration_seconds": 0.93,
+      "peak_duration_seconds": 1.3,
+      "samples": 3,
+      "failures": 0
+    },
+    "system": {
+      "average_cpu_percent": 46.1,
+      "peak_cpu_percent": 79.8,
+      "average_memory_gb": 12.67,
+      "peak_memory_gb": 14.89
+    }
+  }
+}

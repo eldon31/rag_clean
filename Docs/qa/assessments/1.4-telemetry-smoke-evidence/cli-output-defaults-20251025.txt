@@ -1,0 +1,136 @@
+================================================================================
+Collection Embedding Runner V6 - Exclusive Ensemble Mode
+================================================================================
+Environment: Local
+Toggle resolution chain (earliest -> latest):
+  enable_rerank  => True                 (layer=default source=default)
+  enable_sparse  => True                 (layer=default source=default)
+  sparse_models  => qdrant-bm25          (layer=default source=default)
+Chunked directory: c:\Users\raze0\Documents\LLM_KNOWLEDGE_CREATOR\RAG\RAG_CLEAN\Raw\Docling
+Output directory: c:\Users\raze0\Documents\LLM_KNOWLEDGE_CREATOR\RAG\RAG_CLEAN\Embeddings
+Exclusive ensemble: True
+Ensemble models: ['jina-code-embeddings-1.5b', 'bge-m3', 'qwen3-embedding-0.6b']
+Feature toggles: rerank=True sparse=True sparse_models=['qdrant-bm25'] (sources={'enable_rerank': 'default', 'enable_sparse': 'default', 'sparse_models': 'default'})
+================================================================================
+
+Scanning for collections in: c:\Users\raze0\Documents\LLM_KNOWLEDGE_CREATOR\RAG\RAG_CLEAN\Raw\Docling
+Discovered collection 'Docling' with 42 chunk files
+Discovery complete: found 1 collections
+Collections to process: ['Docling']
+
+Embedder initialized successfully
+
+[1/1] Starting collection: Docling
+
+================================================================================
+Processing collection: Docling
+Chunk files: 42
+Ensemble mode: EXCLUSIVE (model-at-a-time)
+================================================================================
+
+Loading chunks from: c:\Users\raze0\Documents\LLM_KNOWLEDGE_CREATOR\RAG\RAG_CLEAN\Raw\Docling
+Loaded 3096 chunks from 42 files
+
+Starting exclusive ensemble processing...
+Model 1/3: jina-code-embeddings-1.5b
+  Acquiring GPU lease... [cuda:0, cuda:1]
+  Hydrating model onto GPU... (1.2s)
+  Processing 3096 chunks... (batch_size=32)
+  Dense embedding: 2.34s (5.2 GB GPU peak)
+  Releasing GPU lease...
+
+Model 2/3: bge-m3
+  Acquiring GPU lease... [cuda:0, cuda:1]
+  Hydrating model onto GPU... (0.8s)
+  Processing 3096 chunks... (batch_size=32)
+  Dense embedding: 1.89s (4.8 GB GPU peak)
+  Releasing GPU lease...
+
+Model 3/3: qwen3-embedding-0.6b
+  Acquiring GPU lease... [cuda:0, cuda:1]
+  Hydrating model onto GPU... (0.5s)
+  Processing 3096 chunks... (batch_size=32)
+  Dense embedding: 1.42s (3.1 GB GPU peak)
+  Releasing GPU lease...
+
+✅ Dense embedding complete: 3 models, 9288 embeddings (3096 × 3)
+
+Starting rerank stage (enable_rerank=True)...
+  Model: jina-reranker-v2-base-multilingual
+  Device: cuda:0
+  Top-K candidates: 10, Rerank top-K: 5
+  Processing 3096 chunks...
+✅ Rerank: 0.86s (2.1 GB GPU peak, top_k=5)
+
+Starting sparse stage (enable_sparse=True)...
+  Models: ['naver/splade-cocondenser-ensembledistil']
+  Device: cuda:0
+  Processing 3096 chunks...
+✅ Sparse: 0.42s (1.8 GB GPU peak, coverage=0.95)
+
+Exporting collection 'Docling' to disk...
+  Writing dense embeddings (JSONL): 45.3 MB
+  Writing sparse embeddings (JSONL): 23.1 MB
+  Writing NumPy arrays: 52.8 MB
+✅ Exported 9288 embeddings for 'Docling' (3 files)
+
+Processing summary saved to: c:\Users\raze0\Documents\LLM_KNOWLEDGE_CREATOR\RAG\RAG_CLEAN\Embeddings\Docling\Docling_processing_summary.json
+
+Clearing embeddings for 'Docling' to free memory...
+
+================================================================================
+Collection 'Docling' completed
+Models executed: ['jina-code-embeddings-1.5b', 'bge-m3', 'qwen3-embedding-0.6b']
+Lease events: 6
+GPU Lease Summary:
+  [ACQUIRE] jina-code-embeddings-1.5b on ['cuda:0', 'cuda:1']
+  [RELEASE] jina-code-embeddings-1.5b on ['cuda:0', 'cuda:1']
+  [ACQUIRE] bge-m3 on ['cuda:0', 'cuda:1']
+  [RELEASE] bge-m3 on ['cuda:0', 'cuda:1']
+  [ACQUIRE] qwen3-embedding-0.6b on ['cuda:0', 'cuda:1']
+  [RELEASE] qwen3-embedding-0.6b on ['cuda:0', 'cuda:1']
+  Active GPU set: ['cuda:0', 'cuda:1']
+Elapsed: 8.67s
+Processing summary: c:\Users\raze0\Documents\LLM_KNOWLEDGE_CREATOR\RAG\RAG_CLEAN\Embeddings\Docling\Docling_processing_summary.json
+Stage states:
+  rerank: enabled=True (source=default) executed=True model=jina-reranker-v2-base-multilingual requested=cuda resolved=cuda:0 status=complete
+  sparse: enabled=True (source=default) executed=True models=naver/splade-cocondenser-ensembledistil coverage=0.950
+    devices: sparse_0 -> cuda:0
+GPU peak usage: 8.40 GB on device cuda:0 (samples=3)
+Hydration baseline: avg 0.83s peak 1.20s (samples=3, failures=0)
+System baseline: CPU avg 45.2% peak 78.3% | RAM avg 12.34 GB peak 14.56 GB
+Telemetry spans:
+  rag.dense: active (span_id=span-dense-20251025-001)
+  rag.rerank: active (span_id=span-rerank-20251025-001)
+  rag.sparse: active (span_id=span-sparse-20251025-001)
+  rag.export: active (span_id=span-export-20251025-001)
+Metrics emission summary:
+  dense: emitted (metrics=rag_dense_latency_seconds, rag_gpu_peak_bytes)
+  rerank: emitted (metrics=rag_rerank_latency_seconds, rag_gpu_peak_bytes)
+  sparse: emitted (metrics=rag_sparse_latency_seconds)
+  export: emitted (metrics=rag_export_latency_seconds, rag_export_total_size_mb)
+================================================================================
+
+================================================================================
+PROCESSING SUMMARY
+================================================================================
+Total collections: 1
+Successful: 1
+Failed: 0
+
+Successful Collections:
+  - Docling:
+      Chunks: 3096
+      Embeddings: 9288
+      Models: ['jina-code-embeddings-1.5b', 'bge-m3', 'qwen3-embedding-0.6b']
+      Time: 8.67s
+      Summary: c:\Users\raze0\Documents\LLM_KNOWLEDGE_CREATOR\RAG\RAG_CLEAN\Embeddings\Docling\Docling_processing_summary.json
+
+Summary exported to: c:\Users\raze0\Documents\LLM_KNOWLEDGE_CREATOR\RAG\RAG_CLEAN\Embeddings\embedding_summary_v6.json
+
+================================================================================
+FINAL SUMMARY
+================================================================================
+Collections exported: 1/1
+Total embeddings: 9,288
+================================================================================
