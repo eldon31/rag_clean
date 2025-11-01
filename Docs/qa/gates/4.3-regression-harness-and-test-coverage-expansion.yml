@@ -1,0 +1,40 @@
+schema: 1
+story: '4.3'
+story_title: 'Regression Harness and Test Coverage Expansion'
+gate: PASS
+status_reason: 'Regression harness now drives the CLI end-to-end with metric guardrails; no blocking issues observed.'
+reviewer: 'Quinn'
+updated: '2025-10-31T18:00:00Z'
+top_issues: []
+waiver: { active: false }
+quality_score: 100
+expires: '2025-11-14T18:00:00Z'
+
+evidence:
+  tests_reviewed: 12
+  risks_identified: 0
+  trace:
+    ac_covered: [1, 2, 3]
+    ac_gaps: []
+
+nfr_validation:
+  security:
+    status: PASS
+    notes: 'Fixture-only changes; no new attack surface.'
+  performance:
+    status: PASS
+    notes: 'Baseline metrics captured for default-on scenario.'
+  reliability:
+    status: PASS
+    notes: 'Regression harness verifies toggle paths and fallback warnings.'
+  maintainability:
+    status: PASS
+    notes: 'Shared fixtures centralize harness logic.'
+
+recommendations:
+  immediate: []
+  future:
+    - action: 'Schedule an occasional full embedder run (non-blocking) to complement the stubbed CLI harness.'
+      refs: ['scripts/embed_collections_v6.py']
+    - action: 'Emit structured regression-harness status JSON for easier evidence diffing.'
+      refs: ['docs/qa/assessments/4.3-regression-harness/']

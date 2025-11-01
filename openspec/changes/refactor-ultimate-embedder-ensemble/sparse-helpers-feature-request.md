@@ -1,0 +1,3 @@
+# Sparse Helper Feature Implementation Request
+
+Deliver a production-ready sparse vector capability within the refactored ultimate embedder. The implementation must explicitly invoke each sparse hook—`SPARSE_MODELS`, the `enable_sparse` pipeline toggle, `ModelManager.initialize_sparse_models`, GPU lease summarization (`GPULease.summarize`, `GPULease.get_vram_delta_gb`), `ThroughputMonitor.log_error`, `_normalize_collection_name`, and `_get_model_primary_dtype`—so none of them remain defined but unused. Provide updated integration coverage proving these helpers participate in end-to-end runs after the modular cleanup, and document the runtime touchpoints to confirm downstream consumers can rely on the fully active sparse pathway alongside the exclusive dense ensemble.

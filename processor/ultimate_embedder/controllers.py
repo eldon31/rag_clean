@@ -50,7 +50,7 @@ class GPUMemorySnapshot:
             "timestamp": self.timestamp,
         }
         if soft_limit_bytes is not None:
-            payload["below_soft_limit"] = self.allocated_bytes >= soft_limit_bytes
+            payload["below_soft_limit"] = self.allocated_bytes <= soft_limit_bytes
         return payload
 
 

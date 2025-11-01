@@ -1,0 +1,44 @@
+flowchart TD
+    subgraph Init[Initialization]
+        A[UltimateKaggleEmbedderV4.__init__]
+        B[ModelManager.initialize_primary_model]
+        C[ModelManager.initialize_companion_models]
+        D[TelemetryTracker]
+        E[BatchRunner]
+        F[ExportRuntime]
+    end
+    subgraph Load[Chunk Intake]
+        G[ChunkLoader.load]
+    end
+    subgraph Run[Sequential Ensemble Pass]
+        H[BatchRunner.run_exclusive_ensemble]
+        I[lease_gpus]
+        J[ModelManager.hydrate_model_to_gpus]
+        K[AdaptiveBatchController]
+        L[UltimateKaggleEmbedderV4._call_encode]
+        M[TelemetryTracker.record_rotation_event]
+    end
+    subgraph Export[Export Pipeline]
+        N[ExportRuntime.export_for_local_qdrant]
+        O[_export_qdrant_jsonl / _export_sparse_jsonl]
+        P[_generate_upload_script]
+    end
+
+    A --> B
+    A --> C
+    A --> D
+    A --> E
+    A --> F
+    A --> G
+    G --> H
+    H --> I
+    I --> J
+    J --> L
+    L --> H
+    H --> K
+    K --> H
+    H --> M
+    M --> D
+    H --> N
+    N --> O
+    N --> P

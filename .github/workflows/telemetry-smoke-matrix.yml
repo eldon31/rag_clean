@@ -110,20 +110,37 @@ jobs:
         run: |
           SUMMARY="${{ steps.smoke_run.outputs.summary_output }}"
           python -c "import json; data = json.load(open('${SUMMARY}')); required = ['collection_name', 'chunk_count', 'timestamp', 'feature_toggles']; missing = [k for k in required if k not in data]; assert not missing, f'Missing: {missing}'; print('✓ Valid structure')"
+
+      - name: Validate evidence integrity - ${{ matrix.toggle_config.name }}
+        run: |
+          python scripts/validate_evidence_integrity.py \
+            "${{ steps.smoke_run.outputs.cli_output }}" \
+            "${{ steps.smoke_run.outputs.summary_output }}"
       
       - name: Run regression tests
         run: |
           pytest tests/test_telemetry_smoke.py -v --tb=short
+
+      - name: Execute regression harness suites
+        if: ${{ matrix.toggle_config.name == 'defaults' }}
+        env:
+          REGRESSION_HARNESS_OUTPUT_DIR: docs/qa/assessments/4.3-regression-harness/${{ steps.smoke_run.outputs.timestamp }}
+          REGRESSION_HARNESS_TIMESTAMP: ${{ steps.smoke_run.outputs.timestamp }}
+        run: |
+          mkdir -p "$REGRESSION_HARNESS_OUTPUT_DIR"
+          pytest -m regression_harness -v --tb=short
       
-      - name: Validate Prometheus endpoint (mock mode)
+      - name: Validate Prometheus endpoint (mock mode with HTTPS)
         id: prometheus_validation
         run: |
           TIMESTAMP=$(date +%Y%m%d)
           VALIDATION_OUTPUT="docs/qa/assessments/1.4-telemetry-smoke-evidence/prometheus-validation-${{ matrix.toggle_config.name }}-${TIMESTAMP}.json"
           
-          echo "Running Prometheus endpoint validation in mock mode..."
+          echo "Running Prometheus endpoint validation in mock HTTPS mode..."
           python scripts/validate_prometheus_endpoint.py \
             --mock-mode \
+            --mock-https \
+            --no-verify-tls \
             --mock-port 19090 \
             --username prometheus_user \
             --password prometheus_pass \
@@ -135,11 +152,12 @@ jobs:
           echo "validation_exit_code=${VALIDATION_EXIT_CODE}" >> $GITHUB_OUTPUT
           
           if [ $VALIDATION_EXIT_CODE -eq 0 ]; then
-            echo "✓ Prometheus validation PASSED"
+            echo "✓ Prometheus HTTPS validation PASSED (all checks including TLS)"
           elif [ $VALIDATION_EXIT_CODE -eq 2 ]; then
-            echo "⚠ Prometheus validation completed with WARNINGS"
+            echo "⚠ Prometheus validation completed with WARNINGS (TLS warnings treated as non-fatal)"
+            exit 0
           else
-            echo "✗ Prometheus validation FAILED"
+            echo "✗ Prometheus validation FAILED (authentication or critical errors)"
             exit 1
           fi
       
@@ -151,6 +169,14 @@ jobs:
             ${{ steps.smoke_run.outputs.cli_output }}
             ${{ steps.smoke_run.outputs.summary_output }}
             ${{ steps.prometheus_validation.outputs.validation_output }}
+          retention-days: 90
+
+      - name: Upload regression harness artifacts
+        if: ${{ matrix.toggle_config.name == 'defaults' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: regression-harness-${{ steps.smoke_run.outputs.timestamp }}
+          path: docs/qa/assessments/4.3-regression-harness/${{ steps.smoke_run.outputs.timestamp }}
           retention-days: 90
   
   consolidate-evidence:
@@ -171,9 +197,15 @@ jobs:
       - name: Consolidate evidence files
         run: |
           mkdir -p docs/qa/assessments/1.4-telemetry-smoke-evidence/
+          mkdir -p docs/qa/assessments/4.3-regression-harness/
           find artifacts/ -name 'cli-output-*.txt' -exec cp {} docs/qa/assessments/1.4-telemetry-smoke-evidence/ \; || true
           find artifacts/ -name 'processing_summary_*.json' -exec cp {} docs/qa/assessments/1.4-telemetry-smoke-evidence/ \; || true
           find artifacts/ -name 'prometheus-validation-*.json' -exec cp {} docs/qa/assessments/1.4-telemetry-smoke-evidence/ \; || true
+          for harness_dir in artifacts/regression-harness-*; do
+            if [ -d "$harness_dir" ]; then
+              rsync -a "$harness_dir"/ docs/qa/assessments/4.3-regression-harness/
+            fi
+          done
           TIMESTAMP=$(date +%Y-%m-%d)
           echo "# Telemetry Smoke Matrix Evidence Manifest" > docs/qa/assessments/1.4-telemetry-smoke-evidence/MANIFEST.md
           echo "" >> docs/qa/assessments/1.4-telemetry-smoke-evidence/MANIFEST.md
@@ -194,18 +226,95 @@ jobs:
           echo "- disable-both" >> docs/qa/assessments/1.4-telemetry-smoke-evidence/MANIFEST.md
           echo "- enable-synonyms" >> docs/qa/assessments/1.4-telemetry-smoke-evidence/MANIFEST.md
           echo "" >> docs/qa/assessments/1.4-telemetry-smoke-evidence/MANIFEST.md
-          echo "### Prometheus Authentication/TLS Validation" >> docs/qa/assessments/1.4-telemetry-smoke-evidence/MANIFEST.md
-          echo "Mock server validation executed for each toggle combination:" >> docs/qa/assessments/1.4-telemetry-smoke-evidence/MANIFEST.md
+          echo "### Prometheus Authentication/TLS Validation (HTTPS)" >> docs/qa/assessments/1.4-telemetry-smoke-evidence/MANIFEST.md
+          echo "Mock HTTPS server validation executed for each toggle combination:" >> docs/qa/assessments/1.4-telemetry-smoke-evidence/MANIFEST.md
           echo "- ✓ Authentication required (401 without credentials)" >> docs/qa/assessments/1.4-telemetry-smoke-evidence/MANIFEST.md
           echo "- ✓ Valid credentials accepted (200 with basic auth)" >> docs/qa/assessments/1.4-telemetry-smoke-evidence/MANIFEST.md
-          echo "- ✓ TLS connection validation" >> docs/qa/assessments/1.4-telemetry-smoke-evidence/MANIFEST.md
+          echo "- ✓ TLS connection validation (self-signed certificates with --no-verify-tls)" >> docs/qa/assessments/1.4-telemetry-smoke-evidence/MANIFEST.md
           echo "" >> docs/qa/assessments/1.4-telemetry-smoke-evidence/MANIFEST.md
-          echo "Evidence manifest generated"
+          echo "Evidence manifest generated" >> docs/qa/assessments/1.4-telemetry-smoke-evidence/MANIFEST.md
+
+          HARNESS_MANIFEST=docs/qa/assessments/4.3-regression-harness/MANIFEST.md
+          echo "# Regression Harness Evidence" > "$HARNESS_MANIFEST"
+          echo "" >> "$HARNESS_MANIFEST"
+          echo "Generated: ${TIMESTAMP}" >> "$HARNESS_MANIFEST"
+          echo "Workflow: Telemetry Smoke Matrix CI" >> "$HARNESS_MANIFEST"
+          echo "Commit: ${{ github.sha }}" >> "$HARNESS_MANIFEST"
+          echo "" >> "$HARNESS_MANIFEST"
+          echo "## Scenario Outputs" >> "$HARNESS_MANIFEST"
+          echo "" >> "$HARNESS_MANIFEST"
+          find docs/qa/assessments/4.3-regression-harness -maxdepth 2 -type f -printf '%P\n' | sort >> "$HARNESS_MANIFEST"
+          echo "" >> "$HARNESS_MANIFEST"
+          echo "## Performance Guardrail" >> "$HARNESS_MANIFEST"
+          echo "- Maintain latency and GPU peaks within 10% of metrics/default-on_metrics_baseline.json" >> "$HARNESS_MANIFEST"
+
+      - name: Verify regression harness metrics baseline
+        run: |
+          python <<'PY'
+          import json
+          import pathlib
+
+          baseline_path = pathlib.Path("docs/qa/assessments/4.3-regression-harness/metrics/default-on_metrics_baseline.json")
+          baseline = json.loads(baseline_path.read_text(encoding="utf-8"))
+
+          harness_root = pathlib.Path("docs/qa/assessments/4.3-regression-harness")
+          summaries = sorted(harness_root.glob("*/default_on/processing_summary_default-on_*.json"))
+
+          if not summaries:
+              raise SystemExit("No default-on processing summary found for metrics comparison.")
+
+          summary_path = summaries[-1]
+          summary = json.loads(summary_path.read_text(encoding="utf-8"))
+
+          latency_actual = summary.get("performance_baseline", {}).get("latency_seconds")
+          gpu_actual = (
+              summary.get("performance_baseline", {})
+              .get("gpu", {})
+              .get("peak_memory_used_gb")
+          )
+          fallback_actual = summary.get("rerank_run", {}).get("fallback_count")
+
+          if latency_actual is None:
+              raise SystemExit("latency_seconds missing in processing summary")
+          if gpu_actual is None:
+              raise SystemExit("peak_memory_used_gb missing in processing summary")
+          if fallback_actual is None:
+              raise SystemExit("rerank fallback count missing in processing summary")
+
+          def check_within(label: str, actual: float, expected: float, threshold_pct: float) -> None:
+              allowed = abs(expected) * (threshold_pct / 100.0)
+              deviation = abs(actual - expected)
+              if deviation > allowed:
+                  raise SystemExit(
+                      f"{label} deviation {deviation:.4f} exceeds allowed {allowed:.4f} (expected {expected}, actual {actual})"
+                  )
+
+          check_within(
+              "Latency seconds",
+              float(latency_actual),
+              float(baseline["latency_seconds"]),
+              float(baseline["latency_threshold_percent"]),
+          )
+          check_within(
+              "GPU peak GB",
+              float(gpu_actual),
+              float(baseline["gpu_peak_gb"]),
+              float(baseline["gpu_threshold_percent"]),
+          )
+
+          if int(fallback_actual) != int(baseline["fallback_count"]):
+              raise SystemExit(
+                  f"Fallback count {fallback_actual} does not equal baseline {baseline['fallback_count']}"
+              )
+
+          print(f"Metrics verified for {summary_path}")
+          PY
       
       - name: Check for changes
         id: git_status
         run: |
           git add docs/qa/assessments/1.4-telemetry-smoke-evidence/
+          git add docs/qa/assessments/4.3-regression-harness/
           if git diff --cached --quiet; then
             echo "changes=false" >> $GITHUB_OUTPUT
             echo "No changes to commit (artifacts identical to previous run)"
@@ -233,7 +342,7 @@ jobs:
           echo "## Telemetry Smoke Matrix - Summary" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "**Status:** ✅ All toggle combinations validated" >> $GITHUB_STEP_SUMMARY
-          echo "**Artifacts:** 15 files (5 CLI logs + 5 JSON summaries + 5 Prometheus validation reports)" >> $GITHUB_STEP_SUMMARY
+          echo "**Artifacts:** Telemetry smoke evidence plus regression harness outputs" >> $GITHUB_STEP_SUMMARY
           echo "**Changes committed:** ${{ steps.git_status.outputs.changes }}" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "### Toggle Matrix Coverage" >> $GITHUB_STEP_SUMMARY
@@ -246,6 +355,10 @@ jobs:
           echo "### Prometheus Validation" >> $GITHUB_STEP_SUMMARY
           echo "- ✅ Authentication enforcement verified (401 without credentials)" >> $GITHUB_STEP_SUMMARY
           echo "- ✅ Valid credentials accepted (200 with basic auth)" >> $GITHUB_STEP_SUMMARY
-          echo "- ✅ TLS connection validation completed" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ TLS/HTTPS connection validation completed (self-signed certificates)" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "**Note:** Validations run against mock Prometheus server in CI. For staging/production validation, see \`docs/qa/assessments/1.4-security-controls-20251025.md\`" >> $GITHUB_STEP_SUMMARY
+          echo "### Regression Harness" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ pytest -m regression_harness executed (default corpus)" >> $GITHUB_STEP_SUMMARY
+          echo "- 📦 Artifacts stored under docs/qa/assessments/4.3-regression-harness/" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Note:** HTTPS validations run against mock Prometheus server with self-signed certificates in CI. For staging/production with proper TLS infrastructure, see \`docs/qa/assessments/1.4-security-controls-20251025.md\`" >> $GITHUB_STEP_SUMMARY

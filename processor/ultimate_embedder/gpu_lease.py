@@ -49,6 +49,23 @@ class GPULease:
 
         self.device_ids = device_ids
         self.leased_device_ids = list(device_ids)  # Preserve for summary
+
+        if self.embedder.device != "cuda":
+            # CPU execution path skips GPU telemetry while maintaining logs
+            self.logger.debug(
+                "CPU execution detected; skipping GPU lease for %s",
+                self.model_name,
+            )
+            self.vram_before = {}
+            self.active = True
+            self.embedder.telemetry.record_gpu_lease_event(
+                event_type="acquire",
+                model=self.model_name,
+                device_ids=[],
+                vram_snapshots={},
+            )
+            return
+
         self.logger.debug(
             "Acquiring GPU lease for %s on devices %s",
             self.model_name,
@@ -62,10 +79,9 @@ class GPULease:
         )
 
         # Evict cache and trigger garbage collection
-        if self.embedder.device == "cuda":
-            torch.cuda.empty_cache()
-            gc.collect()
-            torch.cuda.empty_cache()
+        torch.cuda.empty_cache()
+        gc.collect()
+        torch.cuda.empty_cache()
 
         self.active = True
 
@@ -87,6 +103,18 @@ class GPULease:
 
         self.logger.debug("Releasing GPU lease for %s", self.model_name)
 
+        if self.embedder.device != "cuda":
+            self.vram_after = {}
+            self.active = False
+            self.embedder.telemetry.record_gpu_lease_event(
+                event_type="release",
+                model=self.model_name,
+                device_ids=[],
+                vram_snapshots={},
+            )
+            self.device_ids = []
+            return
+
         # Capture VRAM state after release
         self.vram_after = collect_gpu_snapshots(
             self.embedder.device,
@@ -94,11 +122,10 @@ class GPULease:
         )
 
         # Aggressive cache eviction
-        if self.embedder.device == "cuda":
-            torch.cuda.empty_cache()
-            gc.collect()
-            torch.cuda.synchronize()
-            torch.cuda.empty_cache()
+        torch.cuda.empty_cache()
+        gc.collect()
+        torch.cuda.synchronize()
+        torch.cuda.empty_cache()
 
         self.active = False
 

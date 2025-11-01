@@ -1,0 +1,48 @@
+schema: 1
+story: "4.2"
+story_title: "Export Schema Versioning and Validation"
+gate: PASS
+status_reason: "52-test regression sweep covers manifest v4.1 compatibility, CLI warning pathways, and legacy parsers; additive change stays backward compatible."
+reviewer: "Quinn (Test Architect)"
+updated: "2025-10-30T00:00:00Z"
+
+top_issues: []
+
+waiver: { active: false }
+
+risk_summary:
+  totals: { critical: 0, high: 0, medium: 0, low: 1 }
+  recommendations:
+    must_fix: []
+    monitor:
+      - "Run live export against production-like data to observe CLI warnings and telemetry in situ."
+
+quality_score: 100
+expires: "2025-11-13T00:00:00Z"
+
+evidence:
+  tests_reviewed: 52
+  risks_identified: 1
+  trace:
+    ac_covered: [1, 2, 3]
+    ac_gaps: []
+
+nfr_validation:
+  security:
+    status: PASS
+    notes: "Additive manifest payloads reuse sanitized telemetry structures."
+  performance:
+    status: PASS
+    notes: "Regression suite confirms serialization remains lightweight with sparse/rerank payloads."
+  reliability:
+    status: PASS
+    notes: "Warning pathways validated by tests ensure missing stage data surfaces without failing runs."
+  maintainability:
+    status: PASS
+    notes: "Documentation and toggle provenance logging keep schema changes discoverable."
+
+recommendations:
+  immediate: []
+  future:
+    - action: "Execute an end-to-end export smoke run with rerank and sparse toggles enabled to validate runtime warnings."
+      refs: ["scripts/embed_collections_v6.py", "processor/ultimate_embedder/summary.py"]

@@ -2,9 +2,9 @@ schema: 1
 story: '1.2'
 story_title: 'CLI and Runtime Toggle Integration'
 gate: PASS
-status_reason: 'Story 1.4 consolidation complete with verifiable artifacts: automated GPU peak alerting, expanded sparse fallback coverage, CLI doc updates, and telemetry smoke matrix evidence archived at docs/qa/assessments/1.4-telemetry-smoke-evidence/.'
+status_reason: 'Sparse disable provenance now records cli:disable-sparse-trim and the telemetry runbook reflects the splade default; targeted regression suite passed.'
 reviewer: 'Quinn (Test Architect)'
-updated: '2025-10-25T21:52:00Z'
+updated: '2025-10-31T23:59:30Z'
 waiver: { active: false }
 top_issues: []
 risk_summary:
@@ -12,16 +12,22 @@ risk_summary:
   recommendations:
     must_fix: []
     monitor:
-      - 'Track GPU alert firing frequency in production to refine thresholds.'
-      - 'Monitor rerank/sparse metrics dashboards for baseline drift.'
+      - 'Track telemetry dashboard wiring follow-up for rerank/sparse metrics (Story 1.4 backlog).'
 quality_score: 98
-expires: '2025-11-14T16:05:00Z'
+expires: '2025-11-14T23:59:30Z'
 evidence:
-  tests_reviewed: 15
+  tests_reviewed: 45
   risks_identified: 0
   trace:
     ac_covered: [1, 2, 3]
     ac_gaps: []
+  test_runs:
+    - python -m pytest tests/test_embed_collections_cli.py tests/test_processing_summary.py tests/test_runtime_config.py
+  assessments:
+    - docs/qa/assessments/1.2-risk-20251031b.md
+    - docs/qa/assessments/1.2-risk-20251031c.md
+    - docs/qa/assessments/1.2-nfr-20251031b.md
+    - docs/qa/assessments/1.2-nfr-20251031c.md
   story_1_4_consolidation:
     - docs/qa/assessments/1.4-baselines-20251025.md
     - docs/qa/assessments/1.4-telemetry-smoke-20251025.md
@@ -32,18 +38,27 @@ evidence:
 nfr_validation:
   security:
     status: PASS
-    notes: 'No new sensitive output; toggle provenance retains truncated fields.'
+    notes: 'No new sensitive output; rerank query truncation unchanged.'
   performance:
     status: PASS
-    notes: 'GPU alerting automated with Prometheus rules (WARN 11.5 GB, CRIT 12 GB). See docs/qa/assessments/1.4-baselines-20251025.md.'
+    notes: 'GPU alerting and latency telemetry remained stable during regression run.'
   reliability:
     status: PASS
-    notes: 'Toggle resolution chain and disabled parity validated by regression tests. Sparse fallback coverage comprehensive.'
+    notes: 'Toggle precedence and manifest guards hold under regression suite.'
   maintainability:
     status: PASS
-    notes: 'Changes isolated to CLI/summary modules with direct unit coverage and provenance logging.'
+    notes: 'CLI provenance guard ensures sparse disablement captured for audits.'
+  usability:
+    status: PASS
+    notes: 'Runbook sparse default matches FeatureToggleConfig and has guard tests.'
+  observability:
+    status: PASS
+    notes: 'Processing summary provenance is accurate for sparse disablement after fix.'
 recommendations:
-  immediate: []
+  immediate:
+    - action: 'Maintain telemetry dashboard wiring follow-up (no longer blocking Story 1.2).'
+      refs:
+        - docs/telemetry/rerank_sparse_signals.md
   future:
     - action: 'Integrate rerank/sparse metrics emission with dashboards and add CI guardrails for skipped metrics.'
       refs: ['docs/architecture/observability.md']

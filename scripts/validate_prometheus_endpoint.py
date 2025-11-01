@@ -133,7 +133,7 @@ def start_mock_server(port: int = 9090, use_tls: bool = False) -> threading.Thre
         server = HTTPServer(("localhost", port), MockPrometheusHandler)
         
         if use_tls:
-            # Create minimal SSL context with self-signed cert
+            # Create self-signed certificate for HTTPS testing
             import tempfile
             from pathlib import Path
             
@@ -142,42 +142,105 @@ def start_mock_server(port: int = 9090, use_tls: bool = False) -> threading.Thre
             cert_file = Path(tmpdir) / "cert.pem"
             key_file = Path(tmpdir) / "key.pem"
             
-            # Generate self-signed certificate using Python's ssl module
-            # This creates a minimal cert that works for localhost testing
-            try:
-                import subprocess
-                subprocess.run([
-                    "openssl", "req", "-new", "-x509", "-days", "1",
-                    "-nodes", "-out", str(cert_file), "-keyout", str(key_file),
-                    "-subj", "/CN=localhost"
-                ], check=True, capture_output=True, timeout=5)
-                
-                context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
-                context.load_cert_chain(str(cert_file), str(key_file))
-                server.socket = context.wrap_socket(server.socket, server_side=True)
-                logger.info(f"Mock Prometheus HTTPS server started on port {port} with self-signed cert")
-            except (subprocess.CalledProcessError, FileNotFoundError, subprocess.TimeoutExpired):
-                # If openssl fails, create a basic TLS wrapper
-                # This won't have a proper certificate but will use TLS protocol
-                logger.warning("OpenSSL not available or failed, using basic TLS wrapper")
-                context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
-                context.check_hostname = False
-                context.verify_mode = ssl.CERT_NONE
-                
-                # Try to load default certs or create adhoc
-                try:
-                    import ssl as ssl_module
-                    if hasattr(ssl_module, 'PROTOCOL_TLS_SERVER'):
-                        server.socket = context.wrap_socket(server.socket, server_side=True)
-                        logger.info(f"Mock Prometheus HTTPS server started on port {port} (basic TLS)")
-                except Exception as e:
-                    logger.error(f"Failed to enable TLS: {e}")
-                    logger.info(f"Falling back to HTTP server on port {port}")
+            cert_created = False
             
-            server.serve_forever()
+            # Try method 1: Use cryptography library if available (best option)
+            try:
+                from cryptography import x509
+                from cryptography.x509.oid import NameOID
+                from cryptography.hazmat.primitives import hashes, serialization
+                from cryptography.hazmat.primitives.asymmetric import rsa
+                from datetime import UTC, datetime, timedelta
+                
+                # Generate private key
+                private_key = rsa.generate_private_key(
+                    public_exponent=65537,
+                    key_size=2048,
+                )
+                
+                # Create certificate
+                subject = issuer = x509.Name([
+                    x509.NameAttribute(NameOID.COUNTRY_NAME, "US"),
+                    x509.NameAttribute(NameOID.STATE_OR_PROVINCE_NAME, "Test"),
+                    x509.NameAttribute(NameOID.LOCALITY_NAME, "Test"),
+                    x509.NameAttribute(NameOID.ORGANIZATION_NAME, "Test"),
+                    x509.NameAttribute(NameOID.COMMON_NAME, "localhost"),
+                ])
+                
+                now = datetime.now(UTC)
+
+                cert = x509.CertificateBuilder().subject_name(
+                    subject
+                ).issuer_name(
+                    issuer
+                ).public_key(
+                    private_key.public_key()
+                ).serial_number(
+                    x509.random_serial_number()
+                ).not_valid_before(
+                    now
+                ).not_valid_after(
+                    now + timedelta(days=1)
+                ).add_extension(
+                    x509.SubjectAlternativeName([
+                        x509.DNSName("localhost"),
+                    ]),
+                    critical=False,
+                ).sign(private_key, hashes.SHA256())
+                
+                # Write private key
+                with open(key_file, "wb") as f:
+                    f.write(private_key.private_bytes(
+                        encoding=serialization.Encoding.PEM,
+                        format=serialization.PrivateFormat.TraditionalOpenSSL,
+                        encryption_algorithm=serialization.NoEncryption(),
+                    ))
+                
+                # Write certificate
+                with open(cert_file, "wb") as f:
+                    f.write(cert.public_bytes(serialization.Encoding.PEM))
+                
+                cert_created = True
+                logger.info("Generated self-signed certificate using cryptography library")
+                
+            except ImportError:
+                logger.debug("cryptography library not available, trying openssl command")
+            except Exception as e:
+                logger.warning(f"Failed to generate cert with cryptography: {e}")
+            
+            # Try method 2: Use openssl command if available
+            if not cert_created:
+                try:
+                    import subprocess
+                    subprocess.run([
+                        "openssl", "req", "-new", "-x509", "-days", "1",
+                        "-nodes", "-out", str(cert_file), "-keyout", str(key_file),
+                        "-subj", "/CN=localhost"
+                    ], check=True, capture_output=True, timeout=10)
+                    cert_created = True
+                    logger.info("Generated self-signed certificate using openssl command")
+                except (subprocess.CalledProcessError, FileNotFoundError, subprocess.TimeoutExpired) as e:
+                    logger.warning(f"OpenSSL command not available or failed: {e}")
+            
+            # If we successfully created certificates, use them
+            if cert_created:
+                try:
+                    context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
+                    context.load_cert_chain(str(cert_file), str(key_file))
+                    server.socket = context.wrap_socket(server.socket, server_side=True)
+                    logger.info(f"Mock Prometheus HTTPS server started on port {port} with self-signed cert")
+                except Exception as e:
+                    logger.error(f"Failed to wrap socket with TLS: {e}")
+                    logger.info(f"Falling back to HTTP server on port {port}")
+            else:
+                # Fallback: warn and use HTTP
+                logger.error("Could not generate self-signed certificate (cryptography library and openssl both unavailable)")
+                logger.warning("Install cryptography library: pip install cryptography")
+                logger.info(f"Falling back to HTTP server on port {port}")
         else:
             logger.info(f"Mock Prometheus HTTP server started on port {port}")
-            server.serve_forever()
+        
+        server.serve_forever()
     
     thread = threading.Thread(target=run_server, daemon=True)
     thread.start()
@@ -217,8 +280,16 @@ class PrometheusValidator:
         logger.info("Testing authentication requirement...")
         
         try:
+            # Create SSL context that respects verify_tls setting
+            context = None
+            if self.endpoint.startswith("https://"):
+                context = ssl.create_default_context()
+                if not self.verify_tls:
+                    context.check_hostname = False
+                    context.verify_mode = ssl.CERT_NONE
+            
             req = Request(self.endpoint)
-            response = urlopen(req, timeout=self.timeout)
+            response = urlopen(req, timeout=self.timeout, context=context)
             
             # If we get here, auth is NOT required (bad)
             return ValidationResult(
@@ -278,6 +349,14 @@ class PrometheusValidator:
         logger.info("Testing authentication with valid credentials...")
         
         try:
+            # Create SSL context that respects verify_tls setting
+            context = None
+            if self.endpoint.startswith("https://"):
+                context = ssl.create_default_context()
+                if not self.verify_tls:
+                    context.check_hostname = False
+                    context.verify_mode = ssl.CERT_NONE
+            
             # Create request with basic auth
             import base64
             credentials = base64.b64encode(
@@ -287,7 +366,7 @@ class PrometheusValidator:
             req = Request(self.endpoint)
             req.add_header("Authorization", f"Basic {credentials}")
             
-            response = urlopen(req, timeout=self.timeout)
+            response = urlopen(req, timeout=self.timeout, context=context)
             
             if response.status == 200:
                 content = response.read().decode('utf-8', errors='ignore')
@@ -401,7 +480,7 @@ class PrometheusValidator:
         Returns:
             Complete validation report
         """
-        from datetime import datetime
+        from datetime import UTC, datetime
         
         logger.info(f"Starting validation for endpoint: {self.endpoint}")
         
@@ -429,9 +508,11 @@ class PrometheusValidator:
             "overall_status": "PASS" if failed == 0 else ("FAIL" if errors > 0 else "WARN")
         }
         
+        timestamp = datetime.now(UTC).isoformat().replace("+00:00", "Z")
+
         report = PrometheusValidationReport(
             endpoint=self.endpoint,
-            timestamp=datetime.utcnow().isoformat() + "Z",
+            timestamp=timestamp,
             results=self.results,
             summary=summary
         )

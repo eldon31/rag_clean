@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Any, Dict, Optional
+from typing import Optional
 
 
 @dataclass(frozen=True)
@@ -11,17 +11,13 @@ class BatchProgressContext:
     batch_index: int
     total_batches: int
     label: Optional[str] = None
-
-    def to_dict(self) -> Dict[str, Any]:
-        payload: Dict[str, Any] = {
-            "batch_index": max(0, self.batch_index),
-            "total_batches": max(1, self.total_batches),
-        }
-        if self.label:
-            payload["label"] = self.label
-        return payload
+    model_name: Optional[str] = None
 
     def tqdm_description(self) -> Optional[str]:
         if not self.label:
             return None
         return f"Batches({self.label})"
+    
+    def tqdm_postfix(self) -> Optional[str]:
+        """Return the model name for tqdm postfix display."""
+        return self.model_name

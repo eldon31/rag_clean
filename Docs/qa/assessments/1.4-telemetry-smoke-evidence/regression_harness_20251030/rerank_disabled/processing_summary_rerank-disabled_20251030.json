@@ -1,0 +1,99 @@
+{
+  "schema_version": "v4.1",
+  "generated_at": "2025-10-30T12:00:00Z",
+  "collection": "docling-mini",
+  "chunk_count": 6,
+  "feature_toggles": {
+    "enable_rerank": false,
+    "enable_sparse": true,
+    "sparse_models": [
+      "splade"
+    ],
+    "provenance": {
+      "enable_rerank": "cli",
+      "enable_sparse": "default",
+      "sparse_models": "default"
+    },
+    "provenance_lines": [
+      "default: enable_rerank=True",
+      "default: enable_sparse=True",
+      "default: sparse_models=['splade']",
+      "cli: enable_rerank=False"
+    ]
+  },
+  "dense_run": {
+    "total_embeddings_generated": 6,
+    "models_executed": [
+      "jina-code-embeddings-1.5b"
+    ],
+    "device": "cpu",
+    "batch_size": 2
+  },
+  "sparse_run": {
+    "enabled": true,
+    "model_names": [
+      "naver/splade-cocondenser-ensembledistil"
+    ],
+    "vectors": {
+      "total": 6,
+      "available": 6,
+      "coverage_ratio": 1.0
+    },
+    "devices": {
+      "naver/splade-cocondenser-ensembledistil": "cpu"
+    },
+    "fallback_used": false
+  },
+  "compatibility": {
+    "current": "v4.1",
+    "legacy": [
+      "v4.0"
+    ],
+    "warnings": []
+  },
+  "telemetry": {
+    "lease_events_recorded": 2,
+    "batch_progress_events_recorded": 3,
+    "spans": {
+      "rag.rerank": {
+        "span_id": "rag.rerank-regression",
+        "status": "skipped",
+        "reason": "Disabled via CLI flag"
+      },
+      "rag.sparse": {
+        "span_id": "span-sparse-default",
+        "status": "active",
+        "attributes": {
+          "coverage_ratio": 1.0
+        }
+      }
+    },
+    "metrics": {
+      "rerank": {
+        "status": "skipped",
+        "reason": "Disabled via CLI flag"
+      },
+      "sparse": {
+        "status": "emitted",
+        "metrics": [
+          "rag_sparse_vectors_total"
+        ]
+      }
+    }
+  },
+  "performance_baseline": {
+    "latency_seconds": 2.4,
+    "gpu": {
+      "status": "within_limit",
+      "soft_limit_gb": 12.0,
+      "soft_limit_exceeded": false,
+      "samples": 0,
+      "peak_memory_used_gb": 3.2,
+      "peak_device": "cpu"
+    },
+    "system": {
+      "peak_cpu_percent": 35.0,
+      "peak_memory_gb": 2.1
+    }
+  }
+}

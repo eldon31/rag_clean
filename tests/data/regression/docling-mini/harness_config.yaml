@@ -1,0 +1,37 @@
+chunked_dir: tests/data/regression/docling-mini/chunked
+collections:
+  - docling-mini
+output_dir: docs/qa/assessments/4.3-regression-harness/runs
+scenarios:
+  default_on:
+    description: Default run with rerank and sparse enabled.
+    args:
+      - --chunked-dir
+      - tests/data/regression/docling-mini/chunked
+      - --collections
+      - docling-mini
+  rerank_disabled:
+    description: Override rerank for dense-only parity.
+    args:
+      - --chunked-dir
+      - tests/data/regression/docling-mini/chunked
+      - --collections
+      - docling-mini
+      - --disable-rerank
+  sparse_disabled:
+    description: Disable sparse stage for legacy compatibility check.
+    args:
+      - --chunked-dir
+      - tests/data/regression/docling-mini/chunked
+      - --collections
+      - docling-mini
+      - --disable-sparse
+  fallback_force:
+    description: Inject failure path for rerank and sparse fallback probes.
+    args:
+      - --chunked-dir
+      - tests/data/regression/docling-mini/chunked
+      - --collections
+      - docling-mini
+      - --disable-rerank
+      - --disable-sparse

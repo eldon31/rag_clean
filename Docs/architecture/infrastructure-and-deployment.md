@@ -3,6 +3,11 @@
 ### Runtime Outputs and Storage Order
 
 - Embedding runs must finish by persisting artifacts in this sequence: (1) dense embeddings and metadata bundles, (2) sparse vectors merged into JSONL/FAISS outputs, and (3) rerank manifests that log candidate ordering, latency, and GPU usage. The export runtime writes `processing_summary.json` (v4.1) and per-collection JSONL/FAISS files once all stages complete so downstream tools always see dense, sparse, and rerank payloads together.
+- Each manifest exposes a `compatibility` block (`{"current": "v4.1", "legacy":
+["v4.0"]}`) and nests stage-specific payloads under `rerank_run.payload` and
+  `sparse_run.payload`. Operators can rely on the `warnings` array to spot
+  missing payloads without blocking exports and trace individual runs via the
+  propagated `run_id` fields.
 - Hash comparisons against the previous dense-only baseline should continue to run after each job to confirm additive compatibility.
 
 ### Execution Environment
@@ -19,10 +24,11 @@
   - `!pip install poetry`
   - `!poetry env use 3.11`
   - `!poetry install`
-  - `!poetry run pip install -r scripts/requirements_kaggle.txt` *(optional helper if you maintain a Kaggle-specific dependency list)*
+  - `!poetry run pip install -r scripts/requirements_kaggle.txt` _(optional helper if you maintain a Kaggle-specific dependency list)_
   - `!poetry run python scripts/embed_collections_v6.py --help`
 - Model weights are pulled on-demand via Hugging Face within the Kaggle runtime; if you want to reuse downloads across sessions, persist `/kaggle/working/hf_cache` as a Kaggle Dataset and attach it to new notebooks.
 - Primary scripts:
+
   - `poetry run python scripts/chunk_docs_v5.py` for CPU-based chunking/preprocessing.
   - `poetry run python scripts/embed_collections_v6.py --collections <name>` to execute dense+sparse+rerank pipelines on GPU.
   - Use `--disable-rerank`/`--disable-sparse` flags for rollback verification.
@@ -46,12 +52,12 @@
 
   ### Cross-Epic Dependency Matrix
 
-  | Sequence | Dependent Epic | Prerequisites | Rationale |
-  | --- | --- | --- | --- |
-  | 1 | Epic 1 – Default Rerank & Sparse Activation | None | Establish toggles, configs, telemetry slots. |
-  | 2 | Epic 2 – Sparse Generator & Fusion | Epic 1 | Needs enable/disable controls and baseline telemetry. |
-  | 3 | Epic 3 – CrossEncoder Rerank | Epics 1 & 2 | Requires fused dense+sparse outputs and telemetry streams. |
-  | 4 | Epic 4 – Export Schema & Regression | Epics 1–3 | Depends on actual sparse/rerank data to version exports and tests. |
+  | Sequence | Dependent Epic                              | Prerequisites | Rationale                                                          |
+  | -------- | ------------------------------------------- | ------------- | ------------------------------------------------------------------ |
+  | 1        | Epic 1 – Default Rerank & Sparse Activation | None          | Establish toggles, configs, telemetry slots.                       |
+  | 2        | Epic 2 – Sparse Generator & Fusion          | Epic 1        | Needs enable/disable controls and baseline telemetry.              |
+  | 3        | Epic 3 – CrossEncoder Rerank                | Epics 1 & 2   | Requires fused dense+sparse outputs and telemetry streams.         |
+  | 4        | Epic 4 – Export Schema & Regression         | Epics 1–3     | Depends on actual sparse/rerank data to version exports and tests. |
 
   Incremental value is delivered at each step: Epic 1 unlocks observability, Epic 2 adds live sparse retrieval, Epic 3 improves ranking quality, and Epic 4 hardens exports/tests. Dense-only regression checks run after every epic to preserve system integrity.
 
@@ -59,15 +65,15 @@
 
   ### Goal Traceability
 
-  | PRD Goal / Requirement | Architecture Coverage |
-  | --- | --- |
+  | PRD Goal / Requirement                                                     | Architecture Coverage                                                                                                    |
+  | -------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
   | Default-on rerank and sparse without regressing dense path (FR1, FR4, FR8) | Functional dependency roadmap and Operational Safeguards describe toggles, dense-only parity checks, and staged rollout. |
-  | Live sparse inference with fallbacks (FR2) | SparseVectorGenerator component, Delivery Dependencies (Epic 2), and manifest v4.1 schema integration. |
-  | CrossEncoder rerank stage after fusion (FR3) | CrossEncoderBatchExecutor design, BatchRunner sequencing, and telemetry instrumentation. |
-  | Export/telemetry updates with additive schema (FR5, FR6, NFR1, NFR3) | Runtime Outputs, Schema Integration Strategy, Observability section. |
-  | 12 GB GPU ceiling with adaptive batching (FR7, NFR2, NFR4) | Technical notes on model hydration, adaptive batching, and GPU monitoring in Observability. |
-  | Telemetry coverage for dense, sparse, rerank stages (FR6) | Operational Safeguards, Observability metrics, and Delivery Dependencies (Epic 3). |
-  | Documentation/test hardening (Epic 4, NFR5) | Delivery Dependencies (Epic 4), Testing and Validation section. |
+  | Live sparse inference with fallbacks (FR2)                                 | SparseVectorGenerator component, Delivery Dependencies (Epic 2), and manifest v4.1 schema integration.                   |
+  | CrossEncoder rerank stage after fusion (FR3)                               | CrossEncoderBatchExecutor design, BatchRunner sequencing, and telemetry instrumentation.                                 |
+  | Export/telemetry updates with additive schema (FR5, FR6, NFR1, NFR3)       | Runtime Outputs, Schema Integration Strategy, Observability section.                                                     |
+  | 12 GB GPU ceiling with adaptive batching (FR7, NFR2, NFR4)                 | Technical notes on model hydration, adaptive batching, and GPU monitoring in Observability.                              |
+  | Telemetry coverage for dense, sparse, rerank stages (FR6)                  | Operational Safeguards, Observability metrics, and Delivery Dependencies (Epic 3).                                       |
+  | Documentation/test hardening (Epic 4, NFR5)                                | Delivery Dependencies (Epic 4), Testing and Validation section.                                                          |
 
   ### Operator Journey Overview
 
@@ -121,4 +127,3 @@ If a persistent staging environment is provisioned beyond Kaggle in the future, 
 - **Monitoring:**
   - Extend existing telemetry exporter (OpenTelemetry or custom) with rerank/sparse spans and metrics.
   - Alert when rerank latency exceeds thresholds or GPU peak approaches 12 GB cap consistently.
-

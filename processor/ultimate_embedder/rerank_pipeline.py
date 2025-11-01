@@ -19,6 +19,7 @@ class RerankPipeline:
         self.config = config
         self.logger = logger
         self.model: Optional[CrossEncoder] = None
+        self.device: str = "cpu"
 
     def ensure_model(self, *, device: str) -> None:
         """Load the reranking model if enabled and not already available."""
@@ -41,6 +42,7 @@ class RerankPipeline:
 
         try:
             self.model = CrossEncoder(hub_id, device=device)
+            self.device = device
             self.logger.info("CrossEncoder reranking model ready")
         except Exception as exc:  # pragma: no cover - defensive path
             self.logger.error("Failed to load reranking model: %s", exc)

@@ -1,0 +1,73 @@
+# <!-- Powered by BMAD™ Core -->
+# Quality Gate Decision for Story 3.1
+
+schema: 1
+story: "3.1"
+story_title: "Build CrossEncoder Executor"
+gate: PASS
+status_reason: "Reranking-disabled fallback now clamps results to top_k with regression coverage verifying the contract."
+reviewer: "Quinn (Test Architect)"
+updated: "2025-10-29T23:58:00Z"
+
+quality_score: 95
+expires: "2025-11-12T00:00:00Z"
+
+risk_summary:
+  totals:
+    critical: 0
+    high: 0
+    medium: 0
+    low: 0
+  highest:
+    id: NONE
+    score: 0
+    title: "No open risks"
+  recommendations:
+    monitor:
+      - "Continue tracking GPU telemetry to tune batch-size heuristics as production data accrues"
+    mitigate: []
+
+top_issues: []
+
+evidence:
+  tests_reviewed: 1
+  risks_identified: 0
+  trace:
+    ac_covered: [1, 2, 3]
+    ac_gaps: []
+  test_commands:
+    - "python -m pytest tests/test_cross_encoder_executor.py -k reranking_disabled_clamps_to_top_k -v --tb=short"
+  manual_checks:
+    - |
+      python -c "...execute_rerank(... enable_reranking=False ... top_k=2 ...)"
+      Output: reranking-disabled fallback returned 2 candidates (top_k contract honored)
+
+nfr_validation:
+  _assessed: [security, performance, reliability, maintainability]
+  security:
+    status: PASS
+    notes: "Query truncation enforced; leasing telemetry recorded for audit trail."
+  performance:
+    status: PASS
+    notes: "Dynamic batching active; telemetry available for future calibration."
+  reliability:
+    status: PASS
+    notes: "Fallback path clamps to top_k and regression test guards the contract."
+  maintainability:
+    status: PASS
+    notes: "Extensive unit/integration coverage captures regression scenarios."
+
+recommendations:
+  immediate: []
+  future:
+    - action: "Invoke torch.cuda.reset_peak_memory_stats before capturing peak usage to tighten telemetry accuracy"
+      refs: ["processor/ultimate_embedder/cross_encoder_executor.py"]
+
+waiver:
+  active: false
+
+# References
+risk_profile: docs/qa/assessments/3.1-risk-20251029.md
+nfr_assessment: docs/qa/assessments/3.1-nfr-20251029.md
+test_design: docs/qa/assessments/3.1-test-design-20251029.md
+trace_matrix: docs/qa/assessments/3.1-trace-20251029.md

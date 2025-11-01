@@ -6,8 +6,9 @@ import json
 import logging
 import os
 import textwrap
+import time
 from datetime import datetime
-from typing import TYPE_CHECKING, Any, Dict
+from typing import TYPE_CHECKING, Any, Dict, Optional
 
 import numpy as np
 
@@ -19,6 +20,11 @@ except ImportError:  # pragma: no cover - optional dependency
 if TYPE_CHECKING:  # pragma: no cover
     from processor.ultimate_embedder.core import UltimateKaggleEmbedderV4
 
+from processor.ultimate_embedder.summary import (
+    SCHEMA_VERSION,
+    build_performance_baseline,
+)
+
 
 class ExportRuntime:
     """Coordinate exporting embeddings and metadata for local Qdrant usage."""
@@ -29,6 +35,7 @@ class ExportRuntime:
 
     def export_for_local_qdrant(self) -> Dict[str, str]:
         """Export embeddings in formats optimized for downstream upload."""
+        export_start_time = time.time()
 
         embedder = self.embedder
         if embedder.embeddings is None:
@@ -119,6 +126,42 @@ class ExportRuntime:
             file_size_mb = os.path.getsize(file_path) / 1024 / 1024
             self.logger.info("  %s: %s (%.1fMB)", file_type, os.path.basename(file_path), file_size_mb)
 
+        # Emit rag.export span with latency and file metrics
+        export_latency_ms = (time.time() - export_start_time) * 1000
+        file_count = len([f for f in exported_files.values() if isinstance(f, str) and os.path.exists(f)])
+        total_size_mb = sum(
+            os.path.getsize(f) / 1024 / 1024
+            for f in exported_files.values()
+            if isinstance(f, str) and os.path.exists(f)
+        )
+
+        embedder.telemetry.record_span_presence(
+            "rag.export",
+            active=True,
+            reason="Export completed successfully",
+            attributes={
+                "latency_ms": export_latency_ms,
+                "file_count": file_count,
+                "total_size_mb": total_size_mb,
+                "export_numpy": embedder.export_config.export_numpy,
+                "export_jsonl": embedder.export_config.export_jsonl,
+                "export_faiss": embedder.export_config.export_faiss,
+                "export_sparse_jsonl": embedder.export_config.export_sparse_jsonl,
+            },
+        )
+
+        embedder._emit_metrics_for_stage(
+            "export",
+            active=True,
+            reason="Export completed successfully",
+            details={
+                "latency_seconds": export_latency_ms / 1000.0,
+                "file_count": file_count,
+                "total_size_mb": total_size_mb,
+                "device": embedder.device,
+            },
+        )
+
         return exported_files
 
     def _export_qdrant_jsonl(
@@ -142,7 +185,7 @@ class ExportRuntime:
                     "name": embedder.model_name,
                     "hf_model_id": embedder.model_config.hf_model_id,
                     "dimension": embedder.model_config.vector_dim,
-                    "version": "v4",
+                    "version": SCHEMA_VERSION,
                 }
 
                 companion_payload: Dict[str, Any] = {}
@@ -279,12 +322,66 @@ class ExportRuntime:
             },
             "embedding_stats": {
                 "total_embeddings": len(embeddings) if embeddings is not None else 0,
-                "embedding_dimension": embeddings.shape[1] if embeddings is not None else 0,
-                "memory_usage_mb": embeddings.nbytes / 1024 / 1024 if embeddings is not None else 0,
+                "embedding_dimension": (
+                    embeddings.shape[1] if embeddings is not None else 0
+                ),
+                "memory_usage_mb": (
+                    embeddings.nbytes / 1024 / 1024 if embeddings is not None else 0
+                ),
             },
             "processing_performance": dict(embedder.processing_stats),
             "export_timestamp": datetime.now().isoformat(),
         }
+
+        summary_snapshot = getattr(embedder, "last_processing_summary", None)
+        if isinstance(summary_snapshot, dict):
+            feature_snapshot = summary_snapshot.get("feature_toggles") or {}
+            activation_events = (
+                summary_snapshot.get("activation_provenance")
+                or feature_snapshot.get("provenance")
+                or []
+            )
+            activation_lines = (
+                summary_snapshot.get("activation_provenance_lines")
+                or feature_snapshot.get("provenance_lines")
+                or []
+            )
+            sources_section = feature_snapshot.get("sources")
+
+            resolved_state = {
+                "enable_rerank": embedder.feature_toggles.enable_rerank,
+                "enable_sparse": embedder.feature_toggles.enable_sparse,
+                "sparse_models": list(embedder.feature_toggles.sparse_models),
+            }
+
+            provenance_section: Dict[str, Any] = {
+                "resolved": resolved_state,
+            }
+            if sources_section:
+                provenance_section["sources"] = dict(sources_section)
+            if activation_lines:
+                provenance_section["activation_lines"] = list(activation_lines)
+            if activation_events:
+                sanitized_events = [
+                    {
+                        "key": event.get("key"),
+                        "value": event.get("value"),
+                        "source": event.get("source"),
+                        "layer": event.get("layer"),
+                    }
+                    for event in activation_events
+                    if isinstance(event, dict)
+                ]
+                provenance_section["activation_events"] = sanitized_events
+
+            if provenance_section:
+                stats["feature_toggle_provenance"] = provenance_section
+
+        performance_baseline = build_performance_baseline(
+            dict(embedder.processing_stats)
+        )
+        if performance_baseline:
+            stats["performance_baseline"] = performance_baseline
 
         progress_events = getattr(embedder.telemetry, "batch_progress_events", None)
         if progress_events:
@@ -302,6 +399,94 @@ class ExportRuntime:
                 "sparse_vectors_available": available,
                 "coverage_ratio": available / len(embedder.sparse_vectors) if embedder.sparse_vectors else 0.0,
             }
+
+        # Add sparse_run section when sparse inference was executed
+        if hasattr(embedder, 'sparse_inference_result') and embedder.sparse_inference_result:
+            sparse_result = embedder.sparse_inference_result
+            stats["sparse_run"] = {
+                "run_id": getattr(sparse_result, 'run_id', None) or str(id(sparse_result)),
+                "sparse_model": sparse_result.model_name,
+                "latency_ms": sparse_result.latency_ms,
+                "fallback_used": sparse_result.fallback_count > 0,
+                "fallback_count": sparse_result.fallback_count,
+                "coverage_ratio": (
+                    (len(sparse_result.vectors) - sparse_result.fallback_count) / len(sparse_result.vectors)
+                    if sparse_result.vectors else 0.0
+                ),
+                "device": sparse_result.device,
+                "total_chunks": len(sparse_result.vectors),
+                "success": sparse_result.success,
+            }
+            if sparse_result.error_message:
+                stats["sparse_run"]["error_message"] = sparse_result.error_message
+
+        def build_rerank_section() -> Optional[Dict[str, Any]]:
+            rerank_run = getattr(embedder, "rerank_run", None)
+            fused_candidates_raw = getattr(embedder, "fused_candidates", {})
+            rerank_failure_reason = getattr(embedder, "rerank_failure_reason", None)
+            rerank_enabled = bool(embedder.reranking_config.enable_reranking)
+
+            if not (rerank_enabled or rerank_run or fused_candidates_raw or rerank_failure_reason):
+                return None
+
+            fused_candidates = fused_candidates_raw if isinstance(fused_candidates_raw, dict) else {}
+            candidate_ids = list(fused_candidates.get("candidate_ids", []))
+            candidate_texts = list(fused_candidates.get("candidate_texts", []))
+            dense_scores = list(fused_candidates.get("dense_scores", []))
+            candidate_metadata = list(fused_candidates.get("metadata", []))
+
+            rerank_section: Dict[str, Any] = {
+                "enabled": rerank_enabled,
+                "top_k_candidates": embedder.reranking_config.top_k_candidates,
+                "rerank_top_k": embedder.reranking_config.rerank_top_k,
+                "requested_device": getattr(embedder, "_requested_rerank_device", None),
+                "resolved_device": getattr(embedder, "reranker_device", None),
+                "candidate_count": len(candidate_ids),
+            }
+
+            if rerank_failure_reason:
+                rerank_section["failure_reason"] = rerank_failure_reason
+
+            if candidate_ids:
+                initial_payload: Dict[str, Any] = {
+                    "query": fused_candidates.get("query"),
+                    "candidate_ids": candidate_ids,
+                    "dense_scores": dense_scores,
+                    "metadata": candidate_metadata,
+                }
+                if candidate_texts:
+                    initial_payload["candidate_texts"] = candidate_texts
+
+                reranked_ids = list(fused_candidates.get("reranked_candidate_ids", []))
+                if reranked_ids:
+                    initial_payload["reranked"] = {
+                        "candidate_ids": reranked_ids,
+                        "scores": list(fused_candidates.get("reranked_scores", [])),
+                        "metadata": list(fused_candidates.get("reranked_metadata", [])),
+                    }
+
+                rerank_section["initial"] = initial_payload
+
+            if rerank_run:
+                rerank_section["run"] = {
+                    "run_id": rerank_run.run_id,
+                    "latency_ms": rerank_run.latency_ms,
+                    "gpu_peak_gb": rerank_run.gpu_peak_gb,
+                    "batch_size": rerank_run.batch_size,
+                    "result_count": len(rerank_run.candidate_ids),
+                    "candidate_ids": list(rerank_run.candidate_ids),
+                    "scores": list(rerank_run.scores),
+                }
+
+            candidate_scores = getattr(embedder, "rerank_candidate_scores", None)
+            if candidate_scores:
+                rerank_section["scores_by_candidate"] = dict(candidate_scores)
+
+            return rerank_section
+
+        rerank_section = build_rerank_section()
+        if rerank_section:
+            stats["rerank"] = rerank_section
 
         if embedder.embeddings_by_model:
             stats["dense_vector_layout"] = {

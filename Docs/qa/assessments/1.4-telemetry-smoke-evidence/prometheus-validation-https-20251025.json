@@ -1,41 +1,46 @@
 {
   "endpoint": "https://localhost:19443/metrics",
-  "timestamp": "2025-10-25T03:37:18.385382Z",
+  "timestamp": "2025-10-25T04:03:07.367546Z",
   "results": [
     {
       "test_name": "authentication_required",
-      "passed": false,
-      "message": "Connection failed: [SSL: SSLV3_ALERT_HANDSHAKE_FAILURE] sslv3 alert handshake failure (_ssl.c:1010)",
+      "passed": true,
+      "message": "Endpoint correctly requires authentication (401 Unauthorized)",
       "details": {
-        "error": "[SSL: SSLV3_ALERT_HANDSHAKE_FAILURE] sslv3 alert handshake failure (_ssl.c:1010)"
+        "status_code": 401
       },
-      "severity": "error"
+      "severity": "info"
     },
     {
       "test_name": "authentication_success",
-      "passed": false,
-      "message": "Request failed: URLError",
+      "passed": true,
+      "message": "Valid credentials accepted (200 OK)",
       "details": {
-        "error": "<urlopen error [SSL: SSLV3_ALERT_HANDSHAKE_FAILURE] sslv3 alert handshake failure (_ssl.c:1010)>"
+        "status_code": 200,
+        "has_prometheus_metrics": true,
+        "content_length": 545
       },
-      "severity": "error"
+      "severity": "info"
     },
     {
       "test_name": "tls_enforcement",
-      "passed": false,
-      "message": "TLS validation failed: [SSL: SSLV3_ALERT_HANDSHAKE_FAILURE] sslv3 alert handshake failure (_ssl.c:1010)",
+      "passed": true,
+      "message": "TLS connection successful",
       "details": {
-        "error": "[SSL: SSLV3_ALERT_HANDSHAKE_FAILURE] sslv3 alert handshake failure (_ssl.c:1010)"
+        "scheme": "https",
+        "tls_version": "TLSv1.3",
+        "cipher_suite": "TLS_AES_256_GCM_SHA384",
+        "cert_subject": null
       },
-      "severity": "warning"
+      "severity": "info"
     }
   ],
   "summary": {
     "total_checks": 3,
-    "passed": 0,
-    "failed": 3,
-    "errors": 2,
-    "warnings": 1,
-    "overall_status": "FAIL"
+    "passed": 3,
+    "failed": 0,
+    "errors": 0,
+    "warnings": 0,
+    "overall_status": "PASS"
   }
 }

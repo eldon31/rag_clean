@@ -5,7 +5,7 @@ from __future__ import annotations
 import hashlib
 import os
 from dataclasses import dataclass, field
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Sequence
 
 
 @dataclass
@@ -89,14 +89,57 @@ KAGGLE_OPTIMIZED_MODELS: Dict[str, ModelConfig] = {
 }
 
 
+def resolve_kaggle_model_key(model_name: str) -> str:
+    """Resolve a user-provided model identifier to the canonical registry key."""
+
+    if model_name is None:
+        raise ValueError("Model name cannot be None")
+
+    normalized = model_name.strip()
+    if not normalized:
+        raise ValueError("Model name cannot be empty")
+
+    if normalized in KAGGLE_OPTIMIZED_MODELS:
+        return normalized
+
+    lookup = normalized.lower()
+    for key, config in KAGGLE_OPTIMIZED_MODELS.items():
+        if config.hf_model_id.lower() == lookup:
+            return key
+
+    valid = ", ".join(sorted(KAGGLE_OPTIMIZED_MODELS.keys()))
+    raise ValueError(f"Unknown dense model '{model_name}'. Valid options: {valid}")
+
+
+def normalize_kaggle_model_names(model_names: Sequence[str]) -> List[str]:
+    """Normalize a sequence of model identifiers to canonical registry keys."""
+
+    return [resolve_kaggle_model_key(name) for name in model_names]
+
+
+def get_kaggle_model_config(model_name: str) -> ModelConfig:
+    """Fetch a dense model configuration using any supported identifier."""
+
+    canonical_key = resolve_kaggle_model_key(model_name)
+    return KAGGLE_OPTIMIZED_MODELS[canonical_key]
+
+
 # Sparse embedding model registry for hybrid retrieval.
 SPARSE_MODELS: Dict[str, Dict[str, Any]] = {
+    "splade": {
+        "name": "splade",
+        "hf_model_id": "naver/splade_v2_distil",
+        "type": "splade",
+        "description": "SPLADE learned sparse representation model (works with SentenceTransformer)",
+        "recommended_batch_size": 64,
+    },
     "qdrant-bm25": {
         "name": "qdrant-bm25",
         "hf_model_id": "Qdrant/bm25",
         "type": "bm25",
-        "description": "BM25-style term frequency sparse vectors",
+        "description": "DEPRECATED: BM25-style term frequency sparse vectors (not compatible with SentenceTransformer - use 'splade' instead)",
         "recommended_batch_size": 64,
+        "deprecated": True,
     },
     "qdrant-minilm-attention": {
         "name": "qdrant-minilm-attention",
@@ -192,16 +235,18 @@ class EnsembleConfig:
             "qwen3-embedding-0.6b",
         ]
     )
-    weighting_strategy: str = "equal"
     model_weights: Optional[Dict[str, float]] = None
-    aggregation_method: str = "weighted_average"
-    parallel_encoding: bool = True
-    memory_efficient: bool = True
-    sequential_passes: bool = False
     sequential_data_parallel: bool = True
-    preferred_devices: Optional[List[str]] = None
-    exclusive_mode: bool = False  # Lease both GPUs exclusively per model
-    warm_cache_after_release: bool = False  # Keep one model resident between passes
+    exclusive_mode: bool = True  # Lease both GPUs exclusively per model (DEFAULT)
+
+    def __post_init__(self) -> None:
+        self.ensemble_models = normalize_kaggle_model_names(self.ensemble_models)
+
+        if self.model_weights is not None:
+            self.model_weights = {
+                resolve_kaggle_model_key(model_name): weight
+                for model_name, weight in self.model_weights.items()
+            }
 
 
 @dataclass
@@ -209,7 +254,7 @@ class RerankingConfig:
     """CrossEncoder reranking configuration."""
 
     model_name: str = "jina-reranker-v3"
-    enable_reranking: bool = False
+    enable_reranking: bool = True
     top_k_candidates: int = 100
     rerank_top_k: int = 20
     batch_size: int = 32
@@ -276,10 +321,13 @@ __all__ = [
     "AdvancedPreprocessingConfig",
     "AdvancedTextCache",
     "EnsembleConfig",
+    "get_kaggle_model_config",
     "KAGGLE_OPTIMIZED_MODELS",
     "KaggleExportConfig",
     "KaggleGPUConfig",
     "ModelConfig",
+    "normalize_kaggle_model_names",
+    "resolve_kaggle_model_key",
     "RERANKING_MODELS",
     "RerankingConfig",
     "SPARSE_MODELS",

@@ -1,0 +1,134 @@
+{
+  "collection_name": "Docling",
+  "chunk_count": 3096,
+  "timestamp": "2025-10-26T15:32:27.893000",
+  "feature_toggles": {
+    "enable_rerank": true,
+    "enable_sparse": true,
+    "sparse_models": [
+      "splade"
+    ],
+    "sources": {
+      "enable_rerank": "default",
+      "enable_sparse": "default",
+      "sparse_models": "default"
+    },
+    "provenance_lines": [
+      "enable_rerank: true (default)",
+      "enable_sparse: true (default)",
+      "sparse_models: splade (default)"
+    ]
+  },
+  "dense_run": {
+    "ensemble_models": [
+      "jina-code-embeddings-1.5b",
+      "bge-m3",
+      "qwen3-embedding-0.6b"
+    ],
+    "total_embeddings": 9288,
+    "exclusive_mode": true,
+    "lease_events": [],
+    "device": "cpu"
+  },
+  "rerank_run": {
+    "enabled": true,
+    "executed": true,
+    "model": "jina-reranker-v2-base-multilingual",
+    "device": "cpu",
+    "device_state": {
+      "requested": "cuda",
+      "resolved": "cpu",
+      "fallback_applied": true,
+      "fallback_reason": "cuda_unavailable"
+    },
+    "status": "complete",
+    "top_k_candidates": 10,
+    "rerank_top_k": 5,
+    "fallback_count": 0
+  },
+  "sparse_run": {
+    "enabled": true,
+    "executed": true,
+    "models": [
+      "naver/splade-cocondenser-ensembledistil"
+    ],
+    "vectors": {
+      "total": 3096,
+      "available": 3096,
+      "coverage_ratio": 1.0
+    },
+    "devices": {
+      "sparse_0": "cpu"
+    },
+    "fallback_used": false,
+    "success": true
+  },
+  "telemetry": {
+    "spans": {
+      "rag.dense": {
+        "status": "active",
+        "span_id": "span-dense-20251025-001"
+      },
+      "rag.rerank": {
+        "status": "active",
+        "span_id": "span-rerank-20251025-001"
+      },
+      "rag.sparse": {
+        "status": "active",
+        "span_id": "span-sparse-20251025-001"
+      },
+      "rag.export": {
+        "status": "active",
+        "span_id": "span-export-20251025-001"
+      }
+    },
+    "metrics": {
+      "dense": {
+        "status": "emitted",
+        "metrics": [
+          "rag_dense_latency_seconds",
+          "rag_gpu_peak_bytes"
+        ]
+      },
+      "rerank": {
+        "status": "emitted",
+        "metrics": [
+          "rag_rerank_latency_seconds",
+          "rag_gpu_peak_bytes"
+        ]
+      },
+      "sparse": {
+        "status": "emitted",
+        "metrics": [
+          "rag_sparse_latency_seconds"
+        ]
+      },
+      "export": {
+        "status": "emitted",
+        "metrics": [
+          "rag_export_latency_seconds",
+          "rag_export_total_size_mb"
+        ]
+      }
+    }
+  },
+  "performance_baseline": {
+    "gpu": {
+      "peak_memory_used_gb": 0.0,
+      "peak_device": "cpu",
+      "samples": 3
+    },
+    "hydration": {
+      "average_duration_seconds": 0.83,
+      "peak_duration_seconds": 1.2,
+      "samples": 3,
+      "failures": 0
+    },
+    "system": {
+      "average_cpu_percent": 45.2,
+      "peak_cpu_percent": 78.3,
+      "average_memory_gb": 12.34,
+      "peak_memory_gb": 14.56
+    }
+  }
+}

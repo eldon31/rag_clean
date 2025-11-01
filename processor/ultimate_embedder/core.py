@@ -24,6 +24,7 @@ PERFORMANCE TARGET:
 # ruff: noqa: E402
 
 import os
+import json
 
 # ============================================================================
 # CRITICAL: Set environment variables BEFORE any other imports
@@ -44,10 +45,12 @@ import gc
 import inspect
 import logging
 import re
+import time
 from collections import Counter, defaultdict
+from datetime import datetime
 from pathlib import Path
 from functools import lru_cache
-from typing import Any, Dict, List, Optional, Set, Tuple, Type, Union, cast
+from typing import TYPE_CHECKING, Any, Dict, List, Mapping, Optional, Sequence, Set, Tuple, Type, Union, cast
 
 import numpy as np
 import torch
@@ -94,6 +97,10 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 
+if TYPE_CHECKING:
+    from processor.ultimate_embedder.cross_encoder_executor import CrossEncoderRerankRun
+
+
 # Module extractions
 from processor.ultimate_embedder.batch_runner import BatchRunner
 from processor.ultimate_embedder.progress import BatchProgressContext
@@ -106,8 +113,10 @@ from processor.ultimate_embedder.controllers import (
 from processor.ultimate_embedder.export_runtime import ExportRuntime
 from processor.ultimate_embedder.model_manager import ModelManager
 from processor.ultimate_embedder.monitoring import PerformanceMonitor
+from processor.ultimate_embedder.prometheus_metrics import create_prometheus_emitter, PrometheusMetricsEmitter
 from processor.ultimate_embedder.rerank_pipeline import RerankPipeline
 from processor.ultimate_embedder.telemetry import TelemetryTracker, resolve_rotation_payload_limit
+from processor.ultimate_embedder.throughput_monitor import ThroughputMonitor
 from processor.ultimate_embedder.config import (
     AdvancedPreprocessingConfig,
     AdvancedTextCache,
@@ -116,8 +125,21 @@ from processor.ultimate_embedder.config import (
     KaggleExportConfig,
     KaggleGPUConfig,
     ModelConfig,
+    normalize_kaggle_model_names,
+    resolve_kaggle_model_key,
     RERANKING_MODELS,
     RerankingConfig,
+)
+from processor.ultimate_embedder.runtime_config import (
+    FeatureToggleConfig,
+    load_feature_toggles,
+)
+from processor.ultimate_embedder.summary import (
+    build_performance_baseline,
+    build_processing_summary,
+    build_rerank_stage_summary,
+    build_sparse_stage_summary,
+    build_telemetry_summary,
 )
 from processor.ultimate_embedder.backend_encoder import encode_with_backend
 
@@ -126,6 +148,10 @@ from processor.ultimate_embedder.backend_encoder import encode_with_backend
 # ============================================================================
 # Definitions reside in processor.ultimate_embedder.config and are imported
 # above for reuse within the facade.
+
+
+CPU_DENSE_FALLBACK_PRIMARY = "qwen3-embedding-0.6b"
+CPU_DENSE_FALLBACK_ENSEMBLE = ["nomic-coderank", "all-miniLM-l6"]
 
 
 
@@ -157,26 +183,27 @@ class UltimateKaggleEmbedderV4:
         ensemble_config: Optional[EnsembleConfig] = None,
         reranking_config: Optional[RerankingConfig] = None,
         companion_dense_models: Optional[List[str]] = None,
-        enable_sparse: bool = False,  # V5: Enable sparse embeddings
-        sparse_models: Optional[List[str]] = None,  # V5: Sparse model names
-        matryoshka_dim: Optional[int] = None,  # V5: Matryoshka dimension
+        enable_sparse: Optional[bool] = None,
+        sparse_models: Optional[List[str]] = None,
+        matryoshka_dim: Optional[int] = None,
         local_files_only: bool = False,
         force_cpu: bool = False,
         hf_cache_dir: Optional[Union[str, Path]] = None,
         refresh_cache: bool = False,
         gpu0_soft_limit_gb: float = 12.0,
+        feature_toggles: Optional[FeatureToggleConfig] = None,
     ):
         """Initialize Ultimate Kaggle Embedder V4"""
 
         logger.info("Initializing Ultimate Kaggle Embedder V4 (Split Architecture)")
 
-        # Validate model
-        if model_name not in KAGGLE_OPTIMIZED_MODELS:
-            logger.warning(f"Unknown model {model_name}, defaulting to jina-code-embeddings-1.5b")
-            model_name = "jina-code-embeddings-1.5b"
-        
-        self.model_config = KAGGLE_OPTIMIZED_MODELS[model_name]
-        self.model_name = model_name
+        # Validate model against canonical registry
+        canonical_model_name = resolve_kaggle_model_key(model_name)
+        if canonical_model_name != model_name:
+            logger.info("Resolved model identifier '%s' to registry key '%s'", model_name, canonical_model_name)
+
+        self.model_config = KAGGLE_OPTIMIZED_MODELS[canonical_model_name]
+        self.model_name = canonical_model_name
         logger.info(f"Selected model: {self.model_config.name} ({self.model_config.vector_dim}D)")
 
         self.local_files_only = local_files_only or os.environ.get("HF_HUB_OFFLINE") == "1"
@@ -201,8 +228,18 @@ class UltimateKaggleEmbedderV4:
         self.export_config = export_config or KaggleExportConfig()
         self.preprocessing_config = preprocessing_config or AdvancedPreprocessingConfig()
         self.enable_ensemble = enable_ensemble
-        self.ensemble_config = ensemble_config or EnsembleConfig() if enable_ensemble else None
+        self.ensemble_config = (
+            ensemble_config or EnsembleConfig() if enable_ensemble else None
+        )
+        toggles = feature_toggles or load_feature_toggles()
+        self.feature_toggles = toggles
+
         self.reranking_config = reranking_config or RerankingConfig()
+        self.reranking_config.enable_reranking = toggles.enable_rerank
+        self._rerank_runtime_reason: Optional[str] = None
+        if not self.reranking_config.enable_reranking:
+            source = toggles.sources.get("enable_rerank", "default")
+            self._rerank_runtime_reason = f"Disabled via {source}"
         self._canonical_collection_hint: Optional[str] = None
         self._target_collection_cache: Optional[str] = None
 
@@ -210,14 +247,37 @@ class UltimateKaggleEmbedderV4:
         self.multivectors_by_model: Dict[str, List[List[List[float]]]] = {}
         self.multivector_dimensions: Dict[str, int] = {}
         self.multivector_comparators: Dict[str, str] = {}
+        self.model_dtypes: Dict[str, Optional[torch.dtype]] = {}
         self.primary_vector_name: str = self.model_name
+        self._pending_mitigations: List[Tuple[str, Dict[str, Any]]] = []
 
         # V5: Sparse embedding support
-        self.enable_sparse = enable_sparse
+        resolved_enable_sparse = (
+            toggles.enable_sparse if enable_sparse is None else enable_sparse
+        )
+        self.enable_sparse = resolved_enable_sparse
+        self._sparse_runtime_reason: Optional[str] = None
         self.sparse_models: Dict[str, Any] = {}
-        self.sparse_model_names: List[str] = sparse_models or []
+        self.sparse_device_map: Dict[str, str] = {}
+        base_sparse_models = (
+            list(sparse_models)
+            if sparse_models is not None
+            else list(toggles.sparse_models)
+        )
+        self.sparse_model_names = base_sparse_models
         if self.enable_sparse and not self.sparse_model_names:
-            self.sparse_model_names = ["qdrant-bm25"]
+            self.sparse_model_names = ["splade"]  # Changed from qdrant-bm25 to working SPLADE model
+        if not self.enable_sparse:
+            self.sparse_model_names = []
+            source = toggles.sources.get("enable_sparse", "default")
+            self._sparse_runtime_reason = f"Disabled via {source}"
+
+        logger.info(
+            "Feature toggles resolved: rerank=%s sparse=%s models=%s",
+            self.reranking_config.enable_reranking,
+            self.enable_sparse,
+            self.sparse_model_names if self.sparse_model_names else "none",
+        )
 
         # V5 ENSEMBLE MODE: Default to registry dimension (1024D for ensemble models)
         self.matryoshka_dim = matryoshka_dim if matryoshka_dim else self.model_config.vector_dim
@@ -281,13 +341,25 @@ class UltimateKaggleEmbedderV4:
                 gpu_memory = torch.cuda.get_device_properties(idx).total_memory / 1e9
                 logger.info("  GPU %d: %s (%.1fGB)", idx, gpu_name, gpu_memory)
 
+        if self.device == "cpu":
+            self._apply_cpu_dense_fallback()
+
         self.text_cache = AdvancedTextCache() if self.preprocessing_config.enable_text_caching else None
 
         self.models: Dict[str, Any] = {}
         self.primary_model: Optional[SentenceTransformer] = None
         self.reranker = None
+        self.reranker_device: str = "cpu"
+        self._requested_rerank_device: str = "cuda" if self.device == "cuda" else self.device
+        self.fused_candidates: Dict[str, Any] = {}
+        self.rerank_run: Optional["CrossEncoderRerankRun"] = None
+        self.rerank_candidate_scores: Dict[str, float] = {}
+        self.rerank_failure_reason: Optional[str] = None
+        self.rerank_fallback_count: int = 0
+        self.rerank_fallback_reason: Optional[str] = None
+        self.rerank_fallback_source: Optional[str] = None
 
-        self.companion_dense_model_names: List[str] = companion_dense_models or []
+        self.companion_dense_model_names: List[str] = normalize_kaggle_model_names(companion_dense_models or [])
         self.companion_models: Dict[str, SentenceTransformer] = {}
         self.companion_model_configs: Dict[str, ModelConfig] = {}
         self.companion_batch_sizes: Dict[str, int] = {}
@@ -300,12 +372,32 @@ class UltimateKaggleEmbedderV4:
             rotation_payload_limit=rotation_limit,
             logger=logger,
         )
+        for event_type, payload in self._pending_mitigations:
+            self.telemetry.record_mitigation(event_type, **payload)
+        self._pending_mitigations.clear()
         self._rotation_payload_limit: int = rotation_limit
         self.mitigation_events = self.telemetry.mitigation_events
         self.cache_events = self.telemetry.cache_events
         self.rotation_events = self.telemetry.rotation_events
+        self._last_dense_run: Dict[str, Any] = {}
+        self.last_loading_summary: Dict[str, Any] = {}
+        self.last_processing_summary: Dict[str, Any] = {}
         self.adaptive_controller: Optional[AdaptiveBatchController] = None
         self.gradient_checkpoint_evaluated: bool = False
+        self.cpu_dense_fallback_applied = False
+
+        metrics_flag = os.environ.get("EMBEDDER_METRICS_ENABLED")
+        self.metrics_enabled = bool(
+            metrics_flag and metrics_flag.strip().lower() in {"1", "true", "yes", "on"}
+        )
+        self.metrics_namespace = os.environ.get(
+            "EMBEDDER_METRICS_NAMESPACE",
+            "ultimate_embedder",
+        )
+        self.metrics_payloads: List[Dict[str, Any]] = []
+        self.prometheus_emitter = create_prometheus_emitter(
+            logger_instance=logger,
+        )
 
         self.model_manager = ModelManager(self, logger)
         self.chunk_loader = ChunkLoader(
@@ -315,6 +407,18 @@ class UltimateKaggleEmbedderV4:
         )
         self.batch_runner = BatchRunner(self, logger)
         self.rerank_pipeline = RerankPipeline(self.reranking_config, logger)
+        
+        # Initialize CrossEncoder executor for reranking (wires into search_with_reranking)
+        self.cross_encoder_executor: Optional[Any] = None
+        if self.reranking_config.enable_reranking:
+            from processor.ultimate_embedder.cross_encoder_executor import CrossEncoderBatchExecutor
+            self.cross_encoder_executor = CrossEncoderBatchExecutor(
+                config=self.reranking_config,
+                gpu_config=self.gpu_config,
+                logger=logger,
+                embedder=self,
+            )
+            logger.info("CrossEncoderBatchExecutor initialized and wired into pipeline")
 
         self.sequential_device_order: List[str] = []
         if self.device == "cuda":
@@ -324,24 +428,12 @@ class UltimateKaggleEmbedderV4:
                 self.sequential_device_order = ["cuda:0"]
         self.sequential_device_order.append("cpu")
 
-        sequential_env = os.environ.get("EMBEDDER_SEQUENTIAL_ENSEMBLE")
-        if sequential_env is not None:
-            sequential_enabled = sequential_env.strip().lower() in {"1", "true", "yes", "on"}
-            if sequential_enabled and not self.ensemble_config:
-                self.enable_ensemble = True
-                self.ensemble_config = EnsembleConfig(sequential_passes=True)
-            elif self.ensemble_config:
-                self.ensemble_config.sequential_passes = sequential_enabled
-
-        if self.ensemble_config:
-            device_override = os.environ.get("EMBEDDER_SEQUENTIAL_DEVICES")
-            if device_override:
-                preferred = [candidate.strip() for candidate in device_override.split(",") if candidate.strip()]
-                if preferred:
-                    self.ensemble_config.preferred_devices = preferred
-            if self.ensemble_config.preferred_devices:
+        device_override = os.environ.get("EMBEDDER_SEQUENTIAL_DEVICES")
+        if device_override:
+            preferred = [candidate.strip() for candidate in device_override.split(",") if candidate.strip()]
+            if preferred:
                 unique_order: List[str] = []
-                for candidate in self.ensemble_config.preferred_devices:
+                for candidate in preferred:
                     if candidate and candidate not in unique_order:
                         unique_order.append(candidate)
                 for fallback in self.sequential_device_order:
@@ -417,9 +509,16 @@ class UltimateKaggleEmbedderV4:
             return self.primary_model
 
         if self.models:
-            fallback = self.models.get(self.model_name) or next(iter(self.models.values()))
-            self.primary_model = cast(SentenceTransformer, fallback)
-            logger.debug("Primary model fallback resolved to %s", type(fallback).__name__)
+            fallback = self.models.get(self.model_name) or next(iter(self.models.values()), None)
+            if fallback is not None:
+                self.primary_model = cast(SentenceTransformer, fallback)
+                logger.debug("Primary model fallback resolved to %s", type(fallback).__name__)
+                return self.primary_model
+
+        logger.info("Primary model not in memory; reloading on demand")
+        self.model_manager.initialize_primary_model()
+
+        if self.primary_model is not None:
             return self.primary_model
 
         raise RuntimeError("Primary embedding model is not initialized")
@@ -438,11 +537,172 @@ class UltimateKaggleEmbedderV4:
 
     def _record_mitigation(self, event_type: str, **details: Any) -> None:
         """Track mitigation events for telemetry and diagnostics."""
-        self.telemetry.record_mitigation(event_type, **details)
+        if hasattr(self, "telemetry"):
+            self.telemetry.record_mitigation(event_type, **details)
+            return
+
+        if not hasattr(self, "_pending_mitigations"):
+            self._pending_mitigations = []
+        self._pending_mitigations.append((event_type, dict(details)))
 
     def _record_rotation_event(self, event: Dict[str, Any]) -> None:
         """Capture per-batch ensemble rotation telemetry with bounded detail."""
         self.telemetry.record_rotation_event(event)
+
+    def _emit_metrics_for_stage(
+        self,
+        stage: str,
+        *,
+        active: bool,
+        reason: Optional[str] = None,
+        details: Optional[Mapping[str, Any]] = None,
+    ) -> None:
+        """Emit (or record skip) for Prometheus metrics per observability stage."""
+
+        metric_registry = {
+            "dense": ["rag_dense_latency_seconds", "rag_gpu_peak_bytes"],
+            "rerank": ["rag_rerank_latency_seconds", "rag_gpu_peak_bytes"],
+            "sparse": ["rag_sparse_latency_seconds"],
+            "export": ["rag_export_latency_seconds"],
+        }
+        metric_names = metric_registry.get(stage, [])
+        incoming_details = dict(details) if details else {}
+        if stage == "rerank":
+            fallback_count = incoming_details.get("fallback_count")
+            if fallback_count is None:
+                fallback_count = getattr(self, "rerank_fallback_count", 0)
+                incoming_details["fallback_count"] = fallback_count
+            fallback_reason = incoming_details.get("fallback_reason")
+            if fallback_reason is None:
+                fallback_reason = getattr(self, "rerank_fallback_reason", None)
+                if fallback_reason is not None:
+                    incoming_details["fallback_reason"] = fallback_reason
+            fallback_source = incoming_details.get("fallback_source")
+            if fallback_source is None:
+                fallback_source = getattr(self, "rerank_fallback_source", None)
+                if fallback_source is not None:
+                    incoming_details["fallback_source"] = fallback_source
+            if "device_fallback_applied" not in incoming_details:
+                incoming_details["device_fallback_applied"] = False
+
+        if not active:
+            skip_reason = reason or "stage disabled"
+            self.telemetry.record_metrics_status(
+                stage,
+                emitted=False,
+                reason=skip_reason,
+                metrics=metric_names,
+                details=incoming_details or None,
+            )
+            return
+
+        if not self.metrics_enabled:
+            self.telemetry.record_metrics_status(
+                stage,
+                emitted=False,
+                reason="metrics emitter disabled",
+                metrics=metric_names,
+                details=incoming_details or None,
+            )
+            return
+
+        emission_details: Dict[str, Any] = {
+            "namespace": self.metrics_namespace,
+        }
+        if incoming_details:
+            emission_details.update(incoming_details)
+
+        try:
+            # Extract metric values from details
+            latency_seconds = incoming_details.get("latency_seconds")
+            gpu_peak_gb = incoming_details.get("gpu_peak_gb")
+            gpu_peak_bytes = None
+            if gpu_peak_gb is not None:
+                gpu_peak_bytes = int(gpu_peak_gb * (1024 ** 3))
+            
+            # Build labels for Prometheus metrics
+            labels: Dict[str, str] = {"stage": stage}
+            if "model" in incoming_details:
+                labels["model"] = str(incoming_details["model"])
+            if "device" in incoming_details:
+                labels["device"] = str(incoming_details["device"])
+            
+            # Emit latency metric
+            latency_emitted = False
+            if latency_seconds is not None:
+                latency_emitted = self.prometheus_emitter.emit_latency_metric(
+                    stage=stage,
+                    latency_seconds=float(latency_seconds),
+                    labels=labels,
+                )
+            
+            # Emit GPU peak metric
+            gpu_emitted = False
+            if gpu_peak_bytes is not None:
+                gpu_emitted = self.prometheus_emitter.emit_gpu_peak_metric(
+                    stage=stage,
+                    peak_bytes=gpu_peak_bytes,
+                    labels=labels,
+                )
+
+            fallback_emitted = False
+            fallback_metric_name = f"{self.metrics_namespace}_rerank_fallback_total"
+            if stage == "rerank":
+                fallback_count_value = int(incoming_details.get("fallback_count") or 0)
+                if fallback_count_value > 0:
+                    fallback_labels = {
+                        "stage": stage,
+                        "reason": str(incoming_details.get("fallback_reason") or "unspecified"),
+                        "source": str(incoming_details.get("fallback_source") or "runtime"),
+                    }
+                    fallback_emitted = self.prometheus_emitter.emit_counter(
+                        metric_name="rerank_fallback_total",
+                        value=float(fallback_count_value),
+                        labels=fallback_labels,
+                    )
+            
+            # Record in legacy payload format
+            payload = {
+                "stage": stage,
+                "metrics": metric_names,
+                "namespace": self.metrics_namespace,
+                "details": emission_details,
+                "prometheus_emitted": {
+                    "latency": latency_emitted,
+                    "gpu_peak": gpu_emitted,
+                    "fallback": fallback_emitted,
+                },
+            }
+            self.metrics_payloads.append(payload)
+            
+            # Record emission status in telemetry
+            emitted_metrics = []
+            if latency_emitted:
+                emitted_metrics.append(f"{self.metrics_namespace}_{stage}_latency_seconds")
+            if gpu_emitted:
+                emitted_metrics.append(f"{self.metrics_namespace}_gpu_peak_bytes")
+            if stage == "rerank" and fallback_emitted:
+                emitted_metrics.append(fallback_metric_name)
+            
+            self.telemetry.record_metrics_status(
+                stage,
+                emitted=bool(emitted_metrics),
+                metrics=emitted_metrics or metric_names,
+                details={
+                    **emission_details,
+                    "prometheus_latency_emitted": latency_emitted,
+                    "prometheus_gpu_emitted": gpu_emitted,
+                    "prometheus_fallback_emitted": fallback_emitted,
+                },
+            )
+        except Exception as exc:  # pragma: no cover - defensive guard
+            self.telemetry.record_metrics_status(
+                stage,
+                emitted=False,
+                reason=str(exc),
+                metrics=metric_names,
+                details=incoming_details or None,
+            )
 
     def _ensure_model_snapshot(self, repo_id: str) -> Path:
         """Ensure the Hugging Face snapshot for a model is cached locally."""
@@ -513,6 +773,9 @@ class UltimateKaggleEmbedderV4:
     ) -> np.ndarray:
         """Invoke encode() against SentenceTransformer or compatible wrappers."""
 
+        # Disable progress on CPU to avoid issues
+        show_progress = show_progress and device != "cpu"
+
         encode_callable = getattr(model, "encode", None)
         if encode_callable is None and hasattr(model, "module"):
             encode_callable = getattr(model.module, "encode", None)
@@ -524,10 +787,20 @@ class UltimateKaggleEmbedderV4:
         if encode_callable is None:
             raise AttributeError(f"Model {type(model).__name__} does not expose encode()")
 
+        # Initialize throughput monitoring
+        monitor = ThroughputMonitor(logger=logger)
+        monitor.start(
+            chunk_count=len(texts),
+            model_name=self.model_name,
+            device=device,
+            batch_size=batch_size,
+            is_data_parallel=isinstance(model, torch.nn.DataParallel)
+        )
+
         call_args: List[Any] = [texts]
         call_kwargs: Dict[str, Any] = {
             "batch_size": batch_size,
-            "show_progress_bar": show_progress,
+            "show_progress_bar": show_progress and not progress_context,  # Disable if progress_context provided
             "convert_to_numpy": True,
             "normalize_embeddings": True,
             "device": device,
@@ -536,15 +809,33 @@ class UltimateKaggleEmbedderV4:
         progress_requested = False
         if show_progress and progress_context:
             desc = progress_context.tqdm_description()
+            postfix = progress_context.tqdm_postfix()
             if desc:
                 callable_target = getattr(encode_callable, "__func__", encode_callable)
                 if self._encode_supports_kwarg(callable_target, "tqdm_kwargs"):
-                    call_kwargs["tqdm_kwargs"] = {"desc": desc}
+                    tqdm_kwargs = {"desc": desc}
+                    if postfix:
+                        tqdm_kwargs["postfix"] = postfix
+                    call_kwargs["tqdm_kwargs"] = tqdm_kwargs
                     progress_requested = True
 
         try:
-            return encode_callable(*call_args, **call_kwargs)
+            result = encode_callable(*call_args, **call_kwargs)
+            
+            # Log throughput completion
+            monitor.end()
+            
+            return result
         except Exception as primary_exc:
+            # Log throughput failure and re-raise
+            monitor.log_error(primary_exc)
+            logger.exception(
+                "Encode failed for model %s on %s (batch=%d)",
+                self.model_name,
+                device,
+                batch_size,
+            )
+
             if progress_requested:
                 call_kwargs.pop("tqdm_kwargs", None)
                 try:
@@ -613,7 +904,7 @@ class UltimateKaggleEmbedderV4:
             hint = self.gpu_config.base_batch_size
 
         if self.device == "cpu":
-            hint = max(1, min(hint, 8))
+            hint = max(1, min(hint, 2))
         return max(1, hint)
 
     def _select_sequential_device(self, model_name: str) -> str:
@@ -636,12 +927,7 @@ class UltimateKaggleEmbedderV4:
                     if index < self.device_count:
                         return override
 
-        if self.ensemble_config and self.ensemble_config.preferred_devices:
-            candidates = self.ensemble_config.preferred_devices
-        else:
-            candidates = self.sequential_device_order
-
-        for candidate in candidates:
+        for candidate in self.sequential_device_order:
             if candidate.startswith("cuda"):
                 try:
                     index = int(candidate.split(":")[1]) if ":" in candidate else 0
@@ -702,7 +988,7 @@ class UltimateKaggleEmbedderV4:
         start_index: int,
         end_index: int,
     ) -> Counter[str]:
-        """Aggregate chunk counts per source within the given slice."""
+        """Aggregate chunk counts per chunk file within the given slice."""
 
         counts: Counter[str] = Counter()
         if start_index >= end_index:
@@ -713,13 +999,17 @@ class UltimateKaggleEmbedderV4:
                 source_name = f"chunk_{idx}"
             else:
                 metadata = self.chunks_metadata[idx] or {}
-                source_name = (
-                    metadata.get("source_path")
-                    or metadata.get("source_file")
-                    or metadata.get("filename")
-                    or metadata.get("document_name")
-                    or f"chunk_{idx}"
-                )
+                # Prioritize chunk_file_name for progress display
+                source_name = metadata.get("chunk_file_name")
+                if not source_name:
+                    # Fallback to source file if chunk_file_name not set
+                    source_name = (
+                        metadata.get("source_path")
+                        or metadata.get("source_file")
+                        or metadata.get("filename")
+                        or metadata.get("document_name")
+                        or f"chunk_{idx}"
+                    )
             counts[str(Path(source_name).name)] += 1
 
         return counts
@@ -744,18 +1034,14 @@ class UltimateKaggleEmbedderV4:
         return ", ".join(summary_parts)
 
     def _get_batch_progress_label(self, start_index: int, end_index: int) -> Optional[str]:
-        """Build a succinct progress label describing the primary source for a batch."""
+        """Build a succinct progress label describing the chunk file for a batch."""
 
         counts = self._collect_batch_source_counts(start_index, end_index)
         if not counts:
             return None
 
         primary_name, _ = counts.most_common(1)[0]
-        unique_sources = len(counts)
-        if unique_sources <= 1:
-            return primary_name
-
-        return f"{primary_name} +{unique_sources - 1} more"
+        return primary_name
 
     def _log_batch_sources(self, batch_number: int, start_index: int, end_index: int) -> None:
         """Emit a log entry describing which files contributed to a batch."""
@@ -813,6 +1099,7 @@ class UltimateKaggleEmbedderV4:
                 logger.warning("Failed to wrap %s with DataParallel: %s", model_name, exc)
 
         self.models[model_name] = model
+        self._record_model_dtype(model_name, model)
         return model
 
     def _record_gpu_snapshot(self, snapshots: Dict[int, GPUMemorySnapshot]) -> None:
@@ -883,6 +1170,89 @@ class UltimateKaggleEmbedderV4:
         except (StopIteration, TypeError):
             return None
         return getattr(first_param, "dtype", None)
+
+    def _record_model_dtype(self, model_name: str, model: Any) -> Optional[torch.dtype]:
+        """Cache the primary parameter dtype for the given model."""
+        if model is None:
+            self.model_dtypes[model_name] = None
+            logger.debug("Model %s not loaded; dtype unavailable", model_name)
+            return None
+
+        dtype = self._get_model_primary_dtype(model)
+        self.model_dtypes[model_name] = dtype
+        if dtype is None:
+            logger.debug("Model %s primary dtype could not be determined", model_name)
+        else:
+            logger.debug("Model %s primary dtype recorded as %s", model_name, dtype)
+        return dtype
+
+    def _apply_cpu_dense_fallback(self) -> None:
+        """Adjust dense model roster when operating without GPUs."""
+
+        fallback_primary = resolve_kaggle_model_key(CPU_DENSE_FALLBACK_PRIMARY)
+        fallback_models = normalize_kaggle_model_names(CPU_DENSE_FALLBACK_ENSEMBLE)
+        fallback_models = [model for model in fallback_models if model != fallback_primary]
+
+        current_roster: List[str] = [self.model_name]
+        if self.ensemble_config:
+            current_roster.extend(self.ensemble_config.ensemble_models)
+
+        if (
+            self.model_name == fallback_primary
+            and self.ensemble_config
+            and self.ensemble_config.ensemble_models == fallback_models
+        ):
+            return
+
+        self._record_mitigation(
+            "cpu_dense_model_fallback",
+            original_models=current_roster,
+            fallback_primary=fallback_primary,
+            fallback_models=fallback_models,
+        )
+
+        self.model_name = fallback_primary
+        self.model_config = KAGGLE_OPTIMIZED_MODELS[fallback_primary]
+        self.primary_vector_name = self.model_name
+
+        if fallback_models:
+            if not self.ensemble_config:
+                self.ensemble_config = EnsembleConfig(
+                    ensemble_models=fallback_models,
+                    exclusive_mode=True,
+                )
+            else:
+                self.ensemble_config.ensemble_models = fallback_models
+                self.ensemble_config.exclusive_mode = True
+            self.enable_ensemble = True
+        else:
+            self.enable_ensemble = False
+            self.ensemble_config = None
+
+        fallback_dims = [self.model_config.vector_dim]
+        fallback_dims.extend(
+            KAGGLE_OPTIMIZED_MODELS[model_name].vector_dim for model_name in fallback_models
+        )
+        fallback_dim = min(fallback_dims) if fallback_dims else self.matryoshka_dim
+
+        if self.matryoshka_dim > fallback_dim:
+            logger.info(
+                "Adjusting Matryoshka dimension from %sD to %sD for CPU fallback",
+                self.matryoshka_dim,
+                fallback_dim,
+            )
+            self.matryoshka_dim = fallback_dim
+
+        self.gpu_config.base_batch_size = min(self.gpu_config.base_batch_size, 2)
+        self.gpu_config.dynamic_batching = False
+
+        self.cpu_dense_fallback_applied = True
+        logger.info(
+            "CPU fallback applied: primary=%s | companions=%s | matryoshka_dim=%sD",
+            self.model_name,
+            fallback_models or "none",
+            self.matryoshka_dim,
+        )
         
     def _initialize_embedding_models(self) -> None:
         """Initialize the primary embedding stack via the model manager."""
@@ -910,14 +1280,25 @@ class UltimateKaggleEmbedderV4:
 
         reranker_model = RERANKING_MODELS[self.reranking_config.model_name]
         logger.info(f"Loading reranking model: {reranker_model}")
-        
+        requested_device = "cuda" if self.device == "cuda" else self.device
+        self._requested_rerank_device = requested_device
+        target_device = "cpu" if self.device == "cuda" else self.device
+
         try:
-            self.reranker = CrossEncoder(reranker_model, device=self.device)
-            logger.info("CrossEncoder reranking model loaded successfully")
+            self.reranker = CrossEncoder(reranker_model, device=target_device)
+            self.reranker_device = target_device
+            if target_device == "cpu" and self.device == "cuda":
+                logger.info(
+                    "CrossEncoder reranking model staged on CPU; hydrate via leasing"
+                )
+            else:
+                logger.info("CrossEncoder reranking model loaded successfully")
         except Exception as e:
             logger.error(f"Failed to load reranking model: {e}")
             self.reranking_config.enable_reranking = False
             self.reranker = None
+            message = str(e)
+            self._rerank_runtime_reason = f"Load failure: {message[:160]}"
     
     def generate_ensemble_embeddings(
         self,
@@ -978,49 +1359,123 @@ class UltimateKaggleEmbedderV4:
         # Get top candidates for reranking
         top_indices = np.argsort(similarities)[::-1][:initial_candidates]
         
-        # Step 3: Prepare query-document pairs for reranking
-        query_doc_pairs = []
-        candidate_indices = []
+        # Step 3: Prepare candidate data for reranking
+        candidate_ids = [str(idx) for idx in top_indices if idx < len(self.chunk_texts)]
+        candidate_texts = [self.chunk_texts[idx] for idx in top_indices if idx < len(self.chunk_texts)]
+        candidate_indices = [idx for idx in top_indices if idx < len(self.chunk_texts)]
         
-        for idx in top_indices:
-            if idx < len(self.chunk_texts):
-                query_doc_pairs.append([query, self.chunk_texts[idx]])
-                candidate_indices.append(idx)
-        
-        if not query_doc_pairs:
+        if not candidate_ids:
             logger.warning("No valid candidates for reranking")
             return []
         
-        # Step 4: Rerank with CrossEncoder
-        logger.info(f"Reranking {len(query_doc_pairs)} candidates...")
+        # Step 4: Rerank with CrossEncoderBatchExecutor (replaces legacy self.reranker.predict())
+        logger.info(f"Reranking {len(candidate_ids)} candidates via CrossEncoderBatchExecutor...")
 
         try:
-            rerank_scores = self.reranker.predict(query_doc_pairs)
-            
-            # Sort by reranking scores
-            reranked_indices = np.argsort(rerank_scores)[::-1][:top_k]
-            
-            # Prepare results
-            results = []
-            for rank, idx in enumerate(reranked_indices):
-                original_idx = candidate_indices[idx]
+            # Use CrossEncoderBatchExecutor instead of direct reranker.predict()
+            if not self.cross_encoder_executor:
+                logger.warning("CrossEncoderBatchExecutor not initialized, falling back to legacy path")
+                # Fallback to direct predict for backward compatibility
+                query_doc_pairs = [[query, text] for text in candidate_texts]
+                rerank_scores = self.reranker.predict(query_doc_pairs)
+                rerank_run = None
+            else:
+                # New path: use executor for GPU leasing, batching, OOM recovery
+                rerank_run = self.cross_encoder_executor.execute_rerank(
+                    query=query,
+                    candidate_ids=candidate_ids,
+                    candidate_texts=candidate_texts,
+                    top_k=top_k,
+                )
                 
-                result = {
-                    "rank": rank + 1,
-                    "score": float(rerank_scores[idx]),
-                    "embedding_similarity": float(similarities[original_idx]),
-                    "text": self.chunk_texts[original_idx],
-                    "metadata": self.chunks_metadata[original_idx],
-                    "chunk_id": original_idx
-                }
-                results.append(result)
-            
-            logger.info(f"Reranking complete. Top score: {results[0]['score']:.4f}")
-            return results
+                # Emit metrics from executor telemetry
+                self._emit_metrics_for_stage(
+                    "rerank",
+                    active=True,
+                    reason="Query-time reranking executed via CrossEncoderBatchExecutor",
+                    details={
+                        "latency_seconds": rerank_run.latency_ms / 1000.0,
+                        "gpu_peak_gb": rerank_run.gpu_peak_gb,
+                        "batch_size": rerank_run.batch_size,
+                        "model": self.reranking_config.model_name,
+                        "device": getattr(self.cross_encoder_executor.rerank_pipeline, "device", "cpu"),
+                    },
+                )
+                
+                # Extract scores and ranked candidate IDs
+                ranked_candidate_ids = rerank_run.candidate_ids
+                ranked_scores = rerank_run.scores
+                
+                # Map back to original indices
+                # Fix TECH-002: Create id_to_index mapping to handle non-sequential candidate ids
+                id_to_index = {str(idx): idx for idx in candidate_indices}
+                
+                results = []
+                for rank, (cand_id, score) in enumerate(zip(ranked_candidate_ids, ranked_scores)):
+                    original_idx = id_to_index.get(cand_id)
+                    if original_idx is None:
+                        logger.warning(f"Candidate id {cand_id} not found in mapping, skipping")
+                        continue
+                    
+                    # Build result using extracted helper method
+                    result = self._build_rerank_result(
+                        rank=rank,
+                        score=score,
+                        original_idx=original_idx,
+                        similarities=similarities,
+                    )
+                    
+                    if result is not None:
+                        results.append(result)
+                
+                logger.info(
+                    f"Reranking complete via executor. Top score: {results[0]['score']:.4f}, "
+                    f"latency: {rerank_run.latency_ms:.1f}ms, peak_gpu: {rerank_run.gpu_peak_gb:.2f}GB"
+                )
+                return results
             
         except Exception as e:
             logger.error(f"Reranking failed: {e}")
             return self._embedding_only_search(query, top_k)
+    
+    def _build_rerank_result(
+        self,
+        rank: int,
+        score: float,
+        original_idx: int,
+        similarities: Sequence[float],
+    ) -> Optional[Dict[str, Any]]:
+        """
+        Build a single reranking result dictionary.
+        
+        Args:
+            rank: Zero-based rank in reranked results
+            score: Reranking score from CrossEncoder
+            original_idx: Index into chunk_texts/chunks_metadata/embeddings
+            similarities: Array of embedding similarity scores
+            
+        Returns:
+            Result dictionary with rank, scores, text, metadata, and chunk_id.
+            Returns None if original_idx is invalid.
+        """
+        # Validate index bounds
+        if original_idx is None or original_idx < 0:
+            return None
+        if original_idx >= len(similarities):
+            return None
+        if original_idx >= len(self.chunk_texts):
+            return None
+        if original_idx >= len(self.chunks_metadata):
+            return None
+            
+        return {
+            "rank": rank + 1,  # Convert to 1-based rank for API
+            "score": score,
+            "embedding_similarity": float(similarities[original_idx]),
+            "text": self.chunk_texts[original_idx],
+            "metadata": self.chunks_metadata[original_idx],
+            "chunk_id": original_idx,
+        }
     
     def _embedding_only_search(self, query: str, top_k: int) -> List[Dict[str, Any]]:
         """Fallback search using only embedding similarity"""
@@ -1158,11 +1613,6 @@ class UltimateKaggleEmbedderV4:
 
         return text
     
-    def _generate_upload_script(self, file_path: str, exported_files: Dict[str, str]) -> None:
-        """Generate Python script for local Qdrant upload."""
-
-        self.export_runtime._generate_upload_script(file_path, exported_files)
-
     def load_chunks_from_processing(
         self,
         chunks_dir: str = "/kaggle/working/rag_clean/Chunked"
@@ -1185,6 +1635,7 @@ class UltimateKaggleEmbedderV4:
         self._target_collection_cache = None
 
         summary = result.summary
+        self.last_loading_summary = summary
         if result.canonical_collection_hint:
             logger.info("Canonical collection hint: %s", result.canonical_collection_hint)
 
@@ -1290,10 +1741,447 @@ class UltimateKaggleEmbedderV4:
         if not self.chunk_texts:
             raise ValueError("No chunks loaded. Call load_chunks_from_processing() first.")
 
-        return self.batch_runner.run(
+        results = self.batch_runner.run(
             enable_monitoring=enable_monitoring,
             save_intermediate=save_intermediate,
         )
+        self._last_dense_run = results
+        self._assemble_processing_summary(results=results)
+        return results
+
+    def _assemble_processing_summary(
+        self,
+        *,
+        results: Optional[Dict[str, Any]] = None,
+        collection_name: Optional[str] = None,
+        chunk_count: Optional[int] = None,
+    ) -> Dict[str, Any]:
+        dense_run = results or (self._last_dense_run or None)
+
+        dense_latency_seconds: Optional[float] = None
+        dense_embeddings_generated: Optional[int] = None
+        dense_chunks_per_second: Optional[float] = None
+        if isinstance(dense_run, Mapping):
+            raw_latency = dense_run.get("processing_time_seconds")
+            if isinstance(raw_latency, (int, float)):
+                dense_latency_seconds = float(raw_latency)
+            raw_embeddings = dense_run.get("total_embeddings_generated")
+            if isinstance(raw_embeddings, (int, float)):
+                dense_embeddings_generated = int(raw_embeddings)
+            raw_chunks = dense_run.get("chunks_per_second")
+            if isinstance(raw_chunks, (int, float)):
+                dense_chunks_per_second = float(raw_chunks)
+
+        gpu_history: Optional[Dict[str, Any]] = None
+
+        dense_details: Dict[str, Any] = {
+            "model": self.model_name,
+            "device": self.device,
+        }
+        if dense_latency_seconds is not None:
+            dense_details["latency_seconds"] = dense_latency_seconds
+        if dense_chunks_per_second is not None:
+            dense_details["chunks_per_second"] = dense_chunks_per_second
+        if dense_embeddings_generated is not None:
+            dense_details["embeddings_generated"] = dense_embeddings_generated
+
+        if gpu_history is None:
+            gpu_history = self._summarize_gpu_history()
+        if gpu_history and gpu_history.get("peak_allocated_gb") is not None:
+            peak_value = gpu_history.get("peak_allocated_gb")
+            if isinstance(peak_value, (int, float)):
+                dense_details["gpu_peak_gb"] = float(peak_value)
+
+        dense_active = bool(
+            dense_embeddings_generated is not None
+            and dense_embeddings_generated > 0
+        )
+        dense_skip_reason: Optional[str] = None
+        if not dense_active:
+            dense_skip_reason = "dense stage produced no embeddings"
+        self._emit_metrics_for_stage(
+            "dense",
+            active=dense_active,
+            reason=dense_skip_reason,
+            details=dense_details,
+        )
+
+        rerank_enabled = bool(self.reranking_config.enable_reranking)
+        rerank_executor = getattr(self, "cross_encoder_executor", None)
+        rerank_pipeline_device = None
+        if rerank_executor is not None:
+            rerank_pipeline_device = getattr(rerank_executor.rerank_pipeline, "device", None)
+
+        rerank_run = getattr(self, "rerank_run", None)
+        fused_candidates = getattr(self, "fused_candidates", {})
+        rerank_failure_reason = getattr(self, "rerank_failure_reason", None)
+
+        rerank_executed = bool(rerank_run and rerank_run.candidate_ids)
+        rerank_loaded = bool(
+            self.reranker is not None
+            or (
+                rerank_executor
+                and getattr(rerank_executor.rerank_pipeline, "model", None) is not None
+            )
+        )
+
+        requested_rerank_device = self._requested_rerank_device or (
+            "cuda" if self.device == "cuda" else self.device
+        )
+        resolved_rerank_device = rerank_pipeline_device or self.reranker_device or "cpu"
+
+        fallback_applied = False
+        fallback_reason: Optional[str] = None
+        if (
+            rerank_enabled
+            and isinstance(requested_rerank_device, str)
+            and requested_rerank_device.startswith("cuda")
+            and (not isinstance(resolved_rerank_device, str) or not resolved_rerank_device.startswith("cuda"))
+        ):
+            fallback_applied = True
+            fallback_reason = "Resolved to CPU staging while awaiting GPU lease"
+
+        rerank_status: str
+        rerank_reason: Optional[str] = None
+
+        if not rerank_enabled:
+            source = self.feature_toggles.sources.get("enable_rerank", "default")
+            rerank_status = "disabled"
+            rerank_reason = self._rerank_runtime_reason or f"Disabled via {source}"
+        elif rerank_executed:
+            rerank_status = "executed"
+            rerank_reason = None
+        elif rerank_failure_reason:
+            rerank_status = "error"
+            rerank_reason = rerank_failure_reason
+        elif rerank_loaded:
+            rerank_status = "pending"
+            rerank_reason = self._rerank_runtime_reason or "Rerank executor ready; awaiting execution"
+        else:
+            rerank_status = "pending"
+            rerank_reason = self._rerank_runtime_reason or "Rerank executor unavailable"
+
+        rerank_stage: Optional[Dict[str, Any]] = None
+        if rerank_enabled or rerank_executed or rerank_failure_reason:
+            rerank_stage = build_rerank_stage_summary(
+                enabled=rerank_enabled,
+                model_name=self.reranking_config.model_name,
+                loaded=rerank_loaded,
+                device=resolved_rerank_device,
+                executed=rerank_executed,
+                status=rerank_status,
+                reason=rerank_reason,
+                metrics={
+                    "top_k_candidates": self.reranking_config.top_k_candidates,
+                    "rerank_top_k": self.reranking_config.rerank_top_k,
+                    "batch_size": self.reranking_config.batch_size,
+                },
+                requested_device=requested_rerank_device,
+                fallback_applied=fallback_applied,
+                fallback_reason=fallback_reason,
+                fallback_count=self.rerank_fallback_count,
+                rerank_fallback_reason=self.rerank_fallback_reason,
+                fallback_source=self.rerank_fallback_source,
+            )
+
+            if rerank_run:
+                rerank_stage.update(
+                    {
+                        "run_id": rerank_run.run_id,
+                        "latency_ms": rerank_run.latency_ms,
+                        "gpu_peak_gb": rerank_run.gpu_peak_gb,
+                        "batch_size": rerank_run.batch_size,
+                        "candidate_count": len(rerank_run.candidate_ids),
+                        "candidate_ids": list(rerank_run.candidate_ids),
+                        "scores": list(rerank_run.scores),
+                        "result_count": len(rerank_run.candidate_ids),
+                    }
+                )
+            rerank_stage.setdefault("fallback_count", self.rerank_fallback_count)
+            if self.rerank_fallback_reason:
+                rerank_stage.setdefault("fallback_reason", self.rerank_fallback_reason)
+            if self.rerank_fallback_source:
+                rerank_stage.setdefault("fallback_source", self.rerank_fallback_source)
+            if fused_candidates:
+                initial_ids = fused_candidates.get("candidate_ids", [])
+                rerank_stage.setdefault("initial_candidate_count", len(initial_ids))
+                if "query" in fused_candidates:
+                    rerank_stage.setdefault("query", fused_candidates.get("query", ""))
+                dense_scores = fused_candidates.get("dense_scores")
+                if isinstance(dense_scores, list) and dense_scores:
+                    rerank_stage["dense_scores"] = [float(score) for score in dense_scores]
+                reranked_metadata = fused_candidates.get("reranked_metadata")
+                if reranked_metadata:
+                    rerank_stage["candidate_metadata"] = list(reranked_metadata)
+                elif rerank_run and fused_candidates.get("metadata"):
+                    rerank_stage["candidate_metadata"] = list(
+                        fused_candidates["metadata"][: len(rerank_run.candidate_ids)]
+                    )
+            if rerank_failure_reason and rerank_status == "error":
+                rerank_stage["failure_reason"] = rerank_failure_reason
+
+        candidate_count = len(fused_candidates.get("candidate_ids", []))
+        rerank_span_reason = rerank_reason or (
+            f"Disabled via {self.feature_toggles.sources.get('enable_rerank', 'default')}"
+            if not rerank_enabled
+            else rerank_status
+        )
+        if rerank_executed and rerank_span_reason is None:
+            rerank_span_reason = "executed"
+
+        rerank_attributes: Dict[str, Any] = {
+            "status": rerank_status,
+            "executed": rerank_executed,
+            "candidate_count": candidate_count,
+            "requested_device": requested_rerank_device,
+            "resolved_device": resolved_rerank_device,
+        }
+        rerank_attributes["fallback_count"] = self.rerank_fallback_count
+        if self.rerank_fallback_reason:
+            rerank_attributes["fallback_reason"] = self.rerank_fallback_reason
+        if self.rerank_fallback_source:
+            rerank_attributes["fallback_source"] = self.rerank_fallback_source
+        if rerank_run:
+            rerank_attributes.update(
+                {
+                    "latency_ms": rerank_run.latency_ms,
+                    "gpu_peak_gb": rerank_run.gpu_peak_gb,
+                    "batch_size": rerank_run.batch_size,
+                    "result_count": len(rerank_run.candidate_ids),
+                }
+            )
+        if rerank_failure_reason:
+            rerank_attributes["failure_reason"] = rerank_failure_reason
+        if fallback_applied and fallback_reason:
+            rerank_attributes["device_fallback_reason"] = fallback_reason
+
+        self.telemetry.record_span_presence(
+            "rag.rerank",
+            active=rerank_enabled,
+            reason=rerank_span_reason,
+            attributes=rerank_attributes,
+            candidate_count=candidate_count,
+            fallback_used=fallback_applied,
+            fallback_count=self.rerank_fallback_count,
+            fallback_reason=self.rerank_fallback_reason,
+            fallback_source=self.rerank_fallback_source,
+        )
+
+        metrics_details: Dict[str, Any] = {
+            "model": self.reranking_config.model_name,
+            "device": resolved_rerank_device,
+            "candidate_count": candidate_count,
+        }
+        metrics_details["fallback_count"] = self.rerank_fallback_count
+        if self.rerank_fallback_reason:
+            metrics_details["fallback_reason"] = self.rerank_fallback_reason
+        if self.rerank_fallback_source:
+            metrics_details["fallback_source"] = self.rerank_fallback_source
+        if fallback_applied and fallback_reason:
+            metrics_details["device_fallback_reason"] = fallback_reason
+        metrics_details["device_fallback_applied"] = fallback_applied
+        if rerank_run:
+            metrics_details.update(
+                {
+                    "latency_seconds": rerank_run.latency_ms / 1000.0,
+                    "gpu_peak_gb": rerank_run.gpu_peak_gb,
+                    "batch_size": rerank_run.batch_size,
+                }
+            )
+
+        metrics_reason = rerank_span_reason if not rerank_enabled else rerank_reason
+        self._emit_metrics_for_stage(
+            "rerank",
+            active=rerank_executed if rerank_enabled else False,
+            reason=metrics_reason,
+            details=metrics_details,
+        )
+
+        sparse_total = len(self.sparse_vectors)
+        sparse_available = sum(1 for vector in self.sparse_vectors if vector)
+        coverage = (sparse_available / sparse_total) if sparse_total else 0.0
+        sparse_reason = self._sparse_runtime_reason
+        sparse_fallback_reason: Optional[str] = None
+        sparse_fallback_used = False
+        if self.enable_sparse and sparse_available == 0:
+            sparse_fallback_used = True
+            sparse_fallback_reason = "Sparse vectors unavailable; metadata fallback engaged"
+            if not sparse_reason:
+                sparse_reason = sparse_fallback_reason
+        sparse_stage: Optional[Dict[str, Any]] = None
+        sparse_result = getattr(self, "sparse_inference_result", None)
+        sparse_latency = getattr(sparse_result, "latency_ms", None)
+        sparse_run_id = getattr(sparse_result, "run_id", None)
+        sparse_success = getattr(sparse_result, "success", None)
+        sparse_error = getattr(sparse_result, "error_message", None)
+        sparse_fallback_total = getattr(sparse_result, "fallback_count", None)
+        sparse_primary_device = getattr(sparse_result, "device", None)
+        sparse_attributes: Dict[str, Any] = {
+            "models": list(self.sparse_model_names),
+            "coverage_ratio": coverage,
+            "devices": dict(self.sparse_device_map),
+            "fallback_used": sparse_fallback_used,
+        }
+        if sparse_fallback_reason:
+            sparse_attributes["fallback_reason"] = sparse_fallback_reason
+
+        if self.enable_sparse:
+            sparse_stage = build_sparse_stage_summary(
+                enabled=True,
+                model_names=self.sparse_model_names,
+                vectors_total=sparse_total,
+                vectors_available=sparse_available,
+                executed=bool(self.sparse_vectors),
+                coverage_ratio=coverage,
+                devices=self.sparse_device_map,
+                fallback_used=sparse_fallback_used,
+                fallback_reason=sparse_fallback_reason,
+                reason=sparse_reason,
+                latency_ms=sparse_latency,
+                run_id=sparse_run_id,
+                success=sparse_success,
+                error_message=sparse_error,
+                fallback_count=sparse_fallback_total,
+                device=sparse_primary_device,
+            )
+
+        sparse_span_reason = sparse_reason or (
+            f"Disabled via {self.feature_toggles.sources.get('enable_sparse', 'default')}"
+            if not self.enable_sparse
+            else ("fallback engaged" if sparse_fallback_used else "active")
+        )
+        if not self.enable_sparse:
+            sparse_attributes["source"] = self.feature_toggles.sources.get("enable_sparse", "default")
+        self.telemetry.record_span_presence(
+            "rag.sparse",
+            active=self.enable_sparse,
+            reason=sparse_span_reason,
+            attributes=sparse_attributes,
+            batch_size=sparse_total,
+            coverage_ratio=coverage,
+            fallback_used=sparse_fallback_used,
+        )
+        self._emit_metrics_for_stage(
+            "sparse",
+            active=self.enable_sparse,
+            reason=sparse_span_reason,
+            details={**sparse_attributes, "coverage_ratio": coverage},
+        )
+
+        telemetry_summary = build_telemetry_summary(
+            mitigation_events=self.telemetry.mitigation_events,
+            rotation_events=self.telemetry.rotation_events,
+            lease_events=self.telemetry.gpu_lease_events,
+            batch_progress_events=self.telemetry.batch_progress_events,
+            span_events=getattr(self.telemetry, "span_events", {}),
+            metrics_report=getattr(self.telemetry, "metrics_reports", {}),
+        )
+
+        resolved_chunk_count = chunk_count
+        if resolved_chunk_count is None:
+            if isinstance(dense_run, Mapping):
+                dense_total = dense_run.get("total_embeddings_generated")
+                if isinstance(dense_total, int):
+                    resolved_chunk_count = dense_total
+            if resolved_chunk_count is None:
+                total_loaded = self.last_loading_summary.get("total_chunks_loaded") if isinstance(self.last_loading_summary, Mapping) else None
+                if isinstance(total_loaded, int):
+                    resolved_chunk_count = total_loaded
+            if resolved_chunk_count is None and self.chunk_texts:
+                resolved_chunk_count = len(self.chunk_texts)
+
+        summary = build_processing_summary(
+            feature_toggles=self.feature_toggles,
+            dense_run=dense_run,
+            rerank_stage=rerank_stage,
+            sparse_stage=sparse_stage,
+            telemetry=telemetry_summary,
+            collection_name=collection_name,
+            chunk_count=resolved_chunk_count,
+        )
+
+        warnings = summary.get("warnings") or []
+        rerank_enabled = bool(self.feature_toggles.enable_rerank)
+        rerank_run = getattr(self, "rerank_run", None)
+        rerank_failure_reason = getattr(self, "rerank_failure_reason", None)
+        if rerank_enabled and rerank_run is None and rerank_failure_reason:
+            warnings.append(
+                f"rerank stage reported failure: {rerank_failure_reason}"
+            )
+
+        sparse_enabled = bool(self.feature_toggles.enable_sparse)
+        sparse_result = getattr(self, "sparse_inference_result", None)
+        if sparse_enabled and sparse_result and not getattr(sparse_result, "success", True):
+            error_message = getattr(sparse_result, "error_message", None)
+            if error_message:
+                warnings.append(f"sparse stage failure: {error_message}")
+
+        if warnings:
+            summary["warnings"] = warnings
+
+        performance_baseline = build_performance_baseline(
+            dict(self.processing_stats)
+        )
+        if performance_baseline:
+            if gpu_history is None:
+                gpu_history = self._summarize_gpu_history()
+            if gpu_history:
+                gpu_section = performance_baseline.setdefault("gpu", {})
+                soft_limit_gb = gpu_history.get("soft_limit_gb")
+                if soft_limit_gb is not None:
+                    gpu_section["soft_limit_gb"] = soft_limit_gb
+                exceeded = bool(gpu_history.get("soft_limit_exceeded"))
+                gpu_section["soft_limit_exceeded"] = exceeded
+                devices = gpu_history.get("soft_limit_devices") or []
+                if devices:
+                    gpu_section["soft_limit_devices"] = devices
+                status = "within_limit" if not exceeded else "exceeded_soft_limit"
+                gpu_section["status"] = status
+                if (
+                    exceeded
+                    and "gpu_soft_limit" not in self.telemetry.metrics_reports
+                ):
+                    raise RuntimeError(
+                        "GPU soft limit exceeded without alert telemetry; "
+                        "ensure gpu_soft_limit status is recorded"
+                    )
+                peak_from_history = gpu_history.get("peak_allocated_gb")
+                if peak_from_history is not None and "peak_memory_used_gb" not in gpu_section:
+                    gpu_section["peak_memory_used_gb"] = peak_from_history
+            summary["performance_baseline"] = performance_baseline
+
+        self.last_processing_summary = summary
+        return summary
+
+    def create_processing_summary(
+        self,
+        *,
+        collection_name: Optional[str] = None,
+        chunk_count: Optional[int] = None,
+    ) -> Dict[str, Any]:
+        return self._assemble_processing_summary(
+            results=None,
+            collection_name=collection_name,
+            chunk_count=chunk_count,
+        )
+
+    def write_processing_summary(
+        self,
+        path: Union[str, Path],
+        *,
+        collection_name: Optional[str] = None,
+        chunk_count: Optional[int] = None,
+    ) -> Dict[str, Any]:
+        summary = self._assemble_processing_summary(
+            results=None,
+            collection_name=collection_name,
+            chunk_count=chunk_count,
+        )
+
+        target_path = Path(path)
+        target_path.parent.mkdir(parents=True, exist_ok=True)
+        target_path.write_text(json.dumps(summary, indent=2), encoding="utf-8")
+        return summary
     
     def _encode_with_backend(self, texts: List[str], batch_size: int) -> np.ndarray:
         """Delegate backend encoding to the shared helper"""
@@ -1325,19 +2213,6 @@ class UltimateKaggleEmbedderV4:
             expected_dim,
         )
         return matrix[:, :expected_dim], True
-    
-    def _save_intermediate_results(self, embeddings_list: List[np.ndarray], batch_num: int):
-        """Save intermediate results during processing"""
-        if not self.is_kaggle:
-            return
-        
-        try:
-            intermediate_path = self.export_config.get_output_path(f"_intermediate_batch_{batch_num}")
-            embeddings_so_far = np.vstack(embeddings_list)
-            np.save(f"{intermediate_path}.npy", embeddings_so_far.astype(np.float32))
-            logger.info(f"Intermediate results saved: {intermediate_path}.npy")
-        except Exception as e:
-            logger.warning(f"Failed to save intermediate results: {e}")
     
     def export_for_local_qdrant(self) -> Dict[str, str]:
         """Export embeddings in formats optimized for local Qdrant upload."""
@@ -1418,9 +2293,7 @@ def main():
     
     # V5 Feature Configurations (using V5-specified models)
     ensemble_config = EnsembleConfig(
-        ensemble_models=["jina-code-embeddings-1.5b", "bge-m3", "qwen3-embedding-0.6b"],
-        weighting_strategy="equal",
-        aggregation_method="weighted_average"
+        ensemble_models=["jina-code-embeddings-1.5b", "bge-m3", "qwen3-embedding-0.6b"]
     )
     
     reranking_config = RerankingConfig(

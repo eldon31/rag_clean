@@ -5,13 +5,19 @@ from __future__ import annotations
 import hashlib
 import json
 import logging
+import time
 from collections import defaultdict
 from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path
 from typing import Any, Callable, Dict, List, Optional, Sequence, Tuple
 
-import psutil
+# Defensive import for psutil - optional dependency for memory monitoring
+try:
+    import psutil
+    PSUTIL_AVAILABLE = True
+except ImportError:
+    PSUTIL_AVAILABLE = False
 
 from processor.ultimate_embedder.sparse_pipeline import (
     build_sparse_vector_from_metadata,
@@ -218,7 +224,16 @@ class ChunkLoader:
                 results["chunks_by_collection"][collection_name] = chunk_count
 
         results["total_chunks_loaded"] = len(metadata_list)
-        results["memory_usage_mb"] = psutil.Process().memory_info().rss / 1024 / 1024
+        
+        # Memory monitoring (optional if psutil available)
+        if PSUTIL_AVAILABLE:
+            try:
+                results["memory_usage_mb"] = psutil.Process().memory_info().rss / 1024 / 1024
+            except Exception:  # pragma: no cover - defensive
+                results["memory_usage_mb"] = 0.0
+        else:
+            results["memory_usage_mb"] = 0.0
+            
         if text_cache:
             try:
                 results["preprocessing_stats"] = text_cache.get_stats()
@@ -326,6 +341,16 @@ class ChunkLoader:
     ) -> int:
         chunk_count = 0
         for chunk_file in files:
+            # Per-file throughput logging START
+            file_name = chunk_file.name
+            start_time = time.time()
+            start_timestamp = datetime.now().isoformat()
+            file_chunk_count = 0
+            
+            self.logger.info(
+                f"[FILE_START] Loading: {file_name} | Start: {start_timestamp}"
+            )
+            
             try:
                 with open(chunk_file, "r", encoding="utf-8") as handle:
                     file_chunks = json.load(handle)
@@ -381,6 +406,7 @@ class ChunkLoader:
                 metadata.setdefault("source_path", source_path)
                 metadata.setdefault("source_file", metadata["source_path"])
                 metadata.setdefault("source_filename", Path(str(metadata["source_file"])).name)
+                metadata["chunk_file_name"] = file_name  # Track the chunk JSON filename for progress display
                 metadata.setdefault("document_name", Path(str(metadata["source_file"])).stem)
                 if not metadata.get("chunk_hash"):
                     digest = hashlib.sha1(original_text.encode("utf-8")).hexdigest()[:16]
@@ -420,6 +446,21 @@ class ChunkLoader:
                 processed_texts.append(processed_text)
                 raw_texts.append(original_text)
                 chunk_count += 1
+                file_chunk_count += 1
+            
+            # Per-file throughput logging END
+            end_time = time.time()
+            duration = end_time - start_time
+            end_timestamp = datetime.now().isoformat()
+            processing_rate = file_chunk_count / duration if duration > 0 else 0.0
+            
+            self.logger.info(
+                f"[FILE_END] Loaded: {file_name} | "
+                f"Chunks: {file_chunk_count} | "
+                f"Duration: {duration:.2f}s | "
+                f"Rate: {processing_rate:.1f} chunks/sec | "
+                f"End: {end_timestamp}"
+            )
 
         return chunk_count
 
