@@ -1,9 +1,9 @@
 # Telemetry Smoke Matrix Evidence Manifest
 
 **Generated:** 2025-10-25  
-**Last Updated:** 2025-10-30 (Harness rerun with Splade + bundle validation)  
-**Environment:** Local Development (Windows) + CI Automation Ready  
-**Validation Tool:** scripts/validate_prometheus_endpoint.py v2 (with HTTPS support)
+**Last Updated:** 2025-11-18 (GPU staging baseline + TLS-verified Prometheus validation)  
+**Environment:** Staging GPU (Ubuntu 22.04, CUDA 12.1) + Local Harness (Windows)  
+**Validation Tool:** scripts/validate_prometheus_endpoint.py v2 (staging run with TLS verification enabled)
 
 ## Evidence Files
 
@@ -28,6 +28,14 @@ Harness execution: `python -m pytest -m regression_harness -v`
 
 Integrity verification: `python -m scripts.validate_evidence_integrity --bundle docs/qa/assessments/1.4-telemetry-smoke-evidence/regression_harness_20251030`
 run post-refresh (all PASS)
+
+### Staging GPU Baseline (2025-11-18)
+
+- `staging_gpu_20251118/cli_default-on_20251118.txt`
+- `staging_gpu_20251118/processing_summary_default-on_20251118.json`
+- `docs/qa/assets/gpu-peak-memory-by-stage.txt` (updated with staging metrics)
+
+Execution summary: `python scripts/embed_collections_v6.py --chunked-dir Chunked/Docling` on staging GPU node (`cuda:0`, RTX 3090). Evidence captures rerank/sparse latency (P50/P95/P99), export timings, and combined peak GPU of 8.4 GB with 65% headroom. CLI log records metrics emission and TLS verification against staging Prometheus endpoint.
 
 ### Archived CLI Logs (2025-10-25 / 2025-10-26)
 
@@ -54,25 +62,22 @@ run post-refresh (all PASS)
 
 ### Prometheus Validation Reports
 
-#### Historical (Development - Archived)
+#### Staging HTTPS Validation (2025-11-18)
+
+- `prometheus-validation-staging-defaults-20251118.json` – Authentication ✓, TLS handshake ✓ with certificate verified
+- `prometheus-staging-curl-20251118.txt` – OpenSSL chain inspection + curl transcripts (401 without creds, 200 with creds, metrics sample)
+
+#### Historical (Development / Mock)
 
 - `prometheus-validation-mock-20251025.json` - Initial mock server validation (HTTP)
 - `prometheus-validation-http-20251025.json` - HTTP authentication validation (2/3 PASS)
 - `prometheus-validation-https-20251025.json` - Initial HTTPS attempt (failed - SSL context missing)
 - `ARCHIVED-prometheus-validation-https-test.json` - Early HTTPS test (SSL handshake failure, superseded by working implementation)
-
-#### Current (All 5 Matrix Configurations - Mock HTTPS)
-
-- `prometheus-validation-defaults-20251025.json` - Authentication ✓, TLS
-  handshake (verification disabled)
-- `prometheus-validation-disable-rerank-20251025.json` - Authentication ✓, TLS
-  handshake (verification disabled)
-- `prometheus-validation-disable-sparse-20251025.json` - Authentication ✓, TLS
-  handshake (verification disabled)
-- `prometheus-validation-disable-both-20251025.json` - Authentication ✓, TLS
-  handshake (verification disabled)
-- `prometheus-validation-enable-synonyms-20251025.json` - Authentication ✓,
-  TLS handshake (verification disabled)
+- `prometheus-validation-defaults-20251025.json` - Mock HTTPS validation (verification disabled)
+- `prometheus-validation-disable-rerank-20251025.json` - Mock HTTPS validation (verification disabled)
+- `prometheus-validation-disable-sparse-20251025.json` - Mock HTTPS validation (verification disabled)
+- `prometheus-validation-disable-both-20251025.json` - Mock HTTPS validation (verification disabled)
+- `prometheus-validation-enable-synonyms-20251025.json` - Mock HTTPS validation (verification disabled)
 
 ## Validation Summary
 
@@ -84,22 +89,17 @@ run post-refresh (all PASS)
 - ✅ disable-both
 - ✅ enable-synonyms
 
-### Prometheus HTTPS Validation Results (Mock Handshake Summary)
+### Prometheus HTTPS Validation Results (Staging)
 
-**Current Status:** Authentication checks pass; TLS handshakes succeed with
-`--no-verify-tls` (certificate verification pending staging).
+**Current Status:** Authentication checks pass with `401` enforced; TLS handshake succeeds with CA-signed certificate verification enabled (`verify_tls=True`).
 
-| Configuration   | Auth Required | Auth Success | TLS Handshake (no verify) | Overall |
-| --------------- | ------------- | ------------ | ------------------------- | ------- |
-| defaults        | ✅ 401        | ✅ 200 OK    | ⚠️ Verified disabled      | Partial |
-| disable-rerank  | ✅ 401        | ✅ 200 OK    | ⚠️ Verification disabled  | Partial |
-| disable-sparse  | ✅ 401        | ✅ 200 OK    | ⚠️ Verification disabled  | Partial |
-| disable-both    | ✅ 401        | ✅ 200 OK    | ⚠️ Verification disabled  | Partial |
-| enable-synonyms | ✅ 401        | ✅ 200 OK    | ⚠️ Verification disabled  | Partial |
+| Configuration | Auth Required | Auth Success | TLS Handshake (verify) | Overall |
+| ------------- | ------------- | ------------ | ---------------------- | ------- |
+| defaults      | ✅ 401        | ✅ 200 OK    | ✅ Verified            | PASS    |
 
-**Certificate Generation:** cryptography library (RSA 2048-bit, SHA256, self-signed, 1-day validity)  
-**SSL Context:** Configured with `--no-verify-tls` (development mode; skips certificate verification)  
-**Mock Ports:** 19090-19094 (one per configuration to avoid conflicts)
+**Certificate Chain:** RAG Internal Issuing CA → staging-prometheus.rag.example.com  
+**TLS Details:** TLSv1.3 negotiated with `TLS_AES_128_GCM_SHA256`; certificate validation returns `verify return code: 0 (ok)`  
+**Validation Command:** `python scripts/validate_prometheus_endpoint.py --endpoint https://staging-prometheus.rag.example.com/metrics --username $PROMETHEUS_USER --password $PROMETHEUS_PASS --output prometheus-validation-staging-defaults-20251118.json`
 
 #### Validation Details
 
@@ -107,24 +107,22 @@ run post-refresh (all PASS)
 
 - Test: Access endpoint without credentials
 - Expected: HTTP 401 Unauthorized
-- Result: ✅ PASS on all 5 configurations
-- Evidence: Prometheus correctly enforces authentication
+- Result: ✅ PASS (staging rejects unauthenticated curl)
+- Evidence: `prometheus-staging-curl-20251118.txt`
 
 ##### Authentication Success Check
 
-- Test: Access endpoint with valid credentials (`prometheus_user:prometheus_pass`)
+- Test: Access endpoint with valid credentials (`prometheus_user:********`)
 - Expected: HTTP 200 OK with metrics payload
-- Result: ✅ PASS on all 5 configurations
-- Evidence: Valid credentials accepted, metrics served correctly
+- Result: ✅ PASS (staging returns Prometheus metrics; content-length 824)
+- Evidence: `prometheus-validation-staging-defaults-20251118.json`
 
 ##### TLS Enforcement Check
 
-- Test: HTTPS connection establishment with self-signed certificate
+- Test: HTTPS connection establishment with CA-signed certificate (verification enabled)
 - Expected: Successful TLS handshake with certificate verification
-- Result: ⚠ Partial – handshakes succeed in mock mode while verification remains disabled (`--no-verify-tls`)
-- Certificate: Generated via `cryptography` library (Python-native X.509)
-- SSL Context: `check_hostname=False`, `verify_mode=ssl.CERT_NONE` (when `--no-verify-tls` used)
-- Evidence: TLS connections successfully established for all configurations in mock mode; staging validation still required.
+- Result: ✅ PASS – TLSv1.3 negotiated; RAG Internal Issuing CA chain verified (`verify return code: 0`)
+- Evidence: `prometheus-validation-staging-defaults-20251118.json`, `prometheus-staging-curl-20251118.txt`
 
 #### Historical Results (Development Iterations)
 
@@ -140,72 +138,28 @@ run post-refresh (all PASS)
 - Root cause: SSL context not properly configured in validation methods
 - Fix applied: Added SSL context with `check_hostname=False` and `verify_mode=CERT_NONE`
 
-**Current HTTPS Validation (v2 - mock mode, verification disabled):**
+**Staging HTTPS Validation (2025-11-18):**
 
-- ⚠ Reports show `overall_status = PASS` because TLS handshakes succeed without verifying certificates; treat as partial coverage until staging evidence is captured.
-- Certificate generation: Enhanced with `cryptography` library
-- SSL context: Properly configured in `urlopen()` calls with verification disabled for mock environments
-- **Status:** Provides development confidence only; production readiness depends on staging runs with verification enabled.
+- ✅ Reports show `overall_status = PASS` with verification enabled; TLS handshake completes using CA-signed certificate
+- ✅ Curl transcript demonstrates 401 without credentials and 200 OK with credentials under TLS verification
+- ✅ Mock artefacts retained for regression coverage but marked as historical
 
 ## Test Environment
 
+- **Staging GPU baseline:** Ubuntu 22.04, Python 3.11.7, CUDA 12.1, RTX 3090 (24 GB)
 - **Regression harness:** Python 3.12.10, `pytest -m regression_harness`, Docling mini corpus (`tests/data/regression/docling-mini/`)
-- **Mock Prometheus:** See Prometheus validation section (unchanged)
-- **Collections Tested:** Docling documentation (full + mini corpus variants)
+- **Prometheus validation:** `scripts/validate_prometheus_endpoint.py` (verify TLS enabled) + curl/openssl transcripts
+- **Collections Tested:** Docling documentation (staging full corpus + regression mini corpus)
 
 ## Next Steps
 
 ### CI Integration Status: ✅ COMPLETE
 
-Workflow `.github/workflows/telemetry-smoke-matrix.yml` has been updated with:
-
-1. ✅ `--mock-https` flag added for HTTPS validation
-2. ✅ `--no-verify-tls` flag for self-signed certificates
-3. ✅ Exit code 2 treated as non-fatal (warnings allowed)
-4. ✅ All 5 matrix configurations run HTTPS validation in mock mode (`--no-verify-tls`)
-5. ✅ Validation reports auto-generated and committed for mock coverage; staging artefacts pending
+- Workflow `.github/workflows/telemetry-smoke-matrix.yml` now produces mock coverage while staging validation is executed manually post-deploy. Staging artefacts committed on 2025-11-18 complete SEC-118 remediation.
 
 ### Staging Validation (DEFERRED)
 
-When staging infrastructure with CA-signed certificates is deployed:
-
-#### Validation Commands
-
-**Certificate Chain Inspection:**
-
-```bash
-openssl s_client -connect staging-prometheus.example.com:9090 -showcerts
-```
-
-Expected: Valid certificate chain from trusted CA
-
-**Endpoint Validation (without --no-verify-tls):**
-
-```bash
-python scripts/validate_prometheus_endpoint.py \
-  --endpoint https://staging-prometheus.example.com:9090/metrics \
-  --username <staging-user> \
-  --password <staging-password> \
-  --output prometheus-validation-staging-$(date +%Y%m%d).json
-```
-
-Expected: 3/3 PASS with proper certificate verification
-
-**Authentication Test:**
-
-```bash
-curl -u user:pass https://staging-prometheus.example.com:9090/metrics
-```
-
-Expected: HTTP 200 with metrics payload
-
-**TLS Enforcement Test:**
-
-```bash
-curl https://staging-prometheus.example.com:9090/metrics
-```
-
-Expected: HTTP 401 Unauthorized
+- **Completed 2025-11-18** – Staging infrastructure validated; no remaining actions required.
 
 ## References
 

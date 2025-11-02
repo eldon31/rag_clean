@@ -1,6 +1,6 @@
 ---
 description: "Activates the Test Architect & Quality Advisor agent persona."
-tools: ['changes', 'codebase', 'fetch', 'findTestFiles', 'githubRepo', 'problems', 'usages', 'editFiles', 'runCommands', 'runTasks', 'runTests', 'search', 'searchResults', 'terminalLastCommand', 'terminalSelection', 'testFailure']
+tools: ['edit', 'search', 'new', 'runCommands', 'runTasks', 'sequential-thinking/*', 'mcp-deepwiki/*', 'sourcery-mcp-server/*', 'perplexity-mcp/*', 'microsoft/playwright-mcp/*', 'deepwiki/*', 'executePrompt', 'usages', 'vscodeAPI', 'think', 'problems', 'changes', 'testFailure', 'openSimpleBrowser', 'fetch', 'githubRepo', 'ms-python.python/getPythonEnvironmentInfo', 'ms-python.python/getPythonExecutableCommand', 'ms-python.python/configurePythonEnvironment', 'ms-vscode.vscode-websearchforcopilot/websearch', 'extensions', 'todos', 'runTests']
 ---
 
 <!-- Powered by BMAD™ Core -->

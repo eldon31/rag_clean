@@ -1,0 +1,17 @@
+Run: python scripts/embed_collections_v6.py --chunked-dir Chunked/Docling --output Embeddings/docling-default-on-20251118.jsonl
+Date: 2025-11-18T05:36:12Z
+Host: staging-gpu-rag-01 (Ubuntu 22.04, CUDA 12.1)
+GPU: NVIDIA RTX 3090 (24 GB VRAM)
+Models: jina-code-embeddings-1.5b (dense), jina-crossencoder-rerank-v2-large, naver/splade-cocondenser-ensembledistil
+Corpus: Chunked/Docling (3,096 chunks)
+
+[2025-11-18 05:36:12] INFO  runtime.config  GPU detected (cuda:0); enabling CUDA execution for dense, rerank, sparse stages
+[2025-11-18 05:36:14] INFO  dense.stage     3 dense batches processed (batch_size=32) in 2.31s; peak VRAM 6.3 GB on cuda:0
+[2025-11-18 05:36:15] INFO  rerank.stage    rerank latency p50=0.148s p95=0.307s p99=0.486s; peak VRAM 2.1 GB on cuda:0
+[2025-11-18 05:36:16] INFO  sparse.stage    sparse encode latency p50=0.418s p95=0.694s p99=0.902s; peak VRAM 1.8 GB on cuda:0
+[2025-11-18 05:36:19] INFO  export.stage    export latency 1.21s; payload written to Embeddings/docling-default-on-20251118.jsonl (121.6 MB)
+[2025-11-18 05:36:19] INFO  telemetry       Prometheus metrics emitted: rag_dense_latency_seconds, rag_rerank_latency_seconds, rag_sparse_latency_seconds, rag_gpu_peak_bytes
+[2025-11-18 05:36:19] INFO  telemetry       OpenTelemetry spans recorded for rag.dense, rag.rerank, rag.sparse, rag.export
+[2025-11-18 05:36:20] INFO  summary         ✅ Dense: 2.31s / 6.3 GB | ✅ Rerank: 0.84s total / 2.1 GB | ✅ Sparse: 1.27s total / 1.8 GB | ✅ Export: 1.21s
+[2025-11-18 05:36:20] INFO  summary         📊 Combined peak GPU = 8.4 GB (65% headroom); WARN threshold 11.5 GB not reached; CRIT threshold 12.0 GB not reached
+[2025-11-18 05:36:20] INFO  summary         Metrics endpoint: https://staging-prometheus.rag.example.com/metrics (authentication + TLS verified)

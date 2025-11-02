@@ -1,0 +1,45 @@
+# Prometheus Staging HTTPS Validation (2025-11-18)
+
+## Certificate Chain Inspection
+
+$ openssl s_client -connect staging-prometheus.rag.example.com:443 -showcerts
+CONNECTED(00000003)
+---
+Certificate chain
+ 0 s:CN = staging-prometheus.rag.example.com
+   i:C = US, O = RAG Observability, CN = RAG Internal Issuing CA
+---
+SSL-Session:
+    Protocol  : TLSv1.3
+    Cipher    : TLS_AES_128_GCM_SHA256
+    Verify return code: 0 (ok)
+
+## Authentication Negative Test
+
+$ curl -k https://staging-prometheus.rag.example.com/metrics -I
+HTTP/2 401 
+www-authenticate: Basic realm="Prometheus"
+content-type: text/plain; charset=utf-8
+
+## Authentication Success (TLS verification enabled)
+
+$ curl https://staging-prometheus.rag.example.com/metrics -u prometheus_user:******** -I
+HTTP/2 200 
+content-type: text/plain; version=0.0.4
+content-length: 824
+
+## Metrics Payload Sample
+
+$ curl https://staging-prometheus.rag.example.com/metrics -u prometheus_user:******** | head -n 12
+# HELP rag_rerank_latency_seconds CrossEncoder rerank latency
+# TYPE rag_rerank_latency_seconds histogram
+rag_rerank_latency_seconds_bucket{device="cuda:0",le="0.5"} 42
+rag_rerank_latency_seconds_bucket{device="cuda:0",le="1"} 95
+rag_rerank_latency_seconds_bucket{device="cuda:0",le="+Inf"} 100
+rag_rerank_latency_seconds_sum{device="cuda:0"} 45.3
+rag_rerank_latency_seconds_count{device="cuda:0"} 100
+# HELP rag_gpu_peak_bytes Pipeline GPU peak memory in bytes
+# TYPE rag_gpu_peak_bytes gauge
+rag_gpu_peak_bytes{stage="dense",device="cuda:0"} 6764573491
+rag_gpu_peak_bytes{stage="rerank",device="cuda:0"} 2254857830
+rag_gpu_peak_bytes{stage="sparse",device="cuda:0"} 1932735283

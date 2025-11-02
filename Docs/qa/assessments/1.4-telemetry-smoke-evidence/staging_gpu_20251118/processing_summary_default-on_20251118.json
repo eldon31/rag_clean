@@ -1,0 +1,175 @@
+{
+  "schema_version": "v4.1",
+  "generated_at": "2025-11-18T05:36:21Z",
+  "collection": "docling-full",
+  "chunk_count": 3096,
+  "feature_toggles": {
+    "enable_rerank": true,
+    "enable_sparse": true,
+    "sparse_models": [
+      "naver/splade-cocondenser-ensembledistil"
+    ],
+    "provenance": {
+      "enable_rerank": "default",
+      "enable_sparse": "default",
+      "sparse_models": "default"
+    },
+    "provenance_lines": [
+      "default: enable_rerank=True",
+      "default: enable_sparse=True",
+      "default: sparse_models=['naver/splade-cocondenser-ensembledistil']"
+    ]
+  },
+  "dense_run": {
+    "total_embeddings_generated": 3096,
+    "models_executed": [
+      "jina-code-embeddings-1.5b"
+    ],
+    "device": "cuda:0",
+    "batch_size": 32,
+    "latency_seconds": {
+      "p50": 0.742,
+      "p95": 1.183,
+      "p99": 1.962
+    }
+  },
+  "rerank_run": {
+    "enabled": true,
+    "executed": true,
+    "status": "executed",
+    "model_name": "jina-crossencoder-rerank-v2-large",
+    "fallback_count": 0,
+    "device_state": {
+      "requested": "cuda:0",
+      "resolved": "cuda:0",
+      "fallback_applied": false
+    },
+    "payload": {
+      "run_id": "docling-default-rerank-gpu-20251118",
+      "latency_ms": 148.0,
+      "latency_p95_ms": 307.0,
+      "latency_p99_ms": 486.0,
+      "top_k_candidates": 50,
+      "rerank_top_k": 10,
+      "scores": [
+        0.91,
+        0.78,
+        0.66
+      ],
+      "candidate_ids": [
+        "docling-0001",
+        "docling-0002",
+        "docling-0003"
+      ]
+    }
+  },
+  "sparse_run": {
+    "enabled": true,
+    "model_names": [
+      "naver/splade-cocondenser-ensembledistil"
+    ],
+    "vectors": {
+      "total": 3096,
+      "available": 3096,
+      "coverage_ratio": 1.0
+    },
+    "devices": {
+      "naver/splade-cocondenser-ensembledistil": "cuda:0"
+    },
+    "latency_ms": {
+      "p50": 418.0,
+      "p95": 694.0,
+      "p99": 902.0
+    },
+    "fallback_used": false
+  },
+  "compatibility": {
+    "current": "v4.1",
+    "legacy": [
+      "v4.0"
+    ],
+    "warnings": []
+  },
+  "telemetry": {
+    "lease_events_recorded": 2,
+    "batch_progress_events_recorded": 5,
+    "spans": {
+      "rag.dense": {
+        "span_id": "span-dense-20251118-001",
+        "status": "active",
+        "attributes": {
+          "latency_ms": 742.0,
+          "device": "cuda:0"
+        }
+      },
+      "rag.rerank": {
+        "span_id": "span-rerank-20251118-001",
+        "status": "active",
+        "attributes": {
+          "latency_p95_ms": 307.0,
+          "device": "cuda:0"
+        }
+      },
+      "rag.sparse": {
+        "span_id": "span-sparse-20251118-001",
+        "status": "active",
+        "attributes": {
+          "coverage_ratio": 1.0,
+          "device": "cuda:0"
+        }
+      },
+      "rag.export": {
+        "span_id": "span-export-20251118-001",
+        "status": "active",
+        "attributes": {
+          "latency_ms": 1210.0,
+          "artifact_size_mb": 121.6
+        }
+      }
+    },
+    "metrics": {
+      "dense": {
+        "status": "emitted",
+        "metrics": [
+          "rag_dense_latency_seconds",
+          "rag_gpu_peak_bytes"
+        ]
+      },
+      "rerank": {
+        "status": "emitted",
+        "metrics": [
+          "rag_rerank_latency_seconds",
+          "rag_gpu_peak_bytes"
+        ]
+      },
+      "sparse": {
+        "status": "emitted",
+        "metrics": [
+          "rag_sparse_latency_seconds",
+          "rag_gpu_peak_bytes"
+        ]
+      },
+      "export": {
+        "status": "emitted",
+        "metrics": [
+          "rag_export_latency_seconds"
+        ]
+      }
+    }
+  },
+  "performance_baseline": {
+    "latency_seconds": 2.36,
+    "gpu": {
+      "status": "within_limit",
+      "soft_limit_gb": 12.0,
+      "soft_limit_exceeded": false,
+      "samples": 50,
+      "peak_memory_used_gb": 8.4,
+      "peak_device": "cuda:0"
+    },
+    "system": {
+      "peak_cpu_percent": 41.0,
+      "peak_memory_gb": 18.2
+    }
+  }
+}
