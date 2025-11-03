@@ -300,6 +300,18 @@ def main(argv: Optional[Iterable[str]] = None) -> int:
     manifest_path = _write_manifest(output_path, manifest_payload)
     LOGGER.info("Run manifest written to %s", manifest_path)
 
+    dense_throughput = dense_results.get("chunks_per_second") if isinstance(dense_results, dict) else None
+    if isinstance(dense_throughput, (int, float)):
+        LOGGER.info("Dense throughput: %.2f chunks/sec", dense_throughput)
+    dense_latency = dense_results.get("processing_time_seconds") if isinstance(dense_results, dict) else None
+    if isinstance(dense_latency, (int, float)):
+        LOGGER.info("Dense stage latency: %.2fs", dense_latency)
+
+    if _in_kaggle():
+        LOGGER.info("Detailed runtime log: /kaggle/working/embedding_process.log")
+        LOGGER.info("Run artefacts saved under: %s", output_path)
+        LOGGER.info("CUDA diagnostics: %s", output_path / "cuda_debug_snapshot.json")
+
     LOGGER.info("Embedding pipeline complete")
     return 0
 
