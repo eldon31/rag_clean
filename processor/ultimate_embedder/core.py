@@ -25,6 +25,9 @@ PERFORMANCE TARGET:
 
 import os
 import json
+import sys
+import importlib.util
+import importlib.metadata as importlib_metadata
 
 # ============================================================================
 # CRITICAL: Set environment variables BEFORE any other imports
@@ -95,6 +98,40 @@ logging.basicConfig(
     ]
 )
 logger = logging.getLogger(__name__)
+
+
+CUDA_DEBUG_ENV_KEYS = (
+    "PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION",
+    "JAX_PLATFORMS",
+    "JAX_PLATFORM_NAME",
+    "TF_CPP_MIN_LOG_LEVEL",
+    "XLA_PYTHON_CLIENT_PREALLOCATE",
+    "CUDA_VISIBLE_DEVICES",
+)
+
+
+CUDA_DEBUG_MODULES = (
+    "torch",
+    "jax",
+    "jaxlib",
+    "tensorflow",
+    "cupy",
+    "onnxruntime",
+)
+
+
+def _safe_package_version(name: str) -> Optional[str]:
+    """Return installed package version without importing heavy modules."""
+
+    candidates = {name, name.replace("_", "-")}
+    for candidate in candidates:
+        try:
+            return importlib_metadata.version(candidate)
+        except importlib_metadata.PackageNotFoundError:
+            continue
+        except Exception:  # pragma: no cover - defensive guard
+            return None
+    return None
 
 
 if TYPE_CHECKING:
@@ -343,6 +380,9 @@ class UltimateKaggleEmbedderV4:
 
         if self.device == "cpu":
             self._apply_cpu_dense_fallback()
+
+        self.cuda_debug_snapshot = self._capture_cuda_debug_snapshot()
+        self._log_cuda_debug_snapshot()
 
         self.text_cache = AdvancedTextCache() if self.preprocessing_config.enable_text_caching else None
 
@@ -1185,6 +1225,113 @@ class UltimateKaggleEmbedderV4:
         else:
             logger.debug("Model %s primary dtype recorded as %s", model_name, dtype)
         return dtype
+
+    def _capture_cuda_debug_snapshot(self) -> Dict[str, Any]:
+        """Collect diagnostic details about CUDA-related state for manifest/logging."""
+
+        env_snapshot = {
+            key: os.environ.get(key)
+            for key in CUDA_DEBUG_ENV_KEYS
+            if os.environ.get(key) is not None
+        }
+
+        module_snapshot: Dict[str, Dict[str, Any]] = {}
+        for module_name in CUDA_DEBUG_MODULES:
+            imported = module_name in sys.modules
+            try:
+                available = importlib.util.find_spec(module_name) is not None
+            except (ModuleNotFoundError, ValueError):
+                available = False
+            version: Optional[str]
+            if module_name == "torch":
+                version = torch.__version__
+            else:
+                version = _safe_package_version(module_name)
+            module_snapshot[module_name] = {
+                "imported": imported,
+                "available": available,
+                "version": version,
+            }
+
+        torch_info: Dict[str, Any] = {
+            "version": torch.__version__,
+            "cuda_version": torch.version.cuda,
+            "cuda_available": torch.cuda.is_available(),
+            "device_count": torch.cuda.device_count(),
+            "cudnn_available": torch.backends.cudnn.is_available(),
+            "cudnn_version": torch.backends.cudnn.version() if torch.backends.cudnn.is_available() else None,
+        }
+
+        try:
+            matmul_backend = getattr(torch.backends.cuda, "matmul", None)
+            tf32_flag = getattr(matmul_backend, "allow_tf32", None) if matmul_backend is not None else None
+        except (RuntimeError, AttributeError):  # pragma: no cover - occurs when CUDA not initialized
+            tf32_flag = None
+        if tf32_flag is not None:
+            torch_info["tf32_enabled"] = bool(tf32_flag)
+
+        device_details: List[Dict[str, Any]] = []
+        if torch_info["device_count"]:
+            for idx in range(torch_info["device_count"]):
+                try:
+                    props = torch.cuda.get_device_properties(idx)
+                    device_details.append(
+                        {
+                            "index": idx,
+                            "name": props.name,
+                            "total_memory_gb": round(props.total_memory / 1e9, 2),
+                            "multi_processor_count": props.multi_processor_count,
+                            "compute_capability": f"{props.major}.{props.minor}",
+                        }
+                    )
+                except Exception as exc:  # pragma: no cover - diagnostic only
+                    device_details.append({"index": idx, "error": str(exc)})
+        torch_info["devices"] = device_details
+
+        snapshot: Dict[str, Any] = {
+            "timestamp": datetime.now().isoformat(),
+            "environment": env_snapshot,
+            "force_cpu": self.force_cpu,
+            "effective_device": self.device,
+            "effective_device_count": self.device_count,
+            "gpu_config": {
+                "device_count": getattr(self.gpu_config, "device_count", None),
+                "backend": getattr(self.gpu_config, "backend", None),
+                "strategy": getattr(self.gpu_config, "strategy", None),
+            },
+            "torch": torch_info,
+            "modules": module_snapshot,
+        }
+
+        conflicts = [
+            name
+            for name in ("jax", "jaxlib", "tensorflow")
+            if module_snapshot.get(name, {}).get("imported")
+        ]
+        if conflicts:
+            snapshot["potential_conflicts"] = conflicts
+
+        return snapshot
+
+    def _log_cuda_debug_snapshot(self) -> None:
+        """Log the captured CUDA diagnostic snapshot in a readable format."""
+
+        if not logger.isEnabledFor(logging.INFO):
+            return
+
+        try:
+            pretty_payload = json.dumps(self.cuda_debug_snapshot, indent=2, sort_keys=True)
+        except TypeError:  # pragma: no cover - fallback when serialization fails
+            pretty_payload = str(self.cuda_debug_snapshot)
+
+        logger.info("CUDA debug snapshot:\n%s", pretty_payload)
+
+        conflicts = self.cuda_debug_snapshot.get("potential_conflicts") or []
+        if conflicts:
+            logger.warning(
+                "Modules already imported before embedder init that can trigger CUDA plugin warnings: %s",
+                ", ".join(conflicts),
+            )
 
     def _apply_cpu_dense_fallback(self) -> None:
         """Adjust dense model roster when operating without GPUs."""

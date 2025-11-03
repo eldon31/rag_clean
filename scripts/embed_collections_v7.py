@@ -23,6 +23,11 @@ import sys
 from pathlib import Path
 from typing import Iterable, List, Optional, Sequence
 
+
+REPO_ROOT = Path(__file__).resolve().parent.parent
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
+
 from processor.ultimate_embedder import (
     EnsembleConfig,
     FeatureToggleConfig,
@@ -281,6 +286,7 @@ def main(argv: Optional[Iterable[str]] = None) -> int:
         "load_summary": load_summary,
         "processing_summary_path": str(summary_path),
         "processing_summary": processing_summary,
+        "cuda_debug_snapshot": getattr(embedder, "cuda_debug_snapshot", None),
     }
     manifest_path = _write_manifest(output_path, manifest_payload)
     LOGGER.info("Run manifest written to %s", manifest_path)
