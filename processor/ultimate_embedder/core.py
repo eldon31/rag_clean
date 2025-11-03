@@ -28,8 +28,10 @@ from __future__ import annotations
 import os
 import json
 import sys
+import importlib
 import importlib.util
 import importlib.metadata as importlib_metadata
+from contextlib import contextmanager, nullcontext
 
 # ============================================================================
 # CRITICAL: Set environment variables BEFORE any other imports
@@ -149,6 +151,134 @@ def _apply_protobuf_messagefactory_shim() -> List[str]:
 
 _PROTOBUF_COMPAT_PATCH_TARGETS = _apply_protobuf_messagefactory_shim()
 
+
+def _normalize_package_name(name: str) -> str:
+    """Normalize package identifier for consistent comparisons."""
+
+    return name.replace("-", "_").lower()
+
+
+def _should_apply_tokenizers_shim() -> tuple[Optional[str], bool]:
+    """Determine whether the tokenizers/transformers version gate needs a shim."""
+
+    try:
+        installed_version = importlib_metadata.version("tokenizers")
+    except importlib_metadata.PackageNotFoundError:
+        return None, False
+    except Exception:
+        return None, False
+
+    try:
+        from packaging.version import Version
+    except Exception:
+        return installed_version, False
+
+    try:
+        needs_shim = Version(installed_version) >= Version("0.20")
+    except Exception:
+        needs_shim = False
+
+    return installed_version, needs_shim
+
+
+_TOKENIZERS_INSTALLED_VERSION, _TOKENIZERS_NEEDS_SHIM = _should_apply_tokenizers_shim()
+_TOKENIZERS_COMPAT_PATCHED_FROM: Optional[str] = None
+_TOKENIZERS_REPORTED_VERSION = "0.19.99"
+
+
+@contextmanager
+def _tokenizers_version_guard(installed_version: str):
+    """Temporarily relax transformers' strict tokenizers requirement during import."""
+
+    global _TOKENIZERS_COMPAT_PATCHED_FROM
+
+    patched_version = _TOKENIZERS_REPORTED_VERSION
+    original_version_func = importlib_metadata.version
+
+    stdlib_metadata = None
+    original_stdlib_version = None
+    try:
+        import importlib.metadata as _stdlib_metadata
+
+        stdlib_metadata = _stdlib_metadata
+        original_stdlib_version = getattr(_stdlib_metadata, "version", None)
+    except Exception:
+        stdlib_metadata = None
+        original_stdlib_version = None
+
+    pkg_resources_module = None
+    original_get_distribution = None
+    try:
+        import pkg_resources as _pkg_resources  # type: ignore[import-not-found]
+
+        pkg_resources_module = _pkg_resources
+        original_get_distribution = _pkg_resources.get_distribution  # type: ignore[attr-defined]
+    except Exception:
+        pkg_resources_module = None
+        original_get_distribution = None
+
+    def _patched_version(package: str) -> str:
+        if _normalize_package_name(package) == "tokenizers":
+            return patched_version
+        return original_version_func(package)
+
+    class _DistributionProxy:
+        """Distribution wrapper overriding the exposed version attribute."""
+
+        __slots__ = ("_delegate",)
+
+        def __init__(self, delegate: Any) -> None:
+            self._delegate = delegate
+
+        def __getattr__(self, attr: str) -> Any:
+            if attr == "version":
+                return patched_version
+            return getattr(self._delegate, attr)
+
+        def __dir__(self) -> List[str]:
+            return list(dict.fromkeys(["version", *dir(self._delegate)]))
+
+    def _patched_get_distribution(dist: Any):  # type: ignore[override]
+        distribution = original_get_distribution(dist)  # type: ignore[misc]
+        project_name = getattr(distribution, "project_name", None)
+        key = getattr(distribution, "key", None)
+        normalized = _normalize_package_name(project_name or key or "")
+        if normalized == "tokenizers":
+            return _DistributionProxy(distribution)
+        return distribution
+
+    try:
+        importlib_metadata.version = _patched_version  # type: ignore[assignment]
+        if stdlib_metadata is not None and original_stdlib_version is not None:
+            stdlib_metadata.version = _patched_version  # type: ignore[assignment]
+        if pkg_resources_module is not None and original_get_distribution is not None:
+            pkg_resources_module.get_distribution = _patched_get_distribution  # type: ignore[assignment]
+        _TOKENIZERS_COMPAT_PATCHED_FROM = installed_version
+        yield
+    finally:
+        importlib_metadata.version = original_version_func  # type: ignore[assignment]
+        if stdlib_metadata is not None and original_stdlib_version is not None:
+            stdlib_metadata.version = original_stdlib_version  # type: ignore[assignment]
+        if pkg_resources_module is not None and original_get_distribution is not None:
+            pkg_resources_module.get_distribution = original_get_distribution  # type: ignore[assignment]
+
+
+def _load_sentence_transformers() -> tuple[Any, Any]:
+    """Import sentence-transformers under a compatibility guard if required."""
+
+    context = (
+        _tokenizers_version_guard(_TOKENIZERS_INSTALLED_VERSION)
+        if _TOKENIZERS_NEEDS_SHIM and _TOKENIZERS_INSTALLED_VERSION is not None
+        else nullcontext()
+    )
+
+    with context:
+        module = importlib.import_module("sentence_transformers")
+        cross_encoder_cls = getattr(module, "CrossEncoder")
+        sentence_transformer_cls = getattr(module, "SentenceTransformer")
+
+    return cross_encoder_cls, sentence_transformer_cls
+
 import gc
 import inspect
 import logging
@@ -182,7 +312,7 @@ def snapshot_download(*args: Any, **kwargs: Any) -> str:
     return _snapshot_download(*args, **kwargs)
 
 # Core ML libraries
-from sentence_transformers import CrossEncoder, SentenceTransformer
+CrossEncoder, SentenceTransformer = _load_sentence_transformers()
 from sklearn.metrics.pairwise import cosine_similarity
 
 # Advanced optimization libraries (optional on Kaggle)
@@ -205,6 +335,13 @@ logging.basicConfig(
     ]
 )
 logger = logging.getLogger(__name__)
+
+if _TOKENIZERS_COMPAT_PATCHED_FROM:
+    logger.info(
+        "Relaxed transformers tokenizers gate for runtime compatibility (installed %s -> reported %s)",
+        _TOKENIZERS_COMPAT_PATCHED_FROM,
+        _TOKENIZERS_REPORTED_VERSION,
+    )
 
 if _PROTOBUF_COMPAT_PATCH_TARGETS:
     try:
