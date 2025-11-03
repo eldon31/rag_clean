@@ -68,18 +68,35 @@ def _apply_protobuf_messagefactory_shim() -> List[str]:
             return get_message_class(self, descriptor)
 
         try:
-            setattr(target_cls, "GetPrototype", _get_prototype)
-            patched_targets.append(f"{module.__name__}.{attr_name}")
-            return target_cls
-        except (TypeError, AttributeError):
             subclass_name = f"Patched{target_cls.__name__}"
             patched_cls = type(subclass_name, (target_cls,), {"GetPrototype": _get_prototype})
-            try:
-                setattr(module, attr_name, patched_cls)
-                patched_targets.append(f"{module.__name__}.{attr_name}")
-                return patched_cls
-            except Exception:
-                return target_cls
+            setattr(module, attr_name, patched_cls)
+            patched_targets.append(f"{module.__name__}.{attr_name}[subclass]")
+            return patched_cls
+        except TypeError:
+            class CompatFactory:  # type: ignore[too-few-public-methods]
+                """Lazy wrapper that delegates to the original factory implementation."""
+
+                __slots__ = ("_delegate",)
+
+                def __init__(self, *args: Any, **kwargs: Any) -> None:
+                    self._delegate = target_cls(*args, **kwargs)
+
+                def GetPrototype(self, descriptor: Any) -> Any:  # noqa: N802 - protobuf casing
+                    return self._delegate.GetMessageClass(descriptor)
+
+                def GetMessageClass(self, descriptor: Any) -> Any:  # noqa: N802
+                    return self._delegate.GetMessageClass(descriptor)
+
+                def __getattr__(self, name: str) -> Any:
+                    return getattr(self._delegate, name)
+
+                def __dir__(self) -> List[str]:
+                    return list(dict.fromkeys(dir(self._delegate)))
+
+            setattr(module, attr_name, CompatFactory)
+            patched_targets.append(f"{module.__name__}.{attr_name}[wrapper]")
+            return CompatFactory
 
     try:
         from google.protobuf import message_factory as _message_factory  # type: ignore[import-not-found]  # pylint: disable=import-outside-toplevel
@@ -101,26 +118,13 @@ def _apply_protobuf_messagefactory_shim() -> List[str]:
 
         default_factory = getattr(_pyext_message, "_DEFAULT_FACTORY", None)
         if default_factory is not None and not hasattr(default_factory, "GetPrototype"):
-            get_message_class = getattr(default_factory, "GetMessageClass", None)
-            if get_message_class is not None:
+            factory_cls = patched_pyext_factory_cls or patched_message_factory_cls
+            if factory_cls is not None:
                 try:
-                    import types
-
-                    default_factory.GetPrototype = types.MethodType(
-                        lambda self, descriptor: get_message_class(descriptor),
-                        default_factory,
-                    )
+                    _pyext_message._DEFAULT_FACTORY = factory_cls()
                     patched_targets.append("google.protobuf.pyext._message._DEFAULT_FACTORY")
                 except Exception:
-                    factory_cls = patched_pyext_factory_cls or patched_message_factory_cls
-                    if factory_cls is not None:
-                        try:
-                            _pyext_message._DEFAULT_FACTORY = factory_cls()
-                            patched_targets.append(
-                                "google.protobuf.pyext._message._DEFAULT_FACTORY"
-                            )
-                        except Exception:
-                            pass
+                    pass
 
     try:
         from google.protobuf.internal import python_message as _python_message  # type: ignore[import-not-found]  # pylint: disable=import-outside-toplevel
@@ -130,15 +134,10 @@ def _apply_protobuf_messagefactory_shim() -> List[str]:
     if _python_message is not None:
         default_factory = getattr(_python_message, "_DEFAULT_FACTORY", None)
         if default_factory is not None and not hasattr(default_factory, "GetPrototype"):
-            get_message_class = getattr(default_factory, "GetMessageClass", None)
-            if get_message_class is not None:
+            factory_cls = patched_pyext_factory_cls or patched_message_factory_cls
+            if factory_cls is not None:
                 try:
-                    import types
-
-                    default_factory.GetPrototype = types.MethodType(
-                        lambda self, descriptor: get_message_class(descriptor),
-                        default_factory,
-                    )
+                    _python_message._DEFAULT_FACTORY = factory_cls()
                     patched_targets.append(
                         "google.protobuf.internal.python_message._DEFAULT_FACTORY"
                     )
