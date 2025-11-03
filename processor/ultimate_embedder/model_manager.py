@@ -18,13 +18,15 @@ from processor.ultimate_embedder.config import (
     SPARSE_MODELS,
 )
 
+_ORT_IMPORT_ERROR: Optional[str] = None
 try:  # Optional ONNX acceleration via Optimum
     from optimum.onnxruntime import ORTModelForFeatureExtraction  # type: ignore
 
     ONNX_AVAILABLE = True
-except ImportError:  # pragma: no cover - Optimum not installed
+except Exception as exc:  # pragma: no cover - Optimum missing or incompatible
     ORTModelForFeatureExtraction = None  # type: ignore
     ONNX_AVAILABLE = False
+    _ORT_IMPORT_ERROR = f"{type(exc).__name__}: {exc}"
 
 try:  # Hugging Face hub compatibility across versions
     from huggingface_hub.utils import LocalEntryNotFoundError  # type: ignore
@@ -46,6 +48,12 @@ class ModelManager:
     def __init__(self, embedder: "UltimateKaggleEmbedderV4", logger: logging.Logger) -> None:
         self.embedder = embedder
         self.logger = logger
+
+        if _ORT_IMPORT_ERROR:
+            logger.warning(
+                "Optimum ORT backend disabled, falling back to PyTorch models: %s",
+                _ORT_IMPORT_ERROR,
+            )
 
 
     # ------------------------------------------------------------------
