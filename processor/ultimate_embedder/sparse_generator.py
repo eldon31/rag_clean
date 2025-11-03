@@ -15,12 +15,16 @@ from typing import TYPE_CHECKING, Any, Dict, List, Optional, Sequence
 
 import numpy as np
 import torch
-from sentence_transformers import SentenceTransformer
 
 from processor.ultimate_embedder.gpu_lease import GPULease, lease_gpus
 from processor.ultimate_embedder.sparse_pipeline import (
     build_sparse_vector_from_metadata,
 )
+
+if TYPE_CHECKING:  # pragma: no cover - typing only
+    from sentence_transformers import SentenceTransformer
+else:
+    from .compat import SentenceTransformer
 
 if TYPE_CHECKING:  # pragma: no cover
     from processor.ultimate_embedder.core import UltimateKaggleEmbedderV4

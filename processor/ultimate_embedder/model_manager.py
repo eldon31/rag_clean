@@ -11,12 +11,15 @@ from typing import TYPE_CHECKING, Any, Dict, List, Optional
 
 import torch
 from huggingface_hub import snapshot_download
-from sentence_transformers import SentenceTransformer
-
 from processor.ultimate_embedder.config import (
     KAGGLE_OPTIMIZED_MODELS,
     SPARSE_MODELS,
 )
+
+if TYPE_CHECKING:  # pragma: no cover - typing only
+    from sentence_transformers import SentenceTransformer
+else:
+    from .compat import SentenceTransformer
 
 _ORT_IMPORT_ERROR: Optional[str] = None
 try:  # Optional ONNX acceleration via Optimum

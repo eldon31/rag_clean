@@ -1,5 +1,10 @@
 """Public interface for the modular Ultimate Embedder package."""
 
+# Ensure compatibility shims are applied before importing submodules that rely on
+# sentence-transformers. The underscore indicates this import is intentional but
+# not re-exported directly.
+from . import compat as _compat  # noqa: F401
+
 from .config import (
     AdvancedPreprocessingConfig,
     AdvancedTextCache,

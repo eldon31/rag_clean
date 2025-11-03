@@ -7,7 +7,7 @@ import types
 import importlib.metadata as stdlib_metadata
 import pkg_resources
 
-from processor.ultimate_embedder import core
+from processor.ultimate_embedder import compat
 
 
 def test_tokenizers_version_guard_relaxes_version_checks(monkeypatch):
@@ -20,23 +20,23 @@ def test_tokenizers_version_guard_relaxes_version_checks(monkeypatch):
         return dummy_distribution
 
     def fake_metadata_version(name):
-        assert core._normalize_package_name(name) == "tokenizers"
+        assert compat._normalize_package_name(name) == "tokenizers"  # type: ignore[attr-defined]
         return "0.21.2"
 
     monkeypatch.setattr(pkg_resources, "get_distribution", fake_get_distribution, raising=False)
-    monkeypatch.setattr(core.importlib_metadata, "version", fake_metadata_version, raising=False)
+    monkeypatch.setattr(compat.importlib_metadata, "version", fake_metadata_version, raising=False)
     monkeypatch.setattr(stdlib_metadata, "version", fake_metadata_version, raising=False)
 
-    core._TOKENIZERS_COMPAT_PATCHED_FROM = None
+    compat.TOKENIZERS_COMPAT_PATCHED_FROM = None
 
-    with core._tokenizers_version_guard("0.21.2"):
+    with compat._tokenizers_version_guard("0.21.2"):  # type: ignore[attr-defined]
         patched_dist = pkg_resources.get_distribution("tokenizers")
-        assert patched_dist.version == core._TOKENIZERS_REPORTED_VERSION
-        assert core.importlib_metadata.version("tokenizers") == core._TOKENIZERS_REPORTED_VERSION
-        assert stdlib_metadata.version("tokenizers") == core._TOKENIZERS_REPORTED_VERSION
+        assert patched_dist.version == compat.TOKENIZERS_REPORTED_VERSION
+        assert compat.importlib_metadata.version("tokenizers") == compat.TOKENIZERS_REPORTED_VERSION
+        assert stdlib_metadata.version("tokenizers") == compat.TOKENIZERS_REPORTED_VERSION
 
     assert pkg_resources.get_distribution is fake_get_distribution
-    assert core.importlib_metadata.version("tokenizers") == "0.21.2"
+    assert compat.importlib_metadata.version("tokenizers") == "0.21.2"
     assert stdlib_metadata.version("tokenizers") == "0.21.2"
-    assert core._TOKENIZERS_COMPAT_PATCHED_FROM == "0.21.2"
-    core._TOKENIZERS_COMPAT_PATCHED_FROM = None
+    assert compat.TOKENIZERS_COMPAT_PATCHED_FROM == "0.21.2"
+    compat.TOKENIZERS_COMPAT_PATCHED_FROM = None
