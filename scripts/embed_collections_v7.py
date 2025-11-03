@@ -19,6 +19,7 @@ from __future__ import annotations
 import argparse
 import json
 import logging
+import shutil
 import sys
 from pathlib import Path
 from typing import Iterable, List, Optional, Sequence
@@ -174,6 +175,18 @@ def _write_manifest(output_dir: Path, payload: dict, filename: str = "run_manife
     return target
 
 
+def _copy_kaggle_log(output_dir: Path, export_prefix: str) -> Optional[Path]:
+    log_source = Path("/kaggle/working/embedding_process.log")
+    if not log_source.exists():
+        return None
+    target = output_dir / f"{export_prefix}_embedding_process.log"
+    try:
+        shutil.copy2(log_source, target)
+    except OSError:
+        return None
+    return target
+
+
 # ---------------------------------------------------------------------------
 # Argument parsing
 # ---------------------------------------------------------------------------
@@ -308,7 +321,14 @@ def main(argv: Optional[Iterable[str]] = None) -> int:
         LOGGER.info("Dense stage latency: %.2fs", dense_latency)
 
     if _in_kaggle():
-        LOGGER.info("Detailed runtime log: /kaggle/working/embedding_process.log")
+        kaggle_log = _copy_kaggle_log(output_path, inferred_prefix)
+        if kaggle_log is not None:
+            LOGGER.info("Kaggle runtime log copied to: %s", kaggle_log)
+        else:
+            LOGGER.warning(
+                "embedding_process.log not found; ensure the embedder initialized successfully before searching for logs."
+            )
+        LOGGER.info("Original Kaggle log (if present): /kaggle/working/embedding_process.log")
         LOGGER.info("Run artefacts saved under: %s", output_path)
         LOGGER.info("CUDA diagnostics: %s", output_path / "cuda_debug_snapshot.json")
 

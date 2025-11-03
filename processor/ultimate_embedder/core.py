@@ -81,10 +81,12 @@ from sentence_transformers import CrossEncoder, SentenceTransformer
 from sklearn.metrics.pairwise import cosine_similarity
 
 # Advanced optimization libraries (optional on Kaggle)
+_ORT_IMPORT_ERROR: Optional[str] = None
 try:
     from optimum.onnxruntime import ORTModelForFeatureExtraction  # type: ignore[import-not-found]
-except ImportError:
+except Exception as exc:  # pragma: no cover - defensive import guard
     ORTModelForFeatureExtraction = None  # type: ignore[assignment]
+    _ORT_IMPORT_ERROR = f"{type(exc).__name__}: {exc}"
 
 ONNX_AVAILABLE = ORTModelForFeatureExtraction is not None
 
@@ -98,6 +100,12 @@ logging.basicConfig(
     ]
 )
 logger = logging.getLogger(__name__)
+
+if _ORT_IMPORT_ERROR:
+    logger.warning(
+        "Optimum ORT backend disabled, falling back to PyTorch models: %s",
+        _ORT_IMPORT_ERROR,
+    )
 
 
 CUDA_DEBUG_ENV_KEYS = (
