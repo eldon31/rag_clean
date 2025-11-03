@@ -72,12 +72,26 @@ def _configure_logging(quiet: bool) -> None:
 
 
 def _resolve_paths(chunked_dir: str, output_dir: str) -> tuple[Path, Path]:
-    chunk_path = Path(chunked_dir).expanduser().resolve()
-    output_path = Path(output_dir).expanduser().resolve()
+    chunk_candidate = Path(chunked_dir).expanduser()
+    if not chunk_candidate.is_absolute():
+        chunk_candidate = Path.cwd() / chunk_candidate
+    chunk_path = chunk_candidate.resolve(strict=False)
+
+    output_path = Path(output_dir).expanduser().resolve(strict=False)
     output_path.mkdir(parents=True, exist_ok=True)
+
     if not chunk_path.exists():
-        LOGGER.error("Chunk directory %s does not exist", chunk_path)
-        raise FileNotFoundError(chunk_path)
+        if _in_kaggle():
+            LOGGER.info(
+                "Chunk directory %s not found; deferring to Kaggle chunk auto-discovery",
+                chunk_path,
+            )
+        else:
+            LOGGER.warning(
+                "Chunk directory %s not found; loader will attempt fallback locations",
+                chunk_path,
+            )
+
     return chunk_path, output_path
 
 
