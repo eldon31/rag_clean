@@ -354,6 +354,7 @@ class ChunkLoader:
             self.logger.info(
                 f"[FILE_START] Loading: {file_name} | Start: {start_timestamp}"
             )
+            print(f"[chunk_loader] Loading {chunk_file}...", flush=True)
             
             try:
                 with open(chunk_file, "r", encoding="utf-8") as handle:
@@ -481,6 +482,10 @@ class ChunkLoader:
                 f"Duration: {duration:.2f}s | "
                 f"Rate: {processing_rate:.1f} chunks/sec | "
                 f"End: {end_timestamp}"
+            )
+            print(
+                f"[chunk_loader] Finished {chunk_file.name}: {file_chunk_count} chunks in {duration:.2f}s",
+                flush=True,
             )
 
         return chunk_count
