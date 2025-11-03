@@ -272,9 +272,14 @@ def main(argv: Optional[Iterable[str]] = None) -> int:
         LOGGER.error("Chunk loading failed: %s", load_summary.get("error"))
         return 1
 
+    total_chunks = load_summary.get("total_chunks_loaded", 0)
+    if not total_chunks:
+        LOGGER.error("Chunk loading produced zero chunks; verify input dataset under %s", chunk_path)
+        return 1
+
     LOGGER.info(
         "Loaded %s chunks across %s collections",
-        load_summary.get("total_chunks_loaded", 0),
+        total_chunks,
         load_summary.get("collections_loaded", 0),
     )
 

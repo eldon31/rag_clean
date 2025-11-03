@@ -62,3 +62,28 @@ def test_chunk_loader_coerces_string_entries(tmp_path):
 
     assert result.summary["total_chunks_loaded"] == 1
     assert not result.summary["loading_errors"]
+
+
+def test_chunk_loader_descends_into_nested_chunked_dir(tmp_path):
+    dataset_root = tmp_path / "uploaded_dataset"
+    nested_dir = dataset_root / "Chunked" / "Docling"
+    nested_dir.mkdir(parents=True)
+
+    payload = [
+        {
+            "text": "valid chunk",
+            "metadata": {"token_count": 120},
+        }
+    ]
+    _write_json(nested_dir / "docling_chunks.json", payload)
+
+    loader = _make_loader(tmp_path)
+    result = loader.load(
+        str(dataset_root),
+        preprocess_text=lambda text: text,
+        model_name="test-model",
+        model_vector_dim=768,
+        text_cache=None,
+    )
+
+    assert result.summary["total_chunks_loaded"] == 1

@@ -255,7 +255,11 @@ class ChunkLoader:
         candidates: List[Path] = []
 
         preferred_path = Path(preferred_dir)
-        candidates.extend([preferred_path, preferred_path / "Chunked", preferred_path / "chunked"])
+        candidates.extend([
+            preferred_path / "Chunked",
+            preferred_path / "chunked",
+            preferred_path,
+        ])
 
         if self.is_kaggle:
             candidates.extend([
