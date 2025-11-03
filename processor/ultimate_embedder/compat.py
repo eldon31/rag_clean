@@ -4,6 +4,9 @@ from __future__ import annotations
 
 import importlib
 import importlib.metadata as importlib_metadata
+import os
+import subprocess
+import sys
 from contextlib import contextmanager, nullcontext
 from typing import Any, List, Optional, Tuple
 
@@ -11,6 +14,9 @@ TOKENIZERS_REPORTED_VERSION = "0.19.99"
 _TOKENIZERS_INSTALLED_VERSION: Optional[str]
 _TOKENIZERS_NEEDS_SHIM: bool
 TOKENIZERS_COMPAT_PATCHED_FROM: Optional[str] = None
+_SANITIZER_EXECUTED = False
+_SANITIZER_STATUS: Optional[str] = None
+_SANITIZER_SUCCESS: Optional[bool] = None
 
 
 def _normalize_package_name(name: str) -> str:
@@ -80,6 +86,81 @@ def _should_apply_tokenizers_shim() -> Tuple[Optional[str], bool]:
     _TOKENIZERS_INSTALLED_VERSION,
     _TOKENIZERS_NEEDS_SHIM,
 ) = _should_apply_tokenizers_shim()
+
+
+def _run_conflict_uninstall_if_needed() -> None:
+    """Best-effort removal of CUDA plugin conflicts (e.g., TensorFlow, JAX) on Kaggle."""
+
+    global _SANITIZER_EXECUTED, _SANITIZER_STATUS, _SANITIZER_SUCCESS
+
+    if _SANITIZER_EXECUTED:
+        return
+    _SANITIZER_EXECUTED = True
+
+    if os.environ.get("EMBEDDER_SKIP_XLA_SANITIZE") == "1":
+        _SANITIZER_STATUS = "Sanitizer skipped via EMBEDDER_SKIP_XLA_SANITIZE"
+        _SANITIZER_SUCCESS = False
+        return
+
+    if os.environ.get("EMBEDDER_SANITIZED_XLA_CONFLICTS") == "1":
+        _SANITIZER_STATUS = "Sanitizer previously executed in session"
+        _SANITIZER_SUCCESS = True
+        return
+
+    if "/kaggle" not in os.getcwd():
+        _SANITIZER_STATUS = "Sanitizer not required outside Kaggle runtime"
+        _SANITIZER_SUCCESS = True
+        return
+
+    candidates = [
+        "jax",
+        "jaxlib",
+        "tensorflow",
+        "tensorflow-gpu",
+        "tensorflow-intel",
+        "tensorflow-io-gcs-filesystem",
+        "tensorflow-estimator",
+        "tensorboard",
+    ]
+
+    installed: List[str] = []
+    for pkg in candidates:
+        try:
+            importlib_metadata.version(pkg)
+        except importlib_metadata.PackageNotFoundError:
+            continue
+        except Exception:
+            continue
+        else:
+            installed.append(pkg)
+
+    if not installed:
+        _SANITIZER_STATUS = "No conflicting CUDA plugins detected"
+        _SANITIZER_SUCCESS = True
+        return
+
+    cmd = [sys.executable, "-m", "pip", "uninstall", "-y", *installed]
+    try:
+        result = subprocess.run(cmd, capture_output=True, text=True, check=False)
+    except Exception as exc:  # pragma: no cover - defensive guard
+        _SANITIZER_STATUS = f"Sanitizer failed: {type(exc).__name__}: {exc}"
+        _SANITIZER_SUCCESS = False
+        return
+
+    merged_output = (result.stdout or "") + (result.stderr or "")
+    snippet = merged_output.strip().splitlines()[-1] if merged_output else ""
+
+    if result.returncode == 0:
+        os.environ["EMBEDDER_SANITIZED_XLA_CONFLICTS"] = "1"
+        _SANITIZER_STATUS = "Sanitizer removed conflicting packages"
+        if snippet:
+            _SANITIZER_STATUS += f": {snippet}"
+        _SANITIZER_SUCCESS = True
+    else:
+        _SANITIZER_STATUS = f"Sanitizer pip exit code {result.returncode}"
+        if snippet:
+            _SANITIZER_STATUS += f": {snippet}"
+        _SANITIZER_SUCCESS = False
 
 
 @contextmanager
@@ -157,6 +238,8 @@ def _tokenizers_version_guard(installed_version: str):
 def load_sentence_transformers() -> Tuple[Any, Any]:
     """Import sentence-transformers under a compatibility guard if required."""
 
+    _run_conflict_uninstall_if_needed()
+
     context = (
         _tokenizers_version_guard(_TOKENIZERS_INSTALLED_VERSION)
         if _TOKENIZERS_NEEDS_SHIM and _TOKENIZERS_INSTALLED_VERSION is not None
@@ -173,10 +256,17 @@ def load_sentence_transformers() -> Tuple[Any, Any]:
 
 CrossEncoder, SentenceTransformer = load_sentence_transformers()
 
+
+def get_conflict_sanitizer_status() -> Tuple[Optional[bool], Optional[str]]:
+    """Expose the CUDA conflict sanitizer status for downstream logging."""
+
+    return _SANITIZER_SUCCESS, _SANITIZER_STATUS
+
 __all__ = [
     "CrossEncoder",
     "SentenceTransformer",
     "TOKENIZERS_COMPAT_PATCHED_FROM",
     "TOKENIZERS_REPORTED_VERSION",
     "load_sentence_transformers",
+    "get_conflict_sanitizer_status",
 ]

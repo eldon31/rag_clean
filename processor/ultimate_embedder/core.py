@@ -170,6 +170,7 @@ from huggingface_hub import snapshot_download as _snapshot_download
 from .compat import (
     TOKENIZERS_COMPAT_PATCHED_FROM,
     TOKENIZERS_REPORTED_VERSION,
+    get_conflict_sanitizer_status,
     load_sentence_transformers,
 )
 
@@ -224,6 +225,11 @@ if TOKENIZERS_COMPAT_PATCHED_FROM:
         TOKENIZERS_COMPAT_PATCHED_FROM,
         TOKENIZERS_REPORTED_VERSION,
     )
+
+sanitizer_success, sanitizer_status = get_conflict_sanitizer_status()
+if sanitizer_status:
+    level = logging.INFO if sanitizer_success else logging.WARNING
+    logger.log(level, "CUDA conflict sanitizer: %s", sanitizer_status)
 
 if _PROTOBUF_COMPAT_PATCH_TARGETS:
     try:
