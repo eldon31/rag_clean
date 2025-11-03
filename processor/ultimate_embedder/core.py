@@ -44,6 +44,47 @@ os.environ.setdefault("JAX_PLATFORM_NAME", "cpu")
 os.environ.setdefault("TF_CPP_MIN_LOG_LEVEL", "3")
 os.environ.setdefault("XLA_PYTHON_CLIENT_PREALLOCATE", "false")
 
+def _restore_protobuf_getprototype() -> bool:
+    """Inject compatibility shim for protobuf>=4 where GetPrototype was removed."""
+
+    restored = False
+    try:
+        from google.protobuf import message_factory as _message_factory  # pylint: disable=import-outside-toplevel
+
+        if not hasattr(_message_factory.MessageFactory, "GetPrototype") and hasattr(
+            _message_factory.MessageFactory,
+            "GetMessageClass",
+        ):
+
+            def _get_prototype(self, descriptor):  # type: ignore[override]
+                return self.GetMessageClass(descriptor)
+
+            _message_factory.MessageFactory.GetPrototype = _get_prototype  # type: ignore[assignment]
+            restored = True
+    except Exception:
+        pass
+
+    try:
+        from google.protobuf.internal import python_message as _python_message  # pylint: disable=import-outside-toplevel
+
+        default_factory = getattr(_python_message, "_DEFAULT_FACTORY", None)
+        if default_factory is not None:
+            factory_cls = default_factory.__class__
+            if not hasattr(factory_cls, "GetPrototype") and hasattr(factory_cls, "GetMessageClass"):
+
+                def _get_prototype(self, descriptor):  # type: ignore[override]
+                    return self.GetMessageClass(descriptor)
+
+                factory_cls.GetPrototype = _get_prototype  # type: ignore[assignment]
+                restored = True
+    except Exception:
+        pass
+
+    return restored
+
+
+_PROTOBUF_COMPAT_PATCHED = _restore_protobuf_getprototype()
+
 import gc
 import inspect
 import logging
@@ -100,6 +141,17 @@ logging.basicConfig(
     ]
 )
 logger = logging.getLogger(__name__)
+
+if _PROTOBUF_COMPAT_PATCHED:
+    try:
+        import google.protobuf as _protobuf  # pylint: disable=import-outside-toplevel
+
+        logger.info(
+            "Applied protobuf compatibility shim for MessageFactory (version %s)",
+            getattr(_protobuf, "__version__", "unknown"),
+        )
+    except Exception:
+        logger.info("Applied protobuf compatibility shim for MessageFactory")
 
 if _ORT_IMPORT_ERROR:
     logger.warning(
