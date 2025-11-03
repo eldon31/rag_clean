@@ -17,6 +17,8 @@ TOKENIZERS_COMPAT_PATCHED_FROM: Optional[str] = None
 _SANITIZER_EXECUTED = False
 _SANITIZER_STATUS: Optional[str] = None
 _SANITIZER_SUCCESS: Optional[bool] = None
+_SANITIZER_PERFORMED_ACTION = False
+_SANITIZER_REMOVED: List[str] = []
 
 
 def _normalize_package_name(name: str) -> str:
@@ -91,7 +93,7 @@ def _should_apply_tokenizers_shim() -> Tuple[Optional[str], bool]:
 def _run_conflict_uninstall_if_needed() -> None:
     """Best-effort removal of CUDA plugin conflicts (e.g., TensorFlow, JAX) on Kaggle."""
 
-    global _SANITIZER_EXECUTED, _SANITIZER_STATUS, _SANITIZER_SUCCESS
+    global _SANITIZER_EXECUTED, _SANITIZER_STATUS, _SANITIZER_SUCCESS, _SANITIZER_PERFORMED_ACTION, _SANITIZER_REMOVED
 
     if _SANITIZER_EXECUTED:
         return
@@ -153,9 +155,13 @@ def _run_conflict_uninstall_if_needed() -> None:
     if result.returncode == 0:
         os.environ["EMBEDDER_SANITIZED_XLA_CONFLICTS"] = "1"
         _SANITIZER_STATUS = "Sanitizer removed conflicting packages"
+        if installed:
+            _SANITIZER_STATUS += f" ({', '.join(installed)})"
         if snippet:
             _SANITIZER_STATUS += f": {snippet}"
         _SANITIZER_SUCCESS = True
+        _SANITIZER_PERFORMED_ACTION = True
+        _SANITIZER_REMOVED = installed.copy()
     else:
         _SANITIZER_STATUS = f"Sanitizer pip exit code {result.returncode}"
         if snippet:
