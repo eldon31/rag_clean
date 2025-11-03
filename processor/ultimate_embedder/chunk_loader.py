@@ -353,10 +353,17 @@ class ChunkLoader:
             
             try:
                 with open(chunk_file, "r", encoding="utf-8") as handle:
-                    file_chunks = json.load(handle)
+                    raw_chunks = json.load(handle)
             except Exception as exc:
                 message = f"Error loading {chunk_file}: {exc}"
                 self.logger.error(message)
+                results["loading_errors"].append(message)
+                continue
+
+            file_chunks = self._coerce_file_chunks(raw_chunks, chunk_file)
+            if not file_chunks:
+                message = f"No usable chunks extracted from {chunk_file}"
+                self.logger.warning(message)
                 results["loading_errors"].append(message)
                 continue
 
@@ -463,6 +470,47 @@ class ChunkLoader:
             )
 
         return chunk_count
+
+    def _coerce_file_chunks(self, payload: Any, chunk_file: Path) -> List[Dict[str, Any]]:
+        """Normalize arbitrary JSON payloads into chunk dictionaries."""
+
+        # Handle wrapper dicts that store chunks under a known key.
+        if isinstance(payload, dict):
+            for key in ("chunks", "data", "records", "items"):
+                value = payload.get(key)
+                if isinstance(value, list):
+                    return self._coerce_file_chunks(value, chunk_file)
+            return [payload]
+
+        if isinstance(payload, list):
+            normalized: List[Dict[str, Any]] = []
+            malformed_entries = 0
+            for entry in payload:
+                if isinstance(entry, dict):
+                    normalized.append(entry)
+                    continue
+                if isinstance(entry, str):
+                    normalized.append({"text": entry, "metadata": {}})
+                    malformed_entries += 1
+                    continue
+                malformed_entries += 1
+
+            if malformed_entries:
+                self.logger.warning(
+                    "Coerced %s malformed entries to chunk records in %s",
+                    malformed_entries,
+                    chunk_file,
+                )
+            return normalized
+
+        if isinstance(payload, str):
+            self.logger.warning("Wrapping string payload as chunk in %s", chunk_file)
+            return [{"text": payload, "metadata": {}}]
+
+        self.logger.error(
+            "Unsupported chunk payload type %s in %s", type(payload).__name__, chunk_file
+        )
+        return []
 
 
 __all__ = ["ChunkLoader", "ChunkLoadResult", "normalize_collection_name"]
