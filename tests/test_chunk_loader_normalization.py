@@ -87,3 +87,28 @@ def test_chunk_loader_descends_into_nested_chunked_dir(tmp_path):
     )
 
     assert result.summary["total_chunks_loaded"] == 1
+
+
+def test_chunk_loader_estimates_missing_token_counts(tmp_path):
+    chunk_dir = tmp_path / "token_estimate"
+    chunk_dir.mkdir()
+    long_text = "word " * 120
+    payload = [
+        {
+            "text": long_text,
+            "metadata": {},
+        }
+    ]
+    _write_json(chunk_dir / "estimate_chunks.json", payload)
+
+    loader = _make_loader(tmp_path)
+    result = loader.load(
+        str(chunk_dir),
+        preprocess_text=lambda text: text,
+        model_name="test-model",
+        model_vector_dim=768,
+        text_cache=None,
+    )
+
+    assert result.summary["total_chunks_loaded"] == 1
+    assert result.metadata[0]["token_count"] >= 100

@@ -373,11 +373,21 @@ class ChunkLoader:
 
             for chunk in file_chunks:
                 metadata = chunk.get("metadata", {}) or {}
-                token_count = metadata.get("token_count", 0)
-                if isinstance(token_count, (int, float)) and token_count < 50:
+                original_text = chunk.get("text", "")
+                if not isinstance(original_text, str):
+                    original_text = str(original_text)
+
+                token_count_value = metadata.get("token_count")
+                if isinstance(token_count_value, (int, float)):
+                    token_count = int(token_count_value)
+                else:
+                    token_count = len(original_text.split())
+                    if token_count:
+                        metadata.setdefault("token_count", token_count)
+
+                if token_count < 50:
                     continue
 
-                original_text = chunk.get("text", "")
                 processed_text = preprocess_text(original_text)
                 chunk_id = len(metadata_list)
                 hierarchy_path = metadata.get("hierarchy_path") or _build_hierarchy_path(metadata.get("section_path"))

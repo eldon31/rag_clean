@@ -64,24 +64,24 @@ class ThroughputMonitor:
         
         gpu_count = torch.cuda.device_count() if device == "cuda" else 0
         
-        self.logger.debug("=" * 60)
-        self.logger.debug("THROUGHPUT START:")
-        self.logger.debug(f"  Model: {model_name}")
-        self.logger.debug(f"  Chunks: {chunk_count}")
-        self.logger.debug(f"  Timestamp: {self._timestamp_start}")
-        self.logger.debug(f"  GPUs: {gpu_count}")
-        self.logger.debug(f"  Batch size/GPU: {batch_size}")
-        self.logger.debug(f"  DataParallel: {is_data_parallel}")
+        self.logger.info("=" * 60)
+        self.logger.info("THROUGHPUT START:")
+        self.logger.info(f"  Model: {model_name}")
+        self.logger.info(f"  Chunks: {chunk_count}")
+        self.logger.info(f"  Timestamp: {self._timestamp_start}")
+        self.logger.info(f"  GPUs: {gpu_count}")
+        self.logger.info(f"  Batch size/GPU: {batch_size}")
+        self.logger.info(f"  DataParallel: {is_data_parallel}")
         
         if gpu_count > 0:
             for gpu_id in range(gpu_count):
                 mem_allocated = torch.cuda.memory_allocated(gpu_id) / (1024**3)
                 mem_reserved = torch.cuda.memory_reserved(gpu_id) / (1024**3)
-                self.logger.debug(
+                self.logger.info(
                     f"  GPU {gpu_id}: {mem_allocated:.2f}GB allocated, {mem_reserved:.2f}GB reserved"
                 )
         
-        self.logger.debug("=" * 60)
+        self.logger.info("=" * 60)
         
     def end(self) -> ThroughputMetrics:
         """End monitoring and return metrics.
@@ -109,21 +109,21 @@ class ThroughputMonitor:
                     "reserved_gb": round(mem_reserved, 2),
                 })
         
-        self.logger.debug("=" * 60)
-        self.logger.debug("THROUGHPUT END:")
-        self.logger.debug(f"  Chunks processed: {self._chunk_count}")
-        self.logger.debug(f"  Duration: {elapsed:.2f}s")
-        self.logger.debug(f"  Rate: {chunks_per_sec:.2f} chunks/sec")
+        self.logger.info("=" * 60)
+        self.logger.info("THROUGHPUT END:")
+        self.logger.info(f"  Chunks processed: {self._chunk_count}")
+        self.logger.info(f"  Duration: {elapsed:.2f}s")
+        self.logger.info(f"  Rate: {chunks_per_sec:.2f} chunks/sec")
         
         for metric in gpu_metrics:
-            self.logger.debug(
+            self.logger.info(
                 f"  GPU {metric['gpu_id']} peak: "
                 f"{metric['allocated_gb']:.2f}GB allocated, "
                 f"{metric['reserved_gb']:.2f}GB reserved"
             )
         
-        self.logger.debug(f"  Timestamp: {timestamp_end}")
-        self.logger.debug("=" * 60)
+        self.logger.info(f"  Timestamp: {timestamp_end}")
+        self.logger.info("=" * 60)
         
         return ThroughputMetrics(
             chunk_count=self._chunk_count,
