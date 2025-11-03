@@ -254,6 +254,7 @@ def main(argv: Optional[Iterable[str]] = None) -> int:
         toggles.enable_sparse,
         toggles.sparse_models if toggles.sparse_models else "none",
     )
+    print("[embed_v7] Feature toggles resolved. Loading chunks...", flush=True)
 
     embedder = _build_embedder(args, output_path, toggles)
 
@@ -267,6 +268,7 @@ def main(argv: Optional[Iterable[str]] = None) -> int:
         LOGGER.warning("Failed to persist CUDA debug snapshot: %s", exc)
 
     LOGGER.info("Loading chunks from %s", chunk_path)
+    print(f"[embed_v7] Loading chunks from {chunk_path}...", flush=True)
     load_summary = embedder.load_chunks_from_processing(chunks_dir=str(chunk_path))
     if load_summary.get("error"):
         LOGGER.error("Chunk loading failed: %s", load_summary.get("error"))
@@ -282,19 +284,27 @@ def main(argv: Optional[Iterable[str]] = None) -> int:
         total_chunks,
         load_summary.get("collections_loaded", 0),
     )
+    print(
+        f"[embed_v7] Loaded {total_chunks} chunks across {load_summary.get('collections_loaded', 0)} collections.",
+        flush=True,
+    )
 
     LOGGER.info("Running dense ensemble for models: %s", _resolve_ensemble_models(args.ensemble_models))
+    print("[embed_v7] Starting dense ensemble...", flush=True)
     dense_results = embedder.generate_embeddings_kaggle_optimized(
         enable_monitoring=args.monitor,
         save_intermediate=args.save_intermediate,
     )
+    print("[embed_v7] Dense stage complete.", flush=True)
 
     inferred_prefix = args.export_prefix or embedder.get_target_collection_name()
     embedder.export_config.output_prefix = inferred_prefix
 
     LOGGER.info("Exporting embeddings to %s", embedder.export_config.working_dir)
+    print("[embed_v7] Exporting artefacts...", flush=True)
     exported_files = embedder.export_for_local_qdrant()
     LOGGER.info("Export produced %s artefacts", len(exported_files))
+    print(f"[embed_v7] Export complete with {len(exported_files)} files.", flush=True)
 
     summary_path = Path(args.summary_path) if args.summary_path else output_path / f"{inferred_prefix}_processing_summary.json"
     processing_summary = embedder.write_processing_summary(
@@ -352,6 +362,7 @@ def main(argv: Optional[Iterable[str]] = None) -> int:
         LOGGER.info("CUDA diagnostics: %s", output_path / "cuda_debug_snapshot.json")
 
     LOGGER.info("Embedding pipeline complete")
+    print("[embed_v7] Embedding pipeline complete.", flush=True)
     return 0
 
 
