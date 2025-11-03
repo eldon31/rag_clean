@@ -230,6 +230,15 @@ def main(argv: Optional[Iterable[str]] = None) -> int:
 
     embedder = _build_embedder(args, output_path, toggles)
 
+    try:
+        snapshot_path = output_path / "cuda_debug_snapshot.json"
+        snapshot_payload = getattr(embedder, "cuda_debug_snapshot", None)
+        if snapshot_payload is not None:
+            snapshot_path.write_text(json.dumps(snapshot_payload, indent=2), encoding="utf-8")
+            LOGGER.info("CUDA debug snapshot saved to %s", snapshot_path)
+    except Exception as exc:  # pragma: no cover - filesystem issues
+        LOGGER.warning("Failed to persist CUDA debug snapshot: %s", exc)
+
     LOGGER.info("Loading chunks from %s", chunk_path)
     load_summary = embedder.load_chunks_from_processing(chunks_dir=str(chunk_path))
     if load_summary.get("error"):

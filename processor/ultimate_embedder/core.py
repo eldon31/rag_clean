@@ -1328,9 +1328,13 @@ class UltimateKaggleEmbedderV4:
 
         conflicts = self.cuda_debug_snapshot.get("potential_conflicts") or []
         if conflicts:
+            conflict_list = ", ".join(conflicts)
             logger.warning(
-                "Modules already imported before embedder init that can trigger CUDA plugin warnings: %s",
-                ", ".join(conflicts),
+                "Detected pre-imported CUDA consumers (%s). These libraries often trigger the cuFFT/cuBLAS/cuDNN 'factory already registered' warnings emitted by XLA.",
+                conflict_list,
+            )
+            logger.warning(
+                "Mitigation: ensure those modules are not imported before the embedder starts, or uninstall them in Kaggle (e.g. `pip uninstall -y jax jaxlib tensorflow`).",
             )
 
     def _apply_cpu_dense_fallback(self) -> None:
