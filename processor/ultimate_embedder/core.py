@@ -65,7 +65,33 @@ def _restore_protobuf_getprototype() -> bool:
         pass
 
     try:
-        from google.protobuf.internal import python_message as _python_message  # pylint: disable=import-outside-toplevel
+        from google.protobuf.pyext import _message as _pyext_message  # type: ignore[attr-defined,import-not-found]  # pylint: disable=import-outside-toplevel
+
+        if hasattr(_pyext_message, "MessageFactory"):
+            factory_cls = _pyext_message.MessageFactory
+            if not hasattr(factory_cls, "GetPrototype") and hasattr(factory_cls, "GetMessageClass"):
+
+                def _get_prototype(self, descriptor):  # type: ignore[override]
+                    return self.GetMessageClass(descriptor)
+
+                factory_cls.GetPrototype = _get_prototype  # type: ignore[assignment]
+                restored = True
+
+        default_factory = getattr(_pyext_message, "_DEFAULT_FACTORY", None)
+        if default_factory is not None:
+            factory_cls = default_factory.__class__
+            if not hasattr(factory_cls, "GetPrototype") and hasattr(factory_cls, "GetMessageClass"):
+
+                def _get_prototype(self, descriptor):  # type: ignore[override]
+                    return self.GetMessageClass(descriptor)
+
+                factory_cls.GetPrototype = _get_prototype  # type: ignore[assignment]
+                restored = True
+    except Exception:
+        pass
+
+    try:
+        from google.protobuf.internal import python_message as _python_message  # type: ignore[import-not-found]  # pylint: disable=import-outside-toplevel
 
         default_factory = getattr(_python_message, "_DEFAULT_FACTORY", None)
         if default_factory is not None:
