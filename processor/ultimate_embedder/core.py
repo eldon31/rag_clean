@@ -963,6 +963,7 @@ class UltimateKaggleEmbedderV4:
         device: str,
         show_progress: bool = True,
         progress_context: Optional[BatchProgressContext] = None,
+        model_name: Optional[str] = None,
     ) -> np.ndarray:
         """Invoke encode() against SentenceTransformer or compatible wrappers."""
 
@@ -980,11 +981,13 @@ class UltimateKaggleEmbedderV4:
         if encode_callable is None:
             raise AttributeError(f"Model {type(model).__name__} does not expose encode()")
 
+        active_model_name = model_name or self.model_name
+
         # Initialize throughput monitoring
         monitor = ThroughputMonitor(logger=logger)
         monitor.start(
             chunk_count=len(texts),
-            model_name=self.model_name,
+            model_name=active_model_name,
             device=device,
             batch_size=batch_size,
             is_data_parallel=isinstance(model, torch.nn.DataParallel)
@@ -1024,7 +1027,7 @@ class UltimateKaggleEmbedderV4:
             monitor.log_error(primary_exc)
             logger.exception(
                 "Encode failed for model %s on %s (batch=%d)",
-                self.model_name,
+                active_model_name,
                 device,
                 batch_size,
             )

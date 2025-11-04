@@ -352,6 +352,7 @@ class BatchRunner:
                     batch_size=primary_batch,
                     device=embedder.device,
                     progress_context=progress_context,
+                    model_name=embedder.model_name,
                 )
                 result = embedder._normalize_embedding_matrix(result, embedder.model_name)
             except Exception as exc:
@@ -473,6 +474,7 @@ class BatchRunner:
                         batch_size=batch_hint,
                         device=target_device,
                         progress_context=progress_context,
+                        model_name=model_name,
                     )
                     embeddings = embedder._normalize_embedding_matrix(embeddings, model_name)
                     embeddings, adjusted = embedder._ensure_embedding_dimension(
@@ -755,6 +757,7 @@ class BatchRunner:
                                 batch_size=current_batch,
                                 device=target_device,
                                 progress_context=progress_context,
+                                model_name=model_name,
                             )
                             batch_embeddings = embedder._normalize_embedding_matrix(
                                 batch_embeddings,

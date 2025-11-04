@@ -32,6 +32,7 @@ class ExportRuntime:
     def __init__(self, embedder: "UltimateKaggleEmbedderV4", logger: logging.Logger) -> None:
         self.embedder = embedder
         self.logger = logger
+        self.skipped_exports: Dict[str, str] = {}
 
     def export_for_local_qdrant(self) -> Dict[str, str]:
         """Export embeddings in formats optimized for downstream upload."""
@@ -40,6 +41,9 @@ class ExportRuntime:
         embedder = self.embedder
         if embedder.embeddings is None:
             raise ValueError("No embeddings to export. Generate embeddings first.")
+
+        # Reset skipped export tracking for fresh run
+        self.skipped_exports = {}
 
         embeddings = embedder._require_embeddings()
         companion_arrays = {
@@ -90,11 +94,18 @@ class ExportRuntime:
             exported_files["sparse_jsonl"] = sparse_path
             self.logger.info("Sparse JSONL: %s", sparse_path)
 
+        faiss_performed = False
         if embedder.export_config.export_faiss:
-            faiss_path = f"{base_path}_index.faiss"
-            self._export_faiss_index(faiss_path)
-            exported_files["faiss"] = faiss_path
-            self.logger.info("FAISS index: %s", faiss_path)
+            if faiss is None:
+                reason = "faiss package not installed; skipping FAISS index export"
+                self.logger.warning(reason)
+                self.skipped_exports["faiss"] = reason
+            else:
+                faiss_path = f"{base_path}_index.faiss"
+                self._export_faiss_index(faiss_path)
+                exported_files["faiss"] = faiss_path
+                faiss_performed = True
+                self.logger.info("FAISS index: %s", faiss_path)
 
         metadata_path = f"{base_path}_metadata.json"
         self._export_metadata(metadata_path)
@@ -126,6 +137,11 @@ class ExportRuntime:
             file_size_mb = os.path.getsize(file_path) / 1024 / 1024
             self.logger.info("  %s: %s (%.1fMB)", file_type, os.path.basename(file_path), file_size_mb)
 
+        if self.skipped_exports:
+            self.logger.warning("Export skipped for optional artefacts:")
+            for key, reason in self.skipped_exports.items():
+                self.logger.warning("  %s -> %s", key, reason)
+
         # Emit rag.export span with latency and file metrics
         export_latency_ms = (time.time() - export_start_time) * 1000
         file_count = len([f for f in exported_files.values() if isinstance(f, str) and os.path.exists(f)])
@@ -147,6 +163,8 @@ class ExportRuntime:
                 "export_jsonl": embedder.export_config.export_jsonl,
                 "export_faiss": embedder.export_config.export_faiss,
                 "export_sparse_jsonl": embedder.export_config.export_sparse_jsonl,
+                "faiss_export_performed": faiss_performed,
+                "skipped_exports": list(self.skipped_exports.keys()),
             },
         )
 
@@ -159,6 +177,8 @@ class ExportRuntime:
                 "file_count": file_count,
                 "total_size_mb": total_size_mb,
                 "device": embedder.device,
+                "skipped_exports": self.skipped_exports,
+                "faiss_export_performed": faiss_performed,
             },
         )
 

@@ -368,6 +368,15 @@ def main(argv: Optional[Iterable[str]] = None) -> int:
     LOGGER.info("Export produced %s artefacts", len(exported_files))
     print(f"[embed_v7] Export complete with {len(exported_files)} files.", flush=True)
 
+    skipped_exports = dict(getattr(embedder.export_runtime, "skipped_exports", {}) or {})
+    if skipped_exports:
+        for key, reason in skipped_exports.items():
+            LOGGER.warning("Export skipped for %s: %s", key, reason)
+            print(
+                f"[embed_v7] Export skipped ({key}): {reason}",
+                flush=True,
+            )
+
     summary_path = Path(args.summary_path) if args.summary_path else output_path / f"{inferred_prefix}_processing_summary.json"
     processing_summary = embedder.write_processing_summary(
         summary_path,
@@ -395,6 +404,7 @@ def main(argv: Optional[Iterable[str]] = None) -> int:
         },
         "feature_toggle_sources": toggles.sources,
         "exported_files": exported_files,
+    "skipped_exports": skipped_exports,
         "dense_results": dense_results,
         "load_summary": load_summary,
         "processing_summary_path": str(summary_path),
