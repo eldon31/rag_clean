@@ -7,6 +7,7 @@ import importlib.metadata as importlib_metadata
 import os
 import subprocess
 import sys
+import warnings
 from contextlib import contextmanager, nullcontext
 from typing import Any, List, Optional, Tuple
 
@@ -19,6 +20,23 @@ _SANITIZER_STATUS: Optional[str] = None
 _SANITIZER_SUCCESS: Optional[bool] = None
 _SANITIZER_PERFORMED_ACTION = False
 _SANITIZER_REMOVED: List[str] = []
+
+# Quieten Pydantic Field warnings emitted by upstream dependencies.
+try:  # pragma: no cover - pydantic internals may change
+    from pydantic._internal._generate_schema import UnsupportedFieldAttributeWarning  # type: ignore[attr-defined, import-not-found]
+except Exception:  # pragma: no cover - optional dependency path
+    UnsupportedFieldAttributeWarning = None  # type: ignore[assignment]
+else:
+    warnings.filterwarnings("ignore", category=UnsupportedFieldAttributeWarning)
+
+warnings.filterwarnings(
+    "ignore",
+    message="The 'repr' attribute with value False was provided to the `Field()` function",
+)
+warnings.filterwarnings(
+    "ignore",
+    message="The 'frozen' attribute with value True was provided to the `Field()` function",
+)
 
 
 def _normalize_package_name(name: str) -> str:
