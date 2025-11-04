@@ -15,6 +15,113 @@ from processor.ultimate_embedder.config import (
     get_reranking_model_config,
 )
 
+try:  # Lazy import for optional transformer-based loaders
+    from transformers import AutoModel
+except ImportError:  # pragma: no cover - transformers required for reranker loaders
+    AutoModel = None  # type: ignore[assignment]
+
+
+class _JinaRerankerAdapter:
+    """Adapter exposing a predict() API compatible with CrossEncoder usage."""
+
+    def __init__(self, model: Any) -> None:
+        self._model = model
+
+    def to(self, device: str) -> "_JinaRerankerAdapter":
+        self._model.to(device)
+        return self
+
+    def eval(self) -> None:
+        self._model.eval()
+
+    def predict(self, query_doc_pairs: Sequence[Sequence[str]]) -> List[float]:
+        if not query_doc_pairs:
+            return []
+
+        queries = {pair[0] for pair in query_doc_pairs if pair}
+        if not queries:
+            return []
+        if len(queries) != 1:
+            raise ValueError("Jina reranker expects batches with a single unique query")
+
+        query = next(iter(queries))
+        documents = [pair[1] for pair in query_doc_pairs]
+
+        results = self._model.rerank(
+            query=query,
+            documents=documents,
+            top_n=len(documents),
+            return_embeddings=False,
+        )
+
+        scores: List[float] = [0.0] * len(documents)
+        for entry in results:
+            try:
+                index = int(entry.get("index", -1))
+            except Exception:  # pragma: no cover - defensive cast
+                index = -1
+            if 0 <= index < len(scores):
+                score = entry.get("relevance_score", 0.0)
+                scores[index] = float(score)
+
+        return scores
+
+
+def create_reranker_from_spec(
+    *,
+    model_name: str,
+    spec: Any,
+    device: str,
+    logger: logging.Logger,
+) -> Any:
+    """Instantiate a reranker implementation based on the provided spec."""
+
+    if getattr(spec, "loader", "cross_encoder") == "jina_reranker":
+        if AutoModel is None:  # pragma: no cover - defensive
+            raise RuntimeError(
+                "transformers AutoModel unavailable; install transformers to load jina reranker"
+            )
+
+        model_kwargs = dict(getattr(spec, "model_kwargs", {}))
+        tokenizer_kwargs = dict(getattr(spec, "tokenizer_kwargs", {}))
+
+        if spec.trust_remote_code:
+            model_kwargs.setdefault("trust_remote_code", True)
+
+        logger.info(
+            "Loading jina reranker via AutoModel: %s (kwargs=%s)",
+            spec.hf_model_id,
+            {k: v for k, v in model_kwargs.items() if k != "trust_remote_code"},
+        )
+
+        base_model = AutoModel.from_pretrained(
+            spec.hf_model_id,
+            **model_kwargs,
+        )
+        base_model.eval()
+        if tokenizer_kwargs:
+            logger.debug("Tokenizer kwargs provided but unused by AutoModel: %s", tokenizer_kwargs)
+
+        if device and device != "cpu":
+            base_model.to(device)
+
+        return _JinaRerankerAdapter(base_model)
+
+    cross_encoder_kwargs: Dict[str, Any] = {"device": device}
+    if spec.trust_remote_code:
+        cross_encoder_kwargs["trust_remote_code"] = True
+    if getattr(spec, "model_kwargs", None):
+        cross_encoder_kwargs["model_kwargs"] = dict(spec.model_kwargs)
+    if getattr(spec, "tokenizer_kwargs", None):
+        cross_encoder_kwargs["tokenizer_kwargs"] = dict(spec.tokenizer_kwargs)
+
+    logger.info(
+        "Loading CrossEncoder reranker: %s (trust_remote_code=%s)",
+        spec.hf_model_id,
+        spec.trust_remote_code,
+    )
+    return CrossEncoder(spec.hf_model_id, **cross_encoder_kwargs)
+
 
 class RerankPipeline:
     """Coordinate CrossEncoder reranking for semantic search."""
@@ -22,7 +129,7 @@ class RerankPipeline:
     def __init__(self, config: RerankingConfig, logger: logging.Logger) -> None:
         self.config = config
         self.logger = logger
-        self.model: Optional[CrossEncoder] = None
+        self.model: Optional[Any] = None
         self.device: str = "cpu"
 
     def ensure_model(self, *, device: str) -> None:
@@ -42,28 +149,16 @@ class RerankPipeline:
             self.config.model_name = model_name
 
         spec = get_reranking_model_config(model_name)
-        hub_id = spec.hf_model_id
-        cross_encoder_kwargs: Dict[str, Any] = {
-            "device": device,
-            "trust_remote_code": spec.trust_remote_code,
-        }
-
-        automodel_args = dict(spec.automodel_args)
-        if spec.trust_remote_code:
-            automodel_args.setdefault("trust_remote_code", True)
-        if automodel_args:
-            cross_encoder_kwargs["automodel_args"] = automodel_args
-
-        self.logger.info(
-            "Loading reranking model: %s (trust_remote_code=%s)",
-            hub_id,
-            spec.trust_remote_code,
-        )
 
         try:
-            self.model = CrossEncoder(hub_id, **cross_encoder_kwargs)
+            self.model = create_reranker_from_spec(
+                model_name=model_name,
+                spec=spec,
+                device=device,
+                logger=self.logger,
+            )
             self.device = device
-            self.logger.info("CrossEncoder reranking model ready")
+            self.logger.info("Reranking model ready (%s)", getattr(spec, "loader", "cross_encoder"))
         except Exception as exc:  # pragma: no cover - defensive path
             self.logger.error("Failed to load reranking model: %s", exc)
             self.config.enable_reranking = False

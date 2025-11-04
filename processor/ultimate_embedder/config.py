@@ -153,11 +153,13 @@ SPARSE_MODELS: Dict[str, Dict[str, Any]] = {
 
 @dataclass(frozen=True)
 class RerankingModelSpec:
-    """Configuration describing a CrossEncoder reranking checkpoint."""
+    """Configuration describing a reranking checkpoint and load strategy."""
 
     hf_model_id: str
     trust_remote_code: bool = False
-    automodel_args: Dict[str, Any] = field(default_factory=dict)
+    model_kwargs: Dict[str, Any] = field(default_factory=dict)
+    tokenizer_kwargs: Dict[str, Any] = field(default_factory=dict)
+    loader: str = "cross_encoder"
     description: str = ""
 
 
@@ -166,6 +168,8 @@ RERANKING_MODELS: Dict[str, RerankingModelSpec] = {
     "jina-reranker-v3": RerankingModelSpec(
         hf_model_id="jinaai/jina-reranker-v3",
         trust_remote_code=True,
+        model_kwargs={},
+        loader="jina_reranker",
         description=(
             "Jina reranker v3 with pretrained scoring head; requires trust_remote_code "
             "to restore custom modules."

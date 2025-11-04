@@ -392,7 +392,9 @@ class ChunkLoader:
                 results["loading_errors"].append(message)
                 continue
 
-            for chunk in file_chunks:
+            token_threshold = 50
+
+            for chunk_idx, chunk in enumerate(file_chunks, start=1):
                 metadata = chunk.get("metadata", {}) or {}
                 original_text = chunk.get("text", "")
                 if not isinstance(original_text, str):
@@ -406,7 +408,18 @@ class ChunkLoader:
                     if token_count:
                         metadata.setdefault("token_count", token_count)
 
-                if token_count < 50:
+                if token_count < token_threshold:
+                    self.logger.info(
+                        "[CHUNK_SKIP] File: %s | chunk_idx: %d | tokens: %d | reason: below threshold",
+                        file_name,
+                        chunk_idx,
+                        token_count,
+                    )
+                    print(
+                        "[chunk_loader] SKIP %s | chunk_idx=%d | tokens=%d | reason=below_threshold"
+                        % (file_name, chunk_idx, token_count),
+                        flush=True,
+                    )
                     continue
 
                 processed_text = preprocess_text(original_text)
@@ -489,6 +502,20 @@ class ChunkLoader:
                 raw_texts.append(original_text)
                 chunk_count += 1
                 file_chunk_count += 1
+
+                self.logger.info(
+                    "[CHUNK_PROCESS] File: %s | chunk_idx: %d | global_id: %d | tokens: %d | processed_length: %d",
+                    file_name,
+                    chunk_idx,
+                    chunk_id,
+                    token_count,
+                    len(processed_text),
+                )
+                print(
+                    "[chunk_loader] PROCESS %s | chunk_idx=%d | global_id=%d | tokens=%d"
+                    % (file_name, chunk_idx, chunk_id, token_count),
+                    flush=True,
+                )
             
             # Per-file throughput logging END
             end_time = time.time()

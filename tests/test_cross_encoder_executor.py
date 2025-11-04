@@ -12,7 +12,10 @@ from processor.ultimate_embedder.cross_encoder_executor import (
     CrossEncoderBatchExecutor,
     CrossEncoderRerankRun,
 )
-from processor.ultimate_embedder.rerank_pipeline import RerankPipeline
+from processor.ultimate_embedder.rerank_pipeline import (
+    RerankPipeline,
+    _JinaRerankerAdapter,
+)
 
 
 @pytest.fixture
@@ -189,25 +192,56 @@ class TestEnsureModel:
         # Should log but not call ensure_model
         mock_ensure.assert_not_called()
 
-    @patch("processor.ultimate_embedder.rerank_pipeline.CrossEncoder")
-    def test_rerank_pipeline_respects_trust_remote_code(self, mock_cross_encoder, logger):
-        """RerankPipeline.ensure_model() should enable remote code for Jina reranker."""
+    @patch("processor.ultimate_embedder.rerank_pipeline.create_reranker_from_spec")
+    def test_rerank_pipeline_respects_trust_remote_code(self, mock_factory, logger):
+        """RerankPipeline.ensure_model() should pass through trust_remote_code metadata."""
+
+        sentinel_model = MagicMock()
+        mock_factory.return_value = sentinel_model
 
         config = RerankingConfig(model_name="jina-reranker-v3", enable_reranking=True)
         pipeline = RerankPipeline(config, logger)
 
         pipeline.ensure_model(device="cuda:0")
 
-        mock_cross_encoder.assert_called_once()
-        _, kwargs = mock_cross_encoder.call_args
+        mock_factory.assert_called_once()
+        kwargs = mock_factory.call_args.kwargs
         assert kwargs["device"] == "cuda:0"
-        assert kwargs["trust_remote_code"] is True
+        assert kwargs["spec"].trust_remote_code is True
+        assert kwargs["model_name"] == "jina-reranker-v3"
+        assert pipeline.model is sentinel_model
 
-        automodel_args = kwargs.get("automodel_args")
-        assert automodel_args is not None
-        assert automodel_args.get("trust_remote_code") is True
 
-        assert pipeline.model is mock_cross_encoder.return_value
+class TestJinaRerankerAdapter:
+    """Tests for the adapter wrapping the Jina reranker AutoModel."""
+
+    def test_predict_restores_original_order(self):
+        mock_model = MagicMock()
+        mock_model.rerank.return_value = [
+            {"index": 1, "relevance_score": 0.7},
+            {"index": 0, "relevance_score": 0.9},
+        ]
+
+        adapter = _JinaRerankerAdapter(mock_model)
+
+        pairs = [["query", "doc0"], ["query", "doc1"]]
+        scores = adapter.predict(pairs)
+
+        mock_model.rerank.assert_called_once_with(
+            query="query",
+            documents=["doc0", "doc1"],
+            top_n=2,
+            return_embeddings=False,
+        )
+        # Scores follow original candidate order
+        assert scores == [0.9, 0.7]
+
+    def test_predict_requires_single_query(self):
+        mock_model = MagicMock()
+        adapter = _JinaRerankerAdapter(mock_model)
+
+        with pytest.raises(ValueError, match="single unique query"):
+            adapter.predict([["q1", "doc0"], ["q2", "doc1"]])
 
 
 class TestExecuteRerank:

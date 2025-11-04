@@ -1780,16 +1780,13 @@ class UltimateKaggleEmbedderV4:
         target_device = "cpu" if self.device == "cuda" else self.device
 
         try:
-            automodel_args = dict(reranker_spec.automodel_args)
+            cross_encoder_kwargs: Dict[str, Any] = {"device": target_device}
             if reranker_spec.trust_remote_code:
-                automodel_args.setdefault("trust_remote_code", True)
-
-            cross_encoder_kwargs: Dict[str, Any] = {
-                "device": target_device,
-                "trust_remote_code": reranker_spec.trust_remote_code,
-            }
-            if automodel_args:
-                cross_encoder_kwargs["automodel_args"] = automodel_args
+                cross_encoder_kwargs["trust_remote_code"] = True
+            if reranker_spec.model_kwargs:
+                cross_encoder_kwargs["model_kwargs"] = dict(reranker_spec.model_kwargs)
+            if reranker_spec.tokenizer_kwargs:
+                cross_encoder_kwargs["tokenizer_kwargs"] = dict(reranker_spec.tokenizer_kwargs)
 
             self.reranker = CrossEncoder(reranker_model, **cross_encoder_kwargs)
             self.reranker_device = target_device
