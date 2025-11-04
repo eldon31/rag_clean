@@ -72,6 +72,12 @@ class ThroughputMonitor:
         self.logger.info(f"  GPUs: {gpu_count}")
         self.logger.info(f"  Batch size/GPU: {batch_size}")
         self.logger.info(f"  DataParallel: {is_data_parallel}")
+
+        print(
+            "[throughput] start | chunks=%s | model=%s | device=%s | batch=%s | data_parallel=%s"
+            % (chunk_count, model_name, device, batch_size, is_data_parallel),
+            flush=True,
+        )
         
         if gpu_count > 0:
             for gpu_id in range(gpu_count):
@@ -79,6 +85,11 @@ class ThroughputMonitor:
                 mem_reserved = torch.cuda.memory_reserved(gpu_id) / (1024**3)
                 self.logger.info(
                     f"  GPU {gpu_id}: {mem_allocated:.2f}GB allocated, {mem_reserved:.2f}GB reserved"
+                )
+                print(
+                    "[throughput] gpu%d | allocated=%.2fGB | reserved=%.2fGB"
+                    % (gpu_id, mem_allocated, mem_reserved),
+                    flush=True,
                 )
         
         self.logger.info("=" * 60)
@@ -114,12 +125,27 @@ class ThroughputMonitor:
         self.logger.info(f"  Chunks processed: {self._chunk_count}")
         self.logger.info(f"  Duration: {elapsed:.2f}s")
         self.logger.info(f"  Rate: {chunks_per_sec:.2f} chunks/sec")
+
+        print(
+            "[throughput] end | chunks=%s | duration=%.2fs | rate=%.2f chunks/sec"
+            % (self._chunk_count, elapsed, chunks_per_sec),
+            flush=True,
+        )
         
         for metric in gpu_metrics:
             self.logger.info(
                 f"  GPU {metric['gpu_id']} peak: "
                 f"{metric['allocated_gb']:.2f}GB allocated, "
                 f"{metric['reserved_gb']:.2f}GB reserved"
+            )
+            print(
+                "[throughput] gpu%d_peak | allocated=%.2fGB | reserved=%.2fGB"
+                % (
+                    metric["gpu_id"],
+                    metric["allocated_gb"],
+                    metric["reserved_gb"],
+                ),
+                flush=True,
             )
         
         self.logger.info(f"  Timestamp: {timestamp_end}")
@@ -145,6 +171,7 @@ class ThroughputMonitor:
             message = f"{message} ({type(error).__name__}: {error})"
 
         self.logger.error(message)
+        print(f"[throughput] error | {message}", flush=True)
 
 
 __all__ = ["ThroughputMonitor", "ThroughputMetrics"]

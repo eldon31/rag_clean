@@ -297,6 +297,27 @@ def main(argv: Optional[Iterable[str]] = None) -> int:
     )
     print("[embed_v7] Dense stage complete.", flush=True)
 
+    if isinstance(dense_results, dict):
+        dense_throughput = dense_results.get("chunks_per_second")
+        dense_duration = dense_results.get("processing_time_seconds")
+        dense_embeddings = dense_results.get("total_embeddings_generated")
+
+        if isinstance(dense_throughput, (int, float)):
+            print(
+                f"[embed_v7] Dense throughput: {dense_throughput:.2f} chunks/sec",
+                flush=True,
+            )
+        if isinstance(dense_duration, (int, float)):
+            print(
+                f"[embed_v7] Dense duration: {dense_duration:.2f}s",
+                flush=True,
+            )
+        if isinstance(dense_embeddings, (int, float)):
+            print(
+                f"[embed_v7] Embeddings generated: {int(dense_embeddings)}",
+                flush=True,
+            )
+
     inferred_prefix = args.export_prefix or embedder.get_target_collection_name()
     embedder.export_config.output_prefix = inferred_prefix
 
