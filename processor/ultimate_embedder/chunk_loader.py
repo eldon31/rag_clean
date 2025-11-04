@@ -166,9 +166,10 @@ class ChunkLoader:
         }
 
         has_json_files = any(
-            file.suffix == ".json" and not file.name.endswith("_processing_summary.json")
+            file.is_file()
+            and file.suffix == ".json"
+            and not self._is_summary_file(file)
             for file in chunks_path.iterdir()
-            if file.is_file()
         )
 
         if has_json_files:
@@ -325,9 +326,20 @@ class ChunkLoader:
         discovered: Dict[Path, None] = {}
         for pattern in patterns:
             for path in directory.glob(pattern):
-                if path.is_file():
+                if path.is_file() and not self._is_summary_file(path):
                     discovered.setdefault(path, None)
         return sorted(discovered.keys())
+
+    @staticmethod
+    def _is_summary_file(path: Path) -> bool:
+        if not path.name.lower().endswith(".json"):
+            return False
+        name = path.name.lower()
+        if name == "processing_summary.json":
+            return True
+        if name.endswith("_processing_summary.json"):
+            return True
+        return False
 
     def _ingest_files(
         self,
