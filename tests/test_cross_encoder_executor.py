@@ -80,6 +80,7 @@ class TestCrossEncoderRerankRun:
             latency_ms=123.45,
             gpu_peak_gb=2.5,
             batch_size=16,
+            throughput_cands_per_sec=42.0,
         )
 
         assert run.query == "test query"
@@ -88,6 +89,7 @@ class TestCrossEncoderRerankRun:
         assert run.latency_ms == 123.45
         assert run.gpu_peak_gb == 2.5
         assert run.batch_size == 16
+        assert run.throughput_cands_per_sec == 42.0
         assert len(run.run_id) == 32  # UUID hex format
 
     def test_query_truncation(self):
@@ -107,6 +109,7 @@ class TestCrossEncoderRerankRun:
             latency_ms=50.0,
             gpu_peak_gb=1.2,
             batch_size=8,
+            throughput_cands_per_sec=20.0,
         )
 
         result = run.to_dict()
@@ -118,6 +121,7 @@ class TestCrossEncoderRerankRun:
         assert result["latency_ms"] == 50.0
         assert result["gpu_peak_gb"] == 1.2
         assert result["batch_size"] == 8
+        assert result["throughput_cands_per_sec"] == 20.0
         assert "run_id" in result
 
 

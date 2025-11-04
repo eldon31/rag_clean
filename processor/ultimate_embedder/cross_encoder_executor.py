@@ -32,6 +32,7 @@ class CrossEncoderRerankRun:
     latency_ms: float = 0.0
     gpu_peak_gb: float = 0.0
     batch_size: int = 0
+    throughput_cands_per_sec: float = 0.0
     run_id: str = field(default_factory=lambda: uuid.uuid4().hex)
 
     def __post_init__(self) -> None:
@@ -49,6 +50,7 @@ class CrossEncoderRerankRun:
             "latency_ms": self.latency_ms,
             "gpu_peak_gb": self.gpu_peak_gb,
             "batch_size": self.batch_size,
+            "throughput_cands_per_sec": self.throughput_cands_per_sec,
         }
 
 
@@ -197,6 +199,7 @@ class CrossEncoderBatchExecutor:
         # Execute rerank with appropriate device handling
         start_time = time.time()
         gpu_peak_gb = 0.0
+        throughput_cands_per_sec = 0.0
 
         try:
             if use_gpu:
@@ -234,6 +237,12 @@ class CrossEncoderBatchExecutor:
             self.logger.error("Rerank execution failed: %s", exc)
             # Return fallback result with zero scores
             latency_ms = (time.time() - start_time) * 1000
+            if latency_ms > 0 and candidate_texts:
+                throughput_cands_per_sec = len(candidate_texts) / (latency_ms / 1000.0)
+                self.logger.info(
+                    "Rerank throughput: %.2f candidates/sec",
+                    throughput_cands_per_sec,
+                )
             return CrossEncoderRerankRun(
                 query=truncated_query,
                 candidate_ids=candidate_ids[:top_k],
@@ -241,10 +250,21 @@ class CrossEncoderBatchExecutor:
                 latency_ms=latency_ms,
                 gpu_peak_gb=gpu_peak_gb,
                 batch_size=batch_size,
+                throughput_cands_per_sec=throughput_cands_per_sec,
             )
 
         # Calculate latency
         latency_ms = (time.time() - start_time) * 1000
+        if latency_ms > 0 and candidate_texts:
+            throughput_cands_per_sec = len(candidate_texts) / (latency_ms / 1000.0)
+        else:
+            throughput_cands_per_sec = 0.0
+
+        if throughput_cands_per_sec > 0.0:
+            self.logger.info(
+                "Rerank throughput: %.2f candidates/sec",
+                throughput_cands_per_sec,
+            )
 
         # Rank candidates by score and return top_k
         import numpy as np
@@ -267,6 +287,7 @@ class CrossEncoderBatchExecutor:
             latency_ms=latency_ms,
             gpu_peak_gb=gpu_peak_gb,
             batch_size=batch_size,
+            throughput_cands_per_sec=throughput_cands_per_sec,
         )
 
     def _execute_rerank_with_retry(

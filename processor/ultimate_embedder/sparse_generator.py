@@ -56,6 +56,7 @@ class SparseInferenceResult:
     model_name: str
     success: bool
     error_message: Optional[str] = None
+    throughput_chunks_per_sec: float = 0.0
     run_id: str = field(default_factory=lambda: uuid.uuid4().hex)
 
 
@@ -169,6 +170,20 @@ class SparseVectorGenerator:
             success=success,
             error_message=error_message,
         )
+
+        chunk_count = len(chunks)
+        if result.latency_ms > 0 and chunk_count > 0:
+            throughput = chunk_count / (result.latency_ms / 1000.0)
+        else:
+            throughput = 0.0
+
+        result.throughput_chunks_per_sec = throughput
+
+        if throughput > 0.0:
+            self.logger.info(
+                "Sparse throughput: %.2f chunks/sec",
+                throughput,
+            )
 
         # Emit telemetry for this sparse inference run
         self._record_telemetry(result, len(chunks))
@@ -708,6 +723,7 @@ class SparseVectorGenerator:
                 "fallback_count": result.fallback_count,
                 "chunk_count": chunk_count,
                 "fallback_ratio": round(result.fallback_count / max(1, chunk_count), 4),
+                "throughput_chunks_per_sec": result.throughput_chunks_per_sec,
             },
         )
 
@@ -716,11 +732,12 @@ class SparseVectorGenerator:
             "sparse",
             emitted=result.success,
             reason=result.error_message if not result.success else None,
-            metrics=["latency_ms", "fallback_count", "device"],
+            metrics=["latency_ms", "fallback_count", "device", "throughput_chunks_per_sec"],
             details={
                 "latency_ms": result.latency_ms,
                 "fallback_count": result.fallback_count,
                 "device": result.device,
+                "throughput_chunks_per_sec": result.throughput_chunks_per_sec,
             },
         )
 

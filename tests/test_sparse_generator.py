@@ -436,6 +436,7 @@ class TestSparseVectorGenerator:
             model_name="qdrant-bm25",
             success=True,
             error_message=None,
+            throughput_chunks_per_sec=10.0,
         )
 
         generator._record_telemetry(result, chunk_count=1)
@@ -454,6 +455,14 @@ class TestSparseVectorGenerator:
         assert attrs["device"] == "cuda:0"
         assert attrs["latency_ms"] == 42.5
         assert attrs["fallback_count"] == 0
+        assert attrs["throughput_chunks_per_sec"] == 10.0
+
+        metrics_call = mock_embedder.telemetry.record_metrics_status.call_args
+        details = metrics_call[1]["details"]
+        assert details["latency_ms"] == 42.5
+        assert details["fallback_count"] == 0
+        assert details["device"] == "cuda:0"
+        assert details["throughput_chunks_per_sec"] == 10.0
 
     def test_record_telemetry_with_failure(self, mock_embedder):
         """Test telemetry recording when inference fails."""
@@ -468,6 +477,7 @@ class TestSparseVectorGenerator:
             model_name="qdrant-bm25",
             success=False,
             error_message="Model encoding failed",
+            throughput_chunks_per_sec=0.0,
         )
 
         generator._record_telemetry(result, chunk_count=5)
@@ -477,6 +487,8 @@ class TestSparseVectorGenerator:
         assert span_call[0][0] == "sparse_inference"
         assert span_call[1]["active"] is False
         assert span_call[1]["reason"] == "Model encoding failed"
+        attrs = span_call[1]["attributes"]
+        assert attrs["throughput_chunks_per_sec"] == 0.0
 
     def test_generate_large_batch_cpu(self, mock_embedder, mock_sparse_model):
         """Test CPU inference with large batch of chunks."""
