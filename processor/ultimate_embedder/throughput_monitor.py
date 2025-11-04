@@ -38,6 +38,18 @@ class ThroughputMonitor:
         self._chunk_count: int = 0
         self._model_name: str = ""
         self._device: str = ""
+        self._batch_size: int = 0
+        self._is_data_parallel: bool = False
+
+    def _format_event(self, event: str, *fields: tuple[str, Any]) -> str:
+        parts = [f"[throughput] {event}"]
+        for key, value in fields:
+            if isinstance(value, bool):
+                normalized = "true" if value else "false"
+            else:
+                normalized = str(value)
+            parts.append(f"{key}={normalized}")
+        return " | ".join(parts)
         
     def start(
         self,
@@ -61,8 +73,11 @@ class ThroughputMonitor:
         self._chunk_count = chunk_count
         self._model_name = model_name
         self._device = device
+        self._batch_size = batch_size
+        self._is_data_parallel = is_data_parallel
         
-        gpu_count = torch.cuda.device_count() if device == "cuda" else 0
+        device_normalized = device or ""
+        gpu_count = torch.cuda.device_count() if device_normalized.startswith("cuda") else 0
         
         self.logger.info("=" * 60)
         self.logger.info("THROUGHPUT START:")
@@ -74,8 +89,14 @@ class ThroughputMonitor:
         self.logger.info(f"  DataParallel: {is_data_parallel}")
 
         print(
-            "[throughput] start | chunks=%s | model=%s | device=%s | batch=%s | data_parallel=%s"
-            % (chunk_count, model_name, device, batch_size, is_data_parallel),
+            self._format_event(
+                "start",
+                ("model", model_name),
+                ("device", device),
+                ("chunks", chunk_count),
+                ("batch", batch_size),
+                ("data_parallel", is_data_parallel),
+            ),
             flush=True,
         )
         
@@ -87,8 +108,11 @@ class ThroughputMonitor:
                     f"  GPU {gpu_id}: {mem_allocated:.2f}GB allocated, {mem_reserved:.2f}GB reserved"
                 )
                 print(
-                    "[throughput] gpu%d | allocated=%.2fGB | reserved=%.2fGB"
-                    % (gpu_id, mem_allocated, mem_reserved),
+                    self._format_event(
+                        f"gpu{gpu_id}",
+                        ("allocated", f"{mem_allocated:.2f}GB"),
+                        ("reserved", f"{mem_reserved:.2f}GB"),
+                    ),
                     flush=True,
                 )
         
@@ -127,8 +151,13 @@ class ThroughputMonitor:
         self.logger.info(f"  Rate: {chunks_per_sec:.2f} chunks/sec")
 
         print(
-            "[throughput] end | chunks=%s | duration=%.2fs | rate=%.2f chunks/sec"
-            % (self._chunk_count, elapsed, chunks_per_sec),
+            self._format_event(
+                "done",
+                ("model", self._model_name),
+                ("chunks", self._chunk_count),
+                ("duration", f"{elapsed:.2f}s"),
+                ("rate", f"{chunks_per_sec:.2f}/s"),
+            ),
             flush=True,
         )
         
@@ -139,11 +168,10 @@ class ThroughputMonitor:
                 f"{metric['reserved_gb']:.2f}GB reserved"
             )
             print(
-                "[throughput] gpu%d_peak | allocated=%.2fGB | reserved=%.2fGB"
-                % (
-                    metric["gpu_id"],
-                    metric["allocated_gb"],
-                    metric["reserved_gb"],
+                self._format_event(
+                    f"gpu{metric['gpu_id']}_peak",
+                    ("allocated", f"{metric['allocated_gb']:.2f}GB"),
+                    ("reserved", f"{metric['reserved_gb']:.2f}GB"),
                 ),
                 flush=True,
             )
@@ -171,7 +199,10 @@ class ThroughputMonitor:
             message = f"{message} ({type(error).__name__}: {error})"
 
         self.logger.error(message)
-        print(f"[throughput] error | {message}", flush=True)
+        print(
+            self._format_event("error", ("message", message)),
+            flush=True,
+        )
 
 
 __all__ = ["ThroughputMonitor", "ThroughputMetrics"]
