@@ -12,6 +12,7 @@ from processor.ultimate_embedder.cross_encoder_executor import (
     CrossEncoderBatchExecutor,
     CrossEncoderRerankRun,
 )
+from processor.ultimate_embedder.rerank_pipeline import RerankPipeline
 
 
 @pytest.fixture
@@ -187,6 +188,26 @@ class TestEnsureModel:
 
         # Should log but not call ensure_model
         mock_ensure.assert_not_called()
+
+    @patch("processor.ultimate_embedder.rerank_pipeline.CrossEncoder")
+    def test_rerank_pipeline_respects_trust_remote_code(self, mock_cross_encoder, logger):
+        """RerankPipeline.ensure_model() should enable remote code for Jina reranker."""
+
+        config = RerankingConfig(model_name="jina-reranker-v3", enable_reranking=True)
+        pipeline = RerankPipeline(config, logger)
+
+        pipeline.ensure_model(device="cuda:0")
+
+        mock_cross_encoder.assert_called_once()
+        _, kwargs = mock_cross_encoder.call_args
+        assert kwargs["device"] == "cuda:0"
+        assert kwargs["trust_remote_code"] is True
+
+        automodel_args = kwargs.get("automodel_args")
+        assert automodel_args is not None
+        assert automodel_args.get("trust_remote_code") is True
+
+        assert pipeline.model is mock_cross_encoder.return_value
 
 
 class TestExecuteRerank:

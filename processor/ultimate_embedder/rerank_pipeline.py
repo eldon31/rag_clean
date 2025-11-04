@@ -6,10 +6,14 @@ import logging
 from typing import Any, Dict, List, Optional, Sequence
 
 import numpy as np
-from sentence_transformers.cross_encoder import CrossEncoder
 from sklearn.metrics.pairwise import cosine_similarity
 
-from processor.ultimate_embedder.config import RERANKING_MODELS, RerankingConfig
+from processor.ultimate_embedder.compat import CrossEncoder
+from processor.ultimate_embedder.config import (
+    RERANKING_MODELS,
+    RerankingConfig,
+    get_reranking_model_config,
+)
 
 
 class RerankPipeline:
@@ -37,11 +41,27 @@ class RerankPipeline:
             model_name = "jina-reranker-v3"
             self.config.model_name = model_name
 
-        hub_id = RERANKING_MODELS[model_name]
-        self.logger.info("Loading reranking model: %s", hub_id)
+        spec = get_reranking_model_config(model_name)
+        hub_id = spec.hf_model_id
+        cross_encoder_kwargs: Dict[str, Any] = {
+            "device": device,
+            "trust_remote_code": spec.trust_remote_code,
+        }
+
+        automodel_args = dict(spec.automodel_args)
+        if spec.trust_remote_code:
+            automodel_args.setdefault("trust_remote_code", True)
+        if automodel_args:
+            cross_encoder_kwargs["automodel_args"] = automodel_args
+
+        self.logger.info(
+            "Loading reranking model: %s (trust_remote_code=%s)",
+            hub_id,
+            spec.trust_remote_code,
+        )
 
         try:
-            self.model = CrossEncoder(hub_id, device=device)
+            self.model = CrossEncoder(hub_id, **cross_encoder_kwargs)
             self.device = device
             self.logger.info("CrossEncoder reranking model ready")
         except Exception as exc:  # pragma: no cover - defensive path

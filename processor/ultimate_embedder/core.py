@@ -315,6 +315,7 @@ from processor.ultimate_embedder.config import (
     ModelConfig,
     normalize_kaggle_model_names,
     resolve_kaggle_model_key,
+    get_reranking_model_config,
     RERANKING_MODELS,
     RerankingConfig,
 )
@@ -1767,14 +1768,30 @@ class UltimateKaggleEmbedderV4:
             )
             self.reranking_config.model_name = "jina-reranker-v3"
 
-        reranker_model = RERANKING_MODELS[self.reranking_config.model_name]
-        logger.info(f"Loading reranking model: {reranker_model}")
+        reranker_spec = get_reranking_model_config(self.reranking_config.model_name)
+        reranker_model = reranker_spec.hf_model_id
+        logger.info(
+            "Loading reranking model: %s (trust_remote_code=%s)",
+            reranker_model,
+            reranker_spec.trust_remote_code,
+        )
         requested_device = "cuda" if self.device == "cuda" else self.device
         self._requested_rerank_device = requested_device
         target_device = "cpu" if self.device == "cuda" else self.device
 
         try:
-            self.reranker = CrossEncoder(reranker_model, device=target_device)
+            automodel_args = dict(reranker_spec.automodel_args)
+            if reranker_spec.trust_remote_code:
+                automodel_args.setdefault("trust_remote_code", True)
+
+            cross_encoder_kwargs: Dict[str, Any] = {
+                "device": target_device,
+                "trust_remote_code": reranker_spec.trust_remote_code,
+            }
+            if automodel_args:
+                cross_encoder_kwargs["automodel_args"] = automodel_args
+
+            self.reranker = CrossEncoder(reranker_model, **cross_encoder_kwargs)
             self.reranker_device = target_device
             if target_device == "cpu" and self.device == "cuda":
                 logger.info(
