@@ -158,26 +158,26 @@ class SparseVectorGenerator:
             success = False
             error_message = str(exc)[:200]
 
-        latency_ms = (time.perf_counter() - start_time) * 1000.0
+        elapsed_ms = (time.perf_counter() - start_time) * 1000.0
+        latency_ms = round(elapsed_ms, 2)
+
+        chunk_count = len(chunks)
+        throughput = 0.0
+        if elapsed_ms > 0.0 and chunk_count > 0:
+            throughput = chunk_count / (elapsed_ms / 1000.0)
+            throughput = round(throughput, 2)
 
         result = SparseInferenceResult(
             vectors=vectors,
             fallback_count=len(fallback_indices),
             fallback_indices=fallback_indices,
-            latency_ms=round(latency_ms, 2),
+            latency_ms=latency_ms,
             device=device,
             model_name=model_name,
             success=success,
             error_message=error_message,
+            throughput_chunks_per_sec=throughput,
         )
-
-        chunk_count = len(chunks)
-        if result.latency_ms > 0 and chunk_count > 0:
-            throughput = chunk_count / (result.latency_ms / 1000.0)
-        else:
-            throughput = 0.0
-
-        result.throughput_chunks_per_sec = throughput
 
         if throughput > 0.0:
             self.logger.info(

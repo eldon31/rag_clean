@@ -236,9 +236,12 @@ class CrossEncoderBatchExecutor:
         except Exception as exc:  # pragma: no cover
             self.logger.error("Rerank execution failed: %s", exc)
             # Return fallback result with zero scores
-            latency_ms = (time.time() - start_time) * 1000
-            if latency_ms > 0 and candidate_texts:
-                throughput_cands_per_sec = len(candidate_texts) / (latency_ms / 1000.0)
+            raw_latency_ms = (time.time() - start_time) * 1000.0
+            latency_ms = round(raw_latency_ms, 2)
+            throughput_cands_per_sec = 0.0
+            if raw_latency_ms > 0.0 and candidate_texts:
+                throughput_cands_per_sec = len(candidate_texts) / (raw_latency_ms / 1000.0)
+                throughput_cands_per_sec = round(throughput_cands_per_sec, 2)
                 self.logger.info(
                     "Rerank throughput: %.2f candidates/sec",
                     throughput_cands_per_sec,
@@ -254,9 +257,11 @@ class CrossEncoderBatchExecutor:
             )
 
         # Calculate latency
-        latency_ms = (time.time() - start_time) * 1000
-        if latency_ms > 0 and candidate_texts:
-            throughput_cands_per_sec = len(candidate_texts) / (latency_ms / 1000.0)
+        raw_latency_ms = (time.time() - start_time) * 1000.0
+        latency_ms = round(raw_latency_ms, 2)
+        if raw_latency_ms > 0.0 and candidate_texts:
+            throughput_cands_per_sec = len(candidate_texts) / (raw_latency_ms / 1000.0)
+            throughput_cands_per_sec = round(throughput_cands_per_sec, 2)
         else:
             throughput_cands_per_sec = 0.0
 
