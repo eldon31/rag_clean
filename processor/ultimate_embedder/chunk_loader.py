@@ -113,6 +113,7 @@ class ChunkLoader:
         model_name: str,
         model_vector_dim: int,
         text_cache: Any = None,
+        device: str = "unknown",
     ) -> ChunkLoadResult:
         preferred_dir = chunks_dir
         if not self.is_kaggle:
@@ -189,6 +190,7 @@ class ChunkLoader:
                 preprocess_text=preprocess_text,
                 model_name=model_name,
                 model_vector_dim=model_vector_dim,
+                device=device,
                 metadata_list=metadata_list,
                 processed_texts=processed_texts,
                 raw_texts=raw_texts,
@@ -214,6 +216,7 @@ class ChunkLoader:
                     preprocess_text=preprocess_text,
                     model_name=model_name,
                     model_vector_dim=model_vector_dim,
+                    device=device,
                     metadata_list=metadata_list,
                     processed_texts=processed_texts,
                     raw_texts=raw_texts,
@@ -342,6 +345,7 @@ class ChunkLoader:
         sparse_vectors: List[Optional[Dict[str, Any]]],
         modal_hint_distribution: defaultdict[str, int],
         results: Dict[str, Any],
+        device: str,
     ) -> int:
         chunk_count = 0
         for chunk_file in files:
@@ -354,7 +358,11 @@ class ChunkLoader:
             self.logger.info(
                 f"[FILE_START] Loading: {file_name} | Start: {start_timestamp}"
             )
-            print(f"[chunk_loader] Loading {chunk_file}...", flush=True)
+            print(
+                "[chunk_loader] Loading %s | model=%s | device=%s"
+                % (file_name, model_name, device),
+                flush=True,
+            )
             
             try:
                 with open(chunk_file, "r", encoding="utf-8") as handle:
@@ -481,10 +489,20 @@ class ChunkLoader:
                 f"Chunks: {file_chunk_count} | "
                 f"Duration: {duration:.2f}s | "
                 f"Rate: {processing_rate:.1f} chunks/sec | "
+                f"Model: {model_name} | "
+                f"Device: {device} | "
                 f"End: {end_timestamp}"
             )
             print(
-                f"[chunk_loader] Finished {chunk_file.name}: {file_chunk_count} chunks in {duration:.2f}s",
+                "[chunk_loader] File=%s | chunks=%d | duration=%.2fs | rate=%.2f chunk/s | model=%s | device=%s"
+                % (
+                    file_name,
+                    file_chunk_count,
+                    duration,
+                    processing_rate,
+                    model_name,
+                    device,
+                ),
                 flush=True,
             )
 

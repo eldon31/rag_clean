@@ -1929,6 +1929,7 @@ class UltimateKaggleEmbedderV4:
             model_name=self.model_name,
             model_vector_dim=self.model_config.vector_dim,
             text_cache=self.text_cache,
+            device=self.device,
         )
 
         self.chunks_metadata = result.metadata

@@ -258,6 +258,47 @@ def main(argv: Optional[Iterable[str]] = None) -> int:
 
     embedder = _build_embedder(args, output_path, toggles)
 
+    # Surface ensemble + device configuration before heavy lifting for notebook observers.
+    primary_model = getattr(embedder, "model_name", "unknown")
+    ensemble_roster = []
+    if getattr(embedder, "ensemble_config", None):
+        ensemble_roster = list(getattr(embedder.ensemble_config, "ensemble_models", []))
+
+    device_label = getattr(embedder, "device", "unknown")
+    device_count = getattr(embedder, "device_count", 0)
+
+    print(f"[embed_v7] Primary model: {primary_model}", flush=True)
+    if ensemble_roster:
+        print(
+            "[embed_v7] Ensemble roster: %s"
+            % ", ".join(ensemble_roster),
+            flush=True,
+        )
+    print(
+        "[embed_v7] Device: %s (GPUs: %s)"
+        % (device_label, device_count),
+        flush=True,
+    )
+
+    if device_label == "cuda" and device_count:
+        try:
+            import torch
+
+            for gpu_idx in range(device_count):
+                try:
+                    gpu_name = torch.cuda.get_device_name(gpu_idx)
+                except Exception:  # pragma: no cover - device lookup best-effort
+                    gpu_name = "unknown"
+                print(
+                    "[embed_v7] GPU%d: %s" % (gpu_idx, gpu_name),
+                    flush=True,
+                )
+        except Exception:
+            print(
+                "[embed_v7] GPU metadata unavailable (torch cuda lookup failed)",
+                flush=True,
+            )
+
     try:
         snapshot_path = output_path / "cuda_debug_snapshot.json"
         snapshot_payload = getattr(embedder, "cuda_debug_snapshot", None)
