@@ -67,8 +67,23 @@ def _default_output_dir() -> str:
 
 
 def _configure_logging(quiet: bool) -> None:
+    """Adjust logging level without clobbering existing handlers."""
     level = logging.WARNING if quiet else logging.INFO
-    logging.basicConfig(level=level, format="%(asctime)s - %(levelname)s - %(message)s")
+
+    root_logger = logging.getLogger()
+    root_logger.setLevel(level)
+
+    # Update already registered handlers (file handler from core.py, etc.).
+    for handler in root_logger.handlers:
+        handler.setLevel(level)
+
+    # Ensure at least one stream handler so notebook users still see output.
+    has_stream_handler = any(isinstance(handler, logging.StreamHandler) for handler in root_logger.handlers)
+    if not has_stream_handler:
+        stream_handler = logging.StreamHandler()
+        stream_handler.setLevel(level)
+        stream_handler.setFormatter(logging.Formatter("%(asctime)s - %(levelname)s - %(message)s"))
+        root_logger.addHandler(stream_handler)
 
 
 def _resolve_paths(chunked_dir: str, output_dir: str) -> tuple[Path, Path]:
