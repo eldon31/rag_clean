@@ -249,9 +249,19 @@ class KaggleExportConfig:
     working_dir: str = "/kaggle/working"
     output_prefix: str = "ultimate_embeddings_v4"
 
-    def get_output_path(self, suffix: str = "") -> str:
+    def get_output_path(self, suffix: str = "", collection_name: Optional[str] = None) -> str:
         base = f"{self.output_prefix}{suffix}"
-        return os.path.join(self.working_dir, base)
+
+        target_dir = self.working_dir
+        if collection_name:
+            safe_collection = "".join(
+                character if character.isalnum() or character in {"-", "_"} else "_"
+                for character in collection_name
+            ).strip("_") or "collection"
+            target_dir = os.path.join(self.working_dir, safe_collection)
+
+        os.makedirs(target_dir, exist_ok=True)
+        return os.path.join(target_dir, base)
 
 
 @dataclass

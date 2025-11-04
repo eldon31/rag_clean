@@ -83,6 +83,18 @@ def normalize_collection_name(raw_name: str) -> str:
     return normalized
 
 
+def _sanitize_collection_dir(name: str) -> str:
+    if not name:
+        return "collection"
+
+    sanitized = "".join(
+        character if character.isalnum() or character in {"-", "_"} else "_"
+        for character in name
+    ).strip("_")
+
+    return sanitized or "collection"
+
+
 def _ensure_document_id(metadata: Dict[str, Any]) -> None:
     if metadata.get("document_id"):
         return
@@ -114,6 +126,8 @@ class ChunkLoader:
         model_vector_dim: int,
         text_cache: Any = None,
         device: str = "unknown",
+        collection_name_hint: Optional[str] = None,
+        single_collection_mode: Optional[bool] = None,
     ) -> ChunkLoadResult:
         preferred_dir = chunks_dir
         if not self.is_kaggle:
@@ -153,9 +167,13 @@ class ChunkLoader:
             "preprocessing_stats": {},
             "sparse_vectors_generated": 0,
             "modal_hint_counts": {},
+            "collection_summaries": {},
+            "collection_roots": {},
         }
 
         canonical_hint: Optional[str] = None
+        active_collection_alias: Optional[str] = None
+        active_collection_safe_dir: Optional[str] = None
 
         collection_priorities = {
             "qdrant_ecosystem": 1.0,
@@ -165,23 +183,24 @@ class ChunkLoader:
             "pydantic": 0.6,
         }
 
-        has_json_files = any(
-            file.is_file()
-            and file.suffix == ".json"
-            and not self._is_summary_file(file)
-            for file in chunks_path.iterdir()
-        )
+        normalized_dir_name = chunks_path.name.lower()
+        resolved_single_mode = single_collection_mode
+        if resolved_single_mode is None:
+            if collection_name_hint:
+                resolved_single_mode = True
+            else:
+                resolved_single_mode = normalized_dir_name not in {"chunked", "chunked_output", "docs_chunks_output"}
 
-        if has_json_files:
-            collection_name = chunks_path.name
+        def process_collection(collection_name: str, collection_path: Path) -> Tuple[int, bool, str]:
+            nonlocal canonical_hint
+
             canonical_collection = normalize_collection_name(collection_name)
-            canonical_hint = canonical_collection
             priority = collection_priorities.get(canonical_collection, 0.5)
-            results["collections_loaded"] += 1
-
-            chunk_files = self._collect_chunk_files(chunks_path)
+            chunk_files = self._collect_chunk_files(collection_path)
             if not chunk_files:
-                self.logger.warning("No chunk JSON files detected in %s", chunks_path)
+                self.logger.warning("No chunk JSON files detected in %s", collection_path)
+
+            results["collection_roots"][collection_name] = str(collection_path)
 
             chunk_count = self._ingest_files(
                 chunk_files,
@@ -198,34 +217,48 @@ class ChunkLoader:
                 sparse_vectors=sparse_vectors,
                 modal_hint_distribution=modal_hint_distribution,
                 results=results,
+                collection_path=collection_path,
             )
-            results["chunks_by_collection"][collection_name] = chunk_count
-        else:
-            subdirectories = [item for item in chunks_path.iterdir() if item.is_dir() and item.name != "__pycache__"]
-            for collection_dir in subdirectories:
-                collection_name = collection_dir.name
-                canonical_collection = normalize_collection_name(collection_name)
-                priority = collection_priorities.get(canonical_collection, 0.5)
-                results["collections_loaded"] += 1
 
-                chunk_files = self._collect_chunk_files(collection_dir)
-                chunk_count = self._ingest_files(
-                    chunk_files,
-                    collection_name=collection_name,
-                    canonical_collection=canonical_collection,
-                    priority=priority,
-                    preprocess_text=preprocess_text,
-                    model_name=model_name,
-                    model_vector_dim=model_vector_dim,
-                    device=device,
-                    metadata_list=metadata_list,
-                    processed_texts=processed_texts,
-                    raw_texts=raw_texts,
-                    sparse_vectors=sparse_vectors,
-                    modal_hint_distribution=modal_hint_distribution,
-                    results=results,
-                )
-                results["chunks_by_collection"][collection_name] = chunk_count
+            results["chunks_by_collection"][collection_name] = chunk_count
+            had_files = bool(chunk_files)
+            if had_files:
+                results["collections_loaded"] += 1
+                if canonical_hint is None:
+                    canonical_hint = canonical_collection
+            elif canonical_hint is None and chunk_count:
+                canonical_hint = canonical_collection
+
+            return chunk_count, had_files, canonical_collection
+
+        if resolved_single_mode:
+            collection_name = collection_name_hint or chunks_path.name
+            chunk_count, had_files, _ = process_collection(collection_name, chunks_path)
+            if had_files:
+                active_collection_alias = collection_name
+                active_collection_safe_dir = _sanitize_collection_dir(collection_name)
+            else:
+                results["collections_loaded"] = 0
+        else:
+            collected_any = False
+            subdirectories = [
+                item for item in chunks_path.iterdir() if item.is_dir() and item.name != "__pycache__"
+            ]
+
+            for collection_dir in subdirectories:
+                chunk_count, had_files, _ = process_collection(collection_dir.name, collection_dir)
+                if had_files:
+                    collected_any = True
+
+            if not collected_any:
+                collection_name = collection_name_hint or chunks_path.name
+                chunk_count, had_files, _ = process_collection(collection_name, chunks_path)
+                if had_files:
+                    active_collection_alias = collection_name
+                    active_collection_safe_dir = _sanitize_collection_dir(collection_name)
+                    resolved_single_mode = True
+                else:
+                    results["collections_loaded"] = 0
 
         results["total_chunks_loaded"] = len(metadata_list)
         
@@ -244,6 +277,11 @@ class ChunkLoader:
             except Exception:  # pragma: no cover - defensive
                 pass
         results["modal_hint_counts"] = dict(sorted(modal_hint_distribution.items()))
+
+        if active_collection_alias:
+            results["active_collection"] = active_collection_alias
+            if active_collection_safe_dir:
+                results["active_collection_safe_dir"] = active_collection_safe_dir
 
         return ChunkLoadResult(
             metadata=metadata_list,
@@ -325,7 +363,7 @@ class ChunkLoader:
         patterns = ["*_chunks.json", "*chunks.json", "*.json"]
         discovered: Dict[Path, None] = {}
         for pattern in patterns:
-            for path in directory.glob(pattern):
+            for path in directory.rglob(pattern):
                 if path.is_file() and not self._is_summary_file(path):
                     discovered.setdefault(path, None)
         return sorted(discovered.keys())
@@ -351,6 +389,7 @@ class ChunkLoader:
         preprocess_text: Callable[[str], str],
         model_name: str,
         model_vector_dim: int,
+        collection_path: Path,
         metadata_list: List[Dict[str, Any]],
         processed_texts: List[str],
         raw_texts: List[str],
@@ -360,12 +399,44 @@ class ChunkLoader:
         device: str,
     ) -> int:
         chunk_count = 0
+        processed_files = 0
+        collection_start = time.time()
+        collection_start_ts = datetime.now().isoformat()
+        total_files = len(files)
+
+        self.logger.info(
+            (
+                "[COLLECTION_START] Name: %s | Canonical: %s | Files: %d | Priority: %.2f | "
+                "Model: %s | Device: %s | Start: %s"
+            ),
+            collection_name,
+            canonical_collection,
+            total_files,
+            priority,
+            model_name,
+            device,
+            collection_start_ts,
+        )
+        print(
+            "[throughput] collection_start | collection=%s | canonical=%s | files=%d | model=%s | device=%s | start=%s"
+            % (
+                collection_name,
+                canonical_collection,
+                total_files,
+                model_name,
+                device,
+                collection_start_ts,
+            ),
+            flush=True,
+        )
+
         for chunk_file in files:
             # Per-file throughput logging START
             file_name = chunk_file.name
             start_time = time.time()
             start_timestamp = datetime.now().isoformat()
             file_chunk_count = 0
+            processed_files += 1
             
             self.logger.info(
                 f"[FILE_START] Loading: {file_name} | Start: {start_timestamp}"
@@ -544,6 +615,57 @@ class ChunkLoader:
                 ),
                 flush=True,
             )
+
+        collection_end_ts = datetime.now().isoformat()
+        collection_duration = time.time() - collection_start
+        collection_rate = chunk_count / collection_duration if collection_duration > 0 else 0.0
+
+        self.logger.info(
+            (
+                "[COLLECTION_END] Name: %s | Canonical: %s | Files: %d | Chunks: %d | "
+                "Duration: %.2fs | Rate: %.2f chunks/sec | End: %s"
+            ),
+            collection_name,
+            canonical_collection,
+            processed_files,
+            chunk_count,
+            collection_duration,
+            collection_rate,
+            collection_end_ts,
+        )
+        print(
+            "[throughput] collection_end | collection=%s | canonical=%s | files=%d | chunks=%d | duration=%.2fs | rate=%.2f chunk/s | end=%s"
+            % (
+                collection_name,
+                canonical_collection,
+                processed_files,
+                chunk_count,
+                collection_duration,
+                collection_rate,
+                collection_end_ts,
+            ),
+            flush=True,
+        )
+
+        try:
+            summaries = results.setdefault("collection_summaries", {})
+            summaries[collection_name] = {
+                "collection": collection_name,
+                "canonical_collection": canonical_collection,
+                "files_enumerated": total_files,
+                "files_processed": processed_files,
+                "chunks_processed": chunk_count,
+                "duration_seconds": collection_duration,
+                "chunks_per_second": collection_rate,
+                "start_timestamp": collection_start_ts,
+                "end_timestamp": collection_end_ts,
+                "model": model_name,
+                "device": device,
+                "collection_path": str(collection_path),
+                "output_subdir": _sanitize_collection_dir(collection_name),
+            }
+        except Exception:  # pragma: no cover - defensive write guard
+            pass
 
         return chunk_count
 

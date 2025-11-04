@@ -239,8 +239,17 @@ class RegressionHarnessStubEmbedder:
         self.rerank_failure_reason: str | None = None
         self.prometheus_emitter = None
         self.metrics_enabled = False
+        self._active_collection_name = None
+        self._active_collection_safe_dir = None
 
-    def load_chunks_from_processing(self, chunks_dir: str) -> Dict[str, Any]:
+    def load_chunks_from_processing(
+        self,
+        chunks_dir: str,
+        *,
+        collection_name: str | None = None,
+        single_collection_mode: bool | None = None,
+    ) -> Dict[str, Any]:
+        del single_collection_mode
         directory = Path(chunks_dir)
         total = 0
         for path in directory.rglob("*.json"):
@@ -251,6 +260,14 @@ class RegressionHarnessStubEmbedder:
             if isinstance(payload, list):
                 total += len(payload)
         self._chunk_count = total
+        alias = collection_name or directory.name or "collection"
+        alias_str = str(alias)
+        sanitized = "".join(
+            character if character.isalnum() or character in {"-", "_"} else "_"
+            for character in alias_str
+        ).strip("_") or "collection"
+        self._active_collection_name = alias_str
+        self._active_collection_safe_dir = sanitized
         return {"total_chunks_loaded": total}
 
     def generate_embeddings_kaggle_optimized(
@@ -268,7 +285,8 @@ class RegressionHarnessStubEmbedder:
         }
 
     def export_for_local_qdrant(self) -> List[str]:
-        collection_dir = Path(self.export_config.working_dir)
+        safe_dir = self._active_collection_safe_dir or "collection"
+        collection_dir = Path(self.export_config.working_dir) / safe_dir
         collection_dir.mkdir(parents=True, exist_ok=True)
         filename = f"{self.export_config.output_prefix}_qdrant.jsonl"
         qdrant_path = collection_dir / filename
@@ -278,6 +296,12 @@ class RegressionHarnessStubEmbedder:
         )
         self._qdrant_path = qdrant_path
         return [str(qdrant_path)]
+
+    def get_active_collection_alias(self) -> str | None:
+        return self._active_collection_name
+
+    def get_active_collection_output_dir(self) -> str | None:
+        return self._active_collection_safe_dir
 
     def write_processing_summary(
         self,

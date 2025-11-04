@@ -891,6 +891,7 @@ def process_collection(
         # Load chunks into embedder
         load_summary = embedder.load_chunks_from_processing(
             chunks_dir=str(collection_path),
+            collection_name=collection_name,
         )
         
         # Validate load results
@@ -917,34 +918,34 @@ def process_collection(
         # PHASE 1: Export embeddings to disk (per-collection subdirectory)
         # ======================================================================
         LOGGER.info(f"Exporting collection '{collection_name}' to disk...")
-        
-        # Create collection-specific subdirectory
-        collection_output_dir = output_dir / collection_name
-        collection_output_dir.mkdir(parents=True, exist_ok=True)
-        
-        # Temporarily update export config for this collection
-        original_working_dir = embedder.export_config.working_dir
         original_output_prefix = embedder.export_config.output_prefix
-        
+        embedder.export_config.output_prefix = collection_name
+
         try:
-            # Configure export paths for this collection
-            embedder.export_config.working_dir = str(collection_output_dir)
-            embedder.export_config.output_prefix = collection_name
-            
-            # Export embeddings using existing export_runtime
             exported_files = embedder.export_for_local_qdrant()
-            
-            LOGGER.info(
-                f"✅ Exported {embedding_count} embeddings for '{collection_name}' "
-                f"({len(exported_files)} files)"
-            )
-            
         finally:
-            # Restore original export config
-            embedder.export_config.working_dir = original_working_dir
             embedder.export_config.output_prefix = original_output_prefix
 
-        summary_path = collection_output_dir / f"{collection_name}_processing_summary.json"
+        LOGGER.info(
+            f"✅ Exported {embedding_count} embeddings for '{collection_name}' "
+            f"({len(exported_files)} files)"
+        )
+
+        safe_collection_dir = embedder.get_active_collection_output_dir()
+        if not safe_collection_dir:
+            safe_collection_dir = (
+                "".join(
+                    character if character.isalnum() or character in {"-", "_"} else "_"
+                    for character in collection_name
+                ).strip("_")
+                or "collection"
+            )
+
+        collection_output_dir = Path(embedder.export_config.working_dir) / safe_collection_dir
+        collection_output_dir.mkdir(parents=True, exist_ok=True)
+
+        summary_filename = f"{safe_collection_dir}_processing_summary.json"
+        summary_path = collection_output_dir / summary_filename
         chunk_total = total_chunks_loaded
         if not isinstance(chunk_total, int):
             dense_total = results.get(RESULT_KEY_TOTAL_EMBEDDINGS) if isinstance(results, dict) else None

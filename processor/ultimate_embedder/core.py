@@ -450,6 +450,8 @@ class UltimateKaggleEmbedderV4:
             self._rerank_runtime_reason = f"Disabled via {source}"
         self._canonical_collection_hint: Optional[str] = None
         self._target_collection_cache: Optional[str] = None
+        self._active_collection_name: Optional[str] = None
+        self._active_collection_safe_dir: Optional[str] = None
 
         self.embedding_backend: str = "local"
         self.multivectors_by_model: Dict[str, List[List[List[float]]]] = {}
@@ -793,7 +795,8 @@ class UltimateKaggleEmbedderV4:
 
         try:
             output_path = self.export_config.get_output_path(
-                f"_intermediate_batch_{batch_number}"
+                f"_intermediate_batch_{batch_number}",
+                collection_name=self.get_active_collection_alias(),
             )
             Path(output_path).parent.mkdir(parents=True, exist_ok=True)
 
@@ -2118,7 +2121,10 @@ class UltimateKaggleEmbedderV4:
     
     def load_chunks_from_processing(
         self,
-        chunks_dir: str = "/kaggle/working/rag_clean/Chunked"
+        chunks_dir: str = "/kaggle/working/rag_clean/Chunked",
+        *,
+        collection_name: Optional[str] = None,
+        single_collection_mode: Optional[bool] = None,
     ) -> Dict[str, Any]:
         """Load processed chunks via the delegated chunk loader."""
 
@@ -2129,6 +2135,8 @@ class UltimateKaggleEmbedderV4:
             model_vector_dim=self.model_config.vector_dim,
             text_cache=self.text_cache,
             device=self.device,
+            collection_name_hint=collection_name,
+            single_collection_mode=single_collection_mode,
         )
 
         self.chunks_metadata = result.metadata
@@ -2137,6 +2145,8 @@ class UltimateKaggleEmbedderV4:
         self.sparse_vectors = result.sparse_vectors
         self._canonical_collection_hint = result.canonical_collection_hint
         self._target_collection_cache = None
+        self._active_collection_name = None
+        self._active_collection_safe_dir = None
 
         summary = result.summary
         self.last_loading_summary = summary
@@ -2158,7 +2168,40 @@ class UltimateKaggleEmbedderV4:
         if isinstance(cache_stats, dict) and "hit_rate" in cache_stats:
             logger.info("Cache hit rate: %.2f%%", cache_stats["hit_rate"] * 100.0)
 
+        resolved_collection: Optional[str] = None
+        resolved_safe_dir: Optional[str] = None
+
+        if collection_name:
+            resolved_collection = collection_name
+        else:
+            summary_active = summary.get("active_collection") if isinstance(summary, dict) else None
+            if isinstance(summary_active, str) and summary_active.strip():
+                resolved_collection = summary_active
+
+        if isinstance(summary, dict):
+            summaries = summary.get("collection_summaries")
+            if isinstance(summaries, dict) and resolved_collection:
+                collection_entry = summaries.get(resolved_collection)
+                if isinstance(collection_entry, dict):
+                    safe_dir = collection_entry.get("output_subdir")
+                    if isinstance(safe_dir, str) and safe_dir.strip():
+                        resolved_safe_dir = safe_dir
+            active_safe = summary.get("active_collection_safe_dir")
+            if resolved_safe_dir is None and isinstance(active_safe, str) and active_safe.strip():
+                resolved_safe_dir = active_safe
+
+        if resolved_collection:
+            self._active_collection_name = resolved_collection
+        if resolved_safe_dir:
+            self._active_collection_safe_dir = resolved_safe_dir
+
         return summary
+
+    def get_active_collection_alias(self) -> Optional[str]:
+        return self._active_collection_name
+
+    def get_active_collection_output_dir(self) -> Optional[str]:
+        return self._active_collection_safe_dir
 
     @staticmethod
     def _normalize_collection_name(raw_name: str) -> str:

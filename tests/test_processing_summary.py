@@ -554,9 +554,13 @@ def test_generate_embeddings_kaggle_optimized_emits_intermediate_batches(tmp_pat
         encoding="utf-8",
     )
 
-    embedder.load_chunks_from_processing(chunks_dir=str(collection_dir))
+    embedder.load_chunks_from_processing(
+        chunks_dir=str(collection_dir),
+        collection_name="CollectionA",
+    )
 
-    intermediate_path = export_dir / "test_run_intermediate_batch_3.npy"
+    safe_collection_dir = embedder.get_active_collection_output_dir() or "CollectionA"
+    intermediate_path = export_dir / safe_collection_dir / "test_run_intermediate_batch_3.npy"
     assert not intermediate_path.exists()
 
     embedder.generate_embeddings_kaggle_optimized(

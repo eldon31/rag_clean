@@ -112,3 +112,38 @@ def test_chunk_loader_estimates_missing_token_counts(tmp_path):
 
     assert result.summary["total_chunks_loaded"] == 1
     assert result.metadata[0]["token_count"] >= 100
+
+
+def test_chunk_loader_treats_first_level_directory_as_collection(tmp_path):
+    root_dir = tmp_path / "FAST_DOCS"
+    first_nested = root_dir / "fastapi_fastapi"
+    second_nested = root_dir / "jlowin_fastmcp"
+    first_nested.mkdir(parents=True)
+    second_nested.mkdir(parents=True)
+
+    chunk_payload = [
+        {
+            "text": "alpha " * 70,
+            "metadata": {
+                "token_count": 140,
+            },
+        }
+    ]
+    _write_json(first_nested / "fastapi_chunks.json", chunk_payload)
+    _write_json(second_nested / "fastmcp_chunks.json", chunk_payload)
+
+    loader = _make_loader(tmp_path)
+    result = loader.load(
+        str(root_dir),
+        preprocess_text=lambda text: text,
+        model_name="test-model",
+        model_vector_dim=768,
+        text_cache=None,
+    )
+
+    assert result.summary["collections_loaded"] == 1
+    assert result.summary["chunks_by_collection"] == {"FAST_DOCS": 2}
+    assert {
+        metadata["collection_alias"]
+        for metadata in result.metadata
+    } == {"FAST_DOCS"}

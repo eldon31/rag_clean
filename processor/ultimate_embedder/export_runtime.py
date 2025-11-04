@@ -55,7 +55,10 @@ class ExportRuntime:
         self.logger.info("Exporting embeddings for local Qdrant integration...")
 
         exported_files: Dict[str, str] = {}
-        base_path = embedder.export_config.get_output_path()
+        collection_alias = None
+        if hasattr(embedder, "get_active_collection_alias"):
+            collection_alias = embedder.get_active_collection_alias()
+        base_path = embedder.export_config.get_output_path(collection_name=collection_alias)
 
         if embedder.export_config.export_numpy:
             numpy_path = f"{base_path}_embeddings.npy"
