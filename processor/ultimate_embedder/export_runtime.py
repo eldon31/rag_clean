@@ -34,6 +34,12 @@ class ExportRuntime:
         self.logger = logger
         self.skipped_exports: Dict[str, str] = {}
 
+    @staticmethod
+    def _sanitize_name_token(name: str) -> str:
+        safe_chars = [char if char.isalnum() or char == "_" else "_" for char in name]
+        sanitized = "".join(safe_chars).strip("_")
+        return sanitized or "model"
+
     def export_for_local_qdrant(self) -> Dict[str, str]:
         """Export embeddings in formats optimized for downstream upload."""
         export_start_time = time.time()
@@ -67,7 +73,7 @@ class ExportRuntime:
             self.logger.info("NumPy embeddings: %s", numpy_path)
 
             for companion_name, companion_array in companion_arrays.items():
-                safe_name = companion_name.replace("-", "_")
+                safe_name = self._sanitize_name_token(companion_name)
                 companion_path = f"{base_path}_{safe_name}_embeddings.npy"
                 np.save(companion_path, companion_array)
                 exported_files[f"numpy_{safe_name}"] = companion_path
@@ -560,7 +566,7 @@ class ExportRuntime:
         for model_name, array in embedder.embeddings_by_model.items():
             if model_name == embedder.model_name:
                 continue
-            safe_name = model_name.replace("-", "_")
+            safe_name = self._sanitize_name_token(model_name)
             numpy_key = f"numpy_{safe_name}"
             companion_path = exported_files.get(numpy_key)
             if not companion_path:

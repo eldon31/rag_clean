@@ -42,6 +42,15 @@ def mock_sparse_model():
     """Create a mock SentenceTransformer sparse model."""
     model = Mock()
     model.encode = Mock()
+    tokenizer = Mock()
+    vocab = {f"term_{i}": i for i in range(2048)}
+    tokenizer.get_vocab = Mock(return_value=vocab)
+
+    def convert_ids_to_tokens(token_ids: List[int]) -> List[str]:
+        return [f"term_{idx}" for idx in token_ids]
+
+    tokenizer.convert_ids_to_tokens = Mock(side_effect=convert_ids_to_tokens)
+    model.tokenizer = tokenizer
     return model
 
 
@@ -318,7 +327,15 @@ class TestSparseVectorGenerator:
 
         # Test with numpy array
         embedding = np.array([0.0, 0.8, 0.0, 0.6, 0.0, 0.4], dtype=np.float32)
-        vector = generator._convert_embedding_to_sparse_vector(embedding)
+        lookup = {1: "alpha", 3: "bravo", 5: "charlie"}
+
+        def token_lookup(idx: int) -> Optional[str]:
+            return lookup.get(idx)
+
+        vector = generator._convert_embedding_to_sparse_vector(
+            embedding,
+            token_lookup=token_lookup,
+        )
 
         assert vector is not None
         assert "indices" in vector
@@ -328,6 +345,7 @@ class TestSparseVectorGenerator:
         assert len(vector["indices"]) == 3  # 3 non-zero values
         assert len(vector["values"]) == 3
         assert vector["stats"]["unique_terms"] == 3
+        assert vector["tokens"] == ["alpha", "bravo", "charlie"]
 
     def test_convert_embedding_torch_tensor(self, mock_embedder):
         """Test conversion from torch tensor to sparse vector."""
@@ -335,10 +353,37 @@ class TestSparseVectorGenerator:
 
         # Test with torch tensor
         embedding = torch.tensor([0.0, 0.8, 0.0, 0.6, 0.0], dtype=torch.float32)
-        vector = generator._convert_embedding_to_sparse_vector(embedding)
+        lookup = {1: "whiskey", 3: "tango"}
+
+        def token_lookup(idx: int) -> Optional[str]:
+            return lookup.get(idx)
+
+        vector = generator._convert_embedding_to_sparse_vector(
+            embedding,
+            token_lookup=token_lookup,
+        )
 
         assert vector is not None
         assert len(vector["indices"]) == 2  # 2 non-zero values
+        assert vector["tokens"] == ["whiskey", "tango"]
+
+    def test_convert_embedding_with_token_lookup(self, mock_embedder):
+        """Test conversion maps indices to tokens when lookup is provided."""
+        generator = SparseVectorGenerator(mock_embedder)
+
+        embedding = np.array([0.0, 0.2, 0.0, 0.3], dtype=np.float32)
+        token_map = {1: "foo", 3: "bar"}
+
+        def lookup(idx: int) -> Optional[str]:
+            return token_map.get(idx)
+
+        vector = generator._convert_embedding_to_sparse_vector(
+            embedding,
+            token_lookup=lookup,
+        )
+
+        assert vector is not None
+        assert vector["tokens"] == ["foo", "bar"]
 
     def test_convert_embedding_all_zeros(self, mock_embedder):
         """Test conversion with all-zero embedding returns None."""
@@ -346,6 +391,15 @@ class TestSparseVectorGenerator:
 
         # Test with all zeros
         embedding = np.zeros(10, dtype=np.float32)
+        vector = generator._convert_embedding_to_sparse_vector(embedding)
+
+        assert vector is None
+
+    def test_convert_embedding_without_lookup_triggers_fallback(self, mock_embedder):
+        """Non-zero embedding without lookup should trigger metadata fallback (None)."""
+        generator = SparseVectorGenerator(mock_embedder)
+
+        embedding = np.array([0.1, 0.0, 0.0, 0.4], dtype=np.float32)
         vector = generator._convert_embedding_to_sparse_vector(embedding)
 
         assert vector is None

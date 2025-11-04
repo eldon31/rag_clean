@@ -10,8 +10,9 @@ from __future__ import annotations
 import logging
 import time
 import uuid
+from functools import lru_cache
 from dataclasses import dataclass, field
-from typing import TYPE_CHECKING, Any, Dict, List, Optional, Sequence
+from typing import TYPE_CHECKING, Any, Callable, Dict, List, Optional, Sequence
 
 import numpy as np
 import torch
@@ -83,6 +84,15 @@ class SparseVectorGenerator:
         self._vram_soft_limit_gb = 10.0  # Soft limit for early warning
         self._adaptive_batch_size = 32  # Initial batch size
         self._min_batch_size = 4  # Minimum batch size before abort
+        self._invalid_tokens = {
+            "[UNK]",
+            "<unk>",
+            "<UNK>",
+            "[PAD]",
+            "<pad>",
+            "[MASK]",
+            "<mask>",
+        }
 
     def generate(
         self,
@@ -191,6 +201,7 @@ class SparseVectorGenerator:
         fallback_indices: List[int] = []
 
         texts = [chunk.text for chunk in chunks]
+        token_lookup = self._build_token_lookup(sparse_model, model_name)
 
         try:
             # Encode texts to produce sparse vectors
@@ -202,7 +213,10 @@ class SparseVectorGenerator:
             )
 
             for idx, embedding in enumerate(embeddings):
-                vector = self._convert_embedding_to_sparse_vector(embedding)
+                vector = self._convert_embedding_to_sparse_vector(
+                    embedding,
+                    token_lookup=token_lookup,
+                )
                 if vector is None:
                     # Fallback to metadata-derived vector
                     fallback_vector = build_sparse_vector_from_metadata(
@@ -254,6 +268,7 @@ class SparseVectorGenerator:
         vectors: List[Optional[Dict[str, Any]]] = []
         fallback_indices: List[int] = []
         device = "cpu"
+        token_lookup = self._build_token_lookup(sparse_model, model_name)
 
         try:
             # Lease GPUs for exclusive sparse inference
@@ -343,7 +358,10 @@ class SparseVectorGenerator:
                     embeddings = embeddings.cpu().numpy()
 
                 for idx, embedding in enumerate(embeddings):
-                    vector = self._convert_embedding_to_sparse_vector(embedding)
+                    vector = self._convert_embedding_to_sparse_vector(
+                        embedding,
+                        token_lookup=token_lookup,
+                    )
                     if vector is None:
                         fallback_vector = build_sparse_vector_from_metadata(
                             chunks[idx].metadata
@@ -381,9 +399,80 @@ class SparseVectorGenerator:
 
         return vectors, fallback_indices, device
 
+    def _build_token_lookup(
+        self,
+        sparse_model: SentenceTransformer,
+        model_name: str,
+    ) -> Optional[Callable[[int], Optional[str]]]:
+        """Create a lookup function that maps token ids to vocabulary strings."""
+        tokenizer = getattr(sparse_model, "tokenizer", None)
+        if tokenizer is None:
+            first_module = getattr(sparse_model, "_first_module", None)
+            module = None
+            if callable(first_module):
+                try:
+                    module = first_module()
+                except Exception:  # pragma: no cover - defensive
+                    module = None
+            tokenizer = getattr(module, "tokenizer", None) if module else None
+
+        if tokenizer is None:
+            self.logger.debug(
+                "Sparse model %s does not expose a tokenizer; using placeholder tokens",
+                model_name,
+            )
+            return None
+
+        inverse_vocab: Dict[int, str] = {}
+        get_vocab = getattr(tokenizer, "get_vocab", None)
+        if callable(get_vocab):
+            try:
+                vocab_dict = get_vocab()
+                if isinstance(vocab_dict, dict):
+                    for token, idx in vocab_dict.items():
+                        try:
+                            inverse_vocab.setdefault(int(idx), token)
+                        except (TypeError, ValueError):
+                            continue
+            except Exception as exc:  # pragma: no cover - tokenizer edge cases
+                self.logger.debug(
+                    "Tokenizer vocab retrieval failed for sparse model %s: %s",
+                    model_name,
+                    exc,
+                )
+
+        if inverse_vocab:
+            @lru_cache(maxsize=8192)
+            def lookup(index: int) -> Optional[str]:
+                return inverse_vocab.get(int(index))
+
+            return lookup
+
+        convert_fn = getattr(tokenizer, "convert_ids_to_tokens", None)
+        if callable(convert_fn):
+
+            @lru_cache(maxsize=8192)
+            def lookup(index: int) -> Optional[str]:
+                try:
+                    converted = convert_fn([int(index)])
+                    if isinstance(converted, (list, tuple)):
+                        return converted[0] if converted else None
+                    return converted
+                except Exception:  # pragma: no cover - tokenizer edge cases
+                    return None
+
+            return lookup
+
+        self.logger.debug(
+            "Tokenizer for sparse model %s lacks conversion helpers; using placeholders",
+            model_name,
+        )
+        return None
+
     def _convert_embedding_to_sparse_vector(
         self,
         embedding: Any,
+        token_lookup: Optional[Callable[[int], Optional[str]]] = None,
     ) -> Optional[Dict[str, Any]]:
         """Convert a dense embedding to a sparse vector structure.
 
@@ -392,6 +481,7 @@ class SparseVectorGenerator:
 
         Args:
             embedding: Embedding array (numpy or torch).
+            token_lookup: Optional callable used to map token ids to text.
 
         Returns:
             Sparse vector dict with indices, values, tokens, and stats, or None.
@@ -414,27 +504,59 @@ class SparseVectorGenerator:
                 # No significant values
                 return None
 
-            indices = nonzero_indices.tolist()
-            values = embedding[nonzero_indices].tolist()
+            if token_lookup is None:
+                self.logger.debug(
+                    "Sparse embedding lacks tokenizer mapping; triggering metadata fallback",
+                )
+                return None
 
-            # Normalize values
-            vector = np.array(values, dtype=np.float32)
+            filtered_indices: List[int] = []
+            filtered_values: List[float] = []
+            tokens: List[str] = []
+
+            for raw_idx in nonzero_indices.tolist():
+                token: Optional[str] = None
+                try:
+                    token = token_lookup(int(raw_idx))  # type: ignore[arg-type]
+                except Exception:  # pragma: no cover - defensive
+                    token = None
+
+                if isinstance(token, (list, tuple)):
+                    token = token[0] if token else None
+
+                if token is None:
+                    continue
+
+                token_str = str(token).strip()
+
+                if not token_str or token_str in self._invalid_tokens:
+                    continue
+
+                lowered = token_str.lower()
+                if lowered.startswith("[unused") or lowered.startswith("<unused"):
+                    continue
+
+                filtered_indices.append(int(raw_idx))
+                filtered_values.append(float(embedding[raw_idx]))
+                tokens.append(token_str)
+
+            if not filtered_indices:
+                self.logger.debug(
+                    "Tokenizer produced no valid tokens for sparse embedding; triggering metadata fallback",
+                )
+                return None
+
+            vector = np.array(filtered_values, dtype=np.float32)
             norm = float(np.linalg.norm(vector))
-            if norm > 0:
-                normalized_values = (vector / norm).tolist()
-            else:
-                normalized_values = vector.tolist()
-
-            # Generate token placeholders (actual tokens would come from tokenizer)
-            tokens = [f"token_{idx}" for idx in indices]
+            normalized_values = (vector / norm).tolist() if norm > 0 else vector.tolist()
 
             return {
-                "indices": indices,
+                "indices": filtered_indices,
                 "values": normalized_values,
                 "tokens": tokens,
                 "stats": {
                     "weight_norm": norm,
-                    "unique_terms": len(indices),
+                    "unique_terms": len(filtered_indices),
                     "total_terms": len(embedding),
                     "weighting": "normalized",
                 },

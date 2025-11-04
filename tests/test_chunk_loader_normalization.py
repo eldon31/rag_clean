@@ -60,8 +60,9 @@ def test_chunk_loader_coerces_string_entries(tmp_path):
         text_cache=None,
     )
 
-    assert result.summary["total_chunks_loaded"] == 1
+    assert result.summary["total_chunks_loaded"] == 2
     assert not result.summary["loading_errors"]
+    assert result.metadata[1]["token_count"] == 3
 
 
 def test_chunk_loader_descends_into_nested_chunked_dir(tmp_path):
@@ -112,6 +113,33 @@ def test_chunk_loader_estimates_missing_token_counts(tmp_path):
 
     assert result.summary["total_chunks_loaded"] == 1
     assert result.metadata[0]["token_count"] >= 100
+
+
+def test_chunk_loader_does_not_skip_short_chunks(tmp_path):
+    chunk_dir = tmp_path / "short_chunks"
+    chunk_dir.mkdir()
+    payload = [
+        {
+            "text": "brief content",
+            "metadata": {
+                "token_count": 12,
+            },
+        }
+    ]
+    _write_json(chunk_dir / "short_chunks.json", payload)
+
+    loader = _make_loader(tmp_path)
+    result = loader.load(
+        str(chunk_dir),
+        preprocess_text=lambda text: text,
+        model_name="test-model",
+        model_vector_dim=768,
+        text_cache=None,
+    )
+
+    assert result.summary["total_chunks_loaded"] == 1
+    assert result.metadata[0]["token_count"] == 12
+    assert result.summary["skipped_chunks"] == []
 
 
 def test_chunk_loader_treats_first_level_directory_as_collection(tmp_path):

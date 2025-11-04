@@ -117,6 +117,49 @@ class ChunkLoader:
         self.is_kaggle = is_kaggle
         self.logger = logger
 
+    def _evaluate_chunk_viability(self, token_count: int, original_text: str) -> tuple[bool, Optional[str]]:
+        """Return whether the chunk should be processed along with an optional skip reason."""
+
+        text = original_text if isinstance(original_text, str) else str(original_text)
+        if not text.strip():
+            return False, "empty_text"
+
+        if token_count <= 0:
+            return False, "missing_tokens"
+
+        return True, None
+
+    def _log_chunk_skip(
+        self,
+        *,
+        file_name: str,
+        chunk_idx: int,
+        token_count: int,
+        reason: Optional[str],
+        results: Dict[str, Any],
+    ) -> None:
+        """Emit structured logging when a chunk is skipped."""
+
+        reason_label = reason or "unspecified"
+        message = (
+            "[CHUNK_SKIP] File: %s | chunk_idx: %d | tokens: %d | reason: %s"
+            % (file_name, chunk_idx, token_count, reason_label)
+        )
+        self.logger.info(message)
+        print(
+            "[chunk_loader] SKIP %s | chunk_idx=%d | tokens=%d | reason=%s"
+            % (file_name, chunk_idx, token_count, reason_label),
+            flush=True,
+        )
+        results.setdefault("skipped_chunks", []).append(
+            {
+                "file": file_name,
+                "chunk_idx": chunk_idx,
+                "token_count": token_count,
+                "reason": reason_label,
+            }
+        )
+
     def load(
         self,
         chunks_dir: str,
@@ -169,6 +212,7 @@ class ChunkLoader:
             "modal_hint_counts": {},
             "collection_summaries": {},
             "collection_roots": {},
+            "skipped_chunks": [],
         }
 
         canonical_hint: Optional[str] = None
@@ -463,8 +507,6 @@ class ChunkLoader:
                 results["loading_errors"].append(message)
                 continue
 
-            token_threshold = 50
-
             for chunk_idx, chunk in enumerate(file_chunks, start=1):
                 metadata = chunk.get("metadata", {}) or {}
                 original_text = chunk.get("text", "")
@@ -479,17 +521,14 @@ class ChunkLoader:
                     if token_count:
                         metadata.setdefault("token_count", token_count)
 
-                if token_count < token_threshold:
-                    self.logger.info(
-                        "[CHUNK_SKIP] File: %s | chunk_idx: %d | tokens: %d | reason: below threshold",
-                        file_name,
-                        chunk_idx,
-                        token_count,
-                    )
-                    print(
-                        "[chunk_loader] SKIP %s | chunk_idx=%d | tokens=%d | reason=below_threshold"
-                        % (file_name, chunk_idx, token_count),
-                        flush=True,
+                viable, skip_reason = self._evaluate_chunk_viability(token_count, original_text)
+                if not viable:
+                    self._log_chunk_skip(
+                        file_name=file_name,
+                        chunk_idx=chunk_idx,
+                        token_count=token_count,
+                        reason=skip_reason,
+                        results=results,
                     )
                     continue
 
