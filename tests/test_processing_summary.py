@@ -85,6 +85,13 @@ def test_build_processing_summary_includes_stage_sections() -> None:
         "models_executed": ["jina-code-embeddings-1.5b"],
     }
 
+    ensemble_state = {
+        "requested": True,
+        "resolved": True,
+        "source": "parameter",
+        "models_configured": ["jina-code-embeddings-1.5b"],
+    }
+
     summary = build_processing_summary(
         feature_toggles=toggles,
         dense_run=dense_run,
@@ -93,6 +100,7 @@ def test_build_processing_summary_includes_stage_sections() -> None:
         telemetry=telemetry,
         collection_name="sample_collection",
         chunk_count=10,
+        ensemble_state=ensemble_state,
     )
 
     assert summary["schema_version"] == "v4.1"
@@ -124,6 +132,8 @@ def test_build_processing_summary_includes_stage_sections() -> None:
     assert any(
         "default" in line for line in summary["activation_provenance_lines"]
     )
+    assert summary["ensemble_state"]["resolved"] is True
+    assert summary["ensemble_state"]["requested"] is True
 
 
 def test_build_processing_summary_omits_disabled_stages() -> None:
@@ -424,10 +434,34 @@ def test_write_processing_summary_generates_default_sections(tmp_path, monkeypat
     assert summary_path.exists()
     payload = json.loads(summary_path.read_text(encoding="utf-8"))
 
+    assert results["total_batches_executed"] >= 1
+    assert results["primary_batches_processed"] >= 1
+    assert results["model_used"] in results["batches_per_model"]
+    assert (
+        results["batches_per_model"][results["model_used"]]
+        == results["primary_batches_processed"]
+    )
     assert (
         payload["dense_run"]["total_embeddings_generated"]
         == results["total_embeddings_generated"]
     )
+    assert (
+        payload["dense_run"]["total_batches_executed"]
+        == results["total_batches_executed"]
+    )
+    assert (
+        payload["dense_run"]["primary_batches_processed"]
+        == results["primary_batches_processed"]
+    )
+    assert payload["dense_run"]["batches_per_model"][results["model_used"]] >= 1
+    ensemble_state = payload["ensemble_state"]
+    assert ensemble_state["requested"] is False
+    assert ensemble_state["resolved"] is True
+    assert ensemble_state["source"] == "parameter"
+    assert ensemble_state.get("overridden") is True
+    assert ensemble_state["exclusive_mode"] is True
+    assert "cpu fallback" in ensemble_state.get("runtime_reason", "").lower()
+    assert set(ensemble_state["models_configured"]) == set(embedder.ensemble_config.ensemble_models)
     assert payload["rerank_run"]["enabled"] is True
     # Rerank should now execute as part of batch runner orchestration
     assert payload["rerank_run"]["status"] in {"staged", "pending", "executed"}
@@ -449,6 +483,88 @@ def test_write_processing_summary_generates_default_sections(tmp_path, monkeypat
     assert provenance_lines
     assert payload["activation_provenance_lines"] == provenance_lines
     assert any("default" in line for line in provenance_lines)
+
+
+def test_generate_embeddings_kaggle_optimized_emits_intermediate_batches(tmp_path, monkeypatch):
+    _apply_dummy_model_patches(monkeypatch)
+
+    export_dir = tmp_path / "exports"
+    export_dir.mkdir(parents=True, exist_ok=True)
+
+    gpu_config = KaggleGPUConfig(
+        device_count=1,
+        vram_per_gpu_gb=8.0,
+        total_vram_gb=8.0,
+        max_memory_per_gpu=0.5,
+        enable_memory_efficient_attention=False,
+        gradient_checkpointing=False,
+        precision="fp32",
+        enable_mixed_precision=False,
+        use_amp=False,
+        base_batch_size=1,
+        dynamic_batching=False,
+        max_sequence_length=512,
+        backend="pytorch",
+        enable_torch_compile=False,
+        strategy="data_parallel",
+        enable_gradient_accumulation=False,
+        accumulation_steps=1,
+        kaggle_environment=False,
+        output_path=str(tmp_path / "outputs"),
+    )
+
+    export_config = KaggleExportConfig(
+        working_dir=str(export_dir),
+        output_prefix="test_run",
+        export_numpy=False,
+        export_jsonl=False,
+        export_faiss=False,
+        export_sparse_jsonl=False,
+    )
+
+    embedder = UltimateKaggleEmbedderV4(
+        model_name="jina-code-embeddings-1.5b",
+        gpu_config=gpu_config,
+        export_config=export_config,
+        enable_ensemble=False,
+        feature_toggles=FeatureToggleConfig(),
+        force_cpu=True,
+        gpu0_soft_limit_gb=8.0,
+    )
+
+    # Simulate Kaggle environment so the intermediate writer activates.
+    embedder.is_kaggle = True
+    embedder._intermediate_save_interval = 3
+
+    collection_dir = tmp_path / "Chunked" / "CollectionA"
+    collection_dir.mkdir(parents=True)
+
+    chunk_payload = [
+        {
+            "text": ("Chunk %d sample text " % idx) * 40,
+            "metadata": {
+                "token_count": 160,
+                "source_file": f"doc{idx}.md",
+            },
+        }
+        for idx in range(12)
+    ]
+    (collection_dir / "sample_chunks.json").write_text(
+        json.dumps(chunk_payload),
+        encoding="utf-8",
+    )
+
+    embedder.load_chunks_from_processing(chunks_dir=str(collection_dir))
+
+    intermediate_path = export_dir / "test_run_intermediate_batch_3.npy"
+    assert not intermediate_path.exists()
+
+    embedder.generate_embeddings_kaggle_optimized(
+        enable_monitoring=False,
+        save_intermediate=True,
+    )
+
+    assert intermediate_path.exists()
 
 
 def test_metrics_emission_for_dense_and_export(tmp_path, monkeypatch):
@@ -665,6 +781,12 @@ def test_write_processing_summary_omits_disabled_sections(tmp_path, monkeypatch)
 
     assert "rerank_run" not in payload
     assert "sparse_run" not in payload
+    ensemble_state = payload["ensemble_state"]
+    assert ensemble_state["requested"] is False
+    assert ensemble_state["resolved"] is True
+    assert ensemble_state.get("overridden") is True
+    assert ensemble_state["exclusive_mode"] is True
+    assert "cpu fallback" in ensemble_state.get("runtime_reason", "").lower()
     lines = payload["feature_toggles"].get("provenance_lines", [])
     assert lines
     assert payload["activation_provenance_lines"] == lines

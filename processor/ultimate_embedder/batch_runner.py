@@ -637,6 +637,9 @@ class BatchRunner:
             embedder._start_performance_monitoring()
 
         start_time = time.time()
+        total_executed_batches = 0
+        primary_batches_processed = 0
+        batches_per_model: Dict[str, int] = {}
         per_model_embeddings: Dict[str, np.ndarray] = {}
         model_weights: Dict[str, float] = {}
 
@@ -676,6 +679,7 @@ class BatchRunner:
 
                     if model is None:
                         logger.warning("Failed to hydrate %s, skipping", model_name)
+                        batches_per_model[model_name] = 0
                         continue
 
                     # Reset adaptive controller for this model pass
@@ -777,6 +781,9 @@ class BatchRunner:
 
                             model_embeddings.append(batch_embeddings)
                             executed_batches += 1
+                            total_executed_batches += 1
+                            if model_name == embedder.model_name:
+                                primary_batches_processed += 1
                             progress_tracker.mark_completed()
 
                             self._record_progress_event(
@@ -790,6 +797,16 @@ class BatchRunner:
                                     "total_passes": len(ordered_models),
                                 },
                             )
+
+                            if (
+                                save_intermediate
+                                and model_name == embedder.model_name
+                                and primary_batches_processed % embedder._intermediate_save_interval == 0
+                            ):
+                                embedder._persist_intermediate_embeddings(
+                                    model_embeddings,
+                                    batch_number=primary_batches_processed,
+                                )
 
                             logger.info(
                                 "[%s] Batch %d/%d completed (chunks %d-%d)",
@@ -838,6 +855,8 @@ class BatchRunner:
                         logger.info("[%s] GPU lease summary: %s", model_name, lease_summary)
                     else:
                         logger.warning("[%s] No embeddings generated", model_name)
+
+                    batches_per_model[model_name] = executed_batches
 
                     # Close progress bar for this model pass
                     pbar.close()
@@ -912,9 +931,23 @@ class BatchRunner:
             if final_embeddings.dtype.kind not in {"f", "c"}:
                 final_embeddings = final_embeddings.astype(np.float32, copy=False)
 
-            final_embeddings = normalize(final_embeddings, norm="l2", axis=1)
+            final_embeddings = normalize(final_embeddings, norm="l2", axis=1).astype(np.float32, copy=False)
+            float_per_model_embeddings: Dict[str, np.ndarray] = {
+                name: np.asarray(matrix, dtype=np.float32)
+                for name, matrix in per_model_embeddings.items()
+            }
+            per_model_embeddings = float_per_model_embeddings
+
             embedder.embeddings = final_embeddings
+            embedder.embeddings_by_model.clear()
+            for name, matrix in float_per_model_embeddings.items():
+                embedder.embeddings_by_model[name] = matrix
+
             embedder.embeddings_by_model[embedder.model_name] = final_embeddings
+            embedder._populate_multivector_channels(
+                final_embeddings=final_embeddings,
+                per_model_embeddings=float_per_model_embeddings,
+            )
 
             self._run_rerank_stage(embedder, final_embeddings)
 
@@ -932,6 +965,14 @@ class BatchRunner:
         embedding_memory_mb = embeddings.nbytes / 1024 / 1024
         memory_per_chunk_kb = (embedding_memory_mb * 1024) / total_chunks
 
+        embedder.processing_stats["dense_batches"].append(
+            {
+                "total": total_executed_batches,
+                "primary": primary_batches_processed,
+                "per_model": dict(batches_per_model),
+            }
+        )
+
         results: Dict[str, Any] = {
             "total_embeddings_generated": len(embeddings),
             "embedding_dimension": embeddings.shape[1],
@@ -946,6 +987,9 @@ class BatchRunner:
             "ensemble_mode": "exclusive",
             "models_executed": list(per_model_embeddings.keys()),
             "lease_events": embedder.telemetry.gpu_lease_events,
+            "total_batches_executed": total_executed_batches,
+            "primary_batches_processed": primary_batches_processed,
+            "batches_per_model": dict(batches_per_model),
         }
         
         # Add sparse inference results if available

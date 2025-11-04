@@ -39,8 +39,6 @@ import importlib.metadata as importlib_metadata
 # Fix protobuf compatibility issues (protobuf 4.x vs 3.x API breaking changes)
 # This must be set before importing TensorFlow, ONNX, or any library that uses protobuf
 os.environ.setdefault("PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION", "python")
-
-
 # Force JAX/TensorFlow to remain on CPU so Kaggle doesn't crash when both stacks register CUDA plugins.
 os.environ.setdefault("JAX_PLATFORMS", "cpu")
 os.environ.setdefault("JAX_PLATFORM_NAME", "cpu")
@@ -301,7 +299,7 @@ from processor.ultimate_embedder.controllers import (
     collect_gpu_snapshots,
 )
 from processor.ultimate_embedder.export_runtime import ExportRuntime
-from processor.ultimate_embedder.model_manager import ModelManager
+from processor.ultimate_embedder.model_manager import ModelManager, ONNX_AVAILABLE
 from processor.ultimate_embedder.monitoring import PerformanceMonitor
 from processor.ultimate_embedder.prometheus_metrics import create_prometheus_emitter, PrometheusMetricsEmitter
 from processor.ultimate_embedder.rerank_pipeline import RerankPipeline
@@ -368,8 +366,8 @@ class UltimateKaggleEmbedderV4:
         model_name: str = "jina-code-embeddings-1.5b",
         gpu_config: Optional[KaggleGPUConfig] = None,
         export_config: Optional[KaggleExportConfig] = None,
-        preprocessing_config: Optional[AdvancedPreprocessingConfig] = None,
-        enable_ensemble: bool = False,
+    preprocessing_config: Optional[AdvancedPreprocessingConfig] = None,
+    enable_ensemble: Optional[bool] = None,
         ensemble_config: Optional[EnsembleConfig] = None,
         reranking_config: Optional[RerankingConfig] = None,
         companion_dense_models: Optional[List[str]] = None,
@@ -417,10 +415,29 @@ class UltimateKaggleEmbedderV4:
         self.gpu_config = gpu_config or KaggleGPUConfig()
         self.export_config = export_config or KaggleExportConfig()
         self.preprocessing_config = preprocessing_config or AdvancedPreprocessingConfig()
-        self.enable_ensemble = enable_ensemble
+        self._requested_enable_ensemble = enable_ensemble
+        (
+            resolved_enable_ensemble,
+            ensemble_source,
+            ensemble_reason,
+        ) = self._resolve_enable_ensemble_default(enable_ensemble)
+        self.enable_ensemble = resolved_enable_ensemble
+        self._ensemble_resolution_source: str = ensemble_source
+        self._ensemble_resolution_reason: Optional[str] = ensemble_reason
+        self._ensemble_runtime_reason: Optional[str] = None
         self.ensemble_config = (
-            ensemble_config or EnsembleConfig() if enable_ensemble else None
+            ensemble_config or EnsembleConfig()
+            if self.enable_ensemble
+            else None
         )
+        logger.info(
+            "Ensemble intent resolved: requested=%s resolved=%s source=%s",
+            enable_ensemble,
+            self.enable_ensemble,
+            ensemble_source,
+        )
+        if ensemble_reason:
+            logger.info("Ensemble resolution note: %s", ensemble_reason)
         toggles = feature_toggles or load_feature_toggles()
         self.feature_toggles = toggles
 
@@ -440,6 +457,7 @@ class UltimateKaggleEmbedderV4:
         self.model_dtypes: Dict[str, Optional[torch.dtype]] = {}
         self.primary_vector_name: str = self.model_name
         self._pending_mitigations: List[Tuple[str, Dict[str, Any]]] = []
+        self._intermediate_save_interval: int = 10
 
         # V5: Sparse embedding support
         resolved_enable_sparse = (
@@ -537,6 +555,8 @@ class UltimateKaggleEmbedderV4:
         self.cuda_debug_snapshot = self._capture_cuda_debug_snapshot()
         self._log_cuda_debug_snapshot()
 
+        self._auto_select_backend()
+
         self.text_cache = AdvancedTextCache() if self.preprocessing_config.enable_text_caching else None
 
         self.models: Dict[str, Any] = {}
@@ -552,7 +572,24 @@ class UltimateKaggleEmbedderV4:
         self.rerank_fallback_reason: Optional[str] = None
         self.rerank_fallback_source: Optional[str] = None
 
-        self.companion_dense_model_names: List[str] = normalize_kaggle_model_names(companion_dense_models or [])
+        companion_candidates: List[str] = list(companion_dense_models or [])
+        if self.enable_ensemble and self.ensemble_config:
+            for candidate in self.ensemble_config.ensemble_models:
+                if candidate not in companion_candidates:
+                    companion_candidates.append(candidate)
+
+        if companion_candidates:
+            normalized_companions = normalize_kaggle_model_names(companion_candidates)
+            normalized_companions = [name for name in normalized_companions if name != self.model_name]
+        else:
+            normalized_companions = []
+
+        deduped_companions: List[str] = []
+        for candidate in normalized_companions:
+            if candidate not in deduped_companions:
+                deduped_companions.append(candidate)
+
+        self.companion_dense_model_names = deduped_companions
         self.companion_models: Dict[str, SentenceTransformer] = {}
         self.companion_model_configs: Dict[str, ModelConfig] = {}
         self.companion_batch_sizes: Dict[str, int] = {}
@@ -741,6 +778,32 @@ class UltimateKaggleEmbedderV4:
     def _record_rotation_event(self, event: Dict[str, Any]) -> None:
         """Capture per-batch ensemble rotation telemetry with bounded detail."""
         self.telemetry.record_rotation_event(event)
+
+    def _persist_intermediate_embeddings(
+        self,
+        batches: Sequence[np.ndarray],
+        *,
+        batch_number: int,
+    ) -> None:
+        """Persist intermediate primary embeddings for long Kaggle runs."""
+
+        if not self.is_kaggle or not batches:
+            return
+
+        try:
+            output_path = self.export_config.get_output_path(
+                f"_intermediate_batch_{batch_number}"
+            )
+            Path(output_path).parent.mkdir(parents=True, exist_ok=True)
+
+            stacked = np.vstack(list(batches))
+            if stacked.size == 0:
+                return
+
+            np.save(f"{output_path}.npy", stacked.astype(np.float32, copy=False))
+            logger.info("Intermediate results saved: %s.npy", output_path)
+        except Exception as exc:  # pragma: no cover - filesystem/IO failures
+            logger.warning("Failed to persist intermediate embeddings: %s", exc)
 
     def _emit_metrics_for_stage(
         self,
@@ -1493,6 +1556,116 @@ class UltimateKaggleEmbedderV4:
                 "Mitigation: ensure those modules are not imported before the embedder starts, or uninstall them in Kaggle (e.g. `pip uninstall -y jax jaxlib tensorflow`).",
             )
 
+    @staticmethod
+    def _parse_env_bool(value: Optional[str]) -> Optional[bool]:
+        if value is None:
+            return None
+
+        lowered = value.strip().lower()
+        if lowered in {"1", "true", "yes", "on"}:
+            return True
+        if lowered in {"0", "false", "no", "off"}:
+            return False
+        return None
+
+    def _resolve_enable_ensemble_default(
+        self,
+        requested: Optional[bool],
+    ) -> Tuple[bool, str, Optional[str]]:
+        if requested is not None:
+            return bool(requested), "parameter", "Explicit parameter request"
+
+        env_value = self._parse_env_bool(os.environ.get("EMBEDDER_ENABLE_ENSEMBLE"))
+        if env_value is not None:
+            return env_value, "environment", "Environment override: EMBEDDER_ENABLE_ENSEMBLE"
+
+        if self.force_cpu:
+            return False, "force_cpu", "Disabled due to force_cpu flag"
+
+        if torch.cuda.is_available():
+            return True, "auto_cuda_available", "Auto-enabled: CUDA detected"
+
+        return False, "auto_cuda_unavailable", "Auto-disabled: CUDA unavailable"
+
+    def _auto_select_backend(self) -> None:
+        disable_flag = self._parse_env_bool(os.environ.get("EMBEDDER_DISABLE_ONNX"))
+        if self.force_cpu or self.device != "cuda" or disable_flag:
+            self.gpu_config.backend = "pytorch"
+            self.embedding_backend = "pytorch"
+            return
+
+        if self.gpu_config.backend not in {"pytorch", "auto"}:
+            self.embedding_backend = self.gpu_config.backend
+            return
+
+        if not ONNX_AVAILABLE:
+            self.gpu_config.backend = "pytorch"
+            self.embedding_backend = "pytorch"
+            return
+
+        self.gpu_config.backend = "onnx"
+        self.embedding_backend = "onnx"
+        logger.info("ONNX backend auto-enabled (optimum available)")
+
+    def _derive_matryoshka_levels(self, dimension: int) -> List[int]:
+        if dimension <= 0:
+            return []
+
+        levels: List[int] = []
+        current = dimension
+        while current >= 128 and len(levels) < 4:
+            levels.append(int(current))
+            current = current // 2
+            if current == levels[-1]:
+                break
+
+        if not levels:
+            levels.append(int(dimension))
+        elif levels[-1] != dimension:
+            levels.append(int(dimension))
+
+        return sorted(set(levels))
+
+    def _populate_multivector_channels(
+        self,
+        *,
+        final_embeddings: np.ndarray,
+        per_model_embeddings: Mapping[str, np.ndarray],
+    ) -> None:
+        self.multivectors_by_model.clear()
+        self.multivector_dimensions.clear()
+        self.multivector_comparators.clear()
+
+        if not isinstance(final_embeddings, np.ndarray) or final_embeddings.size == 0:
+            return
+
+        final_matrix = np.asarray(final_embeddings, dtype=np.float32)
+        levels = self._derive_matryoshka_levels(final_matrix.shape[1])
+
+        for level in levels:
+            trimmed = final_matrix[:, :level]
+            channel_name = f"{self.model_name}_matryoshka_{level}"
+            channel_vectors = [[vector.tolist()] for vector in trimmed]
+            self.multivectors_by_model[channel_name] = channel_vectors
+            self.multivector_dimensions[channel_name] = int(level)
+            self.multivector_comparators[channel_name] = "max_sim"
+
+        for model_name, matrix in per_model_embeddings.items():
+            if model_name == self.model_name:
+                continue
+            if not isinstance(matrix, np.ndarray) or matrix.size == 0:
+                continue
+
+            dense_matrix = np.asarray(matrix, dtype=np.float32)
+            channel_name = f"{model_name}_dense"
+            if channel_name in self.multivectors_by_model:
+                continue
+
+            payload = [[vector.tolist()] for vector in dense_matrix]
+            self.multivectors_by_model[channel_name] = payload
+            self.multivector_dimensions[channel_name] = int(dense_matrix.shape[1])
+            self.multivector_comparators[channel_name] = "max_sim"
+
     def _apply_cpu_dense_fallback(self) -> None:
         """Adjust dense model roster when operating without GPUs."""
 
@@ -1522,6 +1695,8 @@ class UltimateKaggleEmbedderV4:
         self.model_config = KAGGLE_OPTIMIZED_MODELS[fallback_primary]
         self.primary_vector_name = self.model_name
 
+        previous_state = self.enable_ensemble
+
         if fallback_models:
             if not self.ensemble_config:
                 self.ensemble_config = EnsembleConfig(
@@ -1532,9 +1707,16 @@ class UltimateKaggleEmbedderV4:
                 self.ensemble_config.ensemble_models = fallback_models
                 self.ensemble_config.exclusive_mode = True
             self.enable_ensemble = True
+            self._ensemble_runtime_reason = (
+                "CPU fallback enforced exclusive ensemble roster"
+                if not previous_state
+                else "CPU fallback updated ensemble roster"
+            )
         else:
             self.enable_ensemble = False
             self.ensemble_config = None
+            if previous_state:
+                self._ensemble_runtime_reason = "CPU fallback disabled ensemble (no compatible companions)"
 
         fallback_dims = [self.model_config.vector_dim]
         fallback_dims.extend(
@@ -2057,6 +2239,58 @@ class UltimateKaggleEmbedderV4:
         self._assemble_processing_summary(results=results)
         return results
 
+    def _build_ensemble_state(
+        self,
+        dense_run: Optional[Mapping[str, Any]],
+    ) -> Dict[str, Any]:
+        resolved_run: Optional[Mapping[str, Any]] = None
+        if isinstance(dense_run, Mapping):
+            resolved_run = dense_run
+        elif isinstance(self._last_dense_run, Mapping):
+            resolved_run = cast(Mapping[str, Any], self._last_dense_run)
+
+        executed_models: List[str] = []
+        model_used: Optional[str] = None
+        if resolved_run:
+            raw_models = resolved_run.get("models_executed")
+            if isinstance(raw_models, Sequence):
+                executed_models = [str(model) for model in raw_models]
+            raw_model_used = resolved_run.get("model_used")
+            if isinstance(raw_model_used, str):
+                model_used = raw_model_used
+
+        configured_models: List[str] = []
+        exclusive_mode = False
+        if self.ensemble_config:
+            configured_models = list(self.ensemble_config.ensemble_models)
+            exclusive_mode = bool(self.ensemble_config.exclusive_mode)
+
+        state: Dict[str, Any] = {
+            "requested": self._requested_enable_ensemble,
+            "resolved": bool(self.enable_ensemble),
+            "source": getattr(self, "_ensemble_resolution_source", "unspecified"),
+            "exclusive_mode": exclusive_mode,
+            "models_configured": configured_models,
+            "primary_model": self.model_name,
+        }
+
+        if executed_models:
+            state["models_executed"] = executed_models
+        if model_used:
+            state["model_used"] = model_used
+        if self._ensemble_resolution_reason:
+            state["resolution_reason"] = self._ensemble_resolution_reason
+        if self._ensemble_runtime_reason:
+            state["runtime_reason"] = self._ensemble_runtime_reason
+
+        if (
+            self._requested_enable_ensemble is not None
+            and bool(self._requested_enable_ensemble) != self.enable_ensemble
+        ):
+            state["overridden"] = True
+
+        return state
+
     def _assemble_processing_summary(
         self,
         *,
@@ -2069,6 +2303,9 @@ class UltimateKaggleEmbedderV4:
         dense_latency_seconds: Optional[float] = None
         dense_embeddings_generated: Optional[int] = None
         dense_chunks_per_second: Optional[float] = None
+        dense_total_batches: Optional[int] = None
+        dense_primary_batches: Optional[int] = None
+        dense_batches_per_model: Optional[Dict[str, Any]] = None
         if isinstance(dense_run, Mapping):
             raw_latency = dense_run.get("processing_time_seconds")
             if isinstance(raw_latency, (int, float)):
@@ -2079,6 +2316,15 @@ class UltimateKaggleEmbedderV4:
             raw_chunks = dense_run.get("chunks_per_second")
             if isinstance(raw_chunks, (int, float)):
                 dense_chunks_per_second = float(raw_chunks)
+            raw_total_batches = dense_run.get("total_batches_executed")
+            if isinstance(raw_total_batches, (int, float)):
+                dense_total_batches = int(raw_total_batches)
+            raw_primary_batches = dense_run.get("primary_batches_processed")
+            if isinstance(raw_primary_batches, (int, float)):
+                dense_primary_batches = int(raw_primary_batches)
+            raw_batches_per_model = dense_run.get("batches_per_model")
+            if isinstance(raw_batches_per_model, Mapping):
+                dense_batches_per_model = dict(raw_batches_per_model)
 
         gpu_history: Optional[Dict[str, Any]] = None
 
@@ -2092,6 +2338,12 @@ class UltimateKaggleEmbedderV4:
             dense_details["chunks_per_second"] = dense_chunks_per_second
         if dense_embeddings_generated is not None:
             dense_details["embeddings_generated"] = dense_embeddings_generated
+        if dense_total_batches is not None:
+            dense_details["total_batches_executed"] = dense_total_batches
+        if dense_primary_batches is not None:
+            dense_details["primary_batches_processed"] = dense_primary_batches
+        if dense_batches_per_model:
+            dense_details["batches_per_model"] = dense_batches_per_model
 
         if gpu_history is None:
             gpu_history = self._summarize_gpu_history()
@@ -2398,6 +2650,10 @@ class UltimateKaggleEmbedderV4:
             if resolved_chunk_count is None and self.chunk_texts:
                 resolved_chunk_count = len(self.chunk_texts)
 
+        ensemble_state = self._build_ensemble_state(dense_run)
+        if ensemble_state:
+            self.processing_stats["ensemble_state"].append(dict(ensemble_state))
+
         summary = build_processing_summary(
             feature_toggles=self.feature_toggles,
             dense_run=dense_run,
@@ -2406,6 +2662,7 @@ class UltimateKaggleEmbedderV4:
             telemetry=telemetry_summary,
             collection_name=collection_name,
             chunk_count=resolved_chunk_count,
+            ensemble_state=ensemble_state,
         )
 
         warnings = summary.get("warnings") or []

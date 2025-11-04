@@ -319,6 +319,7 @@ def build_processing_summary(
     telemetry: Mapping[str, Any],
     collection_name: Optional[str] = None,
     chunk_count: Optional[int] = None,
+    ensemble_state: Optional[Mapping[str, Any]] = None,
 ) -> Dict[str, Any]:
     """Build processing summary manifest with optional stage payloads."""
 
@@ -353,6 +354,11 @@ def build_processing_summary(
         if payload:
             sparse_entry["payload"] = payload
         summary["sparse_run"] = sparse_entry
+    if ensemble_state is not None:
+        summary["ensemble_state"] = {
+            key: ensemble_state[key]
+            for key in ensemble_state
+        }
 
     provenance_events = list(feature_toggles.resolution_events)
     if not provenance_events:

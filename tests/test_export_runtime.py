@@ -78,3 +78,37 @@ def test_export_qdrant_jsonl_uses_schema_version(tmp_path: Path) -> None:
 
     assert payload["model_info"]["version"] == SCHEMA_VERSION
     assert payload["dense_vector_names"] == [embedder.model_name, "companion-model"]
+
+
+def test_export_qdrant_jsonl_includes_multivectors(tmp_path: Path) -> None:
+    """Verify multivector channels are emitted when provided by the embedder."""
+
+    embedder = _StubEmbedder()
+    channel_name = "primary-model_matryoshka_2"
+    embedder.multivectors_by_model = {channel_name: [[[0.1, 0.2]]]}
+    embedder.multivector_dimensions = {channel_name: 2}
+    embedder.multivector_comparators = {channel_name: "max_sim"}
+
+    runtime = ExportRuntime(embedder, logging.getLogger("export-runtime-test"))
+
+    embeddings = embedder.embeddings_by_model[embedder.model_name]
+    companion_arrays = {
+        name: array
+        for name, array in embedder.embeddings_by_model.items()
+        if name != embedder.model_name
+    }
+
+    output_path = tmp_path / "points.jsonl"
+    runtime._export_qdrant_jsonl(str(output_path), embeddings, companion_arrays)
+
+    record = json.loads(output_path.read_text(encoding="utf-8").strip())
+    payload = record["payload"]
+
+    multivectors = payload["model_info"].get("multivectors")
+    assert multivectors is not None
+    assert channel_name in multivectors
+    assert multivectors[channel_name]["dimension"] == 2
+    assert multivectors[channel_name]["comparator"] == "max_sim"
+
+    vector_payload = record["vectors"].get(channel_name)
+    assert vector_payload == {"vectors": [[0.1, 0.2]]}

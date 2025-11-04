@@ -109,22 +109,31 @@ class ModelManager:
                 exc,
             )
 
+        backend_used = "pytorch"
+
         if embedder.gpu_config.backend == "onnx" and ONNX_AVAILABLE:
             logger.info("Attempting ONNX backend optimization...")
             try:
                 embedder.primary_model = self._load_onnx_model()
                 logger.info("ONNX backend loaded successfully")
+                backend_used = "onnx"
             except Exception as exc:  # pragma: no cover - defensive logging
                 logger.warning("ONNX backend failed, using PyTorch: %s", exc)
                 embedder.primary_model = self._load_pytorch_model(model_kwargs, optimal_batch)
         else:
             embedder.primary_model = self._load_pytorch_model(model_kwargs, optimal_batch)
+            backend_used = "pytorch"
 
         if isinstance(embedder.primary_model, SentenceTransformer):
             self._maybe_enable_transformer_checkpointing(embedder.primary_model)
 
         embedder.models[embedder.model_name] = embedder.primary_model
         embedder._record_model_dtype(embedder.model_name, embedder.primary_model)
+        embedder.embedding_backend = backend_used
+        try:
+            embedder.gpu_config.backend = backend_used
+        except AttributeError:
+            pass
 
         # Stage primary model to CPU if exclusive ensemble mode is enabled
         if (
@@ -278,6 +287,7 @@ class ModelManager:
                 )
                 embedder.sparse_models[sparse_name] = sparse_model
                 embedder.sparse_device_map[sparse_name] = target_device
+                embedder.models[sparse_name] = sparse_model
                 embedder._record_model_dtype(sparse_name, sparse_model)
                 logger.info("Sparse model %s staged to CPU", sparse_name)
             except Exception as exc:  # pragma: no cover - defensive logging
@@ -480,8 +490,14 @@ class ModelManager:
         if not embedder.enable_ensemble or not embedder.ensemble_config:
             return
 
-        if embedder.embedding_backend != "local":
-            logger.info("Companion models are unavailable for API-backed embeddings")
+        backend_kind = (embedder.embedding_backend or "local").lower()
+        local_backends = {"local", "pytorch", "onnx"}
+
+        if backend_kind not in local_backends:
+            logger.info(
+                "Companion models are unavailable for %s-backed embeddings",
+                backend_kind,
+            )
             return
 
         logger.info("Loading ensemble models: %s", embedder.ensemble_config.ensemble_models)
@@ -529,6 +545,10 @@ class ModelManager:
         if hasattr(model, "to"):
             model = model.to("cpu")
             embedder.models[model_name] = model
+            if model_name in getattr(embedder, "sparse_models", {}):
+                embedder.sparse_models[model_name] = model
+                if hasattr(embedder, "sparse_device_map"):
+                    embedder.sparse_device_map[model_name] = "cpu"
             embedder._record_model_dtype(model_name, model)
             logger.info("Model %s staged to CPU", model_name)
         else:
@@ -571,6 +591,9 @@ class ModelManager:
         logger = self.logger
 
         model = embedder.models.get(model_name)
+        if model is None and model_name in getattr(embedder, "sparse_models", {}):
+            model = embedder.sparse_models[model_name]
+            embedder.models[model_name] = model
         if model is None:
             try:
                 model = self._load_ensemble_model(model_name, "cpu")
@@ -657,6 +680,10 @@ class ModelManager:
                     )
 
                 embedder.models[model_name] = model
+                if model_name in getattr(embedder, "sparse_models", {}):
+                    embedder.sparse_models[model_name] = model
+                    if hasattr(embedder, "sparse_device_map"):
+                        embedder.sparse_device_map[model_name] = primary_device
                 embedder._record_model_dtype(model_name, model)
                 logger.info("Model %s hydrated to GPUs %s", model_name, device_ids)
                 status = "hydrated"
