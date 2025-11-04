@@ -8,7 +8,7 @@ from typing import Any, Dict, List, Optional, Sequence
 import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity
 
-from processor.ultimate_embedder.compat import CrossEncoder
+from processor.ultimate_embedder.compat import CrossEncoder, SentenceTransformer
 from processor.ultimate_embedder.config import (
     RERANKING_MODELS,
     RerankingConfig,
@@ -67,6 +67,86 @@ class _JinaRerankerAdapter:
         return scores
 
 
+class _BiEncoderRerankerAdapter:
+    """Adapt a SentenceTransformer bi-encoder for query-document scoring."""
+
+    def __init__(self, model: SentenceTransformer) -> None:
+        self._model = model
+        self._device = getattr(model, "device", "cpu")
+
+    def to(self, device: str) -> "_BiEncoderRerankerAdapter":
+        if hasattr(self._model, "to"):
+            self._model = self._model.to(device)
+        self._device = device
+        return self
+
+    def eval(self) -> None:
+        if hasattr(self._model, "eval"):
+            self._model.eval()
+
+    def predict(self, query_doc_pairs: Sequence[Sequence[str]]) -> List[float]:
+        if not query_doc_pairs:
+            return []
+
+        scores: List[float] = [0.0] * len(query_doc_pairs)
+        valid_pairs: List[Sequence[str]] = []
+        valid_indices: List[int] = []
+
+        for idx, pair in enumerate(query_doc_pairs):
+            if not pair or len(pair) < 2:
+                continue
+            query, document = pair[0], pair[1]
+            if not isinstance(query, str) or not isinstance(document, str):
+                continue
+            valid_pairs.append(pair)
+            valid_indices.append(idx)
+
+        if not valid_pairs:
+            return scores
+
+        queries = [pair[0] for pair in valid_pairs]
+        documents = [pair[1] for pair in valid_pairs]
+
+        unique_queries: List[str] = []
+        query_lookup: Dict[str, np.ndarray] = {}
+        for query in queries:
+            if query not in query_lookup:
+                unique_queries.append(query)
+
+        if unique_queries:
+            query_vectors = self._model.encode(
+                unique_queries,
+                convert_to_numpy=True,
+                normalize_embeddings=True,
+                device=self._device,
+            )
+            for query, vector in zip(unique_queries, query_vectors):
+                query_lookup[query] = np.asarray(vector, dtype=np.float32)
+
+        if documents:
+            doc_vectors = self._model.encode(
+                documents,
+                convert_to_numpy=True,
+                normalize_embeddings=True,
+                device=self._device,
+            )
+        else:
+            doc_vectors = np.empty((0, 0), dtype=np.float32)
+
+        for offset, idx in enumerate(valid_indices):
+            query = queries[offset]
+            if query not in query_lookup:
+                continue
+            doc_vector = np.asarray(doc_vectors[offset], dtype=np.float32)
+            query_vector = query_lookup[query]
+            if query_vector.size == 0 or doc_vector.size == 0:
+                continue
+            score = float(np.dot(query_vector, doc_vector))
+            scores[idx] = score
+
+        return scores
+
+
 def create_reranker_from_spec(
     *,
     model_name: str,
@@ -106,6 +186,15 @@ def create_reranker_from_spec(
             base_model.to(device)
 
         return _JinaRerankerAdapter(base_model)
+
+    if getattr(spec, "loader", "cross_encoder") == "bi_encoder":
+        st_kwargs: Dict[str, Any] = dict(getattr(spec, "model_kwargs", {}))
+        if spec.trust_remote_code:
+            st_kwargs.setdefault("trust_remote_code", True)
+        base_model = SentenceTransformer(spec.hf_model_id, **st_kwargs)
+        base_model.to(device)
+        base_model.eval()
+        return _BiEncoderRerankerAdapter(base_model)
 
     cross_encoder_kwargs: Dict[str, Any] = {"device": device}
     if spec.trust_remote_code:

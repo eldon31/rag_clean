@@ -175,6 +175,26 @@ RERANKING_MODELS: Dict[str, RerankingModelSpec] = {
             "to restore custom modules."
         ),
     ),
+    "coderank-bi-encoder": RerankingModelSpec(
+        hf_model_id="nomic-ai/CodeRankEmbed",
+        trust_remote_code=True,
+        model_kwargs={},
+        loader="bi_encoder",
+        description=(
+            "Nomic CodeRank bi-encoder used for reranking via cosine similarity. "
+            "Provides code-friendly scoring without requiring CrossEncoder weights."
+        ),
+    ),
+    "bge-reranker-v2-m3": RerankingModelSpec(
+        hf_model_id="BAAI/bge-reranker-v2-m3",
+        trust_remote_code=False,
+        model_kwargs={},
+        loader="cross_encoder",
+        description=(
+            "BAAI BGE reranker v2 (m3) cross-encoder. Compatible with general purpose "
+            "text/code candidates and does not require trust_remote_code."
+        ),
+    ),
 }
 
 
@@ -186,6 +206,15 @@ def get_reranking_model_config(model_name: str) -> RerankingModelSpec:
         raise ValueError(f"Unknown reranking model '{model_name}'. Valid options: {valid}")
     return RERANKING_MODELS[model_name]
 
+
+# Reranking model preference order used when resolving compatibility fallback chains.
+RERANKING_MODEL_PRIORITY: List[str] = [
+    "coderank-bi-encoder",
+    "bge-reranker-v2-m3",
+    "jina-reranker-v3",
+]
+
+DEFAULT_RERANK_MODEL: str = RERANKING_MODEL_PRIORITY[0]
 
 @dataclass
 class KaggleGPUConfig:
@@ -293,7 +322,7 @@ class EnsembleConfig:
 class RerankingConfig:
     """CrossEncoder reranking configuration."""
 
-    model_name: str = "jina-reranker-v3"
+    model_name: str = DEFAULT_RERANK_MODEL
     enable_reranking: bool = True
     top_k_candidates: int = 100
     rerank_top_k: int = 20
@@ -371,6 +400,8 @@ __all__ = [
     "RerankingModelSpec",
     "get_reranking_model_config",
     "RERANKING_MODELS",
+    "RERANKING_MODEL_PRIORITY",
+    "DEFAULT_RERANK_MODEL",
     "RerankingConfig",
     "SPARSE_MODELS",
 ]

@@ -61,7 +61,9 @@ This document outlines the architectural approach for enhancing `RAG_CLEAN` with
 - **Performance Impact:** Respect 12 GB ceiling by dynamically sizing rerank batches, limiting candidate counts under latency pressure, and keeping sparse inference CPU-first with GPU-cached hot shards only.
 
 ## Tech Stack
+
 ### Existing Technology Stack
+
 | --- | --- | --- | --- | --- |
 | Core Runtime | Python | 3.11 | Maintain | Runtime for embedder, CLI, telemetry integrations. |
 | Web/API | FastAPI | Pinned in project | Maintain | Future API exposure of rerank/sparse toggles; no immediate change. |
@@ -80,33 +82,35 @@ None—enhancements reuse existing dependencies while activating previously scaf
 ### New Data Models
 
 #### `CrossEncoderRerankRun`
+
 - **Purpose:** Capture telemetry/export payload for a CrossEncoder batch rerank pass.
 - **Integration:** Stored alongside dense export manifests (JSON). Enables CLI summaries, QA audits, telemetry dashboards.
 
-| Field | Type | Description |
-| --- | --- | --- |
-| `run_id` | UUID | Correlates with embedding/export batch. |
-| `query` | string | User query (truncated/anonymized per policy). |
-| `candidate_ids` | list[str] | Document IDs scored in this rerank pass. |
-| `batch_size` | int | Dynamic batch size selected under 12 GB constraint. |
-| `scores` | list[float] | CrossEncoder similarity scores per candidate. |
-| `latency_ms` | float | End-to-end rerank latency. |
-| `gpu_peak_gb` | float | Peak GPU memory recorded for audit/alerts. |
+| Field           | Type        | Description                                         |
+| --------------- | ----------- | --------------------------------------------------- |
+| `run_id`        | UUID        | Correlates with embedding/export batch.             |
+| `query`         | string      | User query (truncated/anonymized per policy).       |
+| `candidate_ids` | list[str]   | Document IDs scored in this rerank pass.            |
+| `batch_size`    | int         | Dynamic batch size selected under 12 GB constraint. |
+| `scores`        | list[float] | CrossEncoder similarity scores per candidate.       |
+| `latency_ms`    | float       | End-to-end rerank latency.                          |
+| `gpu_peak_gb`   | float       | Peak GPU memory recorded for audit/alerts.          |
 
 _Relations_: linked to existing embedding run metadata; future child records (e.g., per-candidate diagnostics) can reference `run_id` if needed.
 
 #### `SparseInferenceRun`
+
 - **Purpose:** Document live sparse vector generation replacing metadata echo path.
 - **Integration:** Complements existing sparse JSONL exports; indicates whether live inference or fallback was used.
 
-| Field | Type | Description |
-| --- | --- | --- |
-| `run_id` | UUID | Shares ID with parent embedding batch. |
-| `sparse_model` | string | Identifier from `SPARSE_MODELS` registry (e.g., `qdrant-bm25`). |
-| `query_sparse_vector` | dict | Non-zero indices/values representing query sparse vector. |
-| `document_sparse_vectors` | list[dict] | Sparse vectors per processed chunk (indices/values). |
-| `latency_ms` | float | Processing time for sparse inference stage. |
-| `fallback_used` | bool | Indicates metadata-derived sparse vectors (true) vs live inference (false). |
+| Field                     | Type       | Description                                                                 |
+| ------------------------- | ---------- | --------------------------------------------------------------------------- |
+| `run_id`                  | UUID       | Shares ID with parent embedding batch.                                      |
+| `sparse_model`            | string     | Identifier from `SPARSE_MODELS` registry (e.g., `qdrant-bm25`).             |
+| `query_sparse_vector`     | dict       | Non-zero indices/values representing query sparse vector.                   |
+| `document_sparse_vectors` | list[dict] | Sparse vectors per processed chunk (indices/values).                        |
+| `latency_ms`              | float      | Processing time for sparse inference stage.                                 |
+| `fallback_used`           | bool       | Indicates metadata-derived sparse vectors (true) vs live inference (false). |
 
 _Relations_: ties into export runtime merging sparse vectors with chunk metadata; telemetry uses `run_id` for correlations.
 
@@ -133,6 +137,7 @@ _Relations_: ties into export runtime merging sparse vectors with chunk metadata
 ### New Components
 
 #### `CrossEncoderBatchExecutor`
+
 - **Responsibility:** Manage CrossEncoder batching under GPU leasing, including dynamic batch sizing, telemetry capture, and fallback on OOM/timeouts.
 - **Integration:** Instantiated by `BatchRunner` post dense/sparse fusion; delegates to existing `RerankPipeline` but wraps with leasing and telemetry logic.
 - **Interfaces:**
@@ -140,6 +145,7 @@ _Relations_: ties into export runtime merging sparse vectors with chunk metadata
   - Produces reranked candidate list + `CrossEncoderRerankRun` payload.
 
 #### `SparseVectorGenerator`
+
 - **Responsibility:** Execute live sparse inference using loaded SPLADE-style models, handling CPU/GPU routing and fallback to metadata.
 - **Integration:** Invoked by `BatchRunner` before export; interacts with `SparseInferenceRun` to persist results.
 - **Interfaces:**
@@ -245,16 +251,16 @@ docs/
 
 ### Core Dependency Matrix
 
-| Layer | Package | Version/PIN | Status | Notes |
-| --- | --- | --- | --- | --- |
-| GPU orchestration | torch, accelerate | 2.3.x / 0.30.x | present | Align with Kaggle CUDA 12.1 runtime. |
-| Dense embeddings | sentence-transformers | 2.7.x | present | Powers the existing dense ensemble. |
-| Sparse inference | splade, pyserini (or chosen stack) | latest compatible | pending | Required for Story 2.1; document cache path. |
-| Rerank | transformers, cross-encoder weights | 4.41.x | present | Ensure adaptive batching keeps usage <12 GB. |
-| Export & storage | qdrant-client, faiss-cpu, numpy, pandas | 1.8.x / 1.7.x / 1.26.x / 2.2.x | present | Produces manifests and JSONL artifacts. |
-| API / orchestration | fastapi, pydantic, typer, rich | 0.111.x / 2.7.x / 0.12.x / 13.x | present | CLI, validation, and operator ergonomics. |
-| Telemetry | opentelemetry-sdk, prometheus-client | 1.25.x / 0.20.x | pending | Captures rerank/sparse spans and metrics. |
-| Tooling | ruff, pytest, pytest-asyncio, mypy | pinned in pyproject | present | Supports regression harness and quality gates. |
+| Layer               | Package                                 | Version/PIN                     | Status  | Notes                                          |
+| ------------------- | --------------------------------------- | ------------------------------- | ------- | ---------------------------------------------- |
+| GPU orchestration   | torch, accelerate                       | 2.3.x / 0.30.x                  | present | Align with Kaggle CUDA 12.1 runtime.           |
+| Dense embeddings    | sentence-transformers                   | 2.7.x                           | present | Powers the existing dense ensemble.            |
+| Sparse inference    | splade, pyserini (or chosen stack)      | latest compatible               | pending | Required for Story 2.1; document cache path.   |
+| Rerank              | transformers, cross-encoder weights     | 4.41.x                          | present | Ensure adaptive batching keeps usage <12 GB.   |
+| Export & storage    | qdrant-client, faiss-cpu, numpy, pandas | 1.8.x / 1.7.x / 1.26.x / 2.2.x  | present | Produces manifests and JSONL artifacts.        |
+| API / orchestration | fastapi, pydantic, typer, rich          | 0.111.x / 2.7.x / 0.12.x / 13.x | present | CLI, validation, and operator ergonomics.      |
+| Telemetry           | opentelemetry-sdk, prometheus-client    | 1.25.x / 0.20.x                 | pending | Captures rerank/sparse spans and metrics.      |
+| Tooling             | ruff, pytest, pytest-asyncio, mypy      | pinned in pyproject             | present | Supports regression harness and quality gates. |
 
 ## Infrastructure and Deployment
 
@@ -277,10 +283,38 @@ docs/
   - `!pip install poetry`
   - `!poetry env use 3.11`
   - `!poetry install`
-  - `!poetry run pip install -r scripts/requirements_kaggle.txt` *(optional helper if you maintain a Kaggle-specific dependency list)*
+  - `!poetry run pip install -r scripts/requirements_kaggle.txt` _(optional helper if you maintain a Kaggle-specific dependency list)_
+  - `!pip install --upgrade pip setuptools wheel --no-cache-dir`
+  - `!pip install numpy --no-cache-dir`
+  - `!pip install scipy --no-cache-dir`
+  - `!pip install scikit-learn --no-cache-dir`
+  - `!pip install pandas --no-cache-dir`
+  - `!pip install tqdm --no-cache-dir`
+  - `!pip install tiktoken --no-cache-dir`
+  - `!pip install rich --no-cache-dir`
+  - `!pip install pydantic --no-cache-dir`
+  - `!pip install fastapi --no-cache-dir`
+  - `!pip install "uvicorn[standard]" --no-cache-dir`
+  - `!pip install torch --no-cache-dir`
+  - `!pip install torchvision --no-cache-dir`
+  - `!pip install torchaudio --no-cache-dir`
+  - `!pip install accelerate --no-cache-dir`
+  - `!pip install transformers --no-cache-dir`
+  - `!pip install sentence-transformers --no-cache-dir`
+  - `!pip install huggingface-hub --no-cache-dir`
+  - `!pip install qdrant-client --no-cache-dir`
+  - `!pip install docling --no-cache-dir`
+  - `!pip install optimum --no-cache-dir`
+  - `!pip install onnxruntime --no-cache-dir`
+  - `!pip install onnxruntime-tools --no-cache-dir`
+  - `!pip install "faiss-gpu-cu12[fix-cuda]" --no-cache-dir`
+  - `!pip install "faiss-gpu-cu11[fix-cuda]" --no-cache-dir`
+  - `!pip install faiss-cpu --no-cache-dir`
+  - `!pip install splade-cpu --no-cache-dir`
   - `!poetry run python scripts/embed_collections_v6.py --help`
 - Model weights are pulled on-demand via Hugging Face within the Kaggle runtime; if you want to reuse downloads across sessions, persist `/kaggle/working/hf_cache` as a Kaggle Dataset and attach it to new notebooks.
 - Primary scripts:
+
   - `poetry run python scripts/chunk_docs_v5.py` for CPU-based chunking/preprocessing.
   - `poetry run python scripts/embed_collections_v6.py --collections <name>` to execute dense+sparse+rerank pipelines on GPU.
   - Use `--disable-rerank`/`--disable-sparse` flags for rollback verification.
@@ -304,12 +338,12 @@ docs/
 
   ### Cross-Epic Dependency Matrix
 
-  | Sequence | Dependent Epic | Prerequisites | Rationale |
-  | --- | --- | --- | --- |
-  | 1 | Epic 1 – Default Rerank & Sparse Activation | None | Establish toggles, configs, telemetry slots. |
-  | 2 | Epic 2 – Sparse Generator & Fusion | Epic 1 | Needs enable/disable controls and baseline telemetry. |
-  | 3 | Epic 3 – CrossEncoder Rerank | Epics 1 & 2 | Requires fused dense+sparse outputs and telemetry streams. |
-  | 4 | Epic 4 – Export Schema & Regression | Epics 1–3 | Depends on actual sparse/rerank data to version exports and tests. |
+  | Sequence | Dependent Epic                              | Prerequisites | Rationale                                                          |
+  | -------- | ------------------------------------------- | ------------- | ------------------------------------------------------------------ |
+  | 1        | Epic 1 – Default Rerank & Sparse Activation | None          | Establish toggles, configs, telemetry slots.                       |
+  | 2        | Epic 2 – Sparse Generator & Fusion          | Epic 1        | Needs enable/disable controls and baseline telemetry.              |
+  | 3        | Epic 3 – CrossEncoder Rerank                | Epics 1 & 2   | Requires fused dense+sparse outputs and telemetry streams.         |
+  | 4        | Epic 4 – Export Schema & Regression         | Epics 1–3     | Depends on actual sparse/rerank data to version exports and tests. |
 
   Incremental value is delivered at each step: Epic 1 unlocks observability, Epic 2 adds live sparse retrieval, Epic 3 improves ranking quality, and Epic 4 hardens exports/tests. Dense-only regression checks run after every epic to preserve system integrity.
 
@@ -317,15 +351,15 @@ docs/
 
   ### Goal Traceability
 
-  | PRD Goal / Requirement | Architecture Coverage |
-  | --- | --- |
+  | PRD Goal / Requirement                                                     | Architecture Coverage                                                                                                    |
+  | -------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
   | Default-on rerank and sparse without regressing dense path (FR1, FR4, FR8) | Functional dependency roadmap and Operational Safeguards describe toggles, dense-only parity checks, and staged rollout. |
-  | Live sparse inference with fallbacks (FR2) | SparseVectorGenerator component, Delivery Dependencies (Epic 2), and manifest v4.1 schema integration. |
-  | CrossEncoder rerank stage after fusion (FR3) | CrossEncoderBatchExecutor design, BatchRunner sequencing, and telemetry instrumentation. |
-  | Export/telemetry updates with additive schema (FR5, FR6, NFR1, NFR3) | Runtime Outputs, Schema Integration Strategy, Observability section. |
-  | 12 GB GPU ceiling with adaptive batching (FR7, NFR2, NFR4) | Technical notes on model hydration, adaptive batching, and GPU monitoring in Observability. |
-  | Telemetry coverage for dense, sparse, rerank stages (FR6) | Operational Safeguards, Observability metrics, and Delivery Dependencies (Epic 3). |
-  | Documentation/test hardening (Epic 4, NFR5) | Delivery Dependencies (Epic 4), Testing and Validation section. |
+  | Live sparse inference with fallbacks (FR2)                                 | SparseVectorGenerator component, Delivery Dependencies (Epic 2), and manifest v4.1 schema integration.                   |
+  | CrossEncoder rerank stage after fusion (FR3)                               | CrossEncoderBatchExecutor design, BatchRunner sequencing, and telemetry instrumentation.                                 |
+  | Export/telemetry updates with additive schema (FR5, FR6, NFR1, NFR3)       | Runtime Outputs, Schema Integration Strategy, Observability section.                                                     |
+  | 12 GB GPU ceiling with adaptive batching (FR7, NFR2, NFR4)                 | Technical notes on model hydration, adaptive batching, and GPU monitoring in Observability.                              |
+  | Telemetry coverage for dense, sparse, rerank stages (FR6)                  | Operational Safeguards, Observability metrics, and Delivery Dependencies (Epic 3).                                       |
+  | Documentation/test hardening (Epic 4, NFR5)                                | Delivery Dependencies (Epic 4), Testing and Validation section.                                                          |
 
   ### Operator Journey Overview
 
@@ -399,12 +433,12 @@ docs/
 
 ## Risks and Mitigations
 
-| Risk | Impact | Mitigation |
-| --- | --- | --- |
-| GPU OOM during rerank batches | Pipeline aborts mid-run | Dynamic batch sizing, leasing cleanup, retry with reduced candidate count. |
-| Sparse inference latency increases | Total run time extends beyond SLO | Keep sparse models CPU-first; cache hot indices on GPU; allow fallback to metadata. |
-| Export parsers break on new schema | Downstream tooling fails | Maintain additive schema, version manifests, update documentation/tests, provide feature flags. |
-| Telemetry volume spikes | Monitoring costs/log noise | Sample or aggregate spans; expose config to adjust logging level. |
+| Risk                               | Impact                            | Mitigation                                                                                      |
+| ---------------------------------- | --------------------------------- | ----------------------------------------------------------------------------------------------- |
+| GPU OOM during rerank batches      | Pipeline aborts mid-run           | Dynamic batch sizing, leasing cleanup, retry with reduced candidate count.                      |
+| Sparse inference latency increases | Total run time extends beyond SLO | Keep sparse models CPU-first; cache hot indices on GPU; allow fallback to metadata.             |
+| Export parsers break on new schema | Downstream tooling fails          | Maintain additive schema, version manifests, update documentation/tests, provide feature flags. |
+| Telemetry volume spikes            | Monitoring costs/log noise        | Sample or aggregate spans; expose config to adjust logging level.                               |
 
 ## Testing and Validation
 

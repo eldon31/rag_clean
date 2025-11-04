@@ -302,7 +302,7 @@ from processor.ultimate_embedder.export_runtime import ExportRuntime
 from processor.ultimate_embedder.model_manager import ModelManager, ONNX_AVAILABLE
 from processor.ultimate_embedder.monitoring import PerformanceMonitor
 from processor.ultimate_embedder.prometheus_metrics import create_prometheus_emitter, PrometheusMetricsEmitter
-from processor.ultimate_embedder.rerank_pipeline import RerankPipeline
+from processor.ultimate_embedder.rerank_pipeline import RerankPipeline, create_reranker_from_spec
 from processor.ultimate_embedder.telemetry import TelemetryTracker, resolve_rotation_payload_limit
 from processor.ultimate_embedder.throughput_monitor import ThroughputMonitor
 from processor.ultimate_embedder.config import (
@@ -317,6 +317,7 @@ from processor.ultimate_embedder.config import (
     resolve_kaggle_model_key,
     get_reranking_model_config,
     RERANKING_MODELS,
+    RERANKING_MODEL_PRIORITY,
     RerankingConfig,
 )
 from processor.ultimate_embedder.runtime_config import (
@@ -1762,49 +1763,103 @@ class UltimateKaggleEmbedderV4:
 
         self.model_manager.initialize_sparse_models()
 
+    def _resolve_reranker_candidates(self) -> List[str]:
+        """Return an ordered list of reranker model candidates to attempt."""
+
+        candidates: List[str] = []
+
+        requested = (self.reranking_config.model_name or "").strip()
+        if requested:
+            candidates.append(requested)
+
+        for model_name in RERANKING_MODEL_PRIORITY:
+            if model_name not in candidates:
+                candidates.append(model_name)
+
+        return candidates
+
     def _initialize_reranking_model(self):
         """Initialize CrossEncoder for reranking"""
 
-        if self.reranking_config.model_name not in RERANKING_MODELS:
-            logger.warning(
-                f"Unknown reranker {self.reranking_config.model_name}, defaulting to jina-reranker-v3"
-            )
-            self.reranking_config.model_name = "jina-reranker-v3"
+        candidate_models = self._resolve_reranker_candidates()
+        load_errors: List[str] = []
 
-        reranker_spec = get_reranking_model_config(self.reranking_config.model_name)
-        reranker_model = reranker_spec.hf_model_id
-        logger.info(
-            "Loading reranking model: %s (trust_remote_code=%s)",
-            reranker_model,
-            reranker_spec.trust_remote_code,
-        )
         requested_device = "cuda" if self.device == "cuda" else self.device
         self._requested_rerank_device = requested_device
         target_device = "cpu" if self.device == "cuda" else self.device
 
-        try:
-            cross_encoder_kwargs: Dict[str, Any] = {"device": target_device}
-            if reranker_spec.trust_remote_code:
-                cross_encoder_kwargs["trust_remote_code"] = True
-            if reranker_spec.model_kwargs:
-                cross_encoder_kwargs["model_kwargs"] = dict(reranker_spec.model_kwargs)
-            if reranker_spec.tokenizer_kwargs:
-                cross_encoder_kwargs["tokenizer_kwargs"] = dict(reranker_spec.tokenizer_kwargs)
+        for candidate in candidate_models:
+            if candidate not in RERANKING_MODELS:
+                load_errors.append(f"{candidate}: not registered")
+                continue
 
-            self.reranker = CrossEncoder(reranker_model, **cross_encoder_kwargs)
+            reranker_spec = get_reranking_model_config(candidate)
+            reranker_model = reranker_spec.hf_model_id
+            logger.info(
+                "Loading reranking model: %s (trust_remote_code=%s)",
+                reranker_model,
+                reranker_spec.trust_remote_code,
+            )
+
+            try:
+                reranker_instance = create_reranker_from_spec(
+                    model_name=candidate,
+                    spec=reranker_spec,
+                    device=target_device,
+                    logger=logger,
+                )
+            except Exception as exc:  # pragma: no cover - defensive fallback
+                message = str(exc)
+                load_errors.append(f"{candidate}: {message}")
+                logger.warning("Failed to load reranking model %s: %s", candidate, message)
+                continue
+
+            self.reranking_config.model_name = candidate
+            self.reranker = reranker_instance
             self.reranker_device = target_device
+            self._rerank_runtime_reason = None
+            self.rerank_failure_reason = None
+
             if target_device == "cpu" and self.device == "cuda":
                 logger.info(
                     "CrossEncoder reranking model staged on CPU; hydrate via leasing"
                 )
             else:
                 logger.info("CrossEncoder reranking model loaded successfully")
-        except Exception as e:
-            logger.error(f"Failed to load reranking model: {e}")
-            self.reranking_config.enable_reranking = False
-            self.reranker = None
-            message = str(e)
-            self._rerank_runtime_reason = f"Load failure: {message[:160]}"
+
+            if candidate != candidate_models[0]:
+                logger.info(
+                    "Reranker compatibility fallback applied: requested=%s resolved=%s",
+                    candidate_models[0],
+                    candidate,
+                )
+                self._record_mitigation(
+                    "rerank_model_fallback",
+                    requested=candidate_models[0],
+                    resolved=candidate,
+                )
+
+            return
+
+        logger.error(
+            "Failed to load any reranking model (candidates=%s)",
+            ", ".join(candidate_models),
+        )
+        if load_errors:
+            summary = "; ".join(load_errors)
+            logger.error("Reranker load errors: %s", summary)
+            self._rerank_runtime_reason = f"Load failure: {summary[:160]}"
+        else:
+            self._rerank_runtime_reason = "Load failure: unknown error"
+
+        self.rerank_failure_reason = self._rerank_runtime_reason
+        self.reranking_config.enable_reranking = False
+        self.reranker = None
+        self._record_mitigation(
+            "rerank_disabled",
+            reason=self._rerank_runtime_reason,
+            candidates=candidate_models,
+        )
     
     def generate_ensemble_embeddings(
         self,
