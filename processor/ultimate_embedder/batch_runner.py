@@ -733,6 +733,11 @@ class BatchRunner:
                         progress_label = embedder._get_batch_progress_label(batch_index, batch_end)
                         progress_context = progress_tracker.build_context(progress_label, model_name)
 
+                        if progress_label:
+                            pbar.set_description(f"Batches({progress_label})")
+                        else:
+                            pbar.set_description("Batches")
+
                         # Check memory and adapt
                         if controller and embedder.device == "cuda":
                             snapshots = embedder._collect_gpu_snapshots()
