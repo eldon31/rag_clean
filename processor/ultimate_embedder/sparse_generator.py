@@ -16,6 +16,9 @@ from typing import TYPE_CHECKING, Any, Callable, Dict, List, Optional, Sequence
 
 import numpy as np
 import torch
+from rich.progress import Progress, SpinnerColumn, TextColumn, BarColumn, TaskProgressColumn, TimeRemainingColumn
+from rich.console import Console
+from rich.table import Column
 
 from processor.ultimate_embedder.gpu_lease import GPULease, lease_gpus
 from processor.ultimate_embedder.sparse_pipeline import (
@@ -261,16 +264,47 @@ class SparseVectorGenerator:
 
         texts = [chunk.text for chunk in chunks]
         token_lookup = self._build_token_lookup(sparse_model, model_name)
+        
+        # Log token lookup status
+        if token_lookup is None:
+            self.logger.warning(
+                "[sparse-debug] Token lookup failed for model %s - will use metadata fallback",
+                model_name
+            )
+        else:
+            self.logger.info("[sparse-debug] Token lookup successfully created for model %s", model_name)
 
         try:
-            # Encode texts to produce sparse vectors
-            # Note: Actual SPLADE-style models return token-level weights
-            embeddings = sparse_model.encode(
-                texts,
-                convert_to_tensor=False,
-                show_progress_bar=False,
+            # Create rich progress bar
+            console = Console(width=200, legacy_windows=False)
+            progress = Progress(
+                SpinnerColumn(),
+                TextColumn("[bold cyan]{task.description}", table_column=Column(no_wrap=True)),
+                BarColumn(),
+                TaskProgressColumn(),
+                TimeRemainingColumn(),
+                console=console,
+                expand=False
             )
+            
+            with progress:
+                task = progress.add_task(
+                    f"[SPARSE-CPU] {model_name} encoding {len(texts)} chunks",
+                    total=len(texts)
+                )
+                
+                # Encode texts to produce sparse vectors
+                # Note: Actual SPLADE-style models return token-level weights
+                embeddings = sparse_model.encode(
+                    texts,
+                    convert_to_tensor=False,
+                    show_progress_bar=False,  # We're using rich instead
+                )
+                
+                # Update progress as complete
+                progress.update(task, completed=len(texts))
 
+            success_count = 0
             for idx, embedding in enumerate(embeddings):
                 vector = self._convert_embedding_to_sparse_vector(
                     embedding,
@@ -278,13 +312,25 @@ class SparseVectorGenerator:
                 )
                 if vector is None:
                     # Fallback to metadata-derived vector
+                    if idx < 3:  # Log first few failures
+                        self.logger.warning(
+                            "[sparse-debug] Chunk %d: vector conversion returned None (token_lookup=%s, embedding_shape=%s)",
+                            idx, "present" if token_lookup else "MISSING", 
+                            getattr(embedding, 'shape', len(embedding) if hasattr(embedding, '__len__') else 'unknown')
+                        )
                     fallback_vector = build_sparse_vector_from_metadata(
                         chunks[idx].metadata
                     )
                     vectors.append(fallback_vector)
                     fallback_indices.append(idx)
                 else:
+                    success_count += 1
                     vectors.append(vector)
+            
+            self.logger.info(
+                "[sparse-debug] CPU conversion results: %d/%d successful, %d fallback",
+                success_count, len(chunks), len(fallback_indices)
+            )
 
         except Exception as exc:  # pragma: no cover
             self.logger.warning(
@@ -376,59 +422,102 @@ class SparseVectorGenerator:
                     )
 
                 texts = [chunk.text for chunk in chunks]
+                
+                # Create rich progress bar
+                console = Console(width=200, legacy_windows=False)
+                progress = Progress(
+                    SpinnerColumn(),
+                    TextColumn("[bold green]{task.description}", table_column=Column(no_wrap=True)),
+                    BarColumn(),
+                    TaskProgressColumn(),
+                    TimeRemainingColumn(),
+                    console=console,
+                    expand=False
+                )
 
                 # Process in batches if adaptive sizing is active
                 if batch_size < len(chunks):
                     embeddings_list = []
-                    for i in range(0, len(chunks), batch_size):
-                        batch_texts = texts[i : i + batch_size]
-                        
-                        # Check VRAM before each batch
-                        can_proceed, _ = self._enforce_vram_cap(device_id, batch_size)
-                        if not can_proceed:
-                            self.logger.error(
-                                "VRAM cap violation during batch %d; aborting GPU inference",
-                                i // batch_size,
-                            )
-                            self.embedder.model_manager.stage_model_to_cpu(model_name)
-                            return self._generate_with_cpu(chunks, sparse_model, model_name)
-                        
-                        batch_embeddings = hydrated_model.encode(
-                            batch_texts,
-                            convert_to_tensor=True,
-                            device=device,
-                            show_progress_bar=False,
+                    
+                    with progress:
+                        task = progress.add_task(
+                            f"[SPARSE-GPU] {model_name} on {device} batching {len(chunks)} chunks",
+                            total=len(chunks)
                         )
-                        embeddings_list.append(batch_embeddings)
+                        
+                        for i in range(0, len(chunks), batch_size):
+                            batch_texts = texts[i : i + batch_size]
+                            
+                            # Check VRAM before each batch
+                            can_proceed, _ = self._enforce_vram_cap(device_id, batch_size)
+                            if not can_proceed:
+                                self.logger.error(
+                                    "VRAM cap violation during batch %d; aborting GPU inference",
+                                    i // batch_size,
+                                )
+                                self.embedder.model_manager.stage_model_to_cpu(model_name)
+                                return self._generate_with_cpu(chunks, sparse_model, model_name)
+                            
+                            batch_embeddings = hydrated_model.encode(
+                                batch_texts,
+                                convert_to_tensor=True,
+                                device=device,
+                                show_progress_bar=False,
+                            )
+                            embeddings_list.append(batch_embeddings)
+                            
+                            # Update progress
+                            progress.update(task, advance=len(batch_texts))
                     
                     # Concatenate all batch results
                     embeddings = torch.cat(embeddings_list, dim=0)
                 else:
                     # Process all at once
-                    embeddings = hydrated_model.encode(
-                        texts,
-                        convert_to_tensor=True,
-                        device=device,
-                        show_progress_bar=False,
-                    )
+                    with progress:
+                        task = progress.add_task(
+                            f"[SPARSE-GPU] {model_name} on {device} encoding {len(chunks)} chunks",
+                            total=len(chunks)
+                        )
+                        
+                        embeddings = hydrated_model.encode(
+                            texts,
+                            convert_to_tensor=True,
+                            device=device,
+                            show_progress_bar=False,
+                        )
+                        
+                        progress.update(task, completed=len(chunks))
 
                 # Convert tensor embeddings to sparse vectors
                 if isinstance(embeddings, torch.Tensor):
                     embeddings = embeddings.cpu().numpy()
 
+                success_count = 0
                 for idx, embedding in enumerate(embeddings):
                     vector = self._convert_embedding_to_sparse_vector(
                         embedding,
                         token_lookup=token_lookup,
                     )
                     if vector is None:
+                        if idx < 3:  # Log first few failures
+                            self.logger.warning(
+                                "[sparse-debug] GPU Chunk %d: vector conversion returned None (token_lookup=%s, embedding_shape=%s)",
+                                idx, "present" if token_lookup else "MISSING",
+                                getattr(embedding, 'shape', len(embedding) if hasattr(embedding, '__len__') else 'unknown')
+                            )
                         fallback_vector = build_sparse_vector_from_metadata(
                             chunks[idx].metadata
                         )
                         vectors.append(fallback_vector)
                         fallback_indices.append(idx)
                     else:
+                        success_count += 1
                         vectors.append(vector)
+                
+                self.logger.info(
+                    "[sparse-debug] GPU conversion results: %d/%d successful, %d fallback",
+                    success_count, len(chunks), len(fallback_indices)
+                )
 
                 # Record peak VRAM usage in telemetry
                 final_vram_stats = self._check_vram_usage(device_id)
@@ -561,11 +650,13 @@ class SparseVectorGenerator:
 
             if len(nonzero_indices) == 0:
                 # No significant values
+                self.logger.debug("[sparse-debug] No non-zero values in embedding (all < 1e-6)")
                 return None
 
             if token_lookup is None:
                 self.logger.debug(
-                    "Sparse embedding lacks tokenizer mapping; triggering metadata fallback",
+                    "[sparse-debug] Token lookup is None - cannot map indices to tokens (embedding_shape=%s, nonzero_count=%d)",
+                    embedding.shape, len(nonzero_indices)
                 )
                 return None
 
