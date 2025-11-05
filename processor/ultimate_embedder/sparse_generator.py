@@ -120,6 +120,15 @@ class SparseVectorGenerator:
         success = True
         error_message: Optional[str] = None
 
+        planned_device = "gpu" if use_gpu and self.embedder.device == "cuda" else "cpu"
+        total_chunks = len(chunks)
+        message = (
+            f"[sparse] Starting inference: chunks={total_chunks} "
+            f"model={model_name} device_hint={planned_device}"
+        )
+        self.logger.info(message)
+        print(message, flush=True)
+
         try:
             # Retrieve the sparse model from the embedder's registry
             sparse_model = self.embedder.sparse_models.get(model_name)
@@ -161,7 +170,7 @@ class SparseVectorGenerator:
         elapsed_ms = (time.perf_counter() - start_time) * 1000.0
         latency_ms = round(elapsed_ms, 2)
 
-        chunk_count = len(chunks)
+        chunk_count = total_chunks
         throughput = 0.0
         if elapsed_ms > 0.0 and chunk_count > 0:
             throughput = chunk_count / (elapsed_ms / 1000.0)
@@ -184,6 +193,15 @@ class SparseVectorGenerator:
                 "Sparse throughput: %.2f chunks/sec",
                 throughput,
             )
+
+        completion = (
+            "[sparse] Completed inference: "
+            f"model={model_name} device={result.device} "
+            f"latency={result.latency_ms:.2f}ms fallback={result.fallback_count}/{chunk_count} "
+            f"success={result.success}"
+        )
+        self.logger.info(completion)
+        print(completion, flush=True)
 
         # Emit telemetry for this sparse inference run
         self._record_telemetry(result, len(chunks))

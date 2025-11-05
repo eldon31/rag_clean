@@ -2974,7 +2974,7 @@ def main():
     )
     
     reranking_config = RerankingConfig(
-        model_name="jina-reranker-v3",
+        model_name="bge-reranker-v2-m3",
         enable_reranking=True,
         top_k_candidates=100,
         rerank_top_k=20

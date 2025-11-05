@@ -6,7 +6,7 @@ behaviour of ``embed_collections_v6.py`` but trims the control surface so users
 can simply run ``!python -m scripts.embed_collections_v7`` and immediately get:
 
 * the exclusive three-model dense ensemble (Jina code, BGE M3, Qwen 0.6B);
-* CrossEncoder reranking enabled;
+* CrossEncoder reranking enabled via CodeRankLLM;
 * SPLADE sparse vectors exported alongside dense outputs; and
 * a manifest + processing summary ready for download.
 
@@ -48,12 +48,18 @@ DEFAULT_ENSEMBLE = [
     "qwen3-embedding-0.6b",
 ]
 DEFAULT_SPARSE = ["splade"]
-DEFAULT_RERANK_MODEL = "jina-reranker-v3"
+DEFAULT_RERANK_MODEL = "nomic-ai/CodeRankLLM"
 
 
 # ---------------------------------------------------------------------------
 # Utility helpers
 # ---------------------------------------------------------------------------
+class _SparseModelsAction(argparse.Action):
+    def __call__(self, parser, namespace, values, option_string=None) -> None:
+        setattr(namespace, self.dest, values)
+        setattr(namespace, f"_{self.dest}_provided", True)
+
+
 def _in_kaggle() -> bool:
     return "/kaggle" in str(Path.cwd())
 
@@ -121,6 +127,126 @@ def _dedupe_preserve_order(values: Sequence[str]) -> List[str]:
     return ordered
 
 
+def _format_boolean(value: Optional[bool]) -> str:
+    if value is None:
+        return "unknown"
+    return "yes" if value else "no"
+
+
+def _print_toggle_overview(toggles: FeatureToggleConfig, tag: str) -> None:
+    rerank_src = toggles.sources.get("enable_rerank", "default")
+    sparse_src = toggles.sources.get("enable_sparse", "default")
+    models_src = toggles.sources.get("sparse_models", "default")
+
+    print(f"[{tag}] Toggle overview:", flush=True)
+    print(
+        f"         rerank={'on' if toggles.enable_rerank else 'off'} (source={rerank_src})",
+        flush=True,
+    )
+    sparse_state = "on" if toggles.enable_sparse else "off"
+    print(
+        f"         sparse={sparse_state} (source={sparse_src}) -> models={list(toggles.sparse_models) or ['none']} (source={models_src})",
+        flush=True,
+    )
+
+
+def _print_rerank_report(summary: dict, tag: str) -> None:
+    rerank = (summary or {}).get("rerank_run") or {}
+    if not rerank:
+        print(f"[{tag}] Reranker: no stage payload emitted", flush=True)
+        return
+
+    model = rerank.get("model_name", "")
+    status = rerank.get("status", "unknown").upper()
+    executed = rerank.get("executed")
+    loaded = rerank.get("loaded")
+    device_state = rerank.get("device_state", {})
+    resolved_device = device_state.get("resolved") or rerank.get("device", "cpu")
+    requested_device = device_state.get("requested") or "unspecified"
+    fallback_applied = _format_boolean(device_state.get("fallback_applied"))
+    fallback_reason = device_state.get("fallback_reason") or rerank.get("fallback_reason")
+    reason = rerank.get("reason") or rerank.get("fallback_reason")
+
+    print(
+        f"[{tag}] Reranker (cross-encoder) -> status={status}"
+        f" executed={_format_boolean(executed)} loaded={_format_boolean(loaded)}",
+        flush=True,
+    )
+    print(
+        f"         model={model or 'unknown'} requested_device={requested_device}"
+        f" resolved_device={resolved_device} fallback_applied={fallback_applied}",
+        flush=True,
+    )
+    payload = rerank.get("payload") or {}
+    candidate_count = payload.get("candidate_count") or payload.get("initial_candidate_count")
+    result_count = payload.get("result_count")
+    latency_ms = payload.get("latency_ms")
+    if candidate_count is not None or latency_ms is not None or result_count is not None:
+        metrics_parts = []
+        if candidate_count is not None:
+            metrics_parts.append(f"candidates={candidate_count}")
+        if result_count is not None:
+            metrics_parts.append(f"results={result_count}")
+        if latency_ms is not None:
+            metrics_parts.append(f"latency_ms={latency_ms}")
+        print("         metrics: " + ", ".join(metrics_parts), flush=True)
+    if reason:
+        print(f"         note: {reason}", flush=True)
+    elif fallback_reason:
+        print(f"         note: {fallback_reason}", flush=True)
+
+
+def _print_sparse_report(summary: dict, tag: str) -> None:
+    sparse = (summary or {}).get("sparse_run") or {}
+    if not sparse:
+        print(f"[{tag}] Sparse generator: no stage payload emitted", flush=True)
+        return
+
+    models = sparse.get("models") or []
+    executed = sparse.get("executed")
+    success = sparse.get("success")
+    device = sparse.get("device") or ",".join(set((sparse.get("devices") or {}).values())) or "unknown"
+    vectors = sparse.get("vectors") or {}
+    total = vectors.get("total")
+    available = vectors.get("available")
+    coverage = vectors.get("coverage_ratio")
+    fallback_used = sparse.get("fallback_used")
+    fallback_reason = sparse.get("fallback_reason")
+    latency_ms = sparse.get("latency_ms")
+    error_message = sparse.get("error_message")
+
+    print(
+        f"[{tag}] Sparse (SPLADE) -> executed={_format_boolean(executed)}"
+        f" success={_format_boolean(success)}",
+        flush=True,
+    )
+    print(
+        f"         models={models or ['none']} device={device}"
+        f" coverage={available}/{total} ({coverage})",
+        flush=True,
+    )
+    if latency_ms is not None:
+        print(f"         latency_ms={latency_ms}", flush=True)
+    if fallback_used:
+        print(f"         fallback engaged: {fallback_reason or 'reason unknown'}", flush=True)
+    if error_message:
+        print(f"         error: {error_message}", flush=True)
+
+
+def _print_stage_report(
+    embedder: UltimateKaggleEmbedderV4,
+    summary: Optional[dict],
+    *,
+    tag: str = "embed_v7",
+) -> None:
+    # Emit a concise status block so operators can confirm rerank/sparse behaviour.
+    print(f"\n[{tag}] ===== Stage Status Report =====", flush=True)
+    _print_toggle_overview(embedder.feature_toggles, tag)
+    _print_rerank_report(summary or {}, tag)
+    _print_sparse_report(summary or {}, tag)
+    print(f"[{tag}] ===== End Stage Status Report =====\n", flush=True)
+
+
 def _resolve_ensemble_models(cli_models: Optional[Sequence[str]]) -> List[str]:
     if cli_models:
         models = _dedupe_preserve_order([model.strip() for model in cli_models if model.strip()])
@@ -133,13 +259,15 @@ def _resolve_ensemble_models(cli_models: Optional[Sequence[str]]) -> List[str]:
 def _build_feature_toggles(args: argparse.Namespace) -> FeatureToggleConfig:
     enable_rerank = not args.disable_rerank
     enable_sparse = not args.disable_sparse
-    sparse_models = _dedupe_preserve_order(args.sparse_models or DEFAULT_SPARSE)
+    sparse_provided = getattr(args, "_sparse_models_provided", False)
+    raw_sparse_models = args.sparse_models if sparse_provided else list(DEFAULT_SPARSE)
+    sparse_models = _dedupe_preserve_order(raw_sparse_models)
     if not enable_sparse:
         sparse_models = []
     sources = {
         "enable_rerank": "cli:" + ("default-on" if enable_rerank else "--disable-rerank"),
         "enable_sparse": "cli:" + ("default-on" if enable_sparse else "--disable-sparse"),
-        "sparse_models": "cli:" + ("override" if args.sparse_models else "default"),
+        "sparse_models": "cli:" + ("override" if sparse_provided else "default"),
     }
     resolution_events = (
         {"key": "enable_rerank", "value": enable_rerank, "source": sources["enable_rerank"], "layer": "cli"},
@@ -232,9 +360,15 @@ def _build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--export-prefix", default=None, help="Optional override for export prefix (defaults to inferred collection name).")
     parser.add_argument("--summary-path", default=None, help="Explicit processing summary output path.")
     parser.add_argument("--rerank-model", default=DEFAULT_RERANK_MODEL, help="CrossEncoder reranker model identifier.")
-    parser.add_argument("--rerank-candidates", type=int, default=100, help="Candidate pool size fed into the reranker.")
-    parser.add_argument("--rerank-top-k", type=int, default=20, help="Number of reranked results to keep.")
-    parser.add_argument("--sparse-models", nargs="+", default=None, help="Override sparse models list (defaults to SPLADE).")
+    parser.add_argument("--rerank-candidates", type=int, default=50, help="Candidate pool size fed into the reranker.")
+    parser.add_argument("--rerank-top-k", type=int, default=10, help="Number of reranked results to keep.")
+    parser.add_argument(
+        "--sparse-models",
+        nargs="+",
+        default=list(DEFAULT_SPARSE),
+        action=_SparseModelsAction,
+        help="Override sparse models list (defaults to SPLADE).",
+    )
     parser.add_argument("--disable-rerank", action="store_true", help="Disable CrossEncoder reranking stage.")
     parser.add_argument("--disable-sparse", action="store_true", help="Disable sparse vector generation and export.")
     parser.add_argument("--disable-exclusive", action="store_true", help="Run ensemble without exclusive GPU leasing (parallel mode).")
@@ -245,6 +379,12 @@ def _build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--monitor", action="store_true", help="Enable runtime monitoring thread during embedding.")
     parser.add_argument("--save-intermediate", action="store_true", help="Persist intermediate arrays for debugging.")
     parser.add_argument("--quiet", action="store_true", help="Reduce logging verbosity.")
+    parser.add_argument(
+        "--disable-stage-report",
+        action="store_true",
+        help="Suppress rerank and sparse stage status details at the end of the run.",
+    )
+    parser.set_defaults(_sparse_models_provided=False)
     return parser
 
 
@@ -254,6 +394,9 @@ def _build_parser() -> argparse.ArgumentParser:
 def main(argv: Optional[Iterable[str]] = None) -> int:
     parser = _build_parser()
     args = parser.parse_args(argv)
+
+    if not getattr(args, "_sparse_models_provided", False):
+        args.sparse_models = list(DEFAULT_SPARSE)
 
     _configure_logging(args.quiet)
 
@@ -374,6 +517,32 @@ def main(argv: Optional[Iterable[str]] = None) -> int:
                 flush=True,
             )
 
+    if embedder.feature_toggles.enable_sparse:
+        sparse_result = getattr(embedder, "sparse_inference_result", None)
+        if sparse_result:
+            vectors = getattr(sparse_result, "vectors", []) or []
+            total_vectors = len(vectors)
+            available_vectors = sum(1 for vector in vectors if vector) if total_vectors else 0
+            fallback_count = getattr(sparse_result, "fallback_count", 0)
+            latency_ms = getattr(sparse_result, "latency_ms", None)
+            print(
+                "[embed_v7] Sparse stage complete: model=%s device=%s coverage=%s/%s fallback=%s"
+                % (
+                    getattr(sparse_result, "model_name", "unknown"),
+                    getattr(sparse_result, "device", "unknown"),
+                    available_vectors,
+                    total_vectors,
+                    fallback_count,
+                ),
+                flush=True,
+            )
+            if isinstance(latency_ms, (int, float)):
+                print(f"[embed_v7] Sparse latency: {latency_ms:.2f} ms", flush=True)
+        else:
+            print("[embed_v7] Sparse stage enabled but no result emitted (see logs).", flush=True)
+    else:
+        print("[embed_v7] Sparse stage disabled.", flush=True)
+
     inferred_prefix = args.export_prefix or embedder.get_target_collection_name()
     embedder.export_config.output_prefix = inferred_prefix
 
@@ -399,6 +568,9 @@ def main(argv: Optional[Iterable[str]] = None) -> int:
         chunk_count=load_summary.get("total_chunks_loaded"),
     )
     LOGGER.info("Processing summary written to %s", summary_path)
+
+    if not getattr(args, "disable_stage_report", False):
+        _print_stage_report(embedder, processing_summary, tag="embed_v7-stage")
 
     manifest_payload = {
         "chunk_source": str(chunk_path),
