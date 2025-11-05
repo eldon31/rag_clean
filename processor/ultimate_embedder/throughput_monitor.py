@@ -238,7 +238,7 @@ class ThroughputMonitor:
         
         self._stage_metrics.append(stage_metric)
         
-        status = "✓ success" if stage_metric.success else "✗ failed"
+        status = "[OK] success" if stage_metric.success else "[FAIL] failed"
         if stage_warnings and success:
             status = "⚠ warnings"
         
@@ -373,7 +373,7 @@ class ThroughputMonitor:
         
         # Log stage summary
         for stage in self._stage_metrics:
-            status_symbol = "✓" if stage.success else "✗"
+            status_symbol = "[OK]" if stage.success else "[FAIL]"
             self.logger.info(
                 f"  {status_symbol} {stage.stage_name}: "
                 f"{stage.chunks_per_sec:.2f} chunks/s, "

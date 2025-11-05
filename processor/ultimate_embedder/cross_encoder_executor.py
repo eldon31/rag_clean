@@ -7,16 +7,26 @@ and telemetry integration for the Ultimate Embedder ensemble pipeline.
 from __future__ import annotations
 
 import logging
+import math
 import time
 import uuid
 from dataclasses import dataclass, field
 from typing import TYPE_CHECKING, Any, Dict, List, Optional
 
 import torch
+from rich.progress import (
+    Progress,
+    SpinnerColumn,
+    TextColumn,
+    BarColumn,
+    TaskProgressColumn,
+    TimeRemainingColumn,
+)
 
 from processor.ultimate_embedder.config import KaggleGPUConfig, RerankingConfig
 from processor.ultimate_embedder.gpu_lease import lease_gpus
 from processor.ultimate_embedder.rerank_pipeline import RerankPipeline
+from processor.ultimate_embedder.throughput_monitor import ThroughputMonitor
 
 if TYPE_CHECKING:  # pragma: no cover
     from processor.ultimate_embedder.core import UltimateKaggleEmbedderV4
@@ -196,6 +206,17 @@ class CrossEncoderBatchExecutor:
             and getattr(self.embedder, "device_count", 0) > 0
         )
 
+        # Initialize throughput monitor for stage tracking
+        monitor = ThroughputMonitor(logger=self.logger)
+        monitor.start(
+            chunk_count=len(candidate_ids),
+            model_name=self.config.model_name,
+            device="cuda" if use_gpu else "cpu",
+            batch_size=batch_size,
+            is_data_parallel=False,  # Rerankers don't use DataParallel
+        )
+        monitor.start_stage("rerank", model_name=self.config.model_name, device="cuda" if use_gpu else "cpu")
+
         # Execute rerank with appropriate device handling
         start_time = time.time()
         gpu_peak_gb = 0.0
@@ -235,6 +256,18 @@ class CrossEncoderBatchExecutor:
 
         except Exception as exc:  # pragma: no cover
             self.logger.error("Rerank execution failed: %s", exc)
+            monitor.record_error(
+                stage="rerank",
+                error_type=type(exc).__name__,
+                error_message=str(exc)[:200],
+                model_name=self.config.model_name,
+            )
+            monitor.end_stage(
+                success=False,
+                chunks_processed=len(candidate_ids),
+                batch_size=batch_size,
+            )
+            monitor.end()
             # Return fallback result with zero scores
             raw_latency_ms = (time.time() - start_time) * 1000.0
             latency_ms = round(raw_latency_ms, 2)
@@ -270,6 +303,14 @@ class CrossEncoderBatchExecutor:
                 "Rerank throughput: %.2f candidates/sec",
                 throughput_cands_per_sec,
             )
+
+        # End stage tracking
+        monitor.end_stage(
+            success=True,
+            chunks_processed=len(candidate_ids),
+            batch_size=batch_size,
+        )
+        monitor.end()
 
         # Rank candidates by score and return top_k
         import numpy as np
@@ -332,12 +373,30 @@ class CrossEncoderBatchExecutor:
                     # Single batch
                     scores = self.rerank_pipeline.model.predict(query_doc_pairs)
                 else:
-                    # Multiple batches
+                    # Multiple batches with rich progress
+                    total_batches = math.ceil(len(query_doc_pairs) / current_batch_size)
+                    
+                    # Create rich progress with 5 columns
+                    progress = Progress(
+                        SpinnerColumn(),
+                        TextColumn("[bold blue]{task.description}"),
+                        BarColumn(),
+                        TaskProgressColumn(),
+                        TimeRemainingColumn(),
+                    )
+                    
                     scores = []
-                    for i in range(0, len(query_doc_pairs), current_batch_size):
-                        batch = query_doc_pairs[i:i + current_batch_size]
-                        batch_scores = self.rerank_pipeline.model.predict(batch)
-                        scores.extend(batch_scores)
+                    with progress:
+                        task = progress.add_task(
+                            f"[cyan]Reranking candidates (batch_size={current_batch_size})",
+                            total=total_batches
+                        )
+                        
+                        for i in range(0, len(query_doc_pairs), current_batch_size):
+                            batch = query_doc_pairs[i:i + current_batch_size]
+                            batch_scores = self.rerank_pipeline.model.predict(batch)
+                            scores.extend(batch_scores)
+                            progress.update(task, advance=1)
 
                 # Success - return scores
                 return list(scores)

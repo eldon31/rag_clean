@@ -28,6 +28,7 @@ from __future__ import annotations
 import os
 import json
 import sys
+import math
 import importlib
 import importlib.util
 import importlib.metadata as importlib_metadata
@@ -1005,8 +1006,20 @@ class UltimateKaggleEmbedderV4:
 
     @staticmethod
     @lru_cache(maxsize=128)
-    def _encode_supports_kwarg(callable_target: Any, kwarg_name: str) -> bool:
+    def _encode_supports_kwarg(callable_target: Any, kwarg_name: str, model: Any = None) -> bool:
         """Feature-detect optional keyword support on encode callables."""
+        
+        # Special case: SparseEncoder models have stricter parameter validation
+        # and don't support tqdm_kwargs in sentence-transformers 5.1.2+
+        if model is not None and kwarg_name == "tqdm_kwargs":
+            model_class_name = type(model).__name__
+            # Check if it's a SparseEncoder or wrapped SparseEncoder
+            if "SparseEncoder" in model_class_name:
+                return False
+            # Check module path for SparseEncoder
+            model_module = type(model).__module__
+            if "sparse_encoder" in model_module:
+                return False
 
         try:
             signature = inspect.signature(callable_target)
@@ -1061,37 +1074,108 @@ class UltimateKaggleEmbedderV4:
             is_data_parallel=isinstance(model, torch.nn.DataParallel)
         )
 
+        # Detect if this is a SparseEncoder (different API than SentenceTransformer)
+        model_class_name = type(model).__name__
+        is_sparse_encoder = "SparseEncoder" in model_class_name or "sparse_encoder" in type(model).__module__
+        
         call_args: List[Any] = [texts]
-        call_kwargs: Dict[str, Any] = {
-            "batch_size": batch_size,
-            "show_progress_bar": show_progress and not progress_context,  # Disable if progress_context provided
-            "convert_to_numpy": True,
-            "normalize_embeddings": True,
-            "device": device,
-        }
+        if is_sparse_encoder:
+            # SparseEncoder has a more limited encode() API
+            call_kwargs: Dict[str, Any] = {
+                "batch_size": batch_size,
+                "show_progress_bar": False,
+            }
+        else:
+            # SentenceTransformer supports more parameters
+            call_kwargs: Dict[str, Any] = {
+                "batch_size": batch_size,
+                "show_progress_bar": False,  # Always disable built-in progress, we'll handle it manually
+                "convert_to_numpy": True,
+                "normalize_embeddings": True,
+                "device": device,
+            }
 
-        progress_requested = False
+        # Check if model supports tqdm_kwargs
+        supports_tqdm_kwargs = False
         if show_progress and progress_context:
-            desc = progress_context.tqdm_description()
-            postfix = progress_context.tqdm_postfix()
-            if desc:
-                callable_target = getattr(encode_callable, "__func__", encode_callable)
-                if self._encode_supports_kwarg(callable_target, "tqdm_kwargs"):
+            callable_target = getattr(encode_callable, "__func__", encode_callable)
+            supports_tqdm_kwargs = self._encode_supports_kwarg(callable_target, "tqdm_kwargs", model=model)
+            
+            if supports_tqdm_kwargs:
+                desc = progress_context.tqdm_description()
+                postfix = progress_context.tqdm_postfix()
+                if desc:
                     tqdm_kwargs = {"desc": desc}
                     if postfix:
                         tqdm_kwargs["postfix"] = postfix
                     call_kwargs["tqdm_kwargs"] = tqdm_kwargs
-                    progress_requested = True
+
+        # Rich progress bar for models that don't support tqdm_kwargs
+        rich_progress = None
+        rich_task = None
+        if show_progress and progress_context and not supports_tqdm_kwargs:
+            try:
+                from rich.progress import Progress, SpinnerColumn, TextColumn, BarColumn, TaskProgressColumn, TimeRemainingColumn
+                desc = progress_context.tqdm_description()
+                postfix = progress_context.tqdm_postfix()
+                total_batches = math.ceil(len(texts) / batch_size)
+                
+                # Create rich progress with custom columns
+                rich_progress = Progress(
+                    SpinnerColumn(),
+                    TextColumn("[bold blue]{task.description}"),
+                    BarColumn(),
+                    TaskProgressColumn(),
+                    TimeRemainingColumn(),
+                )
+                rich_progress.start()
+                
+                # Add postfix to description if available
+                full_desc = f"{desc} {postfix}" if postfix else desc or "Encoding"
+                rich_task = rich_progress.add_task(full_desc, total=total_batches)
+            except Exception as e:
+                logger.debug(f"Could not initialize rich progress: {e}")
+                rich_progress = None
 
         try:
-            result = encode_callable(*call_args, **call_kwargs)
+            # For models without tqdm_kwargs support, batch manually with rich progress
+            if rich_progress is not None and rich_task is not None:
+                result_batches = []
+                for i in range(0, len(texts), batch_size):
+                    batch_texts = texts[i:i + batch_size]
+                    # Use appropriate kwargs based on model type
+                    if is_sparse_encoder:
+                        batch_result = encode_callable(
+                            batch_texts,
+                            batch_size=batch_size,
+                            show_progress_bar=False,
+                        )
+                    else:
+                        batch_result = encode_callable(
+                            batch_texts,
+                            batch_size=batch_size,
+                            show_progress_bar=False,
+                            convert_to_numpy=True,
+                            normalize_embeddings=True,
+                            device=device,
+                        )
+                    result_batches.append(batch_result)
+                    rich_progress.update(rich_task, advance=1)
+                rich_progress.stop()
+                result = np.vstack(result_batches) if len(result_batches) > 1 else result_batches[0]
+            else:
+                result = encode_callable(*call_args, **call_kwargs)
             
             # Log throughput completion
             monitor.end()
             
             return result
         except Exception as primary_exc:
-            # Log throughput failure and re-raise
+            # Stop rich progress on error
+            if rich_progress is not None:
+                rich_progress.stop()
+            
+            # Log throughput failure
             monitor.log_error(primary_exc)
             logger.exception(
                 "Encode failed for model %s on %s (batch=%d)",
@@ -1100,8 +1184,10 @@ class UltimateKaggleEmbedderV4:
                 batch_size,
             )
 
-            if progress_requested:
-                call_kwargs.pop("tqdm_kwargs", None)
+            # Try removing tqdm_kwargs if that was the issue
+            if "tqdm_kwargs" in call_kwargs:
+                call_kwargs.pop("tqdm_kwargs")
+                call_kwargs["show_progress_bar"] = False
                 try:
                     return encode_callable(*call_args, **call_kwargs)
                 except Exception:

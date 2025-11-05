@@ -21,6 +21,7 @@ from processor.ultimate_embedder.gpu_lease import GPULease, lease_gpus
 from processor.ultimate_embedder.sparse_pipeline import (
     build_sparse_vector_from_metadata,
 )
+from processor.ultimate_embedder.throughput_monitor import ThroughputMonitor
 
 if TYPE_CHECKING:  # pragma: no cover - typing only
     from sentence_transformers import SentenceTransformer
@@ -129,6 +130,17 @@ class SparseVectorGenerator:
         self.logger.info(message)
         print(message, flush=True)
 
+        # Initialize throughput monitor for stage tracking
+        monitor = ThroughputMonitor(logger=self.logger)
+        monitor.start(
+            chunk_count=total_chunks,
+            model_name=model_name,
+            device=planned_device,
+            batch_size=self._adaptive_batch_size,
+            is_data_parallel=False,  # Sparse models don't use DataParallel
+        )
+        monitor.start_stage("sparse", model_name=model_name, device=planned_device)
+
         try:
             # Retrieve the sparse model from the embedder's registry
             sparse_model = self.embedder.sparse_models.get(model_name)
@@ -163,6 +175,12 @@ class SparseVectorGenerator:
                 exc,
                 exc_info=True,
             )
+            monitor.record_error(
+                stage="sparse",
+                error_type=type(exc).__name__,
+                error_message=str(exc)[:200],
+                model_name=model_name,
+            )
             vectors, fallback_indices = self._fallback_to_metadata(chunks)
             success = False
             error_message = str(exc)[:200]
@@ -175,6 +193,14 @@ class SparseVectorGenerator:
         if elapsed_ms > 0.0 and chunk_count > 0:
             throughput = chunk_count / (elapsed_ms / 1000.0)
             throughput = round(throughput, 2)
+
+        # End stage tracking
+        monitor.end_stage(
+            success=success,
+            chunks_processed=chunk_count,
+            batch_size=self._adaptive_batch_size,
+        )
+        monitor.end()
 
         result = SparseInferenceResult(
             vectors=vectors,
