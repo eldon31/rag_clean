@@ -283,14 +283,30 @@ class ModelManager:
                 
                 # Check if this is a SPLADE model and handle special loading
                 model_type = sparse_config.get("type", "")
+                print(f"\n{'='*80}")
+                print(f"[SPARSE-LOAD] Loading sparse model: {sparse_name}")
+                print(f"[SPARSE-LOAD] Model type: {model_type}")
+                print(f"[SPARSE-LOAD] HF model ID: {sparse_config['hf_model_id']}")
+                print(f"[SPARSE-LOAD] Target device: {target_device}")
+                print(f"[SPARSE-LOAD] If not cached, will download from HuggingFace...")
+                print(f"{'='*80}\n", flush=True)
+                
                 if model_type == "splade":
                     # SPLADE models in sentence-transformers 5.x+ require SparseEncoder class
                     try:
+                        print(f"[SPARSE-LOAD] Using SparseEncoder class (will auto-download if needed)...", flush=True)
                         sparse_model = SparseEncoder(
                             sparse_config["hf_model_id"],
                             device=target_device,
                         )
+                        print(f"[SPARSE-LOAD] ✓ SparseEncoder loaded successfully", flush=True)
+                        print(f"[SPARSE-LOAD] Model type: {type(sparse_model).__name__}", flush=True)
+                        print(f"[SPARSE-LOAD] Has tokenizer attr: {hasattr(sparse_model, 'tokenizer')}", flush=True)
+                        print(f"[SPARSE-LOAD] Has _first_module attr: {hasattr(sparse_model, '_first_module')}", flush=True)
+                        if hasattr(sparse_model, 'tokenizer'):
+                            print(f"[SPARSE-LOAD] Tokenizer type: {type(sparse_model.tokenizer).__name__}", flush=True)
                     except Exception as splade_exc:
+                        print(f"[SPARSE-LOAD] ❌ SparseEncoder loading failed: {splade_exc}", flush=True)
                         logger.warning(
                             "Failed to load SPLADE model %s with SparseEncoder: %s",
                             sparse_name,
@@ -301,16 +317,19 @@ class ModelManager:
                         ) from splade_exc
                 else:
                     # Regular sparse model loading
+                    print(f"[SPARSE-LOAD] Using SentenceTransformer class (will auto-download if needed)...", flush=True)
                     sparse_model = SentenceTransformer(
                         sparse_config["hf_model_id"],
                         trust_remote_code=True,
                         device=target_device,
                     )
+                    print(f"[SPARSE-LOAD] ✓ SentenceTransformer loaded successfully", flush=True)
                 
                 embedder.sparse_models[sparse_name] = sparse_model
                 embedder.sparse_device_map[sparse_name] = target_device
                 embedder.models[sparse_name] = sparse_model
                 embedder._record_model_dtype(sparse_name, sparse_model)
+                print(f"[SPARSE-LOAD] ✓ Model {sparse_name} registered and staged to CPU\n", flush=True)
                 logger.info("Sparse model %s staged to CPU", sparse_name)
             except Exception as exc:  # pragma: no cover - defensive logging
                 logger.error("Failed to load sparse model %s: %s", sparse_name, exc)

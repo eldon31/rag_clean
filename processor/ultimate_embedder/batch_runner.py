@@ -924,6 +924,7 @@ class BatchRunner:
             else:
                 logger.info("=" * 70)
                 logger.info("SPARSE VECTOR GENERATION STAGE")
+                logger.info("Dense ensemble complete - GPUs now available for sparse models")
                 logger.info("=" * 70)
                 
                 # Prepare ChunkRecord instances using helper method
@@ -932,22 +933,39 @@ class BatchRunner:
                 # Instantiate sparse generator
                 sparse_generator = SparseVectorGenerator(embedder, logger)
                 
-                # Determine sparse model to use (first from sparse_models dict)
-                sparse_model_name = (
-                    next(iter(embedder.sparse_models.keys()), None)
-                    if embedder.sparse_models
-                    else None
+                # Process ALL sparse models (not just the first one)
+                sparse_models_list = list(embedder.sparse_models.keys())
+                logger.info(
+                    "Processing %d sparse model(s): %s",
+                    len(sparse_models_list),
+                    sparse_models_list
                 )
                 
-                if not sparse_model_name:
-                    logger.warning("Sparse enabled but no sparse models configured")
+                # GPUs are now available after dense stage completion
+                use_gpu = embedder.device == "cuda" and embedder.device_count > 0
+                device_ids = list(range(embedder.device_count)) if use_gpu else None
+                
+                if use_gpu:
+                    logger.info(
+                        "GPU access available: %d device(s) [%s]",
+                        embedder.device_count,
+                        ", ".join(f"cuda:{i}" for i in device_ids)
+                    )
                 else:
-                    # Execute sparse inference (CPU-first, optional GPU)
-                    use_gpu = embedder.device == "cuda"
-                    device_ids = (
-                        list(range(embedder.device_count)) if use_gpu else None
+                    logger.info("Using CPU for sparse inference")
+                
+                # Process each sparse model sequentially with GPU access
+                for sparse_idx, sparse_model_name in enumerate(sparse_models_list, 1):
+                    logger.info(
+                        "\n>>> Sparse Model %d/%d: %s",
+                        sparse_idx,
+                        len(sparse_models_list),
+                        sparse_model_name
                     )
                     
+                    sparse_start = time.time()
+                    
+                    # Execute sparse inference with GPU access
                     sparse_result = sparse_generator.generate(
                         chunks=chunk_records,
                         model_name=sparse_model_name,
@@ -955,8 +973,23 @@ class BatchRunner:
                         device_ids=device_ids,
                     )
                     
+                    sparse_duration = time.time() - sparse_start
+                    
                     # Store results using helper method
                     self._store_sparse_results(embedder, sparse_result, logger)
+                    
+                    logger.info(
+                        ">>> Model %s complete: device=%s, duration=%.2fs, "
+                        "fallback=%d/%d (%.1f%%)\n",
+                        sparse_model_name,
+                        sparse_result.device,
+                        sparse_duration,
+                        sparse_result.fallback_count,
+                        len(chunk_records),
+                        100.0 * sparse_result.fallback_count / len(chunk_records) if chunk_records else 0.0
+                    )
+                
+                logger.info("All sparse models processed successfully")
 
             if not isinstance(final_embeddings, np.ndarray):
                 final_embeddings = np.asarray(final_embeddings)

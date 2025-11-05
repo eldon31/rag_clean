@@ -49,7 +49,8 @@ DEFAULT_ENSEMBLE = [
     "bge-m3",
     "qwen3-embedding-0.6b",
 ]
-DEFAULT_SPARSE = ["splade"]
+# Both SPLADE models will run sequentially after dense ensemble completes
+DEFAULT_SPARSE = ["splade", "splade-v3"]
 DEFAULT_RERANK_MODEL = "jinaai/jina-reranker-v3"
 
 

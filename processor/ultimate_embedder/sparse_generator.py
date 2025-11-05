@@ -263,20 +263,28 @@ class SparseVectorGenerator:
         fallback_indices: List[int] = []
 
         texts = [chunk.text for chunk in chunks]
+        
+        print(f"\n{'='*80}")
+        print(f"[SPARSE-CPU] Starting CPU inference for {len(texts)} chunks with model {model_name}")
+        print(f"{'='*80}\n", flush=True)
+        
         token_lookup = self._build_token_lookup(sparse_model, model_name)
         
-        # Log token lookup status
+        # Log token lookup status with detailed info
         if token_lookup is None:
-            self.logger.warning(
-                "[sparse-debug] Token lookup failed for model %s - will use metadata fallback",
-                model_name
-            )
+            msg = f"[sparse-debug] Token lookup FAILED for model {model_name} - ALL CHUNKS WILL USE METADATA FALLBACK"
+            self.logger.error(msg)
+            print(f"\n⚠️  {msg}\n", flush=True)
         else:
-            self.logger.info("[sparse-debug] Token lookup successfully created for model %s", model_name)
+            msg = f"[sparse-debug] Token lookup successfully created for model {model_name}"
+            self.logger.info(msg)
+            print(f"✓ {msg}", flush=True)
 
         try:
+            print(f"[SPARSE-CPU] Initializing rich progress bar...", flush=True)
+            
             # Create rich progress bar
-            console = Console(width=200, legacy_windows=False)
+            console = Console(width=200, legacy_windows=False, force_terminal=True)
             progress = Progress(
                 SpinnerColumn(),
                 TextColumn("[bold cyan]{task.description}", table_column=Column(no_wrap=True)),
@@ -286,6 +294,8 @@ class SparseVectorGenerator:
                 console=console,
                 expand=False
             )
+            
+            print(f"[SPARSE-CPU] Starting encoding with progress bar...", flush=True)
             
             with progress:
                 task = progress.add_task(
@@ -303,8 +313,29 @@ class SparseVectorGenerator:
                 
                 # Update progress as complete
                 progress.update(task, completed=len(texts))
+            
+            print(f"[SPARSE-CPU] Encoding complete. Processing {len(embeddings)} embeddings...", flush=True)
 
             success_count = 0
+            print(f"\n[CONVERSION] Starting vector conversion for {len(embeddings)} embeddings...", flush=True)
+            print(f"[CONVERSION] Token lookup available: {token_lookup is not None}", flush=True)
+            
+            # Sample first embedding for diagnostics
+            if len(embeddings) > 0:
+                sample = embeddings[0]
+                sample_type = type(sample).__name__
+                if hasattr(sample, 'shape'):
+                    sample_shape = sample.shape
+                elif hasattr(sample, '__len__'):
+                    sample_shape = f"length={len(sample)}"
+                else:
+                    sample_shape = "unknown"
+                print(f"[CONVERSION] Sample embedding[0]: type={sample_type}, shape={sample_shape}", flush=True)
+                
+                if isinstance(sample, np.ndarray):
+                    nonzero_count = np.count_nonzero(np.abs(sample) > 1e-6)
+                    print(f"[CONVERSION] Sample has {nonzero_count} non-zero values (threshold=1e-6)", flush=True)
+            
             for idx, embedding in enumerate(embeddings):
                 vector = self._convert_embedding_to_sparse_vector(
                     embedding,
@@ -313,24 +344,24 @@ class SparseVectorGenerator:
                 if vector is None:
                     # Fallback to metadata-derived vector
                     if idx < 3:  # Log first few failures
-                        self.logger.warning(
-                            "[sparse-debug] Chunk %d: vector conversion returned None (token_lookup=%s, embedding_shape=%s)",
-                            idx, "present" if token_lookup else "MISSING", 
-                            getattr(embedding, 'shape', len(embedding) if hasattr(embedding, '__len__') else 'unknown')
-                        )
+                        emb_shape = getattr(embedding, 'shape', len(embedding) if hasattr(embedding, '__len__') else 'unknown')
+                        msg = f"[CONVERSION] ❌ Chunk {idx}: conversion FAILED (token_lookup={'present' if token_lookup else 'MISSING'}, shape={emb_shape})"
+                        self.logger.warning(msg)
+                        print(msg, flush=True)
                     fallback_vector = build_sparse_vector_from_metadata(
                         chunks[idx].metadata
                     )
                     vectors.append(fallback_vector)
                     fallback_indices.append(idx)
                 else:
+                    if idx < 3:  # Log first few successes
+                        print(f"[CONVERSION] ✓ Chunk {idx}: SUCCESS ({vector['stats']['unique_terms']} terms)", flush=True)
                     success_count += 1
                     vectors.append(vector)
             
-            self.logger.info(
-                "[sparse-debug] CPU conversion results: %d/%d successful, %d fallback",
-                success_count, len(chunks), len(fallback_indices)
-            )
+            result_msg = f"[CONVERSION] Results: {success_count}/{len(chunks)} successful, {len(fallback_indices)} fallback"
+            self.logger.info(result_msg)
+            print(f"\n{result_msg}\n", flush=True)
 
         except Exception as exc:  # pragma: no cover
             self.logger.warning(
@@ -553,43 +584,60 @@ class SparseVectorGenerator:
         model_name: str,
     ) -> Optional[Callable[[int], Optional[str]]]:
         """Create a lookup function that maps token ids to vocabulary strings."""
+        print(f"\n[TOKEN-LOOKUP] Building token lookup for model: {model_name}", flush=True)
+        print(f"[TOKEN-LOOKUP] Model type: {type(sparse_model).__name__}", flush=True)
+        print(f"[TOKEN-LOOKUP] Model attributes: {dir(sparse_model)[:10]}...", flush=True)
+        
         tokenizer = getattr(sparse_model, "tokenizer", None)
+        print(f"[TOKEN-LOOKUP] Direct tokenizer attribute: {type(tokenizer).__name__ if tokenizer else 'None'}", flush=True)
+        
         if tokenizer is None:
             first_module = getattr(sparse_model, "_first_module", None)
+            print(f"[TOKEN-LOOKUP] _first_module: {first_module}", flush=True)
             module = None
             if callable(first_module):
                 try:
                     module = first_module()
-                except Exception:  # pragma: no cover - defensive
+                    print(f"[TOKEN-LOOKUP] Called _first_module(), got: {type(module).__name__ if module else 'None'}", flush=True)
+                except Exception as e:  # pragma: no cover - defensive
+                    print(f"[TOKEN-LOOKUP] Exception calling _first_module(): {e}", flush=True)
                     module = None
             tokenizer = getattr(module, "tokenizer", None) if module else None
+            print(f"[TOKEN-LOOKUP] Module tokenizer: {type(tokenizer).__name__ if tokenizer else 'None'}", flush=True)
 
         if tokenizer is None:
-            self.logger.debug(
-                "Sparse model %s does not expose a tokenizer; using placeholder tokens",
-                model_name,
-            )
+            msg = f"[TOKEN-LOOKUP] ❌ FAILED: Model {model_name} does not expose a tokenizer"
+            self.logger.error(msg)
+            print(f"\n{msg}\n", flush=True)
             return None
+        
+        print(f"[TOKEN-LOOKUP] ✓ Found tokenizer: {type(tokenizer).__name__}", flush=True)
 
         inverse_vocab: Dict[int, str] = {}
         get_vocab = getattr(tokenizer, "get_vocab", None)
+        print(f"[TOKEN-LOOKUP] Checking get_vocab method: {callable(get_vocab)}", flush=True)
+        
         if callable(get_vocab):
             try:
                 vocab_dict = get_vocab()
+                print(f"[TOKEN-LOOKUP] Got vocab_dict type: {type(vocab_dict).__name__}, size: {len(vocab_dict) if isinstance(vocab_dict, dict) else 'N/A'}", flush=True)
                 if isinstance(vocab_dict, dict):
                     for token, idx in vocab_dict.items():
                         try:
                             inverse_vocab.setdefault(int(idx), token)
                         except (TypeError, ValueError):
                             continue
+                    print(f"[TOKEN-LOOKUP] Built inverse_vocab with {len(inverse_vocab)} entries", flush=True)
             except Exception as exc:  # pragma: no cover - tokenizer edge cases
-                self.logger.debug(
+                print(f"[TOKEN-LOOKUP] ❌ Vocab retrieval failed: {exc}", flush=True)
+                self.logger.error(
                     "Tokenizer vocab retrieval failed for sparse model %s: %s",
                     model_name,
                     exc,
                 )
 
         if inverse_vocab:
+            print(f"[TOKEN-LOOKUP] ✓ Using inverse_vocab lookup with {len(inverse_vocab)} tokens", flush=True)
             @lru_cache(maxsize=8192)
             def lookup(index: int) -> Optional[str]:
                 return inverse_vocab.get(int(index))
@@ -597,8 +645,10 @@ class SparseVectorGenerator:
             return lookup
 
         convert_fn = getattr(tokenizer, "convert_ids_to_tokens", None)
+        print(f"[TOKEN-LOOKUP] Checking convert_ids_to_tokens: {callable(convert_fn)}", flush=True)
+        
         if callable(convert_fn):
-
+            print(f"[TOKEN-LOOKUP] ✓ Using convert_ids_to_tokens method", flush=True)
             @lru_cache(maxsize=8192)
             def lookup(index: int) -> Optional[str]:
                 try:
@@ -611,10 +661,9 @@ class SparseVectorGenerator:
 
             return lookup
 
-        self.logger.debug(
-            "Tokenizer for sparse model %s lacks conversion helpers; using placeholders",
-            model_name,
-        )
+        msg = f"[TOKEN-LOOKUP] ❌ FAILED: Tokenizer for {model_name} has no get_vocab() or convert_ids_to_tokens()"
+        self.logger.error(msg)
+        print(f"\n{msg}\n", flush=True)
         return None
 
     def _convert_embedding_to_sparse_vector(
@@ -664,26 +713,35 @@ class SparseVectorGenerator:
             filtered_values: List[float] = []
             tokens: List[str] = []
 
+            # Track filtering statistics
+            null_tokens = 0
+            invalid_tokens = 0
+            unused_tokens = 0
+            
             for raw_idx in nonzero_indices.tolist():
                 token: Optional[str] = None
                 try:
                     token = token_lookup(int(raw_idx))  # type: ignore[arg-type]
-                except Exception:  # pragma: no cover - defensive
+                except Exception as e:  # pragma: no cover - defensive
+                    self.logger.debug(f"[sparse-debug] Token lookup exception for idx {raw_idx}: {e}")
                     token = None
 
                 if isinstance(token, (list, tuple)):
                     token = token[0] if token else None
 
                 if token is None:
+                    null_tokens += 1
                     continue
 
                 token_str = str(token).strip()
 
                 if not token_str or token_str in self._invalid_tokens:
+                    invalid_tokens += 1
                     continue
 
                 lowered = token_str.lower()
                 if lowered.startswith("[unused") or lowered.startswith("<unused"):
+                    unused_tokens += 1
                     continue
 
                 filtered_indices.append(int(raw_idx))
@@ -692,7 +750,8 @@ class SparseVectorGenerator:
 
             if not filtered_indices:
                 self.logger.debug(
-                    "Tokenizer produced no valid tokens for sparse embedding; triggering metadata fallback",
+                    "[sparse-debug] NO VALID TOKENS after filtering: nonzero=%d, null_tokens=%d, invalid=%d, unused=%d",
+                    len(nonzero_indices), null_tokens, invalid_tokens, unused_tokens
                 )
                 return None
 

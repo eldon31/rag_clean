@@ -128,9 +128,17 @@ def get_kaggle_model_config(model_name: str) -> ModelConfig:
 SPARSE_MODELS: Dict[str, Dict[str, Any]] = {
     "splade": {
         "name": "splade",
-        "hf_model_id": "naver/splade_v2_distil",
+        "hf_model_id": "naver/splade-cocondenser-ensembledistil",
         "type": "splade",
-        "description": "SPLADE learned sparse representation model (requires sentence-transformers <3.0 with sparse_encoder module - not compatible with v5.x+)",
+        "description": "SPLADE ensemble distilled model - learned sparse representation (requires sentence-transformers <3.0 with sparse_encoder module - not compatible with v5.x+)",
+        "recommended_batch_size": 64,
+        "requires_sparse_encoder": True,
+    },
+    "splade-v3": {
+        "name": "splade-v3",
+        "hf_model_id": "naver/splade-v3",
+        "type": "splade",
+        "description": "SPLADE v3 - latest version of learned sparse representation (requires sentence-transformers <3.0 with sparse_encoder module - not compatible with v5.x+)",
         "recommended_batch_size": 64,
         "requires_sparse_encoder": True,
     },
