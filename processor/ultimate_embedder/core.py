@@ -2680,6 +2680,9 @@ class UltimateKaggleEmbedderV4:
             sparse_fallback_reason = "Sparse vectors unavailable; metadata fallback engaged"
             if not sparse_reason:
                 sparse_reason = sparse_fallback_reason
+
+        configured_sparse_models = list(self.sparse_model_names) or list(self.feature_toggles.sparse_models)
+
         sparse_stage: Optional[Dict[str, Any]] = None
         sparse_result = getattr(self, "sparse_inference_result", None)
         sparse_latency = getattr(sparse_result, "latency_ms", None)
@@ -2689,7 +2692,7 @@ class UltimateKaggleEmbedderV4:
         sparse_fallback_total = getattr(sparse_result, "fallback_count", None)
         sparse_primary_device = getattr(sparse_result, "device", None)
         sparse_attributes: Dict[str, Any] = {
-            "models": list(self.sparse_model_names),
+            "models": list(configured_sparse_models),
             "coverage_ratio": coverage,
             "devices": dict(self.sparse_device_map),
             "fallback_used": sparse_fallback_used,
@@ -2697,31 +2700,53 @@ class UltimateKaggleEmbedderV4:
         if sparse_fallback_reason:
             sparse_attributes["fallback_reason"] = sparse_fallback_reason
 
-        if self.enable_sparse:
+        disabled_reason = f"Disabled via {self.feature_toggles.sources.get('enable_sparse', 'default')}"
+        if not sparse_reason and not self.enable_sparse and self.feature_toggles.enable_sparse:
+            sparse_reason = disabled_reason
+
+        sparse_span_reason = sparse_reason or (
+            disabled_reason if not self.enable_sparse else ("fallback engaged" if sparse_fallback_used else "active")
+        )
+
+        include_sparse_stage = (
+            self.feature_toggles.enable_sparse
+            or sparse_result is not None
+            or bool(configured_sparse_models)
+        )
+        if include_sparse_stage:
+            stage_success: Optional[bool]
+            if sparse_result is not None:
+                stage_success = bool(sparse_success)
+            elif self.feature_toggles.enable_sparse:
+                stage_success = False
+            else:
+                stage_success = None
+
+            stage_error = None
+            if sparse_result is not None and sparse_error:
+                stage_error = sparse_error
+            elif sparse_result is None and self.feature_toggles.enable_sparse:
+                stage_error = sparse_span_reason
+
             sparse_stage = build_sparse_stage_summary(
-                enabled=True,
-                model_names=self.sparse_model_names,
+                enabled=self.enable_sparse,
+                model_names=configured_sparse_models,
                 vectors_total=sparse_total,
                 vectors_available=sparse_available,
-                executed=bool(self.sparse_vectors),
+                executed=bool(sparse_result),
                 coverage_ratio=coverage,
                 devices=self.sparse_device_map,
                 fallback_used=sparse_fallback_used,
                 fallback_reason=sparse_fallback_reason,
-                reason=sparse_reason,
-                latency_ms=sparse_latency,
-                run_id=sparse_run_id,
-                success=sparse_success,
-                error_message=sparse_error,
-                fallback_count=sparse_fallback_total,
-                device=sparse_primary_device,
+                reason=sparse_span_reason,
+                latency_ms=sparse_latency if sparse_result is not None else None,
+                run_id=sparse_run_id if sparse_result is not None else None,
+                success=stage_success,
+                error_message=stage_error,
+                fallback_count=sparse_fallback_total if sparse_result is not None else None,
+                device=sparse_primary_device if sparse_result is not None else None,
             )
 
-        sparse_span_reason = sparse_reason or (
-            f"Disabled via {self.feature_toggles.sources.get('enable_sparse', 'default')}"
-            if not self.enable_sparse
-            else ("fallback engaged" if sparse_fallback_used else "active")
-        )
         if not self.enable_sparse:
             sparse_attributes["source"] = self.feature_toggles.sources.get("enable_sparse", "default")
         self.telemetry.record_span_presence(

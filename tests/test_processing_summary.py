@@ -880,6 +880,80 @@ def test_create_processing_summary_includes_failure_warnings(tmp_path, monkeypat
     assert any("sparse stage failure" in warning for warning in warnings)
 
 
+def test_processing_summary_reports_runtime_sparse_disable(tmp_path, monkeypatch):
+    _apply_dummy_model_patches(monkeypatch)
+
+    toggles = FeatureToggleConfig(
+        enable_rerank=False,
+        enable_sparse=True,
+        sparse_models=["splade"],
+        sources={
+            "enable_rerank": "default",
+            "enable_sparse": "cli:default-on",
+            "sparse_models": "cli:default",
+        },
+    )
+
+    gpu_config = KaggleGPUConfig(
+        device_count=1,
+        vram_per_gpu_gb=8.0,
+        total_vram_gb=8.0,
+        enable_memory_efficient_attention=False,
+        gradient_checkpointing=False,
+        precision="fp32",
+        enable_mixed_precision=False,
+        use_amp=False,
+        base_batch_size=2,
+        dynamic_batching=False,
+        backend="pytorch",
+        enable_torch_compile=False,
+        strategy="data_parallel",
+        enable_gradient_accumulation=False,
+        accumulation_steps=1,
+        kaggle_environment=False,
+        output_path=str(tmp_path / "outputs"),
+    )
+
+    export_config = KaggleExportConfig(
+        working_dir=str(tmp_path / "exports"),
+        output_prefix="runtime_sparse_disabled",
+        export_numpy=False,
+        export_jsonl=False,
+        export_faiss=False,
+        export_sparse_jsonl=False,
+    )
+
+    embedder = UltimateKaggleEmbedderV4(
+        model_name="jina-code-embeddings-1.5b",
+        gpu_config=gpu_config,
+        export_config=export_config,
+        enable_ensemble=False,
+        feature_toggles=toggles,
+        force_cpu=True,
+    )
+
+    embedder.feature_toggles = toggles
+    embedder.enable_sparse = False
+    embedder.sparse_model_names = []
+    embedder.sparse_models.clear()
+    embedder.sparse_device_map.clear()
+    embedder.sparse_vectors = []
+    embedder.sparse_inference_result = None
+    embedder._sparse_runtime_reason = "Sparse load failures: missing weights"
+
+    summary = embedder.create_processing_summary(chunk_count=0)
+
+    sparse_run = summary.get("sparse_run")
+    assert sparse_run is not None
+    assert sparse_run["enabled"] is False
+    assert sparse_run["executed"] is False
+    assert sparse_run.get("success") is False
+    reason_text = sparse_run.get("reason", "")
+    assert "Sparse load failures" in reason_text
+    error_text = sparse_run.get("error_message", "")
+    assert "Sparse load failures" in error_text
+
+
 def test_export_processing_stats_includes_activation_provenance(
     tmp_path,
     monkeypatch,

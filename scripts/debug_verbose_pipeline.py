@@ -51,13 +51,11 @@ def _enable_verbose_logging() -> None:
 
 def main(argv: Optional[Iterable[str]] = None) -> int:
     argv_list = list(argv) if argv is not None else sys.argv[1:]
-    if "--quiet" in argv_list:
-        print("[verbose_debug] Ignoring --quiet flag because verbose logging is always on", flush=True)
 
     original_configure_logging = embed_v7._configure_logging
 
-    def _verbose_configure_logging(_: bool) -> None:
-        original_configure_logging(False)
+    def _verbose_configure_logging() -> None:
+        original_configure_logging()
         _enable_verbose_logging()
 
     embed_v7._configure_logging = _verbose_configure_logging

@@ -22,7 +22,7 @@ import logging
 import shutil
 import sys
 from pathlib import Path
-from typing import Iterable, List, Optional, Sequence
+from typing import Dict, Iterable, List, Optional, Sequence, Tuple
 
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
@@ -35,8 +35,10 @@ from processor.ultimate_embedder import (
     KaggleExportConfig,
     KaggleGPUConfig,
     RerankingConfig,
+    SPARSE_MODELS,
     UltimateKaggleEmbedderV4,
 )
+from processor.ultimate_embedder.config import get_reranking_model_config
 
 # ---------------------------------------------------------------------------
 # Globals and defaults
@@ -72,9 +74,9 @@ def _default_output_dir() -> str:
     return "/kaggle/working/Embeddings" if _in_kaggle() else "./Embeddings"
 
 
-def _configure_logging(quiet: bool) -> None:
+def _configure_logging() -> None:
     """Adjust logging level without clobbering existing handlers."""
-    level = logging.WARNING if quiet else logging.INFO
+    level = logging.INFO
 
     root_logger = logging.getLogger()
     root_logger.setLevel(level)
@@ -247,6 +249,178 @@ def _print_stage_report(
     print(f"[{tag}] ===== End Stage Status Report =====\n", flush=True)
 
 
+def _cache_status_for_repo(embedder: UltimateKaggleEmbedderV4, repo_id: Optional[str]) -> Tuple[str, Optional[str]]:
+    if not repo_id:
+        return "unknown", None
+    cache_dir = getattr(embedder, "hf_cache_dir", None)
+    if not isinstance(cache_dir, Path):
+        return "unknown", None
+
+    repo_slug = repo_id.replace("/", "--")
+    repo_base = cache_dir / f"models--{repo_slug}"
+    if not repo_base.exists():
+        return "missing", str(repo_base)
+
+    snapshot_path = None
+    try:
+        snapshot_path = next(repo_base.glob("snapshots/*"))
+    except StopIteration:
+        snapshot_path = None
+
+    if snapshot_path is None:
+        return "present", str(repo_base)
+    return "ready", str(snapshot_path)
+
+
+def _print_model_readiness(embedder: UltimateKaggleEmbedderV4, tag: str = "embed_v7") -> None:
+    """Print reranker and sparse model readiness in readable format matching ensemble roster style."""
+    toggles = embedder.feature_toggles
+
+    # Reranker readiness
+    rerank_enabled = bool(getattr(embedder.reranking_config, "enable_reranking", False))
+    rerank_model_key = getattr(embedder.reranking_config, "model_name", "") or "unspecified"
+    rerank_repo_id = None
+    try:
+        rerank_spec = get_reranking_model_config(rerank_model_key)
+        rerank_repo_id = rerank_spec.hf_model_id
+    except Exception:
+        rerank_spec = None
+
+    rerank_cache_status, _ = _cache_status_for_repo(embedder, rerank_repo_id)
+    rerank_loaded = getattr(embedder, "reranker", None) is not None
+    rerank_device = getattr(embedder, "reranker_device", "unknown")
+    rerank_failure = getattr(embedder, "rerank_failure_reason", None) or getattr(embedder, "_rerank_runtime_reason", None)
+
+    if rerank_enabled:
+        status = "✓ ready" if (rerank_loaded and rerank_cache_status == "ready") else "⚠ pending"
+        if rerank_failure:
+            status = f"✗ failed ({rerank_failure})"
+        print(
+            f"[{tag}] Reranker: {status} | model={rerank_model_key} | device={rerank_device} | cache={rerank_cache_status}",
+            flush=True,
+        )
+    else:
+        source = toggles.sources.get("enable_rerank", "default")
+        reason = rerank_failure or f"disabled via {source}"
+        print(
+            f"[{tag}] Reranker: disabled ({reason})",
+            flush=True,
+        )
+
+    # Sparse readiness
+    sparse_enabled = bool(getattr(embedder, "enable_sparse", False))
+    configured_sparse = list(dict.fromkeys((embedder.sparse_model_names or []) or list(toggles.sparse_models)))
+    loaded_sparse = list(getattr(embedder, "sparse_models", {}).keys())
+    sparse_failure = getattr(embedder, "_sparse_runtime_reason", None)
+
+    if sparse_enabled:
+        if loaded_sparse and not sparse_failure:
+            status = "✓ ready"
+        elif sparse_failure:
+            status = f"✗ failed ({sparse_failure})"
+        else:
+            status = "⚠ pending"
+        
+        # Build per-model cache status
+        model_parts = []
+        for model_name in configured_sparse:
+            repo_id = SPARSE_MODELS.get(model_name, {}).get("hf_model_id")
+            cache_status, _ = _cache_status_for_repo(embedder, repo_id)
+            loaded_marker = "✓" if model_name in loaded_sparse else "○"
+            model_parts.append(f"{loaded_marker}{model_name}[{cache_status}]")
+        
+        models_display = ", ".join(model_parts) if model_parts else "none"
+        print(
+            f"[{tag}] Sparse: {status} | models={models_display}",
+            flush=True,
+        )
+    else:
+        source = toggles.sources.get("enable_sparse", "default")
+        reason = sparse_failure or f"disabled via {source}"
+        print(
+            f"[{tag}] Sparse: disabled ({reason})",
+            flush=True,
+        )
+
+
+def _print_stage_readiness(embedder: UltimateKaggleEmbedderV4, tag: str = "embed_v7") -> None:
+    toggles = embedder.feature_toggles
+
+    rerank_enabled = bool(getattr(embedder.reranking_config, "enable_reranking", False))
+    rerank_source = toggles.sources.get("enable_rerank", "default")
+    rerank_model_key = getattr(embedder.reranking_config, "model_name", "") or "unspecified"
+    rerank_repo_id = None
+    try:
+        rerank_spec = get_reranking_model_config(rerank_model_key)
+        rerank_repo_id = rerank_spec.hf_model_id
+    except Exception:
+        rerank_spec = None
+
+    rerank_cache_status, rerank_cache_path = _cache_status_for_repo(embedder, rerank_repo_id)
+    rerank_ready = rerank_enabled and getattr(embedder, "reranker", None) is not None
+    rerank_device = getattr(embedder, "reranker_device", "unknown")
+    rerank_reason = getattr(embedder, "rerank_failure_reason", None) or getattr(embedder, "_rerank_runtime_reason", None)
+
+    if rerank_enabled:
+        status_label = "ready" if rerank_ready else "pending"
+        reason_text = "" if rerank_ready else (rerank_reason or "model not initialized")
+        print(
+            f"[{tag}] Reranker status: {status_label} model={rerank_model_key} repo={rerank_repo_id or 'unknown'}"
+            f" device={rerank_device} cache={rerank_cache_status}"
+            + (f" path={rerank_cache_path}" if rerank_cache_path else "")
+            + (f" reason={reason_text}" if reason_text else ""),
+            flush=True,
+        )
+    else:
+        reason_text = rerank_reason or f"disabled via {rerank_source}"
+        print(
+            f"[{tag}] Reranker disabled: {reason_text}",
+            flush=True,
+        )
+
+    sparse_enabled = bool(getattr(embedder, "enable_sparse", False))
+    sparse_source = toggles.sources.get("enable_sparse", "default")
+    configured_sparse = list(dict.fromkeys((embedder.sparse_model_names or []) or list(toggles.sparse_models)))
+    loaded_sparse = list(getattr(embedder, "sparse_models", {}).keys())
+    sparse_cache_results: Dict[str, Tuple[str, Optional[str]]] = {}
+    for model_name in configured_sparse:
+        repo_id = SPARSE_MODELS.get(model_name, {}).get("hf_model_id")
+        sparse_cache_results[model_name] = _cache_status_for_repo(embedder, repo_id)
+
+    sparse_ready = sparse_enabled and bool(loaded_sparse)
+    sparse_reason = getattr(embedder, "_sparse_runtime_reason", None)
+
+    if sparse_enabled:
+        cache_parts = []
+        for model_name in configured_sparse:
+            status, path = sparse_cache_results.get(model_name, ("unknown", None))
+            part = f"{model_name}:{status}"
+            if path:
+                part += f"@{path}"
+            cache_parts.append(part)
+        cache_state = ", ".join(cache_parts) if cache_parts else "none"
+        status_label = "ready" if sparse_ready else "pending"
+        reason_text = "" if sparse_ready else (sparse_reason or "models not loaded")
+        print(
+            f"[{tag}] Sparse status: {status_label} models={configured_sparse or ['none']}"
+            f" loaded={loaded_sparse or ['none']} cache={cache_state}"
+            + (f" reason={reason_text}" if reason_text else ""),
+            flush=True,
+        )
+    else:
+        reason_text = sparse_reason or f"disabled via {sparse_source}"
+        cache_state = ", ".join(
+            f"{name}:{status}" + (f"@{path}" if path else "")
+            for name, (status, path) in sparse_cache_results.items()
+        )
+        if cache_state:
+            reason_text = f"{reason_text}; cache={cache_state}"
+        print(
+            f"[{tag}] Sparse disabled: {reason_text}",
+            flush=True,
+        )
+
+
 def _resolve_ensemble_models(cli_models: Optional[Sequence[str]]) -> List[str]:
     if cli_models:
         models = _dedupe_preserve_order([model.strip() for model in cli_models if model.strip()])
@@ -378,7 +552,6 @@ def _build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--refresh-cache", action="store_true", help="Force re-download of model snapshots even if cached.")
     parser.add_argument("--monitor", action="store_true", help="Enable runtime monitoring thread during embedding.")
     parser.add_argument("--save-intermediate", action="store_true", help="Persist intermediate arrays for debugging.")
-    parser.add_argument("--quiet", action="store_true", help="Reduce logging verbosity.")
     parser.add_argument(
         "--disable-stage-report",
         action="store_true",
@@ -398,7 +571,7 @@ def main(argv: Optional[Iterable[str]] = None) -> int:
     if not getattr(args, "_sparse_models_provided", False):
         args.sparse_models = list(DEFAULT_SPARSE)
 
-    _configure_logging(args.quiet)
+    _configure_logging()
 
     try:
         chunk_path, output_path = _resolve_paths(args.chunked_dir, args.output_dir)
@@ -456,6 +629,10 @@ def main(argv: Optional[Iterable[str]] = None) -> int:
                 "[embed_v7] GPU metadata unavailable (torch cuda lookup failed)",
                 flush=True,
             )
+
+    # Print reranker and sparse model readiness immediately after GPU listing
+    print("", flush=True)  # blank line separator
+    _print_model_readiness(embedder, tag="embed_v7")
 
     try:
         snapshot_path = output_path / "cuda_debug_snapshot.json"
@@ -539,7 +716,12 @@ def main(argv: Optional[Iterable[str]] = None) -> int:
             if isinstance(latency_ms, (int, float)):
                 print(f"[embed_v7] Sparse latency: {latency_ms:.2f} ms", flush=True)
         else:
-            print("[embed_v7] Sparse stage enabled but no result emitted (see logs).", flush=True)
+            runtime_reason = getattr(embedder, "_sparse_runtime_reason", None)
+            if not getattr(embedder, "enable_sparse", True):
+                message = runtime_reason or "sparse stage disabled at runtime"
+                print(f"[embed_v7] Sparse stage disabled at runtime: {message}", flush=True)
+            else:
+                print("[embed_v7] Sparse stage enabled but no result emitted (see logs).", flush=True)
     else:
         print("[embed_v7] Sparse stage disabled.", flush=True)
 

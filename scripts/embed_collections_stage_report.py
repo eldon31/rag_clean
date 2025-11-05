@@ -24,8 +24,7 @@ def main(argv: Optional[Iterable[str]] = None) -> int:
     # Force stage reporting for this convenience wrapper regardless of CLI overrides.
     setattr(args, "disable_stage_report", False)
 
-    # Always keep stage messages visible, but respect quiet for other loggers.
-    embed_v7._configure_logging(args.quiet)
+    embed_v7._configure_logging()
 
     try:
         chunk_path, output_path = embed_v7._resolve_paths(args.chunked_dir, args.output_dir)
