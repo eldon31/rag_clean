@@ -1095,25 +1095,11 @@ class UltimateKaggleEmbedderV4:
                 "device": device,
             }
 
-        # Check if model supports tqdm_kwargs
-        supports_tqdm_kwargs = False
-        if show_progress and progress_context:
-            callable_target = getattr(encode_callable, "__func__", encode_callable)
-            supports_tqdm_kwargs = self._encode_supports_kwarg(callable_target, "tqdm_kwargs", model=model)
-            
-            if supports_tqdm_kwargs:
-                desc = progress_context.tqdm_description()
-                postfix = progress_context.tqdm_postfix()
-                if desc:
-                    tqdm_kwargs = {"desc": desc}
-                    if postfix:
-                        tqdm_kwargs["postfix"] = postfix
-                    call_kwargs["tqdm_kwargs"] = tqdm_kwargs
-
-        # Rich progress bar for models that don't support tqdm_kwargs
+        # Always use rich progress for SentenceTransformer models (more reliable than tqdm_kwargs)
+        # Note: We skip tqdm_kwargs check entirely to avoid compatibility issues
         rich_progress = None
         rich_task = None
-        if show_progress and progress_context and not supports_tqdm_kwargs:
+        if show_progress and progress_context:
             try:
                 from rich.progress import Progress, SpinnerColumn, TextColumn, BarColumn, TaskProgressColumn, TimeRemainingColumn
                 desc = progress_context.tqdm_description()
