@@ -1107,12 +1107,17 @@ class UltimateKaggleEmbedderV4:
                 total_batches = math.ceil(len(texts) / batch_size)
                 
                 # Create rich progress with no text truncation
+                from rich.console import Console
+                from rich.table import Column
+                
+                console = Console(width=200, legacy_windows=False)  # Fixed wide width
                 rich_progress = Progress(
                     SpinnerColumn(),
-                    TextColumn("[bold blue]{task.description}", table_column=None),  # No width limit
+                    TextColumn("[bold blue]{task.description}", table_column=Column(no_wrap=True)),  # Never wrap
                     BarColumn(),
                     TaskProgressColumn(),
                     TimeRemainingColumn(),
+                    console=console,
                     expand=False  # Don't expand to fill terminal width
                 )
                 rich_progress.start()

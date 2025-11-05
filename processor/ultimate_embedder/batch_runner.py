@@ -723,12 +723,17 @@ class BatchRunner:
                     progress_desc = f"Batches({chunk_file_name}) {model_name}"
                     
                     # Initialize rich progress bar with no text truncation
+                    from rich.console import Console
+                    from rich.table import Column
+                    
+                    console = Console(width=200, legacy_windows=False)  # Fixed wide width
                     rich_progress = Progress(
                         SpinnerColumn(),
-                        TextColumn("[progress.description]{task.description}", table_column=None),  # No width limit
+                        TextColumn("[progress.description]{task.description}", table_column=Column(no_wrap=True)),  # Never wrap
                         BarColumn(),
                         TaskProgressColumn(),
                         TimeRemainingColumn(),
+                        console=console,
                         disable=not show_batch_progress,
                         expand=False  # Don't expand to fill terminal width
                     )
