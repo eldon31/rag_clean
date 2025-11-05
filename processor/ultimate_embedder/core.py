@@ -2143,26 +2143,36 @@ class UltimateKaggleEmbedderV4:
     def _load_pytorch_model(self, model_kwargs: Dict, optimal_batch: int) -> Any:
         """Load PyTorch model with optimization"""
         
-        # Backward compatibility for dtype parameter
+        # Backward compatibility: Handle dtype/torch_dtype parameter across different sentence-transformers versions
         st_kwargs = model_kwargs.copy()
         dtype_value = st_kwargs.pop("dtype", None)
         
         try:
-            # Try modern 'dtype' parameter first
+            # Try modern 'dtype' parameter first (sentence-transformers >= 3.0)
             if dtype_value is not None:
                 st_kwargs["dtype"] = dtype_value
             model = SentenceTransformer(self.model_config.hf_model_id, **st_kwargs)
         except TypeError as exc:
-            if "dtype" in str(exc) and dtype_value is not None:
-                # Fallback to old 'torch_dtype' for older sentence-transformers versions
+            if "dtype" in str(exc):
+                # Try 'torch_dtype' for older versions (sentence-transformers 2.x)
                 logger.info("Falling back to 'torch_dtype' parameter for compatibility")
                 st_kwargs.pop("dtype", None)
-                st_kwargs["torch_dtype"] = dtype_value
+                if dtype_value is not None:
+                    st_kwargs["torch_dtype"] = dtype_value
                 try:
                     model = SentenceTransformer(self.model_config.hf_model_id, **st_kwargs)
-                except Exception as fallback_exc:
-                    logger.error(f"Failed to load model with torch_dtype fallback: {fallback_exc}")
-                    raise
+                except TypeError as torch_dtype_exc:
+                    if "torch_dtype" in str(torch_dtype_exc):
+                        # Very old versions don't support dtype at all - load without it and convert manually
+                        logger.info("Loading model without dtype parameter (very old sentence-transformers), will convert manually")
+                        st_kwargs.pop("torch_dtype", None)
+                        model = SentenceTransformer(self.model_config.hf_model_id, **st_kwargs)
+                        # Manual FP16 conversion for very old versions
+                        if dtype_value == torch.float16 and self.device == "cuda":
+                            logger.info("Manually converting model to FP16")
+                            model = model.half()
+                    else:
+                        raise
             else:
                 logger.error(f"Failed to load model: {exc}")
                 raise
