@@ -75,7 +75,7 @@ class ModelManager:
         model_kwargs["trust_remote_code"] = embedder.model_config.trust_remote_code
 
         if embedder.gpu_config.precision == "fp16" and embedder.device == "cuda":
-            model_kwargs["torch_dtype"] = torch.float16
+            model_kwargs["dtype"] = torch.float16  # Use 'dtype' instead of deprecated 'torch_dtype'
             logger.info("Using FP16 precision for T4 optimization")
 
         if (
@@ -391,7 +391,7 @@ class ModelManager:
             cpu_model_kwargs.setdefault("low_cpu_mem_usage", True)
             if torch is not None:
                 dtype = getattr(torch, "bfloat16", None) or getattr(torch, "float16", None)
-                cpu_model_kwargs.setdefault("torch_dtype", dtype)
+                cpu_model_kwargs.setdefault("dtype", dtype)  # Use 'dtype' instead of deprecated 'torch_dtype'
         return kwargs
 
     def _ensure_model_snapshot(self, repo_id: str) -> Path:
@@ -443,13 +443,12 @@ class ModelManager:
         logger = self.logger
 
         st_kwargs = model_kwargs.copy()
-        torch_dtype = st_kwargs.pop("torch_dtype", None)
+        # Note: Now using 'dtype' directly instead of deprecated 'torch_dtype'
+        # SentenceTransformer will handle it natively in modern versions
 
         try:
             model = SentenceTransformer(embedder.model_config.hf_model_id, **st_kwargs)
-            if torch_dtype is not None and torch_dtype == torch.float16 and embedder.device == "cuda":
-                model = model.half()
-                logger.info("Converted model to FP16 after loading")
+            # No need for manual conversion - dtype is handled by SentenceTransformer constructor
         except Exception as exc:  # pragma: no cover - defensive logging
             logger.error("Failed to load model: %s", exc)
             raise

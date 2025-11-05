@@ -2143,18 +2143,14 @@ class UltimateKaggleEmbedderV4:
     def _load_pytorch_model(self, model_kwargs: Dict, optimal_batch: int) -> Any:
         """Load PyTorch model with optimization"""
         
-        # Remove torch_dtype for compatibility with older sentence-transformers
+        # Note: Now using 'dtype' directly in model_kwargs (modern sentence-transformers API)
+        # No need to pop and manually convert anymore
         st_kwargs = model_kwargs.copy()
-        torch_dtype = st_kwargs.pop('torch_dtype', None)
         
         try:
-            # Try loading without torch_dtype first (most compatible)
+            # SentenceTransformer handles dtype natively
             model = SentenceTransformer(self.model_config.hf_model_id, **st_kwargs)
-            
-            # Apply FP16 conversion after loading if needed
-            if torch_dtype is not None and torch_dtype == torch.float16 and self.device == "cuda":
-                model = model.half()
-                logger.info("Converted model to FP16 after loading")
+            # No need for manual FP16 conversion - handled by constructor
         except Exception as e:
             logger.error(f"Failed to load model: {e}")
             raise

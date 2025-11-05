@@ -12,6 +12,14 @@ from typing import TYPE_CHECKING, Any, Dict, List, Optional, Set, cast
 import numpy as np
 import torch
 from tqdm import tqdm
+from rich.progress import (
+    Progress,
+    SpinnerColumn,
+    TextColumn,
+    BarColumn,
+    TaskProgressColumn,
+    TimeRemainingColumn,
+)
 
 from processor.ultimate_embedder.config import EnsembleConfig
 from processor.ultimate_embedder.controllers import AdaptiveBatchController
@@ -702,24 +710,29 @@ class BatchRunner:
                     est_batches = max(1, math.ceil(total_chunks / batch_hint))
                     progress_tracker = _BatchProgressTracker(total_chunks, batch_hint)
 
-                    # Create tqdm progress bar for batches (disabled on CPU)
+                    # Create rich progress bar for batches (disabled on CPU)
                     show_batch_progress = embedder.device != "cpu"
-                    pbar = tqdm(
-                        total=total_chunks,
-                        desc=f"Batches",
-                        unit="chunk",
-                        leave=False,
-                        dynamic_ncols=True,
-                        disable=not show_batch_progress
-                    )
                     
-                    # Update progress bar with chunk file name and model
+                    # Get chunk file name and model for progress description
                     chunk_file_name = "unknown"
                     if hasattr(embedder, 'chunks_metadata') and embedder.chunks_metadata and len(embedder.chunks_metadata) > 0:
                         first_metadata = embedder.chunks_metadata[0] or {}
                         chunk_file_name = first_metadata.get("chunk_file_name", "unknown")
-                    pbar.set_description(f"Batches({chunk_file_name})")
-                    pbar.set_postfix_str(model_name)
+                    
+                    # Build progress description with file and model
+                    progress_desc = f"Batches({chunk_file_name}) {model_name}"
+                    
+                    # Initialize rich progress bar
+                    rich_progress = Progress(
+                        SpinnerColumn(),
+                        TextColumn("[progress.description]{task.description}"),
+                        BarColumn(),
+                        TaskProgressColumn(),
+                        TimeRemainingColumn(),
+                        disable=not show_batch_progress
+                    )
+                    rich_progress.start()
+                    rich_task = rich_progress.add_task(progress_desc, total=total_chunks)
 
                     # Batch iteration for this model
                     model_embeddings: List[np.ndarray] = []
@@ -737,10 +750,11 @@ class BatchRunner:
                         progress_label = embedder._get_batch_progress_label(batch_index, batch_end)
                         progress_context = progress_tracker.build_context(progress_label, model_name)
 
+                        # Update rich progress description with current file
                         if progress_label:
-                            pbar.set_description(f"Batches({progress_label})")
+                            rich_progress.update(rich_task, description=f"Batches({progress_label}) {model_name}")
                         else:
-                            pbar.set_description("Batches")
+                            rich_progress.update(rich_task, description=f"Batches {model_name}")
 
                         # Check memory and adapt
                         if controller and embedder.device == "cuda":
@@ -817,8 +831,8 @@ class BatchRunner:
                                 batch_end,
                             )
 
-                            # Update progress bar
-                            pbar.update(batch_end - batch_index)
+                            # Update rich progress bar
+                            rich_progress.update(rich_task, advance=batch_end - batch_index)
                             
                             batch_index = batch_end
 
@@ -858,8 +872,8 @@ class BatchRunner:
 
                     batches_per_model[model_name] = executed_batches
 
-                    # Close progress bar for this model pass
-                    pbar.close()
+                    # Close rich progress bar for this model pass
+                    rich_progress.stop()
 
                 # Lease released automatically here
 
@@ -886,9 +900,21 @@ class BatchRunner:
             # sequence: dense -> sparse -> fusion/export.
             sparse_result: Optional[SparseInferenceResult] = None
             
+            # Diagnostic logging for sparse configuration
+            logger.info("Sparse configuration check: enable_sparse=%s, sparse_models_loaded=%s", 
+                       embedder.enable_sparse, 
+                       bool(embedder.sparse_models))
+            if embedder.sparse_models:
+                logger.info("Sparse models available: %s", list(embedder.sparse_models.keys()))
+            
             # Early return if sparse is not enabled
             if not embedder.enable_sparse or not embedder.sparse_models:
-                logger.debug("Sparse inference disabled or no models available")
+                reason = []
+                if not embedder.enable_sparse:
+                    reason.append("sparse disabled")
+                if not embedder.sparse_models:
+                    reason.append("no sparse models loaded")
+                logger.info("Skipping sparse stage: %s", " and ".join(reason))
             else:
                 logger.info("=" * 70)
                 logger.info("SPARSE VECTOR GENERATION STAGE")
