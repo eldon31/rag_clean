@@ -376,13 +376,14 @@ class CrossEncoderBatchExecutor:
                     # Multiple batches with rich progress
                     total_batches = math.ceil(len(query_doc_pairs) / current_batch_size)
                     
-                    # Create rich progress with 5 columns
+                    # Create rich progress with no text truncation
                     progress = Progress(
                         SpinnerColumn(),
-                        TextColumn("[bold blue]{task.description}"),
+                        TextColumn("[bold blue]{task.description}", table_column=None),  # No width limit
                         BarColumn(),
                         TaskProgressColumn(),
                         TimeRemainingColumn(),
+                        expand=False  # Don't expand to fill terminal width
                     )
                     
                     scores = []

@@ -722,14 +722,15 @@ class BatchRunner:
                     # Build progress description with file and model
                     progress_desc = f"Batches({chunk_file_name}) {model_name}"
                     
-                    # Initialize rich progress bar
+                    # Initialize rich progress bar with no text truncation
                     rich_progress = Progress(
                         SpinnerColumn(),
-                        TextColumn("[progress.description]{task.description}"),
+                        TextColumn("[progress.description]{task.description}", table_column=None),  # No width limit
                         BarColumn(),
                         TaskProgressColumn(),
                         TimeRemainingColumn(),
-                        disable=not show_batch_progress
+                        disable=not show_batch_progress,
+                        expand=False  # Don't expand to fill terminal width
                     )
                     rich_progress.start()
                     rich_task = rich_progress.add_task(progress_desc, total=total_chunks)

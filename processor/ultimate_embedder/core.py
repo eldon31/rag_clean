@@ -1106,13 +1106,14 @@ class UltimateKaggleEmbedderV4:
                 postfix = progress_context.tqdm_postfix()
                 total_batches = math.ceil(len(texts) / batch_size)
                 
-                # Create rich progress with custom columns
+                # Create rich progress with no text truncation
                 rich_progress = Progress(
                     SpinnerColumn(),
-                    TextColumn("[bold blue]{task.description}"),
+                    TextColumn("[bold blue]{task.description}", table_column=None),  # No width limit
                     BarColumn(),
                     TaskProgressColumn(),
                     TimeRemainingColumn(),
+                    expand=False  # Don't expand to fill terminal width
                 )
                 rich_progress.start()
                 
