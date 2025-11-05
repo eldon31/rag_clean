@@ -443,12 +443,29 @@ class ModelManager:
         logger = self.logger
 
         st_kwargs = model_kwargs.copy()
-        # Note: Now using 'dtype' directly instead of deprecated 'torch_dtype'
-        # SentenceTransformer will handle it natively in modern versions
-
+        
+        # Backward compatibility: Try 'dtype' first (modern versions), fallback to 'torch_dtype' (older versions)
+        dtype_value = st_kwargs.pop("dtype", None)
+        
         try:
+            # Try modern 'dtype' parameter first
+            if dtype_value is not None:
+                st_kwargs["dtype"] = dtype_value
             model = SentenceTransformer(embedder.model_config.hf_model_id, **st_kwargs)
-            # No need for manual conversion - dtype is handled by SentenceTransformer constructor
+        except TypeError as exc:
+            if "dtype" in str(exc) and dtype_value is not None:
+                # Fallback to old 'torch_dtype' for older sentence-transformers versions
+                logger.info("Falling back to 'torch_dtype' parameter for older sentence-transformers version")
+                st_kwargs.pop("dtype", None)
+                st_kwargs["torch_dtype"] = dtype_value
+                try:
+                    model = SentenceTransformer(embedder.model_config.hf_model_id, **st_kwargs)
+                except Exception as fallback_exc:
+                    logger.error("Failed to load model with torch_dtype fallback: %s", fallback_exc)
+                    raise
+            else:
+                logger.error("Failed to load model: %s", exc)
+                raise
         except Exception as exc:  # pragma: no cover - defensive logging
             logger.error("Failed to load model: %s", exc)
             raise

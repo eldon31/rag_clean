@@ -2143,14 +2143,29 @@ class UltimateKaggleEmbedderV4:
     def _load_pytorch_model(self, model_kwargs: Dict, optimal_batch: int) -> Any:
         """Load PyTorch model with optimization"""
         
-        # Note: Now using 'dtype' directly in model_kwargs (modern sentence-transformers API)
-        # No need to pop and manually convert anymore
+        # Backward compatibility for dtype parameter
         st_kwargs = model_kwargs.copy()
+        dtype_value = st_kwargs.pop("dtype", None)
         
         try:
-            # SentenceTransformer handles dtype natively
+            # Try modern 'dtype' parameter first
+            if dtype_value is not None:
+                st_kwargs["dtype"] = dtype_value
             model = SentenceTransformer(self.model_config.hf_model_id, **st_kwargs)
-            # No need for manual FP16 conversion - handled by constructor
+        except TypeError as exc:
+            if "dtype" in str(exc) and dtype_value is not None:
+                # Fallback to old 'torch_dtype' for older sentence-transformers versions
+                logger.info("Falling back to 'torch_dtype' parameter for compatibility")
+                st_kwargs.pop("dtype", None)
+                st_kwargs["torch_dtype"] = dtype_value
+                try:
+                    model = SentenceTransformer(self.model_config.hf_model_id, **st_kwargs)
+                except Exception as fallback_exc:
+                    logger.error(f"Failed to load model with torch_dtype fallback: {fallback_exc}")
+                    raise
+            else:
+                logger.error(f"Failed to load model: {exc}")
+                raise
         except Exception as e:
             logger.error(f"Failed to load model: {e}")
             raise
