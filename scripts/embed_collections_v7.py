@@ -50,7 +50,7 @@ DEFAULT_ENSEMBLE = [
     "qwen3-embedding-0.6b",
 ]
 DEFAULT_SPARSE = ["splade"]
-DEFAULT_RERANK_MODEL = "nomic-ai/CodeRankLLM"
+DEFAULT_RERANK_MODEL = "jinaai/jina-reranker-v3"
 
 
 # ---------------------------------------------------------------------------
@@ -534,8 +534,8 @@ def _build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--export-prefix", default=None, help="Optional override for export prefix (defaults to inferred collection name).")
     parser.add_argument("--summary-path", default=None, help="Explicit processing summary output path.")
     parser.add_argument("--rerank-model", default=DEFAULT_RERANK_MODEL, help="CrossEncoder reranker model identifier.")
-    parser.add_argument("--rerank-candidates", type=int, default=50, help="Candidate pool size fed into the reranker.")
-    parser.add_argument("--rerank-top-k", type=int, default=10, help="Number of reranked results to keep.")
+    parser.add_argument("--rerank-candidates", type=int, default=100, help="Candidate pool size fed into the reranker.")
+    parser.add_argument("--rerank-top-k", type=int, default=20, help="Number of reranked results to keep.")
     parser.add_argument(
         "--sparse-models",
         nargs="+",

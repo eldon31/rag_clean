@@ -259,7 +259,7 @@ def _tokenizers_version_guard(installed_version: str):
             pkg_resources.get_distribution = original_get_distribution  # type: ignore[assignment]
 
 
-def load_sentence_transformers() -> Tuple[Any, Any]:
+def load_sentence_transformers() -> Tuple[Any, Any, Any]:
     """Import sentence-transformers under a compatibility guard if required."""
 
     _run_conflict_uninstall_if_needed()
@@ -274,11 +274,12 @@ def load_sentence_transformers() -> Tuple[Any, Any]:
         module = importlib.import_module("sentence_transformers")
         cross_encoder_cls = getattr(module, "CrossEncoder")
         sentence_transformer_cls = getattr(module, "SentenceTransformer")
+        sparse_encoder_cls = getattr(module, "SparseEncoder")
 
-    return cross_encoder_cls, sentence_transformer_cls
+    return cross_encoder_cls, sentence_transformer_cls, sparse_encoder_cls
 
 
-CrossEncoder, SentenceTransformer = load_sentence_transformers()
+CrossEncoder, SentenceTransformer, SparseEncoder = load_sentence_transformers()
 
 
 def get_conflict_sanitizer_status() -> Tuple[Optional[bool], Optional[str]]:
@@ -289,6 +290,7 @@ def get_conflict_sanitizer_status() -> Tuple[Optional[bool], Optional[str]]:
 __all__ = [
     "CrossEncoder",
     "SentenceTransformer",
+    "SparseEncoder",
     "TOKENIZERS_COMPAT_PATCHED_FROM",
     "TOKENIZERS_REPORTED_VERSION",
     "load_sentence_transformers",

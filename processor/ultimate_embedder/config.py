@@ -130,8 +130,9 @@ SPARSE_MODELS: Dict[str, Dict[str, Any]] = {
         "name": "splade",
         "hf_model_id": "naver/splade_v2_distil",
         "type": "splade",
-        "description": "SPLADE learned sparse representation model (works with SentenceTransformer)",
+        "description": "SPLADE learned sparse representation model (requires sentence-transformers <3.0 with sparse_encoder module - not compatible with v5.x+)",
         "recommended_batch_size": 64,
+        "requires_sparse_encoder": True,
     },
     "qdrant-bm25": {
         "name": "qdrant-bm25",
@@ -168,7 +169,7 @@ RERANKING_MODELS: Dict[str, RerankingModelSpec] = {
     "jina-reranker-v3": RerankingModelSpec(
         hf_model_id="jinaai/jina-reranker-v3",
         trust_remote_code=True,
-        model_kwargs={},
+        model_kwargs={"dtype": "auto"},
         loader="jina_reranker",
         description=(
             "Jina reranker v3 with pretrained scoring head; requires trust_remote_code "
@@ -209,9 +210,9 @@ def get_reranking_model_config(model_name: str) -> RerankingModelSpec:
 
 # Reranking model preference order used when resolving compatibility fallback chains.
 RERANKING_MODEL_PRIORITY: List[str] = [
+    "jina-reranker-v3",
     "coderank-bi-encoder",
     "bge-reranker-v2-m3",
-    "jina-reranker-v3",
 ]
 
 DEFAULT_RERANK_MODEL: str = RERANKING_MODEL_PRIORITY[0]

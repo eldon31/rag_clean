@@ -1735,7 +1735,7 @@ def test_processing_summary_includes_rerank_run_when_executed() -> None:
         reason=None,
         metrics={
             "top_k_candidates": 100,
-            "rerank_top_k": 10,
+            "rerank_top_k": 20,
             "batch_size": 32,
         },
         requested_device="cuda",
@@ -1762,7 +1762,7 @@ def test_processing_summary_includes_rerank_run_when_executed() -> None:
             ],
             "result_count": 3,
             "initial_candidate_count": 5,
-            "top_k_results": 10,
+            "top_k_results": 20,
         }
     )
 
@@ -1958,7 +1958,7 @@ def test_processing_summary_rerank_failure_captured() -> None:
         reason="CUDA out of memory during rerank execution",
         metrics={
             "top_k_candidates": 100,
-            "rerank_top_k": 10,
+            "rerank_top_k": 20,
             "batch_size": 32,
         },
         requested_device="cuda",

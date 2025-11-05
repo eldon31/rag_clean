@@ -17,9 +17,9 @@ from processor.ultimate_embedder.config import (
 )
 
 if TYPE_CHECKING:  # pragma: no cover - typing only
-    from sentence_transformers import SentenceTransformer
+    from sentence_transformers import SentenceTransformer, SparseEncoder
 else:
-    from .compat import SentenceTransformer
+    from .compat import SentenceTransformer, SparseEncoder
 
 _ORT_IMPORT_ERROR: Optional[str] = None
 try:  # Optional ONNX acceleration via Optimum
@@ -280,11 +280,33 @@ class ModelManager:
                     sparse_config["hf_model_id"],
                     target_device,
                 )
-                sparse_model = SentenceTransformer(
-                    sparse_config["hf_model_id"],
-                    trust_remote_code=True,
-                    device=target_device,
-                )
+                
+                # Check if this is a SPLADE model and handle special loading
+                model_type = sparse_config.get("type", "")
+                if model_type == "splade":
+                    # SPLADE models in sentence-transformers 5.x+ require SparseEncoder class
+                    try:
+                        sparse_model = SparseEncoder(
+                            sparse_config["hf_model_id"],
+                            device=target_device,
+                        )
+                    except Exception as splade_exc:
+                        logger.warning(
+                            "Failed to load SPLADE model %s with SparseEncoder: %s",
+                            sparse_name,
+                            splade_exc
+                        )
+                        raise ImportError(
+                            f"SPLADE model loading failed: {splade_exc}"
+                        ) from splade_exc
+                else:
+                    # Regular sparse model loading
+                    sparse_model = SentenceTransformer(
+                        sparse_config["hf_model_id"],
+                        trust_remote_code=True,
+                        device=target_device,
+                    )
+                
                 embedder.sparse_models[sparse_name] = sparse_model
                 embedder.sparse_device_map[sparse_name] = target_device
                 embedder.models[sparse_name] = sparse_model
@@ -292,14 +314,37 @@ class ModelManager:
                 logger.info("Sparse model %s staged to CPU", sparse_name)
             except Exception as exc:  # pragma: no cover - defensive logging
                 logger.error("Failed to load sparse model %s: %s", sparse_name, exc)
-                load_failures.append(f"{sparse_name}: {exc}")
+                error_msg = str(exc)
+                # Simplify error message for common issues
+                if "sparse_encoder" in error_msg:
+                    error_msg = "Requires sentence-transformers with sparse_encoder (not available in v5.x+)"
+                load_failures.append(f"{sparse_name}: {error_msg}")
 
         if not embedder.sparse_models:
             logger.warning("No sparse models loaded successfully; disabling sparse mode")
             embedder.enable_sparse = False
             if load_failures:
-                message = ", ".join(load_failures)
-                embedder._sparse_runtime_reason = f"Sparse load failures: {message[:200]}"
+                # Create a concise summary for user display
+                failure_summary = []
+                for failure in load_failures:
+                    if "sparse_encoder" in failure:
+                        # Simplify SPLADE-specific error
+                        model_name = failure.split(":")[0]
+                        failure_summary.append(f"{model_name} (incompatible with sentence-transformers v5.x+)")
+                    else:
+                        # Keep other errors but truncate
+                        failure_summary.append(failure[:100])
+                
+                message = "; ".join(failure_summary)
+                embedder._sparse_runtime_reason = message[:200]
+                
+                # Log full details for debugging
+                if any("sparse_encoder" in f for f in load_failures):
+                    logger.info(
+                        "SPLADE models require sentence-transformers <3.0 with sparse_encoder module. "
+                        "Current version (5.x+) does not support SPLADE. "
+                        "Sparse search is disabled. Consider using dense-only retrieval."
+                    )
             elif not embedder._sparse_runtime_reason:
                 embedder._sparse_runtime_reason = "Sparse mode disabled: no models available"
         else:

@@ -190,9 +190,9 @@ def snapshot_download(*args: Any, **kwargs: Any) -> str:
 
 # Core ML libraries
 if TYPE_CHECKING:  # pragma: no cover - typing only
-    from sentence_transformers import CrossEncoder, SentenceTransformer
+    from sentence_transformers import CrossEncoder, SentenceTransformer, SparseEncoder
 else:
-    CrossEncoder, SentenceTransformer = load_sentence_transformers()
+    CrossEncoder, SentenceTransformer, SparseEncoder = load_sentence_transformers()
 
 from sklearn.metrics.pairwise import cosine_similarity
 
